@@ -10,20 +10,18 @@ export const migrations: Migration[] = [
         version: 1,
         children: data.children ?? [],
         currentChildId: data.currentChildId ?? (data.children?.[0]?.id ?? null),
+        weeklyPlans: [],
       };
     },
   },
-
-  // 示例：未来新增字段时，添加类似迁移
-  // {
-  //   fromVersion: 1,
-  //   toVersion: 2,
-  //   description: '新增用户设置和计划数据',
-  //   migrate: (data) => ({
-  //     ...data,
-  //     version: 2,
-  //     settings: (data as any).settings ?? { theme: 'dark', notifications: true },
-  //     plans: (data as any).plans ?? {},
-  //   }),
-  // },
+  {
+    fromVersion: 1,
+    toVersion: 2,
+    description: '新增每周任务计划数据 weeklyPlans',
+    migrate: (data) => ({
+      ...data,
+      version: 2,
+      weeklyPlans: (data as AppData).weeklyPlans ?? [],
+    }),
+  },
 ];

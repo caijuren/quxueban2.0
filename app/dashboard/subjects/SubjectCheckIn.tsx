@@ -1,0 +1,199 @@
+'use client';
+
+import { useEffect, useMemo, useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { CheckCircle2, Circle, Flame, Calendar, Trophy } from 'lucide-react';
+
+export interface CheckInTask {
+  id: string;
+  label: string;
+  duration?: string;
+}
+
+interface SubjectCheckInProps {
+  childId: string;
+  subject: 'english' | 'math' | 'chinese';
+  tasks: CheckInTask[];
+  title?: string;
+  subtitle?: string;
+}
+
+interface CheckInData {
+  [childId: string]: {
+    [subject: string]: {
+      [date: string]: string[];
+    };
+  };
+}
+
+const STORAGE_KEY = 'subject-checkins';
+
+function getTodayStr() {
+  return new Date().toISOString().split('T')[0];
+}
+
+function loadData(): CheckInData {
+  if (typeof window === 'undefined') return {};
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    return raw ? JSON.parse(raw) : {};
+  } catch {
+    return {};
+  }
+}
+
+function saveData(data: CheckInData) {
+  if (typeof window === 'undefined') return;
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+}
+
+function getStreak(data: CheckInData, childId: string, subject: string): number {
+  const subjectData = data[childId]?.[subject] || {};
+  let streak = 0;
+  const today = new Date();
+  for (let i = 0; i < 365; i++) {
+    const d = new Date(today);
+    d.setDate(d.getDate() - i);
+    const dateStr = d.toISOString().split('T')[0];
+    const completed = subjectData[dateStr] || [];
+    if (completed.length > 0) {
+      streak++;
+    } else if (i > 0) {
+      break;
+    }
+  }
+  return streak;
+}
+
+export default function SubjectCheckIn({
+  childId,
+  subject,
+  tasks,
+  title = '今日打卡',
+  subtitle = '完成任务后勾选，养成持续学习习惯',
+}: SubjectCheckInProps) {
+  const [data, setData] = useState<CheckInData>({});
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setData(loadData());
+    setMounted(true);
+  }, []);
+
+  const today = getTodayStr();
+  const completed = useMemo(
+    () => data[childId]?.[subject]?.[today] || [],
+    [data, childId, subject, today]
+  );
+  const streak = useMemo(
+    () => (mounted ? getStreak(data, childId, subject) : 0),
+    [data, childId, subject, mounted]
+  );
+
+  const toggleTask = (taskId: string) => {
+    const next = { ...data };
+    if (!next[childId]) next[childId] = {};
+    if (!next[childId][subject]) next[childId][subject] = {};
+    if (!next[childId][subject][today]) next[childId][subject][today] = [];
+
+    const list = next[childId][subject][today];
+    if (list.includes(taskId)) {
+      next[childId][subject][today] = list.filter((id) => id !== taskId);
+    } else {
+      next[childId][subject][today] = [...list, taskId];
+    }
+
+    setData(next);
+    saveData(next);
+  };
+
+  const progress = tasks.length > 0 ? Math.round((completed.length / tasks.length) * 100) : 0;
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, delay: 0.15 }}
+      className="rounded-2xl glass p-6 border border-white/5"
+    >
+      <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-400 to-teal-400 flex items-center justify-center">
+            <CheckCircle2 className="w-5 h-5 text-white" />
+          </div>
+          <div>
+            <h2 className="text-xl font-bold font-display">{title}</h2>
+            <p className="text-sm text-slate-400">{subtitle}</p>
+          </div>
+        </div>
+        <div className="flex items-center gap-4">
+          <div className="text-right">
+            <p className="text-xs text-slate-500">连续打卡</p>
+            <p className="text-lg font-bold text-orange-400 flex items-center gap-1 justify-end">
+              <Flame className="w-4 h-4" />
+              {streak} 天
+            </p>
+          </div>
+          <div className="text-right">
+            <p className="text-xs text-slate-500">今日进度</p>
+            <p className="text-lg font-bold text-emerald-400">{progress}%</p>
+          </div>
+        </div>
+      </div>
+
+      <div className="h-2 rounded-full bg-white/10 overflow-hidden mb-5">
+        <motion.div
+          initial={{ width: 0 }}
+          animate={{ width: `${progress}%` }}
+          transition={{ duration: 0.5 }}
+          className="h-full rounded-full bg-gradient-to-r from-emerald-400 to-teal-400"
+        />
+      </div>
+
+      <div className="space-y-2">
+        <AnimatePresence>
+          {tasks.map((task) => {
+            const isDone = completed.includes(task.id);
+            return (
+              <motion.button
+                key={task.id}
+                onClick={() => toggleTask(task.id)}
+                whileTap={{ scale: 0.98 }}
+                className={`w-full flex items-center justify-between p-4 rounded-xl border transition-all text-left ${
+                  isDone
+                    ? 'bg-emerald-500/10 border-emerald-500/30'
+                    : 'bg-white/[0.03] border-white/5 hover:bg-white/[0.06]'
+                }`}
+              >
+                <div className="flex items-center gap-3">
+                  {isDone ? (
+                    <CheckCircle2 className="w-5 h-5 text-emerald-400" />
+                  ) : (
+                    <Circle className="w-5 h-5 text-slate-500" />
+                  )}
+                  <span className={`text-sm ${isDone ? 'text-emerald-200 line-through' : 'text-slate-300'}`}>
+                    {task.label}
+                  </span>
+                </div>
+                {task.duration && (
+                  <span className="text-xs text-slate-500">{task.duration}</span>
+                )}
+              </motion.button>
+            );
+          })}
+        </AnimatePresence>
+      </div>
+
+      {progress === 100 && (
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="mt-5 flex items-center gap-3 rounded-xl bg-gradient-to-r from-emerald-500/20 to-teal-500/10 border border-emerald-500/20 p-4"
+        >
+          <Trophy className="w-5 h-5 text-emerald-400" />
+          <p className="text-sm text-emerald-300">今日任务全部完成！继续保持。</p>
+        </motion.div>
+      )}
+    </motion.div>
+  );
+}

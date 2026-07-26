@@ -4,7 +4,7 @@ import { migrations } from './migrations';
 
 // 当前数据 schema 版本号
 // 每次修改 AppData 结构时递增，并在 migrations.ts 添加迁移函数
-export const CURRENT_DATA_VERSION = 1;
+export const CURRENT_DATA_VERSION = 2;
 
 export const STORAGE_KEYS = {
   appData: 'quxueban_app_data',
@@ -21,6 +21,7 @@ function createDefaultAppData(): AppData {
     version: CURRENT_DATA_VERSION,
     children: defaults,
     currentChildId: defaults[0]?.id ?? null,
+    weeklyPlans: [],
   };
 }
 
@@ -30,7 +31,8 @@ function isValidAppData(value: unknown): value is AppData {
   return (
     typeof data.version === 'number' &&
     Array.isArray(data.children) &&
-    (typeof data.currentChildId === 'string' || data.currentChildId === null)
+    (typeof data.currentChildId === 'string' || data.currentChildId === null) &&
+    Array.isArray(data.weeklyPlans)
   );
 }
 
@@ -44,6 +46,7 @@ function migrateToLatest(raw: unknown): AppData {
         version: 0,
         children: (legacyV0.children ?? []) as Child[],
         currentChildId: legacyV0.currentChildId ?? null,
+        weeklyPlans: [],
       }
     : isValidAppData(raw)
       ? raw
@@ -94,6 +97,7 @@ export function loadAppData(): AppData {
         version: 0,
         children: parsedChildren,
         currentChildId: rawCurrent,
+        weeklyPlans: [],
       });
     }
 

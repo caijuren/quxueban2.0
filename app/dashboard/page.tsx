@@ -106,6 +106,8 @@ export default function DashboardPage() {
   const router = useRouter();
   const { children, currentChild, setCurrentChildId } = useChildren();
 
+  const displayStats = stats;
+
   const handleViewChild = (id: string) => {
     setCurrentChildId(id);
     router.push('/dashboard/plan');
@@ -222,7 +224,7 @@ export default function DashboardPage() {
             animate="visible"
             className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
           >
-            {stats.map((stat) => (
+            {displayStats.map((stat) => (
               <motion.div
                 key={stat.title}
                 variants={itemVariants}

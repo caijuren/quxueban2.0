@@ -4,13 +4,15 @@ import { motion } from 'framer-motion';
 import {
   LayoutDashboard,
   Route,
-  CalendarCheck,
-  School,
   BarChart3,
   Brain,
   Sparkles,
   Settings,
   LogOut,
+  Languages,
+  Calculator,
+  BookText,
+  Calendar,
 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -21,13 +23,19 @@ const menuGroups = [
     items: [
       { name: '仪表盘', href: '/dashboard', icon: LayoutDashboard },
       { name: '路线方案', href: '/dashboard/plan', icon: Route },
-      { name: '里程碑任务', href: '/dashboard/milestones', icon: CalendarCheck },
+    ],
+  },
+  {
+    title: '学科能力',
+    items: [
+      { name: '英语学科', href: '/dashboard/subjects/english', icon: Languages },
+      { name: '数学学科', href: '/dashboard/subjects/math', icon: Calculator },
+      { name: '语文学科', href: '/dashboard/subjects/chinese', icon: BookText },
     ],
   },
   {
     title: '数据跟踪',
     items: [
-      { name: '目标学校', href: '/dashboard/schools', icon: School },
       { name: '进度追踪', href: '/dashboard/progress', icon: BarChart3 },
     ],
   },

@@ -1,0 +1,464 @@
+'use client';
+
+import { motion } from 'framer-motion';
+import { useEffect, useState } from 'react';
+import { chineseTracks, chineseTrackNodes, chineseTimeAxisLabels } from '@/lib/subjects/chinese';
+
+const VIEWBOX = { width: 1100, height: 420, startX: 80, endX: 1000 };
+
+const trackConfig = {
+  classics: {
+    label: '古诗文积累线',
+    color: '#f43f5e',
+    glowColor: 'rgba(244, 63, 94, 0.5)',
+    y: 120,
+  },
+  reading: {
+    label: '阅读写作线',
+    color: '#14b8a6',
+    glowColor: 'rgba(20, 184, 166, 0.5)',
+    y: 220,
+  },
+  honor: {
+    label: '竞赛荣誉线',
+    color: '#f59e0b',
+    glowColor: 'rgba(245, 158, 11, 0.5)',
+    y: 320,
+  },
+};
+
+function positionToX(position: number) {
+  return VIEWBOX.startX + (position / 100) * (VIEWBOX.endX - VIEWBOX.startX);
+}
+
+function seededRandom(seed: number) {
+  const x = Math.sin(seed) * 10000;
+  return x - Math.floor(x);
+}
+
+function createParticles() {
+  return Array.from({ length: 40 }, (_, i) => ({
+    id: i,
+    x: seededRandom(i * 17) * VIEWBOX.width,
+    y: seededRandom(i * 31) * VIEWBOX.height,
+    size: seededRandom(i * 47) * 2 + 0.5,
+    duration: seededRandom(i * 59) * 3 + 2,
+    delay: seededRandom(i * 71) * 2,
+  }));
+}
+
+export default function ChineseTrackMap() {
+  const [mounted, setMounted] = useState(false);
+  const [hoveredNode, setHoveredNode] = useState<string | null>(null);
+  const [mousePos, setMousePos] = useState({ x: VIEWBOX.width / 2, y: VIEWBOX.height / 2 });
+  const [tilt, setTilt] = useState({ rotateX: 0, rotateY: 0 });
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const particles = createParticles();
+
+  const getNodesByTrack = (track: 'classics' | 'reading' | 'honor') =>
+    chineseTrackNodes.filter((n) => n.track === track).sort((a, b) => a.position - b.position);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width - 0.5;
+    const y = (e.clientY - rect.top) / rect.height - 0.5;
+    setTilt({ rotateX: y * -1.5, rotateY: x * 1.5 });
+  };
+
+  const handleMouseLeave = () => {
+    setTilt({ rotateX: 0, rotateY: 0 });
+    setHoveredNode(null);
+  };
+
+  const hoveredData = hoveredNode ? chineseTrackNodes.find((n) => n.id === hoveredNode) : null;
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, delay: 0.1 }}
+      className="rounded-3xl glass p-6 border border-white/5 relative overflow-hidden"
+      style={{
+        perspective: '1200px',
+        transform: `rotateX(${tilt.rotateX}deg) rotateY(${tilt.rotateY}deg)`,
+        transformStyle: 'preserve-3d',
+        transition: 'transform 0.15s ease-out',
+      }}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+    >
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
+        <div>
+          <h2 className="text-xl font-bold font-display">语文三条线作战地图</h2>
+          <p className="text-sm text-slate-400 mt-1">从现在到三公，三条主线并行推进</p>
+        </div>
+        <div className="flex flex-wrap gap-2">
+          {chineseTracks.map((track) => {
+            const cfg = trackConfig[track.id as keyof typeof trackConfig];
+            return (
+              <div
+                key={track.id}
+                className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-white/5 border border-white/5"
+              >
+                <div
+                  className="w-3 h-3 rounded-full"
+                  style={{ backgroundColor: cfg.color, boxShadow: `0 0 10px ${cfg.glowColor}` }}
+                />
+                <span className="text-xs text-slate-300">{track.name}</span>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* SVG Chart */}
+      <div className="relative w-full overflow-x-auto">
+        <svg
+          viewBox={`0 0 ${VIEWBOX.width} ${VIEWBOX.height}`}
+          className="w-full min-w-[900px] h-auto"
+          preserveAspectRatio="xMidYMid meet"
+          onMouseMove={(e) => {
+            const rect = e.currentTarget.getBoundingClientRect();
+            const x = ((e.clientX - rect.left) / rect.width) * VIEWBOX.width;
+            const y = ((e.clientY - rect.top) / rect.height) * VIEWBOX.height;
+            setMousePos({ x, y });
+          }}
+        >
+          <defs>
+            {(['classics', 'reading', 'honor'] as const).map((trackId) => {
+              const cfg = trackConfig[trackId];
+              return (
+                <marker
+                  key={`arrow-${trackId}`}
+                  id={`arrow-${trackId}`}
+                  markerWidth="10"
+                  markerHeight="10"
+                  refX="9"
+                  refY="3"
+                  orient="auto"
+                  markerUnits="strokeWidth"
+                >
+                  <path d="M0,0 L0,6 L9,3 z" fill={cfg.color} opacity="0.8" />
+                </marker>
+              );
+            })}
+
+            <linearGradient id="currentPulse" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="#f43f5e" stopOpacity="0" />
+              <stop offset="50%" stopColor="#f43f5e" stopOpacity="0.6" />
+              <stop offset="100%" stopColor="#f43f5e" stopOpacity="0" />
+            </linearGradient>
+          </defs>
+
+          {/* Background grid lines */}
+          {chineseTimeAxisLabels.map((t) => {
+            const x = positionToX(t.position);
+            return (
+              <line
+                key={t.position}
+                x1={x}
+                y1={50}
+                x2={x}
+                y2={360}
+                stroke="rgba(255,255,255,0.06)"
+                strokeWidth="1"
+                strokeDasharray="4 4"
+              />
+            );
+          })}
+
+          {/* Ambient glow + particles */}
+          {mounted && (
+            <>
+              <defs>
+                <radialGradient id="ambientGlow1" cx="30%" cy="30%" r="50%">
+                  <stop offset="0%" stopColor="#f43f5e" stopOpacity="0.12" />
+                  <stop offset="100%" stopColor="#f43f5e" stopOpacity="0" />
+                </radialGradient>
+                <radialGradient id="ambientGlow2" cx="70%" cy="70%" r="45%">
+                  <stop offset="0%" stopColor="#14b8a6" stopOpacity="0.1" />
+                  <stop offset="100%" stopColor="#14b8a6" stopOpacity="0" />
+                </radialGradient>
+                <radialGradient id="cursorGlow" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%" stopColor="#ffffff" stopOpacity="0.08" />
+                  <stop offset="50%" stopColor="#f43f5e" stopOpacity="0.04" />
+                  <stop offset="100%" stopColor="#f43f5e" stopOpacity="0" />
+                </radialGradient>
+              </defs>
+              <motion.ellipse
+                cx={250}
+                cy={140}
+                rx={220}
+                ry={160}
+                fill="url(#ambientGlow1)"
+                animate={{ cx: [250, 300, 250], cy: [140, 170, 140] }}
+                transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
+              />
+              <motion.ellipse
+                cx={800}
+                cy={280}
+                rx={200}
+                ry={140}
+                fill="url(#ambientGlow2)"
+                animate={{ cx: [800, 750, 800], cy: [280, 250, 280] }}
+                transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}
+              />
+              <motion.ellipse
+                cx={mousePos.x}
+                cy={mousePos.y}
+                rx={160}
+                ry={100}
+                fill="url(#cursorGlow)"
+                transition={{ type: 'spring', stiffness: 150, damping: 30 }}
+                style={{ pointerEvents: 'none' }}
+              />
+              {particles.map((p) => (
+                <motion.circle
+                  key={p.id}
+                  cx={p.x}
+                  cy={p.y}
+                  r={p.size}
+                  fill="white"
+                  initial={{ opacity: 0.1 }}
+                  animate={{
+                    opacity: [0.1, 0.5, 0.1],
+                    cy: [p.y, p.y - 10, p.y],
+                  }}
+                  transition={{
+                    duration: p.duration,
+                    repeat: Infinity,
+                    delay: p.delay,
+                    ease: 'easeInOut',
+                  }}
+                  style={{ pointerEvents: 'none' }}
+                />
+              ))}
+            </>
+          )}
+
+          {/* Time axis */}
+          <line
+            x1={VIEWBOX.startX}
+            y1={40}
+            x2={VIEWBOX.endX + 20}
+            y2={40}
+            stroke="rgba(255,255,255,0.15)"
+            strokeWidth="2"
+            strokeLinecap="round"
+          />
+          {chineseTimeAxisLabels.map((t) => {
+            const x = positionToX(t.position);
+            return (
+              <g key={t.position}>
+                <line x1={x} y1={36} x2={x} y2={44} stroke="rgba(255,255,255,0.3)" strokeWidth="2" />
+                <text
+                  x={x}
+                  y={28}
+                  fill="rgba(148,163,184,0.8)"
+                  fontSize="11"
+                  fontWeight="500"
+                  textAnchor="middle"
+                >
+                  {t.label}
+                </text>
+              </g>
+            );
+          })}
+
+          {/* Tracks */}
+          {(['classics', 'reading', 'honor'] as const).map((trackId) => {
+            const cfg = trackConfig[trackId];
+            const nodes = getNodesByTrack(trackId);
+            const y = cfg.y;
+
+            return (
+              <g key={trackId}>
+                {/* Track line */}
+                <motion.line
+                  initial={{ pathLength: 0 }}
+                  animate={{ pathLength: 1 }}
+                  transition={{ duration: 1.5, delay: 0.3 }}
+                  x1={VIEWBOX.startX}
+                  y1={y}
+                  x2={VIEWBOX.endX}
+                  y2={y}
+                  stroke={cfg.color}
+                  strokeWidth={3}
+                  strokeLinecap="round"
+                  markerEnd={`url(#arrow-${trackId})`}
+                  style={{
+                    filter: `drop-shadow(0 0 12px ${cfg.glowColor})`,
+                    opacity: 0.75,
+                  }}
+                />
+
+                {/* Flowing light */}
+                <motion.line
+                  x1={VIEWBOX.startX}
+                  y1={y}
+                  x2={VIEWBOX.endX}
+                  y2={y}
+                  stroke="white"
+                  strokeWidth={1.5}
+                  strokeLinecap="round"
+                  strokeDasharray="60 250"
+                  initial={{ strokeDashoffset: 310 }}
+                  animate={{ strokeDashoffset: 0 }}
+                  transition={{ duration: 2.5, repeat: Infinity, ease: 'linear' }}
+                  style={{
+                    filter: `drop-shadow(0 0 8px ${cfg.color})`,
+                    opacity: 0.5,
+                  }}
+                />
+
+                {/* Track label */}
+                <text
+                  x={VIEWBOX.startX - 15}
+                  y={y + 4}
+                  fill={cfg.color}
+                  fontSize="12"
+                  fontWeight="600"
+                  textAnchor="end"
+                  style={{ filter: `drop-shadow(0 0 6px ${cfg.glowColor})` }}
+                >
+                  {cfg.label}
+                </text>
+
+                {/* Nodes */}
+                {nodes.map((node, index) => {
+                  const x = positionToX(node.position);
+                  const isCurrent = node.isCurrent;
+                  const isHovered = hoveredNode === node.id;
+
+                  return (
+                    <g
+                      key={node.id}
+                      transform={`translate(${x}, ${y})`}
+                      onMouseEnter={() => setHoveredNode(node.id)}
+                      onMouseLeave={() => setHoveredNode(null)}
+                      style={{ cursor: 'pointer' }}
+                    >
+                      {/* Outer glow */}
+                      {isCurrent && (
+                        <motion.circle
+                          r={18}
+                          fill="none"
+                          stroke="url(#currentPulse)"
+                          strokeWidth="2"
+                          animate={{ r: [14, 22, 14], opacity: [0.6, 0, 0.6] }}
+                          transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+                        />
+                      )}
+
+                      {/* Node circle */}
+                      <motion.circle
+                        initial={{ scale: 0 }}
+                        animate={{ scale: 1 }}
+                        transition={{ delay: 0.5 + index * 0.08 }}
+                        r={isCurrent ? 14 : 10}
+                        fill={isCurrent ? cfg.color : '#0f172a'}
+                        stroke={cfg.color}
+                        strokeWidth={isCurrent ? 3 : 2}
+                        style={{
+                          filter: isCurrent
+                            ? `drop-shadow(0 0 14px ${cfg.glowColor})`
+                            : `drop-shadow(0 0 6px ${cfg.glowColor})`,
+                        }}
+                      />
+
+                      {/* Inner dot for non-current nodes */}
+                      {!isCurrent && (
+                        <circle r={4} fill={cfg.color} opacity={0.8} />
+                      )}
+
+                      {/* Node label */}
+                      <text
+                        y={isCurrent ? -22 : 22}
+                        fill={isCurrent ? '#f8fafc' : 'rgba(148,163,184,0.9)'}
+                        fontSize={isCurrent ? '12' : '10'}
+                        fontWeight={isCurrent ? '700' : '500'}
+                        textAnchor="middle"
+                        style={{
+                          filter: isCurrent ? `drop-shadow(0 0 8px ${cfg.glowColor})` : 'none',
+                          pointerEvents: 'none',
+                        }}
+                      >
+                        {node.label.length > 6 ? node.label.slice(0, 5) + '…' : node.label}
+                      </text>
+                    </g>
+                  );
+                })}
+              </g>
+            );
+          })}
+
+          {/* Current time indicator */}
+          <line
+            x1={VIEWBOX.startX}
+            y1={50}
+            x2={VIEWBOX.startX}
+            y2={360}
+            stroke="#f43f5e"
+            strokeWidth="2"
+            strokeDasharray="6 4"
+            opacity="0.5"
+          />
+          <rect
+            x={VIEWBOX.startX - 30}
+            y={40}
+            width="60"
+            height="20"
+            rx="10"
+            fill="rgba(244,63,94,0.15)"
+            stroke="rgba(244,63,94,0.4)"
+          />
+          <text x={VIEWBOX.startX} y={54} fill="#f43f5e" fontSize="10" fontWeight="600" textAnchor="middle">
+            当前位置
+          </text>
+        </svg>
+      </div>
+
+      {/* Hover tooltip */}
+      {hoveredData && (
+        <motion.div
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="absolute top-24 right-6 w-56 p-4 rounded-xl bg-slate-900/95 border border-white/10 shadow-2xl z-20"
+        >
+          <div className="flex items-center gap-2 mb-2">
+            <div
+              className="w-3 h-3 rounded-full"
+              style={{
+                backgroundColor: trackConfig[hoveredData.track].color,
+                boxShadow: `0 0 10px ${trackConfig[hoveredData.track].glowColor}`,
+              }}
+            />
+            <p className="text-xs text-slate-500">{hoveredData.time}</p>
+          </div>
+          <p className="text-sm font-bold text-slate-200 mb-1">{hoveredData.label}</p>
+          <p className="text-xs text-slate-400">{hoveredData.detail}</p>
+        </motion.div>
+      )}
+
+      {/* Bottom summary */}
+      <div className="mt-6 pt-6 border-t border-white/5 grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div className="rounded-xl bg-rose-500/5 border border-rose-500/10 p-3">
+          <p className="text-xs text-rose-400 mb-1">古诗文积累</p>
+          <p className="text-sm text-slate-300">古诗启蒙 → 120 首 → 文学素养</p>
+        </div>
+        <div className="rounded-xl bg-teal-500/5 border border-teal-500/10 p-3">
+          <p className="text-xs text-teal-400 mb-1">阅读写作</p>
+          <p className="text-sm text-slate-300">绘本 → 儿童文学 → 面谈表达</p>
+        </div>
+        <div className="rounded-xl bg-amber-500/5 border border-amber-500/10 p-3">
+          <p className="text-xs text-amber-400 mb-1">竞赛荣誉</p>
+          <p className="text-sm text-slate-300">校内荣誉 → 汉字/古诗文 → 简历归档</p>
+        </div>
+      </div>
+    </motion.div>
+  );
+}
