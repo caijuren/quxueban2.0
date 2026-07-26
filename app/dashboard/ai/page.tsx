@@ -33,7 +33,7 @@ const reportSections = [
     color: 'text-secondary',
     items: [
       '本月内完成 2-3 家奥数机构试听，确定学习形式',
-      '保持英语优势，暑假尝试 PET 模拟测试',
+      '保持英语优势，暑假完成 OD1 Unit 7-12，RAZ 爬坡至 Level F+',
       '同步维护私立摇号作为保底，不要全部押注三公',
     ],
   },
@@ -43,7 +43,7 @@ const reportSections = [
     color: 'text-accent',
     items: [
       '确定奥数机构和上课时间',
-      '完成 PET 词汇 Unit 1-4',
+      '完成 OD1 Unit 7-12 + RAZ 每日阅读（quiz 正确率 80%+）',
       '整理三公学校招生政策和历年面谈题',
     ],
   },

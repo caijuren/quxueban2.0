@@ -14,14 +14,14 @@ const milestones = [
       { name: '建立学习习惯，每日阅读 30 分钟', status: 'completed' },
       { name: '完成一年级期末成绩记录', status: 'completed' },
       { name: '确定三年级奥数学习形式', status: 'in_progress' },
-      { name: '评估英语启蒙基础，制定 PET 长期计划', status: 'pending' },
+      { name: '评估英语启蒙基础，制定 KET 长期计划', status: 'pending' },
     ],
   },
   {
     grade: '二年级',
     period: '2025.9 - 2026.6',
     tasks: [
-      { name: '开始系统英语拓展学习', status: 'pending' },
+      { name: 'RAZ 爬坡（quiz 正确率 80%+）+ OD1 系统学习', status: 'pending' },
       { name: '培养数学逻辑思维', status: 'pending' },
       { name: '参加 1-2 项综合素质活动', status: 'pending' },
     ],
@@ -31,7 +31,7 @@ const milestones = [
     period: '2026.9 - 2027.6',
     tasks: [
       { name: '启动奥数系统学习', status: 'pending' },
-      { name: 'PET 备考并通过', status: 'pending' },
+      { name: '三年级寒假冲 KET 卓越 140+', status: 'pending' },
       { name: '语文阅读和写作能力强化', status: 'pending' },
     ],
   },

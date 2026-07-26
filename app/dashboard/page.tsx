@@ -56,7 +56,7 @@ const stats = [
 
 const recentTasks = [
   { name: '试听奥数机构 A', status: 'completed', date: '今天' },
-  { name: '完成 PET 词汇 Unit 5', status: 'in_progress', date: '明天截止' },
+  { name: '完成 OD1 Unit 7 学习', status: 'in_progress', date: '明天截止' },
   { name: '整理三公历年招生简章', status: 'pending', date: '本周内' },
   { name: '记录孩子期末成绩', status: 'pending', date: '3 天内' },
 ];
@@ -65,7 +65,7 @@ const aiInsights = [
   {
     type: 'success',
     title: '英语进度正常',
-    content: 'PET 备考节奏良好，建议继续保持每周 3 次单词打卡',
+    content: 'RAZ 爬坡节奏良好，quiz 正确率 80%+，建议继续保持每日阅读',
   },
   {
     type: 'warning',
