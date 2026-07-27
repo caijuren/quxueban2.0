@@ -8,7 +8,7 @@ FROM node:20-alpine AS base
 
 # --- 依赖阶段 ---
 FROM base AS deps
-RUN apk add --no-cache libc6-compat
+RUN apk add --no-cache libc6-compat openssl
 WORKDIR /app
 COPY package.json pnpm-lock.yaml ./
 RUN npm install -g pnpm && pnpm install --frozen-lockfile
@@ -18,6 +18,9 @@ FROM base AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
+
+# 确保 public 目录存在（项目可能无静态资源目录）
+RUN mkdir -p /app/public
 
 # Prisma Client 必须在使用前重新生成，以匹配容器平台引擎
 RUN npx prisma generate
@@ -30,6 +33,9 @@ RUN npm run build
 # --- 运行阶段 ---
 FROM base AS runner
 WORKDIR /app
+
+# Alpine 运行 Prisma 也需要 openssl
+RUN apk add --no-cache openssl
 
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
