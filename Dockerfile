@@ -68,13 +68,21 @@ COPY --from=builder /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
-# 复制 Prisma CLI 及其依赖到运行镜像，避免启动时 npx 下载
-COPY --from=builder --chown=nextjs:nodejs /app/node_modules/prisma ./node_modules/prisma
-COPY --from=builder --chown=nextjs:nodejs /app/node_modules/@prisma ./node_modules/@prisma
+# Prisma schema 供迁移命令使用
+COPY --from=builder --chown=nextjs:nodejs /app/prisma/schema.prisma ./prisma/schema.prisma
+
+# 在独立目录安装 Prisma CLI，避免 pnpm 软链在复制后失效
+RUN mkdir -p /app/prisma-cli && \
+    cd /app/prisma-cli && \
+    npm config set registry https://registry.npmmirror.com && \
+    npm init -y && \
+    npm install prisma@5.22.0 && \
+    rm -rf /root/.npm && \
+    chown -R nextjs:nodejs /app/prisma-cli
 
 USER nextjs
 
 EXPOSE 3000
 
 # 启动时先执行数据库迁移，再启动应用
-CMD ["sh", "-c", "node node_modules/prisma/build/index.js migrate deploy && node server.js"]
+CMD ["sh", "-c", "/app/prisma-cli/node_modules/.bin/prisma migrate deploy --schema=/app/prisma/schema.prisma && node server.js"]
