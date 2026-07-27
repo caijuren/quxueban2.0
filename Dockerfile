@@ -9,10 +9,21 @@ FROM node:20-bullseye-slim AS base
 
 # --- 依赖阶段 ---
 FROM base AS deps
-RUN apt-get update && apt-get install -y openssl ca-certificates && rm -rf /var/lib/apt/lists/*
+# 使用腾讯云 Debian 镜像源加速
+RUN rm -f /etc/apt/sources.list.d/debian.sources && \
+    echo "deb http://mirrors.tencent.com/debian/ bullseye main non-free contrib" > /etc/apt/sources.list && \
+    echo "deb http://mirrors.tencent.com/debian-security/ bullseye-security main" >> /etc/apt/sources.list && \
+    echo "deb http://mirrors.tencent.com/debian/ bullseye-updates main non-free contrib" >> /etc/apt/sources.list && \
+    apt-get update && \
+    apt-get install -y openssl ca-certificates && \
+    rm -rf /var/lib/apt/lists/*
 WORKDIR /app
 COPY package.json pnpm-lock.yaml ./
-RUN npm install -g pnpm && pnpm install --frozen-lockfile
+# 使用国内 npm 镜像源加速
+RUN npm config set registry https://registry.npmmirror.com && \
+    npm install -g pnpm && \
+    pnpm config set registry https://registry.npmmirror.com && \
+    pnpm install --frozen-lockfile
 
 # --- 构建阶段 ---
 FROM base AS builder
@@ -36,7 +47,13 @@ FROM base AS runner
 WORKDIR /app
 
 # Debian 运行 Prisma 也需要 openssl
-RUN apt-get update && apt-get install -y openssl ca-certificates && rm -rf /var/lib/apt/lists/*
+RUN rm -f /etc/apt/sources.list.d/debian.sources && \
+    echo "deb http://mirrors.tencent.com/debian/ bullseye main non-free contrib" > /etc/apt/sources.list && \
+    echo "deb http://mirrors.tencent.com/debian-security/ bullseye-security main" >> /etc/apt/sources.list && \
+    echo "deb http://mirrors.tencent.com/debian/ bullseye-updates main non-free contrib" >> /etc/apt/sources.list && \
+    apt-get update && \
+    apt-get install -y openssl ca-certificates && \
+    rm -rf /var/lib/apt/lists/*
 
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
