@@ -7,15 +7,15 @@ import {
   BarChart3,
   Brain,
   Sparkles,
-  Settings,
   LogOut,
   Languages,
   Calculator,
   BookText,
   Calendar,
+  X,
 } from 'lucide-react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 
 const menuGroups = [
   {
@@ -26,7 +26,7 @@ const menuGroups = [
     ],
   },
   {
-    title: '学科能力',
+    title: '学科作战室',
     items: [
       { name: '英语学科', href: '/dashboard/subjects/english', icon: Languages },
       { name: '数学学科', href: '/dashboard/subjects/math', icon: Calculator },
@@ -34,13 +34,17 @@ const menuGroups = [
     ],
   },
   {
-    title: '数据跟踪',
+    title: '数据追踪',
     items: [
       { name: '进度追踪', href: '/dashboard/progress', icon: BarChart3 },
     ],
   },
   {
-    title: '智能工具',
+    title: '执行跟踪',
+    items: [{ name: '周任务', href: '/dashboard/weekly', icon: Calendar }],
+  },
+  {
+    title: '智能参谋',
     items: [{ name: 'AI 检视', href: '/dashboard/ai', icon: Brain }],
   },
 ];
@@ -52,53 +56,65 @@ interface SidebarProps {
 
 export default function Sidebar({ mobileMenuOpen, onLinkClick }: SidebarProps) {
   const pathname = usePathname();
+  const router = useRouter();
 
   return (
     <aside
-      className={`fixed left-0 top-0 h-full w-64 glass border-r border-white/5 z-50 flex flex-col transition-transform duration-300 ${
+      className={`fixed left-0 top-0 h-full w-64 glass border-r border-white/[0.06] z-50 flex flex-col transition-transform duration-300 ${
         mobileMenuOpen ? 'translate-x-0 lg:translate-x-0' : '-translate-x-full lg:translate-x-0 lg:flex hidden'
       }`}
     >
       {/* Logo */}
-      <div className="p-6 border-b border-white/5">
-        <Link href="/" className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center glow-primary">
-            <Sparkles className="w-5 h-5 text-white" />
-          </div>
-          <div>
-            <span className="text-xl font-bold font-display gradient-text">趣学伴</span>
-            <p className="text-xs text-slate-500">上海升学战略系统</p>
-          </div>
-        </Link>
+      <div className="p-5 border-b border-white/[0.06]">
+        <div className="flex items-center justify-between">
+          <Link href="/" className="flex items-center gap-2.5" onClick={onLinkClick}>
+            <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-primary to-secondary flex items-center justify-center glow-primary">
+              <Sparkles className="w-4 h-4 text-white" />
+            </div>
+            <div>
+              <span className="text-lg font-bold font-display gradient-text">趣学伴</span>
+              <p className="text-[10px] text-slate-500 leading-tight">升学作战指挥中心</p>
+            </div>
+          </Link>
+          <button
+            onClick={onLinkClick}
+            className="lg:hidden w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center text-slate-400 hover:text-white hover:bg-white/10 transition-colors"
+            aria-label="关闭菜单"
+          >
+            <X className="w-4 h-4" />
+          </button>
+        </div>
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 p-4 space-y-5 overflow-y-auto">
+      <nav className="flex-1 p-3 space-y-4 overflow-y-auto">
         {menuGroups.map((group) => (
           <div key={group.title}>
-            <p className="px-4 mb-2 text-[11px] font-medium text-slate-500 uppercase tracking-wider">
+            <p className="px-3 mb-1.5 text-xs font-medium text-slate-500">
               {group.title}
             </p>
-            <div className="space-y-1">
+            <div className="space-y-0.5">
               {group.items.map((item) => {
                 const isActive = item.href === '/dashboard'
                   ? pathname === '/dashboard'
                   : pathname === item.href || pathname.startsWith(`${item.href}/`);
                 return (
-                  <Link key={item.name} href={item.href} onClick={onLinkClick}>
-                    <div
-                      className={`relative flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 ${
-                        isActive
-                          ? 'bg-gradient-to-r from-primary/20 to-secondary/20 text-white border border-primary/20'
-                          : 'text-slate-400 hover:text-white hover:bg-white/5'
-                      }`}
-                    >
-                      {isActive && (
-                        <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 rounded-r-full bg-primary shadow-[0_0_10px_rgba(244,63,94,0.8)]" />
-                      )}
-                      <item.icon className={`w-5 h-5 ${isActive ? 'text-primary' : ''}`} />
-                      <span className="font-medium">{item.name}</span>
-                    </div>
+                  <Link
+                    key={item.name}
+                    href={item.href}
+                    onClick={onLinkClick}
+                    aria-current={isActive ? 'page' : undefined}
+                    className={`group relative flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200 ${
+                      isActive
+                        ? 'bg-white/[0.06] text-white'
+                        : 'text-slate-400 hover:text-slate-200 hover:bg-white/[0.04]'
+                    }`}
+                  >
+                    {isActive && (
+                      <div className="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-4 rounded-r-full bg-primary shadow-glow-primary" />
+                    )}
+                    <item.icon className={`w-4 h-4 transition-colors ${isActive ? 'text-primary' : 'text-slate-500 group-hover:text-slate-300'}`} />
+                    <span className="text-sm font-medium">{item.name}</span>
                   </Link>
                 );
               })}
@@ -108,20 +124,14 @@ export default function Sidebar({ mobileMenuOpen, onLinkClick }: SidebarProps) {
       </nav>
 
       {/* Bottom actions */}
-      <div className="p-4 border-t border-white/5 space-y-1">
+      <div className="p-3 border-t border-white/[0.06]">
         <button
-          className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-white hover:bg-white/5 transition-all duration-300"
-          aria-label="设置"
+          onClick={() => router.push('/')}
+          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-400 hover:text-danger hover:bg-danger/10 transition-colors duration-200 text-sm"
         >
-          <Settings className="w-5 h-5" />
-          <span className="font-medium">设置</span>
+          <LogOut className="w-4 h-4" />
+          <span>退出登录</span>
         </button>
-        <Link href="/" onClick={onLinkClick}>
-          <button className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-danger hover:bg-danger/10 transition-all duration-300">
-            <LogOut className="w-5 h-5" />
-            <span className="font-medium">退出登录</span>
-          </button>
-        </Link>
       </div>
     </aside>
   );

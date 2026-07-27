@@ -1,0 +1,56 @@
+# 趣学伴本地/测试环境一键编排
+# 用法：
+#   1. 复制 .env.example 为 .env.production 并修改密钥
+#   2. docker compose up -d db
+#   3. docker compose run --rm seed        # 首次初始化数据
+#   4. docker compose up -d app
+#   5. 访问 http://localhost:3000
+
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: quxueban
+      POSTGRES_PASSWORD: quxueban
+      POSTGRES_DB: quxueban
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U quxueban -d quxueban"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    ports:
+      - "5432:5432"
+
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env.production
+    environment:
+      DATABASE_URL: postgresql://quxueban:quxueban@db:5432/quxueban?schema=public
+    depends_on:
+      db:
+        condition: service_healthy
+    command: >
+      sh -c "npx prisma migrate deploy && node server.js"
+
+  seed:
+    build:
+      context: .
+      target: builder
+    env_file:
+      - .env.production
+    environment:
+      DATABASE_URL: postgresql://quxueban:quxueban@db:5432/quxueban?schema=public
+    depends_on:
+      db:
+        condition: service_healthy
+    command: >
+      sh -c "npx prisma migrate deploy && npx tsx prisma/seed.ts"
+    restart: "no"
+
+volumes:
+  postgres_data:

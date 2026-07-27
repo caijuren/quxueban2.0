@@ -1,7 +1,8 @@
 'use client';
 
-import { motion } from 'framer-motion';
-import { Home, Route, CalendarCheck, BarChart3, Brain } from 'lucide-react';
+import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Home, Route, CalendarCheck, BarChart3, Brain, Menu, X } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
@@ -15,6 +16,9 @@ const navItems = [
 
 export default function Navbar() {
   const pathname = usePathname();
+  const [mobileOpen, setMobileOpen] = useState(false);
+
+  const isActive = (href: string) => pathname === href;
 
   return (
     <motion.nav
@@ -22,31 +26,32 @@ export default function Navbar() {
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.6 }}
       className="fixed top-0 left-0 right-0 z-50 glass border-b border-white/5"
+      aria-label="主导航"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
-          <Link href="/" className="flex items-center gap-2.5 group">
-            <div className="w-9 h-9 rounded-lg bg-primary flex items-center justify-center glow-primary">
-              <Brain className="w-5 h-5 text-white" />
+        <div className="flex items-center justify-between h-14">
+          <Link href="/" className="flex items-center gap-2 group" aria-label="趣学伴首页">
+            <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center glow-primary">
+              <Brain className="w-4 h-4 text-white" aria-hidden="true" />
             </div>
-            <span className="text-xl font-bold font-display tracking-tight text-white">
+            <span className="text-lg font-bold font-display tracking-tight text-white">
               趣学伴
             </span>
           </Link>
 
           <div className="hidden md:flex items-center gap-1">
             {navItems.map((item) => {
-              const isActive = pathname === item.href;
+              const active = isActive(item.href);
               return (
-                <Link key={item.name} href={item.href}>
+                <Link key={item.name} href={item.href} aria-current={active ? 'page' : undefined}>
                   <span
-                    className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 ${
-                      isActive
+                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-all duration-200 ${
+                      active
                         ? 'text-primary bg-primary/10'
                         : 'text-slate-400 hover:text-white hover:bg-white/5'
                     }`}
                   >
-                    <item.icon className="w-4 h-4" />
+                    <item.icon className="w-3.5 h-3.5" aria-hidden="true" />
                     {item.name}
                   </span>
                 </Link>
@@ -54,13 +59,68 @@ export default function Navbar() {
             })}
           </div>
 
-          <Link href="/login">
-            <button className="px-5 py-2 rounded-full bg-white text-background text-sm font-semibold hover:bg-slate-200 transition-all duration-300">
-              登录 / 注册
+          <div className="flex items-center gap-2">
+            <Link href="/login" className="hidden sm:block">
+              <span className="px-4 py-1.5 rounded-full bg-white text-background text-sm font-semibold hover:bg-slate-200 transition-all duration-200">
+                登录 / 注册
+              </span>
+            </Link>
+            <button
+              onClick={() => setMobileOpen((prev) => !prev)}
+              className="md:hidden p-2 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 transition-colors focus-ring"
+              aria-expanded={mobileOpen}
+              aria-controls="mobile-menu"
+              aria-label={mobileOpen ? '关闭菜单' : '打开菜单'}
+            >
+              {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
-          </Link>
+          </div>
         </div>
       </div>
+
+      <AnimatePresence>
+        {mobileOpen && (
+          <motion.div
+            id="mobile-menu"
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.2 }}
+            className="md:hidden border-t border-white/5 bg-background/95 backdrop-blur-xl"
+          >
+            <div className="px-4 py-3 space-y-1">
+              {navItems.map((item) => {
+                const active = isActive(item.href);
+                return (
+                  <Link
+                    key={item.name}
+                    href={item.href}
+                    onClick={() => setMobileOpen(false)}
+                    aria-current={active ? 'page' : undefined}
+                    className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
+                      active
+                        ? 'text-primary bg-primary/10'
+                        : 'text-slate-400 hover:text-white hover:bg-white/5'
+                    }`}
+                  >
+                    <item.icon className="w-4 h-4" aria-hidden="true" />
+                    {item.name}
+                  </Link>
+                );
+              })}
+              <div className="pt-2 border-t border-white/5 mt-2">
+                <Link
+                  href="/login"
+                  onClick={() => setMobileOpen(false)}
+                  className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-white text-background text-sm font-semibold hover:bg-slate-200 transition-colors"
+                >
+                  登录 / 注册
+                </Link>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.nav>
   );
 }

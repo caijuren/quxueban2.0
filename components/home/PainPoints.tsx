@@ -1,6 +1,6 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import MotionSection from '@/components/ui/MotionSection';
 
 const pains = [
   {
@@ -22,50 +22,44 @@ const pains = [
 
 export default function PainPoints() {
   return (
-    <section className="py-24 px-4 sm:px-6 lg:px-8">
+    <section className="py-14 px-4 sm:px-6 lg:px-8">
       <div className="max-w-6xl mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.7 }}
-          >
-            <span className="text-xs font-mono text-primary uppercase tracking-widest mb-4 block">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-start">
+          <MotionSection direction="up" duration={0.6}>
+            <span className="text-[11px] font-mono text-primary uppercase tracking-widest mb-3 block">
               The Problem
             </span>
-            <h2 className="text-4xl sm:text-5xl font-bold font-display leading-tight mb-6">
+            <h2 className="text-3xl sm:text-4xl font-bold font-display leading-tight mb-4">
               上海升学
               <br />
               <span className="text-slate-500">不是信息不够</span>
               <br />
               是信息太杂
             </h2>
-            <p className="text-slate-400 text-lg leading-relaxed max-w-md">
+            <p className="text-slate-400 text-base leading-relaxed max-w-sm">
               政策每年微调、学校要求各不相同、时间节点密集。家长最缺的不是资源，而是一张清晰的执行地图。
             </p>
-          </motion.div>
+          </MotionSection>
 
-          <div className="space-y-8">
+          <div className="space-y-6">
             {pains.map((pain, index) => (
-              <motion.div
+              <MotionSection
                 key={pain.number}
-                initial={{ opacity: 0, x: 30 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.15 }}
-                className="group flex gap-6 pb-8 border-b border-white/5 last:border-0 last:pb-0"
+                direction="left"
+                delay={index * 0.1}
+                duration={0.5}
+                className="group flex gap-5 pb-6 border-b border-white/5 last:border-0 last:pb-0"
               >
-                <span className="text-3xl font-mono text-slate-700 font-bold group-hover:text-primary transition-colors duration-300">
+                <span className="text-2xl font-mono text-slate-700 font-bold group-hover:text-primary transition-colors duration-300">
                   {pain.number}
                 </span>
                 <div>
-                  <h3 className="text-xl font-bold font-display mb-2 text-white group-hover:text-primary transition-colors duration-300">
+                  <h3 className="text-lg font-bold font-display mb-1.5 text-white group-hover:text-primary transition-colors duration-300">
                     {pain.title}
                   </h3>
-                  <p className="text-slate-400 leading-relaxed">{pain.description}</p>
+                  <p className="text-sm text-slate-400 leading-relaxed">{pain.description}</p>
                 </div>
-              </motion.div>
+              </MotionSection>
             ))}
           </div>
         </div>

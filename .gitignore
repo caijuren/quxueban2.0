@@ -45,6 +45,9 @@ Thumbs.db
 # Local data exports
 *.quxueban-backup.json
 
+# Temporary scripts
+.tmp_*.py
+
 # Environment-specific
 .node/
 dogfood-output/

@@ -1,6 +1,8 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { Quote } from 'lucide-react';
+import CommandCard from '@/components/ui/CommandCard';
+import MotionSection from '@/components/ui/MotionSection';
 
 const stats = [
   { value: '10+', label: '升学路线模板' },
@@ -21,54 +23,51 @@ const testimonials = [
 
 export default function TrustProof() {
   return (
-    <section className="py-24 px-4 sm:px-6 lg:px-8">
+    <section className="py-14 px-4 sm:px-6 lg:px-8">
       <div className="max-w-6xl mx-auto">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.7 }}
-          className="mb-16"
-        >
-          <span className="text-xs font-mono text-primary uppercase tracking-widest mb-4 block">
+        <MotionSection direction="up" duration={0.6} className="mb-12">
+          <span className="text-[11px] font-mono text-primary uppercase tracking-widest mb-3 block">
             Trust
           </span>
-          <h2 className="text-4xl sm:text-5xl font-bold font-display leading-tight mb-6">
+          <h2 className="text-3xl sm:text-4xl font-bold font-display leading-tight">
             已有家长把焦虑
             <br />
             <span className="text-slate-500">变成行动力</span>
           </h2>
-        </motion.div>
+        </MotionSection>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-8">
           {stats.map((stat, index) => (
-            <motion.div
+            <MotionSection
               key={stat.label}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.1 }}
-              className="border-b border-white/10 pb-8 lg:border-b-0 lg:pb-0"
+              direction="up"
+              delay={index * 0.08}
             >
-              <div className="text-5xl sm:text-6xl font-black font-display text-white mb-2">{stat.value}</div>
-              <div className="text-sm text-slate-500">{stat.label}</div>
-            </motion.div>
+              <CommandCard className="p-5 h-full">
+                <div className="text-3xl sm:text-4xl font-bold font-display text-white mb-1 tabular-nums">
+                  {stat.value}
+                </div>
+                <div className="text-xs text-slate-500">{stat.label}</div>
+              </CommandCard>
+            </MotionSection>
           ))}
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {testimonials.map((item, index) => (
-            <motion.div
+            <MotionSection
               key={index}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.15 }}
-              className="relative pl-6 border-l-2 border-primary/30"
+              direction="up"
+              delay={index * 0.1}
             >
-              <p className="text-lg text-slate-300 leading-relaxed mb-4 font-display">&ldquo;{item.content}&rdquo;</p>
-              <p className="text-sm text-slate-500 font-mono">{item.author}</p>
-            </motion.div>
+              <CommandCard className="p-5 h-full relative">
+                <Quote className="absolute top-5 right-5 w-5 h-5 text-primary/20" aria-hidden="true" />
+                <p className="text-sm text-slate-300 leading-relaxed mb-4 pr-6">
+                  &ldquo;{item.content}&rdquo;
+                </p>
+                <p className="text-[11px] text-slate-500 font-mono">{item.author}</p>
+              </CommandCard>
+            </MotionSection>
           ))}
         </div>
       </div>

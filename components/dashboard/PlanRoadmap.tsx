@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import {
   AlertTriangle,
   CheckCircle2,
@@ -175,7 +175,7 @@ export default function PlanRoadmap({
     setMounted(true);
   }, []);
 
-  const particles = createParticles();
+  const particles = useMemo(() => createParticles(), []);
 
   const [hoveredRoute, setHoveredRoute] = useState<string | null>(null);
   const [hoveredCheckpoint, setHoveredCheckpoint] = useState<string | null>(null);
@@ -423,8 +423,8 @@ export default function PlanRoadmap({
                     </radialGradient>
                   </defs>
                   <motion.ellipse
-                    cx={mousePos.x}
-                    cy={mousePos.y}
+                    cx={mousePos?.x ?? 550}
+                    cy={mousePos?.y ?? 230}
                     rx={180}
                     ry={120}
                     fill="url(#cursorGlow)"
@@ -435,9 +435,9 @@ export default function PlanRoadmap({
                   {particles.map((p) => (
                     <motion.circle
                       key={p.id}
-                      cx={p.x}
-                      cy={p.y}
-                      r={p.size}
+                      cx={p.x ?? 0}
+                      cy={p.y ?? 0}
+                      r={p.size ?? 1}
                       fill="white"
                       initial={{ opacity: 0.1 }}
                       animate={{

@@ -1,0 +1,177 @@
+'use client';
+
+import { useEffect, useState } from 'react';
+import Link from 'next/link';
+import { motion } from 'framer-motion';
+import {
+  Users,
+  Baby,
+  Map,
+  CalendarCheck,
+  ArrowRight,
+  Loader2,
+} from 'lucide-react';
+
+interface Stats {
+  userCount: number;
+  childCount: number;
+  planCount: number;
+  weeklyPlanCount: number;
+}
+
+interface AdminUser {
+  id: string;
+  username: string;
+  name: string | null;
+  role: 'ADMIN' | 'PARENT';
+  createdAt: string;
+  _count: {
+    children: number;
+    plans: number;
+    weeklyPlans: number;
+  };
+}
+
+const statCards = [
+  { key: 'userCount', label: '注册用户', icon: Users, color: 'from-blue-500 to-cyan-500' },
+  { key: 'childCount', label: '孩子档案', icon: Baby, color: 'from-pink-500 to-rose-500' },
+  { key: 'planCount', label: '升学计划', icon: Map, color: 'from-violet-500 to-purple-500' },
+  { key: 'weeklyPlanCount', label: '周计划', icon: CalendarCheck, color: 'from-emerald-500 to-teal-500' },
+] as const;
+
+export default function AdminPage() {
+  const [stats, setStats] = useState<Stats | null>(null);
+  const [users, setUsers] = useState<AdminUser[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function load() {
+      try {
+        const [statsRes, usersRes] = await Promise.all([
+          fetch('/api/admin/stats'),
+          fetch('/api/admin/users'),
+        ]);
+        if (!statsRes.ok || !usersRes.ok) throw new Error('加载失败');
+        const [statsData, usersData] = await Promise.all([
+          statsRes.json(),
+          usersRes.json(),
+        ]);
+        if (cancelled) return;
+        setStats(statsData);
+        setUsers(usersData.slice(0, 10));
+      } catch (err) {
+        setError(err instanceof Error ? err.message : '加载失败');
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    load();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="flex h-[60vh] items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="rounded-2xl border border-error/20 bg-error/10 p-6 text-error">
+        {error}
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-8">
+      <div>
+        <h1 className="text-2xl font-bold font-display">数据概览</h1>
+        <p className="text-slate-400">平台核心指标一览</p>
+      </div>
+
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        {statCards.map((card, index) => {
+          const Icon = card.icon;
+          const value = stats?.[card.key] ?? 0;
+          return (
+            <motion.div
+              key={card.key}
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: index * 0.05 }}
+              className="rounded-2xl border border-white/10 bg-surface p-6"
+            >
+              <div className={`mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br shadow-lg ${card.color}`}>
+                <Icon className="h-5 w-5 text-white" />
+              </div>
+              <div className="text-3xl font-bold font-display">{value}</div>
+              <div className="text-sm text-slate-400">{card.label}</div>
+            </motion.div>
+          );
+        })}
+      </div>
+
+      <div className="rounded-2xl border border-white/10 bg-surface p-6">
+        <div className="mb-4 flex items-center justify-between">
+          <h2 className="text-lg font-semibold">最近用户</h2>
+          <Link
+            href="/admin/users"
+            className="flex items-center gap-1 text-sm text-primary hover:underline"
+          >
+            查看全部 <ArrowRight className="h-4 w-4" />
+          </Link>
+        </div>
+
+        <div className="overflow-x-auto">
+          <table className="w-full text-left text-sm">
+            <thead>
+              <tr className="border-b border-white/10 text-slate-400">
+                <th className="pb-3 font-medium">用户名</th>
+                <th className="pb-3 font-medium">角色</th>
+                <th className="pb-3 font-medium">孩子</th>
+                <th className="pb-3 font-medium">计划</th>
+                <th className="pb-3 font-medium">周计划</th>
+                <th className="pb-3 font-medium">注册时间</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-white/5">
+              {users.map((user) => (
+                <tr key={user.id} className="text-slate-300">
+                  <td className="py-3 font-medium text-slate-100">
+                    {user.name || user.username}
+                  </td>
+                  <td className="py-3">
+                    <span
+                      className={`rounded-full px-2 py-0.5 text-xs ${
+                        user.role === 'ADMIN'
+                          ? 'bg-primary/20 text-primary'
+                          : 'bg-slate-700 text-slate-300'
+                      }`}
+                    >
+                      {user.role === 'ADMIN' ? '管理员' : '家长'}
+                    </span>
+                  </td>
+                  <td className="py-3">{user._count.children}</td>
+                  <td className="py-3">{user._count.plans}</td>
+                  <td className="py-3">{user._count.weeklyPlans}</td>
+                  <td className="py-3 text-slate-500">
+                    {new Date(user.createdAt).toLocaleDateString('zh-CN')}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  );
+}

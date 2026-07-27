@@ -12,6 +12,8 @@ const config: Config = {
         background: '#08080c',
         surface: '#0f0f16',
         'surface-light': '#161622',
+        'surface-elevated': '#1a1a28',
+        'border-subtle': 'rgba(255, 255, 255, 0.06)',
         primary: '#ff2d6a',
         'primary-glow': '#ff5c8a',
         secondary: '#8b5cf6',
@@ -21,6 +23,11 @@ const config: Config = {
         success: '#22c55e',
         warning: '#f59e0b',
         danger: '#ef4444',
+      },
+      boxShadow: {
+        'glow-primary': '0 0 20px rgba(255, 45, 106, 0.15)',
+        'glow-secondary': '0 0 20px rgba(139, 92, 246, 0.15)',
+        'glow-accent': '0 0 20px rgba(6, 182, 212, 0.15)',
       },
       fontFamily: {
         display: ['var(--font-display)', 'PingFang SC', 'Microsoft YaHei', 'sans-serif'],

@@ -1,8 +1,8 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import { useEffect, useRef, useState, Suspense } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
 import {
   Route,
   Target,
@@ -16,8 +16,8 @@ import {
   School,
   GraduationCap,
   Home,
+  ChevronUp,
 } from 'lucide-react';
-import Link from 'next/link';
 import PlanRoadmap from '@/components/dashboard/PlanRoadmap';
 import MiddleSchoolMatrix from '@/components/dashboard/MiddleSchoolMatrix';
 import {
@@ -31,12 +31,23 @@ import MatchAnalysisModal from './MatchAnalysisModal';
 import NewPlanModal from './NewPlanModal';
 import ManageNodesModal from './ManageNodesModal';
 import EmptyState from '@/components/ui/EmptyState';
+import CommandCard from '@/components/ui/CommandCard';
+import TimelineNode from '@/components/ui/TimelineNode';
 import { useChildren } from '@/components/dashboard/ChildrenContext';
 import { gradeToStage } from '@/lib/children';
 
+const stages = [
+  { id: '小升初', label: '小升初', status: 'active' },
+  { id: '中考', label: '中考', status: 'active' },
+  { id: '高考', label: '高考', status: 'coming' },
+];
+
 function PlanPageContent() {
+  const router = useRouter();
   const searchParams = useSearchParams();
+  const shouldReduceMotion = useReducedMotion();
   const query = searchParams.get('q')?.toLowerCase() || '';
+  const stageFromUrl = searchParams.get('stage');
   const { currentChild } = useChildren();
 
   // TODO: fetch plan list from backend
@@ -44,15 +55,30 @@ function PlanPageContent() {
   const [showMatchModal, setShowMatchModal] = useState(false);
   const [showNewPlanModal, setShowNewPlanModal] = useState(false);
   const [showManageNodesModal, setShowManageNodesModal] = useState(false);
-  const [activeStage, setActiveStage] = useState('小升初');
+  const [activeStage, setActiveStageState] = useState('小升初');
   const [stageDropdownOpen, setStageDropdownOpen] = useState(false);
+  const [expandedPlanId, setExpandedPlanId] = useState<string | null>(null);
   const stageDropdownRef = useRef<HTMLDivElement>(null);
 
+  // Sync active stage with URL
   useEffect(() => {
-    if (currentChild) {
-      setActiveStage(gradeToStage(currentChild.grade));
+    if (stageFromUrl && stages.some((s) => s.id === stageFromUrl && s.status === 'active')) {
+      setActiveStageState(stageFromUrl);
+    } else if (currentChild) {
+      const childStage = gradeToStage(currentChild.grade);
+      setActiveStageState(childStage);
+      const params = new URLSearchParams(searchParams.toString());
+      params.set('stage', childStage);
+      router.replace(`/dashboard/plan?${params.toString()}`, { scroll: false });
     }
-  }, [currentChild]);
+  }, [currentChild, stageFromUrl, searchParams, router]);
+
+  const setActiveStage = (stage: string) => {
+    setActiveStageState(stage);
+    const params = new URLSearchParams(searchParams.toString());
+    params.set('stage', stage);
+    router.push(`/dashboard/plan?${params.toString()}`, { scroll: false });
+  };
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -77,6 +103,11 @@ function PlanPageContent() {
     } else {
       setPlanList(defaultPlans);
     }
+    // Expand first primary plan by default
+    const firstPrimary = activeStage === '中考'
+      ? middleSchoolPlans.find((p) => p.type === 'primary')
+      : defaultPlans.find((p) => p.type === 'primary');
+    setExpandedPlanId(firstPrimary?.id ?? null);
   }, [activeStage]);
 
   const handleCreatePlan = (plan: RoutePlan) => {
@@ -86,6 +117,10 @@ function PlanPageContent() {
 
   const handleUpdateNodes = (nextPlans: RoutePlan[]) => {
     setPlanList(nextPlans);
+  };
+
+  const togglePlan = (id: string) => {
+    setExpandedPlanId((prev) => (prev === id ? null : id));
   };
 
   const filteredPlans = planList.filter((plan) => {
@@ -103,64 +138,74 @@ function PlanPageContent() {
   });
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       {!currentChild && (
         <EmptyState
           icon={School}
-          title="还没有孩子档案"
-          description="请先在右上角添加孩子，系统会根据年级自动匹配对应阶段的路线方案"
+          title="还没有学员档案"
+          description="请先在右上角添加学员，系统会根据年级自动匹配对应阶段的路线方案"
         />
       )}
 
       {/* Header */}
       <motion.div
-        initial={{ opacity: 0, y: -10 }}
+        initial={shouldReduceMotion ? false : { opacity: 0, y: -8 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
+        transition={{ duration: 0.4 }}
         className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
       >
         <div>
-          <h1 className="text-3xl font-bold font-display mb-2">
+          <h1 className="text-2xl sm:text-3xl font-bold font-display mb-1">
             {currentChild ? `${currentChild.name}的路线方案` : '路线方案'}
           </h1>
-          <p className="text-slate-400">
+          <p className="text-sm text-slate-500">
             {currentChild
-              ? `当前阶段：${activeStage} · 根据${currentChild.name}的年级（${currentChild.grade <= 6 ? `小学${currentChild.grade}年级` : `初中${currentChild.grade - 6}年级`}）自动匹配`
+              ? `当前阶段：${activeStage} · 根据${currentChild.name}的年级自动匹配`
               : '管理小升初、中考、高考各阶段的主路线与备选路线'}
           </p>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2">
           <div ref={stageDropdownRef} className="relative">
             <button
               onClick={() => setStageDropdownOpen((prev) => !prev)}
-              className="flex items-center gap-2 px-4 py-2.5 rounded-xl glass border border-white/10 text-sm font-medium text-slate-200 hover:bg-white/5 transition-all"
+              className="flex items-center gap-2 px-3 py-2 rounded-lg glass border border-white/[0.08] text-sm font-medium text-slate-200 hover:bg-white/[0.04] transition-colors focus-ring"
+              aria-haspopup="listbox"
+              aria-expanded={stageDropdownOpen}
             >
               <span className="text-slate-500">阶段</span>
               <span className="gradient-text font-semibold">{activeStage}</span>
               <ChevronDown
-                className={`w-4 h-4 text-slate-400 transition-transform duration-300 ${
+                className={`w-3.5 h-3.5 text-slate-400 transition-transform duration-200 ${
                   stageDropdownOpen ? 'rotate-180' : ''
                 }`}
               />
             </button>
             {stageDropdownOpen && (
-              <div className="absolute right-0 top-full mt-2 w-40 rounded-xl glass border border-white/10 overflow-hidden z-50 shadow-[0_0_30px_rgba(0,0,0,0.3)]">
-                {['小升初', '中考'].map((stage) => {
-                  const isActive = activeStage === stage;
+              <div className="absolute right-0 top-full mt-2 w-40 rounded-xl glass border border-white/[0.08] overflow-hidden z-50 shadow-2xl">
+                {stages.map((stage) => {
+                  const isActive = activeStage === stage.id;
+                  const disabled = stage.status === 'coming';
                   return (
                     <button
-                      key={stage}
+                      key={stage.id}
+                      disabled={disabled}
                       onClick={() => {
-                        setActiveStage(stage);
+                        if (disabled) return;
+                        setActiveStage(stage.id);
                         setStageDropdownOpen(false);
                       }}
-                      className={`w-full text-left px-4 py-2.5 text-sm transition-colors ${
-                        isActive
+                      className={`w-full text-left px-3 py-2 text-sm transition-colors flex items-center justify-between ${
+                        disabled
+                          ? 'text-slate-600 cursor-not-allowed'
+                          : isActive
                           ? 'bg-primary/10 text-primary font-medium'
                           : 'text-slate-300 hover:bg-white/5'
                       }`}
                     >
-                      {stage}
+                      {stage.label}
+                      {disabled && (
+                        <span className="text-[10px] text-slate-600">即将上线</span>
+                      )}
                     </button>
                   );
                 })}
@@ -169,7 +214,7 @@ function PlanPageContent() {
           </div>
           <button
             onClick={() => setShowNewPlanModal(true)}
-            className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-primary to-secondary text-white font-semibold hover:shadow-[0_0_30px_rgba(244,63,94,0.5)] transition-all duration-300"
+            className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-gradient-to-r from-primary to-secondary text-white text-sm font-semibold hover:shadow-glow-primary transition-all duration-200 focus-ring"
           >
             <Plus className="w-4 h-4" />
             新建方案
@@ -186,196 +231,213 @@ function PlanPageContent() {
       {activeStage === '中考' && <MiddleSchoolMatrix />}
 
       {/* Plan cards */}
-      <div className="space-y-6">
+      <div className="space-y-3">
         {filteredPlans.map((plan, index) => {
           const type = typeConfig[plan.type];
           const status = statusConfig[plan.status];
+          const isExpanded = expandedPlanId === plan.id;
           return (
             <motion.div
               key={plan.id}
-              initial={{ opacity: 0, y: 30 }}
+              initial={shouldReduceMotion ? false : { opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.2 + index * 0.1 }}
-              className={`rounded-2xl glass p-6 border ${
-                plan.type === 'primary' ? 'border-primary/30' : 'border-white/5'
-              } relative overflow-hidden group min-h-[540px] flex flex-col`}
+              transition={{ duration: 0.4, delay: index * 0.06 }}
             >
-              {plan.type === 'primary' && (
-                <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
-              )}
-
-              <div className="relative z-10 flex flex-col h-full">
-                {/* Top row */}
-                <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-4 mb-6">
-                  <div className="flex items-start gap-4">
-                    <div
-                      className={`w-14 h-14 rounded-2xl ${type.bg} flex items-center justify-center shrink-0`}
-                      style={{
-                        boxShadow:
-                          plan.type === 'primary'
-                            ? '0 0 30px rgba(244, 63, 94, 0.3)'
-                            : 'none',
-                      }}
-                    >
-                      {plan.type === 'primary' ? (
-                        <Target className={`w-7 h-7 ${type.color}`} />
-                      ) : (
-                        <Shield className={`w-7 h-7 ${type.color}`} />
-                      )}
-                    </div>
-                    <div>
-                      <div className="flex items-center gap-3 mb-1">
-                        <h2 className="text-xl font-bold font-display">{plan.name}</h2>
-                        <span
-                          className={`px-2.5 py-0.5 rounded-full text-xs font-medium ${type.bg} ${type.color} border ${type.border}`}
-                        >
-                          {type.label}
-                        </span>
-                        <span className={`flex items-center gap-1 text-xs font-medium ${status.color}`}>
-                          <status.icon className="w-3 h-3" />
-                          {status.label}
-                        </span>
+              <CommandCard
+                active={plan.type === 'primary'}
+                corner={plan.type === 'primary'}
+                className="overflow-visible"
+              >
+                {/* Header — always visible */}
+                <button
+                  onClick={() => togglePlan(plan.id)}
+                  className="w-full p-4 text-left focus-ring rounded-xl"
+                  aria-expanded={isExpanded}
+                >
+                  <div className="flex items-start justify-between gap-4">
+                    <div className="flex items-start gap-3">
+                      <div
+                        className={`w-10 h-10 rounded-xl ${type.bg} flex items-center justify-center shrink-0`}
+                        style={{
+                          boxShadow: plan.type === 'primary' ? '0 0 15px rgba(244, 63, 94, 0.12)' : 'none',
+                        }}
+                      >
+                        {plan.type === 'primary' ? (
+                          <Target className={`w-5 h-5 ${type.color}`} />
+                        ) : (
+                          <Shield className={`w-5 h-5 ${type.color}`} />
+                        )}
                       </div>
-                      <p className="text-slate-400 text-sm max-w-2xl leading-relaxed">
-                        {plan.description}
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center gap-3">
-                    <div className="text-right">
-                      <p className="text-xs text-slate-500 mb-1">路线匹配度</p>
-                      <p
-                        className={`text-2xl font-bold font-display ${
-                          plan.probability >= 80
-                            ? 'text-success'
-                            : plan.probability >= 60
-                            ? 'text-warning'
-                            : 'text-slate-300'
-                        }`}
-                      >
-                        {plan.probability}%
-                      </p>
-                    </div>
-                    {plan.type === 'primary' && activeStage === '小升初' && (
-                      <button
-                        onClick={() => setShowMatchModal(true)}
-                        className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-slate-400 hover:text-primary hover:bg-primary/10 transition-all group"
-                        aria-label="编辑匹配度"
-                      >
-                        <Edit3 className="w-4 h-4 group-hover:rotate-90 transition-transform duration-300" />
-                      </button>
-                    )}
-                  </div>
-                </div>
-
-                {/* Requirements & Milestones */}
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                  <div>
-                    <h3 className="text-sm font-semibold text-slate-300 mb-3 flex items-center gap-2">
-                      <AlertTriangle className="w-4 h-4 text-warning" />
-                      关键要求
-                    </h3>
-                    <div className="flex flex-wrap gap-2">
-                      {plan.requirements.map((req) => (
-                        <span
-                          key={req}
-                          className="px-3 py-1.5 rounded-lg bg-white/5 text-sm text-slate-300 border border-white/10"
-                        >
-                          {req}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div>
-                    <h3 className="text-sm font-semibold text-slate-300 mb-3 flex items-center gap-2">
-                      <Route className="w-4 h-4 text-secondary" />
-                      关键里程碑
-                    </h3>
-                    <div className="space-y-2">
-                      {plan.milestones.map((milestone, mIndex) => (
-                        <div key={milestone.task} className="flex items-center gap-3 text-sm">
-                          <div className="w-6 h-6 rounded-full bg-white/5 flex items-center justify-center text-xs text-slate-500 font-medium shrink-0">
-                            {mIndex + 1}
-                          </div>
-                          <span className="text-slate-400 w-16 shrink-0">{milestone.time}</span>
-                          <span className="text-slate-200">{milestone.task}</span>
+                      <div>
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <h2 className="text-base font-bold font-display">{plan.name}</h2>
+                          <span
+                            className={`px-2 py-0.5 rounded-md text-[10px] font-medium ${type.bg} ${type.color} border ${type.border}`}
+                          >
+                            {type.label}
+                          </span>
+                          <span className={`flex items-center gap-1 text-[10px] font-medium ${status.color}`}>
+                            <status.icon className="w-3 h-3" />
+                            {status.label}
+                          </span>
                         </div>
-                      ))}
+                        <p className="text-xs text-slate-500 mt-1 max-w-xl line-clamp-1">
+                          {plan.description}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-3 shrink-0">
+                      <div className="text-right">
+                        <p className="text-[10px] text-slate-500 mb-0.5">匹配度</p>
+                        <p
+                          className={`text-base font-bold font-display tabular-nums ${
+                            plan.probability >= 80
+                              ? 'text-success'
+                              : plan.probability >= 60
+                              ? 'text-warning'
+                              : 'text-slate-300'
+                          }`}
+                        >
+                          {plan.probability}%
+                        </p>
+                      </div>
+                      {plan.type === 'primary' && activeStage === '小升初' && (
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setShowMatchModal(true);
+                          }}
+                          className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center text-slate-400 hover:text-primary hover:bg-primary/10 transition-colors focus-ring"
+                          aria-label="编辑匹配度"
+                        >
+                          <Edit3 className="w-3.5 h-3.5" />
+                        </button>
+                      )}
+                      <div className="text-slate-500">
+                        {isExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                      </div>
                     </div>
                   </div>
-                </div>
+                </button>
 
-                <div className="mt-6">
-                  <h3 className="text-sm font-semibold text-slate-300 mb-3 flex items-center gap-2">
-                    {activeStage === '中考' ? (
-                      <>
-                        <GraduationCap className="w-4 h-4 text-primary" />
-                        目标高中
-                      </>
-                    ) : plan.id === 'sg' ? (
-                      <>
-                        <School className="w-4 h-4 text-primary" />
-                        目标学校
-                      </>
-                    ) : plan.id === 'yaohao' ? (
-                      <>
-                        <GraduationCap className="w-4 h-4 text-secondary" />
-                        目标民办
-                      </>
-                    ) : (
-                      <>
-                        <Home className="w-4 h-4 text-accent" />
-                        保底选项
-                      </>
-                    )}
-                  </h3>
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                    {plan.targets.map((school, sIndex) => (
-                      <Link key={school.slug} href={`/dashboard/schools/${school.slug}`}>
-                        <motion.div
-                          initial={{ opacity: 0, y: 10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ duration: 0.4, delay: 0.3 + sIndex * 0.1 }}
-                          whileHover={{ y: -4 }}
-                          className={`group rounded-xl glass p-4 border border-white/5 cursor-pointer transition-all duration-300 ${school.shadow}`}
-                        >
-                          <div className="flex items-center gap-3">
-                            <div
-                              className={`w-10 h-10 rounded-lg bg-gradient-to-br ${school.color} flex items-center justify-center shrink-0`}
-                            >
-                              <school.icon className="w-5 h-5 text-white" />
-                            </div>
-                            <div>
-                              <h4 className="font-bold font-display group-hover:text-white transition-colors">
-                                {school.name} · {school.tag}
-                              </h4>
-                              <p className="text-xs text-slate-400">查看详情</p>
-                            </div>
-                          </div>
-                        </motion.div>
-                      </Link>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Action */}
-                <div className="mt-auto pt-6 border-t border-white/5 flex items-center justify-between">
-                  <div className="flex items-center gap-2 text-sm text-slate-500">
-                    <Clock className="w-4 h-4" />
-                    {/* TODO: use real updatedAt from backend */}
-                    最近更新：2 天前
-                  </div>
-                  <Link
-                    href={`/dashboard/plan/${plan.id}`}
-                    className="flex items-center gap-1 text-sm text-primary hover:text-primary-glow transition-colors group/btn"
+                {/* Expandable content */}
+                {isExpanded && (
+                  <motion.div
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: 'auto', opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+                    className="overflow-hidden"
                   >
-                    查看完整方案{' '}
-                    <ChevronRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
-                  </Link>
-                </div>
-              </div>
+                    <div className="px-4 pb-4 pt-0 border-t border-white/[0.06]">
+                      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 pt-4">
+                        {/* Requirements */}
+                        <div>
+                          <h3 className="text-xs font-semibold text-slate-400 mb-2.5 flex items-center gap-1.5">
+                            <AlertTriangle className="w-3.5 h-3.5 text-warning" />
+                            关键要求
+                          </h3>
+                          <div className="flex flex-wrap gap-1.5">
+                            {plan.requirements.map((req) => (
+                              <span
+                                key={req}
+                                className="px-2 py-1 rounded-md bg-white/[0.04] text-xs text-slate-300 border border-white/[0.06]"
+                              >
+                                {req}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+
+                        {/* Milestones */}
+                        <div>
+                          <h3 className="text-xs font-semibold text-slate-400 mb-2.5 flex items-center gap-1.5">
+                            <Route className="w-3.5 h-3.5 text-secondary" />
+                            关键里程碑
+                          </h3>
+                          <div className="space-y-1">
+                            {plan.milestones.map((milestone, mIndex) => (
+                              <TimelineNode
+                                key={milestone.task}
+                                title={milestone.task}
+                                subtitle={milestone.time}
+                                status={mIndex === 0 ? 'current' : 'upcoming'}
+                                isLast={mIndex === plan.milestones.length - 1}
+                              />
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Targets */}
+                      <div className="mt-5">
+                        <h3 className="text-xs font-semibold text-slate-400 mb-2.5 flex items-center gap-1.5">
+                          {activeStage === '中考' ? (
+                            <>
+                              <GraduationCap className="w-3.5 h-3.5 text-primary" />
+                              目标高中
+                            </>
+                          ) : plan.id === 'sg' ? (
+                            <>
+                              <School className="w-3.5 h-3.5 text-primary" />
+                              目标学校
+                            </>
+                          ) : plan.id === 'yaohao' ? (
+                            <>
+                              <GraduationCap className="w-3.5 h-3.5 text-secondary" />
+                              目标民办
+                            </>
+                          ) : (
+                            <>
+                              <Home className="w-3.5 h-3.5 text-accent" />
+                              保底选项
+                            </>
+                          )}
+                        </h3>
+                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                          {plan.targets.map((school) => (
+                            <button
+                              key={school.slug}
+                              onClick={() => router.push(`/dashboard/schools/${school.slug}`)}
+                              className="text-left rounded-xl bg-white/[0.03] border border-white/[0.06] p-3 hover:border-white/[0.12] hover:bg-white/[0.05] transition-all focus-ring group"
+                            >
+                              <div className="flex items-center gap-2.5">
+                                <div
+                                  className={`w-8 h-8 rounded-lg bg-gradient-to-br ${school.color} flex items-center justify-center shrink-0`}
+                                >
+                                  <school.icon className="w-4 h-4 text-white" />
+                                </div>
+                                <div className="min-w-0">
+                                  <h4 className="text-sm font-semibold text-slate-200 truncate group-hover:text-white transition-colors">
+                                    {school.name}
+                                  </h4>
+                                  <p className="text-[10px] text-slate-500">{school.tag}</p>
+                                </div>
+                              </div>
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Footer */}
+                      <div className="mt-4 pt-3 border-t border-white/[0.06] flex items-center justify-between">
+                        <div className="flex items-center gap-1.5 text-xs text-slate-500">
+                          <Clock className="w-3.5 h-3.5" />
+                          最近更新：2 天前
+                        </div>
+                        <button
+                          onClick={() => router.push(`/dashboard/plan/${plan.id}`)}
+                          className="flex items-center gap-1 text-xs text-primary hover:text-primary-glow transition-colors group/btn focus-ring rounded-md px-1.5 py-1"
+                        >
+                          查看完整方案{' '}
+                          <ChevronRight className="w-3.5 h-3.5 group-hover/btn:translate-x-0.5 transition-transform" />
+                        </button>
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+              </CommandCard>
             </motion.div>
           );
         })}
@@ -396,7 +458,7 @@ function PlanPageContent() {
                 label: '清除搜索',
                 onClick: () => {
                   setPlanList(defaultPlans);
-                  window.location.href = '/dashboard/plan';
+                  router.push('/dashboard/plan');
                 },
               }}
             />

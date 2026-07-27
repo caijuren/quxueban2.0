@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Plus, Minus } from 'lucide-react';
+import MotionSection from '@/components/ui/MotionSection';
 
 const faqs = [
   {
@@ -31,59 +32,60 @@ export default function FAQ() {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   return (
-    <section className="py-24 px-4 sm:px-6 lg:px-8 border-t border-white/5">
+    <section className="py-14 px-4 sm:px-6 lg:px-8 border-t border-white/5">
       <div className="max-w-3xl mx-auto">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.7 }}
-          className="mb-16"
-        >
-          <span className="text-xs font-mono text-primary uppercase tracking-widest mb-4 block">
+        <MotionSection direction="up" duration={0.6} className="mb-12">
+          <span className="text-[11px] font-mono text-primary uppercase tracking-widest mb-3 block">
             FAQ
           </span>
-          <h2 className="text-4xl sm:text-5xl font-bold font-display leading-tight">
+          <h2 className="text-3xl sm:text-4xl font-bold font-display leading-tight">
             常见问题
           </h2>
-        </motion.div>
+        </MotionSection>
 
-        <div className="space-y-4">
+        <div className="space-y-3">
           {faqs.map((faq, index) => {
             const isOpen = openIndex === index;
             return (
-              <motion.div
+              <MotionSection
                 key={index}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: index * 0.05 }}
-                className="border border-white/5 rounded-xl overflow-hidden hover:border-white/10 transition-colors duration-300"
+                direction="up"
+                delay={index * 0.05}
+                duration={0.4}
+                className="border border-white/[0.06] rounded-xl overflow-hidden hover:border-white/[0.1] transition-colors duration-200 bg-white/[0.02]"
               >
                 <button
                   onClick={() => setOpenIndex(isOpen ? null : index)}
-                  className="w-full flex items-center justify-between p-5 text-left"
+                  className="w-full flex items-center justify-between p-4 text-left focus-ring"
+                  aria-expanded={isOpen}
+                  aria-controls={`faq-answer-${index}`}
                 >
-                  <span className="font-medium text-slate-200 pr-4">{faq.question}</span>
-                  <span className={`shrink-0 w-8 h-8 rounded-lg flex items-center justify-center transition-colors duration-300 ${isOpen ? 'bg-primary text-white' : 'bg-surface text-slate-400'}`}>
-                    {isOpen ? <Minus className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
+                  <span className="text-sm font-medium text-slate-200 pr-4">{faq.question}</span>
+                  <span
+                    className={`shrink-0 w-7 h-7 rounded-lg flex items-center justify-center transition-colors duration-200 ${
+                      isOpen ? 'bg-primary text-white' : 'bg-white/[0.05] text-slate-400'
+                    }`}
+                    aria-hidden="true"
+                  >
+                    {isOpen ? <Minus className="w-3.5 h-3.5" /> : <Plus className="w-3.5 h-3.5" />}
                   </span>
                 </button>
                 <AnimatePresence initial={false}>
                   {isOpen && (
                     <motion.div
+                      id={`faq-answer-${index}`}
                       initial={{ height: 0, opacity: 0 }}
                       animate={{ height: 'auto', opacity: 1 }}
                       exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.25 }}
+                      transition={{ duration: 0.2 }}
                     >
-                      <div className="px-5 pb-5 text-sm text-slate-400 leading-relaxed border-t border-white/5 pt-4">
+                      <div className="px-4 pb-4 text-xs text-slate-400 leading-relaxed border-t border-white/[0.06] pt-3">
                         {faq.answer}
                       </div>
                     </motion.div>
                   )}
                 </AnimatePresence>
-              </motion.div>
+              </MotionSection>
             );
           })}
         </div>

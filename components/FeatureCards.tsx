@@ -1,7 +1,8 @@
 'use client';
 
-import { motion } from 'framer-motion';
 import { Route, ListChecks, LineChart, Bot } from 'lucide-react';
+import CommandCard from '@/components/ui/CommandCard';
+import MotionSection from '@/components/ui/MotionSection';
 
 const features = [
   {
@@ -28,47 +29,40 @@ const features = [
 
 export default function FeatureCards() {
   return (
-    <section className="py-24 px-4 sm:px-6 lg:px-8 border-y border-white/5">
+    <section className="py-14 px-4 sm:px-6 lg:px-8 border-y border-white/5">
       <div className="max-w-6xl mx-auto">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.7 }}
-          className="mb-16"
-        >
-          <span className="text-xs font-mono text-primary uppercase tracking-widest mb-4 block">
+        <MotionSection direction="up" duration={0.6} className="mb-12">
+          <span className="text-[11px] font-mono text-primary uppercase tracking-widest mb-3 block">
             Capabilities
           </span>
-          <h2 className="text-4xl sm:text-5xl font-bold font-display leading-tight">
+          <h2 className="text-3xl sm:text-4xl font-bold font-display leading-tight">
             不只是记录工具
             <br />
             <span className="text-slate-500">更是一套升学战略系统</span>
           </h2>
-        </motion.div>
+        </MotionSection>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-white/5 rounded-2xl overflow-hidden">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {features.map((feature, index) => (
-            <motion.div
+            <MotionSection
               key={feature.title}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.1 }}
-              className="group p-8 sm:p-10 bg-background hover:bg-surface/50 transition-colors duration-300"
+              direction="up"
+              delay={index * 0.08}
             >
-              <div className="flex items-start gap-5">
-                <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center shrink-0 group-hover:bg-primary/20 transition-colors duration-300">
-                  <feature.icon className="w-6 h-6 text-primary" />
+              <CommandCard className="h-full p-5 group" corner={index === 0}>
+                <div className="flex items-start gap-4">
+                  <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center shrink-0 group-hover:bg-primary/20 transition-colors duration-200">
+                    <feature.icon className="w-5 h-5 text-primary" aria-hidden="true" />
+                  </div>
+                  <div>
+                    <h3 className="text-base font-bold font-display mb-1.5 text-white group-hover:text-primary transition-colors duration-200">
+                      {feature.title}
+                    </h3>
+                    <p className="text-sm text-slate-400 leading-relaxed">{feature.description}</p>
+                  </div>
                 </div>
-                <div>
-                  <h3 className="text-xl font-bold font-display mb-2 text-white group-hover:text-primary transition-colors duration-300">
-                    {feature.title}
-                  </h3>
-                  <p className="text-slate-400 leading-relaxed">{feature.description}</p>
-                </div>
-              </div>
-            </motion.div>
+              </CommandCard>
+            </MotionSection>
           ))}
         </div>
       </div>

@@ -1,0 +1,105 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../lib/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  PARENT
+  ADMIN
+}
+
+model User {
+  id           String   @id @default(uuid())
+  username     String   @unique
+  passwordHash String
+  name         String?
+  role         UserRole @default(PARENT)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  children      Child[]
+  plans         Plan[]
+  weeklyPlans   WeeklyPlan[]
+  notifications Notification[]
+
+  @@index([role])
+}
+
+model Child {
+  id           String   @id @default(uuid())
+  userId       String
+  name         String
+  grade        Int
+  avatarColor  String   @default("#f43f5e")
+  targetSchool String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  plans       Plan[]
+  weeklyPlans WeeklyPlan[]
+
+  @@index([userId])
+}
+
+model Plan {
+  id           String   @id @default(uuid())
+  userId       String
+  childId      String
+  name         String
+  type         String
+  status       String   @default("draft")
+  stage        String
+  description  String?
+  requirements Json?    @default("[]")
+  milestones   Json?    @default("[]")
+  targets      Json?    @default("[]")
+  probability  Int      @default(50)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  child Child @relation(fields: [childId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([childId])
+}
+
+model WeeklyPlan {
+  id            String    @id @default(uuid())
+  userId        String
+  childId       String
+  weekId        String
+  tasks         Json      @default("[]")
+  publishedAt   DateTime?
+  reviewedAt    DateTime?
+  parentComment String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  child Child @relation(fields: [childId], references: [id], onDelete: Cascade)
+
+  @@unique([childId, weekId])
+  @@index([userId])
+  @@index([childId])
+}
+
+model Notification {
+  id        String    @id @default(uuid())
+  userId    String
+  title     String
+  content   String
+  readAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([createdAt])
+}

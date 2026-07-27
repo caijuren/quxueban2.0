@@ -19,6 +19,7 @@ export interface WeeklyTaskItem {
 }
 
 export interface WeeklyPlan {
+  id?: string;
   weekId: string;
   childId: string;
   publishedAt?: string;

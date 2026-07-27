@@ -1,7 +1,7 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { Suspense, useEffect, useMemo, useState } from 'react';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import {
   Calendar,
   CheckCircle2,
@@ -20,11 +20,16 @@ import {
   Languages,
   X,
   Trophy,
-  AlertCircle,
   TrendingUp,
+  Plus,
+  Trash2,
+  Pencil,
 } from 'lucide-react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useChildren } from '@/components/dashboard/ChildrenContext';
 import EmptyState from '@/components/ui/EmptyState';
+import CommandCard from '@/components/ui/CommandCard';
+import MetricRing from '@/components/ui/MetricRing';
 import { gradeLabel } from '@/lib/children';
 import {
   type WeeklyPlan,
@@ -106,7 +111,238 @@ function ProgressRing({ rate, size = 96 }: { rate: number; size?: number }) {
   );
 }
 
-export default function WeeklyTasksPage() {
+interface EditPlanModalProps {
+  plan: WeeklyPlan;
+  onClose: () => void;
+  onSave: (tasks: WeeklyTaskItem[]) => void;
+}
+
+function EditPlanModal({ plan, onClose, onSave }: EditPlanModalProps) {
+  const [tasks, setTasks] = useState<WeeklyTaskItem[]>(() =>
+    [...plan.tasks].sort((a, b) => {
+      const dayDiff = dayOrder.indexOf(a.day) - dayOrder.indexOf(b.day);
+      if (dayDiff !== 0) return dayDiff;
+      return a.subjectId.localeCompare(b.subjectId);
+    })
+  );
+
+  const updateTask = (
+    id: string,
+    updates: Partial<Omit<WeeklyTaskItem, 'id'>>
+  ) => {
+    setTasks((prev) =>
+      prev.map((t) => (t.id === id ? { ...t, ...updates } : t))
+    );
+  };
+
+  const deleteTask = (id: string) => {
+    setTasks((prev) => prev.filter((t) => t.id !== id));
+  };
+
+  const addTask = () => {
+    setTasks((prev) => [
+      ...prev,
+      {
+        id: `custom-${Date.now()}-${Math.random().toString(36).slice(2, 5)}`,
+        subjectId: 'chinese',
+        day: '周一',
+        focus: '',
+        duration: '30分钟',
+        materials: [],
+        status: 'pending',
+      },
+    ]);
+  };
+
+  const handleSave = () => {
+    const validTasks = tasks.filter((t) => t.focus.trim() !== '');
+    onSave(validTasks);
+    onClose();
+  };
+
+  const shouldReduceMotion = useReducedMotion();
+
+  return (
+    <motion.div
+      initial={shouldReduceMotion ? { opacity: 1 } : { opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="fixed inset-0 z-[110] flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm"
+      onClick={onClose}
+    >
+      <motion.div
+        initial={shouldReduceMotion ? false : { scale: 0.95, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        exit={shouldReduceMotion ? { opacity: 0 } : { scale: 0.95, opacity: 0 }}
+        onClick={(e) => e.stopPropagation()}
+        className="w-full max-w-3xl max-h-[85vh] overflow-y-auto rounded-3xl glass border border-white/10 p-6 sm:p-8"
+      >
+        <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-accent to-accent-glow flex items-center justify-center">
+              <Pencil className="w-5 h-5 text-white" />
+            </div>
+            <div>
+              <h2 className="text-xl font-bold font-display">编辑周任务</h2>
+              <p className="text-xs text-slate-400">
+                增删改任务后保存即可生效
+              </p>
+            </div>
+          </div>
+          <button
+            onClick={onClose}
+            className="p-2 rounded-lg hover:bg-white/5 text-slate-400 focus-ring"
+            aria-label="关闭"
+          >
+            <X className="w-5 h-5" />
+          </button>
+        </div>
+
+        <div className="space-y-3 mb-6">
+          {tasks.map((task, index) => {
+            const SubjectIcon = subjectIcons[task.subjectId];
+            return (
+              <div
+                key={task.id}
+                className="grid grid-cols-12 gap-2 items-start rounded-xl bg-white/5 border border-white/5 p-3"
+              >
+                <div className="col-span-12 sm:col-span-2">
+                  <label className="block text-[10px] text-slate-500 mb-1">
+                    学科
+                  </label>
+                  <select
+                    value={task.subjectId}
+                    onChange={(e) =>
+                      updateTask(task.id, {
+                        subjectId: e.target.value as SubjectId,
+                      })
+                    }
+                    className="w-full text-xs bg-white/5 border border-white/10 rounded-lg px-2 py-1.5 text-slate-200 focus:outline-none focus:border-accent/50"
+                  >
+                    {(['chinese', 'math', 'english'] as SubjectId[]).map((s) => (
+                      <option key={s} value={s}>
+                        {subjectMeta[s].name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="col-span-6 sm:col-span-1">
+                  <label className="block text-[10px] text-slate-500 mb-1">
+                    星期
+                  </label>
+                  <select
+                    value={task.day}
+                    onChange={(e) =>
+                      updateTask(task.id, { day: e.target.value as DayOfWeek })
+                    }
+                    className="w-full text-xs bg-white/5 border border-white/10 rounded-lg px-2 py-1.5 text-slate-200 focus:outline-none focus:border-accent/50"
+                  >
+                    {dayOrder.map((d) => (
+                      <option key={d} value={d}>
+                        {d}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="col-span-6 sm:col-span-4">
+                  <label className="block text-[10px] text-slate-500 mb-1">
+                    任务内容
+                  </label>
+                  <input
+                    type="text"
+                    value={task.focus}
+                    onChange={(e) =>
+                      updateTask(task.id, { focus: e.target.value })
+                    }
+                    placeholder="例如：古诗新学"
+                    className="w-full text-xs bg-white/5 border border-white/10 rounded-lg px-2 py-1.5 text-slate-200 placeholder:text-slate-600 focus:outline-none focus:border-accent/50"
+                  />
+                </div>
+
+                <div className="col-span-6 sm:col-span-2">
+                  <label className="block text-[10px] text-slate-500 mb-1">
+                    时长
+                  </label>
+                  <input
+                    type="text"
+                    value={task.duration}
+                    onChange={(e) =>
+                      updateTask(task.id, { duration: e.target.value })
+                    }
+                    placeholder="30分钟"
+                    className="w-full text-xs bg-white/5 border border-white/10 rounded-lg px-2 py-1.5 text-slate-200 placeholder:text-slate-600 focus:outline-none focus:border-accent/50"
+                  />
+                </div>
+
+                <div className="col-span-5 sm:col-span-2">
+                  <label className="block text-[10px] text-slate-500 mb-1">
+                    材料/关键词
+                  </label>
+                  <input
+                    type="text"
+                    value={task.materials.join('，')}
+                    onChange={(e) =>
+                      updateTask(task.id, {
+                        materials: e.target.value
+                          .split(/[,，]/)
+                          .map((s) => s.trim())
+                          .filter(Boolean),
+                      })
+                    }
+                    placeholder="用逗号分隔"
+                    className="w-full text-xs bg-white/5 border border-white/10 rounded-lg px-2 py-1.5 text-slate-200 placeholder:text-slate-600 focus:outline-none focus:border-accent/50"
+                  />
+                </div>
+
+                <div className="col-span-1 flex justify-end pt-5">
+                  <button
+                    onClick={() => deleteTask(task.id)}
+                    className="p-1.5 rounded-lg hover:bg-error/10 text-slate-500 hover:text-error transition-colors focus-ring"
+                    aria-label="删除任务"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        <button
+          onClick={addTask}
+          className="w-full py-2.5 mb-6 rounded-xl border border-dashed border-white/15 text-slate-400 hover:text-slate-200 hover:border-white/30 hover:bg-white/5 transition-all flex items-center justify-center gap-2 text-sm focus-ring"
+        >
+          <Plus className="w-4 h-4" />
+          添加任务
+        </button>
+
+        <div className="flex items-center justify-end gap-3">
+          <button
+            onClick={onClose}
+            className="px-4 py-2 rounded-xl text-slate-400 hover:text-slate-200 transition-colors focus-ring"
+          >
+            取消
+          </button>
+          <button
+            onClick={handleSave}
+            className="flex items-center gap-2 px-6 py-2 rounded-xl bg-gradient-to-r from-accent to-accent-glow text-white font-semibold hover:shadow-[0_0_30px_rgba(6,182,212,0.4)] transition-all focus-ring"
+          >
+            <Send className="w-4 h-4" />
+            保存
+          </button>
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+}
+
+function WeeklyTasksContent() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const shouldReduceMotion = useReducedMotion();
+  const viewFromUrl = searchParams.get('view') as ViewMode | null;
   const {
     currentChild,
     getWeeklyPlan,
@@ -117,13 +353,23 @@ export default function WeeklyTasksPage() {
   } = useChildren();
 
   const [weekId, setWeekId] = useState<string>(getCurrentWeekId());
-  const [viewMode, setViewMode] = useState<ViewMode>('day');
+  const [viewMode, setViewModeState] = useState<ViewMode>(
+    viewFromUrl === 'matrix' ? 'matrix' : 'day'
+  );
   const [selectedDay, setSelectedDay] = useState<DayOfWeek>(getTodayName());
   const [draftPlan, setDraftPlan] = useState<WeeklyPlan | null>(null);
   const [reviewOpen, setReviewOpen] = useState(false);
   const [reviewComment, setReviewComment] = useState('');
+  const [editOpen, setEditOpen] = useState(false);
 
   const today = getTodayName();
+
+  const setViewMode = (mode: ViewMode) => {
+    setViewModeState(mode);
+    const params = new URLSearchParams(searchParams.toString());
+    params.set('view', mode);
+    router.replace(`/dashboard/weekly?${params.toString()}`, { scroll: false });
+  };
 
   useEffect(() => {
     setDraftPlan(null);
@@ -153,9 +399,9 @@ export default function WeeklyTasksPage() {
     setDraftPlan(generateWeeklyPlanDraft(currentChild, weekId));
   };
 
-  const handlePublish = () => {
+  const handlePublish = async () => {
     if (!draftPlan) return;
-    publishWeeklyPlan(draftPlan);
+    await publishWeeklyPlan(draftPlan);
     setDraftPlan(null);
   };
 
@@ -163,7 +409,7 @@ export default function WeeklyTasksPage() {
     setDraftPlan(null);
   };
 
-  const handleToggleTask = (task: WeeklyTaskItem) => {
+  const handleToggleTask = async (task: WeeklyTaskItem) => {
     if (!currentChild || !displayPlan) return;
     if (isDraft) {
       setDraftPlan((prev) => {
@@ -184,7 +430,7 @@ export default function WeeklyTasksPage() {
       });
       return;
     }
-    updateTaskStatus(
+    await updateTaskStatus(
       currentChild.id,
       weekId,
       task.id,
@@ -192,9 +438,9 @@ export default function WeeklyTasksPage() {
     );
   };
 
-  const handleNoteBlur = (task: WeeklyTaskItem, note: string) => {
+  const handleNoteBlur = async (task: WeeklyTaskItem, note: string) => {
     if (!currentChild || !displayPlan || isDraft) return;
-    updateTaskStatus(currentChild.id, weekId, task.id, task.status, note);
+    await updateTaskStatus(currentChild.id, weekId, task.id, task.status, note);
   };
 
   const handleOpenReview = () => {
@@ -202,10 +448,19 @@ export default function WeeklyTasksPage() {
     setReviewOpen(true);
   };
 
-  const handleSaveReview = () => {
+  const handleSaveReview = async () => {
     if (!currentChild || !plan) return;
-    reviewWeeklyPlan(currentChild.id, weekId, reviewComment);
+    await reviewWeeklyPlan(currentChild.id, weekId, reviewComment);
     setReviewOpen(false);
+  };
+
+  const handleSaveTasks = async (tasks: WeeklyTaskItem[]) => {
+    if (!displayPlan || !currentChild) return;
+    if (isDraft) {
+      setDraftPlan({ ...displayPlan, tasks });
+    } else {
+      await publishWeeklyPlan({ ...displayPlan, tasks });
+    }
   };
 
   if (!currentChild) {
@@ -226,7 +481,7 @@ export default function WeeklyTasksPage() {
   return (
     <div className="space-y-6">
       <motion.div
-        initial={{ opacity: 0, y: -10 }}
+        initial={shouldReduceMotion ? false : { opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
         className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4"
@@ -245,38 +500,40 @@ export default function WeeklyTasksPage() {
           </div>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2">
           <button
             onClick={() => setWeekId((w) => shiftWeekId(w, -1))}
-            className="p-2 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 transition-colors"
+            className="w-8 h-8 flex items-center justify-center rounded-lg bg-white/5 hover:bg-white/10 text-slate-300 transition-colors focus-ring"
+            aria-label="上一周"
           >
-            <ChevronLeft className="w-5 h-5" />
+            <ChevronLeft className="w-4 h-4" />
           </button>
-          <div className="px-4 py-2 rounded-xl glass text-sm font-medium min-w-[140px] text-center">
+          <div className="px-3 py-1.5 rounded-lg glass border border-white/[0.08] text-sm font-medium min-w-[120px] text-center tabular-nums">
             {year}年第{week}周
           </div>
           <button
             onClick={() => setWeekId((w) => shiftWeekId(w, 1))}
-            className="p-2 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 transition-colors"
+            className="w-8 h-8 flex items-center justify-center rounded-lg bg-white/5 hover:bg-white/10 text-slate-300 transition-colors focus-ring"
+            aria-label="下一周"
           >
-            <ChevronRight className="w-5 h-5" />
+            <ChevronRight className="w-4 h-4" />
           </button>
         </div>
       </motion.div>
 
       <motion.div
-        initial={{ opacity: 0, y: 10 }}
+        initial={shouldReduceMotion ? false : { opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.1 }}
-        className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 rounded-2xl glass p-4"
+        className="flex flex-col sm:flex-row sm:items-center justify-between gap-3"
       >
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           {!displayPlan && (
             <button
               onClick={handleGenerate}
-              className="flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-primary to-primary-glow text-white font-semibold hover:shadow-[0_0_30px_rgba(255,45,106,0.4)] transition-all"
+              className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-gradient-to-r from-primary to-primary-glow text-white text-sm font-semibold hover:shadow-glow-primary transition-all duration-200 focus-ring"
             >
-              <Target className="w-4 h-4" />
+              <Target className="w-3.5 h-3.5" />
               生成本周计划
             </button>
           )}
@@ -284,16 +541,16 @@ export default function WeeklyTasksPage() {
             <>
               <button
                 onClick={handlePublish}
-                className="flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-primary to-primary-glow text-white font-semibold hover:shadow-[0_0_30px_rgba(255,45,106,0.4)] transition-all"
+                className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-gradient-to-r from-primary to-primary-glow text-white text-sm font-semibold hover:shadow-glow-primary transition-all duration-200 focus-ring"
               >
-                <Send className="w-4 h-4" />
+                <Send className="w-3.5 h-3.5" />
                 发布
               </button>
               <button
                 onClick={handleCancelDraft}
-                className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 transition-colors"
+                className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-white/5 hover:bg-white/10 text-slate-300 text-sm transition-colors focus-ring"
               >
-                <X className="w-4 h-4" />
+                <X className="w-3.5 h-3.5" />
                 取消
               </button>
             </>
@@ -301,38 +558,49 @@ export default function WeeklyTasksPage() {
           {isPublished && !isDraft && (
             <button
               onClick={handleOpenReview}
-              className="flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-secondary to-secondary-glow text-white font-semibold hover:shadow-[0_0_30px_rgba(139,92,246,0.4)] transition-all"
+              className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-gradient-to-r from-secondary to-secondary-glow text-white text-sm font-semibold hover:shadow-glow-secondary transition-all duration-200 focus-ring"
             >
-              <Sparkles className="w-4 h-4" />
+              <Sparkles className="w-3.5 h-3.5" />
               {plan?.reviewedAt ? '查看复盘' : '本周复盘'}
             </button>
           )}
+          {displayPlan && (
+            <button
+              onClick={() => setEditOpen(true)}
+              className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-white/5 hover:bg-white/10 text-slate-300 text-sm transition-colors focus-ring"
+            >
+              <Pencil className="w-3.5 h-3.5" />
+              {isDraft ? '编辑任务' : '调整任务'}
+            </button>
+          )}
           {isDraft && (
-            <span className="text-xs text-slate-400 ml-2">预览模式：发布后才会保存</span>
+            <span className="text-xs text-slate-500">预览模式：发布后才会保存</span>
           )}
         </div>
 
-        <div className="flex items-center gap-2 bg-white/5 rounded-xl p-1">
+        <div className="flex items-center gap-1 bg-white/5 rounded-lg p-1">
           <button
             onClick={() => setViewMode('day')}
-            className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm transition-all ${
+            aria-pressed={viewMode === 'day'}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs transition-all focus-ring ${
               viewMode === 'day'
                 ? 'bg-white/10 text-white'
                 : 'text-slate-400 hover:text-slate-200'
             }`}
           >
-            <List className="w-4 h-4" />
+            <List className="w-3.5 h-3.5" />
             日视图
           </button>
           <button
             onClick={() => setViewMode('matrix')}
-            className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm transition-all ${
+            aria-pressed={viewMode === 'matrix'}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs transition-all focus-ring ${
               viewMode === 'matrix'
                 ? 'bg-white/10 text-white'
                 : 'text-slate-400 hover:text-slate-200'
             }`}
           >
-            <LayoutGrid className="w-4 h-4" />
+            <LayoutGrid className="w-3.5 h-3.5" />
             周矩阵
           </button>
         </div>
@@ -340,67 +608,67 @@ export default function WeeklyTasksPage() {
 
       {stats && (
         <motion.div
-          initial={{ opacity: 0, y: 10 }}
+          initial={shouldReduceMotion ? false : { opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"
+          className="grid grid-cols-2 lg:grid-cols-4 gap-3"
         >
-          <div className="rounded-2xl glass p-5 flex items-center gap-5">
-            <ProgressRing rate={stats.completionRate} />
+          <CommandCard className="p-4 flex items-center gap-4">
+            <MetricRing rate={stats.completionRate} size={64} strokeWidth={6} />
             <div>
-              <p className="text-sm text-slate-400">本周完成率</p>
-              <p className="text-xl font-bold font-display text-slate-100">
+              <p className="text-xs text-slate-500">本周完成率</p>
+              <p className="text-lg font-bold font-display tabular-nums text-slate-100">
                 {stats.done}/{stats.total}
               </p>
-              <p className="text-xs text-slate-500">
+              <p className="text-[10px] text-slate-500">
                 {stats.pending > 0 ? `还剩 ${stats.pending} 项` : '全部完成'}
               </p>
             </div>
-          </div>
+          </CommandCard>
 
-          <div className="rounded-2xl glass p-5">
-            <div className="flex items-center gap-2 mb-3">
-              <Clock className="w-4 h-4 text-accent" />
-              <p className="text-sm text-slate-400">计划总时长</p>
+          <CommandCard className="p-4">
+            <div className="flex items-center gap-1.5 mb-2">
+              <Clock className="w-3.5 h-3.5 text-accent" />
+              <p className="text-xs text-slate-500">计划总时长</p>
             </div>
-            <p className="text-2xl font-bold font-display text-slate-100">
+            <p className="text-lg font-bold font-display tabular-nums text-slate-100">
               {Math.round((stats.estimatedMinutes / 60) * 10) / 10}h
             </p>
-            <p className="text-xs text-slate-500">约 {stats.estimatedMinutes} 分钟</p>
-          </div>
+            <p className="text-[10px] text-slate-500">约 {stats.estimatedMinutes} 分钟</p>
+          </CommandCard>
 
-          <div className="rounded-2xl glass p-5">
-            <div className="flex items-center gap-2 mb-3">
-              <TrendingUp className="w-4 h-4 text-secondary" />
-              <p className="text-sm text-slate-400">学科完成</p>
+          <CommandCard className="p-4">
+            <div className="flex items-center gap-1.5 mb-2">
+              <TrendingUp className="w-3.5 h-3.5 text-secondary" />
+              <p className="text-xs text-slate-500">学科完成</p>
             </div>
-            <div className="space-y-1.5">
+            <div className="space-y-1">
               {(['chinese', 'math', 'english'] as SubjectId[]).map((subjectId) => {
                 const s = stats.bySubject[subjectId];
                 return (
                   <div key={subjectId} className="flex items-center justify-between text-xs">
                     <span className="text-slate-400">{subjectMeta[subjectId].name}</span>
-                    <span className={s.total === s.done ? 'text-success' : 'text-slate-300'}>
+                    <span className={s.total === s.done ? 'text-success tabular-nums' : 'text-slate-300 tabular-nums'}>
                       {s.done}/{s.total}
                     </span>
                   </div>
                 );
               })}
             </div>
-          </div>
+          </CommandCard>
 
-          <div className="rounded-2xl glass p-5">
-            <div className="flex items-center gap-2 mb-3">
-              <Trophy className="w-4 h-4 text-warning" />
-              <p className="text-sm text-slate-400">本周状态</p>
+          <CommandCard className="p-4">
+            <div className="flex items-center gap-1.5 mb-2">
+              <Trophy className="w-3.5 h-3.5 text-warning" />
+              <p className="text-xs text-slate-500">本周状态</p>
             </div>
-            <p className="text-lg font-bold text-slate-100">
+            <p className="text-base font-semibold text-slate-100">
               {isDraft ? '草稿待发布' : isPublished ? '已发布' : '未生成'}
             </p>
-            <p className="text-xs text-slate-500">
+            <p className="text-[10px] text-slate-500">
               {plan?.reviewedAt ? '已完成复盘' : plan?.publishedAt ? '待复盘' : '—'}
             </p>
-          </div>
+          </CommandCard>
         </motion.div>
       )}
 
@@ -408,9 +676,9 @@ export default function WeeklyTasksPage() {
         {!displayPlan ? (
           <motion.div
             key="empty"
-            initial={{ opacity: 0, y: 20 }}
+            initial={shouldReduceMotion ? false : { opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
+            exit={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: -20 }}
             className="rounded-2xl glass p-12 text-center"
           >
             <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center mx-auto mb-4">
@@ -422,7 +690,7 @@ export default function WeeklyTasksPage() {
             </p>
             <button
               onClick={handleGenerate}
-              className="px-6 py-3 rounded-xl bg-gradient-to-r from-primary to-primary-glow text-white font-semibold hover:shadow-[0_0_30px_rgba(255,45,106,0.4)] transition-all"
+              className="px-6 py-3 rounded-xl bg-gradient-to-r from-primary to-primary-glow text-white font-semibold hover:shadow-[0_0_30px_rgba(255,45,106,0.4)] transition-all focus-ring"
             >
               生成本周计划
             </button>
@@ -430,12 +698,12 @@ export default function WeeklyTasksPage() {
         ) : viewMode === 'day' ? (
           <motion.div
             key="day"
-            initial={{ opacity: 0, y: 20 }}
+            initial={shouldReduceMotion ? false : { opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
+            exit={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: -20 }}
             className="space-y-4"
           >
-            <div className="flex gap-2 overflow-x-auto pb-2">
+            <div className="flex gap-1.5 overflow-x-auto pb-2">
               {dayOrder.map((day) => {
                 const dayStats = stats?.byDay[day];
                 const isToday = day === today && weekId === getCurrentWeekId();
@@ -446,29 +714,30 @@ export default function WeeklyTasksPage() {
                   <button
                     key={day}
                     onClick={() => setSelectedDay(day)}
-                    className={`flex-shrink-0 relative px-4 py-3 rounded-xl text-left min-w-[80px] transition-all border ${
+                    aria-pressed={isSelected}
+                    className={`flex-shrink-0 relative px-3 py-2 rounded-lg text-left min-w-[68px] transition-all border focus-ring ${
                       isSelected
-                        ? 'bg-white/10 border-primary/40'
-                        : 'bg-white/5 border-white/5 hover:bg-white/[0.07]'
+                        ? 'bg-white/[0.08] border-primary/30'
+                        : 'bg-white/[0.03] border-white/[0.06] hover:bg-white/[0.05] hover:border-white/[0.1]'
                     }`}
                   >
                     {isToday && (
-                      <span className="absolute -top-1.5 -right-1.5 w-3 h-3 rounded-full bg-primary shadow-[0_0_10px_rgba(255,45,106,0.8)]" />
+                      <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-primary shadow-glow-primary" />
                     )}
-                    <p className={`text-sm font-bold ${isSelected ? 'text-white' : 'text-slate-300'}`}>
+                    <p className={`text-xs font-bold ${isSelected ? 'text-white' : 'text-slate-300'}`}>
                       {day}
                     </p>
-                    <p className="text-xs text-slate-500 mt-1">
-                      {total === 0 ? '无任务' : `${done}/${total} 完成`}
+                    <p className="text-[10px] text-slate-500 mt-0.5 tabular-nums">
+                      {total === 0 ? '无任务' : `${done}/${total}`}
                     </p>
                   </button>
                 );
               })}
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-3">
               {tasksByDay?.[selectedDay]?.length === 0 ? (
-                <div className="lg:col-span-3 rounded-2xl glass p-8 text-center text-slate-400 text-sm">
+                <div className="lg:col-span-3 rounded-xl glass border border-white/[0.06] p-8 text-center text-slate-500 text-sm">
                   {selectedDay} 没有安排任务
                 </div>
               ) : (
@@ -479,68 +748,69 @@ export default function WeeklyTasksPage() {
                   return (
                     <motion.div
                       key={task.id}
-                      initial={{ opacity: 0, y: 10 }}
+                      initial={shouldReduceMotion ? false : { opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: index * 0.05 }}
-                      className={`rounded-2xl glass p-5 border transition-all ${
-                        isDone
-                          ? 'border-success/20 bg-success/[0.03]'
-                          : 'border-white/5 hover:border-white/10'
-                      }`}
                     >
-                      <div className="flex items-start gap-4">
-                        <button
-                          onClick={() => handleToggleTask(task)}
-                          className="mt-1 text-slate-400 hover:text-primary transition-colors"
-                        >
-                          {isDone ? (
-                            <CheckCircle2 className="w-6 h-6 text-success" />
-                          ) : (
-                            <Circle className="w-6 h-6" />
-                          )}
-                        </button>
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center gap-2 mb-2">
-                            <div
-                              className={`w-7 h-7 rounded-lg bg-gradient-to-br ${meta.gradient} flex items-center justify-center`}
-                            >
-                              <SubjectIcon className="w-3.5 h-3.5 text-white" />
-                            </div>
-                            <span className="text-xs font-medium text-slate-400">
-                              {meta.name}
-                            </span>
-                            <span className="ml-auto text-xs px-2 py-0.5 rounded-md bg-white/5 text-slate-300">
-                              {task.duration}
-                            </span>
-                          </div>
-                          <p
-                            className={`font-bold mb-3 ${
-                              isDone ? 'text-slate-500 line-through' : 'text-slate-200'
-                            }`}
+                      <CommandCard
+                        className={`p-4 ${isDone ? 'border-success/20' : ''}`}
+                        active={isDone}
+                      >
+                        <div className="flex items-start gap-3">
+                          <button
+                            onClick={() => handleToggleTask(task)}
+                            className="mt-0.5 text-slate-400 hover:text-primary transition-colors focus-ring rounded-full"
+                            aria-label={isDone ? '标记为未完成' : '标记为完成'}
                           >
-                            {task.focus}
-                          </p>
-                          <div className="flex flex-wrap gap-1.5 mb-3">
-                            {task.materials.map((m) => (
-                              <span
-                                key={m}
-                                className="text-[10px] px-2 py-1 rounded-md bg-white/5 text-slate-400 border border-white/5"
+                            {isDone ? (
+                              <CheckCircle2 className="w-5 h-5 text-success" />
+                            ) : (
+                              <Circle className="w-5 h-5" />
+                            )}
+                          </button>
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center gap-2 mb-1.5">
+                              <div
+                                className={`w-6 h-6 rounded-md bg-gradient-to-br ${meta.gradient} flex items-center justify-center`}
                               >
-                                {m}
+                                <SubjectIcon className="w-3 h-3 text-white" />
+                              </div>
+                              <span className="text-[11px] font-medium text-slate-400">
+                                {meta.name}
                               </span>
-                            ))}
+                              <span className="ml-auto text-[10px] px-1.5 py-0.5 rounded bg-white/[0.05] text-slate-300">
+                                {task.duration}
+                              </span>
+                            </div>
+                            <p
+                              className={`text-sm font-semibold mb-2 ${
+                                isDone ? 'text-slate-500 line-through' : 'text-slate-200'
+                              }`}
+                            >
+                              {task.focus}
+                            </p>
+                            <div className="flex flex-wrap gap-1 mb-2">
+                              {task.materials.map((m) => (
+                                <span
+                                  key={m}
+                                  className="text-[10px] px-1.5 py-0.5 rounded bg-white/[0.05] text-slate-400 border border-white/[0.06]"
+                                >
+                                  {m}
+                                </span>
+                              ))}
+                            </div>
+                            {!isDraft && (
+                              <textarea
+                                defaultValue={task.note ?? ''}
+                                onBlur={(e) => handleNoteBlur(task, e.target.value)}
+                                placeholder="完成备注（正确率、感受等）"
+                                className="w-full text-xs bg-white/[0.04] border border-white/[0.08] rounded-lg px-2.5 py-1.5 text-slate-300 placeholder:text-slate-600 focus:outline-none focus:border-primary/50 resize-none"
+                                rows={2}
+                              />
+                            )}
                           </div>
-                          {!isDraft && (
-                            <textarea
-                              defaultValue={task.note ?? ''}
-                              onBlur={(e) => handleNoteBlur(task, e.target.value)}
-                              placeholder="完成备注（正确率、感受等）"
-                              className="w-full text-xs bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-slate-300 placeholder:text-slate-600 focus:outline-none focus:border-primary/50 resize-none"
-                              rows={2}
-                            />
-                          )}
                         </div>
-                      </div>
+                      </CommandCard>
                     </motion.div>
                   );
                 })
@@ -550,9 +820,9 @@ export default function WeeklyTasksPage() {
         ) : (
           <motion.div
             key="matrix"
-            initial={{ opacity: 0, y: 20 }}
+            initial={shouldReduceMotion ? false : { opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
+            exit={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: -20 }}
             className="rounded-2xl glass p-5 overflow-x-auto"
           >
             <div className="min-w-[800px]">
@@ -594,14 +864,22 @@ export default function WeeklyTasksPage() {
                     </div>
                     {dayOrder.map((day) => {
                       const task = tasksByDay?.[day].find((t) => t.subjectId === subjectId);
+                      const taskDone = task?.status === 'done';
                       return (
-                        <div
+                        <button
                           key={day}
+                          type="button"
+                          disabled={!task}
                           onClick={() => task && handleToggleTask(task)}
-                          className={`relative group px-2 py-3 rounded-xl border transition-all min-h-[80px] cursor-pointer ${
+                          aria-label={
                             task
-                              ? task.status === 'done'
-                                ? 'bg-success/10 border-success/20'
+                              ? `${meta.name} ${day}：${task.focus}，${task.duration}，点击${taskDone ? '取消完成' : '标记完成'}`
+                              : `${meta.name} ${day}：无任务`
+                          }
+                          className={`relative group px-2 py-3 rounded-xl border transition-all min-h-[80px] text-left disabled:cursor-default ${
+                            task
+                              ? taskDone
+                                ? 'bg-success/10 border-success/20 hover:bg-success/[0.12]'
                                 : 'bg-white/5 border-white/5 hover:bg-white/[0.07]'
                               : 'bg-transparent border-transparent'
                           }`}
@@ -641,7 +919,7 @@ export default function WeeklyTasksPage() {
                               </div>
                             </>
                           )}
-                        </div>
+                        </button>
                       );
                     })}
                   </div>
@@ -655,16 +933,16 @@ export default function WeeklyTasksPage() {
       <AnimatePresence>
         {reviewOpen && stats && displayPlan && (
           <motion.div
-            initial={{ opacity: 0 }}
+            initial={shouldReduceMotion ? { opacity: 1 } : { opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             className="fixed inset-0 z-[110] flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm"
             onClick={() => setReviewOpen(false)}
           >
             <motion.div
-              initial={{ scale: 0.95, opacity: 0 }}
+              initial={shouldReduceMotion ? false : { scale: 0.95, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.95, opacity: 0 }}
+              exit={shouldReduceMotion ? { opacity: 0 } : { scale: 0.95, opacity: 0 }}
               onClick={(e) => e.stopPropagation()}
               className="w-full max-w-2xl max-h-[85vh] overflow-y-auto rounded-3xl glass border border-white/10 p-6 sm:p-8"
             >
@@ -680,7 +958,8 @@ export default function WeeklyTasksPage() {
                 </div>
                 <button
                   onClick={() => setReviewOpen(false)}
-                  className="p-2 rounded-lg hover:bg-white/5 text-slate-400"
+                  className="p-2 rounded-lg hover:bg-white/5 text-slate-400 focus-ring"
+                  aria-label="关闭"
                 >
                   <X className="w-5 h-5" />
                 </button>
@@ -727,13 +1006,13 @@ export default function WeeklyTasksPage() {
               <div className="flex items-center justify-end gap-3">
                 <button
                   onClick={() => setReviewOpen(false)}
-                  className="px-4 py-2 rounded-xl text-slate-400 hover:text-slate-200 transition-colors"
+                  className="px-4 py-2 rounded-xl text-slate-400 hover:text-slate-200 transition-colors focus-ring"
                 >
                   取消
                 </button>
                 <button
                   onClick={handleSaveReview}
-                  className="flex items-center gap-2 px-6 py-2 rounded-xl bg-gradient-to-r from-secondary to-secondary-glow text-white font-semibold hover:shadow-[0_0_30px_rgba(139,92,246,0.4)] transition-all"
+                  className="flex items-center gap-2 px-6 py-2 rounded-xl bg-gradient-to-r from-secondary to-secondary-glow text-white font-semibold hover:shadow-[0_0_30px_rgba(139,92,246,0.4)] transition-all focus-ring"
                 >
                   <RotateCcw className="w-4 h-4" />
                   保存复盘
@@ -743,6 +1022,46 @@ export default function WeeklyTasksPage() {
           </motion.div>
         )}
       </AnimatePresence>
+
+      {editOpen && displayPlan && (
+        <EditPlanModal
+          plan={displayPlan}
+          onClose={() => setEditOpen(false)}
+          onSave={handleSaveTasks}
+        />
+      )}
     </div>
+  );
+}
+
+function WeeklyTasksSkeleton() {
+  return (
+    <div className="space-y-6 animate-pulse">
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-white/5" />
+          <div className="space-y-2">
+            <div className="h-5 w-32 rounded bg-white/5" />
+            <div className="h-3 w-48 rounded bg-white/5" />
+          </div>
+        </div>
+        <div className="h-8 w-28 rounded-lg bg-white/5" />
+      </div>
+      <div className="h-10 rounded-xl bg-white/5" />
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+        {[...Array(4)].map((_, i) => (
+          <div key={i} className="h-28 rounded-xl bg-white/5" />
+        ))}
+      </div>
+      <div className="h-[420px] rounded-2xl bg-white/5" />
+    </div>
+  );
+}
+
+export default function WeeklyTasksPage() {
+  return (
+    <Suspense fallback={<WeeklyTasksSkeleton />}>
+      <WeeklyTasksContent />
+    </Suspense>
   );
 }

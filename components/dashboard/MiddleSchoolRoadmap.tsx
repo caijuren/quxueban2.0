@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import {
   AlertTriangle,
   Clock,
@@ -154,7 +154,7 @@ export default function MiddleSchoolRoadmap() {
     setDaysLeft(diff);
   }, []);
 
-  const particles = createParticles();
+  const particles = useMemo(() => createParticles(), []);
   const effectiveRoute = hoveredRoute || activeRoute;
   const nextCheckpoint = routes[0].checkpoints.find((c) => c.status === 'current') || routes[0].checkpoints.find((c) => c.status === 'upcoming');
 
@@ -344,9 +344,9 @@ export default function MiddleSchoolRoadmap() {
                 {particles.map((p) => (
                   <motion.circle
                     key={p.id}
-                    cx={p.x}
-                    cy={p.y}
-                    r={p.size}
+                    cx={p.x ?? 0}
+                    cy={p.y ?? 0}
+                    r={p.size ?? 1}
                     fill="white"
                     initial={{ opacity: 0.1 }}
                     animate={{

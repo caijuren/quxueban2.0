@@ -1,7 +1,9 @@
 'use client';
 
-import { motion } from 'framer-motion';
-import { School, GraduationCap, Trophy } from 'lucide-react';
+import { School, GraduationCap, Trophy, ChevronRight } from 'lucide-react';
+import CommandCard from '@/components/ui/CommandCard';
+import DataBadge from '@/components/ui/DataBadge';
+import MotionSection from '@/components/ui/MotionSection';
 
 interface RouteOption {
   name: string;
@@ -58,75 +60,70 @@ const stages: Stage[] = [
 ];
 
 const statusConfig = {
-  active: { label: '主路线', className: 'text-primary bg-primary/10 border-primary/20' },
-  backup: { label: '备选', className: 'text-warning bg-warning/10 border-warning/20' },
-  optional: { label: '待解锁', className: 'text-slate-400 bg-surface border-white/5' },
+  active: { label: '主路线', variant: 'primary' as const },
+  backup: { label: '备选', variant: 'warning' as const },
+  optional: { label: '待解锁', variant: 'default' as const },
 };
 
 export default function StrategyMap() {
   return (
-    <section className="py-24 px-4 sm:px-6 lg:px-8">
+    <section className="py-14 px-4 sm:px-6 lg:px-8">
       <div className="max-w-6xl mx-auto">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.7 }}
-          className="mb-16"
-        >
-          <span className="text-xs font-mono text-primary uppercase tracking-widest mb-4 block">
+        <MotionSection direction="up" duration={0.6} className="mb-12">
+          <span className="text-[11px] font-mono text-primary uppercase tracking-widest mb-3 block">
             Full Journey
           </span>
-          <h2 className="text-4xl sm:text-5xl font-bold font-display leading-tight mb-6">
+          <h2 className="text-3xl sm:text-4xl font-bold font-display leading-tight mb-4">
             覆盖上海升学
             <br />
             <span className="text-slate-500">全阶段路线</span>
           </h2>
-          <p className="text-slate-400 text-lg max-w-2xl">
+          <p className="text-slate-400 text-base max-w-xl">
             从小学入学到高考，每个关键节点的路线选择都帮你梳理清楚。
           </p>
-        </motion.div>
+        </MotionSection>
 
-        <div className="space-y-6">
+        <div className="space-y-4">
           {stages.map((stage, index) => (
-            <motion.div
+            <MotionSection
               key={stage.id}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: index * 0.15 }}
-              className="group rounded-2xl border border-white/5 bg-surface/30 p-6 sm:p-8 hover:border-primary/20 transition-colors duration-300"
+              direction="up"
+              delay={index * 0.1}
+              duration={0.5}
             >
-              <div className="flex flex-col lg:flex-row lg:items-center gap-6 lg:gap-12">
-                {/* Stage header */}
-                <div className="flex items-center gap-4 lg:w-72 shrink-0">
-                  <div className="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
-                    <stage.icon className="w-7 h-7 text-primary" />
+              <CommandCard className="p-5 sm:p-6 group" active={stage.id === 'primary'}>
+                <div className="flex flex-col lg:flex-row lg:items-center gap-5 lg:gap-10">
+                  <div className="flex items-center gap-4 lg:w-64 shrink-0">
+                    <div className="w-11 h-11 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
+                      <stage.icon className="w-5 h-5 text-primary" aria-hidden="true" />
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-bold font-display">{stage.title}</h3>
+                      <p className="text-xs text-slate-500 mt-0.5">{stage.subtitle}</p>
+                      <span className="inline-block mt-1.5 text-[10px] font-mono text-slate-600">
+                        {stage.timeRange}
+                      </span>
+                    </div>
                   </div>
-                  <div>
-                    <h3 className="text-2xl font-bold font-display">{stage.title}</h3>
-                    <p className="text-sm text-slate-500 mt-1">{stage.subtitle}</p>
-                    <span className="inline-block mt-2 text-xs font-mono text-slate-600">{stage.timeRange}</span>
-                  </div>
-                </div>
 
-                {/* Routes */}
-                <div className="flex flex-wrap gap-3 flex-1">
-                  {stage.routes.map((route) => {
-                    const config = statusConfig[route.status];
-                    return (
-                      <div
-                        key={route.name}
-                        className={`flex items-center gap-2 px-4 py-2 rounded-lg border text-sm font-medium ${config.className}`}
-                      >
-                        <span>{route.name}</span>
-                        <span className="text-xs opacity-70">{config.label}</span>
-                      </div>
-                    );
-                  })}
+                  <div className="flex flex-wrap gap-2 flex-1">
+                    {stage.routes.map((route) => {
+                      const config = statusConfig[route.status];
+                      return (
+                        <DataBadge key={route.name} variant={config.variant} size="sm">
+                          <span>{route.name}</span>
+                          <span className="opacity-70">{config.label}</span>
+                        </DataBadge>
+                      );
+                    })}
+                  </div>
+
+                  <div className="hidden lg:flex items-center text-slate-600 group-hover:text-primary transition-colors">
+                    <ChevronRight className="w-4 h-4" aria-hidden="true" />
+                  </div>
                 </div>
-              </div>
-            </motion.div>
+              </CommandCard>
+            </MotionSection>
           ))}
         </div>
       </div>

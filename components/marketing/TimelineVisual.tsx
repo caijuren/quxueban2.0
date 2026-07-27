@@ -1,6 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import { CalendarCheck } from 'lucide-react';
 
 const milestones = [
   { grade: '一升二', event: '路线选择', status: 'current', x: 80 },
@@ -20,72 +21,73 @@ const subTasks = [
 
 export default function TimelineVisual() {
   return (
-    <div className="rounded-2xl border border-white/10 bg-surface/30 p-6 corner-accent">
-      <div className="flex items-center justify-between mb-8">
+    <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-5 corner-accent backdrop-blur-sm">
+      <div className="flex items-center justify-between mb-5">
         <div className="flex items-center gap-2">
-          <div className="w-2 h-2 rounded-full bg-primary animate-pulse" />
-          <span className="text-xs font-mono text-slate-400">MILESTONE TIMELINE // 2025-2030</span>
+          <CalendarCheck className="w-3.5 h-3.5 text-primary" aria-hidden="true" />
+          <span className="text-[11px] font-mono text-slate-400 uppercase tracking-wider">
+            里程碑时间线 · 2025-2030
+          </span>
         </div>
-        <span className="text-xs font-mono text-primary">TRACKING</span>
+        <span className="text-[11px] font-mono text-primary">TRACKING</span>
       </div>
 
-      <svg viewBox="0 0 900 280" className="w-full h-auto">
+      <svg viewBox="0 0 900 250" className="w-full h-auto" aria-label="升学里程碑时间线">
         <defs>
           <pattern id="timelineGrid" width="40" height="40" patternUnits="userSpaceOnUse">
             <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(255,255,255,0.03)" strokeWidth="1" />
           </pattern>
+          <linearGradient id="timelineLineGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stopColor="#ff2d6a" stopOpacity="0.6" />
+            <stop offset="100%" stopColor="#ff2d6a" stopOpacity="0.1" />
+          </linearGradient>
         </defs>
-        <rect width="900" height="280" fill="url(#timelineGrid)" />
+        <rect width="900" height="250" fill="url(#timelineGrid)" />
 
-        {/* Main timeline */}
         <motion.line
           x1="80"
-          y1="120"
+          y1="110"
           x2="780"
-          y2="120"
-          stroke="rgba(255,255,255,0.1)"
+          y2="110"
+          stroke="url(#timelineLineGradient)"
           strokeWidth="2"
           initial={{ pathLength: 0 }}
           animate={{ pathLength: 1 }}
           transition={{ duration: 1.5, delay: 0.3 }}
         />
 
-        {/* Milestones */}
         {milestones.map((milestone, index) => (
           <motion.g
             key={milestone.grade}
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.8 + index * 0.15, duration: 0.5 }}
+            transition={{ delay: 0.6 + index * 0.1, duration: 0.4 }}
           >
-            {/* Vertical connector */}
             <line
               x1={milestone.x}
-              y1="120"
+              y1="110"
               x2={milestone.x}
-              y2={milestone.status === 'current' ? '60' : '180'}
-              stroke={milestone.status === 'current' ? '#ff2d6a' : 'rgba(255,255,255,0.1)'}
+              y2={milestone.status === 'current' ? '55' : '165'}
+              stroke={milestone.status === 'current' ? '#ff2d6a' : 'rgba(255,255,255,0.08)'}
               strokeWidth="1"
-              strokeDasharray={milestone.status === 'current' ? undefined : '2 2'}
+              strokeDasharray={milestone.status === 'current' ? undefined : '3 3'}
             />
 
-            {/* Node */}
             <circle
               cx={milestone.x}
-              cy="120"
-              r={milestone.status === 'current' ? 8 : 5}
+              cy="110"
+              r={milestone.status === 'current' ? 6 : 4}
               fill={milestone.status === 'current' ? '#ff2d6a' : '#1a1a28'}
-              stroke={milestone.status === 'current' ? '#ff2d6a' : 'rgba(255,255,255,0.3)'}
+              stroke={milestone.status === 'current' ? '#ff2d6a' : 'rgba(255,255,255,0.25)'}
               strokeWidth="2"
             />
 
-            {/* Label */}
             <text
               x={milestone.x}
-              y={milestone.status === 'current' ? '45' : '205'}
+              y={milestone.status === 'current' ? '42' : '185'}
               textAnchor="middle"
               fill={milestone.status === 'current' ? '#ff2d6a' : '#8b8b9a'}
-              fontSize="12"
+              fontSize="11"
               fontFamily="var(--font-mono)"
               fontWeight={milestone.status === 'current' ? '600' : '400'}
             >
@@ -93,26 +95,24 @@ export default function TimelineVisual() {
             </text>
             <text
               x={milestone.x}
-              y={milestone.status === 'current' ? '30' : '220'}
+              y={milestone.status === 'current' ? '28' : '199'}
               textAnchor="middle"
               fill={milestone.status === 'current' ? '#ffffff' : '#6b6b7b'}
-              fontSize="11"
+              fontSize="10"
               fontFamily="var(--font-body)"
             >
               {milestone.event}
             </text>
 
-            {/* Current pulse */}
             {milestone.status === 'current' && (
-              <circle cx={milestone.x} cy="120" r="16" fill="none" stroke="#ff2d6a" strokeWidth="1" opacity="0.3">
-                <animate attributeName="r" from="16" to="28" dur="2s" repeatCount="indefinite" />
+              <circle cx={milestone.x} cy="110" r="12" fill="none" stroke="#ff2d6a" strokeWidth="1" opacity="0.3">
+                <animate attributeName="r" from="12" to="22" dur="2s" repeatCount="indefinite" />
                 <animate attributeName="opacity" from="0.3" to="0" dur="2s" repeatCount="indefinite" />
               </circle>
             )}
           </motion.g>
         ))}
 
-        {/* Sub-tasks */}
         {subTasks.map((task, index) => {
           const parent = milestones[task.parent];
           return (
@@ -120,20 +120,20 @@ export default function TimelineVisual() {
               key={task.label}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ delay: 1.8 + index * 0.1, duration: 0.4 }}
+              transition={{ delay: 1.4 + index * 0.1, duration: 0.35 }}
             >
               <rect
-                x={parent.x - 55}
-                y="245"
-                width="110"
-                height="24"
+                x={parent.x - 50}
+                y="220"
+                width="100"
+                height="22"
                 rx="4"
-                fill="rgba(255,45,106,0.08)"
-                stroke="rgba(255,45,106,0.2)"
+                fill="rgba(255,45,106,0.06)"
+                stroke="rgba(255,45,106,0.15)"
               />
               <text
                 x={parent.x}
-                y="261"
+                y="234"
                 textAnchor="middle"
                 fill="#ff8aa8"
                 fontSize="10"
@@ -146,12 +146,10 @@ export default function TimelineVisual() {
         })}
       </svg>
 
-      <div className="mt-4 pt-4 border-t border-white/5 flex items-center justify-between text-xs">
-        <div className="flex items-center gap-4">
-          <span className="text-slate-500">
-            当前: <span className="text-primary">一升二暑假 · 路线选择</span>
-          </span>
-        </div>
+      <div className="mt-4 pt-4 border-t border-white/5 flex items-center justify-between text-[11px]">
+        <span className="text-slate-500">
+          当前: <span className="text-primary">一升二暑假 · 路线选择</span>
+        </span>
         <span className="font-mono text-slate-600">6 MAJOR MILESTONES</span>
       </div>
     </div>

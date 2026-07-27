@@ -1,131 +1,98 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import {
   Target,
   Calendar,
   TrendingUp,
-  AlertCircle,
-  CheckCircle2,
-  Clock,
-  Sparkles,
   School,
   ChevronRight,
   Users,
   Plus,
+  Sparkles,
+  ArrowRight,
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useChildren } from '@/components/dashboard/ChildrenContext';
 import { gradeLabel, gradeToStage, getInitials } from '@/lib/children';
+import {
+  getCurrentWeekId,
+  getPlanStats,
+  generateAiReview,
+  getTodayName,
+} from '@/lib/weeklyTasks';
 import EmptyState from '@/components/ui/EmptyState';
-
-const stats = [
-  {
-    title: '当前方案',
-    value: '三公冲刺',
-    subtext: '备选：私立摇号',
-    icon: Target,
-    color: 'from-primary to-primary-glow',
-    glow: 'rgba(244, 63, 94, 0.3)',
-  },
-  {
-    title: '本周任务',
-    value: '5/8',
-    subtext: '3 个待完成',
-    icon: Calendar,
-    color: 'from-secondary to-secondary-glow',
-    glow: 'rgba(139, 92, 246, 0.3)',
-  },
-  {
-    title: '总体进度',
-    value: '32%',
-    subtext: '略高于同龄平均',
-    icon: TrendingUp,
-    color: 'from-accent to-accent-glow',
-    glow: 'rgba(6, 182, 212, 0.3)',
-  },
-  {
-    title: '目标学校',
-    value: '3 所',
-    subtext: '1 冲刺 · 2 备选',
-    icon: School,
-    color: 'from-warning to-primary-glow',
-    glow: 'rgba(245, 158, 11, 0.3)',
-  },
-];
-
-const recentTasks = [
-  { name: '试听奥数机构 A', status: 'completed', date: '今天' },
-  { name: '完成 OD1 Unit 7 学习', status: 'in_progress', date: '明天截止' },
-  { name: '整理三公历年招生简章', status: 'pending', date: '本周内' },
-  { name: '记录孩子期末成绩', status: 'pending', date: '3 天内' },
-];
-
-const aiInsights = [
-  {
-    type: 'success',
-    title: '英语进度正常',
-    content: 'RAZ 爬坡节奏良好，quiz 正确率 80%+，建议继续保持每日阅读',
-  },
-  {
-    type: 'warning',
-    title: '奥数需要启动',
-    content: '三公路线通常三年级开始系统奥数，建议本月确定机构',
-  },
-  {
-    type: 'info',
-    title: '时间节点提醒',
-    content: '距离三公报名还有约 30 个月，可开始关注面谈准备',
-  },
-];
-
-const statusConfig: Record<string, { label: string; icon: typeof CheckCircle2; color: string; bg: string }> = {
-  completed: { label: '已完成', icon: CheckCircle2, color: 'text-success', bg: 'bg-success/10' },
-  in_progress: { label: '进行中', icon: Clock, color: 'text-warning', bg: 'bg-warning/10' },
-  pending: { label: '待开始', icon: AlertCircle, color: 'text-slate-400', bg: 'bg-slate-500/10' },
-};
+import CommandCard from '@/components/ui/CommandCard';
+import MetricRing from '@/components/ui/MetricRing';
+import DataBadge from '@/components/ui/DataBadge';
+import TimelineNode from '@/components/ui/TimelineNode';
 
 const containerVariants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
-    transition: { staggerChildren: 0.1 },
+    transition: { staggerChildren: 0.06 },
   },
 };
 
 const itemVariants = {
-  hidden: { opacity: 0, y: 20 },
+  hidden: { opacity: 0, y: 12 },
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] },
+    transition: { duration: 0.4, ease: [0.22, 1, 0.36, 1] },
   },
 };
 
 export default function DashboardPage() {
   const router = useRouter();
-  const { children, currentChild, setCurrentChildId } = useChildren();
+  const shouldReduceMotion = useReducedMotion();
+  const { children, currentChild, setCurrentChildId, getWeeklyPlan } = useChildren();
 
-  const displayStats = stats;
+  const currentWeekPlan = currentChild
+    ? getWeeklyPlan(getCurrentWeekId(), currentChild.id)
+    : undefined;
+  const weeklyStats = currentWeekPlan ? getPlanStats(currentWeekPlan) : null;
+  const aiReview = currentChild && currentWeekPlan
+    ? generateAiReview(currentWeekPlan, currentChild.name)
+    : null;
+
+  const todayName = getTodayName();
+  const todayTasks = currentWeekPlan?.tasks.filter((t) => t.day === todayName) ?? [];
+  const pendingTasks = currentWeekPlan?.tasks.filter((t) => t.status !== 'done') ?? [];
+  const recentTasks = todayTasks.length > 0 ? todayTasks : pendingTasks.slice(0, 4);
+
+  const completionRate = weeklyStats?.completionRate ?? 0;
 
   const handleViewChild = (id: string) => {
     setCurrentChildId(id);
     router.push('/dashboard/plan');
   };
 
+  const getStageRoute = (stage: string) => {
+    switch (stage) {
+      case '小升初':
+        return { name: '三公 / 民办摇号', schools: '3 所目标校' };
+      case '中考':
+        return { name: '市重点 / 名额分配', schools: '4 所目标校' };
+      default:
+        return { name: '高考综评 / 强基', schools: '2 所目标校' };
+    }
+  };
+
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       {/* Header */}
       <motion.div
-        initial={{ opacity: 0, y: -10 }}
+        initial={shouldReduceMotion ? false : { opacity: 0, y: -8 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
+        transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
       >
-        <h1 className="text-3xl font-bold font-display mb-2">家庭仪表盘</h1>
-        <p className="text-slate-400">
+        <h1 className="text-2xl sm:text-3xl font-bold font-display mb-1">作战指挥中心</h1>
+        <p className="text-sm text-slate-500">
           {children.length > 0
-            ? `管理 ${children.length} 个孩子，当前选中：${currentChild?.name || '无'}`
-            : '欢迎回来，先添加孩子开始使用'}
+            ? `监控 ${children.length} 名学员 · 当前：${currentChild?.name || '未选择'}`
+            : '请先添加学员档案'}
         </p>
       </motion.div>
 
@@ -133,68 +100,58 @@ export default function DashboardPage() {
       {children.length === 0 ? (
         <EmptyState
           icon={Users}
-          title="还没有孩子档案"
-          description="添加孩子后，这里会显示每个孩子的升学阶段概览，方便快速切换"
+          title="还没有学员档案"
+          description="添加学员后，这里会显示每个学员的升学阶段概览，方便快速切换"
         />
       ) : (
         <motion.div
           variants={containerVariants}
-          initial="hidden"
+          initial={shouldReduceMotion ? false : 'hidden'}
           animate="visible"
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3"
         >
           {children.map((child) => {
             const isActive = currentChild?.id === child.id;
+            const stage = gradeToStage(child.grade);
             return (
-              <motion.div
-                key={child.id}
-                variants={itemVariants}
-                whileHover={{ y: -4, transition: { duration: 0.2 } }}
-                className={`rounded-2xl glass p-4 relative overflow-hidden group cursor-pointer border ${
-                  isActive ? 'border-primary/40' : 'border-white/5'
-                }`}
-                onClick={() => handleViewChild(child.id)}
-              >
-                {isActive && (
-                  <div
-                    className="absolute inset-0 opacity-30 transition-opacity duration-500"
-                    style={{
-                      background: `radial-gradient(circle at 100% 0%, rgba(244,63,94,0.25), transparent 70%)`,
-                    }}
-                  />
-                )}
-                <div className="relative z-10 flex items-center gap-4">
-                  <div
-                    className="w-12 h-12 rounded-full flex items-center justify-center text-white font-bold shrink-0"
-                    style={{
-                      background: `linear-gradient(135deg, ${child.avatarColor}, ${child.avatarColor}88)`,
-                      boxShadow: `0 0 20px ${child.avatarColor}40`,
-                    }}
-                  >
-                    {getInitials(child.name)}
+              <motion.div key={child.id} variants={itemVariants}>
+                <CommandCard
+                  active={isActive}
+                  hover
+                  onClick={() => handleViewChild(child.id)}
+                  className="p-4"
+                >
+                  <div className="flex items-center gap-3">
+                    <div
+                      className="w-10 h-10 rounded-full flex items-center justify-center text-white text-sm font-bold shrink-0"
+                      style={{
+                        background: `linear-gradient(135deg, ${child.avatarColor}, ${child.avatarColor}88)`,
+                      }}
+                    >
+                      {getInitials(child.name)}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className={`font-semibold text-sm truncate ${isActive ? 'text-primary' : 'text-slate-200'}`}>
+                        {child.name}
+                      </p>
+                      <p className="text-xs text-slate-500">
+                        {gradeLabel(child.grade)} · {stage}
+                      </p>
+                    </div>
+                    <ChevronRight className={`w-4 h-4 shrink-0 ${isActive ? 'text-primary' : 'text-slate-600'}`} />
                   </div>
-                  <div className="flex-1 min-w-0">
-                    <p className={`font-bold font-display truncate ${isActive ? 'text-primary' : 'text-slate-200'}`}>
-                      {child.name}
-                    </p>
-                    <p className="text-xs text-slate-500">
-                      {gradeLabel(child.grade)} · {gradeToStage(child.grade)}
-                    </p>
-                  </div>
-                  <ChevronRight className={`w-4 h-4 shrink-0 ${isActive ? 'text-primary' : 'text-slate-500'}`} />
-                </div>
+                </CommandCard>
               </motion.div>
             );
           })}
 
           <motion.button
             variants={itemVariants}
-            whileHover={{ y: -4, transition: { duration: 0.2 } }}
-            className="rounded-2xl glass p-4 border border-dashed border-white/10 flex items-center justify-center gap-2 text-slate-400 hover:text-slate-200 hover:bg-white/5 transition-all"
             onClick={() => router.push('/dashboard/plan')}
+            className="rounded-xl border border-dashed border-white/[0.08] bg-white/[0.02] p-4 flex items-center justify-center gap-2 text-slate-500 hover:text-slate-300 hover:bg-white/[0.04] hover:border-white/[0.12] transition-all text-sm"
           >
             <Plus className="w-4 h-4" />
-            <span className="text-sm font-medium">添加孩子</span>
+            <span className="font-medium">添加学员</span>
           </motion.button>
         </motion.div>
       )}
@@ -202,153 +159,170 @@ export default function DashboardPage() {
       {/* Current child detail */}
       {currentChild && (
         <>
-          <div className="flex items-center gap-3">
-            <div
-              className="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold"
-              style={{ background: `linear-gradient(135deg, ${currentChild.avatarColor}, ${currentChild.avatarColor}88)` }}
-            >
-              {getInitials(currentChild.name)}
-            </div>
-            <div>
-              <h2 className="text-xl font-bold font-display">{currentChild.name} 的近况</h2>
-              <p className="text-sm text-slate-500">
-                {gradeLabel(currentChild.grade)} · {gradeToStage(currentChild.grade)}阶段
-              </p>
-            </div>
-          </div>
-
-          {/* Stats */}
+          {/* Route health */}
           <motion.div
-            variants={containerVariants}
-            initial="hidden"
-            animate="visible"
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
+            initial={shouldReduceMotion ? false : { opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
           >
-            {displayStats.map((stat) => (
-              <motion.div
-                key={stat.title}
-                variants={itemVariants}
-                whileHover={{ y: -4, transition: { duration: 0.2 } }}
-                className="rounded-2xl glass p-6 relative overflow-hidden group cursor-pointer"
-              >
-                <div
-                  className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-                  style={{
-                    background: `radial-gradient(circle at 100% 0%, ${stat.glow}, transparent 70%)`,
-                  }}
-                />
-                <div className="relative z-10 flex items-start justify-between">
-                  <div>
-                    <p className="text-sm text-slate-400 mb-1">{stat.title}</p>
-                    <p className="text-2xl font-bold font-display text-slate-100">{stat.value}</p>
-                    <p className="text-xs text-slate-500 mt-1">{stat.subtext}</p>
-                  </div>
+            <CommandCard active corner className="p-5">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div className="flex items-start gap-4">
                   <div
-                    className={`w-12 h-12 rounded-xl bg-gradient-to-br ${stat.color} flex items-center justify-center`}
-                    style={{ boxShadow: `0 0 20px ${stat.glow}` }}
+                    className="w-12 h-12 rounded-xl flex items-center justify-center text-white font-bold text-lg shrink-0"
+                    style={{
+                      background: `linear-gradient(135deg, ${currentChild.avatarColor}, ${currentChild.avatarColor}88)`,
+                    }}
                   >
-                    <stat.icon className="w-6 h-6 text-white" />
+                    {getInitials(currentChild.name)}
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-2 mb-1">
+                      <h2 className="text-lg font-bold font-display">{currentChild.name}</h2>
+                      <DataBadge variant="primary" size="sm">
+                        {gradeToStage(currentChild.grade)}
+                      </DataBadge>
+                    </div>
+                    <p className="text-sm text-slate-500">
+                      {gradeLabel(currentChild.grade)} · {getStageRoute(gradeToStage(currentChild.grade)).name}
+                    </p>
                   </div>
                 </div>
+
+                <div className="flex items-center gap-4">
+                  <div className="text-right">
+                    <p className="text-xs text-slate-500 mb-1">本周完成率</p>
+                    <p className="text-xl font-bold font-display tabular-nums text-white">
+                      {completionRate}%
+                    </p>
+                  </div>
+                  <MetricRing rate={completionRate} size={72} strokeWidth={7} />
+                </div>
+              </div>
+            </CommandCard>
+          </motion.div>
+
+          {/* Stats grid */}
+          <motion.div
+            variants={containerVariants}
+            initial={shouldReduceMotion ? false : 'hidden'}
+            animate="visible"
+            className="grid grid-cols-2 lg:grid-cols-4 gap-3"
+          >
+            {[
+              {
+                title: '当前方案',
+                value: getStageRoute(gradeToStage(currentChild.grade)).name,
+                subtext: getStageRoute(gradeToStage(currentChild.grade)).schools,
+                icon: Target,
+                color: 'text-primary',
+                bg: 'bg-primary/10',
+              },
+              {
+                title: '本周任务',
+                value: weeklyStats ? `${weeklyStats.done}/${weeklyStats.total}` : '—',
+                subtext: weeklyStats ? `${weeklyStats.pending} 个待完成` : '未发布计划',
+                icon: Calendar,
+                color: 'text-secondary',
+                bg: 'bg-secondary/10',
+              },
+              {
+                title: '总体进度',
+                value: `${completionRate}%`,
+                subtext: completionRate >= 60 ? '节奏良好' : '需要加油',
+                icon: TrendingUp,
+                color: 'text-accent',
+                bg: 'bg-accent/10',
+              },
+              {
+                title: '目标学校',
+                value: getStageRoute(gradeToStage(currentChild.grade)).schools.split(' ')[0],
+                subtext: '点击路线方案查看',
+                icon: School,
+                color: 'text-warning',
+                bg: 'bg-warning/10',
+              },
+            ].map((stat) => (
+              <motion.div key={stat.title} variants={itemVariants}>
+                <CommandCard hover className="p-4">
+                  <div className="flex items-start justify-between mb-3">
+                    <p className="text-xs text-slate-500">{stat.title}</p>
+                    <div className={`w-8 h-8 rounded-lg ${stat.bg} flex items-center justify-center`}>
+                      <stat.icon className={`w-4 h-4 ${stat.color}`} />
+                    </div>
+                  </div>
+                  <p className="text-lg font-bold font-display text-slate-100 truncate">{stat.value}</p>
+                  <p className="text-[11px] text-slate-500 mt-0.5">{stat.subtext}</p>
+                </CommandCard>
               </motion.div>
             ))}
           </motion.div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {/* Recent tasks */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+            {/* Today's tasks timeline */}
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
+              initial={shouldReduceMotion ? false : { opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-              className="lg:col-span-2 rounded-2xl glass p-6"
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="lg:col-span-2"
             >
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="text-xl font-bold font-display">近期任务</h2>
-                <button
-                  onClick={() => router.push('/dashboard/milestones')}
-                  className="flex items-center gap-1 text-sm text-primary hover:text-primary-glow transition-colors"
-                >
-                  查看全部 <ChevronRight className="w-4 h-4" />
-                </button>
-              </div>
+              <CommandCard className="p-5 h-full">
+                <div className="flex items-center justify-between mb-5">
+                  <div className="flex items-center gap-2">
+                    <Calendar className="w-4 h-4 text-primary" />
+                    <h2 className="text-base font-bold font-display">今日任务 · {todayName}</h2>
+                  </div>
+                  <button
+                    onClick={() => router.push('/dashboard/weekly')}
+                    className="flex items-center gap-1 text-xs text-primary hover:text-primary-glow transition-colors"
+                  >
+                    周视图 <ArrowRight className="w-3 h-3" />
+                  </button>
+                </div>
 
-              <div className="space-y-3">
-                {recentTasks.map((task, index) => {
-                  const config = statusConfig[task.status];
-                  return (
-                    <motion.div
-                      key={task.name}
-                      initial={{ opacity: 0, x: -20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: 0.4 + index * 0.1 }}
-                      className="flex items-center justify-between p-4 rounded-xl bg-white/5 hover:bg-white/10 transition-all cursor-pointer group"
-                    >
-                      <div className="flex items-center gap-4">
-                        <div className={`w-10 h-10 rounded-lg ${config.bg} flex items-center justify-center`}>
-                          <config.icon className={`w-5 h-5 ${config.color}`} />
-                        </div>
-                        <div>
-                          <p className="font-medium text-slate-200 group-hover:text-white transition-colors">{task.name}</p>
-                          <p className="text-sm text-slate-500">{task.date}</p>
-                        </div>
-                      </div>
-                      <span className={`text-sm font-medium ${config.color}`}>{config.label}</span>
-                    </motion.div>
-                  );
-                })}
-              </div>
+                {recentTasks.length === 0 ? (
+                  <div className="text-center py-8 text-sm text-slate-500">
+                    今日暂无任务，去周任务页面生成计划
+                  </div>
+                ) : (
+                  <div className="space-y-1">
+                    {recentTasks.map((task, index) => (
+                      <TimelineNode
+                        key={task.id}
+                        title={task.focus}
+                        subtitle={`${task.duration} · ${task.materials.join('、') || '无指定材料'}`}
+                        status={task.status === 'done' ? 'completed' : 'current'}
+                        isLast={index === recentTasks.length - 1}
+                      />
+                    ))}
+                  </div>
+                )}
+              </CommandCard>
             </motion.div>
 
             {/* AI Insights */}
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
+              initial={shouldReduceMotion ? false : { opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.4 }}
-              className="rounded-2xl glass p-6 border border-secondary/20"
-              style={{ boxShadow: '0 0 40px rgba(139, 92, 246, 0.1)' }}
+              transition={{ duration: 0.5, delay: 0.3 }}
             >
-              <div className="flex items-center gap-2 mb-6">
-                <Sparkles className="w-5 h-5 text-secondary" />
-                <h2 className="text-xl font-bold font-display">AI 检视</h2>
-              </div>
+              <CommandCard className="p-5 h-full border-secondary/10">
+                <div className="flex items-center gap-2 mb-4">
+                  <Sparkles className="w-4 h-4 text-secondary" />
+                  <h2 className="text-base font-bold font-display">AI 检视</h2>
+                </div>
 
-              <div className="space-y-4">
-                {aiInsights.map((insight, index) => (
-                  <motion.div
-                    key={insight.title}
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.5 + index * 0.1 }}
-                    className={`p-4 rounded-xl border ${
-                      insight.type === 'success'
-                        ? 'bg-success/5 border-success/20'
-                        : insight.type === 'warning'
-                        ? 'bg-warning/5 border-warning/20'
-                        : 'bg-accent/5 border-accent/20'
-                    }`}
-                  >
-                    <p
-                      className={`text-sm font-semibold mb-1 ${
-                        insight.type === 'success'
-                          ? 'text-success'
-                          : insight.type === 'warning'
-                          ? 'text-warning'
-                          : 'text-accent'
-                      }`}
-                    >
-                      {insight.title}
-                    </p>
-                    <p className="text-sm text-slate-400 leading-relaxed">{insight.content}</p>
-                  </motion.div>
-                ))}
-              </div>
+                <p className="text-sm text-slate-400 leading-relaxed mb-5">
+                  {aiReview ?? '暂无数据，发布本周计划后将自动生成 AI 诊断。'}
+                </p>
 
-              <button
-                onClick={() => router.push('/dashboard/ai')}
-                className="w-full mt-6 py-3 rounded-xl bg-gradient-to-r from-secondary to-secondary-glow text-white font-semibold hover:shadow-[0_0_30px_rgba(139,92,246,0.4)] transition-all duration-300"
-              >
-                生成完整报告
-              </button>
+                <button
+                  onClick={() => router.push('/dashboard/ai')}
+                  className="w-full py-2 rounded-lg bg-secondary/10 border border-secondary/20 text-secondary text-sm font-semibold hover:bg-secondary/15 hover:shadow-glow-secondary transition-all duration-200 focus-ring"
+                >
+                  查看完整报告
+                </button>
+              </CommandCard>
             </motion.div>
           </div>
         </>
