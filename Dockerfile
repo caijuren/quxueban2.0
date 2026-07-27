@@ -68,8 +68,12 @@ COPY --from=builder /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
+# 复制 Prisma CLI 到运行镜像，避免启动时 npx 下载
+COPY --from=builder --chown=nextjs:nodejs /app/node_modules/prisma ./node_modules/prisma
+
 USER nextjs
 
 EXPOSE 3000
 
-CMD ["node", "server.js"]
+# 启动时先执行数据库迁移，再启动应用
+CMD ["sh", "-c", "node node_modules/prisma/build/index.js migrate deploy && node server.js"]
