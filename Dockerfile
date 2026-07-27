@@ -3,8 +3,9 @@
 # 趣学伴 Next.js 独立部署镜像
 # 构建：docker build -t quxueban:latest .
 # 运行：docker run -p 3000:3000 --env-file .env.production quxueban:latest
+# 使用 Debian 11 (bullseye) 以获得 Prisma 5.x 所需的 OpenSSL 1.1
 
-FROM node:20-slim AS base
+FROM node:20-bullseye-slim AS base
 
 # --- 依赖阶段 ---
 FROM base AS deps
