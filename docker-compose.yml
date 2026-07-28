@@ -34,8 +34,7 @@ services:
     depends_on:
       db:
         condition: service_healthy
-    command: >
-      sh -c "npx prisma migrate deploy && node server.js"
+    # Dockerfile 的 CMD 已包含迁移与启动命令
 
   seed:
     build:

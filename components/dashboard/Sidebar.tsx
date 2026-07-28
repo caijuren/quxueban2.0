@@ -12,6 +12,7 @@ import {
   Calculator,
   BookText,
   Calendar,
+  Bell,
   X,
 } from 'lucide-react';
 import Link from 'next/link';
@@ -41,7 +42,10 @@ const menuGroups = [
   },
   {
     title: '执行跟踪',
-    items: [{ name: '周任务', href: '/dashboard/weekly', icon: Calendar }],
+    items: [
+      { name: '周任务', href: '/dashboard/weekly', icon: Calendar },
+      { name: '预警提醒', href: '/dashboard/alerts', icon: Bell },
+    ],
   },
   {
     title: '智能参谋',

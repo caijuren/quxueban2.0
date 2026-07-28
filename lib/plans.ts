@@ -880,3 +880,19 @@ export const statusConfig = {
   standby: { label: '待命', icon: Clock, color: 'text-slate-400' },
   completed: { label: '已完成', icon: CheckCircle2, color: 'text-success' },
 };
+
+export function getRoutesByStage(stage: '小升初' | '中考' | '高考'): RoutePlan[] {
+  switch (stage) {
+    case '小升初':
+      return plans;
+    case '中考':
+      return middleSchoolPlans;
+    case '高考':
+    default:
+      return [];
+  }
+}
+
+export function getRouteById(id: string): RoutePlan | undefined {
+  return [...plans, ...middleSchoolPlans].find((p) => p.id === id);
+}

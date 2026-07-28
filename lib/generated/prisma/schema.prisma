@@ -19,6 +19,10 @@ model User {
   passwordHash String
   name         String?
   role         UserRole @default(PARENT)
+  avatarUrl    String?
+  phone        String?
+  email        String?
+  wechatOpenId String?  @unique
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
@@ -26,19 +30,49 @@ model User {
   plans         Plan[]
   weeklyPlans   WeeklyPlan[]
   notifications Notification[]
+  settings      UserSetting?
 
   @@index([role])
 }
 
+model UserSetting {
+  id     String @id @default(uuid())
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  theme              String  @default("dark-tech")
+  fontSize           String  @default("normal")
+  density            String  @default("comfortable")
+  reducedMotion      Boolean @default(false)
+  defaultLandingPage String  @default("dashboard")
+  defaultChildMode   String  @default("last")
+
+  notificationPrefs Json    @default("{}")
+  reminderTime      String  @default("08:00")
+  doNotDisturb      Boolean @default(false)
+  doNotDisturbStart String?
+  doNotDisturbEnd   String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+}
+
 model Child {
-  id           String   @id @default(uuid())
-  userId       String
-  name         String
-  grade        Int
-  avatarColor  String   @default("#f43f5e")
-  targetSchool String?
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  id            String    @id @default(uuid())
+  userId        String
+  name          String
+  grade         Int
+  avatarColor   String    @default("#f43f5e")
+  avatarUrl     String?
+  targetSchool  String?
+  currentSchool String?
+  birthday      DateTime?
+  notes         String?
+  routeId       String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
 
   user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
   plans       Plan[]

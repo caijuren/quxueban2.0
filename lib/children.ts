@@ -2,7 +2,13 @@ export interface Child {
   id: string;
   name: string;
   avatarColor: string;
+  avatarUrl?: string | null;
   grade: number;
+  targetSchool?: string | null;
+  currentSchool?: string | null;
+  birthday?: string | null;
+  notes?: string | null;
+  routeId?: string | null;
 }
 
 export interface ChildData {
@@ -20,6 +26,17 @@ export const AVATAR_COLORS = [
   '#10b981',
   '#ec4899',
   '#6366f1',
+];
+
+export const AVATAR_PRESETS = [
+  { id: 'boy-1', emoji: '👦', bg: '#f43f5e' },
+  { id: 'girl-1', emoji: '👧', bg: '#8b5cf6' },
+  { id: 'boy-2', emoji: '🧒', bg: '#06b6d4' },
+  { id: 'girl-2', emoji: '👶', bg: '#f59e0b' },
+  { id: 'rocket', emoji: '🚀', bg: '#10b981' },
+  { id: 'star', emoji: '⭐', bg: '#ec4899' },
+  { id: 'book', emoji: '📚', bg: '#6366f1' },
+  { id: 'trophy', emoji: '🏆', bg: '#f97316' },
 ];
 
 export function gradeToStage(grade: number): '小升初' | '中考' | '高考' {

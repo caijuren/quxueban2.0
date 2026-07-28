@@ -19,6 +19,11 @@ export type PrismaPromise<T> = $Public.PrismaPromise<T>
  */
 export type User = $Result.DefaultSelection<Prisma.$UserPayload>
 /**
+ * Model UserSetting
+ * 
+ */
+export type UserSetting = $Result.DefaultSelection<Prisma.$UserSettingPayload>
+/**
  * Model Child
  * 
  */
@@ -188,6 +193,16 @@ export class PrismaClient<
     * ```
     */
   get user(): Prisma.UserDelegate<ExtArgs>;
+
+  /**
+   * `prisma.userSetting`: Exposes CRUD operations for the **UserSetting** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more UserSettings
+    * const userSettings = await prisma.userSetting.findMany()
+    * ```
+    */
+  get userSetting(): Prisma.UserSettingDelegate<ExtArgs>;
 
   /**
    * `prisma.child`: Exposes CRUD operations for the **Child** model.
@@ -670,6 +685,7 @@ export namespace Prisma {
 
   export const ModelName: {
     User: 'User',
+    UserSetting: 'UserSetting',
     Child: 'Child',
     Plan: 'Plan',
     WeeklyPlan: 'WeeklyPlan',
@@ -689,7 +705,7 @@ export namespace Prisma {
 
   export type TypeMap<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, ClientOptions = {}> = {
     meta: {
-      modelProps: "user" | "child" | "plan" | "weeklyPlan" | "notification"
+      modelProps: "user" | "userSetting" | "child" | "plan" | "weeklyPlan" | "notification"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -760,6 +776,76 @@ export namespace Prisma {
           count: {
             args: Prisma.UserCountArgs<ExtArgs>
             result: $Utils.Optional<UserCountAggregateOutputType> | number
+          }
+        }
+      }
+      UserSetting: {
+        payload: Prisma.$UserSettingPayload<ExtArgs>
+        fields: Prisma.UserSettingFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.UserSettingFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserSettingPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.UserSettingFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserSettingPayload>
+          }
+          findFirst: {
+            args: Prisma.UserSettingFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserSettingPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.UserSettingFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserSettingPayload>
+          }
+          findMany: {
+            args: Prisma.UserSettingFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserSettingPayload>[]
+          }
+          create: {
+            args: Prisma.UserSettingCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserSettingPayload>
+          }
+          createMany: {
+            args: Prisma.UserSettingCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.UserSettingCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserSettingPayload>[]
+          }
+          delete: {
+            args: Prisma.UserSettingDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserSettingPayload>
+          }
+          update: {
+            args: Prisma.UserSettingUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserSettingPayload>
+          }
+          deleteMany: {
+            args: Prisma.UserSettingDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.UserSettingUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.UserSettingUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserSettingPayload>
+          }
+          aggregate: {
+            args: Prisma.UserSettingAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateUserSetting>
+          }
+          groupBy: {
+            args: Prisma.UserSettingGroupByArgs<ExtArgs>
+            result: $Utils.Optional<UserSettingGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.UserSettingCountArgs<ExtArgs>
+            result: $Utils.Optional<UserSettingCountAggregateOutputType> | number
           }
         }
       }
@@ -1317,6 +1403,10 @@ export namespace Prisma {
     passwordHash: string | null
     name: string | null
     role: $Enums.UserRole | null
+    avatarUrl: string | null
+    phone: string | null
+    email: string | null
+    wechatOpenId: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -1327,6 +1417,10 @@ export namespace Prisma {
     passwordHash: string | null
     name: string | null
     role: $Enums.UserRole | null
+    avatarUrl: string | null
+    phone: string | null
+    email: string | null
+    wechatOpenId: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -1337,6 +1431,10 @@ export namespace Prisma {
     passwordHash: number
     name: number
     role: number
+    avatarUrl: number
+    phone: number
+    email: number
+    wechatOpenId: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -1349,6 +1447,10 @@ export namespace Prisma {
     passwordHash?: true
     name?: true
     role?: true
+    avatarUrl?: true
+    phone?: true
+    email?: true
+    wechatOpenId?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -1359,6 +1461,10 @@ export namespace Prisma {
     passwordHash?: true
     name?: true
     role?: true
+    avatarUrl?: true
+    phone?: true
+    email?: true
+    wechatOpenId?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -1369,6 +1475,10 @@ export namespace Prisma {
     passwordHash?: true
     name?: true
     role?: true
+    avatarUrl?: true
+    phone?: true
+    email?: true
+    wechatOpenId?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -1452,6 +1562,10 @@ export namespace Prisma {
     passwordHash: string
     name: string | null
     role: $Enums.UserRole
+    avatarUrl: string | null
+    phone: string | null
+    email: string | null
+    wechatOpenId: string | null
     createdAt: Date
     updatedAt: Date
     _count: UserCountAggregateOutputType | null
@@ -1479,12 +1593,17 @@ export namespace Prisma {
     passwordHash?: boolean
     name?: boolean
     role?: boolean
+    avatarUrl?: boolean
+    phone?: boolean
+    email?: boolean
+    wechatOpenId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     children?: boolean | User$childrenArgs<ExtArgs>
     plans?: boolean | User$plansArgs<ExtArgs>
     weeklyPlans?: boolean | User$weeklyPlansArgs<ExtArgs>
     notifications?: boolean | User$notificationsArgs<ExtArgs>
+    settings?: boolean | User$settingsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -1494,6 +1613,10 @@ export namespace Prisma {
     passwordHash?: boolean
     name?: boolean
     role?: boolean
+    avatarUrl?: boolean
+    phone?: boolean
+    email?: boolean
+    wechatOpenId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["user"]>
@@ -1504,6 +1627,10 @@ export namespace Prisma {
     passwordHash?: boolean
     name?: boolean
     role?: boolean
+    avatarUrl?: boolean
+    phone?: boolean
+    email?: boolean
+    wechatOpenId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
@@ -1513,6 +1640,7 @@ export namespace Prisma {
     plans?: boolean | User$plansArgs<ExtArgs>
     weeklyPlans?: boolean | User$weeklyPlansArgs<ExtArgs>
     notifications?: boolean | User$notificationsArgs<ExtArgs>
+    settings?: boolean | User$settingsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -1524,6 +1652,7 @@ export namespace Prisma {
       plans: Prisma.$PlanPayload<ExtArgs>[]
       weeklyPlans: Prisma.$WeeklyPlanPayload<ExtArgs>[]
       notifications: Prisma.$NotificationPayload<ExtArgs>[]
+      settings: Prisma.$UserSettingPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -1531,6 +1660,10 @@ export namespace Prisma {
       passwordHash: string
       name: string | null
       role: $Enums.UserRole
+      avatarUrl: string | null
+      phone: string | null
+      email: string | null
+      wechatOpenId: string | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["user"]>
@@ -1901,6 +2034,7 @@ export namespace Prisma {
     plans<T extends User$plansArgs<ExtArgs> = {}>(args?: Subset<T, User$plansArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PlanPayload<ExtArgs>, T, "findMany"> | Null>
     weeklyPlans<T extends User$weeklyPlansArgs<ExtArgs> = {}>(args?: Subset<T, User$weeklyPlansArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WeeklyPlanPayload<ExtArgs>, T, "findMany"> | Null>
     notifications<T extends User$notificationsArgs<ExtArgs> = {}>(args?: Subset<T, User$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany"> | Null>
+    settings<T extends User$settingsArgs<ExtArgs> = {}>(args?: Subset<T, User$settingsArgs<ExtArgs>>): Prisma__UserSettingClient<$Result.GetResult<Prisma.$UserSettingPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1935,6 +2069,10 @@ export namespace Prisma {
     readonly passwordHash: FieldRef<"User", 'String'>
     readonly name: FieldRef<"User", 'String'>
     readonly role: FieldRef<"User", 'UserRole'>
+    readonly avatarUrl: FieldRef<"User", 'String'>
+    readonly phone: FieldRef<"User", 'String'>
+    readonly email: FieldRef<"User", 'String'>
+    readonly wechatOpenId: FieldRef<"User", 'String'>
     readonly createdAt: FieldRef<"User", 'DateTime'>
     readonly updatedAt: FieldRef<"User", 'DateTime'>
   }
@@ -2331,6 +2469,21 @@ export namespace Prisma {
   }
 
   /**
+   * User.settings
+   */
+  export type User$settingsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserSetting
+     */
+    select?: UserSettingSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserSettingInclude<ExtArgs> | null
+    where?: UserSettingWhereInput
+  }
+
+  /**
    * User without action
    */
   export type UserDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2342,6 +2495,1055 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: UserInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model UserSetting
+   */
+
+  export type AggregateUserSetting = {
+    _count: UserSettingCountAggregateOutputType | null
+    _min: UserSettingMinAggregateOutputType | null
+    _max: UserSettingMaxAggregateOutputType | null
+  }
+
+  export type UserSettingMinAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    theme: string | null
+    fontSize: string | null
+    density: string | null
+    reducedMotion: boolean | null
+    defaultLandingPage: string | null
+    defaultChildMode: string | null
+    reminderTime: string | null
+    doNotDisturb: boolean | null
+    doNotDisturbStart: string | null
+    doNotDisturbEnd: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type UserSettingMaxAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    theme: string | null
+    fontSize: string | null
+    density: string | null
+    reducedMotion: boolean | null
+    defaultLandingPage: string | null
+    defaultChildMode: string | null
+    reminderTime: string | null
+    doNotDisturb: boolean | null
+    doNotDisturbStart: string | null
+    doNotDisturbEnd: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type UserSettingCountAggregateOutputType = {
+    id: number
+    userId: number
+    theme: number
+    fontSize: number
+    density: number
+    reducedMotion: number
+    defaultLandingPage: number
+    defaultChildMode: number
+    notificationPrefs: number
+    reminderTime: number
+    doNotDisturb: number
+    doNotDisturbStart: number
+    doNotDisturbEnd: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type UserSettingMinAggregateInputType = {
+    id?: true
+    userId?: true
+    theme?: true
+    fontSize?: true
+    density?: true
+    reducedMotion?: true
+    defaultLandingPage?: true
+    defaultChildMode?: true
+    reminderTime?: true
+    doNotDisturb?: true
+    doNotDisturbStart?: true
+    doNotDisturbEnd?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type UserSettingMaxAggregateInputType = {
+    id?: true
+    userId?: true
+    theme?: true
+    fontSize?: true
+    density?: true
+    reducedMotion?: true
+    defaultLandingPage?: true
+    defaultChildMode?: true
+    reminderTime?: true
+    doNotDisturb?: true
+    doNotDisturbStart?: true
+    doNotDisturbEnd?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type UserSettingCountAggregateInputType = {
+    id?: true
+    userId?: true
+    theme?: true
+    fontSize?: true
+    density?: true
+    reducedMotion?: true
+    defaultLandingPage?: true
+    defaultChildMode?: true
+    notificationPrefs?: true
+    reminderTime?: true
+    doNotDisturb?: true
+    doNotDisturbStart?: true
+    doNotDisturbEnd?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type UserSettingAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which UserSetting to aggregate.
+     */
+    where?: UserSettingWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UserSettings to fetch.
+     */
+    orderBy?: UserSettingOrderByWithRelationInput | UserSettingOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: UserSettingWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UserSettings from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UserSettings.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned UserSettings
+    **/
+    _count?: true | UserSettingCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: UserSettingMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: UserSettingMaxAggregateInputType
+  }
+
+  export type GetUserSettingAggregateType<T extends UserSettingAggregateArgs> = {
+        [P in keyof T & keyof AggregateUserSetting]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateUserSetting[P]>
+      : GetScalarType<T[P], AggregateUserSetting[P]>
+  }
+
+
+
+
+  export type UserSettingGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: UserSettingWhereInput
+    orderBy?: UserSettingOrderByWithAggregationInput | UserSettingOrderByWithAggregationInput[]
+    by: UserSettingScalarFieldEnum[] | UserSettingScalarFieldEnum
+    having?: UserSettingScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: UserSettingCountAggregateInputType | true
+    _min?: UserSettingMinAggregateInputType
+    _max?: UserSettingMaxAggregateInputType
+  }
+
+  export type UserSettingGroupByOutputType = {
+    id: string
+    userId: string
+    theme: string
+    fontSize: string
+    density: string
+    reducedMotion: boolean
+    defaultLandingPage: string
+    defaultChildMode: string
+    notificationPrefs: JsonValue
+    reminderTime: string
+    doNotDisturb: boolean
+    doNotDisturbStart: string | null
+    doNotDisturbEnd: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: UserSettingCountAggregateOutputType | null
+    _min: UserSettingMinAggregateOutputType | null
+    _max: UserSettingMaxAggregateOutputType | null
+  }
+
+  type GetUserSettingGroupByPayload<T extends UserSettingGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<UserSettingGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof UserSettingGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], UserSettingGroupByOutputType[P]>
+            : GetScalarType<T[P], UserSettingGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type UserSettingSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    theme?: boolean
+    fontSize?: boolean
+    density?: boolean
+    reducedMotion?: boolean
+    defaultLandingPage?: boolean
+    defaultChildMode?: boolean
+    notificationPrefs?: boolean
+    reminderTime?: boolean
+    doNotDisturb?: boolean
+    doNotDisturbStart?: boolean
+    doNotDisturbEnd?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["userSetting"]>
+
+  export type UserSettingSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    theme?: boolean
+    fontSize?: boolean
+    density?: boolean
+    reducedMotion?: boolean
+    defaultLandingPage?: boolean
+    defaultChildMode?: boolean
+    notificationPrefs?: boolean
+    reminderTime?: boolean
+    doNotDisturb?: boolean
+    doNotDisturbStart?: boolean
+    doNotDisturbEnd?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["userSetting"]>
+
+  export type UserSettingSelectScalar = {
+    id?: boolean
+    userId?: boolean
+    theme?: boolean
+    fontSize?: boolean
+    density?: boolean
+    reducedMotion?: boolean
+    defaultLandingPage?: boolean
+    defaultChildMode?: boolean
+    notificationPrefs?: boolean
+    reminderTime?: boolean
+    doNotDisturb?: boolean
+    doNotDisturbStart?: boolean
+    doNotDisturbEnd?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type UserSettingInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type UserSettingIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $UserSettingPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "UserSetting"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      userId: string
+      theme: string
+      fontSize: string
+      density: string
+      reducedMotion: boolean
+      defaultLandingPage: string
+      defaultChildMode: string
+      notificationPrefs: Prisma.JsonValue
+      reminderTime: string
+      doNotDisturb: boolean
+      doNotDisturbStart: string | null
+      doNotDisturbEnd: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["userSetting"]>
+    composites: {}
+  }
+
+  type UserSettingGetPayload<S extends boolean | null | undefined | UserSettingDefaultArgs> = $Result.GetResult<Prisma.$UserSettingPayload, S>
+
+  type UserSettingCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<UserSettingFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: UserSettingCountAggregateInputType | true
+    }
+
+  export interface UserSettingDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['UserSetting'], meta: { name: 'UserSetting' } }
+    /**
+     * Find zero or one UserSetting that matches the filter.
+     * @param {UserSettingFindUniqueArgs} args - Arguments to find a UserSetting
+     * @example
+     * // Get one UserSetting
+     * const userSetting = await prisma.userSetting.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends UserSettingFindUniqueArgs>(args: SelectSubset<T, UserSettingFindUniqueArgs<ExtArgs>>): Prisma__UserSettingClient<$Result.GetResult<Prisma.$UserSettingPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one UserSetting that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {UserSettingFindUniqueOrThrowArgs} args - Arguments to find a UserSetting
+     * @example
+     * // Get one UserSetting
+     * const userSetting = await prisma.userSetting.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends UserSettingFindUniqueOrThrowArgs>(args: SelectSubset<T, UserSettingFindUniqueOrThrowArgs<ExtArgs>>): Prisma__UserSettingClient<$Result.GetResult<Prisma.$UserSettingPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first UserSetting that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserSettingFindFirstArgs} args - Arguments to find a UserSetting
+     * @example
+     * // Get one UserSetting
+     * const userSetting = await prisma.userSetting.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends UserSettingFindFirstArgs>(args?: SelectSubset<T, UserSettingFindFirstArgs<ExtArgs>>): Prisma__UserSettingClient<$Result.GetResult<Prisma.$UserSettingPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first UserSetting that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserSettingFindFirstOrThrowArgs} args - Arguments to find a UserSetting
+     * @example
+     * // Get one UserSetting
+     * const userSetting = await prisma.userSetting.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends UserSettingFindFirstOrThrowArgs>(args?: SelectSubset<T, UserSettingFindFirstOrThrowArgs<ExtArgs>>): Prisma__UserSettingClient<$Result.GetResult<Prisma.$UserSettingPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more UserSettings that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserSettingFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all UserSettings
+     * const userSettings = await prisma.userSetting.findMany()
+     * 
+     * // Get first 10 UserSettings
+     * const userSettings = await prisma.userSetting.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const userSettingWithIdOnly = await prisma.userSetting.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends UserSettingFindManyArgs>(args?: SelectSubset<T, UserSettingFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserSettingPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a UserSetting.
+     * @param {UserSettingCreateArgs} args - Arguments to create a UserSetting.
+     * @example
+     * // Create one UserSetting
+     * const UserSetting = await prisma.userSetting.create({
+     *   data: {
+     *     // ... data to create a UserSetting
+     *   }
+     * })
+     * 
+     */
+    create<T extends UserSettingCreateArgs>(args: SelectSubset<T, UserSettingCreateArgs<ExtArgs>>): Prisma__UserSettingClient<$Result.GetResult<Prisma.$UserSettingPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many UserSettings.
+     * @param {UserSettingCreateManyArgs} args - Arguments to create many UserSettings.
+     * @example
+     * // Create many UserSettings
+     * const userSetting = await prisma.userSetting.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends UserSettingCreateManyArgs>(args?: SelectSubset<T, UserSettingCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many UserSettings and returns the data saved in the database.
+     * @param {UserSettingCreateManyAndReturnArgs} args - Arguments to create many UserSettings.
+     * @example
+     * // Create many UserSettings
+     * const userSetting = await prisma.userSetting.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many UserSettings and only return the `id`
+     * const userSettingWithIdOnly = await prisma.userSetting.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends UserSettingCreateManyAndReturnArgs>(args?: SelectSubset<T, UserSettingCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserSettingPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a UserSetting.
+     * @param {UserSettingDeleteArgs} args - Arguments to delete one UserSetting.
+     * @example
+     * // Delete one UserSetting
+     * const UserSetting = await prisma.userSetting.delete({
+     *   where: {
+     *     // ... filter to delete one UserSetting
+     *   }
+     * })
+     * 
+     */
+    delete<T extends UserSettingDeleteArgs>(args: SelectSubset<T, UserSettingDeleteArgs<ExtArgs>>): Prisma__UserSettingClient<$Result.GetResult<Prisma.$UserSettingPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one UserSetting.
+     * @param {UserSettingUpdateArgs} args - Arguments to update one UserSetting.
+     * @example
+     * // Update one UserSetting
+     * const userSetting = await prisma.userSetting.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends UserSettingUpdateArgs>(args: SelectSubset<T, UserSettingUpdateArgs<ExtArgs>>): Prisma__UserSettingClient<$Result.GetResult<Prisma.$UserSettingPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more UserSettings.
+     * @param {UserSettingDeleteManyArgs} args - Arguments to filter UserSettings to delete.
+     * @example
+     * // Delete a few UserSettings
+     * const { count } = await prisma.userSetting.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends UserSettingDeleteManyArgs>(args?: SelectSubset<T, UserSettingDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more UserSettings.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserSettingUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many UserSettings
+     * const userSetting = await prisma.userSetting.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends UserSettingUpdateManyArgs>(args: SelectSubset<T, UserSettingUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one UserSetting.
+     * @param {UserSettingUpsertArgs} args - Arguments to update or create a UserSetting.
+     * @example
+     * // Update or create a UserSetting
+     * const userSetting = await prisma.userSetting.upsert({
+     *   create: {
+     *     // ... data to create a UserSetting
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the UserSetting we want to update
+     *   }
+     * })
+     */
+    upsert<T extends UserSettingUpsertArgs>(args: SelectSubset<T, UserSettingUpsertArgs<ExtArgs>>): Prisma__UserSettingClient<$Result.GetResult<Prisma.$UserSettingPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of UserSettings.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserSettingCountArgs} args - Arguments to filter UserSettings to count.
+     * @example
+     * // Count the number of UserSettings
+     * const count = await prisma.userSetting.count({
+     *   where: {
+     *     // ... the filter for the UserSettings we want to count
+     *   }
+     * })
+    **/
+    count<T extends UserSettingCountArgs>(
+      args?: Subset<T, UserSettingCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], UserSettingCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a UserSetting.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserSettingAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends UserSettingAggregateArgs>(args: Subset<T, UserSettingAggregateArgs>): Prisma.PrismaPromise<GetUserSettingAggregateType<T>>
+
+    /**
+     * Group by UserSetting.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserSettingGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends UserSettingGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: UserSettingGroupByArgs['orderBy'] }
+        : { orderBy?: UserSettingGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, UserSettingGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetUserSettingGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the UserSetting model
+   */
+  readonly fields: UserSettingFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for UserSetting.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__UserSettingClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the UserSetting model
+   */ 
+  interface UserSettingFieldRefs {
+    readonly id: FieldRef<"UserSetting", 'String'>
+    readonly userId: FieldRef<"UserSetting", 'String'>
+    readonly theme: FieldRef<"UserSetting", 'String'>
+    readonly fontSize: FieldRef<"UserSetting", 'String'>
+    readonly density: FieldRef<"UserSetting", 'String'>
+    readonly reducedMotion: FieldRef<"UserSetting", 'Boolean'>
+    readonly defaultLandingPage: FieldRef<"UserSetting", 'String'>
+    readonly defaultChildMode: FieldRef<"UserSetting", 'String'>
+    readonly notificationPrefs: FieldRef<"UserSetting", 'Json'>
+    readonly reminderTime: FieldRef<"UserSetting", 'String'>
+    readonly doNotDisturb: FieldRef<"UserSetting", 'Boolean'>
+    readonly doNotDisturbStart: FieldRef<"UserSetting", 'String'>
+    readonly doNotDisturbEnd: FieldRef<"UserSetting", 'String'>
+    readonly createdAt: FieldRef<"UserSetting", 'DateTime'>
+    readonly updatedAt: FieldRef<"UserSetting", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * UserSetting findUnique
+   */
+  export type UserSettingFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserSetting
+     */
+    select?: UserSettingSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserSettingInclude<ExtArgs> | null
+    /**
+     * Filter, which UserSetting to fetch.
+     */
+    where: UserSettingWhereUniqueInput
+  }
+
+  /**
+   * UserSetting findUniqueOrThrow
+   */
+  export type UserSettingFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserSetting
+     */
+    select?: UserSettingSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserSettingInclude<ExtArgs> | null
+    /**
+     * Filter, which UserSetting to fetch.
+     */
+    where: UserSettingWhereUniqueInput
+  }
+
+  /**
+   * UserSetting findFirst
+   */
+  export type UserSettingFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserSetting
+     */
+    select?: UserSettingSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserSettingInclude<ExtArgs> | null
+    /**
+     * Filter, which UserSetting to fetch.
+     */
+    where?: UserSettingWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UserSettings to fetch.
+     */
+    orderBy?: UserSettingOrderByWithRelationInput | UserSettingOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for UserSettings.
+     */
+    cursor?: UserSettingWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UserSettings from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UserSettings.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of UserSettings.
+     */
+    distinct?: UserSettingScalarFieldEnum | UserSettingScalarFieldEnum[]
+  }
+
+  /**
+   * UserSetting findFirstOrThrow
+   */
+  export type UserSettingFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserSetting
+     */
+    select?: UserSettingSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserSettingInclude<ExtArgs> | null
+    /**
+     * Filter, which UserSetting to fetch.
+     */
+    where?: UserSettingWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UserSettings to fetch.
+     */
+    orderBy?: UserSettingOrderByWithRelationInput | UserSettingOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for UserSettings.
+     */
+    cursor?: UserSettingWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UserSettings from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UserSettings.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of UserSettings.
+     */
+    distinct?: UserSettingScalarFieldEnum | UserSettingScalarFieldEnum[]
+  }
+
+  /**
+   * UserSetting findMany
+   */
+  export type UserSettingFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserSetting
+     */
+    select?: UserSettingSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserSettingInclude<ExtArgs> | null
+    /**
+     * Filter, which UserSettings to fetch.
+     */
+    where?: UserSettingWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UserSettings to fetch.
+     */
+    orderBy?: UserSettingOrderByWithRelationInput | UserSettingOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing UserSettings.
+     */
+    cursor?: UserSettingWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UserSettings from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UserSettings.
+     */
+    skip?: number
+    distinct?: UserSettingScalarFieldEnum | UserSettingScalarFieldEnum[]
+  }
+
+  /**
+   * UserSetting create
+   */
+  export type UserSettingCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserSetting
+     */
+    select?: UserSettingSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserSettingInclude<ExtArgs> | null
+    /**
+     * The data needed to create a UserSetting.
+     */
+    data: XOR<UserSettingCreateInput, UserSettingUncheckedCreateInput>
+  }
+
+  /**
+   * UserSetting createMany
+   */
+  export type UserSettingCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many UserSettings.
+     */
+    data: UserSettingCreateManyInput | UserSettingCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * UserSetting createManyAndReturn
+   */
+  export type UserSettingCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserSetting
+     */
+    select?: UserSettingSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many UserSettings.
+     */
+    data: UserSettingCreateManyInput | UserSettingCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserSettingIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * UserSetting update
+   */
+  export type UserSettingUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserSetting
+     */
+    select?: UserSettingSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserSettingInclude<ExtArgs> | null
+    /**
+     * The data needed to update a UserSetting.
+     */
+    data: XOR<UserSettingUpdateInput, UserSettingUncheckedUpdateInput>
+    /**
+     * Choose, which UserSetting to update.
+     */
+    where: UserSettingWhereUniqueInput
+  }
+
+  /**
+   * UserSetting updateMany
+   */
+  export type UserSettingUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update UserSettings.
+     */
+    data: XOR<UserSettingUpdateManyMutationInput, UserSettingUncheckedUpdateManyInput>
+    /**
+     * Filter which UserSettings to update
+     */
+    where?: UserSettingWhereInput
+  }
+
+  /**
+   * UserSetting upsert
+   */
+  export type UserSettingUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserSetting
+     */
+    select?: UserSettingSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserSettingInclude<ExtArgs> | null
+    /**
+     * The filter to search for the UserSetting to update in case it exists.
+     */
+    where: UserSettingWhereUniqueInput
+    /**
+     * In case the UserSetting found by the `where` argument doesn't exist, create a new UserSetting with this data.
+     */
+    create: XOR<UserSettingCreateInput, UserSettingUncheckedCreateInput>
+    /**
+     * In case the UserSetting was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<UserSettingUpdateInput, UserSettingUncheckedUpdateInput>
+  }
+
+  /**
+   * UserSetting delete
+   */
+  export type UserSettingDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserSetting
+     */
+    select?: UserSettingSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserSettingInclude<ExtArgs> | null
+    /**
+     * Filter which UserSetting to delete.
+     */
+    where: UserSettingWhereUniqueInput
+  }
+
+  /**
+   * UserSetting deleteMany
+   */
+  export type UserSettingDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which UserSettings to delete
+     */
+    where?: UserSettingWhereInput
+  }
+
+  /**
+   * UserSetting without action
+   */
+  export type UserSettingDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserSetting
+     */
+    select?: UserSettingSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserSettingInclude<ExtArgs> | null
   }
 
 
@@ -2371,7 +3573,12 @@ export namespace Prisma {
     name: string | null
     grade: number | null
     avatarColor: string | null
+    avatarUrl: string | null
     targetSchool: string | null
+    currentSchool: string | null
+    birthday: Date | null
+    notes: string | null
+    routeId: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -2382,7 +3589,12 @@ export namespace Prisma {
     name: string | null
     grade: number | null
     avatarColor: string | null
+    avatarUrl: string | null
     targetSchool: string | null
+    currentSchool: string | null
+    birthday: Date | null
+    notes: string | null
+    routeId: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -2393,7 +3605,12 @@ export namespace Prisma {
     name: number
     grade: number
     avatarColor: number
+    avatarUrl: number
     targetSchool: number
+    currentSchool: number
+    birthday: number
+    notes: number
+    routeId: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -2414,7 +3631,12 @@ export namespace Prisma {
     name?: true
     grade?: true
     avatarColor?: true
+    avatarUrl?: true
     targetSchool?: true
+    currentSchool?: true
+    birthday?: true
+    notes?: true
+    routeId?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -2425,7 +3647,12 @@ export namespace Prisma {
     name?: true
     grade?: true
     avatarColor?: true
+    avatarUrl?: true
     targetSchool?: true
+    currentSchool?: true
+    birthday?: true
+    notes?: true
+    routeId?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -2436,7 +3663,12 @@ export namespace Prisma {
     name?: true
     grade?: true
     avatarColor?: true
+    avatarUrl?: true
     targetSchool?: true
+    currentSchool?: true
+    birthday?: true
+    notes?: true
+    routeId?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -2534,7 +3766,12 @@ export namespace Prisma {
     name: string
     grade: number
     avatarColor: string
+    avatarUrl: string | null
     targetSchool: string | null
+    currentSchool: string | null
+    birthday: Date | null
+    notes: string | null
+    routeId: string | null
     createdAt: Date
     updatedAt: Date
     _count: ChildCountAggregateOutputType | null
@@ -2564,7 +3801,12 @@ export namespace Prisma {
     name?: boolean
     grade?: boolean
     avatarColor?: boolean
+    avatarUrl?: boolean
     targetSchool?: boolean
+    currentSchool?: boolean
+    birthday?: boolean
+    notes?: boolean
+    routeId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -2579,7 +3821,12 @@ export namespace Prisma {
     name?: boolean
     grade?: boolean
     avatarColor?: boolean
+    avatarUrl?: boolean
     targetSchool?: boolean
+    currentSchool?: boolean
+    birthday?: boolean
+    notes?: boolean
+    routeId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -2591,7 +3838,12 @@ export namespace Prisma {
     name?: boolean
     grade?: boolean
     avatarColor?: boolean
+    avatarUrl?: boolean
     targetSchool?: boolean
+    currentSchool?: boolean
+    birthday?: boolean
+    notes?: boolean
+    routeId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
@@ -2619,7 +3871,12 @@ export namespace Prisma {
       name: string
       grade: number
       avatarColor: string
+      avatarUrl: string | null
       targetSchool: string | null
+      currentSchool: string | null
+      birthday: Date | null
+      notes: string | null
+      routeId: string | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["child"]>
@@ -3023,7 +4280,12 @@ export namespace Prisma {
     readonly name: FieldRef<"Child", 'String'>
     readonly grade: FieldRef<"Child", 'Int'>
     readonly avatarColor: FieldRef<"Child", 'String'>
+    readonly avatarUrl: FieldRef<"Child", 'String'>
     readonly targetSchool: FieldRef<"Child", 'String'>
+    readonly currentSchool: FieldRef<"Child", 'String'>
+    readonly birthday: FieldRef<"Child", 'DateTime'>
+    readonly notes: FieldRef<"Child", 'String'>
+    readonly routeId: FieldRef<"Child", 'String'>
     readonly createdAt: FieldRef<"Child", 'DateTime'>
     readonly updatedAt: FieldRef<"Child", 'DateTime'>
   }
@@ -6427,11 +7689,36 @@ export namespace Prisma {
     passwordHash: 'passwordHash',
     name: 'name',
     role: 'role',
+    avatarUrl: 'avatarUrl',
+    phone: 'phone',
+    email: 'email',
+    wechatOpenId: 'wechatOpenId',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
 
   export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
+
+
+  export const UserSettingScalarFieldEnum: {
+    id: 'id',
+    userId: 'userId',
+    theme: 'theme',
+    fontSize: 'fontSize',
+    density: 'density',
+    reducedMotion: 'reducedMotion',
+    defaultLandingPage: 'defaultLandingPage',
+    defaultChildMode: 'defaultChildMode',
+    notificationPrefs: 'notificationPrefs',
+    reminderTime: 'reminderTime',
+    doNotDisturb: 'doNotDisturb',
+    doNotDisturbStart: 'doNotDisturbStart',
+    doNotDisturbEnd: 'doNotDisturbEnd',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type UserSettingScalarFieldEnum = (typeof UserSettingScalarFieldEnum)[keyof typeof UserSettingScalarFieldEnum]
 
 
   export const ChildScalarFieldEnum: {
@@ -6440,7 +7727,12 @@ export namespace Prisma {
     name: 'name',
     grade: 'grade',
     avatarColor: 'avatarColor',
+    avatarUrl: 'avatarUrl',
     targetSchool: 'targetSchool',
+    currentSchool: 'currentSchool',
+    birthday: 'birthday',
+    notes: 'notes',
+    routeId: 'routeId',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -6504,19 +7796,19 @@ export namespace Prisma {
   export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
 
 
+  export const JsonNullValueInput: {
+    JsonNull: typeof JsonNull
+  };
+
+  export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
+
+
   export const NullableJsonNullValueInput: {
     DbNull: typeof DbNull,
     JsonNull: typeof JsonNull
   };
 
   export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
-
-
-  export const JsonNullValueInput: {
-    JsonNull: typeof JsonNull
-  };
-
-  export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
 
 
   export const QueryMode: {
@@ -6592,6 +7884,20 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'Boolean'
+   */
+  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+    
+
+
+  /**
+   * Reference to a field of type 'Json'
+   */
+  export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
+    
+
+
+  /**
    * Reference to a field of type 'Int'
    */
   export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
@@ -6602,13 +7908,6 @@ export namespace Prisma {
    * Reference to a field of type 'Int[]'
    */
   export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
-    
-
-
-  /**
-   * Reference to a field of type 'Json'
-   */
-  export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
     
 
 
@@ -6638,12 +7937,17 @@ export namespace Prisma {
     passwordHash?: StringFilter<"User"> | string
     name?: StringNullableFilter<"User"> | string | null
     role?: EnumUserRoleFilter<"User"> | $Enums.UserRole
+    avatarUrl?: StringNullableFilter<"User"> | string | null
+    phone?: StringNullableFilter<"User"> | string | null
+    email?: StringNullableFilter<"User"> | string | null
+    wechatOpenId?: StringNullableFilter<"User"> | string | null
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
     children?: ChildListRelationFilter
     plans?: PlanListRelationFilter
     weeklyPlans?: WeeklyPlanListRelationFilter
     notifications?: NotificationListRelationFilter
+    settings?: XOR<UserSettingNullableRelationFilter, UserSettingWhereInput> | null
   }
 
   export type UserOrderByWithRelationInput = {
@@ -6652,30 +7956,40 @@ export namespace Prisma {
     passwordHash?: SortOrder
     name?: SortOrderInput | SortOrder
     role?: SortOrder
+    avatarUrl?: SortOrderInput | SortOrder
+    phone?: SortOrderInput | SortOrder
+    email?: SortOrderInput | SortOrder
+    wechatOpenId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     children?: ChildOrderByRelationAggregateInput
     plans?: PlanOrderByRelationAggregateInput
     weeklyPlans?: WeeklyPlanOrderByRelationAggregateInput
     notifications?: NotificationOrderByRelationAggregateInput
+    settings?: UserSettingOrderByWithRelationInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
     id?: string
     username?: string
+    wechatOpenId?: string
     AND?: UserWhereInput | UserWhereInput[]
     OR?: UserWhereInput[]
     NOT?: UserWhereInput | UserWhereInput[]
     passwordHash?: StringFilter<"User"> | string
     name?: StringNullableFilter<"User"> | string | null
     role?: EnumUserRoleFilter<"User"> | $Enums.UserRole
+    avatarUrl?: StringNullableFilter<"User"> | string | null
+    phone?: StringNullableFilter<"User"> | string | null
+    email?: StringNullableFilter<"User"> | string | null
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
     children?: ChildListRelationFilter
     plans?: PlanListRelationFilter
     weeklyPlans?: WeeklyPlanListRelationFilter
     notifications?: NotificationListRelationFilter
-  }, "id" | "username">
+    settings?: XOR<UserSettingNullableRelationFilter, UserSettingWhereInput> | null
+  }, "id" | "username" | "wechatOpenId">
 
   export type UserOrderByWithAggregationInput = {
     id?: SortOrder
@@ -6683,6 +7997,10 @@ export namespace Prisma {
     passwordHash?: SortOrder
     name?: SortOrderInput | SortOrder
     role?: SortOrder
+    avatarUrl?: SortOrderInput | SortOrder
+    phone?: SortOrderInput | SortOrder
+    email?: SortOrderInput | SortOrder
+    wechatOpenId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: UserCountOrderByAggregateInput
@@ -6699,8 +8017,117 @@ export namespace Prisma {
     passwordHash?: StringWithAggregatesFilter<"User"> | string
     name?: StringNullableWithAggregatesFilter<"User"> | string | null
     role?: EnumUserRoleWithAggregatesFilter<"User"> | $Enums.UserRole
+    avatarUrl?: StringNullableWithAggregatesFilter<"User"> | string | null
+    phone?: StringNullableWithAggregatesFilter<"User"> | string | null
+    email?: StringNullableWithAggregatesFilter<"User"> | string | null
+    wechatOpenId?: StringNullableWithAggregatesFilter<"User"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
+  }
+
+  export type UserSettingWhereInput = {
+    AND?: UserSettingWhereInput | UserSettingWhereInput[]
+    OR?: UserSettingWhereInput[]
+    NOT?: UserSettingWhereInput | UserSettingWhereInput[]
+    id?: StringFilter<"UserSetting"> | string
+    userId?: StringFilter<"UserSetting"> | string
+    theme?: StringFilter<"UserSetting"> | string
+    fontSize?: StringFilter<"UserSetting"> | string
+    density?: StringFilter<"UserSetting"> | string
+    reducedMotion?: BoolFilter<"UserSetting"> | boolean
+    defaultLandingPage?: StringFilter<"UserSetting"> | string
+    defaultChildMode?: StringFilter<"UserSetting"> | string
+    notificationPrefs?: JsonFilter<"UserSetting">
+    reminderTime?: StringFilter<"UserSetting"> | string
+    doNotDisturb?: BoolFilter<"UserSetting"> | boolean
+    doNotDisturbStart?: StringNullableFilter<"UserSetting"> | string | null
+    doNotDisturbEnd?: StringNullableFilter<"UserSetting"> | string | null
+    createdAt?: DateTimeFilter<"UserSetting"> | Date | string
+    updatedAt?: DateTimeFilter<"UserSetting"> | Date | string
+    user?: XOR<UserRelationFilter, UserWhereInput>
+  }
+
+  export type UserSettingOrderByWithRelationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    theme?: SortOrder
+    fontSize?: SortOrder
+    density?: SortOrder
+    reducedMotion?: SortOrder
+    defaultLandingPage?: SortOrder
+    defaultChildMode?: SortOrder
+    notificationPrefs?: SortOrder
+    reminderTime?: SortOrder
+    doNotDisturb?: SortOrder
+    doNotDisturbStart?: SortOrderInput | SortOrder
+    doNotDisturbEnd?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    user?: UserOrderByWithRelationInput
+  }
+
+  export type UserSettingWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    userId?: string
+    AND?: UserSettingWhereInput | UserSettingWhereInput[]
+    OR?: UserSettingWhereInput[]
+    NOT?: UserSettingWhereInput | UserSettingWhereInput[]
+    theme?: StringFilter<"UserSetting"> | string
+    fontSize?: StringFilter<"UserSetting"> | string
+    density?: StringFilter<"UserSetting"> | string
+    reducedMotion?: BoolFilter<"UserSetting"> | boolean
+    defaultLandingPage?: StringFilter<"UserSetting"> | string
+    defaultChildMode?: StringFilter<"UserSetting"> | string
+    notificationPrefs?: JsonFilter<"UserSetting">
+    reminderTime?: StringFilter<"UserSetting"> | string
+    doNotDisturb?: BoolFilter<"UserSetting"> | boolean
+    doNotDisturbStart?: StringNullableFilter<"UserSetting"> | string | null
+    doNotDisturbEnd?: StringNullableFilter<"UserSetting"> | string | null
+    createdAt?: DateTimeFilter<"UserSetting"> | Date | string
+    updatedAt?: DateTimeFilter<"UserSetting"> | Date | string
+    user?: XOR<UserRelationFilter, UserWhereInput>
+  }, "id" | "userId">
+
+  export type UserSettingOrderByWithAggregationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    theme?: SortOrder
+    fontSize?: SortOrder
+    density?: SortOrder
+    reducedMotion?: SortOrder
+    defaultLandingPage?: SortOrder
+    defaultChildMode?: SortOrder
+    notificationPrefs?: SortOrder
+    reminderTime?: SortOrder
+    doNotDisturb?: SortOrder
+    doNotDisturbStart?: SortOrderInput | SortOrder
+    doNotDisturbEnd?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: UserSettingCountOrderByAggregateInput
+    _max?: UserSettingMaxOrderByAggregateInput
+    _min?: UserSettingMinOrderByAggregateInput
+  }
+
+  export type UserSettingScalarWhereWithAggregatesInput = {
+    AND?: UserSettingScalarWhereWithAggregatesInput | UserSettingScalarWhereWithAggregatesInput[]
+    OR?: UserSettingScalarWhereWithAggregatesInput[]
+    NOT?: UserSettingScalarWhereWithAggregatesInput | UserSettingScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"UserSetting"> | string
+    userId?: StringWithAggregatesFilter<"UserSetting"> | string
+    theme?: StringWithAggregatesFilter<"UserSetting"> | string
+    fontSize?: StringWithAggregatesFilter<"UserSetting"> | string
+    density?: StringWithAggregatesFilter<"UserSetting"> | string
+    reducedMotion?: BoolWithAggregatesFilter<"UserSetting"> | boolean
+    defaultLandingPage?: StringWithAggregatesFilter<"UserSetting"> | string
+    defaultChildMode?: StringWithAggregatesFilter<"UserSetting"> | string
+    notificationPrefs?: JsonWithAggregatesFilter<"UserSetting">
+    reminderTime?: StringWithAggregatesFilter<"UserSetting"> | string
+    doNotDisturb?: BoolWithAggregatesFilter<"UserSetting"> | boolean
+    doNotDisturbStart?: StringNullableWithAggregatesFilter<"UserSetting"> | string | null
+    doNotDisturbEnd?: StringNullableWithAggregatesFilter<"UserSetting"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"UserSetting"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"UserSetting"> | Date | string
   }
 
   export type ChildWhereInput = {
@@ -6712,7 +8139,12 @@ export namespace Prisma {
     name?: StringFilter<"Child"> | string
     grade?: IntFilter<"Child"> | number
     avatarColor?: StringFilter<"Child"> | string
+    avatarUrl?: StringNullableFilter<"Child"> | string | null
     targetSchool?: StringNullableFilter<"Child"> | string | null
+    currentSchool?: StringNullableFilter<"Child"> | string | null
+    birthday?: DateTimeNullableFilter<"Child"> | Date | string | null
+    notes?: StringNullableFilter<"Child"> | string | null
+    routeId?: StringNullableFilter<"Child"> | string | null
     createdAt?: DateTimeFilter<"Child"> | Date | string
     updatedAt?: DateTimeFilter<"Child"> | Date | string
     user?: XOR<UserRelationFilter, UserWhereInput>
@@ -6726,7 +8158,12 @@ export namespace Prisma {
     name?: SortOrder
     grade?: SortOrder
     avatarColor?: SortOrder
+    avatarUrl?: SortOrderInput | SortOrder
     targetSchool?: SortOrderInput | SortOrder
+    currentSchool?: SortOrderInput | SortOrder
+    birthday?: SortOrderInput | SortOrder
+    notes?: SortOrderInput | SortOrder
+    routeId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     user?: UserOrderByWithRelationInput
@@ -6743,7 +8180,12 @@ export namespace Prisma {
     name?: StringFilter<"Child"> | string
     grade?: IntFilter<"Child"> | number
     avatarColor?: StringFilter<"Child"> | string
+    avatarUrl?: StringNullableFilter<"Child"> | string | null
     targetSchool?: StringNullableFilter<"Child"> | string | null
+    currentSchool?: StringNullableFilter<"Child"> | string | null
+    birthday?: DateTimeNullableFilter<"Child"> | Date | string | null
+    notes?: StringNullableFilter<"Child"> | string | null
+    routeId?: StringNullableFilter<"Child"> | string | null
     createdAt?: DateTimeFilter<"Child"> | Date | string
     updatedAt?: DateTimeFilter<"Child"> | Date | string
     user?: XOR<UserRelationFilter, UserWhereInput>
@@ -6757,7 +8199,12 @@ export namespace Prisma {
     name?: SortOrder
     grade?: SortOrder
     avatarColor?: SortOrder
+    avatarUrl?: SortOrderInput | SortOrder
     targetSchool?: SortOrderInput | SortOrder
+    currentSchool?: SortOrderInput | SortOrder
+    birthday?: SortOrderInput | SortOrder
+    notes?: SortOrderInput | SortOrder
+    routeId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: ChildCountOrderByAggregateInput
@@ -6776,7 +8223,12 @@ export namespace Prisma {
     name?: StringWithAggregatesFilter<"Child"> | string
     grade?: IntWithAggregatesFilter<"Child"> | number
     avatarColor?: StringWithAggregatesFilter<"Child"> | string
+    avatarUrl?: StringNullableWithAggregatesFilter<"Child"> | string | null
     targetSchool?: StringNullableWithAggregatesFilter<"Child"> | string | null
+    currentSchool?: StringNullableWithAggregatesFilter<"Child"> | string | null
+    birthday?: DateTimeNullableWithAggregatesFilter<"Child"> | Date | string | null
+    notes?: StringNullableWithAggregatesFilter<"Child"> | string | null
+    routeId?: StringNullableWithAggregatesFilter<"Child"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Child"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Child"> | Date | string
   }
@@ -7036,12 +8488,17 @@ export namespace Prisma {
     passwordHash: string
     name?: string | null
     role?: $Enums.UserRole
+    avatarUrl?: string | null
+    phone?: string | null
+    email?: string | null
+    wechatOpenId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     children?: ChildCreateNestedManyWithoutUserInput
     plans?: PlanCreateNestedManyWithoutUserInput
     weeklyPlans?: WeeklyPlanCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    settings?: UserSettingCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -7050,12 +8507,17 @@ export namespace Prisma {
     passwordHash: string
     name?: string | null
     role?: $Enums.UserRole
+    avatarUrl?: string | null
+    phone?: string | null
+    email?: string | null
+    wechatOpenId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     children?: ChildUncheckedCreateNestedManyWithoutUserInput
     plans?: PlanUncheckedCreateNestedManyWithoutUserInput
     weeklyPlans?: WeeklyPlanUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    settings?: UserSettingUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserUpdateInput = {
@@ -7064,12 +8526,17 @@ export namespace Prisma {
     passwordHash?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    wechatOpenId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     children?: ChildUpdateManyWithoutUserNestedInput
     plans?: PlanUpdateManyWithoutUserNestedInput
     weeklyPlans?: WeeklyPlanUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    settings?: UserSettingUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -7078,12 +8545,17 @@ export namespace Prisma {
     passwordHash?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    wechatOpenId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     children?: ChildUncheckedUpdateManyWithoutUserNestedInput
     plans?: PlanUncheckedUpdateManyWithoutUserNestedInput
     weeklyPlans?: WeeklyPlanUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    settings?: UserSettingUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -7092,6 +8564,10 @@ export namespace Prisma {
     passwordHash: string
     name?: string | null
     role?: $Enums.UserRole
+    avatarUrl?: string | null
+    phone?: string | null
+    email?: string | null
+    wechatOpenId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -7102,6 +8578,10 @@ export namespace Prisma {
     passwordHash?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    wechatOpenId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -7112,6 +8592,135 @@ export namespace Prisma {
     passwordHash?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    wechatOpenId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserSettingCreateInput = {
+    id?: string
+    theme?: string
+    fontSize?: string
+    density?: string
+    reducedMotion?: boolean
+    defaultLandingPage?: string
+    defaultChildMode?: string
+    notificationPrefs?: JsonNullValueInput | InputJsonValue
+    reminderTime?: string
+    doNotDisturb?: boolean
+    doNotDisturbStart?: string | null
+    doNotDisturbEnd?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutSettingsInput
+  }
+
+  export type UserSettingUncheckedCreateInput = {
+    id?: string
+    userId: string
+    theme?: string
+    fontSize?: string
+    density?: string
+    reducedMotion?: boolean
+    defaultLandingPage?: string
+    defaultChildMode?: string
+    notificationPrefs?: JsonNullValueInput | InputJsonValue
+    reminderTime?: string
+    doNotDisturb?: boolean
+    doNotDisturbStart?: string | null
+    doNotDisturbEnd?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type UserSettingUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    theme?: StringFieldUpdateOperationsInput | string
+    fontSize?: StringFieldUpdateOperationsInput | string
+    density?: StringFieldUpdateOperationsInput | string
+    reducedMotion?: BoolFieldUpdateOperationsInput | boolean
+    defaultLandingPage?: StringFieldUpdateOperationsInput | string
+    defaultChildMode?: StringFieldUpdateOperationsInput | string
+    notificationPrefs?: JsonNullValueInput | InputJsonValue
+    reminderTime?: StringFieldUpdateOperationsInput | string
+    doNotDisturb?: BoolFieldUpdateOperationsInput | boolean
+    doNotDisturbStart?: NullableStringFieldUpdateOperationsInput | string | null
+    doNotDisturbEnd?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutSettingsNestedInput
+  }
+
+  export type UserSettingUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    theme?: StringFieldUpdateOperationsInput | string
+    fontSize?: StringFieldUpdateOperationsInput | string
+    density?: StringFieldUpdateOperationsInput | string
+    reducedMotion?: BoolFieldUpdateOperationsInput | boolean
+    defaultLandingPage?: StringFieldUpdateOperationsInput | string
+    defaultChildMode?: StringFieldUpdateOperationsInput | string
+    notificationPrefs?: JsonNullValueInput | InputJsonValue
+    reminderTime?: StringFieldUpdateOperationsInput | string
+    doNotDisturb?: BoolFieldUpdateOperationsInput | boolean
+    doNotDisturbStart?: NullableStringFieldUpdateOperationsInput | string | null
+    doNotDisturbEnd?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserSettingCreateManyInput = {
+    id?: string
+    userId: string
+    theme?: string
+    fontSize?: string
+    density?: string
+    reducedMotion?: boolean
+    defaultLandingPage?: string
+    defaultChildMode?: string
+    notificationPrefs?: JsonNullValueInput | InputJsonValue
+    reminderTime?: string
+    doNotDisturb?: boolean
+    doNotDisturbStart?: string | null
+    doNotDisturbEnd?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type UserSettingUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    theme?: StringFieldUpdateOperationsInput | string
+    fontSize?: StringFieldUpdateOperationsInput | string
+    density?: StringFieldUpdateOperationsInput | string
+    reducedMotion?: BoolFieldUpdateOperationsInput | boolean
+    defaultLandingPage?: StringFieldUpdateOperationsInput | string
+    defaultChildMode?: StringFieldUpdateOperationsInput | string
+    notificationPrefs?: JsonNullValueInput | InputJsonValue
+    reminderTime?: StringFieldUpdateOperationsInput | string
+    doNotDisturb?: BoolFieldUpdateOperationsInput | boolean
+    doNotDisturbStart?: NullableStringFieldUpdateOperationsInput | string | null
+    doNotDisturbEnd?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserSettingUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    theme?: StringFieldUpdateOperationsInput | string
+    fontSize?: StringFieldUpdateOperationsInput | string
+    density?: StringFieldUpdateOperationsInput | string
+    reducedMotion?: BoolFieldUpdateOperationsInput | boolean
+    defaultLandingPage?: StringFieldUpdateOperationsInput | string
+    defaultChildMode?: StringFieldUpdateOperationsInput | string
+    notificationPrefs?: JsonNullValueInput | InputJsonValue
+    reminderTime?: StringFieldUpdateOperationsInput | string
+    doNotDisturb?: BoolFieldUpdateOperationsInput | boolean
+    doNotDisturbStart?: NullableStringFieldUpdateOperationsInput | string | null
+    doNotDisturbEnd?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -7121,7 +8730,12 @@ export namespace Prisma {
     name: string
     grade: number
     avatarColor?: string
+    avatarUrl?: string | null
     targetSchool?: string | null
+    currentSchool?: string | null
+    birthday?: Date | string | null
+    notes?: string | null
+    routeId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     user: UserCreateNestedOneWithoutChildrenInput
@@ -7135,7 +8749,12 @@ export namespace Prisma {
     name: string
     grade: number
     avatarColor?: string
+    avatarUrl?: string | null
     targetSchool?: string | null
+    currentSchool?: string | null
+    birthday?: Date | string | null
+    notes?: string | null
+    routeId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     plans?: PlanUncheckedCreateNestedManyWithoutChildInput
@@ -7147,7 +8766,12 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     grade?: IntFieldUpdateOperationsInput | number
     avatarColor?: StringFieldUpdateOperationsInput | string
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     targetSchool?: NullableStringFieldUpdateOperationsInput | string | null
+    currentSchool?: NullableStringFieldUpdateOperationsInput | string | null
+    birthday?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    routeId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutChildrenNestedInput
@@ -7161,7 +8785,12 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     grade?: IntFieldUpdateOperationsInput | number
     avatarColor?: StringFieldUpdateOperationsInput | string
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     targetSchool?: NullableStringFieldUpdateOperationsInput | string | null
+    currentSchool?: NullableStringFieldUpdateOperationsInput | string | null
+    birthday?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    routeId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     plans?: PlanUncheckedUpdateManyWithoutChildNestedInput
@@ -7174,7 +8803,12 @@ export namespace Prisma {
     name: string
     grade: number
     avatarColor?: string
+    avatarUrl?: string | null
     targetSchool?: string | null
+    currentSchool?: string | null
+    birthday?: Date | string | null
+    notes?: string | null
+    routeId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -7184,7 +8818,12 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     grade?: IntFieldUpdateOperationsInput | number
     avatarColor?: StringFieldUpdateOperationsInput | string
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     targetSchool?: NullableStringFieldUpdateOperationsInput | string | null
+    currentSchool?: NullableStringFieldUpdateOperationsInput | string | null
+    birthday?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    routeId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -7195,7 +8834,12 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     grade?: IntFieldUpdateOperationsInput | number
     avatarColor?: StringFieldUpdateOperationsInput | string
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     targetSchool?: NullableStringFieldUpdateOperationsInput | string | null
+    currentSchool?: NullableStringFieldUpdateOperationsInput | string | null
+    birthday?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    routeId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -7540,6 +9184,11 @@ export namespace Prisma {
     none?: NotificationWhereInput
   }
 
+  export type UserSettingNullableRelationFilter = {
+    is?: UserSettingWhereInput | null
+    isNot?: UserSettingWhereInput | null
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -7567,6 +9216,10 @@ export namespace Prisma {
     passwordHash?: SortOrder
     name?: SortOrder
     role?: SortOrder
+    avatarUrl?: SortOrder
+    phone?: SortOrder
+    email?: SortOrder
+    wechatOpenId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -7577,6 +9230,10 @@ export namespace Prisma {
     passwordHash?: SortOrder
     name?: SortOrder
     role?: SortOrder
+    avatarUrl?: SortOrder
+    phone?: SortOrder
+    email?: SortOrder
+    wechatOpenId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -7587,6 +9244,10 @@ export namespace Prisma {
     passwordHash?: SortOrder
     name?: SortOrder
     role?: SortOrder
+    avatarUrl?: SortOrder
+    phone?: SortOrder
+    email?: SortOrder
+    wechatOpenId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -7651,6 +9312,123 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
+  export type BoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+  export type JsonFilter<$PrismaModel = never> = 
+    | PatchUndefined<
+        Either<Required<JsonFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
+
+  export type UserRelationFilter = {
+    is?: UserWhereInput
+    isNot?: UserWhereInput
+  }
+
+  export type UserSettingCountOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    theme?: SortOrder
+    fontSize?: SortOrder
+    density?: SortOrder
+    reducedMotion?: SortOrder
+    defaultLandingPage?: SortOrder
+    defaultChildMode?: SortOrder
+    notificationPrefs?: SortOrder
+    reminderTime?: SortOrder
+    doNotDisturb?: SortOrder
+    doNotDisturbStart?: SortOrder
+    doNotDisturbEnd?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type UserSettingMaxOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    theme?: SortOrder
+    fontSize?: SortOrder
+    density?: SortOrder
+    reducedMotion?: SortOrder
+    defaultLandingPage?: SortOrder
+    defaultChildMode?: SortOrder
+    reminderTime?: SortOrder
+    doNotDisturb?: SortOrder
+    doNotDisturbStart?: SortOrder
+    doNotDisturbEnd?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type UserSettingMinOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    theme?: SortOrder
+    fontSize?: SortOrder
+    density?: SortOrder
+    reducedMotion?: SortOrder
+    defaultLandingPage?: SortOrder
+    defaultChildMode?: SortOrder
+    reminderTime?: SortOrder
+    doNotDisturb?: SortOrder
+    doNotDisturbStart?: SortOrder
+    doNotDisturbEnd?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
+  }
+  export type JsonWithAggregatesFilter<$PrismaModel = never> = 
+    | PatchUndefined<
+        Either<Required<JsonWithAggregatesFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonWithAggregatesFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonWithAggregatesFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonWithAggregatesFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonWithAggregatesFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedJsonFilter<$PrismaModel>
+    _max?: NestedJsonFilter<$PrismaModel>
+  }
+
   export type IntFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
     in?: number[] | ListIntFieldRefInput<$PrismaModel>
@@ -7662,9 +9440,15 @@ export namespace Prisma {
     not?: NestedIntFilter<$PrismaModel> | number
   }
 
-  export type UserRelationFilter = {
-    is?: UserWhereInput
-    isNot?: UserWhereInput
+  export type DateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
   }
 
   export type ChildCountOrderByAggregateInput = {
@@ -7673,7 +9457,12 @@ export namespace Prisma {
     name?: SortOrder
     grade?: SortOrder
     avatarColor?: SortOrder
+    avatarUrl?: SortOrder
     targetSchool?: SortOrder
+    currentSchool?: SortOrder
+    birthday?: SortOrder
+    notes?: SortOrder
+    routeId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -7688,7 +9477,12 @@ export namespace Prisma {
     name?: SortOrder
     grade?: SortOrder
     avatarColor?: SortOrder
+    avatarUrl?: SortOrder
     targetSchool?: SortOrder
+    currentSchool?: SortOrder
+    birthday?: SortOrder
+    notes?: SortOrder
+    routeId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -7699,7 +9493,12 @@ export namespace Prisma {
     name?: SortOrder
     grade?: SortOrder
     avatarColor?: SortOrder
+    avatarUrl?: SortOrder
     targetSchool?: SortOrder
+    currentSchool?: SortOrder
+    birthday?: SortOrder
+    notes?: SortOrder
+    routeId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -7722,6 +9521,20 @@ export namespace Prisma {
     _sum?: NestedIntFilter<$PrismaModel>
     _min?: NestedIntFilter<$PrismaModel>
     _max?: NestedIntFilter<$PrismaModel>
+  }
+
+  export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
   export type JsonNullableFilter<$PrismaModel = never> = 
     | PatchUndefined<
@@ -7828,39 +9641,6 @@ export namespace Prisma {
     _min?: NestedJsonNullableFilter<$PrismaModel>
     _max?: NestedJsonNullableFilter<$PrismaModel>
   }
-  export type JsonFilter<$PrismaModel = never> = 
-    | PatchUndefined<
-        Either<Required<JsonFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonFilterBase<$PrismaModel>>, 'path'>>,
-        Required<JsonFilterBase<$PrismaModel>>
-      >
-    | OptionalFlat<Omit<Required<JsonFilterBase<$PrismaModel>>, 'path'>>
-
-  export type JsonFilterBase<$PrismaModel = never> = {
-    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    path?: string[]
-    string_contains?: string | StringFieldRefInput<$PrismaModel>
-    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
-    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
-    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-  }
-
-  export type DateTimeNullableFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
-  }
 
   export type WeeklyPlanChildIdWeekIdCompoundUniqueInput = {
     childId: string
@@ -7902,45 +9682,6 @@ export namespace Prisma {
     parentComment?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-  }
-  export type JsonWithAggregatesFilter<$PrismaModel = never> = 
-    | PatchUndefined<
-        Either<Required<JsonWithAggregatesFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonWithAggregatesFilterBase<$PrismaModel>>, 'path'>>,
-        Required<JsonWithAggregatesFilterBase<$PrismaModel>>
-      >
-    | OptionalFlat<Omit<Required<JsonWithAggregatesFilterBase<$PrismaModel>>, 'path'>>
-
-  export type JsonWithAggregatesFilterBase<$PrismaModel = never> = {
-    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    path?: string[]
-    string_contains?: string | StringFieldRefInput<$PrismaModel>
-    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
-    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
-    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedJsonFilter<$PrismaModel>
-    _max?: NestedJsonFilter<$PrismaModel>
-  }
-
-  export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedDateTimeNullableFilter<$PrismaModel>
-    _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
   export type NotificationCountOrderByAggregateInput = {
@@ -7998,6 +9739,12 @@ export namespace Prisma {
     connect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
   }
 
+  export type UserSettingCreateNestedOneWithoutUserInput = {
+    create?: XOR<UserSettingCreateWithoutUserInput, UserSettingUncheckedCreateWithoutUserInput>
+    connectOrCreate?: UserSettingCreateOrConnectWithoutUserInput
+    connect?: UserSettingWhereUniqueInput
+  }
+
   export type ChildUncheckedCreateNestedManyWithoutUserInput = {
     create?: XOR<ChildCreateWithoutUserInput, ChildUncheckedCreateWithoutUserInput> | ChildCreateWithoutUserInput[] | ChildUncheckedCreateWithoutUserInput[]
     connectOrCreate?: ChildCreateOrConnectWithoutUserInput | ChildCreateOrConnectWithoutUserInput[]
@@ -8024,6 +9771,12 @@ export namespace Prisma {
     connectOrCreate?: NotificationCreateOrConnectWithoutUserInput | NotificationCreateOrConnectWithoutUserInput[]
     createMany?: NotificationCreateManyUserInputEnvelope
     connect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+  }
+
+  export type UserSettingUncheckedCreateNestedOneWithoutUserInput = {
+    create?: XOR<UserSettingCreateWithoutUserInput, UserSettingUncheckedCreateWithoutUserInput>
+    connectOrCreate?: UserSettingCreateOrConnectWithoutUserInput
+    connect?: UserSettingWhereUniqueInput
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -8098,6 +9851,16 @@ export namespace Prisma {
     deleteMany?: NotificationScalarWhereInput | NotificationScalarWhereInput[]
   }
 
+  export type UserSettingUpdateOneWithoutUserNestedInput = {
+    create?: XOR<UserSettingCreateWithoutUserInput, UserSettingUncheckedCreateWithoutUserInput>
+    connectOrCreate?: UserSettingCreateOrConnectWithoutUserInput
+    upsert?: UserSettingUpsertWithoutUserInput
+    disconnect?: UserSettingWhereInput | boolean
+    delete?: UserSettingWhereInput | boolean
+    connect?: UserSettingWhereUniqueInput
+    update?: XOR<XOR<UserSettingUpdateToOneWithWhereWithoutUserInput, UserSettingUpdateWithoutUserInput>, UserSettingUncheckedUpdateWithoutUserInput>
+  }
+
   export type ChildUncheckedUpdateManyWithoutUserNestedInput = {
     create?: XOR<ChildCreateWithoutUserInput, ChildUncheckedCreateWithoutUserInput> | ChildCreateWithoutUserInput[] | ChildUncheckedCreateWithoutUserInput[]
     connectOrCreate?: ChildCreateOrConnectWithoutUserInput | ChildCreateOrConnectWithoutUserInput[]
@@ -8154,6 +9917,34 @@ export namespace Prisma {
     deleteMany?: NotificationScalarWhereInput | NotificationScalarWhereInput[]
   }
 
+  export type UserSettingUncheckedUpdateOneWithoutUserNestedInput = {
+    create?: XOR<UserSettingCreateWithoutUserInput, UserSettingUncheckedCreateWithoutUserInput>
+    connectOrCreate?: UserSettingCreateOrConnectWithoutUserInput
+    upsert?: UserSettingUpsertWithoutUserInput
+    disconnect?: UserSettingWhereInput | boolean
+    delete?: UserSettingWhereInput | boolean
+    connect?: UserSettingWhereUniqueInput
+    update?: XOR<XOR<UserSettingUpdateToOneWithWhereWithoutUserInput, UserSettingUpdateWithoutUserInput>, UserSettingUncheckedUpdateWithoutUserInput>
+  }
+
+  export type UserCreateNestedOneWithoutSettingsInput = {
+    create?: XOR<UserCreateWithoutSettingsInput, UserUncheckedCreateWithoutSettingsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutSettingsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type BoolFieldUpdateOperationsInput = {
+    set?: boolean
+  }
+
+  export type UserUpdateOneRequiredWithoutSettingsNestedInput = {
+    create?: XOR<UserCreateWithoutSettingsInput, UserUncheckedCreateWithoutSettingsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutSettingsInput
+    upsert?: UserUpsertWithoutSettingsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutSettingsInput, UserUpdateWithoutSettingsInput>, UserUncheckedUpdateWithoutSettingsInput>
+  }
+
   export type UserCreateNestedOneWithoutChildrenInput = {
     create?: XOR<UserCreateWithoutChildrenInput, UserUncheckedCreateWithoutChildrenInput>
     connectOrCreate?: UserCreateOrConnectWithoutChildrenInput
@@ -8194,6 +9985,10 @@ export namespace Prisma {
     decrement?: number
     multiply?: number
     divide?: number
+  }
+
+  export type NullableDateTimeFieldUpdateOperationsInput = {
+    set?: Date | string | null
   }
 
   export type UserUpdateOneRequiredWithoutChildrenNestedInput = {
@@ -8298,10 +10093,6 @@ export namespace Prisma {
     create?: XOR<ChildCreateWithoutWeeklyPlansInput, ChildUncheckedCreateWithoutWeeklyPlansInput>
     connectOrCreate?: ChildCreateOrConnectWithoutWeeklyPlansInput
     connect?: ChildWhereUniqueInput
-  }
-
-  export type NullableDateTimeFieldUpdateOperationsInput = {
-    set?: Date | string | null
   }
 
   export type UserUpdateOneRequiredWithoutWeeklyPlansNestedInput = {
@@ -8460,6 +10251,52 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
+  export type NestedBoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
+  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
+  }
+  export type NestedJsonFilter<$PrismaModel = never> = 
+    | PatchUndefined<
+        Either<Required<NestedJsonFilterBase<$PrismaModel>>, Exclude<keyof Required<NestedJsonFilterBase<$PrismaModel>>, 'path'>>,
+        Required<NestedJsonFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<NestedJsonFilterBase<$PrismaModel>>, 'path'>>
+
+  export type NestedJsonFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
+
+  export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
+  }
+
   export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
     in?: number[] | ListIntFieldRefInput<$PrismaModel>
@@ -8486,6 +10323,20 @@ export namespace Prisma {
     gte?: number | FloatFieldRefInput<$PrismaModel>
     not?: NestedFloatFilter<$PrismaModel> | number
   }
+
+  export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
+  }
   export type NestedJsonNullableFilter<$PrismaModel = never> = 
     | PatchUndefined<
         Either<Required<NestedJsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>,
@@ -8509,59 +10360,17 @@ export namespace Prisma {
     not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
   }
 
-  export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
-  }
-  export type NestedJsonFilter<$PrismaModel = never> = 
-    | PatchUndefined<
-        Either<Required<NestedJsonFilterBase<$PrismaModel>>, Exclude<keyof Required<NestedJsonFilterBase<$PrismaModel>>, 'path'>>,
-        Required<NestedJsonFilterBase<$PrismaModel>>
-      >
-    | OptionalFlat<Omit<Required<NestedJsonFilterBase<$PrismaModel>>, 'path'>>
-
-  export type NestedJsonFilterBase<$PrismaModel = never> = {
-    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    path?: string[]
-    string_contains?: string | StringFieldRefInput<$PrismaModel>
-    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
-    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
-    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-  }
-
-  export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedDateTimeNullableFilter<$PrismaModel>
-    _max?: NestedDateTimeNullableFilter<$PrismaModel>
-  }
-
   export type ChildCreateWithoutUserInput = {
     id?: string
     name: string
     grade: number
     avatarColor?: string
+    avatarUrl?: string | null
     targetSchool?: string | null
+    currentSchool?: string | null
+    birthday?: Date | string | null
+    notes?: string | null
+    routeId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     plans?: PlanCreateNestedManyWithoutChildInput
@@ -8573,7 +10382,12 @@ export namespace Prisma {
     name: string
     grade: number
     avatarColor?: string
+    avatarUrl?: string | null
     targetSchool?: string | null
+    currentSchool?: string | null
+    birthday?: Date | string | null
+    notes?: string | null
+    routeId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     plans?: PlanUncheckedCreateNestedManyWithoutChildInput
@@ -8692,6 +10506,45 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type UserSettingCreateWithoutUserInput = {
+    id?: string
+    theme?: string
+    fontSize?: string
+    density?: string
+    reducedMotion?: boolean
+    defaultLandingPage?: string
+    defaultChildMode?: string
+    notificationPrefs?: JsonNullValueInput | InputJsonValue
+    reminderTime?: string
+    doNotDisturb?: boolean
+    doNotDisturbStart?: string | null
+    doNotDisturbEnd?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type UserSettingUncheckedCreateWithoutUserInput = {
+    id?: string
+    theme?: string
+    fontSize?: string
+    density?: string
+    reducedMotion?: boolean
+    defaultLandingPage?: string
+    defaultChildMode?: string
+    notificationPrefs?: JsonNullValueInput | InputJsonValue
+    reminderTime?: string
+    doNotDisturb?: boolean
+    doNotDisturbStart?: string | null
+    doNotDisturbEnd?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type UserSettingCreateOrConnectWithoutUserInput = {
+    where: UserSettingWhereUniqueInput
+    create: XOR<UserSettingCreateWithoutUserInput, UserSettingUncheckedCreateWithoutUserInput>
+  }
+
   export type ChildUpsertWithWhereUniqueWithoutUserInput = {
     where: ChildWhereUniqueInput
     update: XOR<ChildUpdateWithoutUserInput, ChildUncheckedUpdateWithoutUserInput>
@@ -8717,7 +10570,12 @@ export namespace Prisma {
     name?: StringFilter<"Child"> | string
     grade?: IntFilter<"Child"> | number
     avatarColor?: StringFilter<"Child"> | string
+    avatarUrl?: StringNullableFilter<"Child"> | string | null
     targetSchool?: StringNullableFilter<"Child"> | string | null
+    currentSchool?: StringNullableFilter<"Child"> | string | null
+    birthday?: DateTimeNullableFilter<"Child"> | Date | string | null
+    notes?: StringNullableFilter<"Child"> | string | null
+    routeId?: StringNullableFilter<"Child"> | string | null
     createdAt?: DateTimeFilter<"Child"> | Date | string
     updatedAt?: DateTimeFilter<"Child"> | Date | string
   }
@@ -8818,17 +10676,155 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Notification"> | Date | string
   }
 
+  export type UserSettingUpsertWithoutUserInput = {
+    update: XOR<UserSettingUpdateWithoutUserInput, UserSettingUncheckedUpdateWithoutUserInput>
+    create: XOR<UserSettingCreateWithoutUserInput, UserSettingUncheckedCreateWithoutUserInput>
+    where?: UserSettingWhereInput
+  }
+
+  export type UserSettingUpdateToOneWithWhereWithoutUserInput = {
+    where?: UserSettingWhereInput
+    data: XOR<UserSettingUpdateWithoutUserInput, UserSettingUncheckedUpdateWithoutUserInput>
+  }
+
+  export type UserSettingUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    theme?: StringFieldUpdateOperationsInput | string
+    fontSize?: StringFieldUpdateOperationsInput | string
+    density?: StringFieldUpdateOperationsInput | string
+    reducedMotion?: BoolFieldUpdateOperationsInput | boolean
+    defaultLandingPage?: StringFieldUpdateOperationsInput | string
+    defaultChildMode?: StringFieldUpdateOperationsInput | string
+    notificationPrefs?: JsonNullValueInput | InputJsonValue
+    reminderTime?: StringFieldUpdateOperationsInput | string
+    doNotDisturb?: BoolFieldUpdateOperationsInput | boolean
+    doNotDisturbStart?: NullableStringFieldUpdateOperationsInput | string | null
+    doNotDisturbEnd?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserSettingUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    theme?: StringFieldUpdateOperationsInput | string
+    fontSize?: StringFieldUpdateOperationsInput | string
+    density?: StringFieldUpdateOperationsInput | string
+    reducedMotion?: BoolFieldUpdateOperationsInput | boolean
+    defaultLandingPage?: StringFieldUpdateOperationsInput | string
+    defaultChildMode?: StringFieldUpdateOperationsInput | string
+    notificationPrefs?: JsonNullValueInput | InputJsonValue
+    reminderTime?: StringFieldUpdateOperationsInput | string
+    doNotDisturb?: BoolFieldUpdateOperationsInput | boolean
+    doNotDisturbStart?: NullableStringFieldUpdateOperationsInput | string | null
+    doNotDisturbEnd?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserCreateWithoutSettingsInput = {
+    id?: string
+    username: string
+    passwordHash: string
+    name?: string | null
+    role?: $Enums.UserRole
+    avatarUrl?: string | null
+    phone?: string | null
+    email?: string | null
+    wechatOpenId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    children?: ChildCreateNestedManyWithoutUserInput
+    plans?: PlanCreateNestedManyWithoutUserInput
+    weeklyPlans?: WeeklyPlanCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutSettingsInput = {
+    id?: string
+    username: string
+    passwordHash: string
+    name?: string | null
+    role?: $Enums.UserRole
+    avatarUrl?: string | null
+    phone?: string | null
+    email?: string | null
+    wechatOpenId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    children?: ChildUncheckedCreateNestedManyWithoutUserInput
+    plans?: PlanUncheckedCreateNestedManyWithoutUserInput
+    weeklyPlans?: WeeklyPlanUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutSettingsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutSettingsInput, UserUncheckedCreateWithoutSettingsInput>
+  }
+
+  export type UserUpsertWithoutSettingsInput = {
+    update: XOR<UserUpdateWithoutSettingsInput, UserUncheckedUpdateWithoutSettingsInput>
+    create: XOR<UserCreateWithoutSettingsInput, UserUncheckedCreateWithoutSettingsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutSettingsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutSettingsInput, UserUncheckedUpdateWithoutSettingsInput>
+  }
+
+  export type UserUpdateWithoutSettingsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    wechatOpenId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    children?: ChildUpdateManyWithoutUserNestedInput
+    plans?: PlanUpdateManyWithoutUserNestedInput
+    weeklyPlans?: WeeklyPlanUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutSettingsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    wechatOpenId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    children?: ChildUncheckedUpdateManyWithoutUserNestedInput
+    plans?: PlanUncheckedUpdateManyWithoutUserNestedInput
+    weeklyPlans?: WeeklyPlanUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+  }
+
   export type UserCreateWithoutChildrenInput = {
     id?: string
     username: string
     passwordHash: string
     name?: string | null
     role?: $Enums.UserRole
+    avatarUrl?: string | null
+    phone?: string | null
+    email?: string | null
+    wechatOpenId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     plans?: PlanCreateNestedManyWithoutUserInput
     weeklyPlans?: WeeklyPlanCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    settings?: UserSettingCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutChildrenInput = {
@@ -8837,11 +10833,16 @@ export namespace Prisma {
     passwordHash: string
     name?: string | null
     role?: $Enums.UserRole
+    avatarUrl?: string | null
+    phone?: string | null
+    email?: string | null
+    wechatOpenId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     plans?: PlanUncheckedCreateNestedManyWithoutUserInput
     weeklyPlans?: WeeklyPlanUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    settings?: UserSettingUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutChildrenInput = {
@@ -8942,11 +10943,16 @@ export namespace Prisma {
     passwordHash?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    wechatOpenId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     plans?: PlanUpdateManyWithoutUserNestedInput
     weeklyPlans?: WeeklyPlanUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    settings?: UserSettingUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutChildrenInput = {
@@ -8955,11 +10961,16 @@ export namespace Prisma {
     passwordHash?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    wechatOpenId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     plans?: PlanUncheckedUpdateManyWithoutUserNestedInput
     weeklyPlans?: WeeklyPlanUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    settings?: UserSettingUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type PlanUpsertWithWhereUniqueWithoutChildInput = {
@@ -9000,11 +11011,16 @@ export namespace Prisma {
     passwordHash: string
     name?: string | null
     role?: $Enums.UserRole
+    avatarUrl?: string | null
+    phone?: string | null
+    email?: string | null
+    wechatOpenId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     children?: ChildCreateNestedManyWithoutUserInput
     weeklyPlans?: WeeklyPlanCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    settings?: UserSettingCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutPlansInput = {
@@ -9013,11 +11029,16 @@ export namespace Prisma {
     passwordHash: string
     name?: string | null
     role?: $Enums.UserRole
+    avatarUrl?: string | null
+    phone?: string | null
+    email?: string | null
+    wechatOpenId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     children?: ChildUncheckedCreateNestedManyWithoutUserInput
     weeklyPlans?: WeeklyPlanUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    settings?: UserSettingUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutPlansInput = {
@@ -9030,7 +11051,12 @@ export namespace Prisma {
     name: string
     grade: number
     avatarColor?: string
+    avatarUrl?: string | null
     targetSchool?: string | null
+    currentSchool?: string | null
+    birthday?: Date | string | null
+    notes?: string | null
+    routeId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     user: UserCreateNestedOneWithoutChildrenInput
@@ -9043,7 +11069,12 @@ export namespace Prisma {
     name: string
     grade: number
     avatarColor?: string
+    avatarUrl?: string | null
     targetSchool?: string | null
+    currentSchool?: string | null
+    birthday?: Date | string | null
+    notes?: string | null
+    routeId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     weeklyPlans?: WeeklyPlanUncheckedCreateNestedManyWithoutChildInput
@@ -9071,11 +11102,16 @@ export namespace Prisma {
     passwordHash?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    wechatOpenId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     children?: ChildUpdateManyWithoutUserNestedInput
     weeklyPlans?: WeeklyPlanUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    settings?: UserSettingUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPlansInput = {
@@ -9084,11 +11120,16 @@ export namespace Prisma {
     passwordHash?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    wechatOpenId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     children?: ChildUncheckedUpdateManyWithoutUserNestedInput
     weeklyPlans?: WeeklyPlanUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    settings?: UserSettingUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type ChildUpsertWithoutPlansInput = {
@@ -9107,7 +11148,12 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     grade?: IntFieldUpdateOperationsInput | number
     avatarColor?: StringFieldUpdateOperationsInput | string
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     targetSchool?: NullableStringFieldUpdateOperationsInput | string | null
+    currentSchool?: NullableStringFieldUpdateOperationsInput | string | null
+    birthday?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    routeId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutChildrenNestedInput
@@ -9120,7 +11166,12 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     grade?: IntFieldUpdateOperationsInput | number
     avatarColor?: StringFieldUpdateOperationsInput | string
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     targetSchool?: NullableStringFieldUpdateOperationsInput | string | null
+    currentSchool?: NullableStringFieldUpdateOperationsInput | string | null
+    birthday?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    routeId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     weeklyPlans?: WeeklyPlanUncheckedUpdateManyWithoutChildNestedInput
@@ -9132,11 +11183,16 @@ export namespace Prisma {
     passwordHash: string
     name?: string | null
     role?: $Enums.UserRole
+    avatarUrl?: string | null
+    phone?: string | null
+    email?: string | null
+    wechatOpenId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     children?: ChildCreateNestedManyWithoutUserInput
     plans?: PlanCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    settings?: UserSettingCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutWeeklyPlansInput = {
@@ -9145,11 +11201,16 @@ export namespace Prisma {
     passwordHash: string
     name?: string | null
     role?: $Enums.UserRole
+    avatarUrl?: string | null
+    phone?: string | null
+    email?: string | null
+    wechatOpenId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     children?: ChildUncheckedCreateNestedManyWithoutUserInput
     plans?: PlanUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    settings?: UserSettingUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutWeeklyPlansInput = {
@@ -9162,7 +11223,12 @@ export namespace Prisma {
     name: string
     grade: number
     avatarColor?: string
+    avatarUrl?: string | null
     targetSchool?: string | null
+    currentSchool?: string | null
+    birthday?: Date | string | null
+    notes?: string | null
+    routeId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     user: UserCreateNestedOneWithoutChildrenInput
@@ -9175,7 +11241,12 @@ export namespace Prisma {
     name: string
     grade: number
     avatarColor?: string
+    avatarUrl?: string | null
     targetSchool?: string | null
+    currentSchool?: string | null
+    birthday?: Date | string | null
+    notes?: string | null
+    routeId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     plans?: PlanUncheckedCreateNestedManyWithoutChildInput
@@ -9203,11 +11274,16 @@ export namespace Prisma {
     passwordHash?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    wechatOpenId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     children?: ChildUpdateManyWithoutUserNestedInput
     plans?: PlanUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    settings?: UserSettingUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutWeeklyPlansInput = {
@@ -9216,11 +11292,16 @@ export namespace Prisma {
     passwordHash?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    wechatOpenId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     children?: ChildUncheckedUpdateManyWithoutUserNestedInput
     plans?: PlanUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    settings?: UserSettingUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type ChildUpsertWithoutWeeklyPlansInput = {
@@ -9239,7 +11320,12 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     grade?: IntFieldUpdateOperationsInput | number
     avatarColor?: StringFieldUpdateOperationsInput | string
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     targetSchool?: NullableStringFieldUpdateOperationsInput | string | null
+    currentSchool?: NullableStringFieldUpdateOperationsInput | string | null
+    birthday?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    routeId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutChildrenNestedInput
@@ -9252,7 +11338,12 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     grade?: IntFieldUpdateOperationsInput | number
     avatarColor?: StringFieldUpdateOperationsInput | string
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     targetSchool?: NullableStringFieldUpdateOperationsInput | string | null
+    currentSchool?: NullableStringFieldUpdateOperationsInput | string | null
+    birthday?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    routeId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     plans?: PlanUncheckedUpdateManyWithoutChildNestedInput
@@ -9264,11 +11355,16 @@ export namespace Prisma {
     passwordHash: string
     name?: string | null
     role?: $Enums.UserRole
+    avatarUrl?: string | null
+    phone?: string | null
+    email?: string | null
+    wechatOpenId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     children?: ChildCreateNestedManyWithoutUserInput
     plans?: PlanCreateNestedManyWithoutUserInput
     weeklyPlans?: WeeklyPlanCreateNestedManyWithoutUserInput
+    settings?: UserSettingCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutNotificationsInput = {
@@ -9277,11 +11373,16 @@ export namespace Prisma {
     passwordHash: string
     name?: string | null
     role?: $Enums.UserRole
+    avatarUrl?: string | null
+    phone?: string | null
+    email?: string | null
+    wechatOpenId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     children?: ChildUncheckedCreateNestedManyWithoutUserInput
     plans?: PlanUncheckedCreateNestedManyWithoutUserInput
     weeklyPlans?: WeeklyPlanUncheckedCreateNestedManyWithoutUserInput
+    settings?: UserSettingUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutNotificationsInput = {
@@ -9306,11 +11407,16 @@ export namespace Prisma {
     passwordHash?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    wechatOpenId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     children?: ChildUpdateManyWithoutUserNestedInput
     plans?: PlanUpdateManyWithoutUserNestedInput
     weeklyPlans?: WeeklyPlanUpdateManyWithoutUserNestedInput
+    settings?: UserSettingUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutNotificationsInput = {
@@ -9319,11 +11425,16 @@ export namespace Prisma {
     passwordHash?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    wechatOpenId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     children?: ChildUncheckedUpdateManyWithoutUserNestedInput
     plans?: PlanUncheckedUpdateManyWithoutUserNestedInput
     weeklyPlans?: WeeklyPlanUncheckedUpdateManyWithoutUserNestedInput
+    settings?: UserSettingUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type ChildCreateManyUserInput = {
@@ -9331,7 +11442,12 @@ export namespace Prisma {
     name: string
     grade: number
     avatarColor?: string
+    avatarUrl?: string | null
     targetSchool?: string | null
+    currentSchool?: string | null
+    birthday?: Date | string | null
+    notes?: string | null
+    routeId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -9377,7 +11493,12 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     grade?: IntFieldUpdateOperationsInput | number
     avatarColor?: StringFieldUpdateOperationsInput | string
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     targetSchool?: NullableStringFieldUpdateOperationsInput | string | null
+    currentSchool?: NullableStringFieldUpdateOperationsInput | string | null
+    birthday?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    routeId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     plans?: PlanUpdateManyWithoutChildNestedInput
@@ -9389,7 +11510,12 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     grade?: IntFieldUpdateOperationsInput | number
     avatarColor?: StringFieldUpdateOperationsInput | string
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     targetSchool?: NullableStringFieldUpdateOperationsInput | string | null
+    currentSchool?: NullableStringFieldUpdateOperationsInput | string | null
+    birthday?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    routeId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     plans?: PlanUncheckedUpdateManyWithoutChildNestedInput
@@ -9401,7 +11527,12 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     grade?: IntFieldUpdateOperationsInput | number
     avatarColor?: StringFieldUpdateOperationsInput | string
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     targetSchool?: NullableStringFieldUpdateOperationsInput | string | null
+    currentSchool?: NullableStringFieldUpdateOperationsInput | string | null
+    birthday?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    routeId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -9643,6 +11774,10 @@ export namespace Prisma {
      * @deprecated Use UserDefaultArgs instead
      */
     export type UserArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = UserDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use UserSettingDefaultArgs instead
+     */
+    export type UserSettingArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = UserSettingDefaultArgs<ExtArgs>
     /**
      * @deprecated Use ChildDefaultArgs instead
      */

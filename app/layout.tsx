@@ -3,6 +3,7 @@ import { Syne, Manrope, JetBrains_Mono } from 'next/font/google';
 import './globals.css';
 import { AuthProvider } from '@/components/providers/AuthProvider';
 import { MotionProvider } from '@/components/providers/MotionProvider';
+import { SettingsApplier } from '@/components/providers/SettingsApplier';
 
 const syne = Syne({
   subsets: ['latin'],
@@ -41,7 +42,10 @@ export default function RootLayout({
         className={`min-h-screen animated-bg grid-pattern antialiased ${syne.variable} ${manrope.variable} ${jetbrainsMono.variable}`}
       >
         <MotionProvider>
-          <AuthProvider>{children}</AuthProvider>
+          <AuthProvider>
+            <SettingsApplier />
+            {children}
+          </AuthProvider>
         </MotionProvider>
       </body>
     </html>

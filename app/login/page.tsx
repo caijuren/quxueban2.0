@@ -57,7 +57,26 @@ function LoginForm() {
           localStorage.removeItem(REMEMBER_USERNAME_KEY);
         }
       }
-      router.push(callbackUrl);
+
+      // Apply user's default landing page only when no specific callback is requested
+      if (callbackUrl === '/dashboard' || callbackUrl === '/dashboard/') {
+        try {
+          const res = await fetch('/api/user/me');
+          const user = await res.json();
+          const landing = user?.settings?.defaultLandingPage;
+          const target =
+            landing === 'weekly'
+              ? '/dashboard/weekly'
+              : landing === 'alerts'
+                ? '/dashboard/alerts'
+                : '/dashboard';
+          router.push(target);
+        } catch {
+          router.push('/dashboard');
+        }
+      } else {
+        router.push(callbackUrl);
+      }
       router.refresh();
     }
   };

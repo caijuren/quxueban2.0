@@ -26,6 +26,7 @@ import {
   typeConfig,
   statusConfig,
   type RoutePlan,
+  getRouteById,
 } from '@/lib/plans';
 import MatchAnalysisModal from './MatchAnalysisModal';
 import NewPlanModal from './NewPlanModal';
@@ -73,6 +74,22 @@ function PlanPageContent() {
     }
   }, [currentChild, stageFromUrl, searchParams, router]);
 
+  // Sync expanded plan with child's bound route
+  useEffect(() => {
+    if (!currentChild?.routeId) {
+      const firstPrimary = activeStage === '中考'
+        ? middleSchoolPlans.find((p) => p.type === 'primary')
+        : defaultPlans.find((p) => p.type === 'primary');
+      setExpandedPlanId(firstPrimary?.id ?? null);
+      return;
+    }
+    const source = activeStage === '中考' ? middleSchoolPlans : defaultPlans;
+    const bound = source.find((p) => p.id === currentChild.routeId);
+    if (bound) {
+      setExpandedPlanId(bound.id);
+    }
+  }, [currentChild, activeStage]);
+
   const setActiveStage = (stage: string) => {
     setActiveStageState(stage);
     const params = new URLSearchParams(searchParams.toString());
@@ -103,11 +120,6 @@ function PlanPageContent() {
     } else {
       setPlanList(defaultPlans);
     }
-    // Expand first primary plan by default
-    const firstPrimary = activeStage === '中考'
-      ? middleSchoolPlans.find((p) => p.type === 'primary')
-      : defaultPlans.find((p) => p.type === 'primary');
-    setExpandedPlanId(firstPrimary?.id ?? null);
   }, [activeStage]);
 
   const handleCreatePlan = (plan: RoutePlan) => {
@@ -160,7 +172,7 @@ function PlanPageContent() {
           </h1>
           <p className="text-sm text-slate-500">
             {currentChild
-              ? `当前阶段：${activeStage} · 根据${currentChild.name}的年级自动匹配`
+              ? `当前阶段：${activeStage}${currentChild.routeId ? ` · 已绑定「${getRouteById(currentChild.routeId)?.name ?? currentChild.routeId}」路线` : ` · 根据${currentChild.name}的年级自动匹配`}`
               : '管理小升初、中考、高考各阶段的主路线与备选路线'}
           </p>
         </div>

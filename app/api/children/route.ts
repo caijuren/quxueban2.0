@@ -23,22 +23,42 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
-  const body = await req.json();
-  const { name, grade, avatarColor, targetSchool } = body;
-
-  if (!name || typeof grade !== 'number') {
-    return NextResponse.json({ error: 'Invalid data' }, { status: 400 });
-  }
-
-  const child = await prisma.child.create({
-    data: {
-      userId: session.user.id,
+  try {
+    const body = await req.json();
+    const {
       name,
       grade,
-      avatarColor: avatarColor || '#f43f5e',
+      avatarColor,
+      avatarUrl,
       targetSchool,
-    },
-  });
+      currentSchool,
+      birthday,
+      notes,
+      routeId,
+    } = body;
 
-  return NextResponse.json(child, { status: 201 });
+    if (!name || typeof grade !== 'number') {
+      return NextResponse.json({ error: 'Invalid data' }, { status: 400 });
+    }
+
+    const child = await prisma.child.create({
+      data: {
+        userId: session.user.id,
+        name,
+        grade,
+        avatarColor: avatarColor || '#f43f5e',
+        avatarUrl: avatarUrl || null,
+        targetSchool: targetSchool || null,
+        currentSchool: currentSchool || null,
+        birthday: birthday ? new Date(birthday) : null,
+        notes: notes || null,
+        routeId: routeId || null,
+      },
+    });
+
+    return NextResponse.json(child, { status: 201 });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : 'Unknown error';
+    return NextResponse.json({ error: message }, { status: 500 });
+  }
 }

@@ -14,10 +14,10 @@ const config: Config = {
         'surface-light': '#161622',
         'surface-elevated': '#1a1a28',
         'border-subtle': 'rgba(255, 255, 255, 0.06)',
-        primary: '#ff2d6a',
-        'primary-glow': '#ff5c8a',
-        secondary: '#8b5cf6',
-        'secondary-glow': '#a78bfa',
+        primary: 'var(--color-primary)',
+        'primary-glow': 'var(--color-primary-glow)',
+        secondary: 'var(--color-secondary)',
+        'secondary-glow': 'var(--color-secondary-glow)',
         accent: '#06b6d4',
         'accent-glow': '#67e8f9',
         success: '#22c55e',
@@ -25,8 +25,8 @@ const config: Config = {
         danger: '#ef4444',
       },
       boxShadow: {
-        'glow-primary': '0 0 20px rgba(255, 45, 106, 0.15)',
-        'glow-secondary': '0 0 20px rgba(139, 92, 246, 0.15)',
+        'glow-primary': '0 0 20px var(--shadow-primary)',
+        'glow-secondary': '0 0 20px var(--shadow-secondary)',
         'glow-accent': '0 0 20px rgba(6, 182, 212, 0.15)',
       },
       fontFamily: {
@@ -46,8 +46,8 @@ const config: Config = {
           '50%': { transform: 'translateY(-10px)' },
         },
         glow: {
-          '0%': { boxShadow: '0 0 20px rgba(244, 63, 94, 0.3)' },
-          '100%': { boxShadow: '0 0 40px rgba(244, 63, 94, 0.6)' },
+          '0%': { boxShadow: '0 0 20px var(--shadow-primary)' },
+          '100%': { boxShadow: '0 0 40px color-mix(in srgb, var(--color-primary) 40%, transparent)' },
         },
         lineFlow: {
           '0%': { strokeDashoffset: '1000' },

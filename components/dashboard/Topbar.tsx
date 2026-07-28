@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Bell, Search, Menu, Plus, Check, User, Pencil } from 'lucide-react';
+import { Bell, Search, Menu, Plus, Check, User, Settings } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { useChildren } from '@/components/dashboard/ChildrenContext';
@@ -255,6 +255,28 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
             aria-expanded={childDropdownOpen}
             aria-controls="child-listbox"
           >
+            <div
+              className="w-9 h-9 rounded-full flex items-center justify-center text-white text-sm font-bold overflow-hidden shrink-0"
+              style={{
+                background: currentChild
+                  ? `linear-gradient(135deg, ${currentChild.avatarColor}, ${currentChild.avatarColor}88)`
+                  : 'linear-gradient(135deg, #475569, #64748b)',
+              }}
+            >
+              {currentChild?.avatarUrl?.startsWith('data:image') ? (
+                <img
+                  src={currentChild.avatarUrl}
+                  alt={currentChild.name}
+                  className="w-full h-full object-cover"
+                />
+              ) : currentChild?.avatarUrl ? (
+                <span className="text-base">{currentChild.avatarUrl}</span>
+              ) : currentChild ? (
+                getInitials(currentChild.name)
+              ) : (
+                <User className="w-4 h-4" />
+              )}
+            </div>
             <div className="text-right hidden sm:block">
               <p className="text-sm font-medium text-slate-200">
                 {currentChild ? currentChild.name : '未选择学员'}
@@ -264,16 +286,6 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
                   ? `${gradeLabel(currentChild.grade)} · ${currentStage}`
                   : '请选择或添加学员'}
               </p>
-            </div>
-            <div
-              className="w-9 h-9 rounded-full flex items-center justify-center text-white text-sm font-bold"
-              style={{
-                background: currentChild
-                  ? `linear-gradient(135deg, ${currentChild.avatarColor}, ${currentChild.avatarColor}88)`
-                  : 'linear-gradient(135deg, #475569, #64748b)',
-              }}
-            >
-              {currentChild ? getInitials(currentChild.name) : <User className="w-4 h-4" />}
             </div>
             <svg
               className={`w-3.5 h-3.5 text-slate-500 hidden sm:block transition-transform duration-200 ${
@@ -293,8 +305,36 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
               ref={childListboxRef}
               role="listbox"
               aria-label="切换学员"
-              className="absolute right-0 top-full mt-2 w-56 rounded-xl glass border border-white/[0.08] overflow-hidden z-50 shadow-2xl"
+              className="absolute right-0 top-full mt-2 w-60 rounded-xl glass border border-white/[0.08] overflow-hidden z-50 shadow-2xl"
             >
+              <div className="px-2 py-1.5 border-b border-white/[0.06]">
+                {currentChild && (
+                  <button
+                    onClick={() => {
+                      setEditingChild(currentChild);
+                      setChildDropdownOpen(false);
+                    }}
+                    className="w-full flex items-center gap-2.5 px-2.5 py-2 rounded-lg text-left text-sm text-slate-300 hover:bg-white/5 transition-colors"
+                  >
+                    <div className="w-7 h-7 rounded-full bg-white/5 flex items-center justify-center shrink-0">
+                      <User className="w-3.5 h-3.5" />
+                    </div>
+                    编辑当前孩子
+                  </button>
+                )}
+                <button
+                  onClick={() => {
+                    setChildDropdownOpen(false);
+                    router.push('/dashboard/settings');
+                  }}
+                  className="w-full flex items-center gap-2.5 px-2.5 py-2 rounded-lg text-left text-sm text-slate-300 hover:bg-white/5 transition-colors"
+                >
+                  <div className="w-7 h-7 rounded-full bg-white/5 flex items-center justify-center shrink-0">
+                    <Settings className="w-3.5 h-3.5" />
+                  </div>
+                  系统设置
+                </button>
+              </div>
               <div className="px-3 py-2 border-b border-white/[0.06]">
                 <p className="text-xs text-slate-500">切换学员</p>
               </div>
@@ -302,51 +342,47 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
                 {children.map((child, index) => {
                   const isActive = currentChild?.id === child.id;
                   return (
-                    <div
+                    <button
                       key={child.id}
+                      ref={(el) => {
+                        childButtonRefs.current[index] = el;
+                      }}
                       role="option"
                       aria-selected={isActive}
-                      className={`flex items-center gap-2 px-2.5 py-2 rounded-lg transition-colors ${
+                      onClick={() => {
+                        setCurrentChildId(child.id);
+                        setChildDropdownOpen(false);
+                      }}
+                      className={`w-full flex items-center gap-2.5 px-2.5 py-2 rounded-lg text-left transition-colors ${
                         isActive ? 'bg-primary/10' : 'hover:bg-white/5'
                       }`}
                     >
-                      <button
-                        ref={(el) => {
-                          childButtonRefs.current[index] = el;
+                      <div
+                        className="w-7 h-7 rounded-full flex items-center justify-center text-white text-xs font-bold shrink-0 overflow-hidden"
+                        style={{
+                          background: `linear-gradient(135deg, ${child.avatarColor}, ${child.avatarColor}88)`,
                         }}
-                        onClick={() => {
-                          setCurrentChildId(child.id);
-                          setChildDropdownOpen(false);
-                        }}
-                        className="flex-1 flex items-center gap-2.5 text-left min-w-0 focus-ring rounded-md"
                       >
-                        <div
-                          className="w-7 h-7 rounded-full flex items-center justify-center text-white text-xs font-bold shrink-0"
-                          style={{
-                            background: `linear-gradient(135deg, ${child.avatarColor}, ${child.avatarColor}88)`,
-                          }}
-                        >
-                          {getInitials(child.name)}
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <p className={`text-sm font-medium truncate ${isActive ? 'text-primary' : 'text-slate-200'}`}>
-                            {child.name}
-                          </p>
-                          <p className="text-[10px] text-slate-500">{gradeLabel(child.grade)}</p>
-                        </div>
-                        {isActive && <Check className="w-3.5 h-3.5 text-primary shrink-0" />}
-                      </button>
-                      <button
-                        onClick={() => {
-                          setEditingChild(child);
-                          setChildDropdownOpen(false);
-                        }}
-                        className="w-6 h-6 rounded-md bg-white/5 flex items-center justify-center text-slate-500 hover:text-slate-200 hover:bg-white/10 transition-colors shrink-0"
-                        aria-label="编辑学员"
-                      >
-                        <Pencil className="w-3 h-3" />
-                      </button>
-                    </div>
+                        {child.avatarUrl?.startsWith('data:image') ? (
+                          <img
+                            src={child.avatarUrl}
+                            alt={child.name}
+                            className="w-full h-full object-cover"
+                          />
+                        ) : child.avatarUrl ? (
+                          <span className="text-sm">{child.avatarUrl}</span>
+                        ) : (
+                          getInitials(child.name)
+                        )}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className={`text-sm font-medium truncate ${isActive ? 'text-primary' : 'text-slate-200'}`}>
+                          {child.name}
+                        </p>
+                        <p className="text-[10px] text-slate-500">{gradeLabel(child.grade)}</p>
+                      </div>
+                      {isActive && <Check className="w-3.5 h-3.5 text-primary shrink-0" />}
+                    </button>
                   );
                 })}
               </div>

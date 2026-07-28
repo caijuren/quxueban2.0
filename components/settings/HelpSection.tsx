@@ -1,0 +1,137 @@
+'use client';
+
+import { useState } from 'react';
+import { HelpCircle, MessageSquare, FileText, ChevronDown, ChevronUp, Send, Loader2 } from 'lucide-react';
+import SettingsSection from './SettingsSection';
+
+const FAQS = [
+  {
+    q: '如何添加多个学员？',
+    a: '在「学员管理」中点击「添加学员」，填写姓名、年级等基本信息即可。你可以随时切换默认学员。',
+  },
+  {
+    q: '周计划是如何生成的？',
+    a: '系统会根据学员当前年级和已绑定的升学路线，自动生成每周学习任务，你也可以在周任务页面手动调整。',
+  },
+  {
+    q: 'AI 检视报告什么时候更新？',
+    a: '发布本周计划后，AI 会根据任务完成情况和学员阶段生成诊断报告，可在「AI 检视」页面查看。',
+  },
+  {
+    q: '支持微信登录吗？',
+    a: '正式版将支持微信一键登录和微信提醒，当前请使用账号密码登录。',
+  },
+];
+
+export default function HelpSection() {
+  const [openIndex, setOpenIndex] = useState<number | null>(0);
+  const [feedback, setFeedback] = useState('');
+  const [contact, setContact] = useState('');
+  const [submitting, setSubmitting] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+
+  const handleSubmitFeedback = async () => {
+    if (!feedback.trim()) return;
+    setSubmitting(true);
+    // TODO: send feedback to backend or IM
+    await new Promise((resolve) => setTimeout(resolve, 600));
+    setSubmitting(false);
+    setSubmitted(true);
+    setFeedback('');
+    setContact('');
+    setTimeout(() => setSubmitted(false), 3000);
+  };
+
+  return (
+    <div className="space-y-5">
+      <SettingsSection title="常见问题" description="快速了解趣学伴的使用方法">
+        <div className="space-y-2">
+          {FAQS.map((item, index) => {
+            const isOpen = openIndex === index;
+            return (
+              <div
+                key={index}
+                className="rounded-xl bg-white/[0.03] border border-white/[0.06] overflow-hidden"
+              >
+                <button
+                  onClick={() => setOpenIndex(isOpen ? null : index)}
+                  className="w-full flex items-center justify-between p-4 text-left hover:bg-white/[0.02] transition-colors"
+                >
+                  <span className="text-sm font-medium text-slate-200">{item.q}</span>
+                  {isOpen ? (
+                    <ChevronUp className="w-4 h-4 text-slate-500" />
+                  ) : (
+                    <ChevronDown className="w-4 h-4 text-slate-500" />
+                  )}
+                </button>
+                {isOpen && (
+                  <div className="px-4 pb-4 text-sm text-slate-400 leading-relaxed">
+                    {item.a}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      </SettingsSection>
+
+      <SettingsSection title="意见反馈" description="遇到问题或有新想法，告诉我们">
+        <div className="space-y-4">
+          <textarea
+            value={feedback}
+            onChange={(e) => setFeedback(e.target.value)}
+            placeholder="请描述你遇到的问题或建议..."
+            rows={4}
+            className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:border-primary transition-all resize-none"
+          />
+          <input
+            type="text"
+            value={contact}
+            onChange={(e) => setContact(e.target.value)}
+            placeholder="联系方式（选填）"
+            className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:border-primary transition-all"
+          />
+          {submitted && (
+            <div className="text-sm px-4 py-2 rounded-lg bg-success/10 text-success border border-success/20">
+              反馈已提交，感谢你的建议！
+            </div>
+          )}
+          <div className="flex justify-end">
+            <button
+              onClick={handleSubmitFeedback}
+              disabled={submitting || !feedback.trim()}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-gradient-to-r from-primary to-secondary text-white text-sm font-medium hover:shadow-glow-primary transition-all disabled:opacity-70"
+            >
+              {submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
+              提交反馈
+            </button>
+          </div>
+        </div>
+      </SettingsSection>
+
+      <SettingsSection title="关于" description="版本与法律信息">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <a
+            href="/terms"
+            target="_blank"
+            className="flex items-center gap-3 p-4 rounded-xl bg-white/[0.03] border border-white/[0.06] hover:bg-white/[0.05] transition-colors"
+          >
+            <FileText className="w-5 h-5 text-primary" />
+            <span className="text-sm text-slate-200">用户协议</span>
+          </a>
+          <a
+            href="/privacy"
+            target="_blank"
+            className="flex items-center gap-3 p-4 rounded-xl bg-white/[0.03] border border-white/[0.06] hover:bg-white/[0.05] transition-colors"
+          >
+            <FileText className="w-5 h-5 text-secondary" />
+            <span className="text-sm text-slate-200">隐私政策</span>
+          </a>
+        </div>
+        <p className="mt-4 text-xs text-slate-500 text-center">
+          趣学伴 v1.0.0 · 升学作战指挥中心
+        </p>
+      </SettingsSection>
+    </div>
+  );
+}

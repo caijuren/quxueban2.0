@@ -100,7 +100,28 @@ export function ChildrenProvider({ children: childNodes }: { children: ReactNode
         ]);
         if (cancelled) return;
 
-        setChildren(fetchedChildren.length > 0 ? fetchedChildren : getDefaultChildren());
+        if (fetchedChildren.length > 0) {
+          setChildren(fetchedChildren);
+        } else {
+          // No children in DB yet; seed defaults so users can edit them right away.
+          const defaults = getDefaultChildren();
+          try {
+            const created = await Promise.all(
+              defaults.map((c) =>
+                fetchJson<Child>('/api/children', {
+                  method: 'POST',
+                  body: JSON.stringify(c),
+                })
+              )
+            );
+            if (!cancelled) setChildren(created);
+          } catch (seedError) {
+            if (process.env.NODE_ENV === 'development') {
+              console.warn('[ChildrenContext] Failed to seed default children:', seedError);
+            }
+            if (!cancelled) setChildren(defaults);
+          }
+        }
         setWeeklyPlans(fetchedPlans.map(formatWeeklyPlan));
       } catch (error) {
         // Transient network/auth failures should not crash the UI;

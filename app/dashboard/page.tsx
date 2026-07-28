@@ -1,20 +1,23 @@
 'use client';
 
+import { useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import {
   Target,
   Calendar,
   TrendingUp,
   School,
-  ChevronRight,
   Users,
   Plus,
   Sparkles,
   ArrowRight,
+  LayoutGrid,
+  User,
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useChildren } from '@/components/dashboard/ChildrenContext';
-import { gradeLabel, gradeToStage, getInitials } from '@/lib/children';
+import { Child, gradeLabel, gradeToStage, getInitials } from '@/lib/children';
+import { getRouteById } from '@/lib/plans';
 import {
   getCurrentWeekId,
   getPlanStats,
@@ -44,10 +47,169 @@ const itemVariants = {
   },
 };
 
+type ViewMode = 'detail' | 'overview';
+
+function getChildSnapshot(childId: string, getWeeklyPlan: ReturnType<typeof useChildren>['getWeeklyPlan']) {
+  const currentWeekPlan = getWeeklyPlan(getCurrentWeekId(), childId);
+  const weeklyStats = currentWeekPlan ? getPlanStats(currentWeekPlan) : null;
+  const todayName = getTodayName();
+  const todayTasks = currentWeekPlan?.tasks.filter((t) => t.day === todayName) ?? [];
+  const pendingToday = todayTasks.filter((t) => t.status !== 'done').length;
+
+  return {
+    completionRate: weeklyStats?.completionRate ?? 0,
+    todayPending: pendingToday,
+    todayTotal: todayTasks.length,
+    weeklyDone: weeklyStats?.done ?? 0,
+    weeklyTotal: weeklyStats?.total ?? 0,
+  };
+}
+
+function ChildSwitchCard({
+  child,
+  isActive,
+  onClick,
+  getWeeklyPlan,
+}: {
+  child: Child;
+  isActive: boolean;
+  onClick: () => void;
+  getWeeklyPlan: ReturnType<typeof useChildren>['getWeeklyPlan'];
+}) {
+  const stage = gradeToStage(child.grade);
+  const snapshot = getChildSnapshot(child.id, getWeeklyPlan);
+  const hasTodayTasks = snapshot.todayTotal > 0;
+
+  return (
+    <CommandCard active={isActive} hover onClick={onClick} className="p-4 h-full">
+      <div className="flex items-center gap-3">
+        <div
+          className="w-10 h-10 rounded-full flex items-center justify-center text-white text-sm font-bold shrink-0"
+          style={{
+            background: `linear-gradient(135deg, ${child.avatarColor}, ${child.avatarColor}88)`,
+          }}
+        >
+          {getInitials(child.name)}
+        </div>
+        <div className="flex-1 min-w-0">
+          <p className={`font-semibold text-sm truncate ${isActive ? 'text-primary' : 'text-slate-200'}`}>
+            {child.name}
+          </p>
+          <p className="text-xs text-slate-500">
+            {gradeLabel(child.grade)} · {stage}
+          </p>
+        </div>
+        <div className="flex flex-col items-end gap-1.5 shrink-0">
+          <MetricRing rate={snapshot.completionRate} size={32} strokeWidth={4} />
+          {hasTodayTasks && (
+            <span
+              className={`text-[10px] px-1.5 py-0.5 rounded-full font-medium ${
+                snapshot.todayPending > 0
+                  ? 'bg-warning/15 text-warning'
+                  : 'bg-success/15 text-success'
+              }`}
+            >
+              今日 {snapshot.todayPending}/{snapshot.todayTotal}
+            </span>
+          )}
+        </div>
+      </div>
+    </CommandCard>
+  );
+}
+
+function OverviewChildCard({
+  child,
+  onView,
+  getWeeklyPlan,
+}: {
+  child: Child;
+  onView: () => void;
+  getWeeklyPlan: ReturnType<typeof useChildren>['getWeeklyPlan'];
+}) {
+  const snapshot = getChildSnapshot(child.id, getWeeklyPlan);
+  const stage = gradeToStage(child.grade);
+  const routeName = child.routeId
+    ? getRouteById(child.routeId)?.name ?? child.routeId
+    : getStageRoute(stage).name;
+
+  return (
+    <CommandCard className="p-5">
+      <div className="flex items-start gap-4 mb-5">
+        <div
+          className="w-12 h-12 rounded-xl flex items-center justify-center text-white font-bold text-lg shrink-0"
+          style={{
+            background: `linear-gradient(135deg, ${child.avatarColor}, ${child.avatarColor}88)`,
+          }}
+        >
+          {getInitials(child.name)}
+        </div>
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-2 mb-1">
+            <h2 className="text-lg font-bold font-display">{child.name}</h2>
+            <DataBadge variant="primary" size="sm">{stage}</DataBadge>
+          </div>
+          <p className="text-sm text-slate-500 truncate">
+            {gradeLabel(child.grade)}
+            {child.currentSchool ? ` · ${child.currentSchool}` : ''}
+            {routeName ? ` · ${routeName}` : ''}
+          </p>
+        </div>
+        <div className="text-right shrink-0">
+          <p className="text-xs text-slate-500 mb-1">本周完成率</p>
+          <p className="text-xl font-bold font-display tabular-nums text-white">
+            {snapshot.completionRate}%
+          </p>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-3 gap-3 mb-5">
+        <div className="rounded-lg bg-white/[0.03] p-3 text-center">
+          <p className="text-lg font-bold font-display text-slate-100">
+            {snapshot.weeklyDone}/{snapshot.weeklyTotal}
+          </p>
+          <p className="text-[10px] text-slate-500 mt-0.5">本周任务</p>
+        </div>
+        <div className="rounded-lg bg-white/[0.03] p-3 text-center">
+          <p className="text-lg font-bold font-display text-slate-100">
+            {snapshot.todayPending}
+          </p>
+          <p className="text-[10px] text-slate-500 mt-0.5">今日待办</p>
+        </div>
+        <div className="rounded-lg bg-white/[0.03] p-3 text-center">
+          <p className="text-lg font-bold font-display text-slate-100 truncate">
+            {child.targetSchool || '未设置'}
+          </p>
+          <p className="text-[10px] text-slate-500 mt-0.5">目标学校</p>
+        </div>
+      </div>
+
+      <button
+        onClick={onView}
+        className="w-full py-2 rounded-lg bg-primary/10 border border-primary/20 text-primary text-sm font-semibold hover:bg-primary/15 hover:shadow-glow-primary transition-all duration-200"
+      >
+        查看 {child.name} 的作战室
+      </button>
+    </CommandCard>
+  );
+}
+
+function getStageRoute(stage: string) {
+  switch (stage) {
+    case '小升初':
+      return { name: '三公 / 民办摇号', schools: '3 所目标校' };
+    case '中考':
+      return { name: '市重点 / 名额分配', schools: '4 所目标校' };
+    default:
+      return { name: '高考综评 / 强基', schools: '2 所目标校' };
+  }
+}
+
 export default function DashboardPage() {
   const router = useRouter();
   const shouldReduceMotion = useReducedMotion();
   const { children, currentChild, setCurrentChildId, getWeeklyPlan } = useChildren();
+  const [viewMode, setViewMode] = useState<ViewMode>('detail');
 
   const currentWeekPlan = currentChild
     ? getWeeklyPlan(getCurrentWeekId(), currentChild.id)
@@ -66,19 +228,17 @@ export default function DashboardPage() {
 
   const handleViewChild = (id: string) => {
     setCurrentChildId(id);
+    setViewMode('detail');
     router.push('/dashboard/plan');
   };
 
-  const getStageRoute = (stage: string) => {
-    switch (stage) {
-      case '小升初':
-        return { name: '三公 / 民办摇号', schools: '3 所目标校' };
-      case '中考':
-        return { name: '市重点 / 名额分配', schools: '4 所目标校' };
-      default:
-        return { name: '高考综评 / 强基', schools: '2 所目标校' };
-    }
+  const handleSwitchChild = (id: string) => {
+    setCurrentChildId(id);
+    setViewMode('detail');
   };
+
+  const hasChildren = children.length > 0;
+  const canOverview = children.length >= 2;
 
   return (
     <div className="space-y-6">
@@ -87,13 +247,43 @@ export default function DashboardPage() {
         initial={shouldReduceMotion ? false : { opacity: 0, y: -8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+        className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3"
       >
-        <h1 className="text-2xl sm:text-3xl font-bold font-display mb-1">作战指挥中心</h1>
-        <p className="text-sm text-slate-500">
-          {children.length > 0
-            ? `监控 ${children.length} 名学员 · 当前：${currentChild?.name || '未选择'}`
-            : '请先添加学员档案'}
-        </p>
+        <div>
+          <h1 className="text-2xl sm:text-3xl font-bold font-display mb-1">作战指挥中心</h1>
+          <p className="text-sm text-slate-500">
+            {hasChildren
+              ? `监控 ${children.length} 名学员 · 当前：${currentChild?.name || '未选择'}`
+              : '请先添加学员档案'}
+          </p>
+        </div>
+
+        {canOverview && (
+          <div className="flex items-center gap-1 rounded-lg bg-white/[0.03] border border-white/[0.06] p-1">
+            <button
+              onClick={() => setViewMode('detail')}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-all ${
+                viewMode === 'detail'
+                  ? 'bg-primary/10 text-primary'
+                  : 'text-slate-500 hover:text-slate-300'
+              }`}
+            >
+              <User className="w-3.5 h-3.5" />
+              单个详情
+            </button>
+            <button
+              onClick={() => setViewMode('overview')}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-all ${
+                viewMode === 'overview'
+                  ? 'bg-primary/10 text-primary'
+                  : 'text-slate-500 hover:text-slate-300'
+              }`}
+            >
+              <LayoutGrid className="w-3.5 h-3.5" />
+              总览对比
+            </button>
+          </div>
+        )}
       </motion.div>
 
       {/* Children overview */}
@@ -110,40 +300,16 @@ export default function DashboardPage() {
           animate="visible"
           className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3"
         >
-          {children.map((child) => {
-            const isActive = currentChild?.id === child.id;
-            const stage = gradeToStage(child.grade);
-            return (
-              <motion.div key={child.id} variants={itemVariants}>
-                <CommandCard
-                  active={isActive}
-                  hover
-                  onClick={() => handleViewChild(child.id)}
-                  className="p-4"
-                >
-                  <div className="flex items-center gap-3">
-                    <div
-                      className="w-10 h-10 rounded-full flex items-center justify-center text-white text-sm font-bold shrink-0"
-                      style={{
-                        background: `linear-gradient(135deg, ${child.avatarColor}, ${child.avatarColor}88)`,
-                      }}
-                    >
-                      {getInitials(child.name)}
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <p className={`font-semibold text-sm truncate ${isActive ? 'text-primary' : 'text-slate-200'}`}>
-                        {child.name}
-                      </p>
-                      <p className="text-xs text-slate-500">
-                        {gradeLabel(child.grade)} · {stage}
-                      </p>
-                    </div>
-                    <ChevronRight className={`w-4 h-4 shrink-0 ${isActive ? 'text-primary' : 'text-slate-600'}`} />
-                  </div>
-                </CommandCard>
-              </motion.div>
-            );
-          })}
+          {children.map((child) => (
+            <motion.div key={child.id} variants={itemVariants}>
+              <ChildSwitchCard
+                child={child}
+                isActive={currentChild?.id === child.id}
+                onClick={() => handleSwitchChild(child.id)}
+                getWeeklyPlan={getWeeklyPlan}
+              />
+            </motion.div>
+          ))}
 
           <motion.button
             variants={itemVariants}
@@ -156,8 +322,27 @@ export default function DashboardPage() {
         </motion.div>
       )}
 
+      {/* Overview mode */}
+      {viewMode === 'overview' && hasChildren && (
+        <motion.div
+          initial={shouldReduceMotion ? false : { opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="grid grid-cols-1 lg:grid-cols-2 gap-4"
+        >
+          {children.map((child) => (
+            <OverviewChildCard
+              key={child.id}
+              child={child}
+              onView={() => handleViewChild(child.id)}
+              getWeeklyPlan={getWeeklyPlan}
+            />
+          ))}
+        </motion.div>
+      )}
+
       {/* Current child detail */}
-      {currentChild && (
+      {currentChild && viewMode === 'detail' && (
         <>
           {/* Route health */}
           <motion.div
@@ -169,12 +354,22 @@ export default function DashboardPage() {
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div className="flex items-start gap-4">
                   <div
-                    className="w-12 h-12 rounded-xl flex items-center justify-center text-white font-bold text-lg shrink-0"
+                    className="w-12 h-12 rounded-xl flex items-center justify-center text-white font-bold text-lg shrink-0 overflow-hidden"
                     style={{
                       background: `linear-gradient(135deg, ${currentChild.avatarColor}, ${currentChild.avatarColor}88)`,
                     }}
                   >
-                    {getInitials(currentChild.name)}
+                    {currentChild.avatarUrl?.startsWith('data:image') ? (
+                      <img
+                        src={currentChild.avatarUrl}
+                        alt={currentChild.name}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : currentChild.avatarUrl ? (
+                      <span className="text-2xl">{currentChild.avatarUrl}</span>
+                    ) : (
+                      getInitials(currentChild.name)
+                    )}
                   </div>
                   <div>
                     <div className="flex items-center gap-2 mb-1">
@@ -184,7 +379,11 @@ export default function DashboardPage() {
                       </DataBadge>
                     </div>
                     <p className="text-sm text-slate-500">
-                      {gradeLabel(currentChild.grade)} · {getStageRoute(gradeToStage(currentChild.grade)).name}
+                      {gradeLabel(currentChild.grade)}
+                      {currentChild.currentSchool ? ` · ${currentChild.currentSchool}` : ''}
+                      {currentChild.routeId
+                        ? ` · ${getRouteById(currentChild.routeId)?.name ?? currentChild.routeId}`
+                        : ` · ${getStageRoute(gradeToStage(currentChild.grade)).name}`}
                     </p>
                   </div>
                 </div>
@@ -212,8 +411,12 @@ export default function DashboardPage() {
             {[
               {
                 title: '当前方案',
-                value: getStageRoute(gradeToStage(currentChild.grade)).name,
-                subtext: getStageRoute(gradeToStage(currentChild.grade)).schools,
+                value: currentChild.routeId
+                  ? getRouteById(currentChild.routeId)?.name ?? '未绑定'
+                  : getStageRoute(gradeToStage(currentChild.grade)).name,
+                subtext: currentChild.routeId
+                  ? (getRouteById(currentChild.routeId)?.type === 'primary' ? '主路线' : '备选路线')
+                  : getStageRoute(gradeToStage(currentChild.grade)).schools,
                 icon: Target,
                 color: 'text-primary',
                 bg: 'bg-primary/10',
@@ -236,8 +439,8 @@ export default function DashboardPage() {
               },
               {
                 title: '目标学校',
-                value: getStageRoute(gradeToStage(currentChild.grade)).schools.split(' ')[0],
-                subtext: '点击路线方案查看',
+                value: currentChild.targetSchool || '未设置',
+                subtext: currentChild.targetSchool ? '已设定升学目标' : '点击编辑孩子设置',
                 icon: School,
                 color: 'text-warning',
                 bg: 'bg-warning/10',
