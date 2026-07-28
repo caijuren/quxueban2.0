@@ -8,7 +8,10 @@ import {
   type SubjectId,
   type DayOfWeek,
   type TaskStatus,
+  type TaskCategory,
 } from './storage.types';
+import { computeTaskAlignment } from './taskAlignment';
+import { SYSTEM_TASK_TEMPLATES, TASK_CATEGORY_LABELS } from './taskTemplates';
 
 export const dayOrder: DayOfWeek[] = [
   '周一',
@@ -86,9 +89,15 @@ export function formatWeekLabel(weekId: string): string {
   return `${fmt(start)} - ${fmt(end)}`;
 }
 
-export function generateTaskId(subjectId: SubjectId, index: number): string {
+export function generateTaskId(subjectId: SubjectId | TaskCategory, index: number): string {
   return `${subjectId}-${index}-${Math.random().toString(36).slice(2, 7)}`;
 }
+
+const subjectRouteTags: Record<SubjectId, string[]> = {
+  chinese: ['sanchu_gongban', 'sanchu_minban', 'sanchu_guoji', 'zhongkao_putong', 'zhongkao_tese', 'gaokao_zongping', 'gaokao_qiangji'],
+  math: ['sanchu_gongban', 'sanchu_minban', 'sanchu_guoji', 'zhongkao_putong', 'zhongkao_tese', 'gaokao_zongping', 'gaokao_qiangji'],
+  english: ['sanchu_gongban', 'sanchu_minban', 'sanchu_guoji', 'zhongkao_putong', 'zhongkao_tese', 'gaokao_zongping', 'gaokao_qiangji'],
+};
 
 export function generateWeeklyPlan(
   child: Child,
@@ -104,15 +113,68 @@ export function generateWeeklyPlan(
 
   (Object.keys(subjectPlans) as SubjectId[]).forEach((subjectId) => {
     subjectPlans[subjectId].weeklyTemplate.forEach((template, index) => {
+      const alignment = computeTaskAlignment({
+        child: { grade: child.grade, routeId: child.routeId },
+        template: {
+          gradeMin: 1,
+          gradeMax: 12,
+          routeTags: subjectRouteTags[subjectId],
+        },
+      });
+
       tasks.push({
         id: generateTaskId(subjectId, index),
+        category: subjectId,
         subjectId,
+        source: 'auto',
         day: template.day as DayOfWeek,
         focus: template.focus,
         duration: template.duration,
         materials: template.materials,
         status: 'pending',
+        alignment,
       });
+    });
+  });
+
+  return {
+    weekId,
+    childId: child.id,
+    tasks,
+  };
+}
+
+export function generateWeeklyPlanFromLibrary(
+  child: Child,
+  weekId: string = getCurrentWeekId()
+): WeeklyPlan {
+  const candidates = SYSTEM_TASK_TEMPLATES.filter((tpl) => {
+    if (tpl.routeTags.length === 0) return true;
+    if (!child.routeId) return false;
+    return tpl.routeTags.includes(child.routeId);
+  }).filter((tpl) => child.grade >= tpl.gradeMin && child.grade <= tpl.gradeMax);
+
+  const tasks: WeeklyTaskItem[] = [];
+  const days: DayOfWeek[] = ['周一', '周二', '周三', '周四', '周五', '周六', '周日'];
+
+  candidates.forEach((tpl, index) => {
+    const alignment = computeTaskAlignment({
+      child: { grade: child.grade, routeId: child.routeId },
+      template: tpl,
+    });
+
+    tasks.push({
+      id: `library-${tpl.id}-${index}-${Math.random().toString(36).slice(2, 7)}`,
+      category: tpl.category,
+      subjectId: ['chinese', 'math', 'english'].includes(tpl.category) ? (tpl.category as SubjectId) : undefined,
+      source: 'library',
+      templateId: tpl.id,
+      alignment,
+      day: days[index % days.length],
+      focus: tpl.title,
+      duration: tpl.duration,
+      materials: tpl.materials,
+      status: 'pending',
     });
   });
 
@@ -137,7 +199,7 @@ export function getTasksByDay(plan: WeeklyPlan): Record<DayOfWeek, WeeklyTaskIte
     grouped[task.day].push(task);
   });
   dayOrder.forEach((day) => {
-    grouped[day].sort((a, b) => a.subjectId.localeCompare(b.subjectId));
+    grouped[day].sort((a, b) => a.category.localeCompare(b.category));
   });
   return grouped;
 }
@@ -157,12 +219,23 @@ export interface PlanStats {
   pending: number;
   completionRate: number;
   estimatedMinutes: number;
-  bySubject: Record<
-    SubjectId,
+  byCategory: Record<
+    TaskCategory,
     { total: number; done: number; skipped: number; pending: number }
   >;
   byDay: Record<DayOfWeek, { total: number; done: number }>;
 }
+
+const defaultCategories: TaskCategory[] = [
+  'chinese',
+  'math',
+  'english',
+  'school',
+  'reading',
+  'sport',
+  'interest',
+  'other',
+];
 
 export function getPlanStats(plan: WeeklyPlan): PlanStats {
   const total = plan.tasks.length;
@@ -175,11 +248,14 @@ export function getPlanStats(plan: WeeklyPlan): PlanStats {
     0
   );
 
-  const bySubject = {
-    chinese: { total: 0, done: 0, skipped: 0, pending: 0 },
-    math: { total: 0, done: 0, skipped: 0, pending: 0 },
-    english: { total: 0, done: 0, skipped: 0, pending: 0 },
-  };
+  const byCategory = {} as Record<
+    TaskCategory,
+    { total: number; done: number; skipped: number; pending: number }
+  >;
+  defaultCategories.forEach((cat) => {
+    byCategory[cat] = { total: 0, done: 0, skipped: 0, pending: 0 };
+  });
+
   const byDay: Record<DayOfWeek, { total: number; done: number }> = {
     周一: { total: 0, done: 0 },
     周二: { total: 0, done: 0 },
@@ -191,15 +267,16 @@ export function getPlanStats(plan: WeeklyPlan): PlanStats {
   };
 
   plan.tasks.forEach((task) => {
-    bySubject[task.subjectId].total += 1;
+    const category = task.category || 'other';
+    byCategory[category].total += 1;
     byDay[task.day].total += 1;
     if (task.status === 'done') {
-      bySubject[task.subjectId].done += 1;
+      byCategory[category].done += 1;
       byDay[task.day].done += 1;
     } else if (task.status === 'skipped') {
-      bySubject[task.subjectId].skipped += 1;
+      byCategory[category].skipped += 1;
     } else {
-      bySubject[task.subjectId].pending += 1;
+      byCategory[category].pending += 1;
     }
   });
 
@@ -210,7 +287,7 @@ export function getPlanStats(plan: WeeklyPlan): PlanStats {
     pending,
     completionRate,
     estimatedMinutes,
-    bySubject,
+    byCategory,
     byDay,
   };
 }
@@ -225,13 +302,14 @@ export function generateAiReview(plan: WeeklyPlan, childName: string): string {
     `${childName}本周共 ${stats.total} 项任务，已完成 ${stats.done} 项，整体完成率 ${stats.completionRate}%。`,
   ];
 
-  (Object.keys(stats.bySubject) as SubjectId[]).forEach((subjectId) => {
-    const s = stats.bySubject[subjectId];
+  const activeCategories = defaultCategories.filter((cat) => stats.byCategory[cat].total > 0);
+  activeCategories.forEach((category) => {
+    const s = stats.byCategory[category];
     const missed = s.total - s.done - s.skipped;
     if (missed > 0) {
-      lines.push(`${subjectMeta[subjectId].name}缺 ${missed} 项，建议优先补上。`);
+      lines.push(`${TASK_CATEGORY_LABELS[category]}缺 ${missed} 项，建议优先补上。`);
     } else {
-      lines.push(`${subjectMeta[subjectId].name}全部完成，保持得不错。`);
+      lines.push(`${TASK_CATEGORY_LABELS[category]}全部完成，保持得不错。`);
     }
   });
 

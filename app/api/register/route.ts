@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import bcrypt from 'bcryptjs';
 import { prisma } from '@/lib/prisma';
+import { seedSystemTaskTemplatesForUser } from '@/lib/seedTaskTemplates';
 
 export async function POST(req: NextRequest) {
   try {
@@ -41,7 +42,7 @@ export async function POST(req: NextRequest) {
 
     const passwordHash = await bcrypt.hash(password, 10);
 
-    await prisma.user.create({
+    const user = await prisma.user.create({
       data: {
         username,
         passwordHash,
@@ -49,6 +50,8 @@ export async function POST(req: NextRequest) {
         role: 'PARENT',
       },
     });
+
+    await seedSystemTaskTemplatesForUser(prisma, user.id);
 
     return NextResponse.json(
       { message: '注册成功' },

@@ -7,16 +7,16 @@ import SettingsSection from './SettingsSection';
 
 const FAQS = [
   {
-    q: '如何添加多个学员？',
-    a: '在「学员管理」中点击「添加学员」，填写姓名、年级等基本信息即可。你可以随时切换默认学员。',
+    q: '如何添加多个孩子？',
+    a: '在「孩子管理」中点击「添加孩子」，填写姓名、年级等基本信息即可。你可以随时切换默认孩子。',
   },
   {
     q: '周计划是如何生成的？',
-    a: '系统会根据学员当前年级和已绑定的升学路线，自动生成每周学习任务，你也可以在周任务页面手动调整。',
+    a: '系统会根据孩子当前年级和已绑定的升学路线，自动生成每周学习任务，你也可以在周任务页面手动调整。',
   },
   {
     q: 'AI 检视报告什么时候更新？',
-    a: '发布本周计划后，AI 会根据任务完成情况和学员阶段生成诊断报告，可在「AI 检视」页面查看。',
+    a: '发布本周计划后，AI 会根据任务完成情况和孩子的阶段生成诊断报告，可在「AI 检视」页面查看。',
   },
   {
     q: '支持微信登录吗？',
@@ -44,7 +44,7 @@ export default function HelpSection() {
   };
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-4">
       <SettingsSection title="常见问题" description="快速了解趣学伴的使用方法">
         <div className="space-y-2">
           {FAQS.map((item, index) => {

@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
+import { normalizeWeeklyTask, alignTaskFromTemplate } from '@/lib/taskAlignment';
+import { WeeklyTaskItem } from '@/lib/storage.types';
 
 export async function GET(req: Request) {
   const session = await getServerSession(authOptions);
@@ -20,7 +22,16 @@ export async function GET(req: Request) {
     orderBy: { weekId: 'desc' },
   });
 
-  return NextResponse.json(plans);
+  const normalizedPlans = plans.map((plan) => {
+    const rawTasks = (plan.tasks as unknown as Partial<WeeklyTaskItem>[]) || [];
+    const normalizedTasks = rawTasks.map((task) => normalizeWeeklyTask(task as any));
+    return {
+      ...plan,
+      tasks: normalizedTasks,
+    };
+  });
+
+  return NextResponse.json(normalizedPlans);
 }
 
 export async function POST(req: Request) {
@@ -43,6 +54,14 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: 'Child not found' }, { status: 404 });
   }
 
+  const normalizedTasks = (tasks as Partial<WeeklyTaskItem>[]).map((task) => {
+    const normalized = normalizeWeeklyTask(task as any);
+    return alignTaskFromTemplate(normalized, {
+      grade: child.grade,
+      routeId: child.routeId,
+    });
+  });
+
   const plan = await prisma.weeklyPlan.upsert({
     where: {
       childId_weekId: {
@@ -51,7 +70,7 @@ export async function POST(req: Request) {
       },
     },
     update: {
-      tasks,
+      tasks: normalizedTasks as any,
       publishedAt: publishedAt ? new Date(publishedAt) : null,
       reviewedAt: reviewedAt ? new Date(reviewedAt) : null,
       parentComment,
@@ -60,7 +79,7 @@ export async function POST(req: Request) {
       userId: session.user.id,
       childId,
       weekId,
-      tasks,
+      tasks: normalizedTasks as any,
       publishedAt: publishedAt ? new Date(publishedAt) : null,
       reviewedAt: reviewedAt ? new Date(reviewedAt) : null,
       parentComment,

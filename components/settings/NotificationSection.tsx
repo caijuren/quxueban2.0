@@ -54,31 +54,35 @@ export default function NotificationSection({
   };
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-4">
       <SettingsSection title="通知类型" description="选择你关心的提醒">
-        <div className="space-y-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
           {NOTIFICATION_OPTIONS.map((option) => (
             <button
               key={option.key}
               onClick={() => togglePref(option.key)}
-              className="w-full flex items-start gap-3 p-3 rounded-xl bg-white/[0.03] border border-white/[0.06] hover:bg-white/[0.05] transition-colors text-left"
+              className={`flex items-start gap-2.5 p-2.5 rounded-lg border text-left transition-colors ${
+                localPrefs[option.key]
+                  ? 'bg-primary/10 border-primary/30'
+                  : 'bg-white/[0.03] border-white/[0.06] hover:bg-white/[0.05]'
+              }`}
             >
               <div
-                className={`w-5 h-5 rounded-md border flex items-center justify-center shrink-0 mt-0.5 transition-colors ${
+                className={`w-4 h-4 rounded border flex items-center justify-center shrink-0 mt-0.5 transition-colors ${
                   localPrefs[option.key]
                     ? 'bg-primary border-primary'
                     : 'border-white/20'
                 }`}
               >
                 {localPrefs[option.key] && (
-                  <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                  <svg className="w-2.5 h-2.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                   </svg>
                 )}
               </div>
-              <div>
-                <p className="text-sm font-medium text-slate-200">{option.label}</p>
-                <p className="text-xs text-slate-500">{option.description}</p>
+              <div className="min-w-0">
+                <p className="text-xs font-medium text-slate-200">{option.label}</p>
+                <p className="text-[11px] text-slate-500 leading-tight">{option.description}</p>
               </div>
             </button>
           ))}
@@ -86,7 +90,7 @@ export default function NotificationSection({
       </SettingsSection>
 
       <SettingsSection title="提醒偏好" description="设置提醒时间和免打扰">
-        <div className="space-y-5">
+        <div className="space-y-4">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
               <Clock className="w-5 h-5 text-primary" />

@@ -51,7 +51,7 @@ export default function DataPrivacySection() {
   };
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-4">
       <SettingsSection title="数据导出" description="下载你的所有学习数据备份">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 rounded-xl bg-white/[0.03] border border-white/[0.06]">
           <div className="flex items-center gap-3">
@@ -60,7 +60,7 @@ export default function DataPrivacySection() {
             </div>
             <div>
               <p className="text-sm font-medium text-slate-200">导出全部数据</p>
-              <p className="text-xs text-slate-500">包含学员、计划、周任务和通知记录</p>
+              <p className="text-xs text-slate-500">包含孩子、计划、周任务和通知记录</p>
             </div>
           </div>
           <button
@@ -82,7 +82,7 @@ export default function DataPrivacySection() {
             </div>
             <div>
               <p className="text-sm font-medium text-slate-200">注销账号</p>
-              <p className="text-xs text-slate-500">删除后所有学员、计划、任务数据将无法恢复</p>
+              <p className="text-xs text-slate-500">删除后所有孩子、计划、任务数据将无法恢复</p>
             </div>
           </div>
           <button

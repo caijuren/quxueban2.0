@@ -154,8 +154,8 @@ function PlanPageContent() {
       {!currentChild && (
         <EmptyState
           icon={School}
-          title="还没有学员档案"
-          description="请先在右上角添加学员，系统会根据年级自动匹配对应阶段的路线方案"
+          title="还没有孩子档案"
+          description="请先在右上角添加孩子，系统会根据年级自动匹配对应阶段的路线方案"
         />
       )}
 

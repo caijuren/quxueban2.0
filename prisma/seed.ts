@@ -5,6 +5,7 @@ import {
   generateWeeklyPlan,
   getCurrentWeekId,
 } from '../lib/weeklyTasks';
+import { seedSystemTaskTemplatesForUser } from '../lib/seedTaskTemplates';
 
 const prisma = new PrismaClient();
 
@@ -32,6 +33,12 @@ async function main() {
     console.log(`Admin user already exists: ${adminUsername}`);
   }
 
+  // 1b. Seed system task templates for admin
+  const adminTemplatesCount = await seedSystemTaskTemplatesForUser(prisma, admin.id);
+  if (adminTemplatesCount > 0) {
+    console.log(`Seeded ${adminTemplatesCount} system task templates for admin`);
+  }
+
   // 2. Demo parent user
   const demoParentUsername = process.env.DEMO_PARENT_USERNAME || 'parent';
   const demoParentPassword = process.env.DEMO_PARENT_PASSWORD || 'parent123';
@@ -55,6 +62,12 @@ async function main() {
     console.log(`Demo parent user already exists: ${demoParentUsername}`);
   }
 
+  // 2b. Seed system task templates for demo parent
+  const parentTemplatesCount = await seedSystemTaskTemplatesForUser(prisma, parent.id);
+  if (parentTemplatesCount > 0) {
+    console.log(`Seeded ${parentTemplatesCount} system task templates for demo parent`);
+  }
+
   // 3. Demo children
   const existingChildren = await prisma.child.findMany({
     where: { userId: parent.id },
@@ -71,9 +84,16 @@ async function main() {
         grade: 6,
         avatarColor: '#f43f5e',
         targetSchool: '交大附中嘉定分校',
+        routeId: 'zhongkao_putong',
       },
     });
     console.log(`Created child: 大宝 (grade 6)`);
+  } else if (!dabao.routeId) {
+    dabao = await prisma.child.update({
+      where: { id: dabao.id },
+      data: { routeId: 'zhongkao_putong' },
+    });
+    console.log(`Updated child route: 大宝 -> zhongkao_putong`);
   }
 
   if (!xiaobao) {
@@ -84,9 +104,16 @@ async function main() {
         grade: 1,
         avatarColor: '#06b6d4',
         targetSchool: null,
+        routeId: 'sanchu_gongban',
       },
     });
     console.log(`Created child: 小宝 (grade 1)`);
+  } else if (!xiaobao.routeId) {
+    xiaobao = await prisma.child.update({
+      where: { id: xiaobao.id },
+      data: { routeId: 'sanchu_gongban' },
+    });
+    console.log(`Updated child route: 小宝 -> sanchu_gongban`);
   }
 
   // 4. Demo weekly plan for current week (published)

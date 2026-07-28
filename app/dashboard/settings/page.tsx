@@ -11,6 +11,7 @@ import {
   HelpCircle,
   ChevronDown,
   Loader2,
+  Library,
 } from 'lucide-react';
 import { UserWithSettings, applySettingsToDocument } from '@/lib/settings';
 import AccountSection from '@/components/settings/AccountSection';
@@ -19,12 +20,14 @@ import AppearanceSection from '@/components/settings/AppearanceSection';
 import ChildrenSection from '@/components/settings/ChildrenSection';
 import DataPrivacySection from '@/components/settings/DataPrivacySection';
 import HelpSection from '@/components/settings/HelpSection';
+import TaskLibrarySection from '@/components/settings/TaskLibrarySection';
 
 const CATEGORIES = [
   { id: 'account', label: '账号与安全', icon: Shield },
   { id: 'notifications', label: '消息通知', icon: Bell },
   { id: 'appearance', label: '界面偏好', icon: Palette },
-  { id: 'children', label: '学员管理', icon: Users },
+  { id: 'children', label: '孩子管理', icon: Users },
+  { id: 'library', label: '任务库', icon: Library },
   { id: 'data', label: '数据与隐私', icon: User },
   { id: 'help', label: '帮助与关于', icon: HelpCircle },
 ];
@@ -178,7 +181,7 @@ export default function SettingsPage() {
         </div>
       </motion.div>
 
-      <div key={activeCategory}>
+      <div key={activeCategory} className="space-y-4">
         {activeCategory === 'account' && (
           <AccountSection user={user} onUpdate={handleUpdate} />
         )}
@@ -189,6 +192,7 @@ export default function SettingsPage() {
           <AppearanceSection settings={user.settings} onUpdate={handleSettingsUpdate} />
         )}
         {activeCategory === 'children' && <ChildrenSection />}
+        {activeCategory === 'library' && <TaskLibrarySection />}
         {activeCategory === 'data' && <DataPrivacySection />}
         {activeCategory === 'help' && <HelpSection />}
       </div>

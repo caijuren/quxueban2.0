@@ -13,6 +13,15 @@ import {
   ArrowRight,
   LayoutGrid,
   User,
+  CheckCircle2,
+  Circle,
+  BookOpen,
+  Calculator,
+  Languages,
+  Backpack,
+  Dumbbell,
+  Palette,
+  GraduationCap,
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useChildren } from '@/components/dashboard/ChildrenContext';
@@ -23,12 +32,27 @@ import {
   getPlanStats,
   generateAiReview,
   getTodayName,
+  toggleTaskStatus,
 } from '@/lib/weeklyTasks';
+import { TASK_CATEGORY_LABELS } from '@/lib/taskTemplates';
+import { getCategoryColorClass } from '@/lib/taskAlignment';
+import { TaskCategory } from '@/lib/storage.types';
 import EmptyState from '@/components/ui/EmptyState';
 import CommandCard from '@/components/ui/CommandCard';
 import MetricRing from '@/components/ui/MetricRing';
 import DataBadge from '@/components/ui/DataBadge';
-import TimelineNode from '@/components/ui/TimelineNode';
+import ProgressPanel from '@/components/dashboard/ProgressPanel';
+
+const categoryIcons: Record<TaskCategory, typeof BookOpen> = {
+  chinese: BookOpen,
+  math: Calculator,
+  english: Languages,
+  school: Backpack,
+  reading: BookOpen,
+  sport: Dumbbell,
+  interest: Palette,
+  other: GraduationCap,
+};
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -208,7 +232,13 @@ function getStageRoute(stage: string) {
 export default function DashboardPage() {
   const router = useRouter();
   const shouldReduceMotion = useReducedMotion();
-  const { children, currentChild, setCurrentChildId, getWeeklyPlan } = useChildren();
+  const {
+    children,
+    currentChild,
+    setCurrentChildId,
+    getWeeklyPlan,
+    updateTaskStatus,
+  } = useChildren();
   const [viewMode, setViewMode] = useState<ViewMode>('detail');
 
   const currentWeekPlan = currentChild
@@ -253,8 +283,8 @@ export default function DashboardPage() {
           <h1 className="text-2xl sm:text-3xl font-bold font-display mb-1">作战指挥中心</h1>
           <p className="text-sm text-slate-500">
             {hasChildren
-              ? `监控 ${children.length} 名学员 · 当前：${currentChild?.name || '未选择'}`
-              : '请先添加学员档案'}
+              ? `监控 ${children.length} 名孩子 · 当前：${currentChild?.name || '未选择'}`
+              : '请先添加孩子档案'}
           </p>
         </div>
 
@@ -290,8 +320,8 @@ export default function DashboardPage() {
       {children.length === 0 ? (
         <EmptyState
           icon={Users}
-          title="还没有学员档案"
-          description="添加学员后，这里会显示每个学员的升学阶段概览，方便快速切换"
+          title="还没有孩子档案"
+          description="添加孩子后，这里会显示每个孩子的升学阶段概览，方便快速切换"
         />
       ) : (
         <motion.div
@@ -317,7 +347,7 @@ export default function DashboardPage() {
             className="rounded-xl border border-dashed border-white/[0.08] bg-white/[0.02] p-4 flex items-center justify-center gap-2 text-slate-500 hover:text-slate-300 hover:bg-white/[0.04] hover:border-white/[0.12] transition-all text-sm"
           >
             <Plus className="w-4 h-4" />
-            <span className="font-medium">添加学员</span>
+            <span className="font-medium">添加孩子</span>
           </motion.button>
         </motion.div>
       )}
@@ -461,6 +491,9 @@ export default function DashboardPage() {
             ))}
           </motion.div>
 
+          {/* Progress tracking */}
+          <ProgressPanel child={currentChild} />
+
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
             {/* Today's tasks timeline */}
             <motion.div
@@ -488,16 +521,73 @@ export default function DashboardPage() {
                     今日暂无任务，去周任务页面生成计划
                   </div>
                 ) : (
-                  <div className="space-y-1">
-                    {recentTasks.map((task, index) => (
-                      <TimelineNode
-                        key={task.id}
-                        title={task.focus}
-                        subtitle={`${task.duration} · ${task.materials.join('、') || '无指定材料'}`}
-                        status={task.status === 'done' ? 'completed' : 'current'}
-                        isLast={index === recentTasks.length - 1}
-                      />
-                    ))}
+                  <div className="space-y-2">
+                    {recentTasks.map((task) => {
+                      const category = task.category || 'other';
+                      const CategoryIcon = categoryIcons[category];
+                      const isDone = task.status === 'done';
+                      return (
+                        <div
+                          key={task.id}
+                          className={`flex items-start gap-3 p-3 rounded-xl border transition-all ${
+                            isDone
+                              ? 'bg-success/5 border-success/10'
+                              : 'bg-white/[0.03] border-white/[0.06] hover:bg-white/[0.05]'
+                          }`}
+                        >
+                          <button
+                            onClick={() =>
+                              currentChild &&
+                              currentWeekPlan?.id &&
+                              updateTaskStatus(
+                                currentChild.id,
+                                getCurrentWeekId(),
+                                task.id,
+                                toggleTaskStatus(task.status)
+                              )
+                            }
+                            className="mt-0.5 text-slate-400 hover:text-primary transition-colors focus-ring rounded-full shrink-0"
+                            aria-label={isDone ? '标记为未完成' : '标记为完成'}
+                          >
+                            {isDone ? (
+                              <CheckCircle2 className="w-5 h-5 text-success" />
+                            ) : (
+                              <Circle className="w-5 h-5" />
+                            )}
+                          </button>
+                          <button
+                            onClick={() => router.push('/dashboard/weekly')}
+                            className="flex-1 text-left min-w-0"
+                          >
+                            <div className="flex items-center gap-2 mb-1">
+                              <div
+                                className={`w-6 h-6 rounded-md flex items-center justify-center ${getCategoryColorClass(
+                                  category
+                                )}`}
+                              >
+                                <CategoryIcon className="w-3 h-3" />
+                              </div>
+                              <span className="text-[11px] font-medium text-slate-400">
+                                {TASK_CATEGORY_LABELS[category]}
+                              </span>
+                              <span className="text-[10px] px-1.5 py-0.5 rounded bg-white/[0.05] text-slate-300 ml-auto">
+                                {task.duration}
+                              </span>
+                            </div>
+                            <p
+                              className={`text-sm font-semibold ${
+                                isDone ? 'text-slate-500 line-through' : 'text-slate-200'
+                              }`}
+                            >
+                              {task.focus}
+                            </p>
+                            <p className="text-[11px] text-slate-500 mt-0.5">
+                              {task.materials.join('、') || '无指定材料'}
+                            </p>
+                          </button>
+                        </div>
+                      );
+                    })}
                   </div>
                 )}
               </CommandCard>

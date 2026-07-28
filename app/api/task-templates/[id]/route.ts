@@ -2,8 +2,6 @@ import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
-import { normalizeWeeklyTask, alignTaskFromTemplate } from '@/lib/taskAlignment';
-import { WeeklyTaskItem } from '@/lib/storage.types';
 
 type Params = { params: { id: string } };
 
@@ -18,9 +16,8 @@ export async function PATCH(req: Request, { params }: Params) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
-  const existing = await prisma.weeklyPlan.findFirst({
+  const existing = await prisma.taskTemplate.findFirst({
     where: { id: params.id, userId },
-    include: { child: true },
   });
   if (!existing) {
     return NextResponse.json({ error: 'Not found' }, { status: 404 });
@@ -29,25 +26,21 @@ export async function PATCH(req: Request, { params }: Params) {
   const body = await req.json();
   const data: Record<string, unknown> = {};
 
-  if (body.tasks !== undefined) {
-    const normalizedTasks = (body.tasks as Partial<WeeklyTaskItem>[]).map((task) => {
-      const normalized = normalizeWeeklyTask(task as any);
-      return alignTaskFromTemplate(normalized, {
-        grade: existing.child.grade,
-        routeId: existing.child.routeId,
-      });
-    });
-    data.tasks = normalizedTasks;
-  }
-  if (body.publishedAt !== undefined) {
-    data.publishedAt = body.publishedAt ? new Date(body.publishedAt) : null;
-  }
-  if (body.reviewedAt !== undefined) {
-    data.reviewedAt = body.reviewedAt ? new Date(body.reviewedAt) : null;
-  }
-  if (body.parentComment !== undefined) data.parentComment = body.parentComment;
+  const stringFields = ['title', 'duration', 'description', 'milestoneTag'] as const;
+  stringFields.forEach((field) => {
+    if (body[field] !== undefined) data[field] = body[field];
+  });
 
-  const updated = await prisma.weeklyPlan.update({
+  if (body.category !== undefined) {
+    data.category = (body.category as string).toUpperCase();
+  }
+  if (body.gradeMin !== undefined) data.gradeMin = body.gradeMin;
+  if (body.gradeMax !== undefined) data.gradeMax = body.gradeMax;
+  if (body.materials !== undefined) data.materials = body.materials;
+  if (body.routeTags !== undefined) data.routeTags = body.routeTags;
+  if (body.isActive !== undefined) data.isActive = body.isActive;
+
+  const updated = await prisma.taskTemplate.update({
     where: { id: params.id },
     data,
   });
@@ -61,13 +54,13 @@ export async function DELETE(_req: Request, { params }: Params) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
-  const existing = await prisma.weeklyPlan.findFirst({
+  const existing = await prisma.taskTemplate.findFirst({
     where: { id: params.id, userId },
   });
   if (!existing) {
     return NextResponse.json({ error: 'Not found' }, { status: 404 });
   }
 
-  await prisma.weeklyPlan.delete({ where: { id: params.id } });
+  await prisma.taskTemplate.delete({ where: { id: params.id } });
   return NextResponse.json({ success: true });
 }

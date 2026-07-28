@@ -24,6 +24,11 @@ import {
   Plus,
   Trash2,
   Pencil,
+  Library,
+  GraduationCap,
+  Backpack,
+  Dumbbell,
+  Palette,
 } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useChildren } from '@/components/dashboard/ChildrenContext';
@@ -37,6 +42,9 @@ import {
   type TaskStatus,
   type SubjectId,
   type DayOfWeek,
+  type TaskCategory,
+  type TaskTemplate,
+  type TaskAlignment,
 } from '@/lib/storage.types';
 import {
   getCurrentWeekId,
@@ -52,11 +60,27 @@ import {
   subjectMeta,
   parseDurationMinutes,
 } from '@/lib/weeklyTasks';
+import {
+  TASK_CATEGORY_LABELS,
+  TASK_CATEGORY_ICONS,
+  TASK_CATEGORY_COLORS,
+  TASK_ALIGNMENT_LABELS,
+} from '@/lib/taskTemplates';
+import {
+  getCategoryColorClass,
+  getAlignmentColorClass,
+  computeTaskAlignment,
+} from '@/lib/taskAlignment';
 
-const subjectIcons: Record<SubjectId, typeof BookOpen> = {
+const categoryIcons: Record<TaskCategory, typeof BookOpen> = {
   chinese: BookOpen,
   math: Calculator,
   english: Languages,
+  school: Backpack,
+  reading: BookOpen,
+  sport: Dumbbell,
+  interest: Palette,
+  other: GraduationCap,
 };
 
 type ViewMode = 'day' | 'matrix';
@@ -117,12 +141,23 @@ interface EditPlanModalProps {
   onSave: (tasks: WeeklyTaskItem[]) => void;
 }
 
+const allCategories: TaskCategory[] = [
+  'chinese',
+  'math',
+  'english',
+  'school',
+  'reading',
+  'sport',
+  'interest',
+  'other',
+];
+
 function EditPlanModal({ plan, onClose, onSave }: EditPlanModalProps) {
   const [tasks, setTasks] = useState<WeeklyTaskItem[]>(() =>
     [...plan.tasks].sort((a, b) => {
       const dayDiff = dayOrder.indexOf(a.day) - dayOrder.indexOf(b.day);
       if (dayDiff !== 0) return dayDiff;
-      return a.subjectId.localeCompare(b.subjectId);
+      return a.category.localeCompare(b.category);
     })
   );
 
@@ -144,7 +179,8 @@ function EditPlanModal({ plan, onClose, onSave }: EditPlanModalProps) {
       ...prev,
       {
         id: `custom-${Date.now()}-${Math.random().toString(36).slice(2, 5)}`,
-        subjectId: 'chinese',
+        category: 'school',
+        source: 'manual',
         day: '周一',
         focus: '',
         duration: '30分钟',
@@ -203,7 +239,7 @@ function EditPlanModal({ plan, onClose, onSave }: EditPlanModalProps) {
 
         <div className="space-y-3 mb-6">
           {tasks.map((task, index) => {
-            const SubjectIcon = subjectIcons[task.subjectId];
+            const CategoryIcon = categoryIcons[task.category];
             return (
               <div
                 key={task.id}
@@ -211,20 +247,20 @@ function EditPlanModal({ plan, onClose, onSave }: EditPlanModalProps) {
               >
                 <div className="col-span-12 sm:col-span-2">
                   <label className="block text-[10px] text-slate-500 mb-1">
-                    学科
+                    分类
                   </label>
                   <select
-                    value={task.subjectId}
+                    value={task.category}
                     onChange={(e) =>
                       updateTask(task.id, {
-                        subjectId: e.target.value as SubjectId,
+                        category: e.target.value as TaskCategory,
                       })
                     }
                     className="w-full text-xs bg-white/5 border border-white/10 rounded-lg px-2 py-1.5 text-slate-200 focus:outline-none focus:border-accent/50"
                   >
-                    {(['chinese', 'math', 'english'] as SubjectId[]).map((s) => (
-                      <option key={s} value={s}>
-                        {subjectMeta[s].name}
+                    {allCategories.map((c) => (
+                      <option key={c} value={c}>
+                        {TASK_CATEGORY_LABELS[c]}
                       </option>
                     ))}
                   </select>
@@ -341,6 +377,264 @@ function EditPlanModal({ plan, onClose, onSave }: EditPlanModalProps) {
   );
 }
 
+interface TaskLibraryModalProps {
+  childId: string;
+  childGrade: number;
+  childRouteId?: string | null;
+  weekId: string;
+  existingTasks: WeeklyTaskItem[];
+  onClose: () => void;
+  onAdd: (tasks: WeeklyTaskItem[]) => void;
+}
+
+function TaskLibraryModal({
+  childId,
+  childGrade,
+  childRouteId,
+  weekId,
+  existingTasks,
+  onClose,
+  onAdd,
+}: TaskLibraryModalProps) {
+  const [templates, setTemplates] = useState<TaskTemplate[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [selectedCategory, setSelectedCategory] = useState<TaskCategory | 'all'>('all');
+  const [selectedTemplateIds, setSelectedTemplateIds] = useState<Set<string>>(new Set());
+  const [selectedDay, setSelectedDay] = useState<DayOfWeek>('周一');
+  const shouldReduceMotion = useReducedMotion();
+
+  useEffect(() => {
+    fetch('/api/task-templates')
+      .then((res) => res.json())
+      .then((data) => {
+        setTemplates(data);
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
+  }, []);
+
+  const filteredTemplates = useMemo(
+    () => {
+      let list = templates;
+      if (selectedCategory !== 'all') {
+        list = list.filter((t) => t.category === selectedCategory);
+      }
+      return list.map((tpl) => ({
+        ...tpl,
+        alignment: computeTaskAlignment({
+          child: { grade: childGrade, routeId: childRouteId },
+          template: tpl,
+        }),
+      })) as (TaskTemplate & { alignment: TaskAlignment })[];
+    },
+    [templates, selectedCategory, childGrade, childRouteId]
+  );
+
+  const toggleTemplate = (id: string) => {
+    setSelectedTemplateIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  };
+
+  const handleAdd = () => {
+    const selected = templates.filter((t) => selectedTemplateIds.has(t.id));
+    const newTasks: WeeklyTaskItem[] = selected.map((tpl) => {
+      const category = tpl.category as TaskCategory;
+      const alignment = computeTaskAlignment({
+        child: { grade: childGrade, routeId: childRouteId },
+        template: tpl,
+      });
+      return {
+        id: `library-${tpl.id}-${Date.now()}-${Math.random().toString(36).slice(2, 5)}`,
+        category,
+        subjectId: ['chinese', 'math', 'english'].includes(category)
+          ? (category as SubjectId)
+          : undefined,
+        source: 'library',
+        templateId: tpl.id,
+        day: selectedDay,
+        focus: tpl.title,
+        duration: tpl.duration,
+        materials: tpl.materials,
+        status: 'pending',
+        alignment,
+      };
+    });
+    onAdd(newTasks);
+    onClose();
+  };
+
+  return (
+    <motion.div
+      initial={shouldReduceMotion ? { opacity: 1 } : { opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="fixed inset-0 z-[110] flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm"
+      onClick={onClose}
+    >
+      <motion.div
+        initial={shouldReduceMotion ? false : { scale: 0.95, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        exit={shouldReduceMotion ? { opacity: 0 } : { scale: 0.95, opacity: 0 }}
+        onClick={(e) => e.stopPropagation()}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="library-title"
+        className="w-full max-w-4xl max-h-[85vh] overflow-y-auto rounded-3xl glass border border-white/10 p-6 sm:p-8"
+      >
+        <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-secondary to-secondary-glow flex items-center justify-center">
+              <Library className="w-5 h-5 text-white" />
+            </div>
+            <div>
+              <h2 id="library-title" className="text-xl font-bold font-display">从任务库选择</h2>
+              <p className="text-xs text-slate-400">
+                勾选常用任务，一键添加到{selectedDay}
+              </p>
+            </div>
+          </div>
+          <button
+            onClick={onClose}
+            className="p-2 rounded-lg hover:bg-white/5 text-slate-400 focus-ring"
+            aria-label="关闭"
+          >
+            <X className="w-5 h-5" />
+          </button>
+        </div>
+
+        <div className="flex flex-col sm:flex-row gap-3 mb-4">
+          <div className="flex flex-wrap gap-2">
+            <button
+              onClick={() => setSelectedCategory('all')}
+              className={`px-3 py-1.5 rounded-lg text-xs transition-colors ${
+                selectedCategory === 'all'
+                  ? 'bg-white/10 text-white'
+                  : 'bg-white/5 text-slate-400 hover:text-slate-200'
+              }`}
+            >
+              全部
+            </button>
+            {allCategories.map((cat) => (
+              <button
+                key={cat}
+                onClick={() => setSelectedCategory(cat)}
+                className={`px-3 py-1.5 rounded-lg text-xs transition-colors ${
+                  selectedCategory === cat
+                    ? 'bg-white/10 text-white'
+                    : 'bg-white/5 text-slate-400 hover:text-slate-200'
+                }`}
+              >
+                {TASK_CATEGORY_LABELS[cat]}
+              </button>
+            ))}
+          </div>
+          <div className="flex items-center gap-2 ml-auto">
+            <span className="text-xs text-slate-500">添加到</span>
+            <select
+              value={selectedDay}
+              onChange={(e) => setSelectedDay(e.target.value as DayOfWeek)}
+              className="text-xs bg-white/5 border border-white/10 rounded-lg px-2 py-1.5 text-slate-200"
+            >
+              {dayOrder.map((d) => (
+                <option key={d} value={d}>
+                  {d}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+
+        {loading ? (
+          <div className="py-12 text-center text-slate-500 text-sm">加载中...</div>
+        ) : filteredTemplates.length === 0 ? (
+          <div className="py-12 text-center text-slate-500 text-sm">暂无任务模板</div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6 max-h-[50vh] overflow-y-auto pr-1">
+            {filteredTemplates.map((tpl) => {
+              const selected = selectedTemplateIds.has(tpl.id);
+              const CategoryIcon = categoryIcons[tpl.category];
+              const alignment = tpl.alignment;
+              return (
+                <button
+                  key={tpl.id}
+                  onClick={() => toggleTemplate(tpl.id)}
+                  className={`text-left rounded-xl border p-3 transition-all ${
+                    selected
+                      ? 'bg-secondary/10 border-secondary/30'
+                      : 'bg-white/5 border-white/5 hover:bg-white/[0.07]'
+                  }`}
+                >
+                  <div className="flex items-start gap-3">
+                    <div className={`mt-0.5 w-5 h-5 rounded border flex items-center justify-center ${selected ? 'bg-secondary border-secondary' : 'border-white/20'}`}>
+                      {selected && <CheckCircle2 className="w-3.5 h-3.5 text-white" />}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 mb-1">
+                        <CategoryIcon className="w-3.5 h-3.5 text-slate-400" />
+                        <span className="text-[10px] text-slate-400">{TASK_CATEGORY_LABELS[tpl.category]}</span>
+                        {alignment && alignment !== 'unrelated' && (
+                          <span className={`text-[10px] px-1.5 py-0.5 rounded border ${getAlignmentColorClass(alignment)}`}>
+                            {TASK_ALIGNMENT_LABELS[alignment]}
+                          </span>
+                        )}
+                        {alignment === 'unrelated' && (
+                          <span className="text-[10px] px-1.5 py-0.5 rounded bg-zinc-500/20 text-zinc-400 border border-zinc-500/30">
+                            不相关
+                          </span>
+                        )}
+                        <span className="text-[10px] px-1.5 py-0.5 rounded bg-white/5 text-slate-300 ml-auto">{tpl.duration}</span>
+                      </div>
+                      <p className="text-sm font-semibold text-slate-200 mb-1 truncate">{tpl.title}</p>
+                      {tpl.description && (
+                        <p className="text-[10px] text-slate-500 line-clamp-2 mb-1">{tpl.description}</p>
+                      )}
+                      {tpl.routeTags.length > 0 && (
+                        <div className="flex flex-wrap gap-1">
+                          {tpl.routeTags.map((tag) => (
+                            <span key={tag} className="text-[9px] px-1 py-0.5 rounded bg-white/5 text-slate-500">
+                              {tag}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+        )}
+
+        <div className="flex items-center justify-between">
+          <p className="text-xs text-slate-500">
+            已选 {selectedTemplateIds.size} 项
+          </p>
+          <div className="flex items-center gap-3">
+            <button
+              onClick={onClose}
+              className="px-4 py-2 rounded-xl text-slate-400 hover:text-slate-200 transition-colors"
+            >
+              取消
+            </button>
+            <button
+              onClick={handleAdd}
+              disabled={selectedTemplateIds.size === 0}
+              className="flex items-center gap-2 px-6 py-2 rounded-xl bg-gradient-to-r from-secondary to-secondary-glow text-white font-semibold disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-[0_0_30px_rgba(139,92,246,0.4)] transition-all"
+            >
+              <Plus className="w-4 h-4" />
+              添加选中任务
+            </button>
+          </div>
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+}
+
 function WeeklyTasksContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -364,6 +658,7 @@ function WeeklyTasksContent() {
   const [reviewOpen, setReviewOpen] = useState(false);
   const [reviewComment, setReviewComment] = useState('');
   const [editOpen, setEditOpen] = useState(false);
+  const [libraryOpen, setLibraryOpen] = useState(false);
 
   const today = getTodayName();
 
@@ -463,6 +758,16 @@ function WeeklyTasksContent() {
       setDraftPlan({ ...displayPlan, tasks });
     } else {
       await publishWeeklyPlan({ ...displayPlan, tasks });
+    }
+  };
+
+  const handleAddFromLibrary = (newTasks: WeeklyTaskItem[]) => {
+    if (!displayPlan || !currentChild) return;
+    const updatedTasks = [...displayPlan.tasks, ...newTasks];
+    if (isDraft) {
+      setDraftPlan({ ...displayPlan, tasks: updatedTasks });
+    } else {
+      publishWeeklyPlan({ ...displayPlan, tasks: updatedTasks });
     }
   };
 
@@ -568,13 +873,22 @@ function WeeklyTasksContent() {
             </button>
           )}
           {displayPlan && (
-            <button
-              onClick={() => setEditOpen(true)}
-              className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-white/5 hover:bg-white/10 text-slate-300 text-sm transition-colors focus-ring"
-            >
-              <Pencil className="w-3.5 h-3.5" />
-              {isDraft ? '编辑任务' : '调整任务'}
-            </button>
+            <>
+              <button
+                onClick={() => setLibraryOpen(true)}
+                className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-white/5 hover:bg-white/10 text-slate-300 text-sm transition-colors focus-ring"
+              >
+                <Library className="w-3.5 h-3.5" />
+                从任务库选择
+              </button>
+              <button
+                onClick={() => setEditOpen(true)}
+                className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-white/5 hover:bg-white/10 text-slate-300 text-sm transition-colors focus-ring"
+              >
+                <Pencil className="w-3.5 h-3.5" />
+                {isDraft ? '编辑任务' : '调整任务'}
+              </button>
+            </>
           )}
           {isDraft && (
             <span className="text-xs text-slate-500">预览模式：发布后才会保存</span>
@@ -643,20 +957,22 @@ function WeeklyTasksContent() {
           <CommandCard className="p-4">
             <div className="flex items-center gap-1.5 mb-2">
               <TrendingUp className="w-3.5 h-3.5 text-secondary" />
-              <p className="text-xs text-slate-500">学科完成</p>
+              <p className="text-xs text-slate-500">分类完成</p>
             </div>
-            <div className="space-y-1">
-              {(['chinese', 'math', 'english'] as SubjectId[]).map((subjectId) => {
-                const s = stats.bySubject[subjectId];
-                return (
-                  <div key={subjectId} className="flex items-center justify-between text-xs">
-                    <span className="text-slate-400">{subjectMeta[subjectId].name}</span>
-                    <span className={s.total === s.done ? 'text-success tabular-nums' : 'text-slate-300 tabular-nums'}>
-                      {s.done}/{s.total}
-                    </span>
-                  </div>
-                );
-              })}
+            <div className="space-y-1 max-h-[72px] overflow-y-auto">
+              {(['chinese', 'math', 'english', 'school', 'reading', 'sport', 'interest', 'other'] as TaskCategory[])
+                .filter((cat) => stats.byCategory[cat].total > 0)
+                .map((cat) => {
+                  const s = stats.byCategory[cat];
+                  return (
+                    <div key={cat} className="flex items-center justify-between text-xs">
+                      <span className="text-slate-400">{TASK_CATEGORY_LABELS[cat]}</span>
+                      <span className={s.total === s.done ? 'text-success tabular-nums' : 'text-slate-300 tabular-nums'}>
+                        {s.done}/{s.total}
+                      </span>
+                    </div>
+                  );
+                })}
             </div>
           </CommandCard>
 
@@ -745,9 +1061,10 @@ function WeeklyTasksContent() {
                 </div>
               ) : (
                 tasksByDay?.[selectedDay].map((task, index) => {
-                  const SubjectIcon = subjectIcons[task.subjectId];
-                  const meta = subjectMeta[task.subjectId];
+                  const category = task.category || 'other';
+                  const CategoryIcon = categoryIcons[category];
                   const isDone = task.status === 'done';
+                  const alignment = task.alignment;
                   return (
                     <motion.div
                       key={task.id}
@@ -774,13 +1091,18 @@ function WeeklyTasksContent() {
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center gap-2 mb-1.5">
                               <div
-                                className={`w-6 h-6 rounded-md bg-gradient-to-br ${meta.gradient} flex items-center justify-center`}
+                                className={`w-6 h-6 rounded-md flex items-center justify-center ${getCategoryColorClass(category)}`}
                               >
-                                <SubjectIcon className="w-3 h-3 text-white" />
+                                <CategoryIcon className="w-3 h-3" />
                               </div>
                               <span className="text-[11px] font-medium text-slate-400">
-                                {meta.name}
+                                {TASK_CATEGORY_LABELS[category]}
                               </span>
+                              {alignment && (
+                                <span className={`text-[10px] px-1.5 py-0.5 rounded border ${getAlignmentColorClass(alignment)}`}>
+                                  {TASK_ALIGNMENT_LABELS[alignment]}
+                                </span>
+                              )}
                               <span className="ml-auto text-[10px] px-1.5 py-0.5 rounded bg-white/[0.05] text-slate-300">
                                 {task.duration}
                               </span>
@@ -830,7 +1152,7 @@ function WeeklyTasksContent() {
           >
             <div className="min-w-[800px]">
               <div className="grid grid-cols-8 gap-2 mb-2">
-                <div className="text-xs text-slate-500 font-medium px-3 py-2">学科</div>
+                <div className="text-xs text-slate-500 font-medium px-3 py-2">分类</div>
                 {dayOrder.map((day) => {
                   const isToday = day === today && weekId === getCurrentWeekId();
                   const ds = stats?.byDay[day];
@@ -852,82 +1174,83 @@ function WeeklyTasksContent() {
                 })}
               </div>
 
-              {(['chinese', 'math', 'english'] as SubjectId[]).map((subjectId) => {
-                const meta = subjectMeta[subjectId];
-                const SubjectIcon = subjectIcons[subjectId];
-                return (
-                  <div key={subjectId} className="grid grid-cols-8 gap-2 mb-2">
-                    <div className="flex items-center gap-2 px-3 py-3 rounded-xl bg-white/5">
-                      <div
-                        className={`w-7 h-7 rounded-lg bg-gradient-to-br ${meta.gradient} flex items-center justify-center`}
-                      >
-                        <SubjectIcon className="w-3.5 h-3.5 text-white" />
-                      </div>
-                      <span className="text-sm font-medium text-slate-300">{meta.name}</span>
-                    </div>
-                    {dayOrder.map((day) => {
-                      const task = tasksByDay?.[day].find((t) => t.subjectId === subjectId);
-                      const taskDone = task?.status === 'done';
-                      return (
-                        <button
-                          key={day}
-                          type="button"
-                          disabled={!task}
-                          onClick={() => task && handleToggleTask(task)}
-                          aria-label={
-                            task
-                              ? `${meta.name} ${day}：${task.focus}，${task.duration}，点击${taskDone ? '取消完成' : '标记完成'}`
-                              : `${meta.name} ${day}：无任务`
-                          }
-                          className={`relative group px-2 py-3 rounded-xl border transition-all min-h-[80px] text-left disabled:cursor-default ${
-                            task
-                              ? taskDone
-                                ? 'bg-success/10 border-success/20 hover:bg-success/[0.12]'
-                                : 'bg-white/5 border-white/5 hover:bg-white/[0.07]'
-                              : 'bg-transparent border-transparent'
-                          }`}
+              {allCategories
+                .filter((cat) => displayPlan.tasks.some((t) => (t.category || 'other') === cat))
+                .map((category) => {
+                  const CategoryIcon = categoryIcons[category];
+                  return (
+                    <div key={category} className="grid grid-cols-8 gap-2 mb-2">
+                      <div className="flex items-center gap-2 px-3 py-3 rounded-xl bg-white/5">
+                        <div
+                          className={`w-7 h-7 rounded-lg flex items-center justify-center ${getCategoryColorClass(category)}`}
                         >
-                          {task && (
-                            <>
-                              <div className="flex items-center justify-between mb-1">
-                                <span className="text-[10px] text-slate-500">{task.duration}</span>
-                                {task.status === 'done' && (
-                                  <CheckCircle2 className="w-3 h-3 text-success" />
-                                )}
-                              </div>
-                              <p className="text-xs font-medium text-slate-200 line-clamp-2">
-                                {task.focus}
-                              </p>
-
-                              <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 w-48 p-3 rounded-xl bg-surface border border-white/10 shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-20">
-                                <p className="text-xs font-bold text-slate-200 mb-1">
+                          <CategoryIcon className="w-3.5 h-3.5" />
+                        </div>
+                        <span className="text-sm font-medium text-slate-300">{TASK_CATEGORY_LABELS[category]}</span>
+                      </div>
+                      {dayOrder.map((day) => {
+                        const task = tasksByDay?.[day].find((t) => (t.category || 'other') === category);
+                        const taskDone = task?.status === 'done';
+                        return (
+                          <button
+                            key={day}
+                            type="button"
+                            disabled={!task}
+                            onClick={() => task && handleToggleTask(task)}
+                            aria-label={
+                              task
+                                ? `${TASK_CATEGORY_LABELS[category]} ${day}：${task.focus}，${task.duration}，点击${taskDone ? '取消完成' : '标记完成'}`
+                                : `${TASK_CATEGORY_LABELS[category]} ${day}：无任务`
+                            }
+                            className={`relative group px-2 py-3 rounded-xl border transition-all min-h-[80px] text-left disabled:cursor-default ${
+                              task
+                                ? taskDone
+                                  ? 'bg-success/10 border-success/20 hover:bg-success/[0.12]'
+                                  : 'bg-white/5 border-white/5 hover:bg-white/[0.07]'
+                                : 'bg-transparent border-transparent'
+                            }`}
+                          >
+                            {task && (
+                              <>
+                                <div className="flex items-center justify-between mb-1">
+                                  <span className="text-[10px] text-slate-500">{task.duration}</span>
+                                  {task.status === 'done' && (
+                                    <CheckCircle2 className="w-3 h-3 text-success" />
+                                  )}
+                                </div>
+                                <p className="text-xs font-medium text-slate-200 line-clamp-2">
                                   {task.focus}
                                 </p>
-                                <p className="text-[10px] text-slate-500 mb-2">
-                                  {meta.name} · {task.duration}
-                                </p>
-                                <div className="flex flex-wrap gap-1 mb-2">
-                                  {task.materials.map((m) => (
-                                    <span
-                                      key={m}
-                                      className="text-[10px] px-1.5 py-0.5 rounded bg-white/5 text-slate-400"
-                                    >
-                                      {m}
-                                    </span>
-                                  ))}
+
+                                <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 w-48 p-3 rounded-xl bg-surface border border-white/10 shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-20">
+                                  <p className="text-xs font-bold text-slate-200 mb-1">
+                                    {task.focus}
+                                  </p>
+                                  <p className="text-[10px] text-slate-500 mb-2">
+                                    {TASK_CATEGORY_LABELS[category]} · {task.duration}
+                                  </p>
+                                  <div className="flex flex-wrap gap-1 mb-2">
+                                    {task.materials.map((m) => (
+                                      <span
+                                        key={m}
+                                        className="text-[10px] px-1.5 py-0.5 rounded bg-white/5 text-slate-400"
+                                      >
+                                        {m}
+                                      </span>
+                                    ))}
+                                  </div>
+                                  <p className="text-[10px] text-slate-500">
+                                    点击{task.status === 'done' ? '取消完成' : '标记完成'}
+                                  </p>
                                 </div>
-                                <p className="text-[10px] text-slate-500">
-                                  点击{task.status === 'done' ? '取消完成' : '标记完成'}
-                                </p>
-                              </div>
-                            </>
-                          )}
-                        </button>
-                      );
-                    })}
-                  </div>
-                );
-              })}
+                              </>
+                            )}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  );
+                })}
             </div>
           </motion.div>
         )}
@@ -1034,6 +1357,18 @@ function WeeklyTasksContent() {
           plan={displayPlan}
           onClose={() => setEditOpen(false)}
           onSave={handleSaveTasks}
+        />
+      )}
+
+      {libraryOpen && currentChild && displayPlan && (
+        <TaskLibraryModal
+          childId={currentChild.id}
+          childGrade={currentChild.grade}
+          childRouteId={currentChild.routeId}
+          weekId={weekId}
+          existingTasks={displayPlan.tasks}
+          onClose={() => setLibraryOpen(false)}
+          onAdd={handleAddFromLibrary}
         />
       )}
     </div>

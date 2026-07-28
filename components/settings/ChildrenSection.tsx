@@ -28,8 +28,8 @@ export default function ChildrenSection() {
   };
 
   return (
-    <div className="space-y-5">
-      <SettingsSection title="学员管理" description="管理孩子的学习档案">
+    <div className="space-y-4">
+      <SettingsSection title="孩子管理" description="管理孩子的学习档案">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {children.map((child) => (
             <div
@@ -119,7 +119,7 @@ export default function ChildrenSection() {
             <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center">
               <Plus className="w-5 h-5" />
             </div>
-            <span className="font-medium">添加学员</span>
+            <span className="font-medium">添加孩子</span>
           </button>
         </div>
       </SettingsSection>

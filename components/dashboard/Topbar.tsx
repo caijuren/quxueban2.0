@@ -1,12 +1,12 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Bell, Search, Menu, Plus, Check, User, Settings } from 'lucide-react';
+import { Bell, Search, Menu, Check, User, LogOut } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
-import { useRouter, usePathname } from 'next/navigation';
+import { useRouter } from 'next/navigation';
+import { signOut } from 'next-auth/react';
 import { useChildren } from '@/components/dashboard/ChildrenContext';
-import { Child, gradeLabel, gradeToStage, getInitials } from '@/lib/children';
-import ChildModal from '@/components/dashboard/ChildModal';
+import { gradeLabel, gradeToStage, getInitials } from '@/lib/children';
 
 interface Notification {
   id: string;
@@ -22,12 +22,9 @@ interface TopbarProps {
 
 export default function Topbar({ onMenuClick }: TopbarProps) {
   const router = useRouter();
-  const pathname = usePathname();
   const { children, currentChild, currentChildId, setCurrentChildId } = useChildren();
   const [search, setSearch] = useState('');
   const [childDropdownOpen, setChildDropdownOpen] = useState(false);
-  const [showChildModal, setShowChildModal] = useState(false);
-  const [editingChild, setEditingChild] = useState<Child | null>(null);
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [notificationOpen, setNotificationOpen] = useState(false);
   const [loadingNotifications, setLoadingNotifications] = useState(false);
@@ -147,6 +144,11 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
     );
   };
 
+  const handleLogout = async () => {
+    await signOut({ redirect: false });
+    router.push('/');
+  };
+
   const currentStage = currentChild ? gradeToStage(currentChild.grade) : null;
 
   return (
@@ -246,11 +248,19 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
           )}
         </div>
 
+        <button
+          onClick={handleLogout}
+          className="w-9 h-9 rounded-lg bg-white/5 flex items-center justify-center text-slate-400 hover:bg-white/[0.08] hover:text-danger transition-colors focus-ring"
+          aria-label="退出登录"
+        >
+          <LogOut className="w-4 h-4" />
+        </button>
+
         <div className="relative" ref={childDropdownRef}>
           <button
             onClick={() => setChildDropdownOpen((prev) => !prev)}
             className="flex items-center gap-2.5 pl-3 border-l border-white/[0.08] text-left focus-ring rounded-lg"
-            aria-label="切换学员"
+            aria-label="切换孩子"
             aria-haspopup="listbox"
             aria-expanded={childDropdownOpen}
             aria-controls="child-listbox"
@@ -279,12 +289,12 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
             </div>
             <div className="text-right hidden sm:block">
               <p className="text-sm font-medium text-slate-200">
-                {currentChild ? currentChild.name : '未选择学员'}
+                {currentChild ? currentChild.name : '未选择孩子'}
               </p>
               <p className="text-[10px] text-slate-500">
                 {currentChild && currentStage
                   ? `${gradeLabel(currentChild.grade)} · ${currentStage}`
-                  : '请选择或添加学员'}
+                  : '请选择孩子'}
               </p>
             </div>
             <svg
@@ -304,39 +314,11 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
               id="child-listbox"
               ref={childListboxRef}
               role="listbox"
-              aria-label="切换学员"
+              aria-label="切换孩子"
               className="absolute right-0 top-full mt-2 w-60 rounded-xl glass border border-white/[0.08] overflow-hidden z-50 shadow-2xl"
             >
-              <div className="px-2 py-1.5 border-b border-white/[0.06]">
-                {currentChild && (
-                  <button
-                    onClick={() => {
-                      setEditingChild(currentChild);
-                      setChildDropdownOpen(false);
-                    }}
-                    className="w-full flex items-center gap-2.5 px-2.5 py-2 rounded-lg text-left text-sm text-slate-300 hover:bg-white/5 transition-colors"
-                  >
-                    <div className="w-7 h-7 rounded-full bg-white/5 flex items-center justify-center shrink-0">
-                      <User className="w-3.5 h-3.5" />
-                    </div>
-                    编辑当前孩子
-                  </button>
-                )}
-                <button
-                  onClick={() => {
-                    setChildDropdownOpen(false);
-                    router.push('/dashboard/settings');
-                  }}
-                  className="w-full flex items-center gap-2.5 px-2.5 py-2 rounded-lg text-left text-sm text-slate-300 hover:bg-white/5 transition-colors"
-                >
-                  <div className="w-7 h-7 rounded-full bg-white/5 flex items-center justify-center shrink-0">
-                    <Settings className="w-3.5 h-3.5" />
-                  </div>
-                  系统设置
-                </button>
-              </div>
               <div className="px-3 py-2 border-b border-white/[0.06]">
-                <p className="text-xs text-slate-500">切换学员</p>
+                <p className="text-xs text-slate-500">切换孩子</p>
               </div>
               <div className="p-1">
                 {children.map((child, index) => {
@@ -386,34 +368,10 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
                   );
                 })}
               </div>
-              <div className="border-t border-white/[0.06] p-1">
-                <button
-                  onClick={() => {
-                    setChildDropdownOpen(false);
-                    setShowChildModal(true);
-                  }}
-                  className="w-full flex items-center gap-2.5 px-2.5 py-2 rounded-lg text-left text-sm text-slate-300 hover:bg-white/5 transition-colors"
-                >
-                  <div className="w-7 h-7 rounded-full bg-white/5 flex items-center justify-center shrink-0">
-                    <Plus className="w-3.5 h-3.5" />
-                  </div>
-                  添加学员
-                </button>
-              </div>
             </div>
           )}
         </div>
       </div>
-
-      <ChildModal
-        isOpen={showChildModal}
-        onClose={() => setShowChildModal(false)}
-      />
-      <ChildModal
-        isOpen={Boolean(editingChild)}
-        onClose={() => setEditingChild(null)}
-        child={editingChild}
-      />
     </motion.header>
   );
 }

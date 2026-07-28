@@ -6,9 +6,27 @@ export type DayOfWeek = '周一' | '周二' | '周三' | '周四' | '周五' | '
 
 export type SubjectId = 'chinese' | 'math' | 'english';
 
+export type TaskCategory =
+  | 'chinese'
+  | 'math'
+  | 'english'
+  | 'school'
+  | 'reading'
+  | 'sport'
+  | 'interest'
+  | 'other';
+
+export type TaskSource = 'auto' | 'library' | 'manual';
+
+export type TaskAlignment = 'ahead' | 'ontrack' | 'behind' | 'optional' | 'unrelated';
+
 export interface WeeklyTaskItem {
   id: string;
-  subjectId: SubjectId;
+  category: TaskCategory;
+  subjectId?: SubjectId;
+  source: TaskSource;
+  templateId?: string;
+  alignment?: TaskAlignment;
   day: DayOfWeek;
   focus: string;
   duration: string;
@@ -26,6 +44,24 @@ export interface WeeklyPlan {
   reviewedAt?: string;
   reviewComment?: string;
   tasks: WeeklyTaskItem[];
+}
+
+export interface TaskTemplate {
+  id: string;
+  userId: string;
+  title: string;
+  category: TaskCategory;
+  gradeMin: number;
+  gradeMax: number;
+  duration: string;
+  materials: string[];
+  description?: string | null;
+  routeTags: string[];
+  milestoneTag?: string | null;
+  source: 'system' | 'user';
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface AppData {
