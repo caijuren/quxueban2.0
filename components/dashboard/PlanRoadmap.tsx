@@ -396,24 +396,46 @@ export default function PlanRoadmap({
                       <stop offset="100%" stopColor="#f43f5e" stopOpacity="0" />
                     </radialGradient>
                   </defs>
-                  <motion.ellipse
+                  <ellipse
                     cx={300}
                     cy={150}
                     rx={250}
                     ry={180}
                     fill="url(#ambientGlow1)"
-                    animate={{ cx: [300, 350, 300], cy: [150, 180, 150] }}
-                    transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
-                  />
-                  <motion.ellipse
+                  >
+                    <animate
+                      attributeName="cx"
+                      values="300;350;300"
+                      dur="8s"
+                      repeatCount="indefinite"
+                    />
+                    <animate
+                      attributeName="cy"
+                      values="150;180;150"
+                      dur="8s"
+                      repeatCount="indefinite"
+                    />
+                  </ellipse>
+                  <ellipse
                     cx={700}
                     cy={280}
                     rx={200}
                     ry={150}
                     fill="url(#ambientGlow2)"
-                    animate={{ cx: [700, 650, 700], cy: [280, 240, 280] }}
-                    transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}
-                  />
+                  >
+                    <animate
+                      attributeName="cx"
+                      values="700;650;700"
+                      dur="10s"
+                      repeatCount="indefinite"
+                    />
+                    <animate
+                      attributeName="cy"
+                      values="280;240;280"
+                      dur="10s"
+                      repeatCount="indefinite"
+                    />
+                  </ellipse>
 
                   <defs>
                     <radialGradient id="cursorGlow" cx="50%" cy="50%" r="50%">
@@ -422,15 +444,26 @@ export default function PlanRoadmap({
                       <stop offset="100%" stopColor="#8b5cf6" stopOpacity="0" />
                     </radialGradient>
                   </defs>
-                  <motion.ellipse
-                    cx={mousePos?.x ?? 550}
-                    cy={mousePos?.y ?? 230}
-                    rx={180}
-                    ry={120}
-                    fill="url(#cursorGlow)"
+                  <motion.g
+                    initial={{
+                      x: mousePos?.x ?? 550,
+                      y: mousePos?.y ?? 230,
+                    }}
+                    animate={{
+                      x: mousePos?.x ?? 550,
+                      y: mousePos?.y ?? 230,
+                    }}
                     transition={{ type: 'spring', stiffness: 150, damping: 30 }}
                     style={{ pointerEvents: 'none' }}
-                  />
+                  >
+                    <ellipse
+                      cx={0}
+                      cy={0}
+                      rx={180}
+                      ry={120}
+                      fill="url(#cursorGlow)"
+                    />
+                  </motion.g>
 
                   {particles.map((p) => (
                     <motion.circle

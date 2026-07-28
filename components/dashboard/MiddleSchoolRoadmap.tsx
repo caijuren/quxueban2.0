@@ -323,24 +323,46 @@ export default function MiddleSchoolRoadmap() {
                     <stop offset="100%" stopColor="#06b6d4" stopOpacity="0" />
                   </radialGradient>
                 </defs>
-                <motion.ellipse
+                <ellipse
                   cx={300}
                   cy={150}
                   rx={250}
                   ry={180}
                   fill="url(#msGlow1)"
-                  animate={{ cx: [300, 350, 300], cy: [150, 180, 150] }}
-                  transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
-                />
-                <motion.ellipse
+                >
+                  <animate
+                    attributeName="cx"
+                    values="300;350;300"
+                    dur="8s"
+                    repeatCount="indefinite"
+                  />
+                  <animate
+                    attributeName="cy"
+                    values="150;180;150"
+                    dur="8s"
+                    repeatCount="indefinite"
+                  />
+                </ellipse>
+                <ellipse
                   cx={700}
                   cy={280}
                   rx={200}
                   ry={150}
                   fill="url(#msGlow2)"
-                  animate={{ cx: [700, 650, 700], cy: [280, 240, 280] }}
-                  transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}
-                />
+                >
+                  <animate
+                    attributeName="cx"
+                    values="700;650;700"
+                    dur="10s"
+                    repeatCount="indefinite"
+                  />
+                  <animate
+                    attributeName="cy"
+                    values="280;240;280"
+                    dur="10s"
+                    repeatCount="indefinite"
+                  />
+                </ellipse>
                 {particles.map((p) => (
                   <motion.circle
                     key={p.id}

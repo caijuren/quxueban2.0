@@ -1,66 +1,50 @@
 'use client';
 
-import { motion } from 'framer-motion';
-import { School, Star, MapPin, Trophy, Plus, Search, User } from 'lucide-react';
-import { Suspense } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { School, MapPin, Trophy, Plus, Search, User, X } from 'lucide-react';
+import { Suspense, useMemo, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
+import Link from 'next/link';
 import EmptyState from '@/components/ui/EmptyState';
 import { useChildren } from '@/components/dashboard/ChildrenContext';
 import { gradeLabel, gradeToStage } from '@/lib/children';
+import { schoolsData } from './[school]/SchoolDetail';
 
-const schools = [
-  {
-    name: '上海市实验学校',
-    type: '三公',
-    level: '冲刺',
-    area: '浦东新区',
-    features: ['十年一贯制', '理科强', '面谈录取'],
-    probability: 35,
-  },
-  {
-    name: '上海外国语大学附属外国语学校',
-    type: '三公',
-    level: '冲刺',
-    area: '虹口区',
-    features: ['外语特色', '保送优势', '全国招生'],
-    probability: 30,
-  },
-  {
-    name: '上海外国语大学附属浦东外国语学校',
-    type: '三公',
-    level: '冲刺',
-    area: '浦东新区',
-    features: ['外语特色', '寄宿制', '面谈录取'],
-    probability: 40,
-  },
-  {
-    name: '民办华育中学',
-    type: '民办初中',
-    level: '备选',
-    area: '徐汇区',
-    features: ['上海初中一哥', '自招率高', '摇号'],
-    probability: 65,
-  },
-  {
-    name: '民办兰生中学',
-    type: '民办初中',
-    level: '备选',
-    area: '杨浦区',
-    features: ['复旦系', '理科竞赛强', '摇号'],
-    probability: 60,
-  },
-];
-
-const levelConfig: Record<string, { color: string; bg: string; border: string }> = {
-  冲刺: { color: 'text-primary', bg: 'bg-primary/10', border: 'border-primary/30' },
-  备选: { color: 'text-secondary', bg: 'bg-secondary/10', border: 'border-secondary/30' },
-  保底: { color: 'text-accent', bg: 'bg-accent/10', border: 'border-accent/30' },
+const levelConfig: Record<string, { color: string; bg: string; border: string; probability: number }> = {
+  冲刺: { color: 'text-primary', bg: 'bg-primary/10', border: 'border-primary/30', probability: 35 },
+  备选: { color: 'text-secondary', bg: 'bg-secondary/10', border: 'border-secondary/30', probability: 60 },
+  保底: { color: 'text-accent', bg: 'bg-accent/10', border: 'border-accent/30', probability: 85 },
 };
+
+function inferLevel(ranking: string): string {
+  const text = ranking.toLowerCase();
+  if (text.includes('四校') || text.includes('顶尖') || text.includes('第一梯队')) return '冲刺';
+  if (text.includes('第二梯队') || text.includes('区属市重点') || text.includes('新增市重点') || text.includes('区实验性示范')) return '备选';
+  return '保底';
+}
 
 function SchoolsPageContent() {
   const searchParams = useSearchParams();
   const query = searchParams.get('q')?.toLowerCase() || '';
   const { currentChild } = useChildren();
+  const [showAddModal, setShowAddModal] = useState(false);
+
+  const schools = useMemo(
+    () =>
+      Object.values(schoolsData).map((s) => {
+        const level = inferLevel(s.ranking);
+        return {
+          id: s.id,
+          name: s.name,
+          type: s.nature,
+          level,
+          area: s.location,
+          features: s.tags.slice(0, 3),
+          probability: levelConfig[level].probability,
+        };
+      }),
+    []
+  );
 
   const filteredSchools = query
     ? schools.filter(
@@ -90,7 +74,10 @@ function SchoolsPageContent() {
               : '管理冲刺、备选、保底目标学校及录取概率'}
           </p>
         </div>
-        <button className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-primary to-secondary text-white font-semibold hover:shadow-[0_0_30px_rgba(244,63,94,0.5)] transition-all duration-300">
+        <button
+          onClick={() => setShowAddModal(true)}
+          className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-primary to-secondary text-white font-semibold hover:shadow-[0_0_30px_rgba(244,63,94,0.5)] transition-all duration-300"
+        >
           <Plus className="w-4 h-4" />
           添加学校
         </button>
@@ -101,55 +88,59 @@ function SchoolsPageContent() {
           const level = levelConfig[school.level];
           return (
             <motion.div
-              key={school.name}
+              key={school.id}
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="rounded-2xl glass p-6 hover:bg-surface-light/80 transition-all cursor-pointer group"
+              transition={{ duration: 0.5, delay: index * 0.05 }}
             >
-              <div className="flex items-start justify-between mb-4">
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-secondary to-secondary-glow flex items-center justify-center shrink-0">
-                    <School className="w-6 h-6 text-white" />
-                  </div>
-                  <div>
-                    <h2 className="text-lg font-bold font-display group-hover:text-white transition-colors">{school.name}</h2>
-                    <div className="flex items-center gap-2 mt-1 text-sm text-slate-400">
-                      <MapPin className="w-3.5 h-3.5" />
-                      {school.area}
-                      <span className="text-slate-600">·</span>
-                      {school.type}
+              <Link
+                href={`/dashboard/schools/${school.id}`}
+                className="block rounded-2xl glass p-6 hover:bg-surface-light/80 transition-all cursor-pointer group"
+              >
+                <div className="flex items-start justify-between mb-4">
+                  <div className="flex items-start gap-4">
+                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-secondary to-secondary-glow flex items-center justify-center shrink-0">
+                      <School className="w-6 h-6 text-white" />
+                    </div>
+                    <div>
+                      <h2 className="text-lg font-bold font-display group-hover:text-white transition-colors">{school.name}</h2>
+                      <div className="flex items-center gap-2 mt-1 text-sm text-slate-400">
+                        <MapPin className="w-3.5 h-3.5" />
+                        {school.area}
+                        <span className="text-slate-600">·</span>
+                        {school.type}
+                      </div>
                     </div>
                   </div>
-                </div>
-                <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${level.bg} ${level.color} border ${level.border}`}>
-                  {school.level}
-                </span>
-              </div>
-
-              <div className="flex flex-wrap gap-2 mb-4">
-                {school.features.map((feature) => (
-                  <span key={feature} className="px-2.5 py-1 rounded-lg bg-white/5 text-xs text-slate-300 border border-white/10">
-                    {feature}
+                  <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${level.bg} ${level.color} border ${level.border}`}>
+                    {school.level}
                   </span>
-                ))}
-              </div>
+                </div>
 
-              <div className="flex items-center justify-between pt-4 border-t border-white/5">
-                <div className="flex items-center gap-2 text-sm text-slate-400">
-                  <Trophy className="w-4 h-4 text-warning" />
-                  录取概率
+                <div className="flex flex-wrap gap-2 mb-4">
+                  {school.features.map((feature) => (
+                    <span key={feature} className="px-2.5 py-1 rounded-lg bg-white/5 text-xs text-slate-300 border border-white/10">
+                      {feature}
+                    </span>
+                  ))}
                 </div>
-                <div className="flex items-center gap-2">
-                  <div className="w-24 h-2 rounded-full bg-white/10 overflow-hidden">
-                    <div
-                      className="h-full rounded-full bg-gradient-to-r from-primary to-secondary"
-                      style={{ width: `${school.probability}%` }}
-                    />
+
+                <div className="flex items-center justify-between pt-4 border-t border-white/5">
+                  <div className="flex items-center gap-2 text-sm text-slate-400">
+                    <Trophy className="w-4 h-4 text-warning" />
+                    录取概率
                   </div>
-                  <span className="text-sm font-semibold text-slate-200">{school.probability}%</span>
+                  <div className="flex items-center gap-2">
+                    <div className="w-24 h-2 rounded-full bg-white/10 overflow-hidden">
+                      <div
+                        className="h-full rounded-full bg-gradient-to-r from-primary to-secondary"
+                        style={{ width: `${school.probability}%` }}
+                      />
+                    </div>
+                    <span className="text-sm font-semibold text-slate-200">{school.probability}%</span>
+                  </div>
                 </div>
-              </div>
+              </Link>
             </motion.div>
           );
         })}
@@ -176,6 +167,52 @@ function SchoolsPageContent() {
           }}
         />
       )}
+
+      <AnimatePresence>
+        {showAddModal && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+            onClick={() => setShowAddModal(false)}
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.96, y: 12 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.96, y: 12 }}
+              transition={{ duration: 0.2 }}
+              className="relative w-full max-w-sm rounded-xl command-panel corner-accent p-6"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <button
+                type="button"
+                onClick={() => setShowAddModal(false)}
+                className="absolute top-4 right-4 w-7 h-7 rounded-lg bg-white/5 flex items-center justify-center text-slate-400 hover:bg-white/10 hover:text-slate-200 transition-colors focus-ring"
+                aria-label="关闭"
+              >
+                <X className="w-4 h-4" />
+              </button>
+
+              <div className="text-center mb-5">
+                <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mx-auto mb-3 border border-primary/20">
+                  <Plus className="w-6 h-6 text-primary" />
+                </div>
+                <h3 className="text-lg font-bold font-display mb-1">添加目标学校</h3>
+                <p className="text-xs text-slate-500">学校库由平台维护，暂不支持自定义添加。如需补充学校，请联系管理员。</p>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => setShowAddModal(false)}
+                className="w-full py-2 rounded-lg bg-white/5 text-sm text-slate-300 hover:bg-white/10 transition-colors focus-ring"
+              >
+                知道了
+              </button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

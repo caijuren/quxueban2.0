@@ -55,7 +55,7 @@ interface SchoolData {
   interviewFormat: string[];
 }
 
-const schoolsData: Record<string, SchoolData> = {
+export const schoolsData: Record<string, SchoolData> = {
   shishi: {
     id: 'shishi',
     name: '上海市实验学校',

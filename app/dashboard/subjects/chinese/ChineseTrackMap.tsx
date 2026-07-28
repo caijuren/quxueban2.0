@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { chineseTracks, chineseTrackNodes, chineseTimeAxisLabels } from '@/lib/subjects/chinese';
 
 const VIEWBOX = { width: 1100, height: 420, startX: 80, endX: 1000 };
@@ -57,7 +57,7 @@ export default function ChineseTrackMap() {
     setMounted(true);
   }, []);
 
-  const particles = createParticles();
+  const particles = useMemo(() => createParticles(), []);
 
   const getNodesByTrack = (track: 'classics' | 'reading' | 'honor') =>
     chineseTrackNodes.filter((n) => n.track === track).sort((a, b) => a.position - b.position);
@@ -189,44 +189,77 @@ export default function ChineseTrackMap() {
                   <stop offset="100%" stopColor="#f43f5e" stopOpacity="0" />
                 </radialGradient>
               </defs>
-              <motion.ellipse
+              <ellipse
                 cx={250}
                 cy={140}
                 rx={220}
                 ry={160}
                 fill="url(#ambientGlow1)"
-                animate={{ cx: [250, 300, 250], cy: [140, 170, 140] }}
-                transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
-              />
-              <motion.ellipse
+              >
+                <animate
+                  attributeName="cx"
+                  values="250;300;250"
+                  dur="8s"
+                  repeatCount="indefinite"
+                />
+                <animate
+                  attributeName="cy"
+                  values="140;170;140"
+                  dur="8s"
+                  repeatCount="indefinite"
+                />
+              </ellipse>
+              <ellipse
                 cx={800}
                 cy={280}
                 rx={200}
                 ry={140}
                 fill="url(#ambientGlow2)"
-                animate={{ cx: [800, 750, 800], cy: [280, 250, 280] }}
-                transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}
-              />
-              <motion.ellipse
-                cx={mousePos.x}
-                cy={mousePos.y}
-                rx={160}
-                ry={100}
-                fill="url(#cursorGlow)"
+              >
+                <animate
+                  attributeName="cx"
+                  values="800;750;800"
+                  dur="10s"
+                  repeatCount="indefinite"
+                />
+                <animate
+                  attributeName="cy"
+                  values="280;250;280"
+                  dur="10s"
+                  repeatCount="indefinite"
+                />
+              </ellipse>
+              <motion.g
+                initial={{
+                  x: mousePos?.x ?? VIEWBOX.width / 2,
+                  y: mousePos?.y ?? VIEWBOX.height / 2,
+                }}
+                animate={{
+                  x: mousePos?.x ?? VIEWBOX.width / 2,
+                  y: mousePos?.y ?? VIEWBOX.height / 2,
+                }}
                 transition={{ type: 'spring', stiffness: 150, damping: 30 }}
                 style={{ pointerEvents: 'none' }}
-              />
+              >
+                <ellipse
+                  cx={0}
+                  cy={0}
+                  rx={160}
+                  ry={100}
+                  fill="url(#cursorGlow)"
+                />
+              </motion.g>
               {particles.map((p) => (
                 <motion.circle
                   key={p.id}
-                  cx={p.x}
-                  cy={p.y}
-                  r={p.size}
+                  cx={p.x ?? 0}
+                  cy={p.y ?? 0}
+                  r={p.size ?? 1}
                   fill="white"
-                  initial={{ opacity: 0.1 }}
+                  initial={{ opacity: 0.1, cy: p.y ?? 0 }}
                   animate={{
                     opacity: [0.1, 0.5, 0.1],
-                    cy: [p.y, p.y - 10, p.y],
+                    cy: [p.y ?? 0, (p.y ?? 0) - 10, p.y ?? 0],
                   }}
                   transition={{
                     duration: p.duration,

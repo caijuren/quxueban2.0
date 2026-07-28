@@ -175,6 +175,9 @@ function EditPlanModal({ plan, onClose, onSave }: EditPlanModalProps) {
         animate={{ scale: 1, opacity: 1 }}
         exit={shouldReduceMotion ? { opacity: 0 } : { scale: 0.95, opacity: 0 }}
         onClick={(e) => e.stopPropagation()}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="edit-plan-title"
         className="w-full max-w-3xl max-h-[85vh] overflow-y-auto rounded-3xl glass border border-white/10 p-6 sm:p-8"
       >
         <div className="flex items-center justify-between mb-6">
@@ -183,7 +186,7 @@ function EditPlanModal({ plan, onClose, onSave }: EditPlanModalProps) {
               <Pencil className="w-5 h-5 text-white" />
             </div>
             <div>
-              <h2 className="text-xl font-bold font-display">编辑周任务</h2>
+              <h2 id="edit-plan-title" className="text-xl font-bold font-display">编辑周任务</h2>
               <p className="text-xs text-slate-400">
                 增删改任务后保存即可生效
               </p>
@@ -940,6 +943,9 @@ function WeeklyTasksContent() {
             onClick={() => setReviewOpen(false)}
           >
             <motion.div
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="review-title"
               initial={shouldReduceMotion ? false : { scale: 0.95, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={shouldReduceMotion ? { opacity: 0 } : { scale: 0.95, opacity: 0 }}
@@ -952,7 +958,7 @@ function WeeklyTasksContent() {
                     <Sparkles className="w-5 h-5 text-white" />
                   </div>
                   <div>
-                    <h2 className="text-xl font-bold font-display">本周复盘</h2>
+                    <h2 id="review-title" className="text-xl font-bold font-display">本周复盘</h2>
                     <p className="text-xs text-slate-400">{formatWeekLabel(weekId)}</p>
                   </div>
                 </div>
