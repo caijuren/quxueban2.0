@@ -15,6 +15,7 @@ function LoginForm() {
   const searchParams = useSearchParams();
   const shouldReduceMotion = useReducedMotion();
   const callbackUrl = searchParams.get('callbackUrl') || '/dashboard';
+  const justRegistered = searchParams.get('registered') === '1';
 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -183,6 +184,12 @@ function LoginForm() {
                   忘记密码？
                 </Link>
               </div>
+
+              {justRegistered && (
+                <div className="rounded-lg bg-success/10 border border-success/20 px-3 py-2 text-xs text-success">
+                  注册成功，请使用新账号登录
+                </div>
+              )}
 
               {error && (
                 <div className="rounded-lg bg-error/10 border border-error/20 px-3 py-2 text-xs text-error">
