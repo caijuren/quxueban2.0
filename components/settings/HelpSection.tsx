@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { HelpCircle, MessageSquare, FileText, ChevronDown, ChevronUp, Send, Loader2 } from 'lucide-react';
+import packageInfo from '@/package.json';
 import SettingsSection from './SettingsSection';
 
 const FAQS = [
@@ -129,7 +130,7 @@ export default function HelpSection() {
           </a>
         </div>
         <p className="mt-4 text-xs text-slate-500 text-center">
-          趣学伴 v1.0.0 · 升学作战指挥中心
+          趣学伴 v{packageInfo.version} · 升学作战指挥中心
         </p>
       </SettingsSection>
     </div>

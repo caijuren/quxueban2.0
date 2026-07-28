@@ -13,8 +13,10 @@ import {
   BookText,
   Calendar,
   Bell,
+  Settings,
   X,
 } from 'lucide-react';
+import packageInfo from '@/package.json';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 
@@ -128,7 +130,23 @@ export default function Sidebar({ mobileMenuOpen, onLinkClick }: SidebarProps) {
       </nav>
 
       {/* Bottom actions */}
-      <div className="p-3 border-t border-white/[0.06]">
+      <div className="p-3 border-t border-white/[0.06] space-y-1">
+        <Link
+          href="/dashboard/settings"
+          onClick={onLinkClick}
+          aria-current={pathname === '/dashboard/settings' ? 'page' : undefined}
+          className={`group relative flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200 text-sm ${
+            pathname === '/dashboard/settings'
+              ? 'bg-white/[0.06] text-white'
+              : 'text-slate-400 hover:text-slate-200 hover:bg-white/[0.04]'
+          }`}
+        >
+          {pathname === '/dashboard/settings' && (
+            <div className="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-4 rounded-r-full bg-primary shadow-glow-primary" />
+          )}
+          <Settings className={`w-4 h-4 transition-colors ${pathname === '/dashboard/settings' ? 'text-primary' : 'text-slate-500 group-hover:text-slate-300'}`} />
+          <span>系统设置</span>
+        </Link>
         <button
           onClick={() => router.push('/')}
           className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-400 hover:text-danger hover:bg-danger/10 transition-colors duration-200 text-sm"
@@ -136,6 +154,9 @@ export default function Sidebar({ mobileMenuOpen, onLinkClick }: SidebarProps) {
           <LogOut className="w-4 h-4" />
           <span>退出登录</span>
         </button>
+        <p className="px-3 pt-1 text-[10px] text-slate-600">
+          趣学伴 v{packageInfo.version}
+        </p>
       </div>
     </aside>
   );
