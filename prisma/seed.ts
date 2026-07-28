@@ -1,6 +1,6 @@
 import 'dotenv/config';
 import { PrismaClient, UserRole } from '../lib/generated/prisma';
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 import {
   generateWeeklyPlan,
   getCurrentWeekId,
