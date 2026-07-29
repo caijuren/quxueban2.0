@@ -10,6 +10,7 @@ import {
   BookText,
   Calendar,
   Bell,
+  Target,
   Settings,
   X,
 } from 'lucide-react';
@@ -36,8 +37,9 @@ const menuGroups = [
   {
     title: '执行跟踪',
     items: [
+      { name: '今日作战', href: '/dashboard/today', icon: Target },
       { name: '周任务', href: '/dashboard/weekly', icon: Calendar },
-      { name: '预警提醒', href: '/dashboard/alerts', icon: Bell },
+      { name: '作战室', href: '/dashboard/alerts', icon: Bell },
     ],
   },
   {

@@ -1126,6 +1126,18 @@ function WeeklyTasksContent() {
     }
   };
 
+  const lastWeekId = useMemo(() => shiftWeekId(weekId, -1), [weekId]);
+  const lastWeekPlan = useMemo(() => {
+    if (!currentChild) return undefined;
+    return getWeeklyPlan(lastWeekId, currentChild.id);
+  }, [currentChild, getWeeklyPlan, lastWeekId]);
+  const lastWeekUncompleted = useMemo(() => {
+    if (!lastWeekPlan) return [];
+    return lastWeekPlan.tasks.filter(
+      (t) => t.status !== 'done' && t.status !== 'skipped'
+    );
+  }, [lastWeekPlan]);
+
   if (!currentChild) {
     return (
       <div className="space-y-8">
@@ -1140,6 +1152,30 @@ function WeeklyTasksContent() {
   }
 
   const tasksByDay = displayPlan ? getTasksByDay(displayPlan) : null;
+
+  const handleCarryOverLastWeek = () => {
+    if (!currentChild || lastWeekUncompleted.length === 0) return;
+    const carriedTasks = lastWeekUncompleted.map((t) => ({
+      ...t,
+      id: `carryover-${Date.now()}-${Math.random().toString(36).slice(2, 5)}`,
+      status: 'pending' as TaskStatus,
+      day: '周一' as DayOfWeek,
+    }));
+    if (displayPlan) {
+      const updatedTasks = [...displayPlan.tasks, ...carriedTasks];
+      if (isDraft) {
+        setDraftPlan({ ...displayPlan, tasks: updatedTasks });
+      } else {
+        publishWeeklyPlan({ ...displayPlan, tasks: updatedTasks });
+      }
+    } else {
+      setDraftPlan({
+        weekId,
+        childId: currentChild.id,
+        tasks: carriedTasks,
+      });
+    }
+  };
 
   return (
     <div className="space-y-6">
@@ -1277,6 +1313,35 @@ function WeeklyTasksContent() {
           </button>
         </div>
       </motion.div>
+
+      {lastWeekUncompleted.length > 0 && weekId === getCurrentWeekId() && (
+        <motion.div
+          initial={shouldReduceMotion ? false : { opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: 0.15 }}
+          className="rounded-xl border border-warning/20 bg-warning/5 p-4"
+        >
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div className="flex items-start gap-3">
+              <AlertTriangle className="w-5 h-5 text-warning shrink-0 mt-0.5" />
+              <div>
+                <p className="text-sm font-semibold text-slate-200">
+                  上周有 {lastWeekUncompleted.length} 项任务未补完
+                </p>
+                <p className="text-xs text-slate-400 mt-0.5">
+                  可以一键添加到本周，避免学习任务中断
+                </p>
+              </div>
+            </div>
+            <button
+              onClick={handleCarryOverLastWeek}
+              className="shrink-0 px-4 py-2 rounded-lg bg-warning/10 border border-warning/20 text-warning text-sm font-medium hover:bg-warning/15 transition-colors focus-ring"
+            >
+              一键添加到本周
+            </button>
+          </div>
+        </motion.div>
+      )}
 
       {stats && (
         <motion.div
