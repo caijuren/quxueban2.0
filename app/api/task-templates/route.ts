@@ -26,7 +26,14 @@ export async function GET(req: Request) {
     orderBy: [{ source: 'asc' }, { category: 'asc' }, { createdAt: 'desc' }],
   });
 
-  return NextResponse.json(templates);
+  // Normalize Prisma enum (uppercase) to frontend convention (lowercase)
+  const normalized = templates.map((tpl) => ({
+    ...tpl,
+    category: tpl.category.toLowerCase(),
+    source: tpl.source.toLowerCase(),
+  }));
+
+  return NextResponse.json(normalized);
 }
 
 export async function POST(req: Request) {
@@ -69,5 +76,12 @@ export async function POST(req: Request) {
     },
   });
 
-  return NextResponse.json(template, { status: 201 });
+  return NextResponse.json(
+    {
+      ...template,
+      category: template.category.toLowerCase(),
+      source: template.source.toLowerCase(),
+    },
+    { status: 201 }
+  );
 }

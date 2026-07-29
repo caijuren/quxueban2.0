@@ -32,7 +32,7 @@ export async function PATCH(req: Request, { params }: Params) {
   });
 
   if (body.category !== undefined) {
-    data.category = (body.category as string).toUpperCase();
+    data.category = (body.category as string).toUpperCase() as any;
   }
   if (body.gradeMin !== undefined) data.gradeMin = body.gradeMin;
   if (body.gradeMax !== undefined) data.gradeMax = body.gradeMax;
@@ -45,7 +45,11 @@ export async function PATCH(req: Request, { params }: Params) {
     data,
   });
 
-  return NextResponse.json(updated);
+  return NextResponse.json({
+    ...updated,
+    category: updated.category.toLowerCase(),
+    source: updated.source.toLowerCase(),
+  });
 }
 
 export async function DELETE(_req: Request, { params }: Params) {
