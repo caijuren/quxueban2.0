@@ -29,6 +29,9 @@ import {
   Backpack,
   Dumbbell,
   Palette,
+  ChevronDown,
+  Copy,
+  AlertTriangle,
 } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useChildren } from '@/components/dashboard/ChildrenContext';
@@ -153,13 +156,40 @@ const allCategories: TaskCategory[] = [
 ];
 
 function EditPlanModal({ plan, onClose, onSave }: EditPlanModalProps) {
-  const [tasks, setTasks] = useState<WeeklyTaskItem[]>(() =>
-    [...plan.tasks].sort((a, b) => {
-      const dayDiff = dayOrder.indexOf(a.day) - dayOrder.indexOf(b.day);
-      if (dayDiff !== 0) return dayDiff;
-      return a.category.localeCompare(b.category);
-    })
+  const initialTasks = useMemo(
+    () =>
+      [...plan.tasks].sort((a, b) => {
+        const dayDiff = dayOrder.indexOf(a.day) - dayOrder.indexOf(b.day);
+        if (dayDiff !== 0) return dayDiff;
+        return a.category.localeCompare(b.category);
+      }),
+    [plan.tasks]
   );
+
+  const [tasks, setTasks] = useState<WeeklyTaskItem[]>(initialTasks);
+  const [collapsedDays, setCollapsedDays] = useState<Record<DayOfWeek, boolean>>(
+    () => {
+      const init = {} as Record<DayOfWeek, boolean>;
+      dayOrder.forEach((d) => (init[d] = false));
+      return init;
+    }
+  );
+  const [copyingTaskId, setCopyingTaskId] = useState<string | null>(null);
+  const [showUnsavedPrompt, setShowUnsavedPrompt] = useState(false);
+
+  const hasChanges = useMemo(() => {
+    return JSON.stringify(initialTasks) !== JSON.stringify(tasks);
+  }, [initialTasks, tasks]);
+
+  useEffect(() => {
+    if (!hasChanges) return;
+    const handler = (e: BeforeUnloadEvent) => {
+      e.preventDefault();
+      e.returnValue = '';
+    };
+    window.addEventListener('beforeunload', handler);
+    return () => window.removeEventListener('beforeunload', handler);
+  }, [hasChanges]);
 
   const updateTask = (
     id: string,
@@ -174,20 +204,45 @@ function EditPlanModal({ plan, onClose, onSave }: EditPlanModalProps) {
     setTasks((prev) => prev.filter((t) => t.id !== id));
   };
 
-  const addTask = () => {
+  const addTask = (day: DayOfWeek = '周一') => {
     setTasks((prev) => [
       ...prev,
       {
         id: `custom-${Date.now()}-${Math.random().toString(36).slice(2, 5)}`,
         category: 'school',
         source: 'manual',
-        day: '周一',
+        day,
         focus: '',
         duration: '30分钟',
         materials: [],
         status: 'pending',
       },
     ]);
+    setCollapsedDays((prev) => ({ ...prev, [day]: false }));
+  };
+
+  const duplicateTask = (task: WeeklyTaskItem, targetDays: DayOfWeek[]) => {
+    const newTasks = targetDays.map((day) => ({
+      ...task,
+      id: `custom-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+      day,
+      status: 'pending' as TaskStatus,
+    }));
+    setTasks((prev) => {
+      const next = [...prev, ...newTasks];
+      return next.sort((a, b) => {
+        const dayDiff = dayOrder.indexOf(a.day) - dayOrder.indexOf(b.day);
+        if (dayDiff !== 0) return dayDiff;
+        return a.category.localeCompare(b.category);
+      });
+    });
+    targetDays.forEach((day) => {
+      setCollapsedDays((prev) => ({ ...prev, [day]: false }));
+    });
+  };
+
+  const toggleDay = (day: DayOfWeek) => {
+    setCollapsedDays((prev) => ({ ...prev, [day]: !prev[day] }));
   };
 
   const handleSave = () => {
@@ -195,6 +250,47 @@ function EditPlanModal({ plan, onClose, onSave }: EditPlanModalProps) {
     onSave(validTasks);
     onClose();
   };
+
+  const handleClose = () => {
+    if (hasChanges) {
+      setShowUnsavedPrompt(true);
+      return;
+    }
+    onClose();
+  };
+
+  const tasksByDay = useMemo(() => {
+    const grouped: Record<DayOfWeek, WeeklyTaskItem[]> = {
+      周一: [],
+      周二: [],
+      周三: [],
+      周四: [],
+      周五: [],
+      周六: [],
+      周日: [],
+    };
+    tasks.forEach((t) => grouped[t.day].push(t));
+    dayOrder.forEach((d) =>
+      grouped[d].sort((a, b) => a.category.localeCompare(b.category))
+    );
+    return grouped;
+  }, [tasks]);
+
+  const dayStats = useMemo(() => {
+    const stats: Record<DayOfWeek, { count: number; minutes: number }> =
+      {} as any;
+    dayOrder.forEach((day) => {
+      const list = tasksByDay[day];
+      stats[day] = {
+        count: list.length,
+        minutes: list.reduce(
+          (sum, t) => sum + parseDurationMinutes(t.duration),
+          0
+        ),
+      };
+    });
+    return stats;
+  }, [tasksByDay]);
 
   const shouldReduceMotion = useReducedMotion();
 
@@ -204,7 +300,7 @@ function EditPlanModal({ plan, onClose, onSave }: EditPlanModalProps) {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       className="fixed inset-0 z-[110] flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm"
-      onClick={onClose}
+      onClick={handleClose}
     >
       <motion.div
         initial={shouldReduceMotion ? false : { scale: 0.95, opacity: 0 }}
@@ -224,12 +320,12 @@ function EditPlanModal({ plan, onClose, onSave }: EditPlanModalProps) {
             <div>
               <h2 id="edit-plan-title" className="text-xl font-bold font-display">编辑周任务</h2>
               <p className="text-xs text-slate-400">
-                增删改任务后保存即可生效
+                按星期分组管理，支持复制到多天
               </p>
             </div>
           </div>
           <button
-            onClick={onClose}
+            onClick={handleClose}
             className="p-2 rounded-lg hover:bg-white/5 text-slate-400 focus-ring"
             aria-label="关闭"
           >
@@ -237,129 +333,94 @@ function EditPlanModal({ plan, onClose, onSave }: EditPlanModalProps) {
           </button>
         </div>
 
-        <div className="space-y-3 mb-6">
-          {tasks.map((task, index) => {
-            const CategoryIcon = categoryIcons[task.category];
+        <div className="space-y-4 mb-6">
+          {dayOrder.map((day) => {
+            const dayTasks = tasksByDay[day];
+            const { count, minutes } = dayStats[day];
+            const isCollapsed = collapsedDays[day];
             return (
               <div
-                key={task.id}
-                className="grid grid-cols-12 gap-2 items-start rounded-xl bg-white/5 border border-white/5 p-3"
+                key={day}
+                className="rounded-2xl bg-white/[0.03] border border-white/[0.06] overflow-hidden"
               >
-                <div className="col-span-12 sm:col-span-2">
-                  <label className="block text-[10px] text-slate-500 mb-1">
-                    分类
-                  </label>
-                  <select
-                    value={task.category}
-                    onChange={(e) =>
-                      updateTask(task.id, {
-                        category: e.target.value as TaskCategory,
-                      })
-                    }
-                    className="w-full text-xs bg-white/5 border border-white/10 rounded-lg px-2 py-1.5 text-slate-200 focus:outline-none focus:border-accent/50"
-                  >
-                    {allCategories.map((c) => (
-                      <option key={c} value={c}>
-                        {TASK_CATEGORY_LABELS[c]}
-                      </option>
-                    ))}
-                  </select>
-                </div>
+                <button
+                  onClick={() => toggleDay(day)}
+                  className="w-full flex items-center justify-between px-4 py-3 hover:bg-white/[0.03] transition-colors"
+                >
+                  <div className="flex items-center gap-3">
+                    <span className="text-sm font-bold text-slate-200">{day}</span>
+                    <span className="text-[11px] px-2 py-0.5 rounded-full bg-white/5 text-slate-400">
+                      {count} 项
+                    </span>
+                    {minutes > 0 && (
+                      <span className="text-[11px] px-2 py-0.5 rounded-full bg-white/5 text-slate-400">
+                        约 {minutes} 分钟
+                      </span>
+                    )}
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        addTask(day);
+                      }}
+                      className="p-1.5 rounded-lg hover:bg-white/10 text-slate-400 hover:text-slate-200 transition-colors"
+                      aria-label={`${day}添加任务`}
+                    >
+                      <Plus className="w-4 h-4" />
+                    </button>
+                    <ChevronDown
+                      className={`w-4 h-4 text-slate-500 transition-transform ${
+                        isCollapsed ? '-rotate-90' : ''
+                      }`}
+                    />
+                  </div>
+                </button>
 
-                <div className="col-span-6 sm:col-span-1">
-                  <label className="block text-[10px] text-slate-500 mb-1">
-                    星期
-                  </label>
-                  <select
-                    value={task.day}
-                    onChange={(e) =>
-                      updateTask(task.id, { day: e.target.value as DayOfWeek })
-                    }
-                    className="w-full text-xs bg-white/5 border border-white/10 rounded-lg px-2 py-1.5 text-slate-200 focus:outline-none focus:border-accent/50"
-                  >
-                    {dayOrder.map((d) => (
-                      <option key={d} value={d}>
-                        {d}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
-                <div className="col-span-6 sm:col-span-4">
-                  <label className="block text-[10px] text-slate-500 mb-1">
-                    任务内容
-                  </label>
-                  <input
-                    type="text"
-                    value={task.focus}
-                    onChange={(e) =>
-                      updateTask(task.id, { focus: e.target.value })
-                    }
-                    placeholder="例如：古诗新学"
-                    className="w-full text-xs bg-white/5 border border-white/10 rounded-lg px-2 py-1.5 text-slate-200 placeholder:text-slate-600 focus:outline-none focus:border-accent/50"
-                  />
-                </div>
-
-                <div className="col-span-6 sm:col-span-2">
-                  <label className="block text-[10px] text-slate-500 mb-1">
-                    时长
-                  </label>
-                  <input
-                    type="text"
-                    value={task.duration}
-                    onChange={(e) =>
-                      updateTask(task.id, { duration: e.target.value })
-                    }
-                    placeholder="30分钟"
-                    className="w-full text-xs bg-white/5 border border-white/10 rounded-lg px-2 py-1.5 text-slate-200 placeholder:text-slate-600 focus:outline-none focus:border-accent/50"
-                  />
-                </div>
-
-                <div className="col-span-5 sm:col-span-2">
-                  <label className="block text-[10px] text-slate-500 mb-1">
-                    材料/关键词
-                  </label>
-                  <input
-                    type="text"
-                    value={task.materials.join('，')}
-                    onChange={(e) =>
-                      updateTask(task.id, {
-                        materials: e.target.value
-                          .split(/[,，]/)
-                          .map((s) => s.trim())
-                          .filter(Boolean),
-                      })
-                    }
-                    placeholder="用逗号分隔"
-                    className="w-full text-xs bg-white/5 border border-white/10 rounded-lg px-2 py-1.5 text-slate-200 placeholder:text-slate-600 focus:outline-none focus:border-accent/50"
-                  />
-                </div>
-
-                <div className="col-span-1 flex justify-end pt-5">
-                  <button
-                    onClick={() => deleteTask(task.id)}
-                    className="p-1.5 rounded-lg hover:bg-error/10 text-slate-500 hover:text-error transition-colors focus-ring"
-                    aria-label="删除任务"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </button>
-                </div>
+                <AnimatePresence initial={false}>
+                  {!isCollapsed && (
+                    <motion.div
+                      initial={shouldReduceMotion ? false : { height: 0, opacity: 0 }}
+                      animate={{ height: 'auto', opacity: 1 }}
+                      exit={shouldReduceMotion ? { opacity: 0 } : { height: 0, opacity: 0 }}
+                      className="overflow-hidden"
+                    >
+                      <div className="p-3 space-y-3">
+                        {dayTasks.length === 0 && (
+                          <div className="text-center py-4 text-xs text-slate-500">
+                            暂无任务，点击上方 + 添加
+                          </div>
+                        )}
+                        {dayTasks.map((task) => (
+                          <TaskEditRow
+                            key={task.id}
+                            task={task}
+                            isCopying={copyingTaskId === task.id}
+                            onUpdate={updateTask}
+                            onDelete={deleteTask}
+                            onToggleCopy={() =>
+                              setCopyingTaskId(
+                                copyingTaskId === task.id ? null : task.id
+                              )
+                            }
+                            onCopy={(days) => {
+                              duplicateTask(task, days);
+                              setCopyingTaskId(null);
+                            }}
+                          />
+                        ))}
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
             );
           })}
         </div>
 
-        <button
-          onClick={addTask}
-          className="w-full py-2.5 mb-6 rounded-xl border border-dashed border-white/15 text-slate-400 hover:text-slate-200 hover:border-white/30 hover:bg-white/5 transition-all flex items-center justify-center gap-2 text-sm focus-ring"
-        >
-          <Plus className="w-4 h-4" />
-          添加任务
-        </button>
-
         <div className="flex items-center justify-end gap-3">
           <button
-            onClick={onClose}
+            onClick={handleClose}
             className="px-4 py-2 rounded-xl text-slate-400 hover:text-slate-200 transition-colors focus-ring"
           >
             取消
@@ -370,6 +431,300 @@ function EditPlanModal({ plan, onClose, onSave }: EditPlanModalProps) {
           >
             <Send className="w-4 h-4" />
             保存
+          </button>
+        </div>
+      </motion.div>
+
+      <AnimatePresence>
+        {showUnsavedPrompt && (
+          <UnsavedPrompt
+            onCancel={() => setShowUnsavedPrompt(false)}
+            onConfirm={() => {
+              setShowUnsavedPrompt(false);
+              onClose();
+            }}
+          />
+        )}
+      </AnimatePresence>
+    </motion.div>
+  );
+}
+
+const durationPresets = ['15分钟', '20分钟', '30分钟', '45分钟', '60分钟'];
+
+interface TaskEditRowProps {
+  task: WeeklyTaskItem;
+  isCopying: boolean;
+  onUpdate: (id: string, updates: Partial<Omit<WeeklyTaskItem, 'id'>>) => void;
+  onDelete: (id: string) => void;
+  onToggleCopy: () => void;
+  onCopy: (days: DayOfWeek[]) => void;
+}
+
+function TaskEditRow({
+  task,
+  isCopying,
+  onUpdate,
+  onDelete,
+  onToggleCopy,
+  onCopy,
+}: TaskEditRowProps) {
+  const [selectedDays, setSelectedDays] = useState<Set<DayOfWeek>>(new Set());
+  const [materialInput, setMaterialInput] = useState('');
+  const CategoryIcon = categoryIcons[task.category];
+
+  const toggleDay = (day: DayOfWeek) => {
+    setSelectedDays((prev) => {
+      const next = new Set(prev);
+      if (next.has(day)) next.delete(day);
+      else next.add(day);
+      return next;
+    });
+  };
+
+  const handleCopy = () => {
+    if (selectedDays.size === 0) return;
+    onCopy(Array.from(selectedDays));
+    setSelectedDays(new Set());
+  };
+
+  return (
+    <div className="rounded-xl bg-white/5 border border-white/5 p-3">
+      <div className="grid grid-cols-12 gap-2 items-start">
+        <div className="col-span-6 sm:col-span-2">
+          <label className="block text-[10px] text-slate-500 mb-1">分类</label>
+          <div className="relative">
+            <CategoryIcon className="absolute left-2 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400 pointer-events-none" />
+            <select
+              value={task.category}
+              onChange={(e) =>
+                onUpdate(task.id, {
+                  category: e.target.value as TaskCategory,
+                })
+              }
+              className="w-full pl-7 pr-2 text-xs bg-white/5 border border-white/10 rounded-lg py-1.5 text-slate-200 focus:outline-none focus:border-accent/50"
+            >
+              {allCategories.map((c) => (
+                <option key={c} value={c}>
+                  {TASK_CATEGORY_LABELS[c]}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+
+        <div className="col-span-6 sm:col-span-5">
+          <label className="block text-[10px] text-slate-500 mb-1">任务内容</label>
+          <input
+            type="text"
+            value={task.focus}
+            onChange={(e) => onUpdate(task.id, { focus: e.target.value })}
+            placeholder="例如：古诗新学"
+            className="w-full text-xs bg-white/5 border border-white/10 rounded-lg px-2 py-1.5 text-slate-200 placeholder:text-slate-600 focus:outline-none focus:border-accent/50"
+          />
+        </div>
+
+        <div className="col-span-6 sm:col-span-2">
+          <label className="block text-[10px] text-slate-500 mb-1">时长</label>
+          <input
+            type="text"
+            value={task.duration}
+            onChange={(e) => onUpdate(task.id, { duration: e.target.value })}
+            placeholder="30分钟"
+            className="w-full text-xs bg-white/5 border border-white/10 rounded-lg px-2 py-1.5 text-slate-200 placeholder:text-slate-600 focus:outline-none focus:border-accent/50"
+          />
+          <div className="flex flex-wrap gap-1 mt-1.5">
+            {durationPresets.map((preset) => (
+              <button
+                key={preset}
+                type="button"
+                onClick={() => onUpdate(task.id, { duration: preset })}
+                className={`text-[9px] px-1.5 py-0.5 rounded transition-colors ${
+                  task.duration === preset
+                    ? 'bg-accent/20 text-accent border border-accent/30'
+                    : 'bg-white/5 text-slate-500 hover:bg-white/10'
+                }`}
+              >
+                {preset.replace('分钟', '')}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="col-span-5 sm:col-span-2 flex justify-end items-end gap-1">
+          <button
+            onClick={onToggleCopy}
+            className={`p-1.5 rounded-lg transition-colors focus-ring ${
+              isCopying
+                ? 'bg-secondary/15 text-secondary'
+                : 'hover:bg-white/10 text-slate-500 hover:text-slate-300'
+            }`}
+            aria-label="复制到其它日期"
+            title="复制到其它日期"
+          >
+            <Copy className="w-4 h-4" />
+          </button>
+          <button
+            onClick={() => onDelete(task.id)}
+            className="p-1.5 rounded-lg hover:bg-error/10 text-slate-500 hover:text-error transition-colors focus-ring"
+            aria-label="删除任务"
+          >
+            <Trash2 className="w-4 h-4" />
+          </button>
+        </div>
+      </div>
+
+      <div className="mt-2">
+        <label className="block text-[10px] text-slate-500 mb-1">材料/关键词</label>
+        <div className="flex flex-wrap items-center gap-1.5">
+          {task.materials.map((m, idx) => (
+            <span
+              key={`${m}-${idx}`}
+              className="text-[10px] px-2 py-0.5 rounded-full bg-white/10 text-slate-300 flex items-center gap-1"
+            >
+              {m}
+              <button
+                onClick={() =>
+                  onUpdate(task.id, {
+                    materials: task.materials.filter((_, i) => i !== idx),
+                  })
+                }
+                className="hover:text-error"
+                aria-label={`删除 ${m}`}
+              >
+                <X className="w-3 h-3" />
+              </button>
+            </span>
+          ))}
+          <input
+            type="text"
+            value={materialInput}
+            onChange={(e) => {
+              const value = e.target.value;
+              if (value.includes(',') || value.includes('，')) {
+                const parts = value
+                  .split(/[,，]/)
+                  .map((s) => s.trim())
+                  .filter(Boolean);
+                if (parts.length > 0) {
+                  onUpdate(task.id, {
+                    materials: [...task.materials, ...parts],
+                  });
+                }
+                setMaterialInput('');
+              } else {
+                setMaterialInput(value);
+              }
+            }}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                const value = materialInput.trim();
+                if (value) {
+                  onUpdate(task.id, {
+                    materials: [...task.materials, value],
+                  });
+                  setMaterialInput('');
+                }
+              }
+            }}
+            placeholder={task.materials.length === 0 ? '输入后回车或逗号分隔' : ''}
+            className="min-w-[120px] text-xs bg-transparent border-none px-1 py-0.5 text-slate-200 placeholder:text-slate-600 focus:outline-none focus:ring-0"
+          />
+        </div>
+      </div>
+
+      <AnimatePresence>
+        {isCopying && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            className="overflow-hidden"
+          >
+            <div className="mt-3 pt-3 border-t border-white/[0.06]">
+              <p className="text-[10px] text-slate-400 mb-2">复制到以下日期：</p>
+              <div className="flex flex-wrap gap-2 mb-3">
+                {dayOrder.map((day) => {
+                  const selected = selectedDays.has(day);
+                  return (
+                    <button
+                      key={day}
+                      type="button"
+                      onClick={() => toggleDay(day)}
+                      className={`px-2.5 py-1 rounded-lg text-xs transition-all ${
+                        selected
+                          ? 'bg-secondary/15 text-secondary border border-secondary/30'
+                          : 'bg-white/5 text-slate-400 border border-white/[0.06] hover:bg-white/[0.08]'
+                      }`}
+                    >
+                      {day}
+                    </button>
+                  );
+                })}
+              </div>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={handleCopy}
+                  disabled={selectedDays.size === 0}
+                  className="px-3 py-1.5 rounded-lg bg-secondary/15 text-secondary text-xs hover:bg-secondary/20 transition-colors disabled:opacity-50"
+                >
+                  确认复制
+                </button>
+                <button
+                  type="button"
+                  onClick={onToggleCopy}
+                  className="px-3 py-1.5 rounded-lg bg-white/5 text-slate-400 text-xs hover:bg-white/10 transition-colors"
+                >
+                  取消
+                </button>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
+
+interface UnsavedPromptProps {
+  onCancel: () => void;
+  onConfirm: () => void;
+}
+
+function UnsavedPrompt({ onCancel, onConfirm }: UnsavedPromptProps) {
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="fixed inset-0 z-[120] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
+      onClick={onCancel}
+    >
+      <motion.div
+        initial={{ scale: 0.95, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        exit={{ scale: 0.95, opacity: 0 }}
+        onClick={(e) => e.stopPropagation()}
+        className="w-full max-w-sm rounded-2xl glass border border-white/10 p-6 text-center"
+      >
+        <AlertTriangle className="w-10 h-10 text-warning mx-auto mb-3" />
+        <h3 className="text-lg font-bold text-slate-200 mb-2">有未保存的更改</h3>
+        <p className="text-xs text-slate-400 mb-6">
+          关闭后将丢失本次编辑内容，确定要取消吗？
+        </p>
+        <div className="flex items-center justify-center gap-3">
+          <button
+            onClick={onCancel}
+            className="px-4 py-2 rounded-xl text-slate-300 hover:text-white transition-colors"
+          >
+            继续编辑
+          </button>
+          <button
+            onClick={onConfirm}
+            className="px-4 py-2 rounded-xl bg-error/15 text-error hover:bg-error/20 transition-colors"
+          >
+            放弃更改
           </button>
         </div>
       </motion.div>
