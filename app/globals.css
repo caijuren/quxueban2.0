@@ -7,13 +7,15 @@
   --font-body: 'Manrope', 'PingFang SC', 'Microsoft YaHei', sans-serif;
   --font-mono: 'JetBrains Mono', 'SF Mono', monospace;
 
-  /* Default theme: dark-tech */
+  /* Command center theme v2 */
   --color-primary: #ff2d6a;
   --color-primary-glow: #ff5c8a;
+  --color-primary-dim: rgba(255, 45, 106, 0.12);
   --color-secondary: #8b5cf6;
   --color-secondary-glow: #a78bfa;
-  --shadow-primary: rgba(255, 45, 106, 0.15);
-  --shadow-secondary: rgba(139, 92, 246, 0.15);
+  --color-secondary-dim: rgba(139, 92, 246, 0.12);
+  --shadow-primary: rgba(255, 45, 106, 0.22);
+  --shadow-secondary: rgba(139, 92, 246, 0.22);
 }
 
 html {
@@ -21,8 +23,8 @@ html {
 }
 
 body {
-  background-color: #08080c;
-  color: #f8fafc;
+  background-color: #050508;
+  color: #ffffff;
   font-family: var(--font-body);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -61,44 +63,52 @@ body {
   background-clip: text;
 }
 
-/* Glow effects - subtle */
+.gradient-text-secondary {
+  background: linear-gradient(135deg, var(--color-secondary) 0%, var(--color-secondary-glow) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Glow effects - concentrated, used sparingly */
 .glow-primary {
-  box-shadow: 0 0 20px var(--shadow-primary);
+  box-shadow: 0 0 30px var(--shadow-primary);
 }
 
 .glow-secondary {
-  box-shadow: 0 0 20px var(--shadow-secondary);
+  box-shadow: 0 0 30px var(--shadow-secondary);
 }
 
 .glow-accent {
-  box-shadow: 0 0 20px rgba(6, 182, 212, 0.15);
+  box-shadow: 0 0 24px rgba(6, 182, 212, 0.22);
 }
 
-/* Glass effect - more refined */
+/* Glass effect - deeper, less border noise */
 .glass {
-  background: rgba(15, 15, 22, 0.75);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  background: rgba(10, 10, 15, 0.72);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.06);
 }
 
-/* Animated gradient background */
+/* Command center ambient background */
 .animated-bg {
   background:
-    radial-gradient(ellipse at 90% 10%, color-mix(in srgb, var(--color-primary) 8%, transparent) 0%, transparent 40%),
-    radial-gradient(ellipse at 10% 90%, color-mix(in srgb, var(--color-secondary) 5%, transparent) 0%, transparent 40%),
-    #08080c;
+    radial-gradient(ellipse at 80% 0%, color-mix(in srgb, var(--color-primary) 6%, transparent) 0%, transparent 45%),
+    radial-gradient(ellipse at 20% 100%, color-mix(in srgb, var(--color-secondary) 5%, transparent) 0%, transparent 45%),
+    radial-gradient(ellipse at 50% 50%, rgba(10, 10, 18, 0.9) 0%, transparent 70%),
+    #050508;
 }
 
-/* Grid pattern overlay */
+/* Grid pattern overlay - finer, more technical */
 .grid-pattern {
   background-image:
-    linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
-  background-size: 60px 60px;
+    linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
+  background-size: 48px 48px;
 }
 
-/* Tactical corner accents - smaller */
+/* Tactical corner accents - cleaner */
 .corner-accent {
   position: relative;
 }
@@ -107,9 +117,9 @@ body {
 .corner-accent::after {
   content: '';
   position: absolute;
-  width: 6px;
-  height: 6px;
-  border-color: color-mix(in srgb, var(--color-primary) 25%, transparent);
+  width: 8px;
+  height: 8px;
+  border-color: color-mix(in srgb, var(--color-primary) 35%, transparent);
   border-style: solid;
   pointer-events: none;
 }
@@ -117,24 +127,24 @@ body {
 .corner-accent::before {
   top: 0;
   left: 0;
-  border-width: 1px 0 0 1px;
+  border-width: 1.5px 0 0 1.5px;
 }
 
 .corner-accent::after {
   bottom: 0;
   right: 0;
-  border-width: 0 1px 1px 0;
+  border-width: 0 1.5px 1.5px 0;
 }
 
 /* Command panel - refined card */
 .command-panel {
-  @apply rounded-xl bg-white/[0.03] border border-white/[0.06] hover:border-white/[0.12] hover:bg-white/[0.05] transition-all duration-200;
+  @apply rounded-2xl bg-surface border border-border-default hover:border-border-strong transition-all duration-200;
 }
 
 .command-panel-active {
-  @apply rounded-xl bg-white/[0.05] border;
-  border-color: color-mix(in srgb, var(--color-primary) 20%, transparent);
-  box-shadow: 0 0 20px var(--shadow-primary);
+  @apply rounded-2xl bg-surface-light border;
+  border-color: color-mix(in srgb, var(--color-primary) 30%, transparent);
+  box-shadow: 0 0 30px var(--shadow-primary);
 }
 
 /* Text balance */
@@ -157,7 +167,7 @@ a {
 /* Focus visible ring */
 .focus-ring {
   @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-background;
-  --tw-ring-color: color-mix(in srgb, var(--color-primary) 50%, transparent);
+  --tw-ring-color: color-mix(in srgb, var(--color-primary) 55%, transparent);
 }
 
 /* Reduced motion */
@@ -193,4 +203,13 @@ html[data-font-size='xlarge'] {
 /* Utility for numeric data */
 .tabular-nums {
   font-variant-numeric: tabular-nums;
+}
+
+/* Safe area insets for mobile bottom nav */
+.pb-safe {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+.h-screen-safe {
+  height: calc(100vh - env(safe-area-inset-bottom, 0px));
 }

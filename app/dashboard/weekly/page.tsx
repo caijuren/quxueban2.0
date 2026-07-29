@@ -32,12 +32,14 @@ import {
   ChevronDown,
   Copy,
   AlertTriangle,
+  Share2,
 } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useChildren } from '@/components/dashboard/ChildrenContext';
 import EmptyState from '@/components/ui/EmptyState';
 import CommandCard from '@/components/ui/CommandCard';
 import MetricRing from '@/components/ui/MetricRing';
+import WeeklyReportExport from '@/components/weekly/WeeklyReportExport';
 import { gradeLabel } from '@/lib/children';
 import {
   type WeeklyPlan,
@@ -299,7 +301,7 @@ function EditPlanModal({ plan, onClose, onSave }: EditPlanModalProps) {
       initial={shouldReduceMotion ? { opacity: 1 } : { opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="fixed inset-0 z-[110] flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm"
+      className="fixed inset-0 z-[110] flex items-center sm:justify-center sm:p-4 bg-black/70 backdrop-blur-sm"
       onClick={handleClose}
     >
       <motion.div
@@ -310,7 +312,7 @@ function EditPlanModal({ plan, onClose, onSave }: EditPlanModalProps) {
         role="dialog"
         aria-modal="true"
         aria-labelledby="edit-plan-title"
-        className="w-full max-w-3xl max-h-[85vh] overflow-y-auto rounded-3xl glass border border-white/10 p-6 sm:p-8"
+        className="w-full h-full sm:h-auto sm:max-w-3xl sm:max-h-[85vh] overflow-y-auto rounded-none sm:rounded-3xl glass sm:border border-white/10 p-5 sm:p-8 modal-scroll"
       >
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-3">
@@ -698,7 +700,7 @@ function UnsavedPrompt({ onCancel, onConfirm }: UnsavedPromptProps) {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="fixed inset-0 z-[120] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
+      className="fixed inset-0 z-[120] flex items-center sm:justify-center sm:p-4 bg-black/80 backdrop-blur-sm"
       onClick={onCancel}
     >
       <motion.div
@@ -706,7 +708,7 @@ function UnsavedPrompt({ onCancel, onConfirm }: UnsavedPromptProps) {
         animate={{ scale: 1, opacity: 1 }}
         exit={{ scale: 0.95, opacity: 0 }}
         onClick={(e) => e.stopPropagation()}
-        className="w-full max-w-sm rounded-2xl glass border border-white/10 p-6 text-center"
+        className="w-full max-w-sm rounded-2xl glass border border-white/10 p-6 text-center mx-4"
       >
         <AlertTriangle className="w-10 h-10 text-warning mx-auto mb-3" />
         <h3 className="text-lg font-bold text-slate-200 mb-2">有未保存的更改</h3>
@@ -827,7 +829,7 @@ function TaskLibraryModal({
       initial={shouldReduceMotion ? { opacity: 1 } : { opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="fixed inset-0 z-[110] flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm"
+      className="fixed inset-0 z-[110] flex items-center sm:justify-center sm:p-4 bg-black/70 backdrop-blur-sm"
       onClick={onClose}
     >
       <motion.div
@@ -838,7 +840,7 @@ function TaskLibraryModal({
         role="dialog"
         aria-modal="true"
         aria-labelledby="library-title"
-        className="w-full max-w-4xl max-h-[85vh] overflow-y-auto rounded-3xl glass border border-white/10 p-6 sm:p-8"
+        className="w-full h-full sm:h-auto sm:max-w-4xl sm:max-h-[85vh] overflow-y-auto rounded-none sm:rounded-3xl glass sm:border border-white/10 p-5 sm:p-8 modal-scroll"
       >
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-3">
@@ -1009,11 +1011,13 @@ function WeeklyTasksContent() {
     viewFromUrl === 'matrix' ? 'matrix' : 'day'
   );
   const [selectedDay, setSelectedDay] = useState<DayOfWeek>(getTodayName());
+  const [matrixDay, setMatrixDay] = useState<DayOfWeek>(getTodayName());
   const [draftPlan, setDraftPlan] = useState<WeeklyPlan | null>(null);
   const [reviewOpen, setReviewOpen] = useState(false);
   const [reviewComment, setReviewComment] = useState('');
   const [editOpen, setEditOpen] = useState(false);
   const [libraryOpen, setLibraryOpen] = useState(false);
+  const [reportOpen, setReportOpen] = useState(false);
 
   const today = getTodayName();
 
@@ -1027,6 +1031,7 @@ function WeeklyTasksContent() {
   useEffect(() => {
     setDraftPlan(null);
     setSelectedDay(today);
+    setMatrixDay(today);
   }, [weekId, today]);
 
   const plan = useMemo(() => {
@@ -1261,6 +1266,15 @@ function WeeklyTasksContent() {
             >
               <Sparkles className="w-3.5 h-3.5" />
               {plan?.reviewedAt ? '查看复盘' : '本周复盘'}
+            </button>
+          )}
+          {isPublished && !isDraft && stats && (
+            <button
+              onClick={() => setReportOpen(true)}
+              className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-white/5 hover:bg-white/10 text-slate-300 text-sm transition-colors focus-ring"
+            >
+              <Share2 className="w-3.5 h-3.5" />
+              导出周报
             </button>
           )}
           {displayPlan && (
@@ -1568,109 +1582,203 @@ function WeeklyTasksContent() {
             initial={shouldReduceMotion ? false : { opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: -20 }}
-            className="rounded-2xl glass p-5 overflow-x-auto"
+            className="rounded-2xl glass p-5"
           >
-            <div className="min-w-[800px]">
-              <div className="grid grid-cols-8 gap-2 mb-2">
-                <div className="text-xs text-slate-500 font-medium px-3 py-2">分类</div>
+            {/* Desktop matrix */}
+            <div className="hidden lg:block overflow-x-auto">
+              <div className="min-w-[800px]">
+                <div className="grid grid-cols-8 gap-2 mb-2">
+                  <div className="text-xs text-slate-500 font-medium px-3 py-2">分类</div>
+                  {dayOrder.map((day) => {
+                    const isToday = day === today && weekId === getCurrentWeekId();
+                    const ds = stats?.byDay[day];
+                    return (
+                      <div
+                        key={day}
+                        className={`text-center text-xs font-medium px-2 py-2 rounded-lg ${
+                          isToday ? 'bg-primary/10 text-primary' : 'text-slate-400'
+                        }`}
+                      >
+                        {day}
+                        {ds && ds.total > 0 && (
+                          <span className="block text-[10px] text-slate-500 mt-0.5">
+                            {ds.done}/{ds.total}
+                          </span>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+
+                {allCategories
+                  .filter((cat) => displayPlan.tasks.some((t) => (t.category || 'other') === cat))
+                  .map((category) => {
+                    const CategoryIcon = categoryIcons[category];
+                    return (
+                      <div key={category} className="grid grid-cols-8 gap-2 mb-2">
+                        <div className="flex items-center gap-2 px-3 py-3 rounded-xl bg-white/5">
+                          <div
+                            className={`w-7 h-7 rounded-lg flex items-center justify-center ${getCategoryColorClass(category)}`}
+                          >
+                            <CategoryIcon className="w-3.5 h-3.5" />
+                          </div>
+                          <span className="text-sm font-medium text-slate-300">{TASK_CATEGORY_LABELS[category]}</span>
+                        </div>
+                        {dayOrder.map((day) => {
+                          const task = tasksByDay?.[day].find((t) => (t.category || 'other') === category);
+                          const taskDone = task?.status === 'done';
+                          return (
+                            <button
+                              key={day}
+                              type="button"
+                              disabled={!task}
+                              onClick={() => task && handleToggleTask(task)}
+                              aria-label={
+                                task
+                                  ? `${TASK_CATEGORY_LABELS[category]} ${day}：${task.focus}，${task.duration}，点击${taskDone ? '取消完成' : '标记完成'}`
+                                  : `${TASK_CATEGORY_LABELS[category]} ${day}：无任务`
+                              }
+                              className={`relative group px-2 py-3 rounded-xl border transition-all min-h-[80px] text-left disabled:cursor-default ${
+                                task
+                                  ? taskDone
+                                    ? 'bg-success/10 border-success/20 hover:bg-success/[0.12]'
+                                    : 'bg-white/5 border-white/5 hover:bg-white/[0.07]'
+                                  : 'bg-transparent border-transparent'
+                              }`}
+                            >
+                              {task && (
+                                <>
+                                  <div className="flex items-center justify-between mb-1">
+                                    <span className="text-[10px] text-slate-500">{task.duration}</span>
+                                    {task.status === 'done' && (
+                                      <CheckCircle2 className="w-3 h-3 text-success" />
+                                    )}
+                                  </div>
+                                  <p className="text-xs font-medium text-slate-200 line-clamp-2">
+                                    {task.focus}
+                                  </p>
+
+                                  <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 w-48 p-3 rounded-xl bg-surface border border-white/10 shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-20">
+                                    <p className="text-xs font-bold text-slate-200 mb-1">
+                                      {task.focus}
+                                    </p>
+                                    <p className="text-[10px] text-slate-500 mb-2">
+                                      {TASK_CATEGORY_LABELS[category]} · {task.duration}
+                                    </p>
+                                    <div className="flex flex-wrap gap-1 mb-2">
+                                      {task.materials.map((m) => (
+                                        <span
+                                          key={m}
+                                          className="text-[10px] px-1.5 py-0.5 rounded bg-white/5 text-slate-400"
+                                        >
+                                          {m}
+                                        </span>
+                                      ))}
+                                    </div>
+                                    <p className="text-[10px] text-slate-500">
+                                      点击{task.status === 'done' ? '取消完成' : '标记完成'}
+                                    </p>
+                                  </div>
+                                </>
+                              )}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    );
+                  })}
+              </div>
+            </div>
+
+            {/* Mobile matrix */}
+            <div className="lg:hidden space-y-4">
+              <div className="flex gap-1.5 overflow-x-auto pb-2">
                 {dayOrder.map((day) => {
                   const isToday = day === today && weekId === getCurrentWeekId();
+                  const isSelected = day === matrixDay;
                   const ds = stats?.byDay[day];
                   return (
-                    <div
+                    <button
                       key={day}
-                      className={`text-center text-xs font-medium px-2 py-2 rounded-lg ${
-                        isToday ? 'bg-primary/10 text-primary' : 'text-slate-400'
+                      onClick={() => setMatrixDay(day)}
+                      aria-pressed={isSelected}
+                      className={`flex-shrink-0 relative px-3 py-2 rounded-lg text-left min-w-[68px] transition-all border focus-ring ${
+                        isSelected
+                          ? 'bg-white/[0.08] border-primary/30'
+                          : 'bg-white/[0.03] border-white/[0.06] hover:bg-white/[0.05]'
                       }`}
                     >
-                      {day}
-                      {ds && ds.total > 0 && (
-                        <span className="block text-[10px] text-slate-500 mt-0.5">
-                          {ds.done}/{ds.total}
-                        </span>
+                      {isToday && (
+                        <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-primary shadow-glow-primary" />
                       )}
-                    </div>
+                      <p className={`text-xs font-bold ${isSelected ? 'text-white' : 'text-slate-300'}`}>
+                        {day}
+                      </p>
+                      <p className="text-[10px] text-slate-500 mt-0.5 tabular-nums">
+                        {ds && ds.total > 0 ? `${ds.done}/${ds.total}` : '无任务'}
+                      </p>
+                    </button>
                   );
                 })}
               </div>
 
-              {allCategories
-                .filter((cat) => displayPlan.tasks.some((t) => (t.category || 'other') === cat))
-                .map((category) => {
-                  const CategoryIcon = categoryIcons[category];
-                  return (
-                    <div key={category} className="grid grid-cols-8 gap-2 mb-2">
-                      <div className="flex items-center gap-2 px-3 py-3 rounded-xl bg-white/5">
+              <div className="space-y-2">
+                {allCategories
+                  .filter((cat) => displayPlan.tasks.some((t) => (t.category || 'other') === cat))
+                  .map((category) => {
+                    const CategoryIcon = categoryIcons[category];
+                    const task = tasksByDay?.[matrixDay].find((t) => (t.category || 'other') === category);
+                    const taskDone = task?.status === 'done';
+                    return (
+                      <button
+                        key={category}
+                        type="button"
+                        disabled={!task}
+                        onClick={() => task && handleToggleTask(task)}
+                        aria-label={
+                          task
+                            ? `${TASK_CATEGORY_LABELS[category]} ${matrixDay}：${task.focus}，${task.duration}，点击${taskDone ? '取消完成' : '标记完成'}`
+                            : `${TASK_CATEGORY_LABELS[category]} ${matrixDay}：无任务`
+                        }
+                        className={`w-full flex items-center gap-3 px-3 py-3 rounded-xl border transition-all text-left disabled:cursor-default ${
+                          task
+                            ? taskDone
+                              ? 'bg-success/10 border-success/20 active:scale-[0.99]'
+                              : 'bg-white/5 border-white/5 active:scale-[0.99]'
+                            : 'bg-transparent border-transparent opacity-50'
+                        }`}
+                      >
                         <div
-                          className={`w-7 h-7 rounded-lg flex items-center justify-center ${getCategoryColorClass(category)}`}
+                          className={`w-10 h-10 rounded-lg flex items-center justify-center ${getCategoryColorClass(
+                            category
+                          )}`}
                         >
-                          <CategoryIcon className="w-3.5 h-3.5" />
+                          <CategoryIcon className="w-4 h-4" />
                         </div>
-                        <span className="text-sm font-medium text-slate-300">{TASK_CATEGORY_LABELS[category]}</span>
-                      </div>
-                      {dayOrder.map((day) => {
-                        const task = tasksByDay?.[day].find((t) => (t.category || 'other') === category);
-                        const taskDone = task?.status === 'done';
-                        return (
-                          <button
-                            key={day}
-                            type="button"
-                            disabled={!task}
-                            onClick={() => task && handleToggleTask(task)}
-                            aria-label={
-                              task
-                                ? `${TASK_CATEGORY_LABELS[category]} ${day}：${task.focus}，${task.duration}，点击${taskDone ? '取消完成' : '标记完成'}`
-                                : `${TASK_CATEGORY_LABELS[category]} ${day}：无任务`
-                            }
-                            className={`relative group px-2 py-3 rounded-xl border transition-all min-h-[80px] text-left disabled:cursor-default ${
-                              task
-                                ? taskDone
-                                  ? 'bg-success/10 border-success/20 hover:bg-success/[0.12]'
-                                  : 'bg-white/5 border-white/5 hover:bg-white/[0.07]'
-                                : 'bg-transparent border-transparent'
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center justify-between mb-0.5">
+                            <span className="text-sm font-medium text-slate-300">
+                              {TASK_CATEGORY_LABELS[category]}
+                            </span>
+                            {task && (
+                              <span className="text-[10px] px-1.5 py-0.5 rounded bg-white/[0.05] text-slate-300">
+                                {task.duration}
+                              </span>
+                            )}
+                          </div>
+                          <p
+                            className={`text-xs font-medium ${
+                              taskDone ? 'text-slate-500 line-through' : 'text-slate-200'
                             }`}
                           >
-                            {task && (
-                              <>
-                                <div className="flex items-center justify-between mb-1">
-                                  <span className="text-[10px] text-slate-500">{task.duration}</span>
-                                  {task.status === 'done' && (
-                                    <CheckCircle2 className="w-3 h-3 text-success" />
-                                  )}
-                                </div>
-                                <p className="text-xs font-medium text-slate-200 line-clamp-2">
-                                  {task.focus}
-                                </p>
-
-                                <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 w-48 p-3 rounded-xl bg-surface border border-white/10 shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-20">
-                                  <p className="text-xs font-bold text-slate-200 mb-1">
-                                    {task.focus}
-                                  </p>
-                                  <p className="text-[10px] text-slate-500 mb-2">
-                                    {TASK_CATEGORY_LABELS[category]} · {task.duration}
-                                  </p>
-                                  <div className="flex flex-wrap gap-1 mb-2">
-                                    {task.materials.map((m) => (
-                                      <span
-                                        key={m}
-                                        className="text-[10px] px-1.5 py-0.5 rounded bg-white/5 text-slate-400"
-                                      >
-                                        {m}
-                                      </span>
-                                    ))}
-                                  </div>
-                                  <p className="text-[10px] text-slate-500">
-                                    点击{task.status === 'done' ? '取消完成' : '标记完成'}
-                                  </p>
-                                </div>
-                              </>
-                            )}
-                          </button>
-                        );
-                      })}
-                    </div>
-                  );
-                })}
+                            {task ? task.focus : '当天无安排'}
+                          </p>
+                        </div>
+                        {taskDone && <CheckCircle2 className="w-5 h-5 text-success shrink-0" />}
+                      </button>
+                    );
+                  })}
+              </div>
             </div>
           </motion.div>
         )}
@@ -1682,7 +1790,7 @@ function WeeklyTasksContent() {
             initial={shouldReduceMotion ? { opacity: 1 } : { opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[110] flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm"
+            className="fixed inset-0 z-[110] flex items-center sm:justify-center sm:p-4 bg-black/70 backdrop-blur-sm"
             onClick={() => setReviewOpen(false)}
           >
             <motion.div
@@ -1693,7 +1801,7 @@ function WeeklyTasksContent() {
               animate={{ scale: 1, opacity: 1 }}
               exit={shouldReduceMotion ? { opacity: 0 } : { scale: 0.95, opacity: 0 }}
               onClick={(e) => e.stopPropagation()}
-              className="w-full max-w-2xl max-h-[85vh] overflow-y-auto rounded-3xl glass border border-white/10 p-6 sm:p-8"
+              className="w-full h-full sm:h-auto sm:max-w-2xl sm:max-h-[85vh] overflow-y-auto rounded-none sm:rounded-3xl glass sm:border border-white/10 p-5 sm:p-8 modal-scroll"
             >
               <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center gap-3">
@@ -1789,6 +1897,14 @@ function WeeklyTasksContent() {
           existingTasks={displayPlan.tasks}
           onClose={() => setLibraryOpen(false)}
           onAdd={handleAddFromLibrary}
+        />
+      )}
+
+      {reportOpen && displayPlan && currentChild && (
+        <WeeklyReportExport
+          plan={displayPlan}
+          childName={currentChild.name}
+          onClose={() => setReportOpen(false)}
         />
       )}
     </div>

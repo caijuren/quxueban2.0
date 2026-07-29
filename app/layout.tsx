@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { Syne, Manrope, JetBrains_Mono } from 'next/font/google';
 import './globals.css';
 import { AuthProvider } from '@/components/providers/AuthProvider';
@@ -29,6 +29,14 @@ const jetbrainsMono = JetBrains_Mono({
 export const metadata: Metadata = {
   title: '趣学伴 - 上海升学战略地图',
   description: '为上海家长打造的升学路线规划与进度追踪工具',
+};
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+  viewportFit: 'cover',
 };
 
 export default function RootLayout({

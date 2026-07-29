@@ -38,12 +38,12 @@ export default function CommandCard({
   return (
     <div
       className={cn(
-        'rounded-xl border transition-all duration-200 overflow-hidden',
+        'rounded-2xl border transition-all duration-200 overflow-hidden',
         active
-          ? 'bg-white/[0.05] border-primary/20 shadow-glow-primary'
-          : 'bg-white/[0.03] border-white/[0.06]',
-        hover && !active && 'hover:border-white/[0.12] hover:bg-white/[0.05]',
-        isInteractive && 'cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950',
+          ? 'bg-surface-light border-primary/25 shadow-glow-primary'
+          : 'bg-surface border-border-default',
+        hover && !active && 'hover:border-border-strong hover:bg-surface-light',
+        isInteractive && 'cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background',
         corner && 'corner-accent',
         className
       )}

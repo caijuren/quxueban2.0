@@ -156,49 +156,49 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
       initial={{ y: -16, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-      className="fixed top-0 right-0 left-0 lg:left-64 h-16 glass border-b border-white/[0.06] z-30 px-4 sm:px-6 flex items-center justify-between"
+      className="fixed top-0 right-0 left-0 lg:left-64 h-16 glass border-b border-border-default z-30 px-3 sm:px-5 flex items-center justify-between"
     >
       <div className="flex items-center gap-3">
         <button
           onClick={onMenuClick}
-          className="lg:hidden w-9 h-9 rounded-lg bg-white/5 flex items-center justify-center text-slate-300 hover:bg-white/10 transition-colors focus-ring"
+          className="lg:hidden w-10 h-10 rounded-xl bg-surface border border-border-default flex items-center justify-center text-text-secondary hover:text-white hover:border-border-strong hover:bg-surface-light transition-all focus-ring"
           aria-label="打开菜单"
         >
-          <Menu className="w-4 h-4" />
+          <Menu className="w-5 h-5" />
         </button>
 
         <div className="relative hidden sm:block">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-500" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted" />
           <input
             type="text"
             placeholder="搜索路线、任务、学校…"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             onKeyDown={handleSearch}
-            className="pl-9 pr-4 py-2 w-56 lg:w-72 rounded-lg bg-surface border border-white/[0.08] text-sm text-slate-200 placeholder:text-slate-600 focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/50 transition-colors"
+            className="pl-10 pr-4 py-2.5 w-56 lg:w-72 rounded-xl bg-surface border border-border-default text-sm text-white placeholder:text-text-muted focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/40 transition-all"
           />
         </div>
       </div>
 
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-2 sm:gap-3">
         <div className="relative" ref={notificationRef}>
           <button
             onClick={() => setNotificationOpen((prev) => !prev)}
-            className="relative w-9 h-9 rounded-lg bg-white/5 flex items-center justify-center text-slate-400 hover:bg-white/[0.08] hover:text-slate-200 transition-colors focus-ring"
+            className="relative w-10 h-10 rounded-xl bg-surface border border-border-default flex items-center justify-center text-text-secondary hover:text-white hover:border-border-strong hover:bg-surface-light transition-all focus-ring"
             aria-label="通知"
           >
-            <Bell className="w-4 h-4" />
+            <Bell className="w-5 h-5" />
             {unreadCount > 0 && (
-              <span className="absolute top-1.5 right-1.5 min-w-[14px] h-3.5 px-1 rounded-full bg-primary text-[9px] font-bold text-white flex items-center justify-center tabular-nums">
+              <span className="absolute top-2 right-2 min-w-[16px] h-4 px-1 rounded-full bg-primary text-[10px] font-bold text-white flex items-center justify-center tabular-nums shadow-glow-primary">
                 {unreadCount > 9 ? '9+' : unreadCount}
               </span>
             )}
           </button>
 
           {notificationOpen && (
-            <div className="absolute right-0 top-full mt-2 w-72 rounded-xl glass border border-white/[0.08] overflow-hidden z-50 shadow-2xl modal-scroll">
-              <div className="flex items-center justify-between border-b border-white/[0.06] px-4 py-2.5">
-                <p className="text-sm font-semibold text-slate-200">通知</p>
+            <div className="absolute right-0 top-full mt-2 w-80 rounded-2xl glass border border-border-default overflow-hidden z-50 shadow-panel modal-scroll">
+              <div className="flex items-center justify-between border-b border-border-subtle px-4 py-3">
+                <p className="text-sm font-semibold text-white">通知中心</p>
                 {unreadCount > 0 && (
                   <button
                     onClick={handleMarkAllRead}
@@ -214,7 +214,7 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
                     <div className="h-4 w-4 animate-spin rounded-full border-2 border-primary border-t-transparent" />
                   </div>
                 ) : notifications.length === 0 ? (
-                  <div className="py-8 text-center text-sm text-slate-500">
+                  <div className="py-8 text-center text-sm text-text-tertiary">
                     暂无通知
                   </div>
                 ) : (
@@ -222,22 +222,22 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
                     <button
                       key={n.id}
                       onClick={() => handleMarkRead(n.id)}
-                      className={`w-full text-left border-b border-white/[0.04] px-4 py-3 transition-colors hover:bg-white/5 ${
-                        n.readAt ? 'opacity-60' : ''
+                      className={`w-full text-left border-b border-border-subtle px-4 py-3 transition-colors hover:bg-surface-light ${
+                        n.readAt ? 'opacity-55' : ''
                       }`}
                     >
                       <div className="mb-1 flex items-start justify-between gap-2">
-                        <p className="text-sm font-medium text-slate-200">
+                        <p className="text-sm font-medium text-text-secondary">
                           {n.title}
                         </p>
                         {!n.readAt && (
-                          <span className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />
+                          <span className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-primary shadow-glow-primary" />
                         )}
                       </div>
-                      <p className="line-clamp-2 text-xs text-slate-400">
+                      <p className="line-clamp-2 text-xs text-text-tertiary">
                         {n.content}
                       </p>
-                      <p className="mt-1 text-[10px] text-slate-600 tabular-nums">
+                      <p className="mt-1 text-[11px] text-text-muted tabular-nums">
                         {new Date(n.createdAt).toLocaleString('zh-CN')}
                       </p>
                     </button>
@@ -250,23 +250,23 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
 
         <button
           onClick={handleLogout}
-          className="w-9 h-9 rounded-lg bg-white/5 flex items-center justify-center text-slate-400 hover:bg-white/[0.08] hover:text-danger transition-colors focus-ring"
+          className="hidden sm:flex w-10 h-10 rounded-xl bg-surface border border-border-default items-center justify-center text-text-secondary hover:text-danger hover:border-danger/30 hover:bg-danger/10 transition-all focus-ring"
           aria-label="退出登录"
         >
-          <LogOut className="w-4 h-4" />
+          <LogOut className="w-5 h-5" />
         </button>
 
         <div className="relative" ref={childDropdownRef}>
           <button
             onClick={() => setChildDropdownOpen((prev) => !prev)}
-            className="flex items-center gap-2.5 pl-3 border-l border-white/[0.08] text-left focus-ring rounded-lg"
+            className="flex items-center gap-2.5 pl-1 pr-2 py-1 rounded-xl bg-surface border border-border-default hover:border-border-strong hover:bg-surface-light text-left focus-ring transition-all"
             aria-label="切换孩子"
             aria-haspopup="listbox"
             aria-expanded={childDropdownOpen}
             aria-controls="child-listbox"
           >
             <div
-              className="w-9 h-9 rounded-full flex items-center justify-center text-white text-sm font-bold overflow-hidden shrink-0"
+              className="w-9 h-9 rounded-lg flex items-center justify-center text-white text-sm font-bold overflow-hidden shrink-0 ring-1 ring-white/10"
               style={{
                 background: currentChild
                   ? `linear-gradient(135deg, ${currentChild.avatarColor}, ${currentChild.avatarColor}88)`
@@ -288,17 +288,17 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
               )}
             </div>
             <div className="text-right hidden sm:block">
-              <p className="text-sm font-medium text-slate-200">
+              <p className="text-sm font-semibold text-white leading-tight">
                 {currentChild ? currentChild.name : '未选择孩子'}
               </p>
-              <p className="text-[10px] text-slate-500">
+              <p className="text-[11px] text-text-tertiary">
                 {currentChild && currentStage
                   ? `${gradeLabel(currentChild.grade)} · ${currentStage}`
                   : '请选择孩子'}
               </p>
             </div>
             <svg
-              className={`w-3.5 h-3.5 text-slate-500 hidden sm:block transition-transform duration-200 ${
+              className={`w-4 h-4 text-text-muted hidden sm:block transition-transform duration-200 ${
                 childDropdownOpen ? 'rotate-180' : ''
               }`}
               fill="none"
@@ -315,12 +315,12 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
               ref={childListboxRef}
               role="listbox"
               aria-label="切换孩子"
-              className="absolute right-0 top-full mt-2 w-60 rounded-xl glass border border-white/[0.08] overflow-hidden z-50 shadow-2xl"
+              className="absolute right-0 top-full mt-2 w-64 rounded-2xl glass border border-border-default overflow-hidden z-50 shadow-panel"
             >
-              <div className="px-3 py-2 border-b border-white/[0.06]">
-                <p className="text-xs text-slate-500">切换孩子</p>
+              <div className="px-4 py-2.5 border-b border-border-subtle">
+                <p className="text-xs text-text-muted">切换作战档案</p>
               </div>
-              <div className="p-1">
+              <div className="p-1.5">
                 {children.map((child, index) => {
                   const isActive = currentChild?.id === child.id;
                   return (
@@ -335,12 +335,12 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
                         setCurrentChildId(child.id);
                         setChildDropdownOpen(false);
                       }}
-                      className={`w-full flex items-center gap-2.5 px-2.5 py-2 rounded-lg text-left transition-colors ${
-                        isActive ? 'bg-primary/10' : 'hover:bg-white/5'
+                      className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-all ${
+                        isActive ? 'bg-primary-dim border border-primary/20' : 'hover:bg-surface-light'
                       }`}
                     >
                       <div
-                        className="w-7 h-7 rounded-full flex items-center justify-center text-white text-xs font-bold shrink-0 overflow-hidden"
+                        className="w-8 h-8 rounded-lg flex items-center justify-center text-white text-xs font-bold shrink-0 overflow-hidden ring-1 ring-white/10"
                         style={{
                           background: `linear-gradient(135deg, ${child.avatarColor}, ${child.avatarColor}88)`,
                         }}
@@ -358,12 +358,12 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
                         )}
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className={`text-sm font-medium truncate ${isActive ? 'text-primary' : 'text-slate-200'}`}>
+                        <p className={`text-sm font-semibold truncate ${isActive ? 'text-primary' : 'text-white'}`}>
                           {child.name}
                         </p>
-                        <p className="text-[10px] text-slate-500">{gradeLabel(child.grade)}</p>
+                        <p className="text-xs text-text-tertiary">{gradeLabel(child.grade)}</p>
                       </div>
-                      {isActive && <Check className="w-3.5 h-3.5 text-primary shrink-0" />}
+                      {isActive && <Check className="w-4 h-4 text-primary shrink-0" />}
                     </button>
                   );
                 })}
