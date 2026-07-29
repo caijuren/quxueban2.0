@@ -34,6 +34,9 @@ COPY . .
 # 确保 public 目录存在（项目可能无静态资源目录）
 RUN mkdir -p /app/public
 
+# 使用国内镜像加速 Prisma engines 下载（腾讯云服务器访问官方 CDN 易超时）
+ENV PRISMA_ENGINES_MIRROR=https://prisma-builds.s3.cn-north-1.amazonaws.com.cn/all_commits/
+
 # Prisma Client 必须在使用前重新生成，以匹配容器平台引擎
 RUN npx prisma generate
 
