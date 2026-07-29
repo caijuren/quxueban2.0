@@ -210,64 +210,37 @@ export default function PlanRoadmap({
       onMouseLeave={handleMouseLeave}
       style={{ perspective: '1200px' }}
     >
-      {/* Top countdown banner - neon style */}
+      {/* Top countdown banner - command center HUD */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="relative rounded-2xl p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 overflow-hidden"
-        style={{
-          background: 'linear-gradient(135deg, rgba(244,63,94,0.08) 0%, rgba(139,92,246,0.08) 100%)',
-          border: '1px solid rgba(244,63,94,0.35)',
-          boxShadow: '0 0 30px rgba(244,63,94,0.15), inset 0 0 20px rgba(244,63,94,0.05)',
-        }}
+        className="hud-panel corner-accent relative rounded-2xl p-5 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 overflow-hidden"
       >
-        {/* Animated border glow */}
-        <motion.div
-          className="absolute inset-0 rounded-2xl pointer-events-none"
-          style={{
-            background: 'linear-gradient(90deg, transparent, rgba(244,63,94,0.4), rgba(139,92,246,0.4), transparent)',
-            backgroundSize: '200% 100%',
-          }}
-          animate={{ backgroundPosition: ['200% 0', '-200% 0'] }}
-          transition={{ duration: 3, repeat: Infinity, ease: 'linear' }}
-        />
-        <div className="absolute inset-[1px] rounded-2xl bg-slate-950/80 pointer-events-none" />
+        <div className="absolute inset-0 pointer-events-none bg-gradient-to-r from-primary-dim via-transparent to-secondary-dim opacity-40" />
 
         <div className="relative flex items-start gap-4 z-10">
-          <div
-            className="w-12 h-12 rounded-xl flex items-center justify-center shrink-0"
-            style={{
-              background: 'rgba(244,63,94,0.15)',
-              boxShadow: '0 0 20px rgba(244,63,94,0.3)',
-            }}
-          >
-            <Zap className="w-6 h-6 text-warning" style={{ filter: 'drop-shadow(0 0 8px rgba(244,63,94,0.8))' }} />
+          <div className="w-12 h-12 rounded-xl flex items-center justify-center shrink-0 bg-primary/10 border border-primary/20 shadow-glow-primary">
+            <Zap className="w-6 h-6 text-primary" />
           </div>
           <div>
-            <p className="text-sm text-slate-400 mb-1">
-              距离下一个熔断点（{nextCheckpoint?.grade} · {nextCheckpoint?.name}）
+            <p className="text-caption font-bold text-text-muted uppercase tracking-wider mb-1">
+              距离下一个熔断点
             </p>
-            <p className="text-2xl font-bold font-display">
+            <p className="text-body text-text-secondary mb-1">
+              {nextCheckpoint?.grade} · {nextCheckpoint?.name}
+            </p>
+            <p className="text-h2 data-value">
               还有{' '}
-              <motion.span
-                className="inline-block text-transparent bg-clip-text font-black"
-                style={{
-                  backgroundImage: 'linear-gradient(90deg, #f43f5e, #fbbf24, #f43f5e)',
-                  backgroundSize: '200% 100%',
-                  textShadow: '0 0 30px rgba(244,63,94,0.5)',
-                }}
-                animate={{ backgroundPosition: ['0% 0', '200% 0'] }}
-                transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
-              >
+              <span className="gradient-text">
                 {/* TODO: calculate from next checkpoint date */}
                 423 天
-              </motion.span>
+              </span>
             </p>
           </div>
         </div>
         <button
           onClick={onShowDiagnosis}
-          className="relative z-10 px-5 py-2.5 rounded-xl font-medium transition-all bg-primary/10 text-primary border border-primary/30 hover:bg-primary/20 hover:border-primary/50 hover:shadow-[0_0_30px_rgba(244,63,94,0.3)]"
+          className="relative z-10 px-5 py-2.5 rounded-xl font-semibold text-caption transition-all bg-primary text-white hover:shadow-glow-primary focus-ring"
         >
           查看诊断
         </button>
@@ -279,61 +252,51 @@ export default function PlanRoadmap({
           initial={{ opacity: 0, scale: 0.98 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.6, delay: 0.1 }}
-          className="rounded-3xl glass p-6 border border-white/5 relative overflow-hidden"
+          className="hud-panel relative overflow-hidden rounded-3xl"
           style={{
             transform: `rotateX(${tilt.rotateX}deg) rotateY(${tilt.rotateY}deg)`,
             transformStyle: 'preserve-3d',
             transition: 'transform 0.15s ease-out',
           }}
         >
-          <div className="flex items-center justify-between mb-6">
-            <div>
-              <h2 className="text-xl font-bold font-display">小学全景看板</h2>
-              <p className="text-sm text-slate-400">2025-2030 · 三条路线的熔断点与关键节点</p>
-              <div className="mt-2 flex items-center gap-2">
-                <span className="text-xs text-slate-500">当前执行路线：</span>
-                {(() => {
-                  const route = routes.find((r) => r.id === activeRoute);
-                  if (!route) return null;
+          <div className="absolute inset-0 tactical-grid opacity-40 pointer-events-none" />
+
+          <div className="relative p-5 sm:p-6 border-b border-border-default">
+            <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+              <div>
+                <p className="text-caption font-bold text-text-muted uppercase tracking-wider mb-1">作战地图</p>
+                <h2 className="text-h2 neon-text">小学全景看板</h2>
+                <p className="text-body text-text-tertiary mt-1">2025-2030 · 三条路线的熔断点与关键节点</p>
+              </div>
+              <div className="flex flex-wrap items-center gap-2">
+                {routes.map((route) => {
+                  const isActive = activeRoute === route.id;
                   return (
-                    <span
-                      className="px-2 py-0.5 rounded-full text-xs font-bold"
-                      style={{
-                        color: route.color,
-                        backgroundColor: `${route.color}20`,
-                        border: `1px solid ${route.color}40`,
-                      }}
+                    <button
+                      key={route.id}
+                      onMouseEnter={() => setHoveredRoute(route.id)}
+                      onMouseLeave={() => setHoveredRoute(null)}
+                      onClick={() => setActiveRoute(route.id)}
+                      className={`hud-panel-hover flex items-center gap-2 px-3 py-2 rounded-xl text-caption font-medium transition-all border ${
+                        isActive
+                          ? 'text-white bg-surface-light border-border-strong shadow-glow-primary'
+                          : 'text-text-tertiary border-transparent hover:text-white hover:bg-surface-light'
+                      }`}
+                      aria-pressed={isActive}
                     >
+                      <span
+                        className="w-2.5 h-2.5 rounded-full"
+                        style={{ backgroundColor: route.color, boxShadow: `0 0 10px ${route.glowColor}` }}
+                      />
                       {route.name}
-                    </span>
+                    </button>
                   );
-                })()}
+                })}
               </div>
             </div>
-            <div className="flex items-center gap-4 text-sm">
-              {routes.map((route) => {
-                const isActive = activeRoute === route.id;
-                return (
-                  <button
-                    key={route.id}
-                    onMouseEnter={() => setHoveredRoute(route.id)}
-                    onMouseLeave={() => setHoveredRoute(null)}
-                    onClick={() => setActiveRoute(route.id)}
-                    className={`flex items-center gap-2 px-2 py-1 rounded-lg transition-colors ${
-                      isActive ? 'text-white bg-white/10' : 'text-slate-400 hover:text-white hover:bg-white/5'
-                    }`}
-                    aria-pressed={isActive}
-                  >
-                    <span
-                      className="w-3 h-3 rounded-full"
-                      style={{ backgroundColor: route.color, boxShadow: `0 0 10px ${route.glowColor}` }}
-                    />
-                    {route.name}
-                  </button>
-                );
-              })}
-            </div>
           </div>
+
+          <div className="relative p-4 sm:p-6">
 
           {/* SVG Roadmap */}
           <div className="relative w-full overflow-x-auto">
@@ -578,7 +541,7 @@ export default function PlanRoadmap({
                         }}
                       >
                         <span
-                          className="px-2 py-0.5 rounded-full text-xs font-bold"
+                          className="px-2 py-0.5 rounded-full text-micro font-bold"
                           style={{
                             backgroundColor: route.color,
                             color: '#0f172a',
@@ -587,14 +550,14 @@ export default function PlanRoadmap({
                           {outcome.label}
                         </span>
                         <div className="flex flex-col leading-none">
-                          <span className="text-[10px] text-slate-400">{outcome.name}</span>
-                          <span className="text-xs font-bold" style={{ color: route.color }}>
+                          <span className="text-micro text-slate-400">{outcome.name}</span>
+                          <span className="text-small font-bold data-value" style={{ color: route.color }}>
                             {outcome.prob}%
                           </span>
                         </div>
                         {isActive && (
                           <span
-                            className="ml-auto px-1.5 py-0.5 rounded text-[9px] font-bold"
+                            className="ml-auto px-1.5 py-0.5 rounded text-micro font-bold"
                             style={{ color: route.color, backgroundColor: `${route.color}25` }}
                           >
                             主
@@ -861,27 +824,28 @@ export default function PlanRoadmap({
               })}
             </svg>
           </div>
+          </div>
 
           {/* Checkpoint detail panel */}
           {selectedCheckpoint && (
             <motion.div
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: 'auto' }}
-              className="mt-6 p-5 rounded-2xl bg-surface border border-white/10"
+              className="relative mx-4 sm:mx-6 mb-6 p-5 rounded-2xl hud-panel corner-accent"
             >
-              <div className="flex items-start justify-between">
+              <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
                 <div>
                   <div className="flex items-center gap-2 mb-2">
                     {(() => {
                       const config = checkpointConfig[selectedCheckpoint.type];
                       return <config.icon className="w-5 h-5" style={{ color: config.color }} />;
                     })()}
-                    <h3 className="text-lg font-bold font-display">{selectedCheckpoint.name}</h3>
+                    <h3 className="text-h3 neon-text">{selectedCheckpoint.name}</h3>
                     {(() => {
                       const status = statusConfig[selectedCheckpoint.status];
                       return (
                         <span
-                          className="px-2.5 py-0.5 rounded-full text-xs font-medium"
+                          className="px-2.5 py-0.5 rounded-full text-micro font-semibold"
                           style={{ color: status.color, backgroundColor: status.bg }}
                         >
                           {status.label}
@@ -889,11 +853,11 @@ export default function PlanRoadmap({
                       );
                     })()}
                   </div>
-                  <p className="text-sm text-slate-400 mb-2">
+                  <p className="text-body text-text-tertiary mb-2">
                     {selectedCheckpoint.grade}
                     {selectedCheckpoint.requirement && ` · ${selectedCheckpoint.requirement}`}
                   </p>
-                  <p className="text-sm text-slate-300">
+                  <p className="text-caption text-text-secondary">
                     {selectedCheckpoint.type === 'hard'
                       ? '硬熔断点：未达标建议切换主路线到备选方案，系统会提醒家长评估。'
                       : selectedCheckpoint.type === 'soft'
@@ -903,17 +867,17 @@ export default function PlanRoadmap({
                       : '关键事件节点，需要提前规划和准备相关材料。'}
                   </p>
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 shrink-0">
                   <button
                     disabled
                     title="进度录入功能即将上线"
-                    className="px-4 py-2 rounded-lg bg-primary/10 text-primary text-sm font-medium opacity-60 cursor-not-allowed"
+                    className="px-4 py-2 rounded-xl bg-primary-dim text-primary text-caption font-semibold opacity-60 cursor-not-allowed border border-primary/20"
                   >
                     录入进度（即将上线）
                   </button>
                   <button
                     onClick={() => setSelectedCheckpoint(null)}
-                    className="px-4 py-2 rounded-lg text-slate-500 hover:text-white text-sm"
+                    className="hud-panel-hover px-4 py-2 rounded-xl text-text-tertiary hover:text-white text-caption font-medium transition-colors focus-ring"
                   >
                     关闭
                   </button>
@@ -929,32 +893,32 @@ export default function PlanRoadmap({
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.4 }}
-        className="grid grid-cols-1 sm:grid-cols-3 gap-3"
+        className="grid grid-cols-1 sm:grid-cols-3 gap-4"
       >
         {volunteers.map((volunteer) => (
           <div
             key={volunteer.id}
-            className="rounded-xl glass p-4 border border-white/5 hover:border-white/10 transition-all group"
+            className="hud-panel hud-panel-hover rounded-2xl p-5 transition-all group"
           >
-            <div className="flex items-center justify-between mb-3">
-              <div className="flex items-center gap-2">
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-2.5">
                 <span
-                  className="px-2 py-0.5 rounded-full text-xs font-bold"
-                  style={{ backgroundColor: volunteer.color, color: '#0f172a' }}
+                  className="px-2.5 py-1 rounded-full text-micro font-bold"
+                  style={{ backgroundColor: volunteer.color, color: '#050508' }}
                 >
                   {volunteer.type.split('（')[1]?.replace('）', '') || volunteer.type}
                 </span>
-                <h4 className="font-bold font-display text-slate-200">{volunteer.name}</h4>
+                <h4 className="text-h4 text-white">{volunteer.name}</h4>
               </div>
-              <span className="text-lg font-bold font-display" style={{ color: volunteer.color }}>
+              <span className="text-h3 data-value" style={{ color: volunteer.color }}>
                 {volunteer.probability}%
               </span>
             </div>
-            <div className="flex flex-wrap gap-1.5">
+            <div className="flex flex-wrap gap-2">
               {volunteer.requirements.map((req) => (
                 <span
                   key={req}
-                  className="px-2 py-1 rounded-md bg-white/5 text-[11px] text-slate-400 border border-white/5"
+                  className="px-2.5 py-1 rounded-lg bg-surface-elevated border border-border-default text-caption text-text-tertiary"
                 >
                   {req}
                 </span>
@@ -969,20 +933,20 @@ export default function PlanRoadmap({
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.5 }}
-        className="flex items-center justify-between p-4 rounded-2xl glass border border-white/5"
+        className="hud-panel flex items-center justify-between p-5 rounded-2xl"
       >
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center">
-            <Plus className="w-5 h-5 text-slate-400" />
+          <div className="w-11 h-11 rounded-xl bg-surface-light border border-border-default flex items-center justify-center">
+            <Plus className="w-5 h-5 text-text-secondary" />
           </div>
           <div>
-            <p className="text-sm font-medium text-slate-200">自定义熔断点</p>
-            <p className="text-xs text-slate-500">系统已内置默认节点，你也可以添加、修改或删除自己的检查点</p>
+            <p className="text-caption font-bold text-white">自定义熔断点</p>
+            <p className="text-small text-text-tertiary">系统已内置默认节点，你也可以添加、修改或删除自己的检查点</p>
           </div>
         </div>
         <button
           onClick={onManageNodes}
-          className="px-4 py-2 rounded-lg bg-white/5 text-slate-300 text-sm hover:bg-white/10 transition-all"
+          className="hud-panel-hover px-5 py-2.5 rounded-xl border border-border-default text-text-secondary text-caption font-semibold hover:text-white hover:border-border-strong hover:bg-surface-elevated transition-all focus-ring"
         >
           管理节点
         </button>

@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Bell, Search, Menu, Check, User, LogOut } from 'lucide-react';
+import { Bell, Search, Menu, Check, User, LogOut, ChevronDown } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { signOut } from 'next-auth/react';
@@ -156,40 +156,44 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
       initial={{ y: -16, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-      className="fixed top-0 right-0 left-0 lg:left-64 h-16 glass border-b border-border-default z-30 px-3 sm:px-5 flex items-center justify-between"
+      className="fixed top-0 right-0 left-0 lg:left-64 h-16 lg:h-[70px] glass border-b border-border-default z-30 px-3 sm:px-5 flex items-center justify-between"
+      style={{
+        background: 'rgba(8, 8, 12, 0.82)',
+        boxShadow: '0 1px 0 0 rgba(255, 45, 106, 0.08)',
+      }}
     >
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-3 flex-1 min-w-0">
         <button
           onClick={onMenuClick}
-          className="lg:hidden w-10 h-10 rounded-xl bg-surface border border-border-default flex items-center justify-center text-text-secondary hover:text-white hover:border-border-strong hover:bg-surface-light transition-all focus-ring"
+          className="lg:hidden w-11 h-11 rounded-xl bg-surface border border-border-default flex items-center justify-center text-text-secondary hover:text-white hover:border-border-strong hover:bg-surface-light transition-all focus-ring"
           aria-label="打开菜单"
         >
           <Menu className="w-5 h-5" />
         </button>
 
-        <div className="relative hidden sm:block">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted" />
+        <div className="relative flex-1 max-w-md">
+          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted" />
           <input
             type="text"
             placeholder="搜索路线、任务、学校…"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             onKeyDown={handleSearch}
-            className="pl-10 pr-4 py-2.5 w-56 lg:w-72 rounded-xl bg-surface border border-border-default text-sm text-white placeholder:text-text-muted focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/40 transition-all"
+            className="w-full sm:w-64 lg:w-80 pl-10 pr-4 py-2.5 rounded-xl bg-surface border border-border-default text-sm text-white placeholder:text-text-muted focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/40 focus:shadow-[0_0_20px_rgba(255,45,106,0.12)] transition-all"
           />
         </div>
       </div>
 
-      <div className="flex items-center gap-2 sm:gap-3">
+      <div className="flex items-center gap-2 sm:gap-3 shrink-0 ml-3">
         <div className="relative" ref={notificationRef}>
           <button
             onClick={() => setNotificationOpen((prev) => !prev)}
-            className="relative w-10 h-10 rounded-xl bg-surface border border-border-default flex items-center justify-center text-text-secondary hover:text-white hover:border-border-strong hover:bg-surface-light transition-all focus-ring"
+            className="relative w-11 h-11 rounded-xl bg-surface border border-border-default flex items-center justify-center text-text-secondary hover:text-white hover:border-primary/30 hover:bg-surface-light hover:shadow-[0_0_16px_rgba(255,45,106,0.12)] transition-all focus-ring"
             aria-label="通知"
           >
             <Bell className="w-5 h-5" />
             {unreadCount > 0 && (
-              <span className="absolute top-2 right-2 min-w-[16px] h-4 px-1 rounded-full bg-primary text-[10px] font-bold text-white flex items-center justify-center tabular-nums shadow-glow-primary">
+              <span className="absolute top-2 right-2 min-w-[18px] h-[18px] px-1 rounded-full bg-primary text-[10px] font-bold text-white flex items-center justify-center tabular-nums shadow-glow-primary">
                 {unreadCount > 9 ? '9+' : unreadCount}
               </span>
             )}
@@ -248,18 +252,10 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
           )}
         </div>
 
-        <button
-          onClick={handleLogout}
-          className="hidden sm:flex w-10 h-10 rounded-xl bg-surface border border-border-default items-center justify-center text-text-secondary hover:text-danger hover:border-danger/30 hover:bg-danger/10 transition-all focus-ring"
-          aria-label="退出登录"
-        >
-          <LogOut className="w-5 h-5" />
-        </button>
-
         <div className="relative" ref={childDropdownRef}>
           <button
             onClick={() => setChildDropdownOpen((prev) => !prev)}
-            className="flex items-center gap-2.5 pl-1 pr-2 py-1 rounded-xl bg-surface border border-border-default hover:border-border-strong hover:bg-surface-light text-left focus-ring transition-all"
+            className="flex items-center gap-2.5 pl-1.5 pr-2.5 py-1.5 rounded-xl bg-surface border border-border-default hover:border-primary/30 hover:bg-surface-light hover:shadow-[0_0_16px_rgba(255,45,106,0.10)] text-left focus-ring transition-all"
             aria-label="切换孩子"
             aria-haspopup="listbox"
             aria-expanded={childDropdownOpen}
@@ -297,16 +293,11 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
                   : '请选择孩子'}
               </p>
             </div>
-            <svg
+            <ChevronDown
               className={`w-4 h-4 text-text-muted hidden sm:block transition-transform duration-200 ${
                 childDropdownOpen ? 'rotate-180' : ''
               }`}
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-            </svg>
+            />
           </button>
 
           {childDropdownOpen && (
@@ -367,6 +358,15 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
                     </button>
                   );
                 })}
+              </div>
+              <div className="border-t border-border-subtle p-1.5">
+                <button
+                  onClick={handleLogout}
+                  className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left text-text-secondary hover:text-danger hover:bg-danger/10 transition-all"
+                >
+                  <LogOut className="w-4 h-4" />
+                  <span className="text-sm font-medium">退出登录</span>
+                </button>
               </div>
             </div>
           )}

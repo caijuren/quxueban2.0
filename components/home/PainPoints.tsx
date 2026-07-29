@@ -26,38 +26,47 @@ export default function PainPoints() {
       <div className="max-w-6xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-start">
           <MotionSection direction="up" duration={0.6}>
-            <span className="text-[11px] font-mono text-primary uppercase tracking-widest mb-3 block">
-              The Problem
-            </span>
-            <h2 className="text-3xl sm:text-4xl font-bold font-display leading-tight mb-4">
+            <div className="flex items-center gap-2 mb-3">
+              <span className="indicator-dot" />
+              <span className="text-micro font-mono text-primary uppercase tracking-widest">
+                The Problem
+              </span>
+            </div>
+            <h2 className="text-h2 font-display mb-4">
               上海升学
               <br />
-              <span className="text-slate-500">不是信息不够</span>
+              <span className="text-text-muted">不是信息不够</span>
               <br />
               是信息太杂
             </h2>
-            <p className="text-slate-400 text-base leading-relaxed max-w-sm">
+            <p className="text-body text-text-tertiary leading-relaxed max-w-sm">
               政策每年微调、学校要求各不相同、时间节点密集。家长最缺的不是资源，而是一张清晰的执行地图。
             </p>
           </MotionSection>
 
-          <div className="space-y-6">
+          <div className="space-y-4">
             {pains.map((pain, index) => (
               <MotionSection
                 key={pain.number}
                 direction="left"
                 delay={index * 0.1}
                 duration={0.5}
-                className="group flex gap-5 pb-6 border-b border-white/5 last:border-0 last:pb-0"
               >
-                <span className="text-2xl font-mono text-slate-700 font-bold group-hover:text-primary transition-colors duration-300">
-                  {pain.number}
-                </span>
-                <div>
-                  <h3 className="text-lg font-bold font-display mb-1.5 text-white group-hover:text-primary transition-colors duration-300">
-                    {pain.title}
-                  </h3>
-                  <p className="text-sm text-slate-400 leading-relaxed">{pain.description}</p>
+                <div className="hud-panel hud-panel-hover p-4 sm:p-5 group">
+                  <div className="flex gap-4">
+                    <span className="data-value text-h3 text-text-muted group-hover:text-primary transition-colors duration-300">
+                      {pain.number}
+                    </span>
+                    <div className="flex-1">
+                      <h3 className="text-h4 font-display mb-1.5 text-white group-hover:text-primary transition-colors duration-300">
+                        {pain.title}
+                      </h3>
+                      <p className="text-caption text-text-tertiary leading-relaxed">
+                        {pain.description}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="neon-line mt-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 </div>
               </MotionSection>
             ))}

@@ -50,7 +50,7 @@ export default function DashboardLayout({
           />
         )}
 
-        <main className="pt-16 lg:pl-64 min-h-screen relative z-0">
+        <main className="pt-16 lg:pt-[70px] lg:pl-64 min-h-screen relative z-0">
           <div className="p-4 sm:p-6 lg:p-8 pb-28 lg:pb-8">{children}</div>
         </main>
 

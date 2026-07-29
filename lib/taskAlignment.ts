@@ -33,26 +33,27 @@ export function computeTaskAlignment({ child, template }: AlignmentInput): TaskA
 }
 
 export function getCategoryColorClass(category: TaskCategory): string {
+  // Constrained to pink/purple/slate family for the neon command center look
   const map: Record<TaskCategory, string> = {
-    chinese: 'bg-rose-500/20 text-rose-300 border-rose-500/30',
-    math: 'bg-cyan-500/20 text-cyan-300 border-cyan-500/30',
-    english: 'bg-amber-500/20 text-amber-300 border-amber-500/30',
-    school: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30',
-    reading: 'bg-violet-500/20 text-violet-300 border-violet-500/30',
-    sport: 'bg-orange-500/20 text-orange-300 border-orange-500/30',
-    interest: 'bg-pink-500/20 text-pink-300 border-pink-500/30',
-    other: 'bg-slate-500/20 text-slate-300 border-slate-500/30',
+    chinese: 'bg-primary/15 text-primary-glow border-primary/25',
+    math: 'bg-secondary/15 text-secondary-glow border-secondary/25',
+    english: 'bg-secondary/12 text-secondary border-secondary/22',
+    school: 'bg-white/6 text-text-secondary border-white/10',
+    reading: 'bg-secondary/10 text-secondary-glow border-secondary/18',
+    sport: 'bg-primary/12 text-primary border-primary/20',
+    interest: 'bg-secondary/14 text-secondary-glow border-secondary/24',
+    other: 'bg-white/5 text-text-tertiary border-white/8',
   };
   return map[category] || map.other;
 }
 
 export function getAlignmentColorClass(alignment: TaskAlignment): string {
   const map: Record<TaskAlignment, string> = {
-    ahead: 'bg-indigo-500/20 text-indigo-300 border-indigo-500/30',
-    ontrack: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30',
-    behind: 'bg-rose-500/20 text-rose-300 border-rose-500/30',
-    optional: 'bg-slate-500/20 text-slate-300 border-slate-500/30',
-    unrelated: 'bg-zinc-500/20 text-zinc-400 border-zinc-500/30',
+    ahead: 'bg-secondary/12 text-secondary-glow border-secondary/20',
+    ontrack: 'bg-primary/12 text-primary border-primary/20',
+    behind: 'bg-danger/12 text-danger border-danger/25',
+    optional: 'bg-white/5 text-text-tertiary border-white/8',
+    unrelated: 'bg-white/4 text-text-muted border-white/6',
   };
   return map[alignment] || map.optional;
 }

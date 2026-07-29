@@ -6,8 +6,8 @@ import { BarChart3 } from 'lucide-react';
 const subjects = [
   { name: '数学', progress: 72, color: '#ff2d6a' },
   { name: '英语', progress: 85, color: '#8b5cf6' },
-  { name: '语文', progress: 60, color: '#06b6d4' },
-  { name: '竞赛', progress: 35, color: '#f59e0b' },
+  { name: '语文', progress: 60, color: '#ff5c8a' },
+  { name: '竞赛', progress: 35, color: '#a78bfa' },
 ];
 
 const metrics = [
@@ -22,7 +22,7 @@ export default function DashboardVisual() {
       <div className="flex items-center justify-between mb-5">
         <div className="flex items-center gap-2">
           <BarChart3 className="w-3.5 h-3.5 text-primary" aria-hidden="true" />
-          <span className="text-[11px] font-mono text-slate-400 uppercase tracking-wider">
+          <span className="text-xs font-mono text-text-tertiary uppercase tracking-wider">
             实时进度仪表盘
           </span>
         </div>
@@ -31,7 +31,7 @@ export default function DashboardVisual() {
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-40" />
             <span className="relative inline-flex rounded-full h-2 w-2 bg-primary" />
           </span>
-          <span className="text-[11px] font-mono text-primary">LIVE</span>
+          <span className="text-xs font-mono text-primary">LIVE</span>
         </div>
       </div>
 
@@ -45,15 +45,15 @@ export default function DashboardVisual() {
               transition={{ delay: 0.2 + index * 0.08 }}
               className="p-3 rounded-xl bg-white/[0.03] border border-white/[0.06]"
             >
-              <div className="text-[10px] text-slate-500 mb-1">{metric.label}</div>
+              <div className="text-xs text-text-muted mb-1">{metric.label}</div>
               <div className="text-lg font-bold font-display text-white tabular-nums">{metric.value}</div>
-              <div className="text-[10px] text-slate-600 mt-0.5">{metric.status}</div>
+              <div className="text-xs text-text-muted mt-0.5">{metric.status}</div>
             </motion.div>
           ))}
         </div>
 
         <div className="p-4 rounded-xl bg-white/[0.03] border border-white/[0.06] space-y-4">
-          <div className="text-[10px] font-mono text-slate-500 uppercase tracking-wider">
+          <div className="text-xs font-mono text-text-muted uppercase tracking-wider">
             学科准备度
           </div>
           {subjects.map((subject, index) => (
@@ -64,7 +64,7 @@ export default function DashboardVisual() {
               transition={{ delay: 0.4 + index * 0.08 }}
             >
               <div className="flex items-center justify-between mb-1.5">
-                <span className="text-xs text-slate-300">{subject.name}</span>
+                <span className="text-xs text-text-secondary">{subject.name}</span>
                 <span className="text-xs font-mono tabular-nums" style={{ color: subject.color }}>
                   {subject.progress}%
                 </span>
@@ -89,12 +89,12 @@ export default function DashboardVisual() {
           className="flex items-center justify-between p-4 rounded-xl border border-primary/20 bg-primary/[0.03]"
         >
           <div>
-            <div className="text-[10px] text-slate-500 mb-0.5">健康度评分</div>
+            <div className="text-xs text-text-muted mb-0.5">健康度评分</div>
             <div className="text-lg font-bold font-display text-primary tabular-nums">78/100</div>
           </div>
           <div className="text-right">
-            <div className="text-[10px] text-slate-500 mb-0.5">评估结论</div>
-            <div className="text-xs text-slate-300">整体良好，奥数需加强</div>
+            <div className="text-xs text-text-muted mb-0.5">评估结论</div>
+            <div className="text-xs text-text-secondary">整体良好，奥数需加强</div>
           </div>
         </motion.div>
       </div>

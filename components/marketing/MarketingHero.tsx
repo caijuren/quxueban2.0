@@ -39,21 +39,21 @@ export default function MarketingHero({
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-14 items-center">
           <MotionSection direction="up" duration={0.7}>
             <span
-              className={`text-[11px] font-mono ${colorMap[eyebrowColor]} uppercase tracking-widest mb-3 block`}
+              className={`text-xs font-mono ${colorMap[eyebrowColor]} uppercase tracking-widest mb-3 block`}
             >
               {eyebrow}
             </span>
             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold font-display leading-[1.05] mb-5">
               {title}
             </h1>
-            <p className="text-sm sm:text-base text-slate-400 max-w-md mb-8 leading-relaxed">
+            <p className="text-sm sm:text-base text-text-tertiary max-w-md mb-8 leading-relaxed">
               {description}
             </p>
             <div className="flex flex-wrap gap-2">
               {tags.map((tag) => (
                 <div
                   key={tag.text}
-                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-white/[0.06] bg-white/[0.02] text-xs text-slate-300"
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-white/[0.06] bg-white/[0.02] text-xs text-text-secondary"
                 >
                   {tag.icon}
                   {tag.text}

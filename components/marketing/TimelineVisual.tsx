@@ -25,11 +25,11 @@ export default function TimelineVisual() {
       <div className="flex items-center justify-between mb-5">
         <div className="flex items-center gap-2">
           <CalendarCheck className="w-3.5 h-3.5 text-primary" aria-hidden="true" />
-          <span className="text-[11px] font-mono text-slate-400 uppercase tracking-wider">
+          <span className="text-xs font-mono text-text-tertiary uppercase tracking-wider">
             里程碑时间线 · 2025-2030
           </span>
         </div>
-        <span className="text-[11px] font-mono text-primary">TRACKING</span>
+        <span className="text-xs font-mono text-primary">TRACKING</span>
       </div>
 
       <svg viewBox="0 0 900 250" className="w-full h-auto" aria-label="升学里程碑时间线">
@@ -146,11 +146,11 @@ export default function TimelineVisual() {
         })}
       </svg>
 
-      <div className="mt-4 pt-4 border-t border-white/5 flex items-center justify-between text-[11px]">
+      <div className="mt-4 pt-4 border-t border-white/5 flex items-center justify-between text-xs">
         <span className="text-slate-500">
           当前: <span className="text-primary">一升二暑假 · 路线选择</span>
         </span>
-        <span className="font-mono text-slate-600">6 MAJOR MILESTONES</span>
+        <span className="font-mono text-text-muted">6 MAJOR MILESTONES</span>
       </div>
     </div>
   );

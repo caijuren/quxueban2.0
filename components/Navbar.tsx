@@ -25,13 +25,13 @@ export default function Navbar() {
       initial={{ y: -20, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.6 }}
-      className="fixed top-0 left-0 right-0 z-50 glass border-b border-white/5"
+      className="fixed top-0 left-0 right-0 z-50 glass shadow-panel border-b border-border-default"
       aria-label="主导航"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-14">
+        <div className="flex items-center justify-between h-16">
           <Link href="/" className="flex items-center gap-2 group" aria-label="趣学伴首页">
-            <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center glow-primary">
+            <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center shadow-glow-primary">
               <Brain className="w-4 h-4 text-white" aria-hidden="true" />
             </div>
             <span className="text-lg font-bold font-display tracking-tight text-white">
@@ -47,8 +47,8 @@ export default function Navbar() {
                   <span
                     className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-all duration-200 ${
                       active
-                        ? 'text-primary bg-primary/10'
-                        : 'text-slate-400 hover:text-white hover:bg-white/5'
+                        ? 'text-primary bg-primary/10 shadow-glow-sm'
+                        : 'text-text-tertiary hover:text-white hover:bg-white/5'
                     }`}
                   >
                     <item.icon className="w-3.5 h-3.5" aria-hidden="true" />
@@ -61,13 +61,13 @@ export default function Navbar() {
 
           <div className="flex items-center gap-2">
             <Link href="/login" className="hidden sm:block">
-              <span className="px-4 py-1.5 rounded-full bg-white text-background text-sm font-semibold hover:bg-slate-200 transition-all duration-200">
+              <span className="px-4 py-1.5 rounded-full bg-primary text-white hover:shadow-neon text-sm font-semibold hover:bg-primary-glow transition-all duration-200">
                 登录 / 注册
               </span>
             </Link>
             <button
               onClick={() => setMobileOpen((prev) => !prev)}
-              className="md:hidden p-2 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 transition-colors focus-ring"
+              className="md:hidden p-2 rounded-lg text-text-tertiary hover:text-white hover:bg-white/5 transition-colors focus-ring"
               aria-expanded={mobileOpen}
               aria-controls="mobile-menu"
               aria-label={mobileOpen ? '关闭菜单' : '打开菜单'}
@@ -86,7 +86,7 @@ export default function Navbar() {
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.2 }}
-            className="md:hidden border-t border-white/5 bg-background/95 backdrop-blur-xl"
+            className="md:hidden border-t border-border-default bg-background/95 backdrop-blur-xl"
           >
             <div className="px-4 py-3 space-y-1">
               {navItems.map((item) => {
@@ -100,7 +100,7 @@ export default function Navbar() {
                     className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
                       active
                         ? 'text-primary bg-primary/10'
-                        : 'text-slate-400 hover:text-white hover:bg-white/5'
+                        : 'text-text-tertiary hover:text-white hover:bg-white/5'
                     }`}
                   >
                     <item.icon className="w-4 h-4" aria-hidden="true" />
@@ -112,7 +112,7 @@ export default function Navbar() {
                 <Link
                   href="/login"
                   onClick={() => setMobileOpen(false)}
-                  className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-white text-background text-sm font-semibold hover:bg-slate-200 transition-colors"
+                  className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-primary text-white hover:shadow-neon text-sm font-semibold hover:bg-primary-glow transition-colors"
                 >
                   登录 / 注册
                 </Link>

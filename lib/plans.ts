@@ -876,9 +876,9 @@ export const typeConfig = {
 };
 
 export const statusConfig = {
-  active: { label: '执行中', icon: Target, color: 'text-success' },
-  standby: { label: '待命', icon: Clock, color: 'text-slate-400' },
-  completed: { label: '已完成', icon: CheckCircle2, color: 'text-success' },
+  active: { label: '执行中', icon: Target, color: 'text-primary' },
+  standby: { label: '待命', icon: Clock, color: 'text-text-tertiary' },
+  completed: { label: '已完成', icon: CheckCircle2, color: 'text-primary' },
 };
 
 export function getRoutesByStage(stage: '小升初' | '中考' | '高考'): RoutePlan[] {

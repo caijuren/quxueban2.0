@@ -32,15 +32,16 @@ export default function FAQ() {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   return (
-    <section className="py-14 px-4 sm:px-6 lg:px-8 border-t border-white/5">
+    <section className="py-14 px-4 sm:px-6 lg:px-8 border-t border-border-default/50">
       <div className="max-w-3xl mx-auto">
         <MotionSection direction="up" duration={0.6} className="mb-12">
-          <span className="text-[11px] font-mono text-primary uppercase tracking-widest mb-3 block">
-            FAQ
-          </span>
-          <h2 className="text-3xl sm:text-4xl font-bold font-display leading-tight">
-            常见问题
-          </h2>
+          <div className="flex items-center gap-2 mb-3">
+            <span className="indicator-dot" />
+            <span className="text-micro font-mono text-primary uppercase tracking-widest">
+              FAQ
+            </span>
+          </div>
+          <h2 className="text-h2 font-display">常见问题</h2>
         </MotionSection>
 
         <div className="space-y-3">
@@ -52,39 +53,40 @@ export default function FAQ() {
                 direction="up"
                 delay={index * 0.05}
                 duration={0.4}
-                className="border border-white/[0.06] rounded-xl overflow-hidden hover:border-white/[0.1] transition-colors duration-200 bg-white/[0.02]"
               >
-                <button
-                  onClick={() => setOpenIndex(isOpen ? null : index)}
-                  className="w-full flex items-center justify-between p-4 text-left focus-ring"
-                  aria-expanded={isOpen}
-                  aria-controls={`faq-answer-${index}`}
-                >
-                  <span className="text-sm font-medium text-slate-200 pr-4">{faq.question}</span>
-                  <span
-                    className={`shrink-0 w-7 h-7 rounded-lg flex items-center justify-center transition-colors duration-200 ${
-                      isOpen ? 'bg-primary text-white' : 'bg-white/[0.05] text-slate-400'
-                    }`}
-                    aria-hidden="true"
+                <div className="hud-panel hud-panel-hover overflow-hidden">
+                  <button
+                    onClick={() => setOpenIndex(isOpen ? null : index)}
+                    className="w-full flex items-center justify-between p-4 text-left focus-ring"
+                    aria-expanded={isOpen}
+                    aria-controls={`faq-answer-${index}`}
                   >
-                    {isOpen ? <Minus className="w-3.5 h-3.5" /> : <Plus className="w-3.5 h-3.5" />}
-                  </span>
-                </button>
-                <AnimatePresence initial={false}>
-                  {isOpen && (
-                    <motion.div
-                      id={`faq-answer-${index}`}
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: 'auto', opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.2 }}
+                    <span className="text-body font-medium text-text-secondary pr-4">{faq.question}</span>
+                    <span
+                      className={`shrink-0 w-7 h-7 rounded-lg flex items-center justify-center transition-colors duration-200 ${
+                        isOpen ? 'bg-primary text-white' : 'bg-white/[0.05] text-text-tertiary'
+                      }`}
+                      aria-hidden="true"
                     >
-                      <div className="px-4 pb-4 text-xs text-slate-400 leading-relaxed border-t border-white/[0.06] pt-3">
-                        {faq.answer}
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+                      {isOpen ? <Minus className="w-3.5 h-3.5" /> : <Plus className="w-3.5 h-3.5" />}
+                    </span>
+                  </button>
+                  <AnimatePresence initial={false}>
+                    {isOpen && (
+                      <motion.div
+                        id={`faq-answer-${index}`}
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: 'auto', opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.2 }}
+                      >
+                        <div className="px-4 pb-4 text-small text-text-tertiary leading-relaxed border-t border-white/[0.06] pt-3">
+                          {faq.answer}
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
               </MotionSection>
             );
           })}

@@ -24,7 +24,7 @@ export default function PageLayout({ children, ctaText = '免费开始规划' }:
             <h2 className="text-3xl sm:text-4xl font-bold font-display leading-tight mb-4">
               准备好开始规划了吗？
             </h2>
-            <p className="text-slate-400 text-base max-w-md mx-auto mb-8">
+            <p className="text-text-tertiary text-base max-w-md mx-auto mb-8">
               注册登录后，即可进入后台使用完整功能，为孩子建立专属升学档案。
             </p>
             <Link

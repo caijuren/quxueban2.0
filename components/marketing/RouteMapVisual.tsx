@@ -6,8 +6,8 @@ import { Target } from 'lucide-react';
 const routes = [
   { id: 'sg', name: '三公冲刺', color: '#ff2d6a', y: 60, active: true },
   { id: 'dual', name: '双轨维持', color: '#8b5cf6', y: 110, active: false },
-  { id: 'public', name: '公办直升', color: '#06b6d4', y: 160, active: false },
-  { id: 'international', name: '国际路线', color: '#22c55e', y: 210, active: false },
+  { id: 'public', name: '公办直升', color: '#a78bfa', y: 160, active: false },
+  { id: 'international', name: '国际路线', color: '#94a3b8', y: 210, active: false },
 ];
 
 const stages = [
@@ -25,7 +25,7 @@ export default function RouteMapVisual() {
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
           <Target className="w-3.5 h-3.5 text-primary" aria-hidden="true" />
-          <span className="text-[11px] font-mono text-slate-400 uppercase tracking-wider">
+          <span className="text-xs font-mono text-text-tertiary uppercase tracking-wider">
             路线矩阵 · 多路线并行评估
           </span>
         </div>
@@ -34,7 +34,7 @@ export default function RouteMapVisual() {
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-40" />
             <span className="relative inline-flex rounded-full h-2 w-2 bg-primary" />
           </span>
-          <span className="text-[11px] font-mono text-primary">ACTIVE</span>
+          <span className="text-xs font-mono text-primary">ACTIVE</span>
         </div>
       </div>
 
@@ -97,16 +97,16 @@ export default function RouteMapVisual() {
         ))}
       </svg>
 
-      <div className="mt-4 pt-4 border-t border-white/5 flex items-center justify-between text-[11px]">
+      <div className="mt-4 pt-4 border-t border-white/5 flex items-center justify-between text-xs">
         <div className="flex items-center gap-4">
-          <span className="text-slate-500">
+          <span className="text-text-muted">
             主路线: <span className="text-primary">三公冲刺型</span>
           </span>
-          <span className="text-slate-500 hidden sm:inline">
+          <span className="text-text-muted hidden sm:inline">
             备选: <span className="text-secondary">双轨维持</span> · <span className="text-accent">公办直升</span>
           </span>
         </div>
-        <span className="font-mono text-slate-600">4 ROUTES LOADED</span>
+        <span className="font-mono text-text-muted">4 ROUTES LOADED</span>
       </div>
     </div>
   );

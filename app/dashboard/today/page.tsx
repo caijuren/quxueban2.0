@@ -4,49 +4,20 @@ import { useMemo } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import {
-  CheckCircle2,
-  Circle,
   ChevronRight,
   Calendar,
-  Clock,
-  BookOpen,
-  Calculator,
-  Languages,
-  Backpack,
-  Dumbbell,
-  Palette,
-  GraduationCap,
   Target,
 } from 'lucide-react';
 import { useChildren } from '@/components/dashboard/ChildrenContext';
+import TaskCard from '@/components/dashboard/TaskCard';
 import EmptyState from '@/components/ui/EmptyState';
-import CommandCard from '@/components/ui/CommandCard';
-import { getTodayName, getCurrentWeekId, getPlanStats } from '@/lib/weeklyTasks';
+import MetricRing from '@/components/ui/MetricRing';
+import { getTodayName, getCurrentWeekId } from '@/lib/weeklyTasks';
 import { TASK_CATEGORY_LABELS } from '@/lib/taskTemplates';
 import { getCategoryColorClass } from '@/lib/taskAlignment';
 import { TaskCategory } from '@/lib/storage.types';
-
-const categoryIcons: Record<TaskCategory, typeof BookOpen> = {
-  chinese: BookOpen,
-  math: Calculator,
-  english: Languages,
-  school: Backpack,
-  reading: BookOpen,
-  sport: Dumbbell,
-  interest: Palette,
-  other: GraduationCap,
-};
-
-const allCategories: TaskCategory[] = [
-  'chinese',
-  'math',
-  'english',
-  'school',
-  'reading',
-  'sport',
-  'interest',
-  'other',
-];
+import { categoryIcons, allCategories } from '@/lib/taskIcons';
+import { gradeLabel } from '@/lib/children';
 
 export default function TodayPage() {
   const router = useRouter();
@@ -113,23 +84,28 @@ export default function TodayPage() {
         className="flex items-start justify-between gap-4"
       >
         <div>
-          <p className="text-xs text-slate-500 mb-1 flex items-center gap-1">
-            <Calendar className="w-3 h-3" />
+          <p className="text-caption font-bold text-text-muted uppercase tracking-wider mb-2 flex items-center gap-1.5">
+            <Calendar className="w-3.5 h-3.5" />
             今日作战 · {todayName}
           </p>
-          <h1 className="text-2xl sm:text-3xl font-bold font-display">
+          <h1 className="text-h1 font-display tracking-tight neon-text">
             {currentChild ? currentChild.name : '未选择孩子'}
           </h1>
+          {currentChild && (
+            <p className="text-caption text-text-tertiary mt-1">
+              {gradeLabel(currentChild.grade)} · {todayName}任务清单
+            </p>
+          )}
           {children.length > 1 && (
-            <div className="flex items-center gap-2 mt-2">
+            <div className="flex items-center gap-2 mt-3">
               {children.map((child) => (
                 <button
                   key={child.id}
                   onClick={() => setCurrentChildId(child.id)}
-                  className={`px-2.5 py-1 rounded-lg text-xs font-medium transition-colors ${
+                  className={`px-3 py-1.5 rounded-xl text-caption font-semibold transition-all border focus-ring ${
                     currentChild?.id === child.id
-                      ? 'bg-primary/10 text-primary border border-primary/20'
-                      : 'bg-white/5 text-slate-400 border border-white/[0.06] hover:bg-white/[0.08]'
+                      ? 'bg-primary-dim text-primary border-primary/25 shadow-glow-sm'
+                      : 'bg-surface text-text-tertiary border-border-default hover:border-border-strong hover:bg-surface-light'
                   }`}
                 >
                   {child.name}
@@ -138,11 +114,12 @@ export default function TodayPage() {
             </div>
           )}
         </div>
-        <div className="text-right shrink-0">
-          <p className="text-3xl font-bold font-display tabular-nums">
-            {doneCount}<span className="text-slate-500 text-lg">/{totalCount}</span>
+        <div className="text-right shrink-0 hud-panel px-4 py-3">
+          <p className="text-h2 font-display data-value">
+            <span className="text-primary">{doneCount}</span>
+            <span className="text-text-muted text-h4">/{totalCount}</span>
           </p>
-          <p className="text-[10px] text-slate-500">已完成</p>
+          <p className="text-micro text-text-muted font-medium">已完成</p>
         </div>
       </motion.div>
 
@@ -153,30 +130,29 @@ export default function TodayPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, delay: 0.05 }}
         >
-          <CommandCard className="p-4">
-            <div className="flex items-center gap-4">
-              <div
-                className="w-14 h-14 rounded-full flex items-center justify-center text-white font-bold text-lg shrink-0"
-                style={{
-                  background: `conic-gradient(var(--tw-colors-primary) ${completionRate * 3.6}deg, rgba(255,255,255,0.08) 0deg)`,
-                }}
-              >
-                <span className="text-sm">{completionRate}%</span>
-              </div>
-              <div className="flex-1">
-                <p className="text-sm font-semibold text-slate-200">
+          <div className="hud-panel p-4 sm:p-5">
+            <div className="flex items-center gap-5">
+              <MetricRing
+                rate={completionRate}
+                size={72}
+                strokeWidth={8}
+                label={`${completionRate}%`}
+                sublabel="完成率"
+              />
+              <div className="flex-1 min-w-0">
+                <p className="text-h4 font-bold text-white">
                   {completionRate === 100
                     ? '今日任务全部完成！'
                     : completionRate >= 60
                     ? '完成度不错，继续加油'
                     : '今天任务还不少，先完成重要的'}
                 </p>
-                <p className="text-xs text-slate-500 mt-0.5">
-                  预计剩余 {remainingMinutes} 分钟 · 今日总计 {totalMinutes} 分钟
+                <p className="text-caption text-text-tertiary mt-1">
+                  预计剩余 <span className="data-value text-text-secondary">{remainingMinutes}</span> 分钟 · 今日总计 <span className="data-value text-text-secondary">{totalMinutes}</span> 分钟
                 </p>
               </div>
             </div>
-          </CommandCard>
+          </div>
         </motion.div>
       )}
 
@@ -212,69 +188,34 @@ export default function TodayPage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.4, delay: 0.1 + catIndex * 0.05 }}
               >
-                <div className="flex items-center gap-2 mb-2">
+                <div className="flex items-center gap-2.5 mb-3">
                   <div
-                    className={`w-7 h-7 rounded-lg flex items-center justify-center ${getCategoryColorClass(
+                    className={`w-8 h-8 rounded-lg flex items-center justify-center border ${getCategoryColorClass(
                       category
                     )}`}
                   >
-                    <CategoryIcon className="w-3.5 h-3.5" />
+                    <CategoryIcon className="w-4 h-4" />
                   </div>
-                  <span className="text-sm font-medium text-slate-300">
+                  <span className="text-caption font-bold text-white">
                     {TASK_CATEGORY_LABELS[category]}
                   </span>
                   {allDone && (
-                    <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-success/10 text-success">
+                    <span className="text-micro px-2 py-0.5 rounded-full bg-primary-dim text-primary font-semibold border border-primary/20 flex items-center gap-1.5">
+                      <span className="indicator-dot" />
                       已完成
                     </span>
                   )}
                 </div>
 
-                <div className="space-y-2">
-                  {tasks.map((task) => {
-                    const isDone = task.status === 'done';
-                    return (
-                      <button
-                        key={task.id}
-                        onClick={() => handleToggle(task.id, task.status)}
-                        className={`w-full text-left p-4 rounded-2xl border transition-all ${
-                          isDone
-                            ? 'bg-success/5 border-success/10'
-                            : 'bg-white/[0.03] border-white/[0.06] active:scale-[0.99]'
-                        }`}
-                      >
-                        <div className="flex items-start gap-3">
-                          <div className="shrink-0 mt-0.5">
-                            {isDone ? (
-                              <CheckCircle2 className="w-7 h-7 text-success" />
-                            ) : (
-                              <Circle className="w-7 h-7 text-slate-500" />
-                            )}
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <p
-                              className={`text-base font-semibold mb-1 ${
-                                isDone ? 'text-slate-500 line-through' : 'text-slate-200'
-                              }`}
-                            >
-                              {task.focus}
-                            </p>
-                            <div className="flex items-center gap-3 text-[11px] text-slate-500">
-                              <span className="flex items-center gap-1">
-                                <Clock className="w-3 h-3" />
-                                {task.duration}
-                              </span>
-                              {task.materials.length > 0 && (
-                                <span className="truncate">
-                                  {task.materials.join('、')}
-                                </span>
-                              )}
-                            </div>
-                          </div>
-                        </div>
-                      </button>
-                    );
-                  })}
+                <div className="space-y-2.5">
+                  {tasks.map((task) => (
+                    <TaskCard
+                      key={task.id}
+                      task={task}
+                      onToggle={() => handleToggle(task.id, task.status)}
+                      showNote
+                    />
+                  ))}
                 </div>
               </motion.div>
             );
@@ -291,7 +232,7 @@ export default function TodayPage() {
       >
         <button
           onClick={() => router.push('/dashboard/weekly')}
-          className="w-full py-3 rounded-xl border border-dashed border-white/[0.12] text-slate-400 hover:text-slate-200 hover:border-white/20 hover:bg-white/[0.03] transition-all flex items-center justify-center gap-2 text-sm"
+          className="w-full py-3.5 rounded-2xl border border-dashed border-border-strong text-text-tertiary hover:text-white hover:border-primary/30 hover:bg-primary-dim transition-all flex items-center justify-center gap-2 text-caption font-semibold focus-ring"
         >
           <Target className="w-4 h-4" />
           查看完整周计划

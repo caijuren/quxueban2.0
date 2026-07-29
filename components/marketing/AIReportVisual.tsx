@@ -8,19 +8,19 @@ const insights = [
     icon: Target,
     title: '路线匹配度 78%',
     status: '良好',
-    color: '#22c55e',
+    color: '#ff2d6a',
   },
   {
     icon: AlertTriangle,
     title: '需关注：奥数尚未启动',
     status: '风险',
-    color: '#f59e0b',
+    color: '#8b5cf6',
   },
   {
     icon: TrendingUp,
     title: '本月重点任务',
     status: '建议',
-    color: '#06b6d4',
+    color: '#94a3b8',
   },
 ];
 
@@ -30,11 +30,11 @@ export default function AIReportVisual() {
       <div className="flex items-center justify-between mb-5">
         <div className="flex items-center gap-2">
           <Sparkles className="w-3.5 h-3.5 text-secondary" aria-hidden="true" />
-          <span className="text-[11px] font-mono text-slate-400 uppercase tracking-wider">
+          <span className="text-xs font-mono text-text-tertiary uppercase tracking-wider">
             AI 智能检视
           </span>
         </div>
-        <span className="text-[11px] font-mono text-secondary">GENERATED</span>
+        <span className="text-xs font-mono text-secondary">GENERATED</span>
       </div>
 
       <div className="rounded-xl bg-background border border-white/[0.06] p-4 space-y-3">
@@ -45,10 +45,10 @@ export default function AIReportVisual() {
             </div>
             <div>
               <h3 className="text-base font-bold font-display">AI 检视报告</h3>
-              <p className="text-[11px] text-slate-500">基于当前进度生成 · 2025.07</p>
+              <p className="text-xs text-text-muted">基于当前进度生成 · 2025.07</p>
             </div>
           </div>
-          <span className="text-[11px] font-mono text-secondary">v2.4</span>
+          <span className="text-xs font-mono text-secondary">v2.4</span>
         </div>
 
         {insights.map((insight, index) => (
@@ -74,7 +74,7 @@ export default function AIReportVisual() {
                     {insight.status}
                   </span>
                 </div>
-                <p className="text-xs text-slate-400 leading-relaxed">
+                <p className="text-xs text-text-tertiary leading-relaxed">
                   {insight.title.includes('匹配度')
                     ? '当前主路线与目标学校匹配良好，建议继续保持节奏'
                     : insight.title.includes('奥数')
@@ -93,8 +93,8 @@ export default function AIReportVisual() {
           className="pt-1"
         >
           <div className="h-px bg-white/[0.06] mb-2" />
-          <div className="flex items-center justify-between text-[11px]">
-            <span className="text-slate-500">AI 建议 action</span>
+          <div className="flex items-center justify-between text-xs">
+            <span className="text-text-muted">AI 建议 action</span>
             <span className="font-mono text-primary">START MATH FOUNDATION</span>
           </div>
         </motion.div>
