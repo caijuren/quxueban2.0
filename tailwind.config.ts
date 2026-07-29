@@ -37,9 +37,9 @@ const config: Config = {
         warning: '#fbbf24',
         danger: '#fb7185',
         'text-primary': '#ffffff',
-        'text-secondary': 'rgba(255, 255, 255, 0.74)',
-        'text-tertiary': 'rgba(255, 255, 255, 0.48)',
-        'text-muted': 'rgba(255, 255, 255, 0.28)',
+        'text-secondary': 'rgba(255, 255, 255, 0.80)',
+        'text-tertiary': 'rgba(255, 255, 255, 0.62)',
+        'text-muted': 'rgba(255, 255, 255, 0.45)',
       },
       boxShadow: {
         'glow-primary': '0 0 28px var(--shadow-primary)',

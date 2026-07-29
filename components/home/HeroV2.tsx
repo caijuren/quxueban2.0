@@ -101,7 +101,7 @@ export default function HeroV2() {
 
             <motion.p
               variants={shouldReduceMotion ? undefined : itemVariants}
-              className="text-h3 text-text-muted mb-5"
+              className="text-h3 text-text-secondary mb-5"
             >
               一张图，看清孩子从小学到高考的每一步
             </motion.p>
