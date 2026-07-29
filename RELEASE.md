@@ -181,6 +181,39 @@ docker push your-registry/quxueban:v1.0.0
 
 # 发版记录
 
+## v1.6.0（2026-07-29）
+
+**主题：全局视觉升级 —— 炫酷指挥中心**
+
+- 重构视觉系统底层
+  - 统一粉紫霓虹色彩体系：主色 `#ff2d6a`、辅色 `#8b5cf6`
+  - 新增系统化光效工具类：`hud-panel`、`hud-panel-hover`、`neon-text`、`neon-line`、`indicator-dot`、`shimmer`
+  - 新增平衡的字体比例工具类：`text-h1` / `text-h2` / `text-h3` / `text-body` / `text-caption` / `text-small` / `text-micro`，避免字号过大或过小
+  - 新增 `animated-bg-strong` 深环境光背景与 `tactical-grid` 战术网格
+- 重设计首页与营销页
+  - Hero 区域改为「指挥中心入口」风格，加入路线概览、任务状态、风险提醒等动态数据面板
+  - 所有营销区块卡片统一使用 `hud-panel` + 战术边角装饰
+  - 统计数字使用 `data-value` 强调，标题使用新字体比例
+- 重设计路线方案页
+  - 路线卡片改为发光战术节点，主路线带霓虹阴影
+  - 路线图背景增加战术网格，检查点与志愿卡片使用 `hud-panel`
+  - 中考矩阵单元格按角色使用主题阴影，强化可读性
+- 重设计今日作战 / 周任务页
+  - 任务卡片改为 `hud-panel`，已完成状态使用左侧霓虹边线 + 灰显文字，不再使用绿色背景
+  - 周矩阵表头与单元格增加悬停霓虹效果，today 状态更清晰
+  - 编辑周任务、任务库、本周复盘弹窗统一为指挥中心风格
+- 统一全局组件
+  - 顶部栏、侧边栏、移动端底部导航增加霓虹发光细节与一致的激活态
+  - 搜索框、通知按钮、孩子切换器增加聚焦/悬停光晕
+- 构建验证：`npm run build` 通过
+
+## v1.5.1（2026-07-29）
+
+**主题：修复 Docker 构建 Prisma engines 下载失败**
+
+- 在 Dockerfile builder 阶段设置 `PRISMA_ENGINES_MIRROR` 为国内 AWS S3 镜像
+- 解决腾讯云服务器构建时访问 Prisma 官方 CDN 出现 `ECONNRESET` 导致构建失败的问题
+
 ## v1.5.0（2026-07-29）
 
 **主题：移动端体验升级与周报分享卡片**
