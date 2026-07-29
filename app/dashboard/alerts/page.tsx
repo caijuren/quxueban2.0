@@ -1,18 +1,22 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useMemo } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
-import { Bell, AlertTriangle, Info, CheckCircle2, Loader2, Eye } from 'lucide-react';
+import {
+  AlertTriangle,
+  Info,
+  CheckCircle2,
+  ArrowRight,
+  Calendar,
+  TrendingDown,
+  Clock,
+  Target,
+} from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { useChildren } from '@/components/dashboard/ChildrenContext';
+import { generateAlerts, Alert, AlertLevel, AlertType } from '@/lib/alerts';
 import EmptyState from '@/components/ui/EmptyState';
 import CommandCard from '@/components/ui/CommandCard';
-
-interface Notification {
-  id: string;
-  title: string;
-  content: string;
-  readAt: string | null;
-  createdAt: string;
-}
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -31,65 +35,100 @@ const itemVariants = {
   },
 };
 
-function getAlertIcon(title: string) {
-  const lower = title.toLowerCase();
-  if (lower.includes('预警') || lower.includes('风险') || lower.includes('截止')) {
-    return <AlertTriangle className="w-5 h-5 text-warning" />;
-  }
-  if (lower.includes('公告') || lower.includes('系统')) {
-    return <Info className="w-5 h-5 text-secondary" />;
-  }
-  if (lower.includes('完成') || lower.includes('通过')) {
-    return <CheckCircle2 className="w-5 h-5 text-success" />;
-  }
-  return <Bell className="w-5 h-5 text-primary" />;
+const levelMeta: Record<
+  AlertLevel,
+  { icon: typeof AlertTriangle; color: string; bg: string; label: string }
+> = {
+  urgent: {
+    icon: AlertTriangle,
+    color: 'text-error',
+    bg: 'bg-error/10',
+    label: '紧急',
+  },
+  warning: {
+    icon: AlertTriangle,
+    color: 'text-warning',
+    bg: 'bg-warning/10',
+    label: '提醒',
+  },
+  info: {
+    icon: Info,
+    color: 'text-secondary',
+    bg: 'bg-secondary/10',
+    label: '提示',
+  },
+};
+
+const typeMeta: Record<AlertType, { icon: typeof Calendar; label: string }> = {
+  today_pending: { icon: Clock, label: '今日任务' },
+  missed_yesterday: { icon: Calendar, label: '昨日遗漏' },
+  category_gap: { icon: Target, label: '节奏断层' },
+  low_completion: { icon: TrendingDown, label: '完成偏低' },
+  milestone_deadline: { icon: Target, label: '节点临近' },
+};
+
+function AlertCard({ alert }: { alert: Alert }) {
+  const router = useRouter();
+  const meta = levelMeta[alert.level];
+  const type = typeMeta[alert.type];
+  const Icon = meta.icon;
+  const TypeIcon = type.icon;
+
+  return (
+    <motion.div variants={itemVariants}>
+      <CommandCard className="p-4 overflow-hidden">
+        <div className="flex items-start gap-3">
+          <div
+            className={`w-10 h-10 rounded-xl ${meta.bg} flex items-center justify-center shrink-0`}
+          >
+            <Icon className={`w-5 h-5 ${meta.color}`} />
+          </div>
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-2 mb-1 flex-wrap">
+              <span
+                className={`text-[10px] px-1.5 py-0.5 rounded-full font-medium ${meta.bg} ${meta.color}`}
+              >
+                {meta.label}
+              </span>
+              <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-white/5 text-slate-400 flex items-center gap-1">
+                <TypeIcon className="w-3 h-3" />
+                {type.label}
+              </span>
+            </div>
+            <h3 className="text-sm font-bold text-slate-200 mb-1">
+              {alert.title}
+            </h3>
+            <p className="text-xs text-slate-400 leading-relaxed mb-3">
+              {alert.content}
+            </p>
+            {alert.action && (
+              <button
+                onClick={() => router.push(alert.action!.href)}
+                className="inline-flex items-center gap-1 text-xs font-medium text-primary hover:text-primary-glow transition-colors"
+              >
+                {alert.action.label}
+                <ArrowRight className="w-3 h-3" />
+              </button>
+            )}
+          </div>
+        </div>
+      </CommandCard>
+    </motion.div>
+  );
 }
 
 export default function AlertsPage() {
   const shouldReduceMotion = useReducedMotion();
-  const [notifications, setNotifications] = useState<Notification[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  const router = useRouter();
+  const { children, weeklyPlans } = useChildren();
 
-  useEffect(() => {
-    let cancelled = false;
-    setLoading(true);
-    fetch('/api/notifications')
-      .then((res) => {
-        if (!res.ok) throw new Error('加载失败');
-        return res.json();
-      })
-      .then((data) => {
-        if (!cancelled) setNotifications(data);
-      })
-      .catch((err) => {
-        if (!cancelled) setError(err instanceof Error ? err.message : '加载失败');
-      })
-      .finally(() => {
-        if (!cancelled) setLoading(false);
-      });
-    return () => {
-      cancelled = true;
-    };
-  }, []);
+  const alerts = useMemo(
+    () => generateAlerts({ children, weeklyPlans }),
+    [children, weeklyPlans]
+  );
 
-  const handleMarkRead = async (id: string) => {
-    const res = await fetch(`/api/notifications/${id}`, { method: 'PATCH' });
-    if (!res.ok) return;
-    setNotifications((prev) =>
-      prev.map((n) => (n.id === id ? { ...n, readAt: new Date().toISOString() } : n))
-    );
-  };
-
-  const handleMarkAllRead = async () => {
-    const res = await fetch('/api/notifications/read-all', { method: 'PATCH' });
-    if (!res.ok) return;
-    setNotifications((prev) =>
-      prev.map((n) => ({ ...n, readAt: n.readAt ?? new Date().toISOString() }))
-    );
-  };
-
-  const unreadCount = notifications.filter((n) => !n.readAt).length;
+  const urgentCount = alerts.filter((a) => a.level === 'urgent').length;
+  const warningCount = alerts.filter((a) => a.level === 'warning').length;
 
   return (
     <div className="space-y-6">
@@ -100,86 +139,55 @@ export default function AlertsPage() {
         className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
       >
         <div>
-          <h1 className="text-2xl sm:text-3xl font-bold font-display mb-1">预警提醒</h1>
+          <h1 className="text-2xl sm:text-3xl font-bold font-display mb-1">作战室</h1>
           <p className="text-sm text-slate-500">
-            {unreadCount > 0
-              ? `你有 ${unreadCount} 条未读提醒`
-              : '暂无新的提醒'}
+            {alerts.length > 0
+              ? `共 ${alerts.length} 条提醒，其中 ${urgentCount} 条需立即处理`
+              : '当前没有需要处理的事项，节奏良好'}
           </p>
         </div>
-        {unreadCount > 0 && (
-          <button
-            onClick={handleMarkAllRead}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-white/5 border border-white/[0.08] text-sm text-slate-300 hover:bg-white/[0.08] transition-colors"
-          >
-            <Eye className="w-4 h-4" />
-            全部已读
-          </button>
+        {alerts.length > 0 && (
+          <div className="flex items-center gap-2">
+            {urgentCount > 0 && (
+              <span className="px-3 py-1.5 rounded-lg bg-error/10 text-error text-xs font-medium">
+                {urgentCount} 紧急
+              </span>
+            )}
+            {warningCount > 0 && (
+              <span className="px-3 py-1.5 rounded-lg bg-warning/10 text-warning text-xs font-medium">
+                {warningCount} 提醒
+              </span>
+            )}
+          </div>
         )}
       </motion.div>
 
-      {loading ? (
-        <div className="flex h-[40vh] items-center justify-center">
-          <Loader2 className="h-8 w-8 animate-spin text-primary" />
-        </div>
-      ) : error ? (
-        <div className="rounded-2xl border border-error/20 bg-error/10 p-6 text-error">
-          {error}
-        </div>
-      ) : notifications.length === 0 ? (
-        <EmptyState
-          icon={Bell}
-          title="暂无提醒"
-          description="系统公告、任务截止预警和里程碑提醒会出现在这里"
-        />
+      {alerts.length === 0 ? (
+        <motion.div
+          initial={shouldReduceMotion ? false : { opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          <EmptyState
+            icon={CheckCircle2}
+            title="一切正常"
+            description="今日任务已完成，本周节奏稳定，继续保持。"
+            action={{
+              label: '查看周任务',
+              onClick: () => router.push('/dashboard/weekly'),
+            }}
+          />
+        </motion.div>
       ) : (
         <motion.div
           variants={containerVariants}
           initial={shouldReduceMotion ? false : 'hidden'}
           animate="visible"
-          className="space-y-3"
+          className="grid grid-cols-1 lg:grid-cols-2 gap-3"
         >
-          {notifications.map((notification) => {
-            const isUnread = !notification.readAt;
-            return (
-              <motion.div key={notification.id} variants={itemVariants}>
-                <CommandCard
-                  className={`p-4 transition-opacity ${isUnread ? '' : 'opacity-60'}`}
-                >
-                  <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 rounded-xl bg-white/[0.03] flex items-center justify-center shrink-0">
-                      {getAlertIcon(notification.title)}
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-start justify-between gap-3 mb-1">
-                        <h3 className="text-sm font-semibold text-slate-200">
-                          {notification.title}
-                        </h3>
-                        <span className="text-[10px] text-slate-600 tabular-nums shrink-0">
-                          {new Date(notification.createdAt).toLocaleString('zh-CN')}
-                        </span>
-                      </div>
-                      <p className="text-sm text-slate-400 leading-relaxed mb-3">
-                        {notification.content}
-                      </p>
-                      {isUnread && (
-                        <button
-                          onClick={() => handleMarkRead(notification.id)}
-                          className="inline-flex items-center gap-1.5 text-xs text-primary hover:text-primary-glow transition-colors"
-                        >
-                          <CheckCircle2 className="w-3.5 h-3.5" />
-                          标记已读
-                        </button>
-                      )}
-                    </div>
-                    {isUnread && (
-                      <span className="mt-1.5 h-2 w-2 rounded-full bg-primary shrink-0" />
-                    )}
-                  </div>
-                </CommandCard>
-              </motion.div>
-            );
-          })}
+          {alerts.map((alert) => (
+            <AlertCard key={alert.id} alert={alert} />
+          ))}
         </motion.div>
       )}
     </div>

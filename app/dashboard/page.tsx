@@ -54,6 +54,17 @@ const categoryIcons: Record<TaskCategory, typeof BookOpen> = {
   other: GraduationCap,
 };
 
+const allCategories: TaskCategory[] = [
+  'chinese',
+  'math',
+  'english',
+  'school',
+  'reading',
+  'sport',
+  'interest',
+  'other',
+];
+
 const containerVariants = {
   hidden: { opacity: 0 },
   visible: {
@@ -503,10 +514,15 @@ export default function DashboardPage() {
               className="lg:col-span-2"
             >
               <CommandCard className="p-5 h-full">
-                <div className="flex items-center justify-between mb-5">
+                <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center gap-2">
                     <Calendar className="w-4 h-4 text-primary" />
                     <h2 className="text-base font-bold font-display">今日任务 · {todayName}</h2>
+                    {todayTasks.length > 0 && (
+                      <span className="text-[11px] px-2 py-0.5 rounded-full bg-white/5 text-slate-400">
+                        {todayTasks.filter((t) => t.status === 'done').length}/{todayTasks.length} 完成
+                      </span>
+                    )}
                   </div>
                   <button
                     onClick={() => router.push('/dashboard/weekly')}
@@ -521,45 +537,15 @@ export default function DashboardPage() {
                     今日暂无任务，去周任务页面生成计划
                   </div>
                 ) : (
-                  <div className="space-y-2">
-                    {recentTasks.map((task) => {
-                      const category = task.category || 'other';
-                      const CategoryIcon = categoryIcons[category];
-                      const isDone = task.status === 'done';
-                      return (
-                        <div
-                          key={task.id}
-                          className={`flex items-start gap-3 p-3 rounded-xl border transition-all ${
-                            isDone
-                              ? 'bg-success/5 border-success/10'
-                              : 'bg-white/[0.03] border-white/[0.06] hover:bg-white/[0.05]'
-                          }`}
-                        >
-                          <button
-                            onClick={() =>
-                              currentChild &&
-                              currentWeekPlan?.id &&
-                              updateTaskStatus(
-                                currentChild.id,
-                                getCurrentWeekId(),
-                                task.id,
-                                toggleTaskStatus(task.status)
-                              )
-                            }
-                            className="mt-0.5 text-slate-400 hover:text-primary transition-colors focus-ring rounded-full shrink-0"
-                            aria-label={isDone ? '标记为未完成' : '标记为完成'}
-                          >
-                            {isDone ? (
-                              <CheckCircle2 className="w-5 h-5 text-success" />
-                            ) : (
-                              <Circle className="w-5 h-5" />
-                            )}
-                          </button>
-                          <button
-                            onClick={() => router.push('/dashboard/weekly')}
-                            className="flex-1 text-left min-w-0"
-                          >
-                            <div className="flex items-center gap-2 mb-1">
+                  <div className="space-y-4">
+                    {allCategories
+                      .filter((cat) => recentTasks.some((t) => (t.category || 'other') === cat))
+                      .map((category) => {
+                        const CategoryIcon = categoryIcons[category];
+                        const catTasks = recentTasks.filter((t) => (t.category || 'other') === category);
+                        return (
+                          <div key={category}>
+                            <div className="flex items-center gap-2 mb-2">
                               <div
                                 className={`w-6 h-6 rounded-md flex items-center justify-center ${getCategoryColorClass(
                                   category
@@ -567,27 +553,69 @@ export default function DashboardPage() {
                               >
                                 <CategoryIcon className="w-3 h-3" />
                               </div>
-                              <span className="text-[11px] font-medium text-slate-400">
+                              <span className="text-xs font-medium text-slate-300">
                                 {TASK_CATEGORY_LABELS[category]}
                               </span>
-                              <span className="text-[10px] px-1.5 py-0.5 rounded bg-white/[0.05] text-slate-300 ml-auto">
-                                {task.duration}
-                              </span>
                             </div>
-                            <p
-                              className={`text-sm font-semibold ${
-                                isDone ? 'text-slate-500 line-through' : 'text-slate-200'
-                              }`}
-                            >
-                              {task.focus}
-                            </p>
-                            <p className="text-[11px] text-slate-500 mt-0.5">
-                              {task.materials.join('、') || '无指定材料'}
-                            </p>
-                          </button>
-                        </div>
-                      );
-                    })}
+                            <div className="space-y-2">
+                              {catTasks.map((task) => {
+                                const isDone = task.status === 'done';
+                                return (
+                                  <div
+                                    key={task.id}
+                                    className={`flex items-start gap-3 p-3 rounded-xl border transition-all ${
+                                      isDone
+                                        ? 'bg-success/5 border-success/10'
+                                        : 'bg-white/[0.03] border-white/[0.06] hover:bg-white/[0.05]'
+                                    }`}
+                                  >
+                                    <button
+                                      onClick={() =>
+                                        currentChild &&
+                                        currentWeekPlan?.id &&
+                                        updateTaskStatus(
+                                          currentChild.id,
+                                          getCurrentWeekId(),
+                                          task.id,
+                                          toggleTaskStatus(task.status)
+                                        )
+                                      }
+                                      className="mt-0.5 text-slate-400 hover:text-primary transition-colors focus-ring rounded-full shrink-0"
+                                      aria-label={isDone ? '标记为未完成' : '标记为完成'}
+                                    >
+                                      {isDone ? (
+                                        <CheckCircle2 className="w-5 h-5 text-success" />
+                                      ) : (
+                                        <Circle className="w-5 h-5" />
+                                      )}
+                                    </button>
+                                    <button
+                                      onClick={() => router.push('/dashboard/weekly')}
+                                      className="flex-1 text-left min-w-0"
+                                    >
+                                      <div className="flex items-center justify-between mb-1">
+                                        <span
+                                          className={`text-sm font-semibold ${
+                                            isDone ? 'text-slate-500 line-through' : 'text-slate-200'
+                                          }`}
+                                        >
+                                          {task.focus}
+                                        </span>
+                                        <span className="text-[10px] px-1.5 py-0.5 rounded bg-white/[0.05] text-slate-300 shrink-0 ml-2">
+                                          {task.duration}
+                                        </span>
+                                      </div>
+                                      <p className="text-[11px] text-slate-500">
+                                        {task.materials.join('、') || '无指定材料'}
+                                      </p>
+                                    </button>
+                                  </div>
+                                );
+                              })}
+                            </div>
+                          </div>
+                        );
+                      })}
                   </div>
                 )}
               </CommandCard>

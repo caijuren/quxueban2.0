@@ -140,7 +140,7 @@ export async function PATCH(req: Request) {
             density: (settingData.density as string) ?? 'comfortable',
             reducedMotion: (settingData.reducedMotion as boolean) ?? false,
             defaultLandingPage:
-              (settingData.defaultLandingPage as string) ?? 'dashboard',
+              (settingData.defaultLandingPage as string) ?? 'alerts',
             defaultChildMode: (settingData.defaultChildMode as string) ?? 'last',
             notificationPrefs:
               (settingData.notificationPrefs as object) ?? {},
