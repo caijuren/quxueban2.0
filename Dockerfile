@@ -36,7 +36,7 @@ RUN mkdir -p /app/public
 
 # 使用国内镜像加速 Prisma engines 下载（腾讯云服务器访问官方 CDN 易超时）
 # 注意：不要以 /all_commits/ 结尾，Prisma 会自动追加该路径
-ENV PRISMA_ENGINES_MIRROR=https://prisma-builds.s3.cn-north-1.amazonaws.com.cn
+ENV PRISMA_ENGINES_MIRROR=https://registry.npmmirror.com/-/binary/prisma
 ENV PRISMA_ENGINES_CHECKSUM_IGNORE_MISSING=1
 
 # Prisma Client 必须在使用前重新生成，以匹配容器平台引擎
