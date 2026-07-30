@@ -97,7 +97,7 @@ export default function TaskCard({
             className={`font-bold mb-1 text-body ${
               isDone
                 ? 'text-text-muted line-through'
-                : 'text-white'
+                : 'text-text-primary'
             }`}
           >
             {task.focus}

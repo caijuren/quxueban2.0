@@ -38,7 +38,7 @@ export default function ProgressMarketingPage() {
           <>
             实时追踪
             <br />
-            <span className="text-slate-500">各科准备进度</span>
+            <span className="text-slate-600">各科准备进度</span>
           </>
         }
         description="不知道孩子准备得怎么样？趣学伴用可视化仪表盘展示各科能力进度，哪里超前、哪里落后，一眼就能看清楚。"
@@ -58,10 +58,10 @@ export default function ProgressMarketingPage() {
                 <span className="text-3xl font-mono text-slate-700 font-bold block mb-3 group-hover:text-primary transition-colors">
                   0{index + 1}
                 </span>
-                <h3 className="text-base font-bold font-display mb-2 text-white group-hover:text-primary transition-colors">
+                <h3 className="text-base font-bold font-display mb-2 text-text-primary group-hover:text-primary transition-colors">
                   {item.title}
                 </h3>
-                <p className="text-sm text-slate-400 leading-relaxed">{item.description}</p>
+                <p className="text-sm text-slate-600 leading-relaxed">{item.description}</p>
               </CommandCard>
             ))}
           </div>

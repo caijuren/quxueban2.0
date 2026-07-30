@@ -193,7 +193,7 @@ export default function MiddleSchoolRoadmap() {
             <Zap className="w-6 h-6 text-[#8b5cf6]" style={{ filter: 'drop-shadow(0 0 8px rgba(139,92,246,0.8))' }} />
           </div>
           <div>
-            <p className="text-sm text-slate-400 mb-1">
+            <p className="text-sm text-slate-600 mb-1">
               距离下一个熔断点（{nextCheckpoint?.grade} · {nextCheckpoint?.name}）
             </p>
             <p className="text-2xl font-bold font-display">
@@ -225,9 +225,9 @@ export default function MiddleSchoolRoadmap() {
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-6">
           <div>
             <h2 className="text-xl font-bold font-display">初中全景看板</h2>
-            <p className="text-sm text-slate-400">2026-2033 · 三条中考路线的熔断点与关键节点</p>
+            <p className="text-sm text-slate-600">2026-2033 · 三条中考路线的熔断点与关键节点</p>
             <div className="mt-2 flex items-center gap-2">
-              <span className="text-xs text-slate-500">当前执行路线：</span>
+              <span className="text-xs text-slate-600">当前执行路线：</span>
               {(() => {
                 const route = routes.find((r) => r.id === activeRoute);
                 if (!route) return null;
@@ -256,7 +256,7 @@ export default function MiddleSchoolRoadmap() {
                   onMouseLeave={() => setHoveredRoute(null)}
                   onClick={() => setActiveRoute(route.id)}
                   className={`flex items-center gap-2 px-2 py-1 rounded-lg transition-colors ${
-                    isActive ? 'text-white bg-white/10' : 'text-slate-400 hover:text-white hover:bg-white/5'
+                    isActive ? 'text-text-primary bg-black/10' : 'text-slate-600 hover:text-text-primary hover:bg-black/5'
                   }`}
                 >
                   <span
@@ -479,7 +479,7 @@ export default function MiddleSchoolRoadmap() {
                         {outcome.label}
                       </span>
                       <div className="flex flex-col leading-none">
-                        <span className="text-[10px] text-slate-400">{outcome.name}</span>
+                        <span className="text-[10px] text-slate-600">{outcome.name}</span>
                         <span className="text-xs font-bold" style={{ color: route.color }}>
                           {outcome.prob}%
                         </span>
@@ -740,11 +740,11 @@ export default function MiddleSchoolRoadmap() {
                     );
                   })()}
                 </div>
-                <p className="text-sm text-slate-400 mb-2">
+                <p className="text-sm text-slate-600 mb-2">
                   {selectedCheckpoint.grade}
                   {selectedCheckpoint.requirement && ` · ${selectedCheckpoint.requirement}`}
                 </p>
-                <p className="text-sm text-slate-300">
+                <p className="text-sm text-slate-700">
                   {selectedCheckpoint.type === 'hard'
                     ? '硬熔断点：未达标建议切换主路线到备选方案，系统会提醒家长评估。'
                     : selectedCheckpoint.type === 'soft'
@@ -756,7 +756,7 @@ export default function MiddleSchoolRoadmap() {
               </div>
               <button
                 onClick={() => setSelectedCheckpoint(null)}
-                className="px-4 py-2 rounded-lg text-slate-500 hover:text-white text-sm shrink-0"
+                className="px-4 py-2 rounded-lg text-slate-600 hover:text-text-primary text-sm shrink-0"
               >
                 关闭
               </button>

@@ -84,7 +84,7 @@ export default function HeroV2() {
           >
             <motion.div
               variants={shouldReduceMotion ? undefined : itemVariants}
-              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-md border border-border-default bg-white/[0.03] mb-6"
+              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-md border border-border-default bg-black/[0.03] mb-6"
             >
               <span className="indicator-dot animate-pulse" />
               <span className="text-micro font-medium tracking-wide text-text-tertiary uppercase">
@@ -94,7 +94,7 @@ export default function HeroV2() {
 
             <motion.h1
               variants={shouldReduceMotion ? undefined : itemVariants}
-              className="text-h1 font-display text-white mb-4"
+              className="text-h1 font-display text-text-primary mb-4"
               style={{
                 textShadow:
                   '0 0 12px rgba(255, 45, 106, 0.55), 0 0 32px rgba(255, 45, 106, 0.35), 0 0 56px rgba(255, 45, 106, 0.18)',
@@ -120,7 +120,7 @@ export default function HeroV2() {
             <motion.div variants={shouldReduceMotion ? undefined : itemVariants}>
               <Link
                 href="/login"
-                className="group inline-flex items-center gap-2 px-6 py-3 rounded-full bg-primary text-white font-semibold text-sm hover:shadow-neon-strong transition-all duration-300 focus-ring"
+                className="group inline-flex items-center gap-2 px-6 py-3 rounded-full bg-primary text-text-primary font-semibold text-sm hover:shadow-neon-strong transition-all duration-300 focus-ring"
               >
                 免费绘制升学地图
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
@@ -133,7 +133,7 @@ export default function HeroV2() {
             >
               {stats.map((stat) => (
                 <div key={stat.label}>
-                  <div className="data-value text-h3 text-white">{stat.value}</div>
+                  <div className="data-value text-h3 text-text-primary">{stat.value}</div>
                   <div className="text-micro text-text-muted mt-0.5">{stat.label}</div>
                 </div>
               ))}
@@ -157,7 +157,7 @@ export default function HeroV2() {
                         className="w-2 h-2 rounded-full"
                         style={{ backgroundColor: route.color, boxShadow: `0 0 8px ${route.color}` }}
                       />
-                      <span className={route.active ? 'text-white' : 'text-text-tertiary'}>
+                      <span className={route.active ? 'text-text-primary' : 'text-text-tertiary'}>
                         {route.name}
                       </span>
                       {route.active && (
@@ -355,7 +355,7 @@ export default function HeroV2() {
                       />
                       <span className="text-micro text-text-muted">{task.label}</span>
                     </div>
-                    <div className="data-value text-h4 text-white">
+                    <div className="data-value text-h4 text-text-primary">
                       {task.value}
                       {task.suffix && (
                         <span className="text-micro text-text-muted ml-1">{task.suffix}</span>
@@ -371,7 +371,7 @@ export default function HeroV2() {
                     主路线: <span className="text-primary">三公冲刺型</span>
                   </span>
                   <span className="text-text-muted hidden sm:inline">
-                    下一节点: <span className="text-white">二年级末 · 基础检查</span>
+                    下一节点: <span className="text-text-primary">二年级末 · 基础检查</span>
                   </span>
                 </div>
                 <span className="font-mono text-micro text-text-muted">SYSTEM NORMAL</span>

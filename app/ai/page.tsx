@@ -39,7 +39,7 @@ export default function AIMarketingPage() {
           <>
             AI 主动诊断
             <br />
-            <span className="text-slate-500">与调整建议</span>
+            <span className="text-slate-600">与调整建议</span>
           </>
         }
         description="输入孩子当前进度，AI 帮你判断路线是否合理、哪些任务需要加强、是否需要启动备选方案。"
@@ -59,10 +59,10 @@ export default function AIMarketingPage() {
                 <span className="text-3xl font-mono text-slate-700 font-bold block mb-3 group-hover:text-secondary transition-colors">
                   0{index + 1}
                 </span>
-                <h3 className="text-base font-bold font-display mb-2 text-white group-hover:text-secondary transition-colors">
+                <h3 className="text-base font-bold font-display mb-2 text-text-primary group-hover:text-secondary transition-colors">
                   {item.title}
                 </h3>
-                <p className="text-sm text-slate-400 leading-relaxed">{item.description}</p>
+                <p className="text-sm text-slate-600 leading-relaxed">{item.description}</p>
               </CommandCard>
             ))}
           </div>

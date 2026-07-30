@@ -66,7 +66,7 @@ export default function WeeklyReportExport({
       initial={shouldReduceMotion ? { opacity: 1 } : { opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="fixed inset-0 z-[110] flex items-center sm:justify-center sm:p-4 bg-black/70 backdrop-blur-sm"
+      className="fixed inset-0 z-[110] flex items-center sm:justify-center sm:p-4 bg-black/40 backdrop-blur-sm"
       onClick={onClose}
     >
       <motion.div
@@ -80,7 +80,7 @@ export default function WeeklyReportExport({
           <h2 className="text-lg font-bold font-display">导出周报</h2>
           <button
             onClick={onClose}
-            className="p-2 rounded-lg hover:bg-white/5 text-slate-400"
+            className="p-2 rounded-lg hover:bg-black/5 text-slate-600"
             aria-label="关闭"
           >
             <X className="w-5 h-5" />
@@ -90,18 +90,18 @@ export default function WeeklyReportExport({
         {/* Preview card */}
         <div
           ref={cardRef}
-          className="rounded-2xl bg-gradient-to-br from-[#1a1a2e] to-[#0f0f1a] p-5 border border-white/[0.08]"
+          className="rounded-2xl bg-gradient-to-br from-[#1a1a2e] to-[#0f0f1a] p-5 border border-black/[0.10]"
         >
           <div className="flex items-center justify-between mb-5">
             <div>
-              <p className="text-[10px] text-slate-500 uppercase tracking-wider">
+              <p className="text-[10px] text-slate-600 uppercase tracking-wider">
                 {formatWeekLabel(plan.weekId)}
               </p>
-              <h3 className="text-xl font-bold font-display text-white">
+              <h3 className="text-xl font-bold font-display text-text-primary">
                 {childName} 的每周战报
               </h3>
             </div>
-            <div className="w-14 h-14 rounded-full flex items-center justify-center text-white font-bold text-sm"
+            <div className="w-14 h-14 rounded-full flex items-center justify-center text-text-primary font-bold text-sm"
               style={{
                 background: `conic-gradient(#ff2d6a ${stats.completionRate * 3.6}deg, rgba(255,255,255,0.08) 0deg)`,
               }}
@@ -111,17 +111,17 @@ export default function WeeklyReportExport({
           </div>
 
           <div className="grid grid-cols-3 gap-2 mb-5">
-            <div className="rounded-xl bg-white/[0.05] p-3 text-center">
-              <p className="text-lg font-bold text-white">{stats.total}</p>
-              <p className="text-[10px] text-slate-400">总任务</p>
+            <div className="rounded-xl bg-black/[0.05] p-3 text-center">
+              <p className="text-lg font-bold text-text-primary">{stats.total}</p>
+              <p className="text-[10px] text-slate-600">总任务</p>
             </div>
             <div className="rounded-xl bg-success/10 p-3 text-center">
               <p className="text-lg font-bold text-success">{stats.done}</p>
-              <p className="text-[10px] text-slate-400">已完成</p>
+              <p className="text-[10px] text-slate-600">已完成</p>
             </div>
-            <div className="rounded-xl bg-white/[0.05] p-3 text-center">
-              <p className="text-lg font-bold text-white">{stats.estimatedMinutes}</p>
-              <p className="text-[10px] text-slate-400">总分钟</p>
+            <div className="rounded-xl bg-black/[0.05] p-3 text-center">
+              <p className="text-lg font-bold text-text-primary">{stats.estimatedMinutes}</p>
+              <p className="text-[10px] text-slate-600">总分钟</p>
             </div>
           </div>
 
@@ -139,14 +139,14 @@ export default function WeeklyReportExport({
                 </div>
                 <div className="flex-1">
                   <div className="flex items-center justify-between text-xs mb-1">
-                    <span className="text-slate-300">
+                    <span className="text-slate-700">
                       {TASK_CATEGORY_LABELS[category as TaskCategory]}
                     </span>
-                    <span className="text-slate-500">
+                    <span className="text-slate-600">
                       {s.done}/{s.total}
                     </span>
                   </div>
-                  <div className="h-1.5 rounded-full bg-white/[0.08] overflow-hidden">
+                  <div className="h-1.5 rounded-full bg-black/[0.08] overflow-hidden">
                     <div
                       className="h-full rounded-full bg-primary"
                       style={{
@@ -159,7 +159,7 @@ export default function WeeklyReportExport({
             ))}
           </div>
 
-          <div className="flex items-center gap-2 text-[10px] text-slate-500">
+          <div className="flex items-center gap-2 text-[10px] text-slate-600">
             <Target className="w-3 h-3" />
             趣学伴 · 升学作战指挥中心
           </div>
@@ -170,7 +170,7 @@ export default function WeeklyReportExport({
             <button
               onClick={handleExport}
               disabled={exporting}
-              className="w-full py-3 rounded-xl bg-gradient-to-r from-primary to-primary-glow text-white font-semibold hover:shadow-[0_0_30px_rgba(255,45,106,0.3)] transition-all disabled:opacity-60 flex items-center justify-center gap-2"
+              className="w-full py-3 rounded-xl bg-gradient-to-r from-primary to-primary-glow text-text-primary font-semibold hover:shadow-[0_0_30px_rgba(255,45,106,0.3)] transition-all disabled:opacity-60 flex items-center justify-center gap-2"
             >
               {exporting ? (
                 <>

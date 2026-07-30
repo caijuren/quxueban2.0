@@ -16,7 +16,7 @@ const abilities = [
 const trendConfig: Record<string, { icon: typeof TrendingUp; color: string; label: string }> = {
   up: { icon: TrendingUp, color: 'text-success', label: '超前' },
   down: { icon: TrendingDown, color: 'text-danger', label: '落后' },
-  minus: { icon: Minus, color: 'text-slate-400', label: '持平' },
+  minus: { icon: Minus, color: 'text-slate-600', label: '持平' },
 };
 
 interface ProgressPanelProps {
@@ -39,7 +39,7 @@ export default function ProgressPanel({ child }: ProgressPanelProps) {
           <div className="flex items-center gap-2 mb-5">
             <BarChart3 className="w-4 h-4 text-primary" />
             <h2 className="text-base font-bold font-display">能力准备度</h2>
-            <span className="text-xs text-slate-500 ml-auto">
+            <span className="text-xs text-slate-600 ml-auto">
               {gradeLabel(child.grade)} · 对比目标与同龄平均
             </span>
           </div>
@@ -56,19 +56,19 @@ export default function ProgressPanel({ child }: ProgressPanelProps) {
                 >
                   <div className="flex items-center justify-between mb-2">
                     <div className="flex items-center gap-2">
-                      <span className="font-medium text-sm text-slate-200">{ability.name}</span>
+                      <span className="font-medium text-sm text-slate-800">{ability.name}</span>
                       <span className={`flex items-center gap-1 text-[10px] ${trend.color}`}>
                         <trend.icon className="w-3 h-3" />
                         {trend.label}
                       </span>
                     </div>
-                    <div className="text-xs text-slate-400">
-                      <span className="text-white font-semibold">{ability.current}%</span>
+                    <div className="text-xs text-slate-600">
+                      <span className="text-text-primary font-semibold">{ability.current}%</span>
                       {' / '}
                       目标 {ability.target}%
                     </div>
                   </div>
-                  <div className="relative h-2 rounded-full bg-white/10 overflow-hidden">
+                  <div className="relative h-2 rounded-full bg-black/10 overflow-hidden">
                     <motion.div
                       initial={shouldReduceMotion ? false : { width: 0 }}
                       animate={{ width: `${ability.current}%` }}
@@ -84,7 +84,7 @@ export default function ProgressPanel({ child }: ProgressPanelProps) {
                       style={{ left: `${ability.average}%` }}
                     />
                   </div>
-                  <div className="flex items-center justify-between mt-1 text-[10px] text-slate-500">
+                  <div className="flex items-center justify-between mt-1 text-[10px] text-slate-600">
                     <span>同龄平均 {ability.average}%</span>
                     <span>目标 {ability.target}%</span>
                   </div>
@@ -128,7 +128,7 @@ export default function ProgressPanel({ child }: ProgressPanelProps) {
               </svg>
               <div className="absolute inset-0 flex flex-col items-center justify-center">
                 <span className="text-2xl font-bold font-display">32%</span>
-                <span className="text-[10px] text-slate-400">总体准备度</span>
+                <span className="text-[10px] text-slate-600">总体准备度</span>
               </div>
             </div>
           </div>
@@ -136,11 +136,11 @@ export default function ProgressPanel({ child }: ProgressPanelProps) {
           <div className="space-y-3">
             <div className="p-3 rounded-xl bg-success/10 border border-success/20">
               <p className="text-xs text-success font-semibold mb-0.5">优势项</p>
-              <p className="text-xs text-slate-300">英语基础较好，已超前同龄平均水平</p>
+              <p className="text-xs text-slate-700">英语基础较好，已超前同龄平均水平</p>
             </div>
             <div className="p-3 rounded-xl bg-warning/10 border border-warning/20">
               <p className="text-xs text-warning font-semibold mb-0.5">短板项</p>
-              <p className="text-xs text-slate-300">奥数思维和竞赛经历尚未启动，需尽快规划</p>
+              <p className="text-xs text-slate-700">奥数思维和竞赛经历尚未启动，需尽快规划</p>
             </div>
           </div>
         </CommandCard>

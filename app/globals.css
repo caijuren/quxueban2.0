@@ -23,8 +23,8 @@ html {
 }
 
 body {
-  background-color: #1e1e2e;
-  color: #ffffff;
+  background-color: #f4f6f8;
+  color: #0f172a;
   font-family: var(--font-body);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -85,35 +85,35 @@ body {
 
 /* Glass effect - deeper, less border noise */
 .glass {
-  background: rgba(42, 42, 62, 0.92);
+  background: rgba(255, 255, 255, 0.92);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
-  border: 1px solid rgba(255, 255, 255, 0.10);
+  border: 1px solid rgba(15, 23, 42, 0.08);
 }
 
 /* Command center ambient background - neon command deck */
 .animated-bg {
   background:
-    radial-gradient(ellipse at 85% 10%, color-mix(in srgb, var(--color-primary) 26%, transparent) 0%, transparent 50%),
-    radial-gradient(ellipse at 15% 90%, color-mix(in srgb, var(--color-secondary) 20%, transparent) 0%, transparent 50%),
-    radial-gradient(ellipse at 50% 50%, rgba(42, 42, 62, 0.95) 0%, transparent 70%),
-    #1e1e2e;
+    radial-gradient(ellipse at 85% 10%, color-mix(in srgb, var(--color-primary) 14%, transparent) 0%, transparent 50%),
+    radial-gradient(ellipse at 15% 90%, color-mix(in srgb, var(--color-secondary) 10%, transparent) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 50%, rgba(241, 243, 246, 0.95) 0%, transparent 70%),
+    #f4f6f8;
 }
 
 /* Deeper ambient glow for hero / landing */
 .animated-bg-strong {
   background:
-    radial-gradient(ellipse at 70% 20%, color-mix(in srgb, var(--color-primary) 50%, transparent) 0%, transparent 55%),
-    radial-gradient(ellipse at 30% 80%, color-mix(in srgb, var(--color-secondary) 38%, transparent) 0%, transparent 55%),
-    radial-gradient(circle at 50% 50%, rgba(60, 60, 85, 0.90) 0%, transparent 65%),
-    #1e1e2e;
+    radial-gradient(ellipse at 70% 20%, color-mix(in srgb, var(--color-primary) 22%, transparent) 0%, transparent 55%),
+    radial-gradient(ellipse at 30% 80%, color-mix(in srgb, var(--color-secondary) 16%, transparent) 0%, transparent 55%),
+    radial-gradient(circle at 50% 50%, rgba(232, 235, 240, 0.90) 0%, transparent 65%),
+    #f4f6f8;
 }
 
 /* Grid pattern overlay - finer, more technical */
 .grid-pattern {
   background-image:
-    linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+    linear-gradient(rgba(15, 23, 42, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(15, 23, 42, 0.04) 1px, transparent 1px);
   background-size: 48px 48px;
   mask-image: radial-gradient(ellipse at center, black 0%, transparent 80%);
   -webkit-mask-image: radial-gradient(ellipse at center, black 0%, transparent 80%);
@@ -122,8 +122,8 @@ body {
 /* Tactical grid - denser, sharper */
 .tactical-grid {
   background-image:
-    linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+    linear-gradient(rgba(15, 23, 42, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(15, 23, 42, 0.05) 1px, transparent 1px);
   background-size: 32px 32px;
 }
 
@@ -171,7 +171,7 @@ body {
 
 /* Neon border glow on hover */
 .neon-border {
-  border: 1px solid rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(15, 23, 42, 0.10);
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
@@ -188,12 +188,12 @@ body {
   pointer-events: none;
   background: repeating-linear-gradient(
     0deg,
-    rgba(255, 255, 255, 0.012),
-    rgba(255, 255, 255, 0.012) 1px,
+    rgba(15, 23, 42, 0.015),
+    rgba(15, 23, 42, 0.015) 1px,
     transparent 1px,
     transparent 3px
   );
-  opacity: 0.25;
+  opacity: 0.15;
 }
 
 /* Command panel - refined card */
@@ -202,7 +202,7 @@ body {
 }
 
 .command-panel:hover {
-  border-color: rgba(255, 255, 255, 0.1);
+  border-color: rgba(15, 23, 42, 0.22);
 }
 
 .command-panel-active {
@@ -213,7 +213,7 @@ body {
 
 /* Surface gradient cards */
 .surface-gradient {
-  background: linear-gradient(145deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.01) 100%);
+  background: linear-gradient(145deg, rgba(15, 23, 42, 0.03) 0%, rgba(15, 23, 42, 0.01) 100%);
 }
 
 /* Horizontal neon rule */
@@ -281,8 +281,8 @@ body {
 .hud-panel {
   @apply rounded-2xl bg-surface border border-border-default backdrop-blur-xl;
   box-shadow:
-    0 8px 32px rgba(0, 0, 0, 0.35),
-    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+    0 8px 32px rgba(15, 23, 42, 0.10),
+    inset 0 1px 0 rgba(255, 255, 255, 0.50);
 }
 
 .hud-panel-hover {
@@ -292,9 +292,9 @@ body {
 .hud-panel-hover:hover {
   border-color: color-mix(in srgb, var(--color-primary) 30%, transparent);
   box-shadow:
-    0 12px 40px rgba(0, 0, 0, 0.45),
-    0 0 24px color-mix(in srgb, var(--color-primary) 12%, transparent),
-    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    0 12px 40px rgba(15, 23, 42, 0.14),
+    0 0 24px color-mix(in srgb, var(--color-primary) 10%, transparent),
+    inset 0 1px 0 rgba(255, 255, 255, 0.60);
   transform: translateY(-1px);
 }
 

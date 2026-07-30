@@ -94,7 +94,7 @@ export default function ChineseTrackMap() {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
         <div>
           <h2 className="text-xl font-bold font-display">语文三条线作战地图</h2>
-          <p className="text-sm text-slate-400 mt-1">从现在到三公，三条主线并行推进</p>
+          <p className="text-sm text-slate-600 mt-1">从现在到三公，三条主线并行推进</p>
         </div>
         <div className="flex flex-wrap gap-2">
           {chineseTracks.map((track) => {
@@ -102,13 +102,13 @@ export default function ChineseTrackMap() {
             return (
               <div
                 key={track.id}
-                className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-white/5 border border-white/5"
+                className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-black/5 border border-white/5"
               >
                 <div
                   className="w-3 h-3 rounded-full"
                   style={{ backgroundColor: cfg.color, boxShadow: `0 0 10px ${cfg.glowColor}` }}
                 />
-                <span className="text-xs text-slate-300">{track.name}</span>
+                <span className="text-xs text-slate-700">{track.name}</span>
               </div>
             );
           })}
@@ -470,10 +470,10 @@ export default function ChineseTrackMap() {
                 boxShadow: `0 0 10px ${trackConfig[hoveredData.track].glowColor}`,
               }}
             />
-            <p className="text-xs text-slate-500">{hoveredData.time}</p>
+            <p className="text-xs text-slate-600">{hoveredData.time}</p>
           </div>
-          <p className="text-sm font-bold text-slate-200 mb-1">{hoveredData.label}</p>
-          <p className="text-xs text-slate-400">{hoveredData.detail}</p>
+          <p className="text-sm font-bold text-slate-800 mb-1">{hoveredData.label}</p>
+          <p className="text-xs text-slate-600">{hoveredData.detail}</p>
         </motion.div>
       )}
 
@@ -481,15 +481,15 @@ export default function ChineseTrackMap() {
       <div className="mt-6 pt-6 border-t border-white/5 grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div className="rounded-xl bg-rose-500/5 border border-rose-500/10 p-3">
           <p className="text-xs text-rose-400 mb-1">古诗文积累</p>
-          <p className="text-sm text-slate-300">古诗启蒙 → 120 首 → 文学素养</p>
+          <p className="text-sm text-slate-700">古诗启蒙 → 120 首 → 文学素养</p>
         </div>
         <div className="rounded-xl bg-teal-500/5 border border-teal-500/10 p-3">
           <p className="text-xs text-teal-400 mb-1">阅读写作</p>
-          <p className="text-sm text-slate-300">绘本 → 儿童文学 → 面谈表达</p>
+          <p className="text-sm text-slate-700">绘本 → 儿童文学 → 面谈表达</p>
         </div>
         <div className="rounded-xl bg-amber-500/5 border border-amber-500/10 p-3">
           <p className="text-xs text-amber-400 mb-1">竞赛荣誉</p>
-          <p className="text-sm text-slate-300">校内荣誉 → 汉字/古诗文 → 简历归档</p>
+          <p className="text-sm text-slate-700">校内荣誉 → 汉字/古诗文 → 简历归档</p>
         </div>
       </div>
     </motion.div>

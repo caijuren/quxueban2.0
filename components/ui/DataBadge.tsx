@@ -16,7 +16,7 @@ const variantMap = {
   success: 'bg-success/10 text-success border-success/20',
   warning: 'bg-warning/10 text-warning border-warning/20',
   danger: 'bg-danger/10 text-danger border-danger/20',
-  default: 'bg-white/5 text-slate-400 border-white/10',
+  default: 'bg-black/5 text-slate-600 border-white/10',
 };
 
 const sizeMap = {

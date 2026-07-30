@@ -65,8 +65,8 @@ export default function Sidebar({ mobileMenuOpen, onLinkClick }: SidebarProps) {
         mobileMenuOpen ? 'translate-x-0 lg:translate-x-0' : '-translate-x-full lg:translate-x-0 lg:flex hidden'
       }`}
       style={{
-        background: 'rgba(6, 6, 10, 0.9)',
-        boxShadow: 'inset -1px 0 0 rgba(255, 45, 106, 0.06)',
+        background: 'rgba(255, 255, 255, 0.95)',
+        boxShadow: 'inset -1px 0 0 rgba(15, 23, 42, 0.06)',
       }}
     >
       {/* Logo */}
@@ -74,7 +74,7 @@ export default function Sidebar({ mobileMenuOpen, onLinkClick }: SidebarProps) {
         <div className="flex items-center justify-between">
           <Link href="/" className="flex items-center gap-3" onClick={onLinkClick}>
             <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center shadow-neon-strong">
-              <Sparkles className="w-5 h-5 text-white" />
+              <Sparkles className="w-5 h-5 text-text-primary" />
             </div>
             <div>
               <span className="text-2xl font-black font-display gradient-text tracking-tight neon-text">趣学伴</span>
@@ -83,7 +83,7 @@ export default function Sidebar({ mobileMenuOpen, onLinkClick }: SidebarProps) {
           </Link>
           <button
             onClick={onLinkClick}
-            className="lg:hidden w-10 h-10 rounded-xl bg-surface border border-border-default flex items-center justify-center text-text-secondary hover:text-white hover:border-border-strong transition-colors"
+            className="lg:hidden w-10 h-10 rounded-xl bg-surface border border-border-default flex items-center justify-center text-text-secondary hover:text-text-primary hover:border-border-strong transition-colors"
             aria-label="关闭菜单"
           >
             <X className="w-5 h-5" />
@@ -112,8 +112,8 @@ export default function Sidebar({ mobileMenuOpen, onLinkClick }: SidebarProps) {
                     aria-current={isActive ? 'page' : undefined}
                     className={`group relative flex items-center gap-3 px-3 py-3 rounded-xl transition-all duration-200 ${
                       isActive
-                        ? 'bg-gradient-to-r from-primary/10 to-transparent text-white border border-primary/25 shadow-glow-primary'
-                        : 'text-text-tertiary hover:text-white hover:bg-surface-light/60'
+                        ? 'bg-gradient-to-r from-primary/10 to-transparent text-text-primary border border-primary/25 shadow-glow-primary'
+                        : 'text-text-tertiary hover:text-text-primary hover:bg-surface-light/60'
                     }`}
                   >
                     {isActive && (

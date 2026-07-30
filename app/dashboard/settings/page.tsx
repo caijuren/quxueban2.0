@@ -132,14 +132,14 @@ export default function SettingsPage() {
           <h1 className="text-2xl sm:text-3xl font-bold font-display mb-1">
             系统设置
           </h1>
-          <p className="text-sm text-slate-500">管理账号、通知和界面偏好</p>
+          <p className="text-sm text-slate-600">管理账号、通知和界面偏好</p>
         </div>
 
         <div ref={dropdownRef} className="relative">
           <button
             id="settings-category-dropdown"
             onClick={() => setDropdownOpen((v) => !v)}
-            className="flex items-center gap-2 px-3 py-2 rounded-lg glass border border-white/[0.08] text-sm font-medium text-slate-200 hover:bg-white/[0.04] transition-colors focus-ring"
+            className="flex items-center gap-2 px-3 py-2 rounded-lg glass border border-black/[0.10] text-sm font-medium text-slate-800 hover:bg-black/[0.04] transition-colors focus-ring"
             aria-haspopup="listbox"
             aria-expanded={dropdownOpen}
           >
@@ -148,14 +148,14 @@ export default function SettingsPage() {
               {activeCategoryInfo.label}
             </span>
             <ChevronDown
-              className={`w-3.5 h-3.5 text-slate-400 transition-transform duration-200 ${
+              className={`w-3.5 h-3.5 text-slate-600 transition-transform duration-200 ${
                 dropdownOpen ? 'rotate-180' : ''
               }`}
             />
           </button>
 
           {dropdownOpen && (
-            <div className="absolute right-0 top-full mt-2 w-48 rounded-xl glass border border-white/[0.08] overflow-hidden z-50 shadow-2xl">
+            <div className="absolute right-0 top-full mt-2 w-48 rounded-xl glass border border-black/[0.10] overflow-hidden z-50 shadow-2xl">
               {CATEGORIES.map((cat) => {
                 const isActive = activeCategory === cat.id;
                 return (
@@ -168,7 +168,7 @@ export default function SettingsPage() {
                     className={`w-full text-left px-3 py-2.5 text-sm transition-colors flex items-center gap-2 ${
                       isActive
                         ? 'bg-primary/10 text-primary font-medium'
-                        : 'text-slate-300 hover:bg-white/5'
+                        : 'text-slate-700 hover:bg-black/5'
                     }`}
                   >
                     <cat.icon className="w-4 h-4" />

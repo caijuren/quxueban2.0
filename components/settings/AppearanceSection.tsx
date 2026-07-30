@@ -12,6 +12,12 @@ interface AppearanceSectionProps {
 
 const THEMES = [
   {
+    id: 'light',
+    label: '浅色模式',
+    primary: '#e11d48',
+    secondary: '#7c3aed',
+  },
+  {
     id: 'dark-tech',
     label: '暗黑科技',
     primary: '#ff2d6a',
@@ -92,17 +98,17 @@ export default function AppearanceSection({
           <div>
             <div className="flex items-center gap-2 mb-2">
               <Palette className="w-3.5 h-3.5 text-primary" />
-              <p className="text-xs font-medium text-slate-200">主题风格</p>
+              <p className="text-xs font-medium text-slate-800">主题风格</p>
             </div>
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid grid-cols-3 gap-2">
               {THEMES.map((t) => (
                 <button
                   key={t.id}
                   onClick={() => setTheme(t.id as typeof theme)}
                   className={`relative flex items-center gap-2 p-2.5 rounded-lg border text-left transition-all ${
                     theme === t.id
-                      ? 'bg-white/[0.06] border-primary/40'
-                      : 'bg-white/[0.03] border-white/[0.06] hover:bg-white/[0.05]'
+                      ? 'bg-black/[0.06] border-primary/40'
+                      : 'bg-black/[0.03] border-black/[0.08] hover:bg-black/[0.05]'
                   }`}
                 >
                   <div
@@ -111,7 +117,7 @@ export default function AppearanceSection({
                       background: `linear-gradient(135deg, ${t.primary} 0%, ${t.secondary} 100%)`,
                     }}
                   />
-                  <p className="text-xs font-medium text-slate-200">{t.label}</p>
+                  <p className="text-xs font-medium text-slate-800">{t.label}</p>
                   {theme === t.id && (
                     <div className="absolute top-2 right-2 w-1.5 h-1.5 rounded-full bg-primary" />
                   )}
@@ -120,13 +126,13 @@ export default function AppearanceSection({
             </div>
           </div>
 
-          <div className="h-px bg-white/[0.06]" />
+          <div className="h-px bg-black/[0.06]" />
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <div className="flex items-center gap-2 mb-2">
                 <Type className="w-3.5 h-3.5 text-primary" />
-                <p className="text-xs font-medium text-slate-200">字体大小</p>
+                <p className="text-xs font-medium text-slate-800">字体大小</p>
               </div>
               <div className="flex gap-1.5">
                 {FONT_SIZES.map((fs) => (
@@ -136,7 +142,7 @@ export default function AppearanceSection({
                     className={`flex-1 py-1.5 rounded-md text-xs font-medium transition-colors ${
                       fontSize === fs.id
                         ? 'bg-primary/10 text-primary border border-primary/20'
-                        : 'bg-white/5 text-slate-400 border border-white/[0.06] hover:bg-white/[0.08]'
+                        : 'bg-black/5 text-slate-600 border border-black/[0.08] hover:bg-black/[0.08]'
                     }`}
                   >
                     {fs.label}
@@ -148,7 +154,7 @@ export default function AppearanceSection({
             <div>
               <div className="flex items-center gap-2 mb-2">
                 <Layout className="w-3.5 h-3.5 text-secondary" />
-                <p className="text-xs font-medium text-slate-200">信息密度</p>
+                <p className="text-xs font-medium text-slate-800">信息密度</p>
               </div>
               <div className="flex gap-1.5">
                 {DENSITIES.map((d) => (
@@ -158,7 +164,7 @@ export default function AppearanceSection({
                     className={`flex-1 py-1.5 rounded-md text-xs font-medium transition-colors ${
                       density === d.id
                         ? 'bg-secondary/10 text-secondary border border-secondary/20'
-                        : 'bg-white/5 text-slate-400 border border-white/[0.06] hover:bg-white/[0.08]'
+                        : 'bg-black/5 text-slate-600 border border-black/[0.08] hover:bg-black/[0.08]'
                     }`}
                   >
                     {d.label}
@@ -171,12 +177,12 @@ export default function AppearanceSection({
           <div className="flex items-center justify-between py-1">
             <div className="flex items-center gap-2">
               <Eye className="w-3.5 h-3.5 text-accent" />
-              <p className="text-xs font-medium text-slate-200">减少动效</p>
+              <p className="text-xs font-medium text-slate-800">减少动效</p>
             </div>
             <button
               onClick={() => setReducedMotion((v) => !v)}
               className={`relative w-9 h-5 rounded-full transition-colors ${
-                reducedMotion ? 'bg-primary' : 'bg-white/10'
+                reducedMotion ? 'bg-primary' : 'bg-black/10'
               }`}
             >
               <span
@@ -187,12 +193,12 @@ export default function AppearanceSection({
             </button>
           </div>
 
-          <div className="h-px bg-white/[0.06]" />
+          <div className="h-px bg-black/[0.06]" />
 
           <div>
             <div className="flex items-center gap-2 mb-2">
               <Home className="w-3.5 h-3.5 text-primary" />
-              <p className="text-xs font-medium text-slate-200">登录后默认进入</p>
+              <p className="text-xs font-medium text-slate-800">登录后默认进入</p>
             </div>
             <div className="grid grid-cols-3 gap-1.5">
               {LANDING_PAGES.map((page) => (
@@ -202,7 +208,7 @@ export default function AppearanceSection({
                   className={`flex items-center justify-center gap-1 px-2 py-1.5 rounded-md text-xs transition-colors ${
                     defaultLandingPage === page.id
                       ? 'bg-primary/10 text-primary border border-primary/20'
-                      : 'bg-white/5 text-slate-400 border border-white/[0.06] hover:bg-white/[0.08]'
+                      : 'bg-black/5 text-slate-600 border border-black/[0.08] hover:bg-black/[0.08]'
                   }`}
                 >
                   <page.icon className="w-3.5 h-3.5" />
@@ -215,7 +221,7 @@ export default function AppearanceSection({
           <div>
             <div className="flex items-center gap-2 mb-2">
               <Users className="w-3.5 h-3.5 text-secondary" />
-              <p className="text-sm font-medium text-slate-200">默认孩子选择</p>
+              <p className="text-sm font-medium text-slate-800">默认孩子选择</p>
             </div>
             <div className="flex gap-1.5">
               {CHILD_MODES.map((mode) => (
@@ -225,7 +231,7 @@ export default function AppearanceSection({
                   className={`flex-1 py-1.5 rounded-md text-xs font-medium transition-colors ${
                     defaultChildMode === mode.id
                       ? 'bg-secondary/10 text-secondary border border-secondary/20'
-                      : 'bg-white/5 text-slate-400 border border-white/[0.06] hover:bg-white/[0.08]'
+                      : 'bg-black/5 text-slate-600 border border-black/[0.08] hover:bg-black/[0.08]'
                   }`}
                 >
                   {mode.label}
@@ -252,7 +258,7 @@ export default function AppearanceSection({
         <button
           onClick={handleSave}
           disabled={saving}
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gradient-to-r from-primary to-secondary text-white text-xs font-medium hover:shadow-glow-primary transition-all disabled:opacity-70"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gradient-to-r from-primary to-secondary text-text-primary text-xs font-medium hover:shadow-glow-primary transition-all disabled:opacity-70"
         >
           {saving ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Save className="w-3.5 h-3.5" />}
           保存界面偏好

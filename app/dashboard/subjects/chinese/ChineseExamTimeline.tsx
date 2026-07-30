@@ -14,11 +14,11 @@ export default function ChineseExamTimeline() {
     >
       <div className="flex items-center gap-3 mb-6">
         <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-400 to-orange-400 flex items-center justify-center">
-          <Award className="w-5 h-5 text-white" />
+          <Award className="w-5 h-5 text-text-primary" />
         </div>
         <div>
           <h2 className="text-xl font-bold font-display">语文荣誉与赛事时间轴</h2>
-          <p className="text-sm text-slate-400">汉字小达人 → 古诗文大会 → 综合荣誉整理，关键节点与提醒</p>
+          <p className="text-sm text-slate-600">汉字小达人 → 古诗文大会 → 综合荣誉整理，关键节点与提醒</p>
         </div>
       </div>
 
@@ -48,18 +48,18 @@ export default function ChineseExamTimeline() {
               </div>
 
               {/* Card */}
-              <div className="rounded-xl bg-white/[0.03] border border-white/5 p-4 hover:bg-white/[0.05] transition-colors">
+              <div className="rounded-xl bg-black/[0.03] border border-white/5 p-4 hover:bg-black/[0.05] transition-colors">
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-3">
                   <div>
-                    <h3 className="font-bold text-slate-200 flex items-center gap-2">
+                    <h3 className="font-bold text-slate-800 flex items-center gap-2">
                       {exam.name}
                       <span className="px-2 py-0.5 rounded-md bg-amber-500/10 text-amber-400 text-xs border border-amber-500/20">
                         目标 {exam.target}
                       </span>
                     </h3>
-                    <p className="text-sm text-slate-400 mt-0.5">{exam.month} · {exam.date}</p>
+                    <p className="text-sm text-slate-600 mt-0.5">{exam.month} · {exam.date}</p>
                   </div>
-                  <div className="flex items-center gap-1.5 text-xs text-slate-500">
+                  <div className="flex items-center gap-1.5 text-xs text-slate-600">
                     <Calendar className="w-3.5 h-3.5" />
                     {exam.registerBefore}
                   </div>
@@ -67,7 +67,7 @@ export default function ChineseExamTimeline() {
 
                 <div className="flex items-start gap-2 rounded-lg bg-warning/5 border border-warning/10 p-3">
                   <AlertTriangle className="w-4 h-4 text-warning shrink-0 mt-0.5" />
-                  <p className="text-xs text-slate-400">{exam.notes}</p>
+                  <p className="text-xs text-slate-600">{exam.notes}</p>
                 </div>
               </div>
             </motion.div>

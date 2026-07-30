@@ -24,14 +24,14 @@ export default function ResourceList() {
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.45 + index * 0.05 }}
-              className="flex items-start gap-3 rounded-xl bg-white/5 border border-white/5 p-4"
+              className="flex items-start gap-3 rounded-xl bg-black/5 border border-white/5 p-4"
             >
               <div className="w-8 h-8 rounded-lg bg-accent/10 flex items-center justify-center shrink-0">
                 <span className="text-xs font-bold text-accent">{index + 1}</span>
               </div>
               <div>
-                <p className="font-medium text-slate-200 mb-1">{resource.name}</p>
-                <p className="text-sm text-slate-400">{resource.usage}</p>
+                <p className="font-medium text-slate-800 mb-1">{resource.name}</p>
+                <p className="text-sm text-slate-600">{resource.usage}</p>
               </div>
             </motion.div>
           ))}
@@ -55,11 +55,11 @@ export default function ResourceList() {
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.55 + index * 0.05 }}
-              className="rounded-xl bg-white/5 border border-white/5 p-4"
+              className="rounded-xl bg-black/5 border border-white/5 p-4"
             >
               <p className="text-xs text-primary font-medium mb-1">{checkpoint.time}</p>
-              <p className="text-sm text-slate-200 mb-2">{checkpoint.target}</p>
-              <p className="text-xs text-slate-500">
+              <p className="text-sm text-slate-800 mb-2">{checkpoint.target}</p>
+              <p className="text-xs text-slate-600">
                 <span className="text-warning">Fallback：</span>
                 {checkpoint.fallback}
               </p>

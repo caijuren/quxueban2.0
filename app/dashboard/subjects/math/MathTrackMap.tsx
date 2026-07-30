@@ -94,7 +94,7 @@ export default function MathTrackMap() {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
         <div>
           <h2 className="text-xl font-bold font-display">数学三条线作战地图</h2>
-          <p className="text-sm text-slate-400 mt-1">从现在到三公，三条主线并行推进</p>
+          <p className="text-sm text-slate-600 mt-1">从现在到三公，三条主线并行推进</p>
         </div>
         <div className="flex flex-wrap gap-2">
           {mathTracks.map((track) => {
@@ -102,13 +102,13 @@ export default function MathTrackMap() {
             return (
               <div
                 key={track.id}
-                className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-white/5 border border-white/5"
+                className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-black/5 border border-white/5"
               >
                 <div
                   className="w-3 h-3 rounded-full"
                   style={{ backgroundColor: cfg.color, boxShadow: `0 0 10px ${cfg.glowColor}` }}
                 />
-                <span className="text-xs text-slate-300">{track.name}</span>
+                <span className="text-xs text-slate-700">{track.name}</span>
               </div>
             );
           })}
@@ -470,10 +470,10 @@ export default function MathTrackMap() {
                 boxShadow: `0 0 10px ${trackConfig[hoveredData.track].glowColor}`,
               }}
             />
-            <p className="text-xs text-slate-500">{hoveredData.time}</p>
+            <p className="text-xs text-slate-600">{hoveredData.time}</p>
           </div>
-          <p className="text-sm font-bold text-slate-200 mb-1">{hoveredData.label}</p>
-          <p className="text-xs text-slate-400">{hoveredData.detail}</p>
+          <p className="text-sm font-bold text-slate-800 mb-1">{hoveredData.label}</p>
+          <p className="text-xs text-slate-600">{hoveredData.detail}</p>
         </motion.div>
       )}
 
@@ -481,15 +481,15 @@ export default function MathTrackMap() {
       <div className="mt-6 pt-6 border-t border-white/5 grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div className="rounded-xl bg-blue-500/5 border border-blue-500/10 p-3">
           <p className="text-xs text-blue-400 mb-1">校内线</p>
-          <p className="text-sm text-slate-300">二年级 → 五年级校内 · 初中衔接</p>
+          <p className="text-sm text-slate-700">二年级 → 五年级校内 · 初中衔接</p>
         </div>
         <div className="rounded-xl bg-violet-500/5 border border-violet-500/10 p-3">
           <p className="text-xs text-violet-400 mb-1">奥数线</p>
-          <p className="text-sm text-slate-300">启蒙 → 系统 → 模块深入 → AMC8 专题</p>
+          <p className="text-sm text-slate-700">启蒙 → 系统 → 模块深入 → AMC8 专题</p>
         </div>
         <div className="rounded-xl bg-amber-500/5 border border-amber-500/10 p-3">
           <p className="text-xs text-amber-400 mb-1">竞赛线</p>
-          <p className="text-sm text-slate-300">袋鼠 → 澳洲 AMC → AMC8 20+</p>
+          <p className="text-sm text-slate-700">袋鼠 → 澳洲 AMC → AMC8 20+</p>
         </div>
       </div>
     </motion.div>

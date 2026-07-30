@@ -64,13 +64,13 @@ export default function AIPage() {
           <h1 className="text-3xl font-bold font-display mb-2">
             {currentChild ? `${currentChild.name}的 AI 检视` : 'AI 检视'}
           </h1>
-          <p className="text-slate-400">
+          <p className="text-slate-600">
             {currentChild
               ? `当前阶段：${gradeLabel(currentChild.grade)} · 基于当前进度和目标生成诊断建议`
               : '基于当前进度和目标，智能生成诊断与调整建议'}
           </p>
         </div>
-        <button className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-secondary to-secondary-glow text-white font-semibold hover:shadow-[0_0_30px_rgba(139,92,246,0.4)] transition-all duration-300">
+        <button className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-secondary to-secondary-glow text-text-primary font-semibold hover:shadow-[0_0_30px_rgba(139,92,246,0.4)] transition-all duration-300">
           <RefreshCw className="w-4 h-4" />
           重新生成
         </button>
@@ -93,11 +93,11 @@ export default function AIPage() {
       >
         <div className="flex items-start gap-4">
           <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-secondary to-secondary-glow flex items-center justify-center shrink-0">
-            <Sparkles className="w-6 h-6 text-white" />
+            <Sparkles className="w-6 h-6 text-text-primary" />
           </div>
           <div>
             <h2 className="text-xl font-bold font-display mb-2">AI 综合评估</h2>
-            <p className="text-slate-300 leading-relaxed">
+            <p className="text-slate-700 leading-relaxed">
               当前处于一升二阶段，三公冲刺方案匹配度 <span className="text-primary font-semibold">78%</span>。
               英语基础是优势，但奥数尚未启动是最大短板。建议本月内确定奥数学习形式，
               同时保持私立摇号作为备选路线，降低单一目标风险。
@@ -121,7 +121,7 @@ export default function AIPage() {
             </div>
             <ul className="space-y-3">
               {section.items.map((item, itemIndex) => (
-                <li key={itemIndex} className="flex items-start gap-3 text-sm text-slate-300 leading-relaxed">
+                <li key={itemIndex} className="flex items-start gap-3 text-sm text-slate-700 leading-relaxed">
                   <span className={`w-1.5 h-1.5 rounded-full ${section.color.replace('text-', 'bg-')} mt-2 shrink-0`} />
                   {item}
                 </li>

@@ -31,18 +31,18 @@ export default function SubjectPathSwimlane({ paths }: SubjectPathSwimlaneProps)
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.3 + pathIndex * 0.1 }}
-              className="rounded-xl bg-white/[0.02] border border-white/5 overflow-hidden"
+              className="rounded-xl bg-black/[0.02] border border-white/5 overflow-hidden"
             >
               {/* Lane header */}
-              <div className="flex items-center gap-3 px-4 py-3 border-b border-white/5 bg-white/[0.03]">
+              <div className="flex items-center gap-3 px-4 py-3 border-b border-white/5 bg-black/[0.03]">
                 <div
                   className={`w-10 h-10 rounded-lg bg-gradient-to-br ${path.color} flex items-center justify-center shrink-0`}
                 >
-                  <Icon className="w-5 h-5 text-white" />
+                  <Icon className="w-5 h-5 text-text-primary" />
                 </div>
                 <div>
-                  <h3 className="font-bold text-slate-200">{path.name}</h3>
-                  <p className="text-xs text-slate-500">起始时间：{path.startTime}</p>
+                  <h3 className="font-bold text-slate-800">{path.name}</h3>
+                  <p className="text-xs text-slate-600">起始时间：{path.startTime}</p>
                 </div>
               </div>
 
@@ -54,14 +54,14 @@ export default function SubjectPathSwimlane({ paths }: SubjectPathSwimlaneProps)
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.35 + pathIndex * 0.1 + phaseIndex * 0.05 }}
-                    className="rounded-lg bg-white/5 border border-white/5 p-3 hover:border-primary/30 hover:bg-white/[0.07] transition-all group"
+                    className="rounded-lg bg-black/5 border border-white/5 p-3 hover:border-primary/30 hover:bg-white/[0.07] transition-all group"
                   >
                     <p className="text-xs text-primary font-medium mb-1.5">{phase.time}</p>
-                    <h4 className="font-bold text-slate-200 text-sm mb-1.5">{phase.title}</h4>
-                    <p className="text-xs text-slate-400 leading-relaxed mb-2.5">{phase.content}</p>
+                    <h4 className="font-bold text-slate-800 text-sm mb-1.5">{phase.title}</h4>
+                    <p className="text-xs text-slate-600 leading-relaxed mb-2.5">{phase.content}</p>
                     <div className="flex items-start gap-1.5 pt-2 border-t border-white/5">
                       <Target className="w-3 h-3 text-warning shrink-0 mt-0.5" />
-                      <p className="text-xs text-slate-500">{phase.milestone}</p>
+                      <p className="text-xs text-slate-600">{phase.milestone}</p>
                     </div>
                   </motion.div>
                 ))}

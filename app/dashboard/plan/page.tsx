@@ -183,7 +183,7 @@ function PlanPageContent() {
           <div ref={stageDropdownRef} className="relative">
             <button
               onClick={() => setStageDropdownOpen((prev) => !prev)}
-              className="hud-panel hud-panel-hover corner-accent flex items-center gap-2 px-4 py-2.5 text-caption font-semibold text-white focus-ring"
+              className="hud-panel hud-panel-hover corner-accent flex items-center gap-2 px-4 py-2.5 text-caption font-semibold text-text-primary focus-ring"
               aria-haspopup="listbox"
               aria-expanded={stageDropdownOpen}
             >
@@ -229,7 +229,7 @@ function PlanPageContent() {
           </div>
           <button
             onClick={() => setShowNewPlanModal(true)}
-            className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-primary to-secondary text-white text-caption font-bold hover:shadow-glow-primary transition-all duration-200 focus-ring"
+            className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-primary to-secondary text-text-primary text-caption font-bold hover:shadow-glow-primary transition-all duration-200 focus-ring"
           >
             <Plus className="w-4 h-4" />
             新建方案
@@ -290,7 +290,7 @@ function PlanPageContent() {
                       </div>
                       <div>
                         <div className="flex items-center gap-2 flex-wrap">
-                          <h2 className="text-h4 text-white">{plan.name}</h2>
+                          <h2 className="text-h4 text-text-primary">{plan.name}</h2>
                           <span
                             className={`px-2.5 py-0.5 rounded-lg text-micro font-semibold ${type.bg} ${type.color} border ${type.border}`}
                           >
@@ -427,10 +427,10 @@ function PlanPageContent() {
                                 <div
                                   className={`w-9 h-9 rounded-lg bg-gradient-to-br ${school.color} flex items-center justify-center shrink-0 ${school.shadow}`}
                                 >
-                                  <school.icon className="w-4 h-4 text-white" />
+                                  <school.icon className="w-4 h-4 text-text-primary" />
                                 </div>
                                 <div className="min-w-0">
-                                  <h4 className="text-caption font-bold text-white truncate group-hover:text-primary transition-colors">
+                                  <h4 className="text-caption font-bold text-text-primary truncate group-hover:text-primary transition-colors">
                                     {school.name}
                                   </h4>
                                   <p className="text-micro text-text-muted">{school.tag}</p>
@@ -509,7 +509,7 @@ function PlanPageContent() {
 
 export default function PlanPage() {
   return (
-    <Suspense fallback={<div className="p-8 text-center text-slate-500">加载中...</div>}>
+    <Suspense fallback={<div className="p-8 text-center text-slate-600">加载中...</div>}>
       <PlanPageContent />
     </Suspense>
   );

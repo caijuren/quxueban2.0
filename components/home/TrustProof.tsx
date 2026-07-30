@@ -46,7 +46,7 @@ export default function TrustProof() {
               delay={index * 0.08}
             >
               <div className="hud-panel hud-panel-hover p-5 h-full">
-                <div className="data-value text-h2 text-white mb-1">{stat.value}</div>
+                <div className="data-value text-h2 text-text-primary mb-1">{stat.value}</div>
                 <div className="text-micro text-text-muted">{stat.label}</div>
               </div>
             </MotionSection>

@@ -21,9 +21,9 @@ export default function Footer() {
         <div className="flex flex-col md:flex-row items-center justify-between gap-5">
           <Link href="/" className="flex items-center gap-2 group" aria-label="趣学伴首页">
             <div className="w-7 h-7 rounded-lg bg-primary flex items-center justify-center shadow-glow-primary">
-              <Brain className="w-3.5 h-3.5 text-white" aria-hidden="true" />
+              <Brain className="w-3.5 h-3.5 text-text-primary" aria-hidden="true" />
             </div>
-            <span className="text-base font-bold font-display text-white">趣学伴</span>
+            <span className="text-base font-bold font-display text-text-primary">趣学伴</span>
           </Link>
           <p className="text-micro text-text-muted text-center">
             上海升学战略执行系统 · 为家长把复杂政策变成清晰计划

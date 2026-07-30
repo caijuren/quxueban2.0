@@ -29,7 +29,7 @@ export default function PageLayout({ children, ctaText = '免费开始规划' }:
             </p>
             <Link
               href="/login"
-              className="group inline-flex items-center gap-2 px-7 py-3 rounded-full bg-primary text-white font-semibold text-sm hover:shadow-[0_0_50px_rgba(255,45,106,0.35)] transition-all duration-300 focus-ring"
+              className="group inline-flex items-center gap-2 px-7 py-3 rounded-full bg-primary text-text-primary font-semibold text-sm hover:shadow-[0_0_50px_rgba(255,45,106,0.35)] transition-all duration-300 focus-ring"
             >
               {ctaText}
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />

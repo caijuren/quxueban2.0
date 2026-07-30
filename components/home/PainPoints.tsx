@@ -58,7 +58,7 @@ export default function PainPoints() {
                       {pain.number}
                     </span>
                     <div className="flex-1">
-                      <h3 className="text-h4 font-display mb-1.5 text-white group-hover:text-primary transition-colors duration-300">
+                      <h3 className="text-h4 font-display mb-1.5 text-text-primary group-hover:text-primary transition-colors duration-300">
                         {pain.title}
                       </h3>
                       <p className="text-caption text-text-tertiary leading-relaxed">

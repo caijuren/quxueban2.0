@@ -53,7 +53,7 @@ export default function MarketingHero({
               {tags.map((tag) => (
                 <div
                   key={tag.text}
-                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-white/[0.06] bg-white/[0.02] text-xs text-text-secondary"
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-black/[0.08] bg-black/[0.02] text-xs text-text-secondary"
                 >
                   {tag.icon}
                   {tag.text}

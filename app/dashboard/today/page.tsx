@@ -140,7 +140,7 @@ export default function TodayPage() {
                 sublabel="完成率"
               />
               <div className="flex-1 min-w-0">
-                <p className="text-h4 font-bold text-white">
+                <p className="text-h4 font-bold text-text-primary">
                   {completionRate === 100
                     ? '今日任务全部完成！'
                     : completionRate >= 60
@@ -196,7 +196,7 @@ export default function TodayPage() {
                   >
                     <CategoryIcon className="w-4 h-4" />
                   </div>
-                  <span className="text-caption font-bold text-white">
+                  <span className="text-caption font-bold text-text-primary">
                     {TASK_CATEGORY_LABELS[category]}
                   </span>
                   {allDone && (
@@ -232,7 +232,7 @@ export default function TodayPage() {
       >
         <button
           onClick={() => router.push('/dashboard/weekly')}
-          className="w-full py-3.5 rounded-2xl border border-dashed border-border-strong text-text-tertiary hover:text-white hover:border-primary/30 hover:bg-primary-dim transition-all flex items-center justify-center gap-2 text-caption font-semibold focus-ring"
+          className="w-full py-3.5 rounded-2xl border border-dashed border-border-strong text-text-tertiary hover:text-text-primary hover:border-primary/30 hover:bg-primary-dim transition-all flex items-center justify-center gap-2 text-caption font-semibold focus-ring"
         >
           <Target className="w-4 h-4" />
           查看完整周计划

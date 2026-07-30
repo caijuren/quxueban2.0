@@ -170,12 +170,12 @@ export default function AccountSection({ user, onUpdate }: AccountSectionProps) 
     }
     if (name) {
       return (
-        <span className="text-xl font-bold text-white">
+        <span className="text-xl font-bold text-text-primary">
           {name.slice(0, 1).toUpperCase()}
         </span>
       );
     }
-    return <User className="w-7 h-7 text-white/80" />;
+    return <User className="w-7 h-7 text-text-primary/80" />;
   };
 
   return (
@@ -196,7 +196,7 @@ export default function AccountSection({ user, onUpdate }: AccountSectionProps) 
               <button
                 type="button"
                 onClick={() => fileInputRef.current?.click()}
-                className="inline-flex items-center gap-1 px-2 py-1 rounded-md bg-white/5 text-slate-300 text-[11px] hover:bg-white/10 transition-colors"
+                className="inline-flex items-center gap-1 px-2 py-1 rounded-md bg-black/5 text-slate-700 text-[11px] hover:bg-black/10 transition-colors"
               >
                 <Upload className="w-3 h-3" />
                 上传
@@ -205,7 +205,7 @@ export default function AccountSection({ user, onUpdate }: AccountSectionProps) 
                 <button
                   type="button"
                   onClick={() => setAvatarUrl(null)}
-                  className="inline-flex items-center gap-1 px-2 py-1 rounded-md bg-white/5 text-slate-400 text-[11px] hover:bg-white/10 transition-colors"
+                  className="inline-flex items-center gap-1 px-2 py-1 rounded-md bg-black/5 text-slate-600 text-[11px] hover:bg-black/10 transition-colors"
                 >
                   <X className="w-3 h-3" />
                   清除
@@ -224,42 +224,42 @@ export default function AccountSection({ user, onUpdate }: AccountSectionProps) 
           <div className="flex-1 min-w-0">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
-                <label className="block text-[11px] text-slate-400 mb-1">用户名</label>
+                <label className="block text-[11px] text-slate-600 mb-1">用户名</label>
                 <input
                   type="text"
                   value={user.username}
                   disabled
-                  className="w-full px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-sm text-slate-500 cursor-not-allowed"
+                  className="w-full px-3 py-2 rounded-lg bg-black/5 border border-white/10 text-sm text-slate-600 cursor-not-allowed"
                 />
               </div>
               <div>
-                <label className="block text-[11px] text-slate-400 mb-1">显示名称</label>
+                <label className="block text-[11px] text-slate-600 mb-1">显示名称</label>
                 <input
                   type="text"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder="例如：宝妈"
-                  className="w-full px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:border-primary transition-all"
+                  className="w-full px-3 py-2 rounded-lg bg-black/5 border border-white/10 text-sm text-slate-800 placeholder-slate-500 focus:outline-none focus:border-primary transition-all"
                 />
               </div>
               <div>
-                <label className="block text-[11px] text-slate-400 mb-1">手机号</label>
+                <label className="block text-[11px] text-slate-600 mb-1">手机号</label>
                 <input
                   type="tel"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
                   placeholder="接收短信提醒"
-                  className="w-full px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:border-primary transition-all"
+                  className="w-full px-3 py-2 rounded-lg bg-black/5 border border-white/10 text-sm text-slate-800 placeholder-slate-500 focus:outline-none focus:border-primary transition-all"
                 />
               </div>
               <div>
-                <label className="block text-[11px] text-slate-400 mb-1">邮箱</label>
+                <label className="block text-[11px] text-slate-600 mb-1">邮箱</label>
                 <input
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="接收邮件通知"
-                  className="w-full px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:border-primary transition-all"
+                  className="w-full px-3 py-2 rounded-lg bg-black/5 border border-white/10 text-sm text-slate-800 placeholder-slate-500 focus:outline-none focus:border-primary transition-all"
                 />
               </div>
             </div>
@@ -280,7 +280,7 @@ export default function AccountSection({ user, onUpdate }: AccountSectionProps) 
               <button
                 onClick={handleSaveProfile}
                 disabled={savingProfile}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gradient-to-r from-primary to-secondary text-white text-xs font-medium hover:shadow-glow-primary transition-all disabled:opacity-70"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gradient-to-r from-primary to-secondary text-text-primary text-xs font-medium hover:shadow-glow-primary transition-all disabled:opacity-70"
               >
                 {savingProfile ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Save className="w-3.5 h-3.5" />}
                 保存
@@ -294,39 +294,39 @@ export default function AccountSection({ user, onUpdate }: AccountSectionProps) 
         <div className="space-y-2">
           <button
             onClick={() => toggleSecurity('wechat')}
-            className="w-full flex items-center justify-between p-3 rounded-lg bg-white/[0.03] border border-white/[0.06] hover:bg-white/[0.05] transition-colors text-left"
+            className="w-full flex items-center justify-between p-3 rounded-lg bg-black/[0.03] border border-black/[0.08] hover:bg-black/[0.05] transition-colors text-left"
           >
             <div className="flex items-center gap-3">
               <div className="w-9 h-9 rounded-lg bg-[#07C160]/10 flex items-center justify-center">
                 <MessageCircle className="w-4 h-4 text-[#07C160]" />
               </div>
               <div>
-                <p className="text-sm font-medium text-slate-200">微信绑定</p>
-                <p className="text-[11px] text-slate-500">
+                <p className="text-sm font-medium text-slate-800">微信绑定</p>
+                <p className="text-[11px] text-slate-600">
                   {user.wechatOpenId ? '已绑定' : '未绑定'}
                 </p>
               </div>
             </div>
             <div className="flex items-center gap-2">
-              <span className="text-xs text-slate-400">
+              <span className="text-xs text-slate-600">
                 {user.wechatOpenId ? '管理' : '去绑定'}
               </span>
               {expandedSecurity === 'wechat' ? (
-                <ChevronUp className="w-4 h-4 text-slate-500" />
+                <ChevronUp className="w-4 h-4 text-slate-600" />
               ) : (
-                <ChevronDown className="w-4 h-4 text-slate-500" />
+                <ChevronDown className="w-4 h-4 text-slate-600" />
               )}
             </div>
           </button>
 
           {expandedSecurity === 'wechat' && (
-            <div className="p-3 rounded-lg bg-white/[0.02] border border-white/[0.06]">
-              <p className="text-xs text-slate-400 mb-2">
+            <div className="p-3 rounded-lg bg-black/[0.02] border border-black/[0.08]">
+              <p className="text-xs text-slate-600 mb-2">
                 绑定微信后可使用微信一键登录和接收微信提醒。
               </p>
               <button
                 onClick={() => setShowWechatModal(true)}
-                className="px-3 py-1.5 rounded-md bg-white/5 text-slate-300 text-xs hover:bg-white/10 transition-colors"
+                className="px-3 py-1.5 rounded-md bg-black/5 text-slate-700 text-xs hover:bg-black/10 transition-colors"
               >
                 {user.wechatOpenId ? '管理微信绑定' : '立即绑定微信'}
               </button>
@@ -335,59 +335,59 @@ export default function AccountSection({ user, onUpdate }: AccountSectionProps) 
 
           <button
             onClick={() => toggleSecurity('password')}
-            className="w-full flex items-center justify-between p-3 rounded-lg bg-white/[0.03] border border-white/[0.06] hover:bg-white/[0.05] transition-colors text-left"
+            className="w-full flex items-center justify-between p-3 rounded-lg bg-black/[0.03] border border-black/[0.08] hover:bg-black/[0.05] transition-colors text-left"
           >
             <div className="flex items-center gap-3">
               <div className="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center">
                 <Lock className="w-4 h-4 text-primary" />
               </div>
               <div>
-                <p className="text-sm font-medium text-slate-200">修改密码</p>
-                <p className="text-[11px] text-slate-500">定期更换更安全</p>
+                <p className="text-sm font-medium text-slate-800">修改密码</p>
+                <p className="text-[11px] text-slate-600">定期更换更安全</p>
               </div>
             </div>
             {expandedSecurity === 'password' ? (
-              <ChevronUp className="w-4 h-4 text-slate-500" />
+              <ChevronUp className="w-4 h-4 text-slate-600" />
             ) : (
-              <ChevronDown className="w-4 h-4 text-slate-500" />
+              <ChevronDown className="w-4 h-4 text-slate-600" />
             )}
           </button>
 
           {expandedSecurity === 'password' && (
-            <div className="p-3 rounded-lg bg-white/[0.02] border border-white/[0.06] space-y-3">
+            <div className="p-3 rounded-lg bg-black/[0.02] border border-black/[0.08] space-y-3">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div className="relative">
-                  <label className="block text-[11px] text-slate-400 mb-1">当前密码</label>
+                  <label className="block text-[11px] text-slate-600 mb-1">当前密码</label>
                   <input
                     type={showPassword ? 'text' : 'password'}
                     value={currentPassword}
                     onChange={(e) => setCurrentPassword(e.target.value)}
-                    className="w-full px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-sm text-slate-200 focus:outline-none focus:border-primary transition-all"
+                    className="w-full px-3 py-2 rounded-lg bg-black/5 border border-white/10 text-sm text-slate-800 focus:outline-none focus:border-primary transition-all"
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword((v) => !v)}
-                    className="absolute right-3 top-[26px] text-slate-500 hover:text-slate-300"
+                    className="absolute right-3 top-[26px] text-slate-600 hover:text-slate-700"
                   >
                     {showPassword ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
                   </button>
                 </div>
                 <div>
-                  <label className="block text-[11px] text-slate-400 mb-1">新密码</label>
+                  <label className="block text-[11px] text-slate-600 mb-1">新密码</label>
                   <input
                     type="password"
                     value={newPassword}
                     onChange={(e) => setNewPassword(e.target.value)}
-                    className="w-full px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-sm text-slate-200 focus:outline-none focus:border-primary transition-all"
+                    className="w-full px-3 py-2 rounded-lg bg-black/5 border border-white/10 text-sm text-slate-800 focus:outline-none focus:border-primary transition-all"
                   />
                 </div>
                 <div className="sm:col-span-2">
-                  <label className="block text-[11px] text-slate-400 mb-1">确认新密码</label>
+                  <label className="block text-[11px] text-slate-600 mb-1">确认新密码</label>
                   <input
                     type="password"
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
-                    className="w-full px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-sm text-slate-200 focus:outline-none focus:border-primary transition-all"
+                    className="w-full px-3 py-2 rounded-lg bg-black/5 border border-white/10 text-sm text-slate-800 focus:outline-none focus:border-primary transition-all"
                   />
                 </div>
               </div>
@@ -408,7 +408,7 @@ export default function AccountSection({ user, onUpdate }: AccountSectionProps) 
                 <button
                   onClick={handleChangePassword}
                   disabled={changingPassword}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-slate-200 text-xs font-medium hover:bg-white/[0.08] transition-all disabled:opacity-70"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-black/5 border border-white/10 text-slate-800 text-xs font-medium hover:bg-black/[0.08] transition-all disabled:opacity-70"
                 >
                   {changingPassword ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Lock className="w-3.5 h-3.5" />}
                   修改密码
@@ -426,20 +426,20 @@ export default function AccountSection({ user, onUpdate }: AccountSectionProps) 
                 <Trash2 className="w-4 h-4 text-danger" />
               </div>
               <div>
-                <p className="text-sm font-medium text-slate-200">注销账号</p>
-                <p className="text-[11px] text-slate-500">删除后数据无法恢复</p>
+                <p className="text-sm font-medium text-slate-800">注销账号</p>
+                <p className="text-[11px] text-slate-600">删除后数据无法恢复</p>
               </div>
             </div>
             {expandedSecurity === 'danger' ? (
-              <ChevronUp className="w-4 h-4 text-slate-500" />
+              <ChevronUp className="w-4 h-4 text-slate-600" />
             ) : (
-              <ChevronDown className="w-4 h-4 text-slate-500" />
+              <ChevronDown className="w-4 h-4 text-slate-600" />
             )}
           </button>
 
           {expandedSecurity === 'danger' && (
             <div className="p-3 rounded-lg bg-danger/5 border border-danger/10 space-y-3">
-              <p className="text-xs text-slate-400">
+              <p className="text-xs text-slate-600">
                 注销后所有孩子、计划、任务数据将无法恢复，请谨慎操作。
               </p>
               <div className="flex justify-end">
@@ -467,11 +467,11 @@ export default function AccountSection({ user, onUpdate }: AccountSectionProps) 
                 <AlertTriangle className="w-4 h-4 text-danger" />
               </div>
               <div>
-                <h4 className="text-sm font-bold text-slate-200">确认注销账号？</h4>
-                <p className="text-[11px] text-slate-500">此操作不可恢复</p>
+                <h4 className="text-sm font-bold text-slate-800">确认注销账号？</h4>
+                <p className="text-[11px] text-slate-600">此操作不可恢复</p>
               </div>
             </div>
-            <p className="text-xs text-slate-400 mb-3">
+            <p className="text-xs text-slate-600 mb-3">
               请输入当前密码以确认注销账号，注销后所有数据将被清除。
             </p>
             <input
@@ -479,20 +479,20 @@ export default function AccountSection({ user, onUpdate }: AccountSectionProps) 
               value={deletePassword}
               onChange={(e) => setDeletePassword(e.target.value)}
               placeholder="当前密码"
-              className="w-full px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:border-danger transition-all mb-3"
+              className="w-full px-3 py-2 rounded-lg bg-black/5 border border-white/10 text-sm text-slate-800 placeholder-slate-500 focus:outline-none focus:border-danger transition-all mb-3"
             />
             <div className="flex justify-end gap-2">
               <button
                 onClick={() => setShowDeleteConfirm(false)}
                 disabled={deleting}
-                className="px-3 py-1.5 rounded-lg bg-white/5 text-slate-400 text-xs hover:bg-white/10 transition-colors disabled:opacity-50"
+                className="px-3 py-1.5 rounded-lg bg-black/5 text-slate-600 text-xs hover:bg-black/10 transition-colors disabled:opacity-50"
               >
                 取消
               </button>
               <button
                 onClick={handleDeleteAccount}
                 disabled={deleting || !deletePassword}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-danger text-white text-xs font-medium hover:bg-danger/90 transition-colors disabled:opacity-70"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-danger text-text-primary text-xs font-medium hover:bg-danger/90 transition-colors disabled:opacity-70"
               >
                 {deleting && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
                 确认注销

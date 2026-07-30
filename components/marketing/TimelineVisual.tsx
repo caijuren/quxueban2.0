@@ -21,7 +21,7 @@ const subTasks = [
 
 export default function TimelineVisual() {
   return (
-    <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-5 corner-accent backdrop-blur-sm">
+    <div className="rounded-2xl border border-white/10 bg-black/[0.02] p-5 corner-accent backdrop-blur-sm">
       <div className="flex items-center justify-between mb-5">
         <div className="flex items-center gap-2">
           <CalendarCheck className="w-3.5 h-3.5 text-primary" aria-hidden="true" />
@@ -147,7 +147,7 @@ export default function TimelineVisual() {
       </svg>
 
       <div className="mt-4 pt-4 border-t border-white/5 flex items-center justify-between text-xs">
-        <span className="text-slate-500">
+        <span className="text-slate-600">
           当前: <span className="text-primary">一升二暑假 · 路线选择</span>
         </span>
         <span className="font-mono text-text-muted">6 MAJOR MILESTONES</span>

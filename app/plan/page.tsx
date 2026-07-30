@@ -38,7 +38,7 @@ export default function PlanMarketingPage() {
           <>
             为孩子设计
             <br />
-            <span className="text-slate-500">清晰的升学路线</span>
+            <span className="text-slate-600">清晰的升学路线</span>
           </>
         }
         description="三公、摇号、对口、直升……上海升学路径复杂多变。趣学伴帮助你评估多条路线的可行性，制定主路线与备选方案。"
@@ -58,10 +58,10 @@ export default function PlanMarketingPage() {
                 <span className="text-3xl font-mono text-slate-700 font-bold block mb-3 group-hover:text-primary transition-colors">
                   0{index + 1}
                 </span>
-                <h3 className="text-base font-bold font-display mb-2 text-white group-hover:text-primary transition-colors">
+                <h3 className="text-base font-bold font-display mb-2 text-text-primary group-hover:text-primary transition-colors">
                   {item.title}
                 </h3>
-                <p className="text-sm text-slate-400 leading-relaxed">{item.description}</p>
+                <p className="text-sm text-slate-600 leading-relaxed">{item.description}</p>
               </CommandCard>
             ))}
           </div>

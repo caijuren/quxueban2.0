@@ -240,7 +240,7 @@ export default function PlanRoadmap({
         </div>
         <button
           onClick={onShowDiagnosis}
-          className="relative z-10 px-5 py-2.5 rounded-xl font-semibold text-caption transition-all bg-primary text-white hover:shadow-glow-primary focus-ring"
+          className="relative z-10 px-5 py-2.5 rounded-xl font-semibold text-caption transition-all bg-primary text-text-primary hover:shadow-glow-primary focus-ring"
         >
           查看诊断
         </button>
@@ -279,8 +279,8 @@ export default function PlanRoadmap({
                       onClick={() => setActiveRoute(route.id)}
                       className={`hud-panel-hover flex items-center gap-2 px-3 py-2 rounded-xl text-caption font-medium transition-all border ${
                         isActive
-                          ? 'text-white bg-surface-light border-border-strong shadow-glow-primary'
-                          : 'text-text-tertiary border-transparent hover:text-white hover:bg-surface-light'
+                          ? 'text-text-primary bg-surface-light border-border-strong shadow-glow-primary'
+                          : 'text-text-tertiary border-transparent hover:text-text-primary hover:bg-surface-light'
                       }`}
                       aria-pressed={isActive}
                     >
@@ -550,7 +550,7 @@ export default function PlanRoadmap({
                           {outcome.label}
                         </span>
                         <div className="flex flex-col leading-none">
-                          <span className="text-micro text-slate-400">{outcome.name}</span>
+                          <span className="text-micro text-slate-600">{outcome.name}</span>
                           <span className="text-small font-bold data-value" style={{ color: route.color }}>
                             {outcome.prob}%
                           </span>
@@ -877,7 +877,7 @@ export default function PlanRoadmap({
                   </button>
                   <button
                     onClick={() => setSelectedCheckpoint(null)}
-                    className="hud-panel-hover px-4 py-2 rounded-xl text-text-tertiary hover:text-white text-caption font-medium transition-colors focus-ring"
+                    className="hud-panel-hover px-4 py-2 rounded-xl text-text-tertiary hover:text-text-primary text-caption font-medium transition-colors focus-ring"
                   >
                     关闭
                   </button>
@@ -908,7 +908,7 @@ export default function PlanRoadmap({
                 >
                   {volunteer.type.split('（')[1]?.replace('）', '') || volunteer.type}
                 </span>
-                <h4 className="text-h4 text-white">{volunteer.name}</h4>
+                <h4 className="text-h4 text-text-primary">{volunteer.name}</h4>
               </div>
               <span className="text-h3 data-value" style={{ color: volunteer.color }}>
                 {volunteer.probability}%
@@ -940,13 +940,13 @@ export default function PlanRoadmap({
             <Plus className="w-5 h-5 text-text-secondary" />
           </div>
           <div>
-            <p className="text-caption font-bold text-white">自定义熔断点</p>
+            <p className="text-caption font-bold text-text-primary">自定义熔断点</p>
             <p className="text-small text-text-tertiary">系统已内置默认节点，你也可以添加、修改或删除自己的检查点</p>
           </div>
         </div>
         <button
           onClick={onManageNodes}
-          className="hud-panel-hover px-5 py-2.5 rounded-xl border border-border-default text-text-secondary text-caption font-semibold hover:text-white hover:border-border-strong hover:bg-surface-elevated transition-all focus-ring"
+          className="hud-panel-hover px-5 py-2.5 rounded-xl border border-border-default text-text-secondary text-caption font-semibold hover:text-text-primary hover:border-border-strong hover:bg-surface-elevated transition-all focus-ring"
         >
           管理节点
         </button>

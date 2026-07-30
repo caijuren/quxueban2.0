@@ -21,7 +21,7 @@ const stages = [
 
 export default function RouteMapVisual() {
   return (
-    <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-5 corner-accent backdrop-blur-sm">
+    <div className="rounded-2xl border border-white/10 bg-black/[0.02] p-5 corner-accent backdrop-blur-sm">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
           <Target className="w-3.5 h-3.5 text-primary" aria-hidden="true" />

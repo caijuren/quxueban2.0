@@ -158,14 +158,14 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
       transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
       className="fixed top-0 right-0 left-0 lg:left-64 h-16 lg:h-[70px] glass border-b border-border-default z-30 px-3 sm:px-5 flex items-center justify-between"
       style={{
-        background: 'rgba(8, 8, 12, 0.82)',
-        boxShadow: '0 1px 0 0 rgba(255, 45, 106, 0.08)',
+        background: 'rgba(255, 255, 255, 0.88)',
+        boxShadow: '0 1px 0 0 rgba(15, 23, 42, 0.06)',
       }}
     >
       <div className="flex items-center gap-3 flex-1 min-w-0">
         <button
           onClick={onMenuClick}
-          className="lg:hidden w-11 h-11 rounded-xl bg-surface border border-border-default flex items-center justify-center text-text-secondary hover:text-white hover:border-border-strong hover:bg-surface-light transition-all focus-ring"
+          className="lg:hidden w-11 h-11 rounded-xl bg-surface border border-border-default flex items-center justify-center text-text-secondary hover:text-text-primary hover:border-border-strong hover:bg-surface-light transition-all focus-ring"
           aria-label="打开菜单"
         >
           <Menu className="w-5 h-5" />
@@ -179,7 +179,7 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             onKeyDown={handleSearch}
-            className="w-full sm:w-64 lg:w-80 pl-10 pr-4 py-2.5 rounded-xl bg-surface border border-border-default text-sm text-white placeholder:text-text-muted focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/40 focus:shadow-[0_0_20px_rgba(255,45,106,0.12)] transition-all"
+            className="w-full sm:w-64 lg:w-80 pl-10 pr-4 py-2.5 rounded-xl bg-surface border border-border-default text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/40 focus:shadow-[0_0_20px_rgba(255,45,106,0.12)] transition-all"
           />
         </div>
       </div>
@@ -188,12 +188,12 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
         <div className="relative" ref={notificationRef}>
           <button
             onClick={() => setNotificationOpen((prev) => !prev)}
-            className="relative w-11 h-11 rounded-xl bg-surface border border-border-default flex items-center justify-center text-text-secondary hover:text-white hover:border-primary/30 hover:bg-surface-light hover:shadow-[0_0_16px_rgba(255,45,106,0.12)] transition-all focus-ring"
+            className="relative w-11 h-11 rounded-xl bg-surface border border-border-default flex items-center justify-center text-text-secondary hover:text-text-primary hover:border-primary/30 hover:bg-surface-light hover:shadow-[0_0_16px_rgba(255,45,106,0.12)] transition-all focus-ring"
             aria-label="通知"
           >
             <Bell className="w-5 h-5" />
             {unreadCount > 0 && (
-              <span className="absolute top-2 right-2 min-w-[18px] h-[18px] px-1 rounded-full bg-primary text-[10px] font-bold text-white flex items-center justify-center tabular-nums shadow-glow-primary">
+              <span className="absolute top-2 right-2 min-w-[18px] h-[18px] px-1 rounded-full bg-primary text-[10px] font-bold text-text-primary flex items-center justify-center tabular-nums shadow-glow-primary">
                 {unreadCount > 9 ? '9+' : unreadCount}
               </span>
             )}
@@ -202,7 +202,7 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
           {notificationOpen && (
             <div className="absolute right-0 top-full mt-2 w-80 rounded-2xl glass border border-border-default overflow-hidden z-50 shadow-panel modal-scroll">
               <div className="flex items-center justify-between border-b border-border-subtle px-4 py-3">
-                <p className="text-sm font-semibold text-white">通知中心</p>
+                <p className="text-sm font-semibold text-text-primary">通知中心</p>
                 {unreadCount > 0 && (
                   <button
                     onClick={handleMarkAllRead}
@@ -262,7 +262,7 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
             aria-controls="child-listbox"
           >
             <div
-              className="w-9 h-9 rounded-lg flex items-center justify-center text-white text-sm font-bold overflow-hidden shrink-0 ring-1 ring-white/10"
+              className="w-9 h-9 rounded-lg flex items-center justify-center text-text-primary text-sm font-bold overflow-hidden shrink-0 ring-1 ring-black/10"
               style={{
                 background: currentChild
                   ? `linear-gradient(135deg, ${currentChild.avatarColor}, ${currentChild.avatarColor}88)`
@@ -284,7 +284,7 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
               )}
             </div>
             <div className="text-right hidden sm:block">
-              <p className="text-sm font-semibold text-white leading-tight">
+              <p className="text-sm font-semibold text-text-primary leading-tight">
                 {currentChild ? currentChild.name : '未选择孩子'}
               </p>
               <p className="text-[11px] text-text-tertiary">
@@ -331,7 +331,7 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
                       }`}
                     >
                       <div
-                        className="w-8 h-8 rounded-lg flex items-center justify-center text-white text-xs font-bold shrink-0 overflow-hidden ring-1 ring-white/10"
+                        className="w-8 h-8 rounded-lg flex items-center justify-center text-text-primary text-xs font-bold shrink-0 overflow-hidden ring-1 ring-black/10"
                         style={{
                           background: `linear-gradient(135deg, ${child.avatarColor}, ${child.avatarColor}88)`,
                         }}
@@ -349,7 +349,7 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
                         )}
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className={`text-sm font-semibold truncate ${isActive ? 'text-primary' : 'text-white'}`}>
+                        <p className={`text-sm font-semibold truncate ${isActive ? 'text-primary' : 'text-text-primary'}`}>
                           {child.name}
                         </p>
                         <p className="text-xs text-text-tertiary">{gradeLabel(child.grade)}</p>

@@ -111,7 +111,7 @@ const roleConfig: Record<
   },
   none: {
     label: '不适用',
-    color: 'text-slate-500',
+    color: 'text-slate-600',
     bg: 'bg-slate-500/5',
     border: 'border-slate-500/15',
     glow: '',
@@ -237,7 +237,7 @@ const jiadingMap: MapTier[] = [
   {
     id: 'benpu',
     name: '本区普高',
-    color: 'text-slate-300',
+    color: 'text-slate-700',
     bg: 'bg-slate-500/10',
     channel: '统招为主，少量到校',
     schools: [
@@ -415,8 +415,8 @@ export default function MiddleSchoolMatrix() {
                     isHovered ? 'bg-surface-light border-border-strong' : 'bg-surface-elevated border-border-default'
                   }`}
                 >
-                  <Icon className={`w-4 h-4 ${isHovered ? 'text-white' : 'text-text-tertiary'}`} />
-                  <span className={`text-caption font-semibold ${isHovered ? 'text-white' : 'text-text-secondary'}`}>
+                  <Icon className={`w-4 h-4 ${isHovered ? 'text-text-primary' : 'text-text-tertiary'}`} />
+                  <span className={`text-caption font-semibold ${isHovered ? 'text-text-primary' : 'text-text-secondary'}`}>
                     {channel}
                   </span>
                 </motion.div>
@@ -520,7 +520,7 @@ export default function MiddleSchoolMatrix() {
 
                   {/* Current tier badge */}
                   {isCurrentTier && (
-                    <div className="absolute -top-2 -right-2 px-2 py-0.5 rounded-full bg-primary text-white text-micro font-bold shadow-glow-primary">
+                    <div className="absolute -top-2 -right-2 px-2 py-0.5 rounded-full bg-primary text-text-primary text-micro font-bold shadow-glow-primary">
                       当前目标
                     </div>
                   )}
@@ -637,7 +637,7 @@ export default function MiddleSchoolMatrix() {
                     <div className="flex items-center gap-1 min-w-0">
                       <span className="text-caption text-text-secondary truncate">{school.name}</span>
                       {school.slug && (
-                        <ExternalLink className="w-2.5 h-2.5 text-text-muted group-hover:text-white transition-colors shrink-0" />
+                        <ExternalLink className="w-2.5 h-2.5 text-text-muted group-hover:text-text-primary transition-colors shrink-0" />
                       )}
                     </div>
                   );
@@ -645,7 +645,7 @@ export default function MiddleSchoolMatrix() {
                     <Link
                       key={school.name}
                       href={`/dashboard/schools/${school.slug}`}
-                      className="group flex items-center gap-1 px-2 py-1 rounded-md bg-black/20 hover:bg-white/10 border border-white/5 transition-colors"
+                      className="group flex items-center gap-1 px-2 py-1 rounded-md bg-black/20 hover:bg-black/10 border border-white/5 transition-colors"
                     >
                       {chip}
                     </Link>

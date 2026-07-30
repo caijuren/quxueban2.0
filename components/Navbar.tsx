@@ -32,9 +32,9 @@ export default function Navbar() {
         <div className="flex items-center justify-between h-16">
           <Link href="/" className="flex items-center gap-2 group" aria-label="趣学伴首页">
             <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center shadow-glow-primary">
-              <Brain className="w-4 h-4 text-white" aria-hidden="true" />
+              <Brain className="w-4 h-4 text-text-primary" aria-hidden="true" />
             </div>
-            <span className="text-lg font-bold font-display tracking-tight text-white">
+            <span className="text-lg font-bold font-display tracking-tight text-text-primary">
               趣学伴
             </span>
           </Link>
@@ -48,7 +48,7 @@ export default function Navbar() {
                     className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-all duration-200 ${
                       active
                         ? 'text-primary bg-primary/10 shadow-glow-sm'
-                        : 'text-text-tertiary hover:text-white hover:bg-white/5'
+                        : 'text-text-tertiary hover:text-text-primary hover:bg-black/5'
                     }`}
                   >
                     <item.icon className="w-3.5 h-3.5" aria-hidden="true" />
@@ -61,13 +61,13 @@ export default function Navbar() {
 
           <div className="flex items-center gap-2">
             <Link href="/login" className="hidden sm:block">
-              <span className="px-4 py-1.5 rounded-full bg-primary text-white hover:shadow-neon text-sm font-semibold hover:bg-primary-glow transition-all duration-200">
+              <span className="px-4 py-1.5 rounded-full bg-primary text-text-primary hover:shadow-neon text-sm font-semibold hover:bg-primary-glow transition-all duration-200">
                 登录 / 注册
               </span>
             </Link>
             <button
               onClick={() => setMobileOpen((prev) => !prev)}
-              className="md:hidden p-2 rounded-lg text-text-tertiary hover:text-white hover:bg-white/5 transition-colors focus-ring"
+              className="md:hidden p-2 rounded-lg text-text-tertiary hover:text-text-primary hover:bg-black/5 transition-colors focus-ring"
               aria-expanded={mobileOpen}
               aria-controls="mobile-menu"
               aria-label={mobileOpen ? '关闭菜单' : '打开菜单'}
@@ -100,7 +100,7 @@ export default function Navbar() {
                     className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
                       active
                         ? 'text-primary bg-primary/10'
-                        : 'text-text-tertiary hover:text-white hover:bg-white/5'
+                        : 'text-text-tertiary hover:text-text-primary hover:bg-black/5'
                     }`}
                   >
                     <item.icon className="w-4 h-4" aria-hidden="true" />
@@ -112,7 +112,7 @@ export default function Navbar() {
                 <Link
                   href="/login"
                   onClick={() => setMobileOpen(false)}
-                  className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-primary text-white hover:shadow-neon text-sm font-semibold hover:bg-primary-glow transition-colors"
+                  className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-primary text-text-primary hover:shadow-neon text-sm font-semibold hover:bg-primary-glow transition-colors"
                 >
                   登录 / 注册
                 </Link>

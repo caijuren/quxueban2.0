@@ -45,19 +45,19 @@ export default function WechatBindModal({
               boxShadow: '0 0 60px rgba(7, 193, 96, 0.15)',
             }}
           >
-            <div className="p-6 border-b border-white/[0.06] flex items-center justify-between">
+            <div className="p-6 border-b border-black/[0.08] flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-xl bg-[#07C160]/20 flex items-center justify-center">
                   <MessageCircle className="w-5 h-5 text-[#07C160]" />
                 </div>
                 <div>
                   <h3 className="text-lg font-bold font-display">微信绑定</h3>
-                  <p className="text-xs text-slate-400">绑定后支持微信提醒与一键登录</p>
+                  <p className="text-xs text-slate-600">绑定后支持微信提醒与一键登录</p>
                 </div>
               </div>
               <button
                 onClick={onClose}
-                className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center text-slate-400 hover:text-white hover:bg-white/10 transition-colors"
+                className="w-8 h-8 rounded-lg bg-black/5 flex items-center justify-center text-slate-600 hover:text-text-primary hover:bg-black/10 transition-colors"
                 aria-label="关闭"
               >
                 <X className="w-4 h-4" />
@@ -71,12 +71,12 @@ export default function WechatBindModal({
                   <span className="text-sm text-slate-600">微信扫码绑定</span>
                 </div>
               </div>
-              <p className="text-sm text-slate-400 mb-6">
+              <p className="text-sm text-slate-600 mb-6">
                 正式版上线后将支持微信扫码一键绑定，当前请使用账号密码登录。
               </p>
               <button
                 onClick={onClose}
-                className="w-full py-2.5 rounded-xl bg-[#07C160] text-white text-sm font-semibold hover:shadow-[0_0_20px_rgba(7,193,96,0.25)] transition-all"
+                className="w-full py-2.5 rounded-xl bg-[#07C160] text-text-primary text-sm font-semibold hover:shadow-[0_0_20px_rgba(7,193,96,0.25)] transition-all"
               >
                 知道了
               </button>

@@ -29,7 +29,7 @@ export default function FinalCTA() {
 
           <Link
             href="/login"
-            className="group inline-flex items-center gap-2 px-7 py-3 rounded-full bg-primary text-white font-semibold text-sm hover:shadow-neon-strong transition-all duration-300 focus-ring"
+            className="group inline-flex items-center gap-2 px-7 py-3 rounded-full bg-primary text-text-primary font-semibold text-sm hover:shadow-neon-strong transition-all duration-300 focus-ring"
           >
             免费开始规划
             <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />

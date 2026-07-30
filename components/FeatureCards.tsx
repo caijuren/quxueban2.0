@@ -57,7 +57,7 @@ export default function FeatureCards() {
                     <feature.icon className="w-5 h-5 text-primary" aria-hidden="true" />
                   </div>
                   <div>
-                    <h3 className="text-h4 font-display mb-1.5 text-white group-hover:text-primary transition-colors duration-200">
+                    <h3 className="text-h4 font-display mb-1.5 text-text-primary group-hover:text-primary transition-colors duration-200">
                       {feature.title}
                     </h3>
                     <p className="text-caption text-text-tertiary leading-relaxed">

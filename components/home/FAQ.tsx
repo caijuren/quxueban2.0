@@ -64,7 +64,7 @@ export default function FAQ() {
                     <span className="text-body font-medium text-text-secondary pr-4">{faq.question}</span>
                     <span
                       className={`shrink-0 w-7 h-7 rounded-lg flex items-center justify-center transition-colors duration-200 ${
-                        isOpen ? 'bg-primary text-white' : 'bg-white/[0.05] text-text-tertiary'
+                        isOpen ? 'bg-primary text-text-primary' : 'bg-black/[0.05] text-text-tertiary'
                       }`}
                       aria-hidden="true"
                     >
@@ -80,7 +80,7 @@ export default function FAQ() {
                         exit={{ height: 0, opacity: 0 }}
                         transition={{ duration: 0.2 }}
                       >
-                        <div className="px-4 pb-4 text-small text-text-tertiary leading-relaxed border-t border-white/[0.06] pt-3">
+                        <div className="px-4 pb-4 text-small text-text-tertiary leading-relaxed border-t border-black/[0.08] pt-3">
                           {faq.answer}
                         </div>
                       </motion.div>

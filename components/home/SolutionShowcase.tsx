@@ -39,7 +39,7 @@ export default function SolutionShowcase() {
                     </span>
                   </div>
                   <div className="text-h4 font-display">三公冲刺路线</div>
-                  <div className="mt-3 h-1.5 rounded-full bg-white/5 overflow-hidden">
+                  <div className="mt-3 h-1.5 rounded-full bg-black/5 overflow-hidden">
                     <div className="h-full w-[68%] rounded-full bg-primary" />
                   </div>
                   <div className="mt-2 text-micro font-mono text-text-muted">OVERALL 68%</div>
@@ -48,7 +48,7 @@ export default function SolutionShowcase() {
                 <div className="grid grid-cols-2 gap-3">
                   <div className="p-4 rounded-xl bg-surface-light border border-border-default">
                     <div className="text-micro text-text-muted mb-1">本月任务</div>
-                    <div className="data-value text-h3 text-white">12</div>
+                    <div className="data-value text-h3 text-text-primary">12</div>
                     <div className="text-micro text-primary mt-1">已完成 8</div>
                   </div>
                   <div className="p-4 rounded-xl bg-surface-light border border-border-default">
