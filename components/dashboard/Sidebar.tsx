@@ -91,8 +91,8 @@ export default function Sidebar({ mobileMenuOpen, onLinkClick }: SidebarProps) {
       <nav className="flex-1 p-3 space-y-6 overflow-y-auto">
         {menuGroups.map((group) => (
           <div key={group.title}>
-            <p className="px-3 mb-2.5 text-[11px] font-bold text-text-muted uppercase tracking-[0.08em] flex items-center gap-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-text-muted/50" />
+            <p className="px-3 mb-2.5 text-[11px] font-bold text-text-tertiary uppercase tracking-[0.08em] flex items-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-text-tertiary/50" />
               {group.title}
             </p>
             <div className="space-y-1">
@@ -109,13 +109,13 @@ export default function Sidebar({ mobileMenuOpen, onLinkClick }: SidebarProps) {
                     className={`group relative flex items-center gap-3 px-3 py-3 rounded-xl transition-all duration-200 ${
                       isActive
                         ? 'bg-gradient-to-r from-primary/10 to-transparent text-text-primary border border-primary/25 shadow-glow-primary'
-                        : 'text-text-tertiary hover:text-text-primary hover:bg-surface-light/60'
+                        : 'text-text-secondary hover:text-text-primary hover:bg-surface-light/60'
                     }`}
                   >
                     {isActive && (
                       <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 rounded-r-full bg-primary shadow-glow-primary" />
                     )}
-                    <item.icon className={`w-5 h-5 transition-colors ${isActive ? 'text-primary' : 'text-text-muted group-hover:text-text-secondary'}`} />
+                    <item.icon className={`w-5 h-5 transition-colors ${isActive ? 'text-primary' : 'text-text-tertiary group-hover:text-text-secondary'}`} />
                     <span className="text-[15px] font-medium">{item.name}</span>
                   </Link>
                 );

@@ -9,14 +9,14 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        background: '#f7f8fa',
+        background: '#f1f5f9',
         surface: '#ffffff',
         'surface-light': '#f8fafc',
         'surface-elevated': '#f1f5f9',
         'surface-highlight': '#e2e8f0',
-        'border-subtle': '#e2e8f0',
-        'border-default': '#cbd5e1',
-        'border-strong': '#94a3b8',
+        'border-subtle': '#cbd5e1',
+        'border-default': '#94a3b8',
+        'border-strong': '#64748b',
         'border-glow': 'rgba(225, 29, 72, 0.35)',
         primary: 'var(--color-primary)',
         'primary-glow': 'var(--color-primary-glow)',
@@ -37,9 +37,9 @@ const config: Config = {
         warning: '#f59e0b',
         danger: '#ef4444',
         'text-primary': '#0f172a',
-        'text-secondary': '#475569',
-        'text-tertiary': '#64748b',
-        'text-muted': '#94a3b8',
+        'text-secondary': '#334155',
+        'text-tertiary': '#475569',
+        'text-muted': '#64748b',
       },
       boxShadow: {
         'glow-primary': '0 0 20px var(--shadow-primary)',

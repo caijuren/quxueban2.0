@@ -199,6 +199,24 @@ docker push your-registry/quxueban:v1.0.0
 - 不改内容、不改排版，只改视觉表现
 - 构建验证：`npx tsc --noEmit`、`npm run lint`、`npm run build` 均通过
 
+## v1.6.7（2026-07-30）
+
+**主题：修复 v1.6.6 浅色科技风对比度不足，全面提升可读性**
+
+- 加深全局背景色，从 `#f7f8fa` 调整为 `#f1f5f9`，减少屏幕泛白感并增强层次
+- 加深文字颜色，提升核心文案可读性
+  - `text-secondary`: `#475569` → `#334155`
+  - `text-tertiary`: `#64748b` → `#475569`
+  - `text-muted`: `#94a3b8` → `#64748b`
+- 加深边框颜色，卡片与分区轮廓更清晰
+  - `border-subtle`: `#e2e8f0` → `#cbd5e1`
+  - `border-default`: `#cbd5e1` → `#94a3b8`
+  - `border-strong`: `#94a3b8` → `#64748b`
+- 同步更新 `animated-bg`、`animated-bg-strong` 等背景渐变，保持整体色调一致
+- 优化 `Sidebar`、`Topbar` 等核心导航组件的图标与次级文字颜色
+- 不改内容、不改排版，仅调整视觉 token 对比度
+- 构建验证：`npx tsc --noEmit`、`npm run lint`、`npm run build` 均通过
+
 ## v1.6.3（2026-07-29）
 
 **主题：大幅提亮指挥中心暗色主题，修复「黑屏看不清」**

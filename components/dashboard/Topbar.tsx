@@ -161,21 +161,21 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
       <div className="flex items-center gap-3 flex-1 min-w-0">
         <button
           onClick={onMenuClick}
-          className="lg:hidden w-11 h-11 rounded-xl bg-surface border border-border-default flex items-center justify-center text-text-secondary hover:text-text-primary hover:border-border-strong hover:bg-surface-light transition-all focus-ring"
+          className="lg:hidden w-11 h-11 rounded-xl bg-surface border border-border-default flex items-center justify-center text-text-tertiary hover:text-text-primary hover:border-border-strong hover:bg-surface-light transition-all focus-ring"
           aria-label="打开菜单"
         >
           <Menu className="w-5 h-5" />
         </button>
 
         <div className="relative flex-1 max-w-md">
-          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted" />
+          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-text-tertiary" />
           <input
             type="text"
             placeholder="搜索路线、任务、学校…"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             onKeyDown={handleSearch}
-            className="w-full sm:w-64 lg:w-80 pl-10 pr-4 py-2.5 rounded-xl bg-surface border border-border-default text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/40 focus:shadow-glow-accent transition-all"
+            className="w-full sm:w-64 lg:w-80 pl-10 pr-4 py-2.5 rounded-xl bg-surface border border-border-default text-sm text-text-primary placeholder:text-text-tertiary focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/40 focus:shadow-glow-accent transition-all"
           />
         </div>
       </div>
@@ -184,7 +184,7 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
         <div className="relative" ref={notificationRef}>
           <button
             onClick={() => setNotificationOpen((prev) => !prev)}
-            className="relative w-11 h-11 rounded-xl bg-surface border border-border-default flex items-center justify-center text-text-secondary hover:text-text-primary hover:border-primary/30 hover:bg-surface-light hover:shadow-glow-accent transition-all focus-ring"
+            className="relative w-11 h-11 rounded-xl bg-surface border border-border-default flex items-center justify-center text-text-tertiary hover:text-text-primary hover:border-primary/30 hover:bg-surface-light hover:shadow-glow-accent transition-all focus-ring"
             aria-label="通知"
           >
             <Bell className="w-5 h-5" />

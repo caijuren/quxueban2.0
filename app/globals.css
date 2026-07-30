@@ -23,7 +23,7 @@ html {
 }
 
 body {
-  background-color: #f7f8fa;
+  background-color: #f1f5f9;
   color: #0f172a;
   font-family: var(--font-body);
   -webkit-font-smoothing: antialiased;
@@ -96,7 +96,7 @@ body {
   background:
     radial-gradient(ellipse at 80% 0%, color-mix(in srgb, var(--color-primary) 8%, transparent) 0%, transparent 45%),
     radial-gradient(ellipse at 20% 100%, color-mix(in srgb, var(--color-secondary) 6%, transparent) 0%, transparent 45%),
-    #f7f8fa;
+    #f1f5f9;
 }
 
 /* Deeper ambient glow for hero / landing */
@@ -104,8 +104,8 @@ body {
   background:
     radial-gradient(ellipse at 70% 20%, color-mix(in srgb, var(--color-primary) 12%, transparent) 0%, transparent 55%),
     radial-gradient(ellipse at 30% 80%, color-mix(in srgb, var(--color-secondary) 10%, transparent) 0%, transparent 55%),
-    radial-gradient(circle at 50% 50%, rgba(241, 245, 249, 0.90) 0%, transparent 65%),
-    #f7f8fa;
+    radial-gradient(circle at 50% 50%, rgba(226, 232, 240, 0.90) 0%, transparent 65%),
+    #f1f5f9;
 }
 
 /* Grid pattern overlay - finer, more technical */
