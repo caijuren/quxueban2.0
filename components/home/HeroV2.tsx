@@ -94,7 +94,7 @@ export default function HeroV2() {
 
             <motion.h1
               variants={shouldReduceMotion ? undefined : itemVariants}
-              className="text-h1 font-display text-white mb-4"
+              className="text-h1 font-display text-white mb-4 neon-text"
             >
               趣学伴
             </motion.h1>
@@ -108,7 +108,7 @@ export default function HeroV2() {
 
             <motion.p
               variants={shouldReduceMotion ? undefined : itemVariants}
-              className="text-body text-text-tertiary max-w-md mb-8 leading-relaxed"
+              className="text-body text-text-secondary max-w-md mb-8 leading-relaxed"
             >
               三公、摇号、对口、自招、名额分配到校……所有路线、关键节点、执行进度，全部心中有数。
             </motion.p>

@@ -181,6 +181,21 @@ docker push your-registry/quxueban:v1.0.0
 
 # 发版记录
 
+## v1.6.2（2026-07-29）
+
+**主题：进一步提升暗色模式全局亮度与可读性**
+
+- 整体底色从 `#030305` 提亮至 `#0a0a12`，避免「黑屏」感
+- 卡片/表面色同步提亮：`surface` / `surface-light` / `surface-elevated` / `surface-highlight`
+- 再次提升文字透明度
+  - `text-secondary`: 0.80 → 0.88
+  - `text-tertiary`: 0.62 → 0.72
+  - `text-muted`: 0.45 → 0.58
+- 边框透明度提升，卡片轮廓更清晰
+- `hud-panel` 背景不透明度从 80% 提升至 95%
+- 首页 Hero 环境光增强，标题添加霓虹发光
+- 构建验证：`npm run build` 通过
+
 ## v1.6.1（2026-07-29）
 
 **主题：修复 v1.6.0 暗色模式下文字对比度过低**
