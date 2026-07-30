@@ -23,7 +23,7 @@ html {
 }
 
 body {
-  background-color: #141420;
+  background-color: #1e1e2e;
   color: #ffffff;
   font-family: var(--font-body);
   -webkit-font-smoothing: antialiased;
@@ -85,35 +85,35 @@ body {
 
 /* Glass effect - deeper, less border noise */
 .glass {
-  background: rgba(30, 30, 45, 0.92);
+  background: rgba(42, 42, 62, 0.92);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.10);
 }
 
 /* Command center ambient background - neon command deck */
 .animated-bg {
   background:
-    radial-gradient(ellipse at 85% 10%, color-mix(in srgb, var(--color-primary) 22%, transparent) 0%, transparent 50%),
-    radial-gradient(ellipse at 15% 90%, color-mix(in srgb, var(--color-secondary) 16%, transparent) 0%, transparent 50%),
-    radial-gradient(ellipse at 50% 50%, rgba(30, 30, 45, 0.95) 0%, transparent 70%),
-    #141420;
+    radial-gradient(ellipse at 85% 10%, color-mix(in srgb, var(--color-primary) 26%, transparent) 0%, transparent 50%),
+    radial-gradient(ellipse at 15% 90%, color-mix(in srgb, var(--color-secondary) 20%, transparent) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 50%, rgba(42, 42, 62, 0.95) 0%, transparent 70%),
+    #1e1e2e;
 }
 
 /* Deeper ambient glow for hero / landing */
 .animated-bg-strong {
   background:
-    radial-gradient(ellipse at 70% 20%, color-mix(in srgb, var(--color-primary) 45%, transparent) 0%, transparent 55%),
-    radial-gradient(ellipse at 30% 80%, color-mix(in srgb, var(--color-secondary) 32%, transparent) 0%, transparent 55%),
-    radial-gradient(circle at 50% 50%, rgba(50, 50, 70, 0.90) 0%, transparent 65%),
-    #141420;
+    radial-gradient(ellipse at 70% 20%, color-mix(in srgb, var(--color-primary) 50%, transparent) 0%, transparent 55%),
+    radial-gradient(ellipse at 30% 80%, color-mix(in srgb, var(--color-secondary) 38%, transparent) 0%, transparent 55%),
+    radial-gradient(circle at 50% 50%, rgba(60, 60, 85, 0.90) 0%, transparent 65%),
+    #1e1e2e;
 }
 
 /* Grid pattern overlay - finer, more technical */
 .grid-pattern {
   background-image:
-    linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
+    linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
   background-size: 48px 48px;
   mask-image: radial-gradient(ellipse at center, black 0%, transparent 80%);
   -webkit-mask-image: radial-gradient(ellipse at center, black 0%, transparent 80%);
@@ -122,8 +122,8 @@ body {
 /* Tactical grid - denser, sharper */
 .tactical-grid {
   background-image:
-    linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+    linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
   background-size: 32px 32px;
 }
 
@@ -188,12 +188,12 @@ body {
   pointer-events: none;
   background: repeating-linear-gradient(
     0deg,
-    rgba(255, 255, 255, 0.015),
-    rgba(255, 255, 255, 0.015) 1px,
+    rgba(255, 255, 255, 0.012),
+    rgba(255, 255, 255, 0.012) 1px,
     transparent 1px,
     transparent 3px
   );
-  opacity: 0.4;
+  opacity: 0.25;
 }
 
 /* Command panel - refined card */
