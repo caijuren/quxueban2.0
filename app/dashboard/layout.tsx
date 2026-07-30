@@ -45,12 +45,12 @@ export default function DashboardLayout({
         {/* Mobile sidebar overlay */}
         {mobileMenuOpen && (
           <div
-            className="fixed inset-0 bg-black/40 backdrop-blur-sm z-40 lg:hidden"
+            className="fixed inset-0 bg-black/70 backdrop-blur-sm z-40 lg:hidden"
             onClick={() => setMobileMenuOpen(false)}
           />
         )}
 
-        <main className="pt-16 lg:pt-[70px] lg:pl-64 min-h-screen relative z-0">
+        <main className="pt-16 lg:pl-64 min-h-screen relative z-0">
           <div className="p-4 sm:p-6 lg:p-8 pb-28 lg:pb-8">{children}</div>
         </main>
 

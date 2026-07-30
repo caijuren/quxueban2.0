@@ -9,7 +9,7 @@ export interface UserProfile {
 }
 
 export interface UserSettings {
-  theme: 'light' | 'dark-tech' | 'rose-pink';
+  theme: 'dark-tech' | 'rose-pink';
   fontSize: 'normal' | 'large' | 'xlarge';
   density: 'comfortable' | 'compact';
   reducedMotion: boolean;
@@ -89,21 +89,13 @@ export const THEME_COLORS: Record<
     '--shadow-secondary': string;
   }
 > = {
-  light: {
-    '--color-primary': '#e11d48',
-    '--color-primary-glow': '#f43f5e',
-    '--color-secondary': '#7c3aed',
-    '--color-secondary-glow': '#8b5cf6',
-    '--shadow-primary': 'rgba(225, 29, 72, 0.12)',
-    '--shadow-secondary': 'rgba(124, 58, 237, 0.12)',
-  },
   'dark-tech': {
-    '--color-primary': '#e11d48',
-    '--color-primary-glow': '#f43f5e',
-    '--color-secondary': '#7c3aed',
-    '--color-secondary-glow': '#8b5cf6',
-    '--shadow-primary': 'rgba(225, 29, 72, 0.15)',
-    '--shadow-secondary': 'rgba(124, 58, 237, 0.15)',
+    '--color-primary': '#ff2d6a',
+    '--color-primary-glow': '#ff5c8a',
+    '--color-secondary': '#8b5cf6',
+    '--color-secondary-glow': '#a78bfa',
+    '--shadow-primary': 'rgba(255, 45, 106, 0.15)',
+    '--shadow-secondary': 'rgba(139, 92, 246, 0.15)',
   },
   'rose-pink': {
     '--color-primary': '#ec4899',
@@ -127,8 +119,8 @@ export function applySettingsToDocument(settings: UserSettings | null) {
     String(reducedMotion)
   );
 
-  const theme = settings?.theme ?? 'light';
-  const colors = THEME_COLORS[theme] ?? THEME_COLORS['light'];
+  const theme = settings?.theme ?? 'dark-tech';
+  const colors = THEME_COLORS[theme] ?? THEME_COLORS['dark-tech'];
   Object.entries(colors).forEach(([key, value]) => {
     document.documentElement.style.setProperty(key, value);
   });

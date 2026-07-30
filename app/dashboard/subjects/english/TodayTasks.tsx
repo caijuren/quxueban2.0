@@ -45,7 +45,7 @@ export default function TodayTasks({ grade }: { grade: number }) {
         animate={{ backgroundPosition: ['200% 0', '-200% 0'] }}
         transition={{ duration: 4, repeat: Infinity, ease: 'linear' }}
       />
-      <div className="absolute inset-[1px] rounded-2xl bg-surface pointer-events-none" />
+      <div className="absolute inset-[1px] rounded-2xl bg-slate-950/80 pointer-events-none" />
 
       <div className="relative z-10">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-5">
@@ -58,35 +58,35 @@ export default function TodayTasks({ grade }: { grade: number }) {
             </div>
             <div>
               <h2 className="text-xl font-bold font-display">今天英语任务</h2>
-              <p className="text-sm text-text-secondary">{todayName} · {plan.grade}</p>
+              <p className="text-sm text-slate-400">{todayName} · {plan.grade}</p>
             </div>
           </div>
-          <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-surface-light border border-border-subtle">
-            <Clock className="w-4 h-4 text-text-secondary" />
-            <span className="text-sm text-text-secondary">{todayTask.duration}</span>
+          <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/5 border border-white/10">
+            <Clock className="w-4 h-4 text-slate-400" />
+            <span className="text-sm text-slate-300">{todayTask.duration}</span>
           </div>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
           {/* Main task */}
-          <div className="lg:col-span-2 rounded-xl bg-surface-light border border-border-subtle p-5">
+          <div className="lg:col-span-2 rounded-xl bg-white/5 border border-white/10 p-5">
             <div className="flex items-start gap-4">
               <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center shrink-0">
-                <SkillIcon className="w-6 h-6 text-text-primary" />
+                <SkillIcon className="w-6 h-6 text-white" />
               </div>
               <div className="flex-1">
-                <p className="text-lg font-bold text-text-primary mb-2">{todayTask.focus}</p>
+                <p className="text-lg font-bold text-slate-200 mb-2">{todayTask.focus}</p>
                 <div className="flex flex-wrap gap-2 mb-3">
                   {todayTask.materials.map((material) => (
                     <span
                       key={material}
-                      className="px-2 py-1 rounded-md bg-surface-light border border-border-subtle text-xs text-text-secondary"
+                      className="px-2 py-1 rounded-md bg-white/5 border border-white/10 text-xs text-slate-300"
                     >
                       {material}
                     </span>
                   ))}
                 </div>
-                <p className="text-sm text-text-secondary">
+                <p className="text-sm text-slate-500">
                   建议分 1-2 个时段完成，不要一次做太久。完成后在下方勾选。
                 </p>
               </div>
@@ -94,8 +94,8 @@ export default function TodayTasks({ grade }: { grade: number }) {
           </div>
 
           {/* Quick checklist */}
-          <div className="rounded-xl bg-surface-light border border-border-subtle p-5">
-            <p className="text-sm font-medium text-text-secondary mb-3 flex items-center gap-2">
+          <div className="rounded-xl bg-white/5 border border-white/10 p-5">
+            <p className="text-sm font-medium text-slate-300 mb-3 flex items-center gap-2">
               <CheckCircle2 className="w-4 h-4 text-success" />
               完成检查
             </p>
@@ -107,10 +107,10 @@ export default function TodayTasks({ grade }: { grade: number }) {
               ].map((item, index) => (
                 <label
                   key={index}
-                  className="flex items-center gap-3 p-2 rounded-lg hover:bg-surface-light cursor-pointer transition-colors"
+                  className="flex items-center gap-3 p-2 rounded-lg hover:bg-white/5 cursor-pointer transition-colors"
                 >
-                  <input type="checkbox" className="w-4 h-4 rounded border-border-default bg-transparent text-primary focus:ring-primary/50" />
-                  <span className="text-sm text-text-secondary">{item}</span>
+                  <input type="checkbox" className="w-4 h-4 rounded border-white/20 bg-transparent text-primary focus:ring-primary/50" />
+                  <span className="text-sm text-slate-400">{item}</span>
                 </label>
               ))}
             </div>

@@ -14,14 +14,14 @@ interface EmptyStateProps {
 
 export default function EmptyState({ icon: Icon, title, description, action }: EmptyStateProps) {
   return (
-    <div className="rounded-2xl glass p-8 text-center border border-border-subtle">
+    <div className="rounded-2xl glass p-8 text-center border border-white/5">
       {Icon && (
-        <div className="w-12 h-12 rounded-xl bg-surface-elevated flex items-center justify-center mx-auto mb-4">
-          <Icon className="w-6 h-6 text-text-secondary" />
+        <div className="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center mx-auto mb-4">
+          <Icon className="w-6 h-6 text-slate-400" />
         </div>
       )}
-      <p className="text-text-primary font-medium mb-1">{title}</p>
-      {description && <p className="text-sm text-text-secondary mb-4">{description}</p>}
+      <p className="text-slate-300 font-medium mb-1">{title}</p>
+      {description && <p className="text-sm text-slate-500 mb-4">{description}</p>}
       {action && (
         <button
           onClick={action.onClick}

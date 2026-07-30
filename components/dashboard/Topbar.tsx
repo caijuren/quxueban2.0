@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Bell, Search, Menu, Check, User, LogOut, ChevronDown } from 'lucide-react';
+import { Bell, Search, Menu, Check, User, LogOut } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { signOut } from 'next-auth/react';
@@ -156,40 +156,40 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
       initial={{ y: -16, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-      className="fixed top-0 right-0 left-0 lg:left-64 h-16 lg:h-[70px] glass border-b border-border-default shadow-card z-30 px-3 sm:px-5 flex items-center justify-between"
+      className="fixed top-0 right-0 left-0 lg:left-64 h-16 glass border-b border-border-default z-30 px-3 sm:px-5 flex items-center justify-between"
     >
-      <div className="flex items-center gap-3 flex-1 min-w-0">
+      <div className="flex items-center gap-3">
         <button
           onClick={onMenuClick}
-          className="lg:hidden w-11 h-11 rounded-xl bg-surface border border-border-default flex items-center justify-center text-text-tertiary hover:text-text-primary hover:border-border-strong hover:bg-surface-light transition-all focus-ring"
+          className="lg:hidden w-10 h-10 rounded-xl bg-surface border border-border-default flex items-center justify-center text-text-secondary hover:text-white hover:border-border-strong hover:bg-surface-light transition-all focus-ring"
           aria-label="打开菜单"
         >
           <Menu className="w-5 h-5" />
         </button>
 
-        <div className="relative flex-1 max-w-md">
-          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-text-tertiary" />
+        <div className="relative hidden sm:block">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted" />
           <input
             type="text"
             placeholder="搜索路线、任务、学校…"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             onKeyDown={handleSearch}
-            className="w-full sm:w-64 lg:w-80 pl-10 pr-4 py-2.5 rounded-xl bg-surface border border-border-default text-sm text-text-primary placeholder:text-text-tertiary focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/40 focus:shadow-glow-accent transition-all"
+            className="pl-10 pr-4 py-2.5 w-56 lg:w-72 rounded-xl bg-surface border border-border-default text-sm text-white placeholder:text-text-muted focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/40 transition-all"
           />
         </div>
       </div>
 
-      <div className="flex items-center gap-2 sm:gap-3 shrink-0 ml-3">
+      <div className="flex items-center gap-2 sm:gap-3">
         <div className="relative" ref={notificationRef}>
           <button
             onClick={() => setNotificationOpen((prev) => !prev)}
-            className="relative w-11 h-11 rounded-xl bg-surface border border-border-default flex items-center justify-center text-text-tertiary hover:text-text-primary hover:border-primary/30 hover:bg-surface-light hover:shadow-glow-accent transition-all focus-ring"
+            className="relative w-10 h-10 rounded-xl bg-surface border border-border-default flex items-center justify-center text-text-secondary hover:text-white hover:border-border-strong hover:bg-surface-light transition-all focus-ring"
             aria-label="通知"
           >
             <Bell className="w-5 h-5" />
             {unreadCount > 0 && (
-              <span className="absolute top-2 right-2 min-w-[18px] h-[18px] px-1 rounded-full bg-primary text-[10px] font-bold text-white flex items-center justify-center tabular-nums shadow-glow-primary">
+              <span className="absolute top-2 right-2 min-w-[16px] h-4 px-1 rounded-full bg-primary text-[10px] font-bold text-white flex items-center justify-center tabular-nums shadow-glow-primary">
                 {unreadCount > 9 ? '9+' : unreadCount}
               </span>
             )}
@@ -198,7 +198,7 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
           {notificationOpen && (
             <div className="absolute right-0 top-full mt-2 w-80 rounded-2xl glass border border-border-default overflow-hidden z-50 shadow-panel modal-scroll">
               <div className="flex items-center justify-between border-b border-border-subtle px-4 py-3">
-                <p className="text-sm font-semibold text-text-primary">通知中心</p>
+                <p className="text-sm font-semibold text-white">通知中心</p>
                 {unreadCount > 0 && (
                   <button
                     onClick={handleMarkAllRead}
@@ -248,23 +248,31 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
           )}
         </div>
 
+        <button
+          onClick={handleLogout}
+          className="hidden sm:flex w-10 h-10 rounded-xl bg-surface border border-border-default items-center justify-center text-text-secondary hover:text-danger hover:border-danger/30 hover:bg-danger/10 transition-all focus-ring"
+          aria-label="退出登录"
+        >
+          <LogOut className="w-5 h-5" />
+        </button>
+
         <div className="relative" ref={childDropdownRef}>
           <button
             onClick={() => setChildDropdownOpen((prev) => !prev)}
-            className="flex items-center gap-2.5 pl-1.5 pr-2.5 py-1.5 rounded-xl bg-surface border border-border-default hover:border-primary/30 hover:bg-surface-light hover:shadow-glow-accent text-left focus-ring transition-all"
+            className="flex items-center gap-2.5 pl-1 pr-2 py-1 rounded-xl bg-surface border border-border-default hover:border-border-strong hover:bg-surface-light text-left focus-ring transition-all"
             aria-label="切换孩子"
             aria-haspopup="listbox"
             aria-expanded={childDropdownOpen}
             aria-controls="child-listbox"
           >
             <div
-            className="w-9 h-9 rounded-lg flex items-center justify-center text-text-primary text-sm font-bold overflow-hidden shrink-0 ring-1 ring-border-default"
-            style={{
-              background: currentChild
-                ? `linear-gradient(135deg, ${currentChild.avatarColor}, ${currentChild.avatarColor}88)`
-                : 'linear-gradient(135deg, #f1f5f9, #e2e8f0)',
-            }}
-          >
+              className="w-9 h-9 rounded-lg flex items-center justify-center text-white text-sm font-bold overflow-hidden shrink-0 ring-1 ring-white/10"
+              style={{
+                background: currentChild
+                  ? `linear-gradient(135deg, ${currentChild.avatarColor}, ${currentChild.avatarColor}88)`
+                  : 'linear-gradient(135deg, #475569, #64748b)',
+              }}
+            >
               {currentChild?.avatarUrl?.startsWith('data:image') ? (
                 <img
                   src={currentChild.avatarUrl}
@@ -280,7 +288,7 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
               )}
             </div>
             <div className="text-right hidden sm:block">
-              <p className="text-sm font-semibold text-text-primary leading-tight">
+              <p className="text-sm font-semibold text-white leading-tight">
                 {currentChild ? currentChild.name : '未选择孩子'}
               </p>
               <p className="text-[11px] text-text-tertiary">
@@ -289,11 +297,16 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
                   : '请选择孩子'}
               </p>
             </div>
-            <ChevronDown
+            <svg
               className={`w-4 h-4 text-text-muted hidden sm:block transition-transform duration-200 ${
                 childDropdownOpen ? 'rotate-180' : ''
               }`}
-            />
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+            </svg>
           </button>
 
           {childDropdownOpen && (
@@ -327,7 +340,7 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
                       }`}
                     >
                       <div
-                        className="w-8 h-8 rounded-lg flex items-center justify-center text-text-primary text-xs font-bold shrink-0 overflow-hidden ring-1 ring-border-default"
+                        className="w-8 h-8 rounded-lg flex items-center justify-center text-white text-xs font-bold shrink-0 overflow-hidden ring-1 ring-white/10"
                         style={{
                           background: `linear-gradient(135deg, ${child.avatarColor}, ${child.avatarColor}88)`,
                         }}
@@ -345,7 +358,7 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
                         )}
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className={`text-sm font-semibold truncate ${isActive ? 'text-primary' : 'text-text-primary'}`}>
+                        <p className={`text-sm font-semibold truncate ${isActive ? 'text-primary' : 'text-white'}`}>
                           {child.name}
                         </p>
                         <p className="text-xs text-text-tertiary">{gradeLabel(child.grade)}</p>
@@ -354,15 +367,6 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
                     </button>
                   );
                 })}
-              </div>
-              <div className="border-t border-border-subtle p-1.5">
-                <button
-                  onClick={handleLogout}
-                  className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left text-text-secondary hover:text-danger hover:bg-danger/10 transition-all"
-                >
-                  <LogOut className="w-4 h-4" />
-                  <span className="text-sm font-medium">退出登录</span>
-                </button>
               </div>
             </div>
           )}

@@ -42,7 +42,7 @@ export default function MilestonesMarketingPage() {
           <>
             把大目标
             <br />
-            <span className="text-text-muted">拆成可执行节点</span>
+            <span className="text-slate-500">拆成可执行节点</span>
           </>
         }
         description="升学不是一蹴而就。趣学伴将长远目标拆分为年级目标、学期目标、月度任务和周计划，让每一步都有明确的截止时间。"
@@ -54,7 +54,7 @@ export default function MilestonesMarketingPage() {
         visual={<TimelineVisual />}
       />
 
-      <section className="py-20 px-4 sm:px-6 lg:px-8 border-t border-border-subtle">
+      <section className="py-20 px-4 sm:px-6 lg:px-8 border-t border-white/5">
         <div className="max-w-6xl mx-auto">
           <div className="space-y-3">
             {levels.map((item, index) => (
@@ -65,8 +65,8 @@ export default function MilestonesMarketingPage() {
                     <h3 className="text-base font-bold font-display mt-0.5">{item.grade}</h3>
                   </div>
                   <div className="flex-1">
-                    <p className="text-sm text-text-primary font-medium mb-0.5">{item.example}</p>
-                    <p className="text-xs text-text-tertiary">{item.detail}</p>
+                    <p className="text-sm text-white font-medium mb-0.5">{item.example}</p>
+                    <p className="text-xs text-slate-400">{item.detail}</p>
                   </div>
                 </div>
               </CommandCard>

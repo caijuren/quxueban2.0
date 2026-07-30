@@ -1,7 +1,7 @@
 'use client';
 
 import { motion, useReducedMotion } from 'framer-motion';
-import { ArrowRight, MapPin, Target, Activity, CheckCircle2, AlertCircle } from 'lucide-react';
+import { ArrowRight, MapPin, Target } from 'lucide-react';
 import Link from 'next/link';
 
 const containerVariants = {
@@ -34,9 +34,9 @@ const mapVariants = {
 };
 
 const routes = [
-  { id: 'sg', name: '三公冲刺', color: '#e11d48', y: 80, active: true },
-  { id: 'dual', name: '双轨维持', color: '#7c3aed', y: 140, active: false },
-  { id: 'public', name: '公办直升', color: '#8b5cf6', y: 200, active: false },
+  { id: 'sg', name: '三公冲刺', color: '#ff2d6a', y: 80, active: true },
+  { id: 'dual', name: '双轨维持', color: '#8b5cf6', y: 140, active: false },
+  { id: 'public', name: '公办直升', color: '#06b6d4', y: 200, active: false },
 ];
 
 const checkpoints = [
@@ -54,24 +54,28 @@ const stats = [
   { value: '60+', label: '重要节点' },
 ];
 
-const tasks = [
-  { label: '本月任务', value: '8/12', status: 'normal', icon: CheckCircle2 },
-  { label: '风险提醒', value: '2', status: 'warning', icon: AlertCircle },
-  { label: '距离节点', value: '423', suffix: 'DAYS', status: 'event', icon: Activity },
-];
-
 export default function HeroV2() {
   const shouldReduceMotion = useReducedMotion();
+  const motionProps = shouldReduceMotion
+    ? { animate: { opacity: 1, y: 0, x: 0, scale: 1 } }
+    : {};
 
   return (
     <section
-      className="relative min-h-[calc(100svh-4rem)] flex items-center overflow-hidden pt-14 animated-bg-strong"
+      className="relative min-h-[85vh] flex items-center overflow-hidden pt-14"
       aria-label="首页首屏"
     >
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute inset-0 tactical-grid opacity-40" />
-        <div className="absolute top-1/4 right-0 w-[500px] h-[500px] bg-primary/10 rounded-full blur-[120px]" />
-        <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-secondary/10 rounded-full blur-[100px]" />
+        <div
+          className="absolute inset-0 opacity-[0.18]"
+          style={{
+            backgroundImage:
+              'linear-gradient(rgba(255,45,106,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(255,45,106,0.04) 1px, transparent 1px)',
+            backgroundSize: '60px 60px',
+          }}
+        />
+        <div className="absolute top-1/4 right-0 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[120px]" />
+        <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-secondary/5 rounded-full blur-[100px]" />
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-10">
@@ -84,34 +88,29 @@ export default function HeroV2() {
           >
             <motion.div
               variants={shouldReduceMotion ? undefined : itemVariants}
-              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-md border border-border-default bg-surface-light mb-6"
+              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-md border border-white/10 bg-white/[0.03] mb-6"
             >
-              <span className="indicator-dot animate-pulse" />
-              <span className="text-micro font-medium tracking-wide text-text-tertiary uppercase">
+              <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
+              <span className="text-[11px] font-medium tracking-wide text-slate-400 uppercase">
                 上海家长专属的升学执行系统
               </span>
             </motion.div>
 
             <motion.h1
               variants={shouldReduceMotion ? undefined : itemVariants}
-              className="text-h1 font-display text-text-primary mb-4"
-              style={{
-                textShadow: '0 0 24px rgba(225, 29, 72, 0.18)',
-              }}
+              className="text-4xl sm:text-5xl lg:text-6xl font-bold font-display leading-[1.05] tracking-tight mb-5"
             >
-              趣学伴
+              <span className="text-white">趣学伴</span>
+              <span className="block text-xl sm:text-2xl lg:text-3xl font-medium text-slate-500 mt-3 leading-snug">
+                一张图，看清孩子
+                <br />
+                从小学到高考的每一步
+              </span>
             </motion.h1>
 
             <motion.p
               variants={shouldReduceMotion ? undefined : itemVariants}
-              className="text-h3 text-text-secondary mb-5"
-            >
-              一张图，看清孩子从小学到高考的每一步
-            </motion.p>
-
-            <motion.p
-              variants={shouldReduceMotion ? undefined : itemVariants}
-              className="text-body text-text-secondary max-w-md mb-8 leading-relaxed"
+              className="text-sm sm:text-base text-slate-400 max-w-md mb-8 leading-relaxed"
             >
               三公、摇号、对口、自招、名额分配到校……所有路线、关键节点、执行进度，全部心中有数。
             </motion.p>
@@ -119,7 +118,7 @@ export default function HeroV2() {
             <motion.div variants={shouldReduceMotion ? undefined : itemVariants}>
               <Link
                 href="/login"
-                className="group inline-flex items-center gap-2 px-6 py-3 rounded-full bg-primary text-text-primary font-semibold text-sm hover:shadow-neon-strong transition-all duration-300 focus-ring"
+                className="group inline-flex items-center gap-2 px-6 py-3 rounded-full bg-primary text-white font-semibold text-sm hover:shadow-[0_0_40px_rgba(255,45,106,0.35)] transition-all duration-300 focus-ring"
               >
                 免费绘制升学地图
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
@@ -132,42 +131,12 @@ export default function HeroV2() {
             >
               {stats.map((stat) => (
                 <div key={stat.label}>
-                  <div className="data-value text-h3 text-text-primary">{stat.value}</div>
-                  <div className="text-micro text-text-muted mt-0.5">{stat.label}</div>
+                  <div className="text-xl sm:text-2xl font-bold font-display text-white tabular-nums">
+                    {stat.value}
+                  </div>
+                  <div className="text-[11px] text-slate-500 mt-0.5">{stat.label}</div>
                 </div>
               ))}
-            </motion.div>
-
-            <motion.div
-              variants={shouldReduceMotion ? undefined : itemVariants}
-              className="mt-8 lg:hidden"
-            >
-              <div className="hud-panel p-4">
-                <div className="flex items-center gap-2 mb-3">
-                  <Target className="w-3.5 h-3.5 text-primary" aria-hidden="true" />
-                  <span className="text-micro font-mono text-text-tertiary uppercase tracking-wider">
-                    路线概览
-                  </span>
-                </div>
-                <div className="space-y-2">
-                  {routes.map((route) => (
-                    <div key={route.id} className="flex items-center gap-2 text-sm">
-                      <span
-                        className="w-2 h-2 rounded-full"
-                        style={{ backgroundColor: route.color, boxShadow: `0 0 6px ${route.color}` }}
-                      />
-                      <span className={route.active ? 'text-text-primary' : 'text-text-tertiary'}>
-                        {route.name}
-                      </span>
-                      {route.active && (
-                        <span className="text-micro px-1.5 py-0.5 rounded bg-primary/10 text-primary border border-primary/20">
-                          主路线
-                        </span>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              </div>
             </motion.div>
           </motion.div>
 
@@ -177,17 +146,20 @@ export default function HeroV2() {
             animate="visible"
             className="relative hidden lg:block"
           >
-            <div className="hud-panel corner-accent p-5 overflow-hidden">
+            <div className="relative rounded-2xl border border-white/10 bg-white/[0.02] p-5 corner-accent overflow-hidden backdrop-blur-sm">
               <div className="flex items-center justify-between mb-5">
                 <div className="flex items-center gap-2">
                   <Target className="w-3.5 h-3.5 text-primary" aria-hidden="true" />
-                  <span className="text-micro font-mono text-text-tertiary uppercase tracking-wider">
+                  <span className="text-[11px] font-mono text-slate-400 uppercase tracking-wider">
                     升学作战图 · 2025-2030
                   </span>
                 </div>
                 <div className="flex items-center gap-1.5">
-                  <span className="indicator-dot animate-pulse" />
-                  <span className="text-micro font-mono text-primary">LIVE</span>
+                  <span className="relative flex h-2 w-2">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-40" />
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-primary" />
+                  </span>
+                  <span className="text-[11px] font-mono text-primary">LIVE</span>
                 </div>
               </div>
 
@@ -197,13 +169,13 @@ export default function HeroV2() {
                     <path
                       d="M 40 0 L 0 0 0 40"
                       fill="none"
-                      stroke="#e2e8f0"
+                      stroke="rgba(255,255,255,0.03)"
                       strokeWidth="1"
                     />
                   </pattern>
                   <linearGradient id="routeGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop offset="0%" stopColor="#e11d48" stopOpacity="0.9" />
-                    <stop offset="100%" stopColor="#f43f5e" stopOpacity="0.3" />
+                    <stop offset="0%" stopColor="#ff2d6a" stopOpacity="0.8" />
+                    <stop offset="100%" stopColor="#ff5c8a" stopOpacity="0.3" />
                   </linearGradient>
                 </defs>
                 <rect width="900" height="300" fill="url(#heroGrid)" />
@@ -213,7 +185,7 @@ export default function HeroV2() {
                   y1="260"
                   x2="860"
                   y2="260"
-                  stroke="#cbd5e1"
+                  stroke="rgba(255,255,255,0.08)"
                   strokeWidth="1"
                 />
                 {checkpoints.map((cp) => (
@@ -223,14 +195,14 @@ export default function HeroV2() {
                       y1="255"
                       x2={cp.x}
                       y2="265"
-                      stroke="#cbd5e1"
+                      stroke="rgba(255,255,255,0.15)"
                       strokeWidth="1"
                     />
                     <text
                       x={cp.x}
                       y="285"
                       textAnchor="middle"
-                      fill="#64748b"
+                      fill="#6b6b7b"
                       fontSize="11"
                       fontFamily="var(--font-mono)"
                     >
@@ -246,7 +218,7 @@ export default function HeroV2() {
                       fill="none"
                       stroke={route.active ? 'url(#routeGradient)' : route.color}
                       strokeWidth={route.active ? 2.5 : 1.5}
-                      strokeOpacity={route.active ? 1 : 0.5}
+                      strokeOpacity={route.active ? 1 : 0.2}
                       strokeDasharray={route.active ? undefined : '5 5'}
                       initial={shouldReduceMotion ? { pathLength: 1 } : { pathLength: 0 }}
                       animate={{ pathLength: 1 }}
@@ -256,7 +228,7 @@ export default function HeroV2() {
                       x="45"
                       y={route.y + 4}
                       textAnchor="end"
-                      fill={route.active ? route.color : '#64748b'}
+                      fill={route.active ? route.color : 'rgba(255,255,255,0.35)'}
                       fontSize="11"
                       fontFamily="var(--font-body)"
                     >
@@ -278,7 +250,7 @@ export default function HeroV2() {
                         cy={80}
                         r="10"
                         fill="none"
-                        stroke="#e11d48"
+                        stroke="#ff2d6a"
                         strokeWidth="1"
                         opacity="0.35"
                       >
@@ -302,8 +274,8 @@ export default function HeroV2() {
                       cx={cp.x}
                       cy={80}
                       r={cp.status === 'current' ? 5 : 3.5}
-                      fill={cp.status === 'current' ? '#e11d48' : '#e2e8f0'}
-                      stroke={cp.status === 'current' ? '#e11d48' : '#cbd5e1'}
+                      fill={cp.status === 'current' ? '#ff2d6a' : '#1a1a28'}
+                      stroke={cp.status === 'current' ? '#ff2d6a' : 'rgba(255,255,255,0.25)'}
                       strokeWidth="2"
                     />
                   </motion.g>
@@ -320,15 +292,15 @@ export default function HeroV2() {
                     width="110"
                     height="26"
                     rx="4"
-                    fill="rgba(225,29,72,0.10)"
-                    stroke="rgba(225,29,72,0.35)"
+                    fill="rgba(255,45,106,0.08)"
+                    stroke="rgba(255,45,106,0.25)"
                   />
                   <MapPin x="108" y="53" className="w-3 h-3 text-primary" />
                   <text
                     x="155"
                     y="59"
                     textAnchor="middle"
-                    fill="#f43f5e"
+                    fill="#ff8aa8"
                     fontSize="11"
                     fontFamily="var(--font-mono)"
                   >
@@ -337,43 +309,16 @@ export default function HeroV2() {
                 </motion.g>
               </svg>
 
-              <div className="neon-line my-4" />
-
-              <div className="grid grid-cols-3 gap-3">
-                {tasks.map((task) => (
-                  <div
-                    key={task.label}
-                    className="rounded-xl bg-surface-light border border-border-default p-3"
-                  >
-                    <div className="flex items-center gap-1.5 mb-2">
-                      <task.icon
-                        className={`w-3 h-3 ${
-                          task.status === 'warning' ? 'text-secondary' : 'text-primary'
-                        }`}
-                        aria-hidden="true"
-                      />
-                      <span className="text-micro text-text-muted">{task.label}</span>
-                    </div>
-                    <div className="data-value text-h4 text-text-primary">
-                      {task.value}
-                      {task.suffix && (
-                        <span className="text-micro text-text-muted ml-1">{task.suffix}</span>
-                      )}
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              <div className="mt-4 pt-4 border-t border-border-subtle flex items-center justify-between text-xs">
+              <div className="mt-4 pt-4 border-t border-white/5 flex items-center justify-between text-[11px]">
                 <div className="flex items-center gap-4">
-                  <span className="text-text-muted">
+                  <span className="text-slate-500">
                     主路线: <span className="text-primary">三公冲刺型</span>
                   </span>
-                  <span className="text-text-muted hidden sm:inline">
-                    下一节点: <span className="text-text-primary">二年级末 · 基础检查</span>
+                  <span className="text-slate-500 hidden sm:inline">
+                    下一节点: <span className="text-white">二年级末 · 基础检查</span>
                   </span>
                 </div>
-                <span className="font-mono text-micro text-text-muted">SYSTEM NORMAL</span>
+                <span className="font-mono text-slate-600">423 DAYS REMAINING</span>
               </div>
             </div>
           </motion.div>
@@ -387,11 +332,11 @@ export default function HeroV2() {
         className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
         aria-hidden="true"
       >
-        <span className="text-micro text-text-muted uppercase tracking-widest">Scroll</span>
+        <span className="text-[10px] text-slate-600 uppercase tracking-widest">Scroll</span>
         <motion.div
           animate={shouldReduceMotion ? { y: 0 } : { y: [0, 6, 0] }}
           transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
-          className="w-5 h-8 rounded-full border border-border-default flex items-start justify-center p-1.5"
+          className="w-5 h-8 rounded-full border border-white/10 flex items-start justify-center p-1.5"
         >
           <div className="w-1 h-1.5 rounded-full bg-primary" />
         </motion.div>

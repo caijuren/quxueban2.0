@@ -105,20 +105,25 @@ export default function MatchAnalysisModal({
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.9, y: 20 }}
           transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-          className="relative w-full max-w-2xl max-h-[85vh] rounded-3xl flex flex-col bg-surface border border-primary/30 shadow-dropdown"
+          className="relative w-full max-w-2xl max-h-[85vh] rounded-3xl flex flex-col"
+          style={{
+            background: 'linear-gradient(135deg, rgba(15,23,42,0.98) 0%, rgba(30,41,59,0.98) 100%)',
+            border: '1px solid rgba(244,63,94,0.3)',
+            boxShadow: '0 0 80px rgba(244,63,94,0.25), 0 0 120px rgba(139,92,246,0.15), inset 0 1px 0 rgba(255,255,255,0.1)',
+          }}
         >
           <div className="absolute top-0 right-0 w-48 h-48 bg-primary/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
           <div className="absolute bottom-0 left-0 w-32 h-32 bg-secondary/10 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2" />
 
-          <div className="relative z-10 p-6 pb-4 border-b border-border-subtle">
+          <div className="relative z-10 p-6 pb-4 border-b border-white/5">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center">
-                  <Sparkles className="w-5 h-5 text-text-primary" />
+                  <Sparkles className="w-5 h-5 text-white" />
                 </div>
                 <div>
                   <h3 className="text-lg font-bold font-display">路线匹配度分析</h3>
-                  <p className="text-xs text-text-tertiary">{plan.name} · 当前匹配度 {match}%</p>
+                  <p className="text-xs text-slate-400">{plan.name} · 当前匹配度 {match}%</p>
                 </div>
               </div>
               <div className="flex items-center gap-2">
@@ -127,7 +132,7 @@ export default function MatchAnalysisModal({
                   className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${
                     isEditing
                       ? 'bg-success/20 text-success hover:bg-success/30'
-                      : 'bg-surface-light text-text-secondary hover:bg-surface-highlight'
+                      : 'bg-white/5 text-slate-300 hover:bg-white/10'
                   }`}
                 >
                   {isEditing ? (
@@ -142,7 +147,7 @@ export default function MatchAnalysisModal({
                 </button>
                 <button
                   onClick={onClose}
-                  className="w-8 h-8 rounded-lg bg-surface-light flex items-center justify-center text-text-secondary hover:text-text-primary hover:bg-surface-highlight transition-all"
+                  className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center text-slate-400 hover:text-white hover:bg-white/10 transition-all"
                 >
                   <X className="w-4 h-4" />
                 </button>
@@ -160,7 +165,7 @@ export default function MatchAnalysisModal({
                       cy="50"
                       r="45"
                       fill="none"
-                      className="stroke-border-subtle"
+                      stroke="rgba(255,255,255,0.08)"
                       strokeWidth="8"
                     />
                     <motion.circle
@@ -176,13 +181,13 @@ export default function MatchAnalysisModal({
                       animate={{ pathLength: match / 100 }}
                       transition={{ duration: 1, ease: 'easeOut' }}
                       style={{
-                        filter: 'drop-shadow(0 0 12px var(--shadow-primary))',
+                        filter: 'drop-shadow(0 0 12px rgba(244,63,94,0.6))',
                       }}
                     />
                     <defs>
                       <linearGradient id="matchGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                        <stop offset="0%" stopColor="var(--color-primary-glow)" />
-                        <stop offset="100%" stopColor="var(--color-secondary)" />
+                        <stop offset="0%" stopColor="#f43f5e" />
+                        <stop offset="100%" stopColor="#8b5cf6" />
                       </linearGradient>
                     </defs>
                   </svg>
@@ -190,13 +195,13 @@ export default function MatchAnalysisModal({
                     <span className="text-3xl font-bold font-display text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">
                       {match}%
                     </span>
-                    <span className="text-xs text-text-tertiary">匹配度</span>
+                    <span className="text-xs text-slate-500">匹配度</span>
                   </div>
                 </div>
               </div>
               <p
                 className={`text-center text-sm ${
-                  advice.level === 'good' ? 'text-success' : advice.level === 'medium' ? 'text-warning' : 'text-text-tertiary'
+                  advice.level === 'good' ? 'text-success' : advice.level === 'medium' ? 'text-warning' : 'text-slate-400'
                 }`}
               >
                 {advice.text}
@@ -210,7 +215,7 @@ export default function MatchAnalysisModal({
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.2 + index * 0.1 }}
-                  className="bg-surface-light rounded-xl p-4 border border-border-subtle"
+                  className="bg-white/5 rounded-xl p-4 border border-white/5"
                 >
                   <div className="flex items-center justify-between mb-2">
                     <div className="flex items-center gap-3">
@@ -218,8 +223,8 @@ export default function MatchAnalysisModal({
                         <metric.icon className="w-4 h-4" style={{ color: metric.color }} />
                       </div>
                       <div>
-                        <p className="text-sm font-medium text-text-primary">{metric.name}</p>
-                        <p className="text-xs text-text-tertiary">目标：{metric.target}分</p>
+                        <p className="text-sm font-medium text-slate-200">{metric.name}</p>
+                        <p className="text-xs text-slate-500">目标：{metric.target}分</p>
                       </div>
                     </div>
                     <div className="flex items-center gap-1">
@@ -228,7 +233,7 @@ export default function MatchAnalysisModal({
                       ) : metric.trend === 'down' ? (
                         <TrendingDown className="w-4 h-4 text-warning" />
                       ) : (
-                        <Minus className="w-4 h-4 text-text-secondary" />
+                        <Minus className="w-4 h-4 text-slate-500" />
                       )}
                       {isEditing ? (
                         <input
@@ -237,7 +242,7 @@ export default function MatchAnalysisModal({
                           max={Math.round(metric.target * 1.2)}
                           value={Math.round(metric.score)}
                           onChange={(e) => handleScoreChange(index, Number(e.target.value))}
-                          className="w-16 ml-1 px-2 py-1 rounded-md bg-surface-light text-sm font-bold text-text-primary text-center border border-border-default focus:border-primary focus:outline-none"
+                          className="w-16 ml-1 px-2 py-1 rounded-md bg-white/10 text-sm font-bold text-white text-center border border-white/10 focus:border-primary focus:outline-none"
                         />
                       ) : (
                         <span
@@ -246,7 +251,7 @@ export default function MatchAnalysisModal({
                               ? 'text-success'
                               : metric.score >= metric.target * 0.7
                               ? 'text-warning'
-                              : 'text-text-secondary'
+                              : 'text-slate-300'
                           }`}
                         >
                           {Math.round(metric.score)}分
@@ -263,11 +268,11 @@ export default function MatchAnalysisModal({
                       step={1}
                       value={Math.round(metric.score)}
                       onChange={(e) => handleScoreChange(index, Number(e.target.value))}
-                      className="w-full h-2 rounded-full bg-surface-highlight appearance-none cursor-pointer accent-primary"
+                      className="w-full h-2 rounded-full bg-white/10 appearance-none cursor-pointer accent-primary"
                       style={{ accentColor: metric.color } as React.CSSProperties}
                     />
                   ) : (
-                    <div className="h-2 rounded-full bg-surface-highlight overflow-hidden">
+                    <div className="h-2 rounded-full bg-white/5 overflow-hidden">
                       <motion.div
                         initial={{ width: 0 }}
                         animate={{ width: `${Math.min((metric.score / metric.target) * 100, 100)}%` }}
@@ -282,7 +287,7 @@ export default function MatchAnalysisModal({
                   )}
 
                   <div className="flex justify-between mt-1">
-                    <span className="text-xs text-text-tertiary">
+                    <span className="text-xs text-slate-500">
                       差距：{Math.max(0, metric.target - Math.round(metric.score))}分
                     </span>
                     <span
@@ -301,23 +306,23 @@ export default function MatchAnalysisModal({
               ))}
             </div>
 
-            <div className="mt-6 pt-4 border-t border-border-subtle">
+            <div className="mt-6 pt-4 border-t border-white/5">
               <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                 <div>
-                  <p className="text-xs text-text-tertiary mb-1">综合建议</p>
-                  <p className="text-sm text-text-secondary">
+                  <p className="text-xs text-slate-500 mb-1">综合建议</p>
+                  <p className="text-sm text-slate-300">
                     当前阶段重点提升{metrics.slice(0, 2).map((m) => m.name).join('和')}，建议四年级前完成 AMC8 和小托福考试
                   </p>
                 </div>
                 <div className="flex items-center gap-2">
                   <button
                     onClick={reset}
-                    className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-surface-light text-text-secondary text-sm hover:bg-surface-highlight transition-all"
+                    className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-white/5 text-slate-400 text-sm hover:bg-white/10 transition-all"
                   >
                     <RotateCcw className="w-3.5 h-3.5" />
                     重置
                   </button>
-                  <button className="px-4 py-2 rounded-lg bg-gradient-to-r from-primary to-secondary text-text-primary text-sm font-medium hover:shadow-glow-primary transition-all">
+                  <button className="px-4 py-2 rounded-lg bg-gradient-to-r from-primary to-secondary text-white text-sm font-medium hover:shadow-[0_0_20px_rgba(244,63,94,0.4)] transition-all">
                     制定提升计划
                   </button>
                 </div>

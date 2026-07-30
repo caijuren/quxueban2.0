@@ -18,11 +18,11 @@ export default function SettingsSection({
   return (
     <CommandCard className={compact ? 'p-3 sm:p-4' : 'p-4 sm:p-5'}>
       <div className={compact ? 'mb-2.5' : 'mb-3'}>
-        <h2 className="text-base font-bold font-display text-text-primary">
+        <h2 className="text-base font-bold font-display text-slate-100">
           {title}
         </h2>
         {description && (
-          <p className="text-xs text-text-tertiary mt-0.5">{description}</p>
+          <p className="text-xs text-slate-500 mt-0.5">{description}</p>
         )}
       </div>
       {children}

@@ -68,7 +68,7 @@ function SchoolsPageContent() {
           <h1 className="text-3xl font-bold font-display mb-2">
             {currentChild ? `${currentChild.name}的目标学校库` : '目标学校库'}
           </h1>
-          <p className="text-text-secondary">
+          <p className="text-slate-400">
             {currentChild
               ? `当前阶段：${gradeToStage(currentChild.grade)}（${gradeLabel(currentChild.grade)}） · 管理冲刺、备选、保底目标`
               : '管理冲刺、备选、保底目标学校及录取概率'}
@@ -76,7 +76,7 @@ function SchoolsPageContent() {
         </div>
         <button
           onClick={() => setShowAddModal(true)}
-          className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-primary to-secondary text-text-primary font-semibold hover:shadow-glow-primary transition-all duration-300"
+          className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-primary to-secondary text-white font-semibold hover:shadow-[0_0_30px_rgba(244,63,94,0.5)] transition-all duration-300"
         >
           <Plus className="w-4 h-4" />
           添加学校
@@ -100,14 +100,14 @@ function SchoolsPageContent() {
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex items-start gap-4">
                     <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-secondary to-secondary-glow flex items-center justify-center shrink-0">
-                      <School className="w-6 h-6 text-text-primary" />
+                      <School className="w-6 h-6 text-white" />
                     </div>
                     <div>
-                      <h2 className="text-lg font-bold font-display group-hover:text-text-primary transition-colors">{school.name}</h2>
-                      <div className="flex items-center gap-2 mt-1 text-sm text-text-secondary">
+                      <h2 className="text-lg font-bold font-display group-hover:text-white transition-colors">{school.name}</h2>
+                      <div className="flex items-center gap-2 mt-1 text-sm text-slate-400">
                         <MapPin className="w-3.5 h-3.5" />
                         {school.area}
-                        <span className="text-text-secondary">·</span>
+                        <span className="text-slate-600">·</span>
                         {school.type}
                       </div>
                     </div>
@@ -119,25 +119,25 @@ function SchoolsPageContent() {
 
                 <div className="flex flex-wrap gap-2 mb-4">
                   {school.features.map((feature) => (
-                    <span key={feature} className="px-2.5 py-1 rounded-lg bg-surface-light text-xs text-text-secondary border border-border-subtle">
+                    <span key={feature} className="px-2.5 py-1 rounded-lg bg-white/5 text-xs text-slate-300 border border-white/10">
                       {feature}
                     </span>
                   ))}
                 </div>
 
-                <div className="flex items-center justify-between pt-4 border-t border-border-subtle">
-                  <div className="flex items-center gap-2 text-sm text-text-secondary">
+                <div className="flex items-center justify-between pt-4 border-t border-white/5">
+                  <div className="flex items-center gap-2 text-sm text-slate-400">
                     <Trophy className="w-4 h-4 text-warning" />
                     录取概率
                   </div>
                   <div className="flex items-center gap-2">
-                    <div className="w-24 h-2 rounded-full bg-surface-highlight overflow-hidden">
+                    <div className="w-24 h-2 rounded-full bg-white/10 overflow-hidden">
                       <div
                         className="h-full rounded-full bg-gradient-to-r from-primary to-secondary"
                         style={{ width: `${school.probability}%` }}
                       />
                     </div>
-                    <span className="text-sm font-semibold text-text-primary">{school.probability}%</span>
+                    <span className="text-sm font-semibold text-slate-200">{school.probability}%</span>
                   </div>
                 </div>
               </Link>
@@ -174,7 +174,7 @@ function SchoolsPageContent() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/30 backdrop-blur-sm"
+            className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
             onClick={() => setShowAddModal(false)}
           >
             <motion.div
@@ -188,7 +188,7 @@ function SchoolsPageContent() {
               <button
                 type="button"
                 onClick={() => setShowAddModal(false)}
-                className="absolute top-4 right-4 w-7 h-7 rounded-lg bg-surface-light flex items-center justify-center text-text-secondary hover:bg-surface-highlight hover:text-text-primary transition-colors focus-ring"
+                className="absolute top-4 right-4 w-7 h-7 rounded-lg bg-white/5 flex items-center justify-center text-slate-400 hover:bg-white/10 hover:text-slate-200 transition-colors focus-ring"
                 aria-label="关闭"
               >
                 <X className="w-4 h-4" />
@@ -199,13 +199,13 @@ function SchoolsPageContent() {
                   <Plus className="w-6 h-6 text-primary" />
                 </div>
                 <h3 className="text-lg font-bold font-display mb-1">添加目标学校</h3>
-                <p className="text-xs text-text-secondary">学校库由平台维护，暂不支持自定义添加。如需补充学校，请联系管理员。</p>
+                <p className="text-xs text-slate-500">学校库由平台维护，暂不支持自定义添加。如需补充学校，请联系管理员。</p>
               </div>
 
               <button
                 type="button"
                 onClick={() => setShowAddModal(false)}
-                className="w-full py-2 rounded-lg bg-surface-light text-sm text-text-secondary hover:bg-surface-highlight transition-colors focus-ring"
+                className="w-full py-2 rounded-lg bg-white/5 text-sm text-slate-300 hover:bg-white/10 transition-colors focus-ring"
               >
                 知道了
               </button>
@@ -219,7 +219,7 @@ function SchoolsPageContent() {
 
 export default function SchoolsPage() {
   return (
-    <Suspense fallback={<div className="p-8 text-center text-text-secondary">加载中...</div>}>
+    <Suspense fallback={<div className="p-8 text-center text-slate-500">加载中...</div>}>
       <SchoolsPageContent />
     </Suspense>
   );

@@ -35,7 +35,7 @@ import EmptyState from '@/components/ui/EmptyState';
 import CommandCard from '@/components/ui/CommandCard';
 import TimelineNode from '@/components/ui/TimelineNode';
 import { useChildren } from '@/components/dashboard/ChildrenContext';
-import { gradeToStage, gradeLabel } from '@/lib/children';
+import { gradeToStage } from '@/lib/children';
 
 const stages = [
   { id: '小升初', label: '小升初', status: 'active' },
@@ -167,36 +167,33 @@ function PlanPageContent() {
         className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
       >
         <div>
-          <p className="text-caption font-semibold text-text-muted uppercase tracking-wider mb-1.5">
-            {currentChild ? `${gradeLabel(currentChild.grade)} · ${activeStage}` : '升学作战中心'}
-          </p>
-          <h1 className="text-h1 neon-text mb-2">
+          <h1 className="text-2xl sm:text-3xl font-bold font-display mb-1">
             {currentChild ? `${currentChild.name}的路线方案` : '路线方案'}
           </h1>
-          <p className="text-body text-text-tertiary">
+          <p className="text-sm text-slate-500">
             {currentChild
-              ? `${currentChild.routeId ? `已绑定「${getRouteById(currentChild.routeId)?.name ?? currentChild.routeId}」路线` : `根据${currentChild.name}的年级自动匹配`}`
+              ? `当前阶段：${activeStage}${currentChild.routeId ? ` · 已绑定「${getRouteById(currentChild.routeId)?.name ?? currentChild.routeId}」路线` : ` · 根据${currentChild.name}的年级自动匹配`}`
               : '管理小升初、中考、高考各阶段的主路线与备选路线'}
           </p>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2">
           <div ref={stageDropdownRef} className="relative">
             <button
               onClick={() => setStageDropdownOpen((prev) => !prev)}
-              className="hud-panel hud-panel-hover corner-accent flex items-center gap-2 px-4 py-2.5 text-caption font-semibold text-text-primary focus-ring"
+              className="flex items-center gap-2 px-3 py-2 rounded-lg glass border border-white/[0.08] text-sm font-medium text-slate-200 hover:bg-white/[0.04] transition-colors focus-ring"
               aria-haspopup="listbox"
               aria-expanded={stageDropdownOpen}
             >
-              <span className="text-text-tertiary">阶段</span>
-              <span className="gradient-text">{activeStage}</span>
+              <span className="text-slate-500">阶段</span>
+              <span className="gradient-text font-semibold">{activeStage}</span>
               <ChevronDown
-                className={`w-4 h-4 text-text-muted transition-transform duration-200 ${
+                className={`w-3.5 h-3.5 text-slate-400 transition-transform duration-200 ${
                   stageDropdownOpen ? 'rotate-180' : ''
                 }`}
               />
             </button>
             {stageDropdownOpen && (
-              <div className="absolute right-0 top-full mt-2 w-44 rounded-2xl hud-panel shadow-panel overflow-hidden z-50">
+              <div className="absolute right-0 top-full mt-2 w-40 rounded-xl glass border border-white/[0.08] overflow-hidden z-50 shadow-2xl">
                 {stages.map((stage) => {
                   const isActive = activeStage === stage.id;
                   const disabled = stage.status === 'coming';
@@ -209,17 +206,17 @@ function PlanPageContent() {
                         setActiveStage(stage.id);
                         setStageDropdownOpen(false);
                       }}
-                      className={`w-full text-left px-4 py-2.5 text-caption transition-colors flex items-center justify-between ${
+                      className={`w-full text-left px-3 py-2 text-sm transition-colors flex items-center justify-between ${
                         disabled
-                          ? 'text-text-muted cursor-not-allowed'
+                          ? 'text-slate-600 cursor-not-allowed'
                           : isActive
-                          ? 'bg-primary-dim text-primary font-semibold'
-                          : 'text-text-secondary hover:bg-surface-light'
+                          ? 'bg-primary/10 text-primary font-medium'
+                          : 'text-slate-300 hover:bg-white/5'
                       }`}
                     >
                       {stage.label}
                       {disabled && (
-                        <span className="text-micro text-text-muted">即将上线</span>
+                        <span className="text-[10px] text-slate-600">即将上线</span>
                       )}
                     </button>
                   );
@@ -229,7 +226,7 @@ function PlanPageContent() {
           </div>
           <button
             onClick={() => setShowNewPlanModal(true)}
-            className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-primary to-secondary text-text-primary text-caption font-bold hover:shadow-glow-primary transition-all duration-200 focus-ring"
+            className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-gradient-to-r from-primary to-secondary text-white text-sm font-semibold hover:shadow-glow-primary transition-all duration-200 focus-ring"
           >
             <Plus className="w-4 h-4" />
             新建方案
@@ -246,12 +243,11 @@ function PlanPageContent() {
       {activeStage === '中考' && <MiddleSchoolMatrix />}
 
       {/* Plan cards */}
-      <div className="space-y-4">
+      <div className="space-y-3">
         {filteredPlans.map((plan, index) => {
           const type = typeConfig[plan.type];
           const status = statusConfig[plan.status];
           const isExpanded = expandedPlanId === plan.id;
-          const isPrimary = plan.type === 'primary';
           return (
             <motion.div
               key={plan.id}
@@ -260,48 +256,44 @@ function PlanPageContent() {
               transition={{ duration: 0.4, delay: index * 0.06 }}
             >
               <CommandCard
-                active={isPrimary}
-                corner={isPrimary}
-                className={`overflow-visible ${isPrimary ? 'shadow-neon' : ''}`}
+                active={plan.type === 'primary'}
+                corner={plan.type === 'primary'}
+                className="overflow-visible"
               >
                 {/* Header — always visible */}
                 <button
                   onClick={() => togglePlan(plan.id)}
-                  className="w-full p-5 text-left focus-ring rounded-2xl"
+                  className="w-full p-4 text-left focus-ring rounded-xl"
                   aria-expanded={isExpanded}
                 >
                   <div className="flex items-start justify-between gap-4">
-                    <div className="flex items-start gap-4">
+                    <div className="flex items-start gap-3">
                       <div
-                        className={`relative w-12 h-12 rounded-xl flex items-center justify-center shrink-0 ${
-                          isPrimary
-                            ? 'bg-primary/10 border border-primary/30 shadow-glow-primary'
-                            : 'bg-surface-elevated border border-border-default'
-                        }`}
+                        className={`w-10 h-10 rounded-xl ${type.bg} flex items-center justify-center shrink-0`}
+                        style={{
+                          boxShadow: plan.type === 'primary' ? '0 0 15px rgba(244, 63, 94, 0.12)' : 'none',
+                        }}
                       >
-                        {isPrimary ? (
+                        {plan.type === 'primary' ? (
                           <Target className={`w-5 h-5 ${type.color}`} />
                         ) : (
                           <Shield className={`w-5 h-5 ${type.color}`} />
                         )}
-                        {isPrimary && (
-                          <span className="absolute -top-1 -right-1 indicator-dot" />
-                        )}
                       </div>
                       <div>
                         <div className="flex items-center gap-2 flex-wrap">
-                          <h2 className="text-h4 text-text-primary">{plan.name}</h2>
+                          <h2 className="text-base font-bold font-display">{plan.name}</h2>
                           <span
-                            className={`px-2.5 py-0.5 rounded-lg text-micro font-semibold ${type.bg} ${type.color} border ${type.border}`}
+                            className={`px-2 py-0.5 rounded-md text-[10px] font-medium ${type.bg} ${type.color} border ${type.border}`}
                           >
                             {type.label}
                           </span>
-                          <span className={`flex items-center gap-1 text-micro font-semibold ${status.color}`}>
-                            <status.icon className="w-3.5 h-3.5" />
+                          <span className={`flex items-center gap-1 text-[10px] font-medium ${status.color}`}>
+                            <status.icon className="w-3 h-3" />
                             {status.label}
                           </span>
                         </div>
-                        <p className="text-caption text-text-tertiary mt-1.5 max-w-xl line-clamp-1">
+                        <p className="text-xs text-slate-500 mt-1 max-w-xl line-clamp-1">
                           {plan.description}
                         </p>
                       </div>
@@ -309,33 +301,33 @@ function PlanPageContent() {
 
                     <div className="flex items-center gap-3 shrink-0">
                       <div className="text-right">
-                        <p className="text-micro text-text-muted mb-1">匹配度</p>
+                        <p className="text-[10px] text-slate-500 mb-0.5">匹配度</p>
                         <p
-                          className={`text-h3 data-value ${
+                          className={`text-base font-bold font-display tabular-nums ${
                             plan.probability >= 80
                               ? 'text-success'
                               : plan.probability >= 60
                               ? 'text-warning'
-                              : 'text-text-secondary'
+                              : 'text-slate-300'
                           }`}
                         >
                           {plan.probability}%
                         </p>
                       </div>
-                      {isPrimary && activeStage === '小升初' && (
+                      {plan.type === 'primary' && activeStage === '小升初' && (
                         <button
                           onClick={(e) => {
                             e.stopPropagation();
                             setShowMatchModal(true);
                           }}
-                          className="w-9 h-9 rounded-lg hud-panel flex items-center justify-center text-text-tertiary hover:text-primary hover:border-primary/30 hover:bg-primary-dim transition-all focus-ring"
+                          className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center text-slate-400 hover:text-primary hover:bg-primary/10 transition-colors focus-ring"
                           aria-label="编辑匹配度"
                         >
-                          <Edit3 className="w-4 h-4" />
+                          <Edit3 className="w-3.5 h-3.5" />
                         </button>
                       )}
-                      <div className="text-text-muted">
-                        {isExpanded ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
+                      <div className="text-slate-500">
+                        {isExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
                       </div>
                     </div>
                   </div>
@@ -350,20 +342,19 @@ function PlanPageContent() {
                     transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
                     className="overflow-hidden"
                   >
-                    <div className="neon-line" />
-                    <div className="px-5 pb-5 pt-5">
-                      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+                    <div className="px-4 pb-4 pt-0 border-t border-white/[0.06]">
+                      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 pt-4">
                         {/* Requirements */}
-                        <div className="hud-panel p-4 corner-accent">
-                          <h3 className="text-caption font-bold text-text-tertiary uppercase tracking-wider mb-3 flex items-center gap-2">
-                            <AlertTriangle className="w-4 h-4 text-warning" />
+                        <div>
+                          <h3 className="text-xs font-semibold text-slate-400 mb-2.5 flex items-center gap-1.5">
+                            <AlertTriangle className="w-3.5 h-3.5 text-warning" />
                             关键要求
                           </h3>
-                          <div className="flex flex-wrap gap-2">
+                          <div className="flex flex-wrap gap-1.5">
                             {plan.requirements.map((req) => (
                               <span
                                 key={req}
-                                className="px-3 py-1.5 rounded-lg bg-surface-elevated border border-border-default text-caption text-text-secondary hover:border-primary/30 hover:text-primary transition-colors"
+                                className="px-2 py-1 rounded-md bg-white/[0.04] text-xs text-slate-300 border border-white/[0.06]"
                               >
                                 {req}
                               </span>
@@ -372,9 +363,9 @@ function PlanPageContent() {
                         </div>
 
                         {/* Milestones */}
-                        <div className="hud-panel p-4 corner-accent">
-                          <h3 className="text-caption font-bold text-text-tertiary uppercase tracking-wider mb-3 flex items-center gap-2">
-                            <Route className="w-4 h-4 text-secondary" />
+                        <div>
+                          <h3 className="text-xs font-semibold text-slate-400 mb-2.5 flex items-center gap-1.5">
+                            <Route className="w-3.5 h-3.5 text-secondary" />
                             关键里程碑
                           </h3>
                           <div className="space-y-1">
@@ -392,48 +383,48 @@ function PlanPageContent() {
                       </div>
 
                       {/* Targets */}
-                      <div className="mt-5 hud-panel p-4 corner-accent">
-                        <h3 className="text-caption font-bold text-text-tertiary uppercase tracking-wider mb-3 flex items-center gap-2">
+                      <div className="mt-5">
+                        <h3 className="text-xs font-semibold text-slate-400 mb-2.5 flex items-center gap-1.5">
                           {activeStage === '中考' ? (
                             <>
-                              <GraduationCap className="w-4 h-4 text-primary" />
+                              <GraduationCap className="w-3.5 h-3.5 text-primary" />
                               目标高中
                             </>
                           ) : plan.id === 'sg' ? (
                             <>
-                              <School className="w-4 h-4 text-primary" />
+                              <School className="w-3.5 h-3.5 text-primary" />
                               目标学校
                             </>
                           ) : plan.id === 'yaohao' ? (
                             <>
-                              <GraduationCap className="w-4 h-4 text-secondary" />
+                              <GraduationCap className="w-3.5 h-3.5 text-secondary" />
                               目标民办
                             </>
                           ) : (
                             <>
-                              <Home className="w-4 h-4 text-accent" />
+                              <Home className="w-3.5 h-3.5 text-accent" />
                               保底选项
                             </>
                           )}
                         </h3>
-                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
                           {plan.targets.map((school) => (
                             <button
                               key={school.slug}
                               onClick={() => router.push(`/dashboard/schools/${school.slug}`)}
-                              className="hud-panel hud-panel-hover text-left rounded-xl p-3.5 focus-ring group"
+                              className="text-left rounded-xl bg-white/[0.03] border border-white/[0.06] p-3 hover:border-white/[0.12] hover:bg-white/[0.05] transition-all focus-ring group"
                             >
-                              <div className="flex items-center gap-3">
+                              <div className="flex items-center gap-2.5">
                                 <div
-                                  className={`w-9 h-9 rounded-lg bg-gradient-to-br ${school.color} flex items-center justify-center shrink-0 ${school.shadow}`}
+                                  className={`w-8 h-8 rounded-lg bg-gradient-to-br ${school.color} flex items-center justify-center shrink-0`}
                                 >
-                                  <school.icon className="w-4 h-4 text-text-primary" />
+                                  <school.icon className="w-4 h-4 text-white" />
                                 </div>
                                 <div className="min-w-0">
-                                  <h4 className="text-caption font-bold text-text-primary truncate group-hover:text-primary transition-colors">
+                                  <h4 className="text-sm font-semibold text-slate-200 truncate group-hover:text-white transition-colors">
                                     {school.name}
                                   </h4>
-                                  <p className="text-micro text-text-muted">{school.tag}</p>
+                                  <p className="text-[10px] text-slate-500">{school.tag}</p>
                                 </div>
                               </div>
                             </button>
@@ -442,17 +433,17 @@ function PlanPageContent() {
                       </div>
 
                       {/* Footer */}
-                      <div className="mt-5 pt-4 border-t border-border-default flex items-center justify-between">
-                        <div className="flex items-center gap-2 text-small text-text-muted">
-                          <Clock className="w-4 h-4" />
+                      <div className="mt-4 pt-3 border-t border-white/[0.06] flex items-center justify-between">
+                        <div className="flex items-center gap-1.5 text-xs text-slate-500">
+                          <Clock className="w-3.5 h-3.5" />
                           最近更新：2 天前
                         </div>
                         <button
                           onClick={() => router.push(`/dashboard/plan/${plan.id}`)}
-                          className="flex items-center gap-1.5 text-caption font-semibold text-primary hover:text-primary-glow transition-colors group/btn focus-ring rounded-lg px-2 py-1"
+                          className="flex items-center gap-1 text-xs text-primary hover:text-primary-glow transition-colors group/btn focus-ring rounded-md px-1.5 py-1"
                         >
                           查看完整方案{' '}
-                          <ChevronRight className="w-4 h-4 group-hover/btn:translate-x-0.5 transition-transform" />
+                          <ChevronRight className="w-3.5 h-3.5 group-hover/btn:translate-x-0.5 transition-transform" />
                         </button>
                       </div>
                     </div>
@@ -509,7 +500,7 @@ function PlanPageContent() {
 
 export default function PlanPage() {
   return (
-    <Suspense fallback={<div className="p-8 text-center text-slate-600">加载中...</div>}>
+    <Suspense fallback={<div className="p-8 text-center text-slate-500">加载中...</div>}>
       <PlanPageContent />
     </Suspense>
   );

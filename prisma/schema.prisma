@@ -41,7 +41,7 @@ model UserSetting {
   userId             String   @unique
   user               User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  theme              String   @default("light")
+  theme              String   @default("dark-tech")
   fontSize           String   @default("normal")
   density            String   @default("comfortable")
   reducedMotion      Boolean  @default(false)

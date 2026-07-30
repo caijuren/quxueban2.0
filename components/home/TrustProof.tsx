@@ -1,6 +1,7 @@
 'use client';
 
 import { Quote } from 'lucide-react';
+import CommandCard from '@/components/ui/CommandCard';
 import MotionSection from '@/components/ui/MotionSection';
 
 const stats = [
@@ -25,16 +26,13 @@ export default function TrustProof() {
     <section className="py-14 px-4 sm:px-6 lg:px-8">
       <div className="max-w-6xl mx-auto">
         <MotionSection direction="up" duration={0.6} className="mb-12">
-          <div className="flex items-center gap-2 mb-3">
-            <span className="indicator-dot" />
-            <span className="text-micro font-mono text-primary uppercase tracking-widest">
-              Trust
-            </span>
-          </div>
-          <h2 className="text-h2 font-display">
+          <span className="text-[11px] font-mono text-primary uppercase tracking-widest mb-3 block">
+            Trust
+          </span>
+          <h2 className="text-3xl sm:text-4xl font-bold font-display leading-tight">
             已有家长把焦虑
             <br />
-            <span className="text-text-muted">变成行动力</span>
+            <span className="text-slate-500">变成行动力</span>
           </h2>
         </MotionSection>
 
@@ -45,10 +43,12 @@ export default function TrustProof() {
               direction="up"
               delay={index * 0.08}
             >
-              <div className="hud-panel hud-panel-hover p-5 h-full">
-                <div className="data-value text-h2 text-text-primary mb-1">{stat.value}</div>
-                <div className="text-micro text-text-muted">{stat.label}</div>
-              </div>
+              <CommandCard className="p-5 h-full">
+                <div className="text-3xl sm:text-4xl font-bold font-display text-white mb-1 tabular-nums">
+                  {stat.value}
+                </div>
+                <div className="text-xs text-slate-500">{stat.label}</div>
+              </CommandCard>
             </MotionSection>
           ))}
         </div>
@@ -60,13 +60,13 @@ export default function TrustProof() {
               direction="up"
               delay={index * 0.1}
             >
-              <div className="hud-panel hud-panel-hover p-5 h-full relative">
+              <CommandCard className="p-5 h-full relative">
                 <Quote className="absolute top-5 right-5 w-5 h-5 text-primary/20" aria-hidden="true" />
-                <p className="text-caption text-text-secondary leading-relaxed mb-4 pr-6">
+                <p className="text-sm text-slate-300 leading-relaxed mb-4 pr-6">
                   &ldquo;{item.content}&rdquo;
                 </p>
-                <p className="text-micro text-text-muted font-mono">{item.author}</p>
-              </div>
+                <p className="text-[11px] text-slate-500 font-mono">{item.author}</p>
+              </CommandCard>
             </MotionSection>
           ))}
         </div>

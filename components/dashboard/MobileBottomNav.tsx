@@ -18,8 +18,8 @@ export default function MobileBottomNav() {
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-50 lg:hidden">
-      <div className="glass border-t border-border-default px-2 pb-safe shadow-[0_-1px_0_0_var(--shadow-primary)]">
-        <div className="flex items-center justify-around h-[68px]">
+      <div className="glass border-t border-border-default px-2 pb-safe">
+        <div className="flex items-center justify-around h-[64px]">
           {navItems.map((item) => {
             const isActive =
               item.href === '/dashboard'
@@ -35,18 +35,18 @@ export default function MobileBottomNav() {
                 {isActive && (
                   <motion.div
                     layoutId="mobile-bottom-active"
-                    className="absolute top-1 left-1/2 -translate-x-1/2 w-9 h-1 rounded-full bg-primary shadow-glow-primary"
+                    className="absolute top-1 left-1/2 -translate-x-1/2 w-8 h-1 rounded-full bg-primary shadow-glow-primary"
                     transition={{ type: 'spring', stiffness: 500, damping: 30 }}
                   />
                 )}
                 <item.icon
-                  className={`w-6 h-6 transition-colors ${
-                    isActive ? 'text-primary drop-shadow-[0_0_10px_var(--shadow-primary)]' : 'text-text-muted'
+                  className={`w-[22px] h-[22px] transition-colors ${
+                    isActive ? 'text-primary' : 'text-text-muted'
                   }`}
                 />
                 <span
-                  className={`text-xs mt-1 font-medium transition-colors ${
-                    isActive ? 'text-text-primary' : 'text-text-muted'
+                  className={`text-[11px] mt-1 font-medium transition-colors ${
+                    isActive ? 'text-white' : 'text-text-muted'
                   }`}
                 >
                   {item.name}

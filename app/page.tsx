@@ -12,8 +12,7 @@ import Footer from '@/components/Footer';
 
 export default function Home() {
   return (
-    <main className="relative min-h-screen overflow-hidden">
-      <div className="fixed inset-0 tactical-grid opacity-30 pointer-events-none -z-10" aria-hidden="true" />
+    <main className="min-h-screen">
       <Navbar />
       <HeroV2 />
       <PainPoints />

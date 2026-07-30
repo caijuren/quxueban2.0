@@ -1,6 +1,7 @@
 'use client';
 
 import { Check, Route, Calendar, LineChart, Brain } from 'lucide-react';
+import CommandCard from '@/components/ui/CommandCard';
 import MotionSection from '@/components/ui/MotionSection';
 
 const steps = [
@@ -21,49 +22,47 @@ export default function SolutionShowcase() {
             duration={0.7}
             className="relative order-2 lg:order-1"
           >
-            <div className="hud-panel corner-accent p-1">
+            <CommandCard corner className="p-1">
               <div className="rounded-xl bg-background p-5 space-y-4">
-                <div className="flex items-center justify-between pb-4 border-b border-border-subtle">
+                <div className="flex items-center justify-between pb-4 border-b border-white/5">
                   <div className="flex items-center gap-2">
-                    <div className="indicator-dot animate-pulse" />
-                    <span className="text-micro font-mono text-text-muted">趣学伴 · 仪表盘</span>
+                    <div className="w-2 h-2 rounded-full bg-primary" />
+                    <span className="text-[11px] font-mono text-slate-500">趣学伴 · 仪表盘</span>
                   </div>
-                  <span className="text-micro font-mono text-primary">LIVE</span>
+                  <span className="text-[11px] font-mono text-primary">LIVE</span>
                 </div>
 
-                <div className="p-4 rounded-xl bg-surface-light border border-border-default">
+                <div className="p-4 rounded-lg bg-white/[0.03] border border-white/[0.06]">
                   <div className="flex items-center justify-between mb-3">
-                    <span className="text-caption font-medium text-text-secondary">当前主路线</span>
-                    <span className="text-micro px-2 py-0.5 rounded-md bg-primary/10 text-primary border border-primary/20">
-                      执行中
-                    </span>
+                    <span className="text-sm font-medium text-slate-300">当前主路线</span>
+                    <span className="text-[10px] px-2 py-0.5 rounded-md bg-primary/10 text-primary border border-primary/20">执行中</span>
                   </div>
-                  <div className="text-h4 font-display">三公冲刺路线</div>
-                  <div className="mt-3 h-1.5 rounded-full bg-surface-highlight overflow-hidden">
+                  <div className="text-base font-bold font-display">三公冲刺路线</div>
+                  <div className="mt-3 h-1.5 rounded-full bg-white/5 overflow-hidden">
                     <div className="h-full w-[68%] rounded-full bg-primary" />
                   </div>
-                  <div className="mt-2 text-micro font-mono text-text-muted">OVERALL 68%</div>
+                  <div className="mt-2 text-[10px] font-mono text-slate-500">OVERALL 68%</div>
                 </div>
 
                 <div className="grid grid-cols-2 gap-3">
-                  <div className="p-4 rounded-xl bg-surface-light border border-border-default">
-                    <div className="text-micro text-text-muted mb-1">本月任务</div>
-                    <div className="data-value text-h3 text-text-primary">12</div>
-                    <div className="text-micro text-primary mt-1">已完成 8</div>
+                  <div className="p-4 rounded-lg bg-white/[0.03] border border-white/[0.06]">
+                    <div className="text-[11px] text-slate-500 mb-1">本月任务</div>
+                    <div className="text-xl font-bold font-display text-white">12</div>
+                    <div className="text-[11px] text-success mt-1">已完成 8</div>
                   </div>
-                  <div className="p-4 rounded-xl bg-surface-light border border-border-default">
-                    <div className="text-micro text-text-muted mb-1">风险提醒</div>
-                    <div className="data-value text-h3 text-secondary">2</div>
-                    <div className="text-micro text-text-muted mt-1">需关注</div>
+                  <div className="p-4 rounded-lg bg-white/[0.03] border border-white/[0.06]">
+                    <div className="text-[11px] text-slate-500 mb-1">风险提醒</div>
+                    <div className="text-xl font-bold font-display text-warning">2</div>
+                    <div className="text-[11px] text-slate-500 mt-1">需关注</div>
                   </div>
                 </div>
 
-                <div className="p-4 rounded-xl bg-surface-light border border-border-default">
-                  <div className="text-micro text-text-muted mb-2">AI 检视摘要</div>
-                  <p className="text-caption text-text-secondary">英语进度良好，奥数需加强，建议本月完成机构试听。</p>
+                <div className="p-4 rounded-lg bg-white/[0.03] border border-white/[0.06]">
+                  <div className="text-[11px] text-slate-500 mb-2">AI 检视摘要</div>
+                  <p className="text-sm text-slate-300">英语进度良好，奥数需加强，建议本月完成机构试听。</p>
                 </div>
               </div>
-            </div>
+            </CommandCard>
           </MotionSection>
 
           <MotionSection
@@ -72,18 +71,15 @@ export default function SolutionShowcase() {
             className="space-y-6 order-1 lg:order-2"
           >
             <div>
-              <div className="flex items-center gap-2 mb-3">
-                <span className="indicator-dot" />
-                <span className="text-micro font-mono text-primary uppercase tracking-widest">
-                  How it works
-                </span>
-              </div>
-              <h2 className="text-h2 font-display mb-4">
+              <span className="text-[11px] font-mono text-primary uppercase tracking-widest mb-3 block">
+                How it works
+              </span>
+              <h2 className="text-3xl sm:text-4xl font-bold font-display leading-tight mb-4">
                 把复杂路线
                 <br />
-                <span className="text-text-muted">变成每日行动</span>
+                <span className="text-slate-500">变成每日行动</span>
               </h2>
-              <p className="text-body text-text-tertiary leading-relaxed">
+              <p className="text-slate-400 text-base leading-relaxed">
                 不再被海量信息淹没，你只需要跟着系统一步步走。
               </p>
             </div>
@@ -94,16 +90,15 @@ export default function SolutionShowcase() {
                   key={step.text}
                   direction="up"
                   delay={index * 0.1}
+                  className="flex items-center gap-4 p-4 rounded-xl border border-white/[0.06] bg-white/[0.02] hover:border-primary/20 hover:bg-white/[0.04] transition-all duration-200"
                 >
-                  <div className="hud-panel hud-panel-hover flex items-center gap-4 p-4">
-                    <div className="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
-                      <step.icon className="w-4 h-4 text-primary" aria-hidden="true" />
-                    </div>
-                    <div className="flex-1">
-                      <h3 className="text-caption font-bold font-display">{step.text}</h3>
-                    </div>
-                    <Check className="w-4 h-4 text-text-muted" aria-hidden="true" />
+                  <div className="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
+                    <step.icon className="w-4 h-4 text-primary" aria-hidden="true" />
                   </div>
+                  <div className="flex-1">
+                    <h3 className="text-sm font-bold font-display">{step.text}</h3>
+                  </div>
+                  <Check className="w-4 h-4 text-slate-600" aria-hidden="true" />
                 </MotionSection>
               ))}
             </div>

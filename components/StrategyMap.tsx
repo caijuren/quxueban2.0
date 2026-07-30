@@ -1,6 +1,7 @@
 'use client';
 
 import { School, GraduationCap, Trophy, ChevronRight } from 'lucide-react';
+import CommandCard from '@/components/ui/CommandCard';
 import DataBadge from '@/components/ui/DataBadge';
 import MotionSection from '@/components/ui/MotionSection';
 
@@ -60,7 +61,7 @@ const stages: Stage[] = [
 
 const statusConfig = {
   active: { label: '主路线', variant: 'primary' as const },
-  backup: { label: '备选', variant: 'secondary' as const },
+  backup: { label: '备选', variant: 'warning' as const },
   optional: { label: '待解锁', variant: 'default' as const },
 };
 
@@ -69,24 +70,20 @@ export default function StrategyMap() {
     <section className="py-14 px-4 sm:px-6 lg:px-8">
       <div className="max-w-6xl mx-auto">
         <MotionSection direction="up" duration={0.6} className="mb-12">
-          <div className="flex items-center gap-2 mb-3">
-            <span className="indicator-dot" />
-            <span className="text-micro font-mono text-primary uppercase tracking-widest">
-              Full Journey
-            </span>
-          </div>
-          <h2 className="text-h2 font-display mb-4">
+          <span className="text-[11px] font-mono text-primary uppercase tracking-widest mb-3 block">
+            Full Journey
+          </span>
+          <h2 className="text-3xl sm:text-4xl font-bold font-display leading-tight mb-4">
             覆盖上海升学
             <br />
-            <span className="text-text-muted">全阶段路线</span>
+            <span className="text-slate-500">全阶段路线</span>
           </h2>
-          <p className="text-body text-text-tertiary max-w-xl">
+          <p className="text-slate-400 text-base max-w-xl">
             从小学入学到高考，每个关键节点的路线选择都帮你梳理清楚。
           </p>
         </MotionSection>
 
-        <div className="space-y-4 relative">
-          <div className="absolute left-[2.25rem] top-8 bottom-8 w-px hidden lg:block bg-gradient-to-b from-primary/40 via-secondary/20 to-transparent" aria-hidden="true" />
+        <div className="space-y-4">
           {stages.map((stage, index) => (
             <MotionSection
               key={stage.id}
@@ -94,21 +91,16 @@ export default function StrategyMap() {
               delay={index * 0.1}
               duration={0.5}
             >
-              <div className={`hud-panel hud-panel-hover p-5 sm:p-6 group ${stage.id === 'primary' ? 'corner-accent' : ''}`}>
+              <CommandCard className="p-5 sm:p-6 group" active={stage.id === 'primary'}>
                 <div className="flex flex-col lg:flex-row lg:items-center gap-5 lg:gap-10">
                   <div className="flex items-center gap-4 lg:w-64 shrink-0">
-                    <div className="relative">
-                      <div className="w-11 h-11 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
-                        <stage.icon className="w-5 h-5 text-primary" aria-hidden="true" />
-                      </div>
-                      {stage.id === 'primary' && (
-                        <span className="absolute -top-1 -right-1 indicator-dot" />
-                      )}
+                    <div className="w-11 h-11 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
+                      <stage.icon className="w-5 h-5 text-primary" aria-hidden="true" />
                     </div>
                     <div>
-                      <h3 className="text-h4 font-display">{stage.title}</h3>
-                      <p className="text-micro text-text-muted mt-0.5">{stage.subtitle}</p>
-                      <span className="inline-block mt-1.5 text-micro font-mono text-text-muted">
+                      <h3 className="text-lg font-bold font-display">{stage.title}</h3>
+                      <p className="text-xs text-slate-500 mt-0.5">{stage.subtitle}</p>
+                      <span className="inline-block mt-1.5 text-[10px] font-mono text-slate-600">
                         {stage.timeRange}
                       </span>
                     </div>
@@ -126,11 +118,11 @@ export default function StrategyMap() {
                     })}
                   </div>
 
-                  <div className="hidden lg:flex items-center text-text-muted group-hover:text-primary transition-colors">
+                  <div className="hidden lg:flex items-center text-slate-600 group-hover:text-primary transition-colors">
                     <ChevronRight className="w-4 h-4" aria-hidden="true" />
                   </div>
                 </div>
-              </div>
+              </CommandCard>
             </MotionSection>
           ))}
         </div>
