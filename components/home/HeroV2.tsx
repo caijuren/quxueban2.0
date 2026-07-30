@@ -94,7 +94,11 @@ export default function HeroV2() {
 
             <motion.h1
               variants={shouldReduceMotion ? undefined : itemVariants}
-              className="text-h1 font-display text-white mb-4 neon-text"
+              className="text-h1 font-display text-white mb-4"
+              style={{
+                textShadow:
+                  '0 0 12px rgba(255, 45, 106, 0.55), 0 0 32px rgba(255, 45, 106, 0.35), 0 0 56px rgba(255, 45, 106, 0.18)',
+              }}
             >
               趣学伴
             </motion.h1>
@@ -194,7 +198,7 @@ export default function HeroV2() {
                     <path
                       d="M 40 0 L 0 0 0 40"
                       fill="none"
-                      stroke="rgba(255,255,255,0.03)"
+                      stroke="rgba(255,255,255,0.08)"
                       strokeWidth="1"
                     />
                   </pattern>
@@ -210,7 +214,7 @@ export default function HeroV2() {
                   y1="260"
                   x2="860"
                   y2="260"
-                  stroke="rgba(255,255,255,0.08)"
+                  stroke="rgba(255,255,255,0.18)"
                   strokeWidth="1"
                 />
                 {checkpoints.map((cp) => (
@@ -220,14 +224,14 @@ export default function HeroV2() {
                       y1="255"
                       x2={cp.x}
                       y2="265"
-                      stroke="rgba(255,255,255,0.15)"
+                      stroke="rgba(255,255,255,0.35)"
                       strokeWidth="1"
                     />
                     <text
                       x={cp.x}
                       y="285"
                       textAnchor="middle"
-                      fill="#6b6b7b"
+                      fill="#a0a0b8"
                       fontSize="11"
                       fontFamily="var(--font-mono)"
                     >
@@ -243,7 +247,7 @@ export default function HeroV2() {
                       fill="none"
                       stroke={route.active ? 'url(#routeGradient)' : route.color}
                       strokeWidth={route.active ? 2.5 : 1.5}
-                      strokeOpacity={route.active ? 1 : 0.2}
+                      strokeOpacity={route.active ? 1 : 0.5}
                       strokeDasharray={route.active ? undefined : '5 5'}
                       initial={shouldReduceMotion ? { pathLength: 1 } : { pathLength: 0 }}
                       animate={{ pathLength: 1 }}
@@ -253,7 +257,7 @@ export default function HeroV2() {
                       x="45"
                       y={route.y + 4}
                       textAnchor="end"
-                      fill={route.active ? route.color : 'rgba(255,255,255,0.35)'}
+                      fill={route.active ? route.color : 'rgba(255,255,255,0.70)'}
                       fontSize="11"
                       fontFamily="var(--font-body)"
                     >
@@ -299,8 +303,8 @@ export default function HeroV2() {
                       cx={cp.x}
                       cy={80}
                       r={cp.status === 'current' ? 5 : 3.5}
-                      fill={cp.status === 'current' ? '#ff2d6a' : '#1a1a28'}
-                      stroke={cp.status === 'current' ? '#ff2d6a' : 'rgba(255,255,255,0.25)'}
+                      fill={cp.status === 'current' ? '#ff2d6a' : '#2a2a3c'}
+                      stroke={cp.status === 'current' ? '#ff2d6a' : 'rgba(255,255,255,0.50)'}
                       strokeWidth="2"
                     />
                   </motion.g>
@@ -317,8 +321,8 @@ export default function HeroV2() {
                     width="110"
                     height="26"
                     rx="4"
-                    fill="rgba(255,45,106,0.08)"
-                    stroke="rgba(255,45,106,0.25)"
+                    fill="rgba(255,45,106,0.15)"
+                    stroke="rgba(255,45,106,0.45)"
                   />
                   <MapPin x="108" y="53" className="w-3 h-3 text-primary" />
                   <text
