@@ -40,7 +40,7 @@ const milestones = [
 const statusConfig: Record<string, { icon: typeof CheckCircle2; color: string; bg: string; label: string }> = {
   completed: { icon: CheckCircle2, color: 'text-success', bg: 'bg-success/10', label: '已完成' },
   in_progress: { icon: Clock, color: 'text-warning', bg: 'bg-warning/10', label: '进行中' },
-  pending: { icon: Circle, color: 'text-slate-600', bg: 'bg-slate-500/10', label: '待开始' },
+  pending: { icon: Circle, color: 'text-text-secondary', bg: 'bg-surface-highlight', label: '待开始' },
 };
 
 export default function MilestonesPage() {
@@ -56,7 +56,7 @@ export default function MilestonesPage() {
         <h1 className="text-3xl font-bold font-display mb-2">
           {currentChild ? `${currentChild.name}的里程碑任务` : '里程碑任务'}
         </h1>
-        <p className="text-slate-600">
+        <p className="text-text-secondary">
           {currentChild
             ? `当前阶段：${gradeLabel(currentChild.grade)} · 按年级拆解升学准备任务`
             : '按年级拆解升学准备任务，追踪每个阶段完成情况'}
@@ -86,7 +86,7 @@ export default function MilestonesPage() {
               </div>
               <div>
                 <h2 className="text-xl font-bold font-display">{milestone.grade}</h2>
-                <p className="text-sm text-slate-600">{milestone.period}</p>
+                <p className="text-sm text-text-secondary">{milestone.period}</p>
               </div>
               {milestone.period === '当前' && (
                 <span className="ml-auto px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-medium border border-primary/30">
@@ -101,13 +101,13 @@ export default function MilestonesPage() {
                 return (
                   <div
                     key={task.name}
-                    className="flex items-center justify-between p-4 rounded-xl bg-black/5 hover:bg-black/10 transition-all cursor-pointer group"
+                    className="flex items-center justify-between p-4 rounded-xl bg-surface-light hover:bg-surface-highlight transition-all cursor-pointer group"
                   >
                     <div className="flex items-center gap-4">
                       <div className={`w-10 h-10 rounded-lg ${config.bg} flex items-center justify-center`}>
                         <config.icon className={`w-5 h-5 ${config.color}`} />
                       </div>
-                      <span className="text-slate-800 group-hover:text-text-primary transition-colors">{task.name}</span>
+                      <span className="text-text-primary group-hover:text-text-primary transition-colors">{task.name}</span>
                     </div>
                     <span className={`text-sm font-medium ${config.color}`}>{config.label}</span>
                   </div>
@@ -128,7 +128,7 @@ export default function MilestonesPage() {
           <AlertCircle className="w-5 h-5 text-warning shrink-0 mt-0.5" />
           <div>
             <h3 className="font-semibold text-warning mb-1">三年级是关键窗口期</h3>
-            <p className="text-sm text-slate-600">
+            <p className="text-sm text-text-secondary">
               三公路线通常需要三年级开始系统奥数和英语拓展。当前一升二阶段重点是打好基础、确定方向。
             </p>
           </div>

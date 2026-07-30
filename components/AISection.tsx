@@ -28,7 +28,7 @@ const reportItems = [
     status: '良好',
     variant: 'primary',
     description: '当前主路线与目标学校匹配良好，建议继续保持节奏',
-    color: '#ff2d6a',
+    color: '#e11d48',
   },
   {
     icon: AlertTriangle,
@@ -36,7 +36,7 @@ const reportItems = [
     status: '风险',
     variant: 'secondary',
     description: '建议根据三公路线要求，提前布局关键能力项',
-    color: '#8b5cf6',
+    color: '#7c3aed',
   },
   {
     icon: TrendingUp,
@@ -44,7 +44,7 @@ const reportItems = [
     status: '建议',
     variant: 'default',
     description: '确定数学学习形式，建立每周稳定的学习节奏',
-    color: '#94a3b8',
+    color: '#64748b',
   },
 ];
 
@@ -60,7 +60,7 @@ export default function AISection() {
           >
             <div className="hud-panel corner-accent p-1">
               <div className="rounded-xl bg-background p-5 space-y-3">
-                <div className="flex items-center justify-between pb-4 border-b border-white/5">
+                <div className="flex items-center justify-between pb-4 border-b border-border-subtle">
                   <div className="flex items-center gap-3">
                     <div className="w-9 h-9 rounded-lg bg-secondary/10 flex items-center justify-center">
                       <Sparkles className="w-4 h-4 text-secondary" aria-hidden="true" />
@@ -123,7 +123,7 @@ export default function AISection() {
             className="order-1 lg:order-2"
           >
             <div className="flex items-center gap-2 mb-3">
-              <span className="indicator-dot" style={{ background: '#8b5cf6', boxShadow: '0 0 8px #8b5cf6' }} />
+              <span className="indicator-dot" style={{ background: '#7c3aed', boxShadow: '0 0 8px rgba(124, 58, 237, 0.35)' }} />
               <span className="text-micro font-mono text-secondary uppercase tracking-widest">
                 AI Intelligence
               </span>

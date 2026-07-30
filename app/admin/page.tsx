@@ -95,7 +95,7 @@ export default function AdminPage() {
     <div className="space-y-8">
       <div>
         <h1 className="text-2xl font-bold font-display">数据概览</h1>
-        <p className="text-slate-600">平台核心指标一览</p>
+        <p className="text-text-tertiary">平台核心指标一览</p>
       </div>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -108,19 +108,19 @@ export default function AdminPage() {
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.05 }}
-              className="rounded-2xl border border-white/10 bg-surface p-6"
+              className="rounded-2xl border border-border-subtle bg-surface p-6"
             >
               <div className={`mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br shadow-lg ${card.color}`}>
                 <Icon className="h-5 w-5 text-text-primary" />
               </div>
               <div className="text-3xl font-bold font-display">{value}</div>
-              <div className="text-sm text-slate-600">{card.label}</div>
+              <div className="text-sm text-text-tertiary">{card.label}</div>
             </motion.div>
           );
         })}
       </div>
 
-      <div className="rounded-2xl border border-white/10 bg-surface p-6">
+      <div className="rounded-2xl border border-border-subtle bg-surface p-6">
         <div className="mb-4 flex items-center justify-between">
           <h2 className="text-lg font-semibold">最近用户</h2>
           <Link
@@ -134,7 +134,7 @@ export default function AdminPage() {
         <div className="overflow-x-auto">
           <table className="w-full text-left text-sm">
             <thead>
-              <tr className="border-b border-white/10 text-slate-600">
+              <tr className="border-b border-border-subtle text-text-tertiary">
                 <th className="pb-3 font-medium">用户名</th>
                 <th className="pb-3 font-medium">角色</th>
                 <th className="pb-3 font-medium">孩子</th>
@@ -143,10 +143,10 @@ export default function AdminPage() {
                 <th className="pb-3 font-medium">注册时间</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-white/5">
+            <tbody className="divide-y divide-border-subtle">
               {users.map((user) => (
-                <tr key={user.id} className="text-slate-700">
-                  <td className="py-3 font-medium text-slate-900">
+                <tr key={user.id} className="text-text-secondary">
+                  <td className="py-3 font-medium text-text-primary">
                     {user.name || user.username}
                   </td>
                   <td className="py-3">
@@ -154,7 +154,7 @@ export default function AdminPage() {
                       className={`rounded-full px-2 py-0.5 text-xs ${
                         user.role === 'ADMIN'
                           ? 'bg-primary/20 text-primary'
-                          : 'bg-slate-700 text-slate-700'
+                          : 'bg-surface-highlight text-text-secondary'
                       }`}
                     >
                       {user.role === 'ADMIN' ? '管理员' : '家长'}
@@ -163,7 +163,7 @@ export default function AdminPage() {
                   <td className="py-3">{user._count.children}</td>
                   <td className="py-3">{user._count.plans}</td>
                   <td className="py-3">{user._count.weeklyPlans}</td>
-                  <td className="py-3 text-slate-600">
+                  <td className="py-3 text-text-tertiary">
                     {new Date(user.createdAt).toLocaleDateString('zh-CN')}
                   </td>
                 </tr>

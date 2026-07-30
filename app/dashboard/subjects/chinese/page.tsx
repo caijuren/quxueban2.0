@@ -35,7 +35,7 @@ export default function ChineseSubjectPage() {
         <div>
           <Link
             href="/dashboard"
-            className="inline-flex items-center gap-1 text-sm text-slate-600 hover:text-primary transition-colors mb-2"
+            className="inline-flex items-center gap-1 text-sm text-text-secondary hover:text-primary transition-colors mb-2"
           >
             <ArrowLeft className="w-4 h-4" />
             返回仪表盘
@@ -46,7 +46,7 @@ export default function ChineseSubjectPage() {
             </div>
             <div>
               <h1 className="text-3xl font-bold font-display">语文学科路径</h1>
-              <p className="text-sm text-slate-600">
+              <p className="text-sm text-text-secondary">
                 {currentChild ? `${currentChild.name} · ${gradeLabel(grade)} · 从当前到三公录取的语文素养作战地图` : '从当前到三公录取的语文素养作战地图'}
               </p>
             </div>
@@ -93,8 +93,8 @@ export default function ChineseSubjectPage() {
       >
         <AlertCircle className="w-5 h-5 text-primary shrink-0 mt-0.5" />
         <div>
-          <p className="font-medium text-slate-800 mb-1">本路径服务于三公冲刺路线的语文素养与综合荣誉</p>
-          <p className="text-sm text-slate-600">
+          <p className="font-medium text-text-primary mb-1">本路径服务于三公冲刺路线的语文素养与综合荣誉</p>
+          <p className="text-sm text-text-secondary">
             语文学科路径是小升初方案中「三公冲刺型」路线的人文素养与面谈表达支撑。核心目标：古诗文积累 120 首+、汉字小达人/古诗文大会荣誉、流畅自信的面谈表达。
             <Link href="/dashboard/plan" className="text-primary hover:underline ml-1">
               查看完整小升初方案 →

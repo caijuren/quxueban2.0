@@ -34,7 +34,7 @@ export default function ChildrenSection() {
           {children.map((child) => (
             <div
               key={child.id}
-              className="relative p-4 rounded-xl bg-black/[0.03] border border-black/[0.08] hover:border-black/[0.14] transition-all"
+              className="relative p-4 rounded-xl bg-surface-light border border-border-subtle hover:border-border-default transition-all"
             >
               {currentChildId === child.id && (
                 <div className="absolute top-3 right-3 flex items-center gap-1 text-[10px] text-primary bg-primary/10 px-2 py-0.5 rounded-full">
@@ -62,30 +62,30 @@ export default function ChildrenSection() {
                   )}
                 </div>
                 <div className="min-w-0">
-                  <h3 className="text-base font-bold font-display text-slate-900 truncate">
+                  <h3 className="text-base font-bold font-display text-text-primary truncate">
                     {child.name}
                   </h3>
-                  <p className="text-xs text-slate-600">
+                  <p className="text-xs text-text-tertiary">
                     {gradeLabel(child.grade)} · {gradeToStage(child.grade)}
                   </p>
                 </div>
               </div>
 
               <div className="space-y-2 mb-4">
-                <div className="flex items-center gap-2 text-xs text-slate-600">
-                  <School className="w-3.5 h-3.5 text-slate-600" />
+                <div className="flex items-center gap-2 text-xs text-text-tertiary">
+                  <School className="w-3.5 h-3.5 text-text-tertiary" />
                   <span className="truncate">
                     当前：{child.currentSchool || '未填写'}
                   </span>
                 </div>
-                <div className="flex items-center gap-2 text-xs text-slate-600">
-                  <Route className="w-3.5 h-3.5 text-slate-600" />
+                <div className="flex items-center gap-2 text-xs text-text-tertiary">
+                  <Route className="w-3.5 h-3.5 text-text-tertiary" />
                   <span className="truncate">
                     目标：{child.targetSchool || '未填写'}
                   </span>
                 </div>
-                <div className="flex items-center gap-2 text-xs text-slate-600">
-                  <Route className="w-3.5 h-3.5 text-slate-600" />
+                <div className="flex items-center gap-2 text-xs text-text-tertiary">
+                  <Route className="w-3.5 h-3.5 text-text-tertiary" />
                   <span className="truncate">
                     路线：{child.routeId ? getRouteById(child.routeId)?.name || child.routeId : '未绑定'}
                   </span>
@@ -95,7 +95,7 @@ export default function ChildrenSection() {
               <div className="flex items-center gap-2">
                 <button
                   onClick={() => handleEdit(child)}
-                  className="flex-1 flex items-center justify-center gap-1 px-3 py-2 rounded-lg bg-black/5 text-slate-700 text-xs hover:bg-black/10 transition-colors"
+                  className="flex-1 flex items-center justify-center gap-1 px-3 py-2 rounded-lg bg-surface text-text-secondary text-xs hover:bg-surface-light transition-colors"
                 >
                   <Pencil className="w-3.5 h-3.5" />
                   编辑
@@ -114,9 +114,9 @@ export default function ChildrenSection() {
 
           <button
             onClick={handleAdd}
-            className="min-h-[180px] rounded-xl border border-dashed border-black/[0.10] bg-black/[0.02] p-4 flex flex-col items-center justify-center gap-2 text-slate-600 hover:text-slate-700 hover:bg-black/[0.04] hover:border-black/[0.14] transition-all text-sm"
+            className="min-h-[180px] rounded-xl border border-dashed border-border-default bg-surface-light p-4 flex flex-col items-center justify-center gap-2 text-text-tertiary hover:text-text-secondary hover:bg-surface hover:border-border-strong transition-all text-sm"
           >
-            <div className="w-10 h-10 rounded-full bg-black/5 flex items-center justify-center">
+            <div className="w-10 h-10 rounded-full bg-surface-light flex items-center justify-center">
               <Plus className="w-5 h-5" />
             </div>
             <span className="font-medium">添加孩子</span>

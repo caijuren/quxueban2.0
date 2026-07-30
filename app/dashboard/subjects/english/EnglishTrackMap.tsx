@@ -81,7 +81,7 @@ export default function EnglishTrackMap() {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.1 }}
-      className="rounded-3xl glass p-6 border border-white/5 relative overflow-hidden"
+      className="rounded-3xl glass p-6 border border-border-subtle relative overflow-hidden"
       style={{
         perspective: '1200px',
         transform: `rotateX(${tilt.rotateX}deg) rotateY(${tilt.rotateY}deg)`,
@@ -94,7 +94,7 @@ export default function EnglishTrackMap() {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
         <div>
           <h2 className="text-xl font-bold font-display">英语三条线作战地图</h2>
-          <p className="text-sm text-slate-600 mt-1">从现在到三公，三条主线并行推进</p>
+          <p className="text-sm text-text-secondary mt-1">从现在到三公，三条主线并行推进</p>
         </div>
         <div className="flex flex-wrap gap-2">
           {englishTracks.map((track) => {
@@ -102,13 +102,13 @@ export default function EnglishTrackMap() {
             return (
               <div
                 key={track.id}
-                className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-black/5 border border-white/5"
+                className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-surface-light border border-border-subtle"
               >
                 <div
                   className="w-3 h-3 rounded-full"
                   style={{ backgroundColor: cfg.color, boxShadow: `0 0 10px ${cfg.glowColor}` }}
                 />
-                <span className="text-xs text-slate-700">{track.name}</span>
+                <span className="text-xs text-text-secondary">{track.name}</span>
               </div>
             );
           })}
@@ -164,7 +164,7 @@ export default function EnglishTrackMap() {
                 y1={50}
                 x2={x}
                 y2={360}
-                stroke="rgba(255,255,255,0.06)"
+                stroke="rgba(15, 23, 42, 0.06)"
                 strokeWidth="1"
                 strokeDasharray="4 4"
               />
@@ -255,7 +255,7 @@ export default function EnglishTrackMap() {
                   cx={p.x ?? 0}
                   cy={p.y ?? 0}
                   r={p.size ?? 1}
-                  fill="white"
+                  fill="rgba(15, 23, 42, 0.35)"
                   initial={{ opacity: 0.1, cy: p.y ?? 0 }}
                   animate={{
                     opacity: [0.1, 0.5, 0.1],
@@ -279,7 +279,7 @@ export default function EnglishTrackMap() {
             y1={40}
             x2={VIEWBOX.endX + 20}
             y2={40}
-            stroke="rgba(255,255,255,0.15)"
+            stroke="rgba(15, 23, 42, 0.15)"
             strokeWidth="2"
             strokeLinecap="round"
           />
@@ -287,11 +287,11 @@ export default function EnglishTrackMap() {
             const x = positionToX(t.position);
             return (
               <g key={t.position}>
-                <line x1={x} y1={36} x2={x} y2={44} stroke="rgba(255,255,255,0.3)" strokeWidth="2" />
+                <line x1={x} y1={36} x2={x} y2={44} stroke="rgba(15, 23, 42, 0.3)" strokeWidth="2" />
                 <text
                   x={x}
                   y={28}
-                  fill="rgba(148,163,184,0.8)"
+                  fill="#64748b"
                   fontSize="11"
                   fontWeight="500"
                   textAnchor="middle"
@@ -335,7 +335,7 @@ export default function EnglishTrackMap() {
                   y1={y}
                   x2={VIEWBOX.endX}
                   y2={y}
-                  stroke="white"
+                  stroke="rgba(15, 23, 42, 0.4)"
                   strokeWidth={1.5}
                   strokeLinecap="round"
                   strokeDasharray="60 250"
@@ -393,7 +393,7 @@ export default function EnglishTrackMap() {
                         animate={{ scale: 1 }}
                         transition={{ delay: 0.5 + index * 0.08 }}
                         r={isCurrent ? 14 : 10}
-                        fill={isCurrent ? cfg.color : '#0f172a'}
+                        fill={isCurrent ? cfg.color : '#ffffff'}
                         stroke={cfg.color}
                         strokeWidth={isCurrent ? 3 : 2}
                         style={{
@@ -411,7 +411,7 @@ export default function EnglishTrackMap() {
                       {/* Node label */}
                       <text
                         y={isCurrent ? -22 : 22}
-                        fill={isCurrent ? '#f8fafc' : 'rgba(148,163,184,0.9)'}
+                        fill={isCurrent ? '#0f172a' : '#64748b'}
                         fontSize={isCurrent ? '12' : '10'}
                         fontWeight={isCurrent ? '700' : '500'}
                         textAnchor="middle"
@@ -460,7 +460,7 @@ export default function EnglishTrackMap() {
         <motion.div
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
-          className="absolute top-24 right-6 w-56 p-4 rounded-xl bg-slate-900/95 border border-white/10 shadow-2xl z-20"
+          className="absolute top-24 right-6 w-56 p-4 rounded-xl bg-surface border border-border-subtle shadow-dropdown z-20"
         >
           <div className="flex items-center gap-2 mb-2">
             <div
@@ -470,26 +470,26 @@ export default function EnglishTrackMap() {
                 boxShadow: `0 0 10px ${trackConfig[hoveredData.track].glowColor}`,
               }}
             />
-            <p className="text-xs text-slate-600">{hoveredData.time}</p>
+            <p className="text-xs text-text-secondary">{hoveredData.time}</p>
           </div>
-          <p className="text-sm font-bold text-slate-800 mb-1">{hoveredData.label}</p>
-          <p className="text-xs text-slate-600">{hoveredData.detail}</p>
+          <p className="text-sm font-bold text-text-primary mb-1">{hoveredData.label}</p>
+          <p className="text-xs text-text-secondary">{hoveredData.detail}</p>
         </motion.div>
       )}
 
       {/* Bottom summary */}
-      <div className="mt-6 pt-6 border-t border-white/5 grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <div className="mt-6 pt-6 border-t border-border-subtle grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div className="rounded-xl bg-emerald-500/5 border border-emerald-500/10 p-3">
           <p className="text-xs text-emerald-400 mb-1">RAZ 线</p>
-          <p className="text-sm text-slate-700">E → G → I/J → K/L</p>
+          <p className="text-sm text-text-secondary">E → G → I/J → K/L</p>
         </div>
         <div className="rounded-xl bg-violet-500/5 border border-violet-500/10 p-3">
           <p className="text-xs text-violet-400 mb-1">OD 线</p>
-          <p className="text-sm text-slate-700">OD1 → OD2 → OD3</p>
+          <p className="text-sm text-text-secondary">OD1 → OD2 → OD3</p>
         </div>
         <div className="rounded-xl bg-amber-500/5 border border-amber-500/10 p-3">
           <p className="text-xs text-amber-400 mb-1">考证线</p>
-          <p className="text-sm text-slate-700">KET → PET → 小托福</p>
+          <p className="text-sm text-text-secondary">KET → PET → 小托福</p>
         </div>
       </div>
     </motion.div>

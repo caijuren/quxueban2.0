@@ -17,7 +17,7 @@ export default function PageLayout({ children, ctaText = '免费开始规划' }:
       <Navbar />
       {children}
 
-      <section className="py-20 px-4 sm:px-6 lg:px-8 border-t border-white/5 relative overflow-hidden">
+      <section className="py-20 px-4 sm:px-6 lg:px-8 border-t border-border-subtle relative overflow-hidden">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-primary/10 rounded-full blur-[120px] -z-10" />
         <div className="max-w-3xl mx-auto text-center relative z-10">
           <MotionSection direction="up" duration={0.7}>
@@ -29,7 +29,7 @@ export default function PageLayout({ children, ctaText = '免费开始规划' }:
             </p>
             <Link
               href="/login"
-              className="group inline-flex items-center gap-2 px-7 py-3 rounded-full bg-primary text-text-primary font-semibold text-sm hover:shadow-[0_0_50px_rgba(255,45,106,0.35)] transition-all duration-300 focus-ring"
+              className="group inline-flex items-center gap-2 px-7 py-3 rounded-full bg-primary text-text-primary font-semibold text-sm hover:shadow-neon-strong transition-all duration-300 focus-ring"
             >
               {ctaText}
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />

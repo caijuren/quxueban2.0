@@ -38,11 +38,11 @@ export function getCategoryColorClass(category: TaskCategory): string {
     chinese: 'bg-primary/15 text-primary-glow border-primary/25',
     math: 'bg-secondary/15 text-secondary-glow border-secondary/25',
     english: 'bg-secondary/12 text-secondary border-secondary/22',
-    school: 'bg-white/6 text-text-secondary border-white/10',
+    school: 'bg-surface-highlight text-text-secondary border-border-subtle',
     reading: 'bg-secondary/10 text-secondary-glow border-secondary/18',
     sport: 'bg-primary/12 text-primary border-primary/20',
     interest: 'bg-secondary/14 text-secondary-glow border-secondary/24',
-    other: 'bg-white/5 text-text-tertiary border-white/8',
+    other: 'bg-surface-light text-text-tertiary border-border-subtle',
   };
   return map[category] || map.other;
 }
@@ -52,8 +52,8 @@ export function getAlignmentColorClass(alignment: TaskAlignment): string {
     ahead: 'bg-secondary/12 text-secondary-glow border-secondary/20',
     ontrack: 'bg-primary/12 text-primary border-primary/20',
     behind: 'bg-danger/12 text-danger border-danger/25',
-    optional: 'bg-white/5 text-text-tertiary border-white/8',
-    unrelated: 'bg-white/4 text-text-muted border-white/6',
+    optional: 'bg-surface-light text-text-tertiary border-border-subtle',
+    unrelated: 'bg-surface-light text-text-muted border-border-subtle',
   };
   return map[alignment] || map.optional;
 }

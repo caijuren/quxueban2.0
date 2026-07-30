@@ -14,17 +14,17 @@ const statusConfig = {
   completed: {
     dot: 'bg-success border-success',
     line: 'bg-success/30',
-    text: 'text-slate-700',
+    text: 'text-text-secondary',
   },
   current: {
     dot: 'bg-primary border-primary shadow-glow-primary',
-    line: 'bg-black/10',
+    line: 'bg-border-default',
     text: 'text-text-primary',
   },
   upcoming: {
-    dot: 'bg-surface-elevated border-white/20',
-    line: 'bg-black/10',
-    text: 'text-slate-600',
+    dot: 'bg-surface-elevated border-border-default',
+    line: 'bg-border-default',
+    text: 'text-text-secondary',
   },
 };
 
@@ -52,7 +52,7 @@ export default function TimelineNode({
       </div>
       <div className={cn('pb-4 -mt-1', isLast && 'pb-0')}>
         <p className={cn('text-sm font-medium', config.text)}>{title}</p>
-        {subtitle && <p className="text-xs text-slate-600 mt-0.5">{subtitle}</p>}
+        {subtitle && <p className="text-xs text-text-secondary mt-0.5">{subtitle}</p>}
       </div>
     </div>
   );

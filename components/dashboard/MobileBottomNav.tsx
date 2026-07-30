@@ -18,11 +18,7 @@ export default function MobileBottomNav() {
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-50 lg:hidden">
-      <div className="glass border-t border-border-default px-2 pb-safe"
-        style={{
-          background: 'rgba(6, 6, 10, 0.92)',
-          boxShadow: '0 -1px 0 0 rgba(255, 45, 106, 0.06)',
-        }}>
+      <div className="glass border-t border-border-default px-2 pb-safe shadow-[0_-1px_0_0_var(--shadow-primary)]">
         <div className="flex items-center justify-around h-[68px]">
           {navItems.map((item) => {
             const isActive =
@@ -45,7 +41,7 @@ export default function MobileBottomNav() {
                 )}
                 <item.icon
                   className={`w-6 h-6 transition-colors ${
-                    isActive ? 'text-primary drop-shadow-[0_0_10px_rgba(255,45,106,0.6)]' : 'text-text-muted'
+                    isActive ? 'text-primary drop-shadow-[0_0_10px_var(--shadow-primary)]' : 'text-text-muted'
                   }`}
                 />
                 <span

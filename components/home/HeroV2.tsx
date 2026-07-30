@@ -34,9 +34,9 @@ const mapVariants = {
 };
 
 const routes = [
-  { id: 'sg', name: '三公冲刺', color: '#ff2d6a', y: 80, active: true },
-  { id: 'dual', name: '双轨维持', color: '#8b5cf6', y: 140, active: false },
-  { id: 'public', name: '公办直升', color: '#a78bfa', y: 200, active: false },
+  { id: 'sg', name: '三公冲刺', color: '#e11d48', y: 80, active: true },
+  { id: 'dual', name: '双轨维持', color: '#7c3aed', y: 140, active: false },
+  { id: 'public', name: '公办直升', color: '#8b5cf6', y: 200, active: false },
 ];
 
 const checkpoints = [
@@ -84,7 +84,7 @@ export default function HeroV2() {
           >
             <motion.div
               variants={shouldReduceMotion ? undefined : itemVariants}
-              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-md border border-border-default bg-black/[0.03] mb-6"
+              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-md border border-border-default bg-surface-light mb-6"
             >
               <span className="indicator-dot animate-pulse" />
               <span className="text-micro font-medium tracking-wide text-text-tertiary uppercase">
@@ -96,8 +96,7 @@ export default function HeroV2() {
               variants={shouldReduceMotion ? undefined : itemVariants}
               className="text-h1 font-display text-text-primary mb-4"
               style={{
-                textShadow:
-                  '0 0 12px rgba(255, 45, 106, 0.55), 0 0 32px rgba(255, 45, 106, 0.35), 0 0 56px rgba(255, 45, 106, 0.18)',
+                textShadow: '0 0 24px rgba(225, 29, 72, 0.18)',
               }}
             >
               趣学伴
@@ -155,7 +154,7 @@ export default function HeroV2() {
                     <div key={route.id} className="flex items-center gap-2 text-sm">
                       <span
                         className="w-2 h-2 rounded-full"
-                        style={{ backgroundColor: route.color, boxShadow: `0 0 8px ${route.color}` }}
+                        style={{ backgroundColor: route.color, boxShadow: `0 0 6px ${route.color}` }}
                       />
                       <span className={route.active ? 'text-text-primary' : 'text-text-tertiary'}>
                         {route.name}
@@ -198,13 +197,13 @@ export default function HeroV2() {
                     <path
                       d="M 40 0 L 0 0 0 40"
                       fill="none"
-                      stroke="rgba(255,255,255,0.08)"
+                      stroke="#e2e8f0"
                       strokeWidth="1"
                     />
                   </pattern>
                   <linearGradient id="routeGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop offset="0%" stopColor="#ff2d6a" stopOpacity="0.9" />
-                    <stop offset="100%" stopColor="#ff5c8a" stopOpacity="0.3" />
+                    <stop offset="0%" stopColor="#e11d48" stopOpacity="0.9" />
+                    <stop offset="100%" stopColor="#f43f5e" stopOpacity="0.3" />
                   </linearGradient>
                 </defs>
                 <rect width="900" height="300" fill="url(#heroGrid)" />
@@ -214,7 +213,7 @@ export default function HeroV2() {
                   y1="260"
                   x2="860"
                   y2="260"
-                  stroke="rgba(255,255,255,0.18)"
+                  stroke="#cbd5e1"
                   strokeWidth="1"
                 />
                 {checkpoints.map((cp) => (
@@ -224,14 +223,14 @@ export default function HeroV2() {
                       y1="255"
                       x2={cp.x}
                       y2="265"
-                      stroke="rgba(255,255,255,0.35)"
+                      stroke="#cbd5e1"
                       strokeWidth="1"
                     />
                     <text
                       x={cp.x}
                       y="285"
                       textAnchor="middle"
-                      fill="#a0a0b8"
+                      fill="#64748b"
                       fontSize="11"
                       fontFamily="var(--font-mono)"
                     >
@@ -257,7 +256,7 @@ export default function HeroV2() {
                       x="45"
                       y={route.y + 4}
                       textAnchor="end"
-                      fill={route.active ? route.color : 'rgba(255,255,255,0.70)'}
+                      fill={route.active ? route.color : '#64748b'}
                       fontSize="11"
                       fontFamily="var(--font-body)"
                     >
@@ -279,7 +278,7 @@ export default function HeroV2() {
                         cy={80}
                         r="10"
                         fill="none"
-                        stroke="#ff2d6a"
+                        stroke="#e11d48"
                         strokeWidth="1"
                         opacity="0.35"
                       >
@@ -303,8 +302,8 @@ export default function HeroV2() {
                       cx={cp.x}
                       cy={80}
                       r={cp.status === 'current' ? 5 : 3.5}
-                      fill={cp.status === 'current' ? '#ff2d6a' : '#2a2a3c'}
-                      stroke={cp.status === 'current' ? '#ff2d6a' : 'rgba(255,255,255,0.50)'}
+                      fill={cp.status === 'current' ? '#e11d48' : '#e2e8f0'}
+                      stroke={cp.status === 'current' ? '#e11d48' : '#cbd5e1'}
                       strokeWidth="2"
                     />
                   </motion.g>
@@ -321,15 +320,15 @@ export default function HeroV2() {
                     width="110"
                     height="26"
                     rx="4"
-                    fill="rgba(255,45,106,0.15)"
-                    stroke="rgba(255,45,106,0.45)"
+                    fill="rgba(225,29,72,0.10)"
+                    stroke="rgba(225,29,72,0.35)"
                   />
                   <MapPin x="108" y="53" className="w-3 h-3 text-primary" />
                   <text
                     x="155"
                     y="59"
                     textAnchor="middle"
-                    fill="#ff8aa8"
+                    fill="#f43f5e"
                     fontSize="11"
                     fontFamily="var(--font-mono)"
                   >
@@ -365,7 +364,7 @@ export default function HeroV2() {
                 ))}
               </div>
 
-              <div className="mt-4 pt-4 border-t border-white/5 flex items-center justify-between text-xs">
+              <div className="mt-4 pt-4 border-t border-border-subtle flex items-center justify-between text-xs">
                 <div className="flex items-center gap-4">
                   <span className="text-text-muted">
                     主路线: <span className="text-primary">三公冲刺型</span>

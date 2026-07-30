@@ -79,7 +79,7 @@ export default function RegisterPage() {
             <span className="gradient-text">作战指挥</span>
           </h1>
 
-          <p className="text-base text-slate-600 leading-relaxed mb-10 max-w-md">
+          <p className="text-base text-text-secondary leading-relaxed mb-10 max-w-md">
             一个账号即可规划多条升学路线，追踪孩子的学习进度，及时调整备考策略。
           </p>
 
@@ -94,7 +94,7 @@ export default function RegisterPage() {
                 initial={shouldReduceMotion ? false : { opacity: 0, x: -16 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.3 + index * 0.1, duration: 0.4 }}
-                className="flex items-center gap-3 text-sm text-slate-700"
+                className="flex items-center gap-3 text-sm text-text-secondary"
               >
                 <div className="w-5 h-5 rounded-full bg-success/10 flex items-center justify-center border border-success/20">
                   <div className="w-1.5 h-1.5 rounded-full bg-success" />
@@ -113,16 +113,16 @@ export default function RegisterPage() {
           <div className="rounded-xl command-panel corner-accent p-6 sm:p-8">
             <div className="text-center mb-8">
               <h2 className="text-xl font-bold font-display mb-1.5">注册账号</h2>
-              <p className="text-sm text-slate-600">创建你的趣学伴家庭账户</p>
+              <p className="text-sm text-text-secondary">创建你的趣学伴家庭账户</p>
             </div>
 
             <form className="space-y-4" onSubmit={handleSubmit}>
               <div>
-                <label htmlFor="username" className="block text-sm font-medium text-slate-700 mb-1.5">
+                <label htmlFor="username" className="block text-sm font-medium text-text-secondary mb-1.5">
                   用户名
                 </label>
                 <div className="relative">
-                  <User className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-600" />
+                  <User className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-text-secondary" />
                   <input
                     id="username"
                     name="username"
@@ -134,17 +134,17 @@ export default function RegisterPage() {
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
                     placeholder="3-20 位字符"
-                    className="w-full pl-10 pr-4 py-2.5 rounded-lg bg-surface border border-black/[0.10] text-sm text-slate-900 placeholder:text-slate-600 focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/50 transition-colors"
+                    className="w-full pl-10 pr-4 py-2.5 rounded-lg bg-surface border border-border-default text-sm text-text-primary placeholder:text-text-tertiary focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/50 transition-colors"
                   />
                 </div>
               </div>
 
               <div>
-                <label htmlFor="name" className="block text-sm font-medium text-slate-700 mb-1.5">
+                <label htmlFor="name" className="block text-sm font-medium text-text-secondary mb-1.5">
                   昵称（选填）
                 </label>
                 <div className="relative">
-                  <UserCircle className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-600" />
+                  <UserCircle className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-text-secondary" />
                   <input
                     id="name"
                     name="name"
@@ -153,17 +153,17 @@ export default function RegisterPage() {
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     placeholder="如何称呼您"
-                    className="w-full pl-10 pr-4 py-2.5 rounded-lg bg-surface border border-black/[0.10] text-sm text-slate-900 placeholder:text-slate-600 focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/50 transition-colors"
+                    className="w-full pl-10 pr-4 py-2.5 rounded-lg bg-surface border border-border-default text-sm text-text-primary placeholder:text-text-tertiary focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/50 transition-colors"
                   />
                 </div>
               </div>
 
               <div>
-                <label htmlFor="password" className="block text-sm font-medium text-slate-700 mb-1.5">
+                <label htmlFor="password" className="block text-sm font-medium text-text-secondary mb-1.5">
                   密码
                 </label>
                 <div className="relative">
-                  <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-600" />
+                  <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-text-secondary" />
                   <input
                     id="password"
                     name="password"
@@ -175,17 +175,17 @@ export default function RegisterPage() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="至少 6 位"
-                    className="w-full pl-10 pr-4 py-2.5 rounded-lg bg-surface border border-black/[0.10] text-sm text-slate-900 placeholder:text-slate-600 focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/50 transition-colors"
+                    className="w-full pl-10 pr-4 py-2.5 rounded-lg bg-surface border border-border-default text-sm text-text-primary placeholder:text-text-tertiary focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/50 transition-colors"
                   />
                 </div>
               </div>
 
               <div>
-                <label htmlFor="confirmPassword" className="block text-sm font-medium text-slate-700 mb-1.5">
+                <label htmlFor="confirmPassword" className="block text-sm font-medium text-text-secondary mb-1.5">
                   确认密码
                 </label>
                 <div className="relative">
-                  <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-600" />
+                  <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-text-secondary" />
                   <input
                     id="confirmPassword"
                     name="confirmPassword"
@@ -196,7 +196,7 @@ export default function RegisterPage() {
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
                     placeholder="再次输入密码"
-                    className="w-full pl-10 pr-4 py-2.5 rounded-lg bg-surface border border-black/[0.10] text-sm text-slate-900 placeholder:text-slate-600 focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/50 transition-colors"
+                    className="w-full pl-10 pr-4 py-2.5 rounded-lg bg-surface border border-border-default text-sm text-text-primary placeholder:text-text-tertiary focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/50 transition-colors"
                   />
                 </div>
               </div>
@@ -222,7 +222,7 @@ export default function RegisterPage() {
               </button>
             </form>
 
-            <p className="mt-6 text-center text-xs text-slate-600">
+            <p className="mt-6 text-center text-xs text-text-secondary">
               已有账号？{' '}
               <Link href="/login" className="text-primary hover:text-primary-glow transition-colors">
                 直接登录

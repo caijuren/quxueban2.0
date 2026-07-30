@@ -28,7 +28,7 @@ export default function Tooltip({
       <div
         role="tooltip"
         className={cn(
-          'absolute z-30 w-48 p-3 rounded-lg bg-surface-elevated border border-white/10 shadow-xl',
+          'absolute z-30 w-48 p-3 rounded-lg bg-surface-elevated border border-border-default shadow-dropdown',
           'opacity-0 invisible group-hover:opacity-100 group-hover:visible',
           'group-focus-within:opacity-100 group-focus-within:visible',
           'transition-all duration-200 pointer-events-none',

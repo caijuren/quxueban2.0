@@ -58,7 +58,7 @@ export default function TaskCard({
           aria-label={isDone ? '标记为未完成' : '标记为完成'}
         >
           {isDone ? (
-            <CheckCircle2 className="w-6 h-6 text-primary drop-shadow-[0_0_8px_rgba(255,45,106,0.55)]" />
+            <CheckCircle2 className="w-6 h-6 text-primary drop-shadow-[0_0_8px_var(--shadow-primary)]" />
           ) : (
             <Circle className="w-6 h-6 text-text-muted group-hover:text-primary-glow transition-colors" />
           )}
@@ -122,7 +122,7 @@ export default function TaskCard({
               onBlur={(e) => onNoteBlur(e.target.value)}
               placeholder="完成备注（正确率、感受等）"
               onClick={(e) => e.stopPropagation()}
-              className="w-full text-caption bg-surface-light border border-border-default rounded-xl px-3 py-2 text-text-secondary placeholder:text-text-muted focus:outline-none focus:border-primary/50 focus:shadow-[0_0_18px_rgba(255,45,106,0.12)] resize-none mt-2"
+              className="w-full text-caption bg-surface-light border border-border-default rounded-xl px-3 py-2 text-text-secondary placeholder:text-text-muted focus:outline-none focus:border-primary/50 focus:shadow-glow-accent resize-none mt-2"
               rows={2}
             />
           )}

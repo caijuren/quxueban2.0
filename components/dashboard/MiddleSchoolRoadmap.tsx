@@ -180,20 +180,14 @@ export default function MiddleSchoolRoadmap() {
           animate={{ backgroundPosition: ['200% 0', '-200% 0'] }}
           transition={{ duration: 3, repeat: Infinity, ease: 'linear' }}
         />
-        <div className="absolute inset-[1px] rounded-2xl bg-slate-950/80 pointer-events-none" />
+        <div className="absolute inset-[1px] rounded-2xl bg-surface-highlight/80 pointer-events-none" />
 
         <div className="relative flex items-start gap-4 z-10">
-          <div
-            className="w-12 h-12 rounded-xl flex items-center justify-center shrink-0"
-            style={{
-              background: 'rgba(139,92,246,0.15)',
-              boxShadow: '0 0 20px rgba(139,92,246,0.3)',
-            }}
-          >
-            <Zap className="w-6 h-6 text-[#8b5cf6]" style={{ filter: 'drop-shadow(0 0 8px rgba(139,92,246,0.8))' }} />
+          <div className="w-12 h-12 rounded-xl flex items-center justify-center shrink-0 bg-secondary-dim shadow-glow-secondary">
+            <Zap className="w-6 h-6 text-secondary drop-shadow-[0_0_8px_var(--shadow-secondary)]" />
           </div>
           <div>
-            <p className="text-sm text-slate-600 mb-1">
+            <p className="text-sm text-text-secondary mb-1">
               距离下一个熔断点（{nextCheckpoint?.grade} · {nextCheckpoint?.name}）
             </p>
             <p className="text-2xl font-bold font-display">
@@ -203,7 +197,7 @@ export default function MiddleSchoolRoadmap() {
                 style={{
                   backgroundImage: 'linear-gradient(90deg, #8b5cf6, #22d3ee, #8b5cf6)',
                   backgroundSize: '200% 100%',
-                  textShadow: '0 0 30px rgba(139,92,246,0.5)',
+                  textShadow: '0 0 30px var(--shadow-secondary)',
                 }}
                 animate={{ backgroundPosition: ['0% 0', '200% 0'] }}
                 transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
@@ -220,14 +214,14 @@ export default function MiddleSchoolRoadmap() {
         initial={{ opacity: 0, scale: 0.98 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.6, delay: 0.1 }}
-        className="rounded-3xl glass p-6 border border-white/5 relative overflow-hidden"
+        className="rounded-3xl glass p-6 border border-border-subtle relative overflow-hidden"
       >
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-6">
           <div>
             <h2 className="text-xl font-bold font-display">初中全景看板</h2>
-            <p className="text-sm text-slate-600">2026-2033 · 三条中考路线的熔断点与关键节点</p>
+            <p className="text-sm text-text-secondary">2026-2033 · 三条中考路线的熔断点与关键节点</p>
             <div className="mt-2 flex items-center gap-2">
-              <span className="text-xs text-slate-600">当前执行路线：</span>
+              <span className="text-xs text-text-secondary">当前执行路线：</span>
               {(() => {
                 const route = routes.find((r) => r.id === activeRoute);
                 if (!route) return null;
@@ -256,7 +250,7 @@ export default function MiddleSchoolRoadmap() {
                   onMouseLeave={() => setHoveredRoute(null)}
                   onClick={() => setActiveRoute(route.id)}
                   className={`flex items-center gap-2 px-2 py-1 rounded-lg transition-colors ${
-                    isActive ? 'text-text-primary bg-black/10' : 'text-slate-600 hover:text-text-primary hover:bg-black/5'
+                    isActive ? 'text-text-primary bg-surface-highlight' : 'text-text-secondary hover:text-text-primary hover:bg-surface-elevated'
                   }`}
                 >
                   <span
@@ -303,7 +297,7 @@ export default function MiddleSchoolRoadmap() {
                   y1={60}
                   x2={x}
                   y2={360}
-                  stroke="rgba(255,255,255,0.08)"
+                  className="stroke-border-subtle/40"
                   strokeWidth="1"
                   strokeDasharray="4 4"
                 />
@@ -369,7 +363,7 @@ export default function MiddleSchoolRoadmap() {
                     cx={p.x ?? 0}
                     cy={p.y ?? 0}
                     r={p.size ?? 1}
-                    fill="white"
+                    className="fill-text-muted/30"
                     initial={{ opacity: 0.1 }}
                     animate={{
                       opacity: [0.1, 0.6, 0.1],
@@ -473,13 +467,13 @@ export default function MiddleSchoolRoadmap() {
                       }}
                     >
                       <span
-                        className="px-2 py-0.5 rounded-full text-xs font-bold"
-                        style={{ backgroundColor: route.color, color: '#0f172a' }}
+                        className="px-2 py-0.5 rounded-full text-xs font-bold text-text-primary"
+                        style={{ backgroundColor: route.color }}
                       >
                         {outcome.label}
                       </span>
                       <div className="flex flex-col leading-none">
-                        <span className="text-[10px] text-slate-600">{outcome.name}</span>
+                        <span className="text-[10px] text-text-secondary">{outcome.name}</span>
                         <span className="text-xs font-bold" style={{ color: route.color }}>
                           {outcome.prob}%
                         </span>
@@ -633,13 +627,13 @@ export default function MiddleSchoolRoadmap() {
             <g opacity={hoveredRoute && hoveredRoute !== 'sizhong' && hoveredRoute !== 'shizhong' ? 0.2 : 0.45}>
               <defs>
                 <marker id="ms-fallback-arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto" markerUnits="strokeWidth">
-                  <path d="M0,0 L0,6 L7,3 z" fill="#94a3b8" opacity="0.7" />
+                  <path d="M0,0 L0,6 L7,3 z" className="fill-border-strong" opacity="0.7" />
                 </marker>
               </defs>
               <motion.path
                 d="M 920 125 Q 960 125 960 155 Q 960 185 920 185"
                 fill="none"
-                stroke="#94a3b8"
+                className="stroke-border-strong"
                 strokeWidth="1.5"
                 strokeDasharray="4 4"
                 markerEnd="url(#ms-fallback-arrow)"
@@ -650,7 +644,7 @@ export default function MiddleSchoolRoadmap() {
               <motion.path
                 d="M 920 205 Q 960 205 960 235 Q 960 265 920 265"
                 fill="none"
-                stroke="#94a3b8"
+                className="stroke-border-strong"
                 strokeWidth="1.5"
                 strokeDasharray="4 4"
                 markerEnd="url(#ms-fallback-arrow)"
@@ -658,8 +652,8 @@ export default function MiddleSchoolRoadmap() {
                 animate={{ pathLength: 1 }}
                 transition={{ duration: 1, delay: 1.4 }}
               />
-              <text x={975} y={158} fill="#64748b" fontSize="9" textAnchor="middle">未录取</text>
-              <text x={975} y={238} fill="#64748b" fontSize="9" textAnchor="middle">未录取</text>
+              <text x={975} y={158} className="fill-text-secondary" fontSize="9" textAnchor="middle">未录取</text>
+              <text x={975} y={238} className="fill-text-secondary" fontSize="9" textAnchor="middle">未录取</text>
             </g>
 
             {/* Current time indicator */}
@@ -668,20 +662,20 @@ export default function MiddleSchoolRoadmap() {
               y1={60}
               x2={80}
               y2={410}
-              stroke="#f43f5e"
+              className="stroke-primary"
               strokeWidth="1"
               strokeDasharray="6 4"
               opacity="0.5"
-              style={{ filter: 'drop-shadow(0 0 10px rgba(244,63,94,0.6))' }}
+              style={{ filter: 'drop-shadow(0 0 10px var(--shadow-primary))' }}
             />
             <motion.circle
               cx={80}
               cy={410}
               r={5}
-              fill="#f43f5e"
+              className="fill-primary"
               animate={{ opacity: [0.5, 1, 0.5], scale: [1, 1.3, 1] }}
               transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-              style={{ filter: 'drop-shadow(0 0 10px rgba(244,63,94,0.8))' }}
+              style={{ filter: 'drop-shadow(0 0 10px var(--shadow-primary))' }}
             />
 
             {/* Year labels */}
@@ -691,20 +685,20 @@ export default function MiddleSchoolRoadmap() {
               return (
                 <g key={year.year}>
                   {isCurrent && (
-                    <circle cx={x} cy={400} r={24} fill="rgba(244,63,94,0.1)" style={{ filter: 'drop-shadow(0 0 16px rgba(244,63,94,0.4))' }} />
+                    <circle cx={x} cy={400} r={24} className="fill-primary/10" style={{ filter: 'drop-shadow(0 0 16px var(--shadow-primary))' }} />
                   )}
                   <text
                     x={x}
                     y={390}
-                    fill={isCurrent ? '#f43f5e' : '#94a3b8'}
+                    className={isCurrent ? 'fill-primary' : 'fill-text-muted'}
                     fontSize="12"
                     fontWeight={isCurrent ? '700' : '400'}
                     textAnchor="middle"
-                    style={isCurrent ? { filter: 'drop-shadow(0 0 10px rgba(244,63,94,0.6))' } : undefined}
+                    style={isCurrent ? { filter: 'drop-shadow(0 0 10px var(--shadow-primary))' } : undefined}
                   >
                     {year.year}
                   </text>
-                  <text x={x} y={410} fill={isCurrent ? '#fda4af' : '#64748b'} fontSize="11" textAnchor="middle">
+                  <text x={x} y={410} className={isCurrent ? 'fill-primary/60' : 'fill-text-secondary'} fontSize="11" textAnchor="middle">
                     {year.grade}
                   </text>
                 </g>
@@ -718,7 +712,7 @@ export default function MiddleSchoolRoadmap() {
           <motion.div
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
-            className="mt-6 p-5 rounded-2xl bg-surface border border-white/10"
+            className="mt-6 p-5 rounded-2xl bg-surface border border-border-subtle"
           >
             <div className="flex items-start justify-between gap-4">
               <div>
@@ -740,11 +734,11 @@ export default function MiddleSchoolRoadmap() {
                     );
                   })()}
                 </div>
-                <p className="text-sm text-slate-600 mb-2">
+                <p className="text-sm text-text-secondary mb-2">
                   {selectedCheckpoint.grade}
                   {selectedCheckpoint.requirement && ` · ${selectedCheckpoint.requirement}`}
                 </p>
-                <p className="text-sm text-slate-700">
+                <p className="text-sm text-text-primary">
                   {selectedCheckpoint.type === 'hard'
                     ? '硬熔断点：未达标建议切换主路线到备选方案，系统会提醒家长评估。'
                     : selectedCheckpoint.type === 'soft'
@@ -756,7 +750,7 @@ export default function MiddleSchoolRoadmap() {
               </div>
               <button
                 onClick={() => setSelectedCheckpoint(null)}
-                className="px-4 py-2 rounded-lg text-slate-600 hover:text-text-primary text-sm shrink-0"
+                className="px-4 py-2 rounded-lg text-text-secondary hover:text-text-primary text-sm shrink-0"
               >
                 关闭
               </button>

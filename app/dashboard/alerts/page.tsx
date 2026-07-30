@@ -90,15 +90,15 @@ function AlertCard({ alert }: { alert: Alert }) {
               >
                 {meta.label}
               </span>
-              <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-black/5 text-slate-600 flex items-center gap-1">
+              <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-surface-light text-text-secondary flex items-center gap-1">
                 <TypeIcon className="w-3 h-3" />
                 {type.label}
               </span>
             </div>
-            <h3 className="text-sm font-bold text-slate-800 mb-1">
+            <h3 className="text-sm font-bold text-text-primary mb-1">
               {alert.title}
             </h3>
-            <p className="text-xs text-slate-600 leading-relaxed mb-3">
+            <p className="text-xs text-text-secondary leading-relaxed mb-3">
               {alert.content}
             </p>
             {alert.action && (
@@ -140,7 +140,7 @@ export default function AlertsPage() {
       >
         <div>
           <h1 className="text-2xl sm:text-3xl font-bold font-display mb-1">作战室</h1>
-          <p className="text-sm text-slate-600">
+          <p className="text-sm text-text-secondary">
             {alerts.length > 0
               ? `共 ${alerts.length} 条提醒，其中 ${urgentCount} 条需立即处理`
               : '当前没有需要处理的事项，节奏良好'}

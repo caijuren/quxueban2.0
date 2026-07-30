@@ -4,10 +4,10 @@ import { motion } from 'framer-motion';
 import { BarChart3 } from 'lucide-react';
 
 const subjects = [
-  { name: '数学', progress: 72, color: '#ff2d6a' },
-  { name: '英语', progress: 85, color: '#8b5cf6' },
-  { name: '语文', progress: 60, color: '#ff5c8a' },
-  { name: '竞赛', progress: 35, color: '#a78bfa' },
+  { name: '数学', progress: 72, color: '#e11d48' },
+  { name: '英语', progress: 85, color: '#7c3aed' },
+  { name: '语文', progress: 60, color: '#f43f5e' },
+  { name: '竞赛', progress: 35, color: '#8b5cf6' },
 ];
 
 const metrics = [
@@ -18,7 +18,7 @@ const metrics = [
 
 export default function DashboardVisual() {
   return (
-    <div className="rounded-2xl border border-white/10 bg-black/[0.02] p-5 corner-accent backdrop-blur-sm">
+    <div className="rounded-2xl border border-border-subtle bg-surface p-5 corner-accent backdrop-blur-sm">
       <div className="flex items-center justify-between mb-5">
         <div className="flex items-center gap-2">
           <BarChart3 className="w-3.5 h-3.5 text-primary" aria-hidden="true" />
@@ -43,7 +43,7 @@ export default function DashboardVisual() {
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 + index * 0.08 }}
-              className="p-3 rounded-xl bg-black/[0.03] border border-black/[0.08]"
+              className="p-3 rounded-xl bg-surface-light border border-border-subtle"
             >
               <div className="text-xs text-text-muted mb-1">{metric.label}</div>
               <div className="text-lg font-bold font-display text-text-primary tabular-nums">{metric.value}</div>
@@ -52,7 +52,7 @@ export default function DashboardVisual() {
           ))}
         </div>
 
-        <div className="p-4 rounded-xl bg-black/[0.03] border border-black/[0.08] space-y-4">
+        <div className="p-4 rounded-xl bg-surface-light border border-border-subtle space-y-4">
           <div className="text-xs font-mono text-text-muted uppercase tracking-wider">
             学科准备度
           </div>
@@ -69,7 +69,7 @@ export default function DashboardVisual() {
                   {subject.progress}%
                 </span>
               </div>
-              <div className="h-1.5 rounded-full bg-black/5 overflow-hidden">
+              <div className="h-1.5 rounded-full bg-surface-highlight overflow-hidden">
                 <motion.div
                   className="h-full rounded-full"
                   style={{ backgroundColor: subject.color }}

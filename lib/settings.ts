@@ -98,12 +98,12 @@ export const THEME_COLORS: Record<
     '--shadow-secondary': 'rgba(124, 58, 237, 0.12)',
   },
   'dark-tech': {
-    '--color-primary': '#ff2d6a',
-    '--color-primary-glow': '#ff5c8a',
-    '--color-secondary': '#8b5cf6',
-    '--color-secondary-glow': '#a78bfa',
-    '--shadow-primary': 'rgba(255, 45, 106, 0.15)',
-    '--shadow-secondary': 'rgba(139, 92, 246, 0.15)',
+    '--color-primary': '#e11d48',
+    '--color-primary-glow': '#f43f5e',
+    '--color-secondary': '#7c3aed',
+    '--color-secondary-glow': '#8b5cf6',
+    '--shadow-primary': 'rgba(225, 29, 72, 0.15)',
+    '--shadow-secondary': 'rgba(124, 58, 237, 0.15)',
   },
   'rose-pink': {
     '--color-primary': '#ec4899',

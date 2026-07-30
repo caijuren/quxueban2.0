@@ -64,14 +64,14 @@ export default function NotificationSection({
               className={`flex items-start gap-2.5 p-2.5 rounded-lg border text-left transition-colors ${
                 localPrefs[option.key]
                   ? 'bg-primary/10 border-primary/30'
-                  : 'bg-black/[0.03] border-black/[0.08] hover:bg-black/[0.05]'
+                  : 'bg-surface-light border border-border-subtle hover:bg-surface'
               }`}
             >
               <div
                 className={`w-4 h-4 rounded border flex items-center justify-center shrink-0 mt-0.5 transition-colors ${
                   localPrefs[option.key]
                     ? 'bg-primary border-primary'
-                    : 'border-white/20'
+                    : 'border-border-default'
                 }`}
               >
                 {localPrefs[option.key] && (
@@ -81,8 +81,8 @@ export default function NotificationSection({
                 )}
               </div>
               <div className="min-w-0">
-                <p className="text-xs font-medium text-slate-800">{option.label}</p>
-                <p className="text-[11px] text-slate-600 leading-tight">{option.description}</p>
+                <p className="text-xs font-medium text-text-primary">{option.label}</p>
+                <p className="text-[11px] text-text-tertiary leading-tight">{option.description}</p>
               </div>
             </button>
           ))}
@@ -96,14 +96,14 @@ export default function NotificationSection({
               <Clock className="w-5 h-5 text-primary" />
             </div>
             <div className="flex-1">
-              <p className="text-sm font-medium text-slate-800">每日提醒时间</p>
-              <p className="text-xs text-slate-600">每天在这个时间推送当天任务</p>
+              <p className="text-sm font-medium text-text-primary">每日提醒时间</p>
+              <p className="text-xs text-text-tertiary">每天在这个时间推送当天任务</p>
             </div>
             <input
               type="time"
               value={reminderTime}
               onChange={(e) => setReminderTime(e.target.value)}
-              className="px-3 py-2 rounded-lg bg-black/5 border border-white/10 text-sm text-slate-800 focus:outline-none focus:border-primary"
+              className="px-3 py-2 rounded-lg bg-surface-light border border-border-subtle text-sm text-text-primary focus:outline-none focus:border-primary"
             />
           </div>
 
@@ -112,13 +112,13 @@ export default function NotificationSection({
               <Moon className="w-5 h-5 text-secondary" />
             </div>
             <div className="flex-1">
-              <p className="text-sm font-medium text-slate-800">免打扰模式</p>
-              <p className="text-xs text-slate-600">开启后在设定时段内不发送提醒</p>
+              <p className="text-sm font-medium text-text-primary">免打扰模式</p>
+              <p className="text-xs text-text-tertiary">开启后在设定时段内不发送提醒</p>
             </div>
             <button
               onClick={() => setDoNotDisturb((v) => !v)}
               className={`relative w-11 h-6 rounded-full transition-colors ${
-                doNotDisturb ? 'bg-primary' : 'bg-black/10'
+                doNotDisturb ? 'bg-primary' : 'bg-border-default'
               }`}
             >
               <span
@@ -132,21 +132,21 @@ export default function NotificationSection({
           {doNotDisturb && (
             <div className="grid grid-cols-2 gap-4 pl-14">
               <div>
-                <label className="block text-xs text-slate-600 mb-1.5">开始时间</label>
+                <label className="block text-xs text-text-tertiary mb-1.5">开始时间</label>
                 <input
                   type="time"
                   value={doNotDisturbStart}
                   onChange={(e) => setDoNotDisturbStart(e.target.value)}
-                  className="w-full px-3 py-2 rounded-lg bg-black/5 border border-white/10 text-sm text-slate-800 focus:outline-none focus:border-primary"
+                  className="w-full px-3 py-2 rounded-lg bg-surface-light border border-border-subtle text-sm text-text-primary focus:outline-none focus:border-primary"
                 />
               </div>
               <div>
-                <label className="block text-xs text-slate-600 mb-1.5">结束时间</label>
+                <label className="block text-xs text-text-tertiary mb-1.5">结束时间</label>
                 <input
                   type="time"
                   value={doNotDisturbEnd}
                   onChange={(e) => setDoNotDisturbEnd(e.target.value)}
-                  className="w-full px-3 py-2 rounded-lg bg-black/5 border border-white/10 text-sm text-slate-800 focus:outline-none focus:border-primary"
+                  className="w-full px-3 py-2 rounded-lg bg-surface-light border border-border-subtle text-sm text-text-primary focus:outline-none focus:border-primary"
                 />
               </div>
             </div>

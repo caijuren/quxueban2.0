@@ -10,7 +10,7 @@ export default function MathExamTimeline() {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.3 }}
-      className="rounded-2xl glass p-6 border border-white/5"
+      className="rounded-2xl glass p-6 border border-border-subtle"
     >
       <div className="flex items-center gap-3 mb-6">
         <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-400 to-orange-400 flex items-center justify-center">
@@ -18,7 +18,7 @@ export default function MathExamTimeline() {
         </div>
         <div>
           <h2 className="text-xl font-bold font-display">竞赛证书考试时间轴</h2>
-          <p className="text-sm text-slate-600">袋鼠 → 澳洲 AMC → AMC8，关键节点与报名提醒</p>
+          <p className="text-sm text-text-secondary">袋鼠 → 澳洲 AMC → AMC8，关键节点与报名提醒</p>
         </div>
       </div>
 
@@ -48,18 +48,18 @@ export default function MathExamTimeline() {
               </div>
 
               {/* Card */}
-              <div className="rounded-xl bg-black/[0.03] border border-white/5 p-4 hover:bg-black/[0.05] transition-colors">
+              <div className="rounded-xl bg-surface-light border border-border-subtle p-4 hover:bg-surface-light transition-colors">
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-3">
                   <div>
-                    <h3 className="font-bold text-slate-800 flex items-center gap-2">
+                    <h3 className="font-bold text-text-primary flex items-center gap-2">
                       {exam.name}
                       <span className="px-2 py-0.5 rounded-md bg-amber-500/10 text-amber-400 text-xs border border-amber-500/20">
                         目标 {exam.target}
                       </span>
                     </h3>
-                    <p className="text-sm text-slate-600 mt-0.5">{exam.month} · {exam.date}</p>
+                    <p className="text-sm text-text-secondary mt-0.5">{exam.month} · {exam.date}</p>
                   </div>
-                  <div className="flex items-center gap-1.5 text-xs text-slate-600">
+                  <div className="flex items-center gap-1.5 text-xs text-text-secondary">
                     <Calendar className="w-3.5 h-3.5" />
                     报名截止：{exam.registerBefore}
                   </div>
@@ -67,7 +67,7 @@ export default function MathExamTimeline() {
 
                 <div className="flex items-start gap-2 rounded-lg bg-warning/5 border border-warning/10 p-3">
                   <AlertTriangle className="w-4 h-4 text-warning shrink-0 mt-0.5" />
-                  <p className="text-xs text-slate-600">{exam.notes}</p>
+                  <p className="text-xs text-text-secondary">{exam.notes}</p>
                 </div>
               </div>
             </motion.div>

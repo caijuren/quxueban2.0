@@ -23,7 +23,7 @@ export default function SolutionShowcase() {
           >
             <div className="hud-panel corner-accent p-1">
               <div className="rounded-xl bg-background p-5 space-y-4">
-                <div className="flex items-center justify-between pb-4 border-b border-white/5">
+                <div className="flex items-center justify-between pb-4 border-b border-border-subtle">
                   <div className="flex items-center gap-2">
                     <div className="indicator-dot animate-pulse" />
                     <span className="text-micro font-mono text-text-muted">趣学伴 · 仪表盘</span>
@@ -39,7 +39,7 @@ export default function SolutionShowcase() {
                     </span>
                   </div>
                   <div className="text-h4 font-display">三公冲刺路线</div>
-                  <div className="mt-3 h-1.5 rounded-full bg-black/5 overflow-hidden">
+                  <div className="mt-3 h-1.5 rounded-full bg-surface-highlight overflow-hidden">
                     <div className="h-full w-[68%] rounded-full bg-primary" />
                   </div>
                   <div className="mt-2 text-micro font-mono text-text-muted">OVERALL 68%</div>

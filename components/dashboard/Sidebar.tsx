@@ -61,13 +61,9 @@ export default function Sidebar({ mobileMenuOpen, onLinkClick }: SidebarProps) {
 
   return (
     <aside
-      className={`fixed left-0 top-0 h-full w-64 glass border-r border-border-default z-50 flex flex-col transition-transform duration-300 ${
+      className={`fixed left-0 top-0 h-full w-64 glass border-r border-border-default shadow-card z-50 flex flex-col transition-transform duration-300 ${
         mobileMenuOpen ? 'translate-x-0 lg:translate-x-0' : '-translate-x-full lg:translate-x-0 lg:flex hidden'
       }`}
-      style={{
-        background: 'rgba(255, 255, 255, 0.95)',
-        boxShadow: 'inset -1px 0 0 rgba(15, 23, 42, 0.06)',
-      }}
     >
       {/* Logo */}
       <div className="p-5 border-b border-border-default">

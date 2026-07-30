@@ -31,15 +31,15 @@ export default function HeatmapCell({
           ? 'bg-success/10 border-success/20 hover:bg-success/15'
           : intensity >= 40
           ? 'bg-warning/10 border-warning/20 hover:bg-warning/15'
-          : 'bg-black/[0.03] border-black/[0.08] hover:bg-black/[0.05]',
+          : 'bg-surface-elevated border-border-default hover:bg-surface-highlight',
         className
       )}
     >
       {label && (
-        <p className="text-[11px] font-medium text-slate-800 line-clamp-2">{label}</p>
+        <p className="text-[11px] font-medium text-text-primary line-clamp-2">{label}</p>
       )}
       {sublabel && (
-        <p className="text-[10px] text-slate-600 mt-0.5 tabular-nums">{sublabel}</p>
+        <p className="text-[10px] text-text-secondary mt-0.5 tabular-nums">{sublabel}</p>
       )}
     </button>
   );

@@ -8,25 +8,25 @@ const insights = [
     icon: Target,
     title: '路线匹配度 78%',
     status: '良好',
-    color: '#ff2d6a',
+    color: '#e11d48',
   },
   {
     icon: AlertTriangle,
     title: '需关注：奥数尚未启动',
     status: '风险',
-    color: '#8b5cf6',
+    color: '#7c3aed',
   },
   {
     icon: TrendingUp,
     title: '本月重点任务',
     status: '建议',
-    color: '#94a3b8',
+    color: '#64748b',
   },
 ];
 
 export default function AIReportVisual() {
   return (
-    <div className="rounded-2xl border border-white/10 bg-black/[0.02] p-5 corner-accent backdrop-blur-sm">
+    <div className="rounded-2xl border border-border-subtle bg-surface p-5 corner-accent backdrop-blur-sm">
       <div className="flex items-center justify-between mb-5">
         <div className="flex items-center gap-2">
           <Sparkles className="w-3.5 h-3.5 text-secondary" aria-hidden="true" />
@@ -37,8 +37,8 @@ export default function AIReportVisual() {
         <span className="text-xs font-mono text-secondary">GENERATED</span>
       </div>
 
-      <div className="rounded-xl bg-background border border-black/[0.08] p-4 space-y-3">
-        <div className="flex items-center justify-between pb-3 border-b border-black/[0.08]">
+      <div className="rounded-xl bg-surface-light border border-border-subtle p-4 space-y-3">
+        <div className="flex items-center justify-between pb-3 border-b border-border-subtle">
           <div className="flex items-center gap-3">
             <div className="w-9 h-9 rounded-lg bg-secondary/10 flex items-center justify-center">
               <Sparkles className="w-4 h-4 text-secondary" aria-hidden="true" />
@@ -92,7 +92,7 @@ export default function AIReportVisual() {
           transition={{ delay: 0.9 }}
           className="pt-1"
         >
-          <div className="h-px bg-black/[0.06] mb-2" />
+          <div className="h-px bg-border-subtle mb-2" />
           <div className="flex items-center justify-between text-xs">
             <span className="text-text-muted">AI 建议 action</span>
             <span className="font-mono text-primary">START MATH FOUNDATION</span>

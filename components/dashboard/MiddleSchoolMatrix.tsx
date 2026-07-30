@@ -87,7 +87,7 @@ const roleConfig: Record<
 > = {
   primary: {
     label: '主通道',
-    color: 'text-violet-300',
+    color: 'text-violet-700',
     bg: 'bg-violet-500/15',
     border: 'border-violet-500/40',
     glow: 'shadow-neon-violet',
@@ -95,7 +95,7 @@ const roleConfig: Record<
   },
   optional: {
     label: '可选',
-    color: 'text-cyan-300',
+    color: 'text-cyan-700',
     bg: 'bg-cyan-500/15',
     border: 'border-cyan-500/40',
     glow: 'shadow-glow-secondary',
@@ -103,7 +103,7 @@ const roleConfig: Record<
   },
   partial: {
     label: '部分有',
-    color: 'text-amber-300',
+    color: 'text-amber-700',
     bg: 'bg-amber-500/15',
     border: 'border-amber-500/40',
     glow: 'shadow-panel',
@@ -111,11 +111,11 @@ const roleConfig: Record<
   },
   none: {
     label: '不适用',
-    color: 'text-slate-600',
-    bg: 'bg-slate-500/5',
-    border: 'border-slate-500/15',
+    color: 'text-text-secondary',
+    bg: 'bg-surface-light',
+    border: 'border-border-subtle',
     glow: '',
-    pillBg: 'bg-slate-500/15',
+    pillBg: 'bg-surface-elevated',
   },
 };
 
@@ -213,7 +213,7 @@ const jiadingMap: MapTier[] = [
   {
     id: 'benshi',
     name: '本区市重点',
-    color: 'text-violet-300',
+    color: 'text-violet-700',
     bg: 'bg-violet-500/10',
     channel: '名额到区 / 名额到校 / 统招',
     schools: [
@@ -225,7 +225,7 @@ const jiadingMap: MapTier[] = [
   {
     id: 'benqu',
     name: '本区区重点 / 市特色',
-    color: 'text-cyan-300',
+    color: 'text-cyan-700',
     bg: 'bg-cyan-500/10',
     channel: '名额到校 / 统招为主',
     schools: [
@@ -237,8 +237,8 @@ const jiadingMap: MapTier[] = [
   {
     id: 'benpu',
     name: '本区普高',
-    color: 'text-slate-700',
-    bg: 'bg-slate-500/10',
+    color: 'text-text-primary',
+    bg: 'bg-surface-highlight',
     channel: '统招为主，少量到校',
     schools: [
       { name: '中光高级中学', note: '公办普高' },
@@ -248,7 +248,7 @@ const jiadingMap: MapTier[] = [
   {
     id: 'waiqu',
     name: '外区可冲',
-    color: 'text-rose-300',
+    color: 'text-rose-700',
     bg: 'bg-rose-500/10',
     channel: '四校：自招/到区；其他市重点：名额到区',
     schools: [
@@ -264,7 +264,7 @@ const jiadingMap: MapTier[] = [
   {
     id: 'zhiguan',
     name: '中职贯通',
-    color: 'text-emerald-300',
+    color: 'text-emerald-700',
     bg: 'bg-emerald-500/10',
     channel: '提前批 / 统招录取',
     schools: [
@@ -351,7 +351,7 @@ export default function MiddleSchoolMatrix() {
           <div className="flex flex-wrap items-center gap-3">
             <div className="flex flex-wrap items-center gap-2 text-micro text-text-muted">
               <span className="hud-panel-hover flex items-center gap-1.5 px-2 py-1 rounded-full">
-                <span className="w-2 h-2 rounded-full bg-violet-500 shadow-[0_0_6px_rgba(139,92,246,0.8)]" />
+                <span className="w-2 h-2 rounded-full bg-violet-500 shadow-[0_0_6px_var(--shadow-secondary)]" />
                 主通道
               </span>
               <span className="hud-panel-hover flex items-center gap-1.5 px-2 py-1 rounded-full">
@@ -363,7 +363,7 @@ export default function MiddleSchoolMatrix() {
                 部分有
               </span>
               <span className="hud-panel-hover flex items-center gap-1.5 px-2 py-1 rounded-full">
-                <span className="w-2 h-2 rounded-full bg-slate-600" />
+                <span className="w-2 h-2 rounded-full bg-text-muted" />
                 不适用
               </span>
             </div>
@@ -493,8 +493,8 @@ export default function MiddleSchoolMatrix() {
                     {outcome && (
                       <div className="flex items-center gap-1.5 shrink-0 pl-2 ml-1 border-l border-border-default">
                         <span
-                          className="px-1.5 py-0.5 rounded text-micro font-bold"
-                          style={{ backgroundColor: outcome.color, color: '#0f172a' }}
+                          className="px-1.5 py-0.5 rounded text-micro font-bold text-text-primary"
+                          style={{ backgroundColor: outcome.color }}
                         >
                           {outcome.label}
                         </span>
@@ -552,7 +552,7 @@ export default function MiddleSchoolMatrix() {
                         dimmed ? 'opacity-35' : 'opacity-100'
                       } ${
                         isHighlighted
-                          ? 'border-white/40 shadow-panel'
+                          ? 'border-border-strong shadow-panel'
                           : ''
                       } ${isCurrentTier ? 'ring-1 ring-primary/20' : ''}`}
                     >
@@ -597,7 +597,7 @@ export default function MiddleSchoolMatrix() {
               <Shield className="w-4 h-4 text-amber-400" />
             </div>
             <div>
-              <h4 className="text-caption font-bold text-amber-200 mb-1">名额到校资格门槛</h4>
+              <h4 className="text-caption font-bold text-amber-700 mb-1">名额到校资格门槛</h4>
               <p className="text-small text-text-tertiary leading-relaxed">
                 嘉定区名额到校主要面向不择生源的初中。学生需在<strong>同一所初中连续就读满 3 年</strong>
                 （含学籍与就读），民办初中是否具备名额到校资格以当年政策为准。提前转学、人户分离等情况可能影响资格。
@@ -626,7 +626,7 @@ export default function MiddleSchoolMatrix() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-3 items-stretch">
           {jiadingMap.map((tier) => (
-            <div key={tier.id} className={`hud-panel-hover rounded-xl ${tier.bg} border border-white/5 p-3 flex flex-col`}>
+            <div key={tier.id} className={`hud-panel-hover rounded-xl ${tier.bg} border border-border-subtle p-3 flex flex-col`}>
               <div className="flex items-center justify-between mb-1">
                 <h4 className={`text-caption font-bold font-display ${tier.color}`}>{tier.name}</h4>
               </div>
@@ -645,14 +645,14 @@ export default function MiddleSchoolMatrix() {
                     <Link
                       key={school.name}
                       href={`/dashboard/schools/${school.slug}`}
-                      className="group flex items-center gap-1 px-2 py-1 rounded-md bg-black/20 hover:bg-black/10 border border-white/5 transition-colors"
+                      className="group flex items-center gap-1 px-2 py-1 rounded-md bg-surface-highlight hover:bg-surface-elevated border border-border-subtle transition-colors"
                     >
                       {chip}
                     </Link>
                   ) : (
                     <div
                       key={school.name}
-                      className="flex items-center gap-1 px-2 py-1 rounded-md bg-black/10 border border-white/5"
+                      className="flex items-center gap-1 px-2 py-1 rounded-md bg-surface-highlight border border-border-subtle"
                     >
                       {chip}
                     </div>

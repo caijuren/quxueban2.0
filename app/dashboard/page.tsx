@@ -127,10 +127,10 @@ function ChildSwitchCard({
           {getInitials(child.name)}
         </div>
         <div className="flex-1 min-w-0">
-          <p className={`font-semibold text-sm truncate ${isActive ? 'text-primary' : 'text-slate-800'}`}>
+          <p className={`font-semibold text-sm truncate ${isActive ? 'text-primary' : 'text-text-primary'}`}>
             {child.name}
           </p>
-          <p className="text-xs text-slate-600">
+          <p className="text-xs text-text-secondary">
             {gradeLabel(child.grade)} · {stage}
           </p>
         </div>
@@ -184,14 +184,14 @@ function OverviewChildCard({
             <h2 className="text-lg font-bold font-display">{child.name}</h2>
             <DataBadge variant="primary" size="sm">{stage}</DataBadge>
           </div>
-          <p className="text-sm text-slate-600 truncate">
+          <p className="text-sm text-text-secondary truncate">
             {gradeLabel(child.grade)}
             {child.currentSchool ? ` · ${child.currentSchool}` : ''}
             {routeName ? ` · ${routeName}` : ''}
           </p>
         </div>
         <div className="text-right shrink-0">
-          <p className="text-xs text-slate-600 mb-1">本周完成率</p>
+          <p className="text-xs text-text-secondary mb-1">本周完成率</p>
           <p className="text-xl font-bold font-display tabular-nums text-text-primary">
             {snapshot.completionRate}%
           </p>
@@ -199,23 +199,23 @@ function OverviewChildCard({
       </div>
 
       <div className="grid grid-cols-3 gap-3 mb-5">
-        <div className="rounded-lg bg-black/[0.03] p-3 text-center">
-          <p className="text-lg font-bold font-display text-slate-900">
+        <div className="rounded-lg bg-surface-light p-3 text-center">
+          <p className="text-lg font-bold font-display text-text-primary">
             {snapshot.weeklyDone}/{snapshot.weeklyTotal}
           </p>
-          <p className="text-[10px] text-slate-600 mt-0.5">本周任务</p>
+          <p className="text-[10px] text-text-secondary mt-0.5">本周任务</p>
         </div>
-        <div className="rounded-lg bg-black/[0.03] p-3 text-center">
-          <p className="text-lg font-bold font-display text-slate-900">
+        <div className="rounded-lg bg-surface-light p-3 text-center">
+          <p className="text-lg font-bold font-display text-text-primary">
             {snapshot.todayPending}
           </p>
-          <p className="text-[10px] text-slate-600 mt-0.5">今日待办</p>
+          <p className="text-[10px] text-text-secondary mt-0.5">今日待办</p>
         </div>
-        <div className="rounded-lg bg-black/[0.03] p-3 text-center">
-          <p className="text-lg font-bold font-display text-slate-900 truncate">
+        <div className="rounded-lg bg-surface-light p-3 text-center">
+          <p className="text-lg font-bold font-display text-text-primary truncate">
             {child.targetSchool || '未设置'}
           </p>
-          <p className="text-[10px] text-slate-600 mt-0.5">目标学校</p>
+          <p className="text-[10px] text-text-secondary mt-0.5">目标学校</p>
         </div>
       </div>
 
@@ -292,7 +292,7 @@ export default function DashboardPage() {
       >
         <div>
           <h1 className="text-2xl sm:text-3xl font-bold font-display mb-1">作战指挥中心</h1>
-          <p className="text-sm text-slate-600">
+          <p className="text-sm text-text-secondary">
             {hasChildren
               ? `监控 ${children.length} 名孩子 · 当前：${currentChild?.name || '未选择'}`
               : '请先添加孩子档案'}
@@ -300,13 +300,13 @@ export default function DashboardPage() {
         </div>
 
         {canOverview && (
-          <div className="flex items-center gap-1 rounded-lg bg-black/[0.03] border border-black/[0.08] p-1">
+          <div className="flex items-center gap-1 rounded-lg bg-surface-light border border-border-default p-1">
             <button
               onClick={() => setViewMode('detail')}
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-all ${
                 viewMode === 'detail'
                   ? 'bg-primary/10 text-primary'
-                  : 'text-slate-600 hover:text-slate-700'
+                  : 'text-text-secondary hover:text-text-secondary'
               }`}
             >
               <User className="w-3.5 h-3.5" />
@@ -317,7 +317,7 @@ export default function DashboardPage() {
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-all ${
                 viewMode === 'overview'
                   ? 'bg-primary/10 text-primary'
-                  : 'text-slate-600 hover:text-slate-700'
+                  : 'text-text-secondary hover:text-text-secondary'
               }`}
             >
               <LayoutGrid className="w-3.5 h-3.5" />
@@ -355,7 +355,7 @@ export default function DashboardPage() {
           <motion.button
             variants={itemVariants}
             onClick={() => router.push('/dashboard/plan')}
-            className="rounded-xl border border-dashed border-black/[0.10] bg-black/[0.02] p-4 flex items-center justify-center gap-2 text-slate-600 hover:text-slate-700 hover:bg-black/[0.04] hover:border-black/[0.14] transition-all text-sm"
+            className="rounded-xl border border-dashed border-border-default bg-surface-light p-4 flex items-center justify-center gap-2 text-text-secondary hover:text-text-secondary hover:bg-surface-light hover:border-border-strong transition-all text-sm"
           >
             <Plus className="w-4 h-4" />
             <span className="font-medium">添加孩子</span>
@@ -419,7 +419,7 @@ export default function DashboardPage() {
                         {gradeToStage(currentChild.grade)}
                       </DataBadge>
                     </div>
-                    <p className="text-sm text-slate-600">
+                    <p className="text-sm text-text-secondary">
                       {gradeLabel(currentChild.grade)}
                       {currentChild.currentSchool ? ` · ${currentChild.currentSchool}` : ''}
                       {currentChild.routeId
@@ -431,7 +431,7 @@ export default function DashboardPage() {
 
                 <div className="flex items-center gap-4">
                   <div className="text-right">
-                    <p className="text-xs text-slate-600 mb-1">本周完成率</p>
+                    <p className="text-xs text-text-secondary mb-1">本周完成率</p>
                     <p className="text-xl font-bold font-display tabular-nums text-text-primary">
                       {completionRate}%
                     </p>
@@ -490,13 +490,13 @@ export default function DashboardPage() {
               <motion.div key={stat.title} variants={itemVariants}>
                 <CommandCard hover className="p-4">
                   <div className="flex items-start justify-between mb-3">
-                    <p className="text-xs text-slate-600">{stat.title}</p>
+                    <p className="text-xs text-text-secondary">{stat.title}</p>
                     <div className={`w-8 h-8 rounded-lg ${stat.bg} flex items-center justify-center`}>
                       <stat.icon className={`w-4 h-4 ${stat.color}`} />
                     </div>
                   </div>
-                  <p className="text-lg font-bold font-display text-slate-900 truncate">{stat.value}</p>
-                  <p className="text-[11px] text-slate-600 mt-0.5">{stat.subtext}</p>
+                  <p className="text-lg font-bold font-display text-text-primary truncate">{stat.value}</p>
+                  <p className="text-[11px] text-text-secondary mt-0.5">{stat.subtext}</p>
                 </CommandCard>
               </motion.div>
             ))}
@@ -519,7 +519,7 @@ export default function DashboardPage() {
                     <Calendar className="w-4 h-4 text-primary" />
                     <h2 className="text-base font-bold font-display">今日任务 · {todayName}</h2>
                     {todayTasks.length > 0 && (
-                      <span className="text-[11px] px-2 py-0.5 rounded-full bg-black/5 text-slate-600">
+                      <span className="text-[11px] px-2 py-0.5 rounded-full bg-surface-light text-text-secondary">
                         {todayTasks.filter((t) => t.status === 'done').length}/{todayTasks.length} 完成
                       </span>
                     )}
@@ -533,7 +533,7 @@ export default function DashboardPage() {
                 </div>
 
                 {recentTasks.length === 0 ? (
-                  <div className="text-center py-8 text-sm text-slate-600">
+                  <div className="text-center py-8 text-sm text-text-secondary">
                     今日暂无任务，去周任务页面生成计划
                   </div>
                 ) : (
@@ -553,7 +553,7 @@ export default function DashboardPage() {
                               >
                                 <CategoryIcon className="w-3 h-3" />
                               </div>
-                              <span className="text-xs font-medium text-slate-700">
+                              <span className="text-xs font-medium text-text-secondary">
                                 {TASK_CATEGORY_LABELS[category]}
                               </span>
                             </div>
@@ -566,7 +566,7 @@ export default function DashboardPage() {
                                     className={`flex items-start gap-3 p-3 rounded-xl border transition-all ${
                                       isDone
                                         ? 'bg-success/5 border-success/10'
-                                        : 'bg-black/[0.03] border-black/[0.08] hover:bg-black/[0.05]'
+                                        : 'bg-surface-light border-border-default hover:bg-surface-light'
                                     }`}
                                   >
                                     <button
@@ -580,7 +580,7 @@ export default function DashboardPage() {
                                           toggleTaskStatus(task.status)
                                         )
                                       }
-                                      className="mt-0.5 text-slate-600 hover:text-primary transition-colors focus-ring rounded-full shrink-0"
+                                      className="mt-0.5 text-text-secondary hover:text-primary transition-colors focus-ring rounded-full shrink-0"
                                       aria-label={isDone ? '标记为未完成' : '标记为完成'}
                                     >
                                       {isDone ? (
@@ -596,16 +596,16 @@ export default function DashboardPage() {
                                       <div className="flex items-center justify-between mb-1">
                                         <span
                                           className={`text-sm font-semibold ${
-                                            isDone ? 'text-slate-600 line-through' : 'text-slate-800'
+                                            isDone ? 'text-text-secondary line-through' : 'text-text-primary'
                                           }`}
                                         >
                                           {task.focus}
                                         </span>
-                                        <span className="text-[10px] px-1.5 py-0.5 rounded bg-black/[0.05] text-slate-700 shrink-0 ml-2">
+                                        <span className="text-[10px] px-1.5 py-0.5 rounded bg-surface-light text-text-secondary shrink-0 ml-2">
                                           {task.duration}
                                         </span>
                                       </div>
-                                      <p className="text-[11px] text-slate-600">
+                                      <p className="text-[11px] text-text-secondary">
                                         {task.materials.join('、') || '无指定材料'}
                                       </p>
                                     </button>
@@ -633,7 +633,7 @@ export default function DashboardPage() {
                   <h2 className="text-base font-bold font-display">AI 检视</h2>
                 </div>
 
-                <p className="text-sm text-slate-600 leading-relaxed mb-5">
+                <p className="text-sm text-text-secondary leading-relaxed mb-5">
                   {aiReview ?? '暂无数据，发布本周计划后将自动生成 AI 诊断。'}
                 </p>
 

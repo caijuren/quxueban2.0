@@ -4,9 +4,9 @@ import { motion } from 'framer-motion';
 import { Target } from 'lucide-react';
 
 const routes = [
-  { id: 'sg', name: '三公冲刺', color: '#ff2d6a', y: 60, active: true },
-  { id: 'dual', name: '双轨维持', color: '#8b5cf6', y: 110, active: false },
-  { id: 'public', name: '公办直升', color: '#a78bfa', y: 160, active: false },
+  { id: 'sg', name: '三公冲刺', color: '#e11d48', y: 60, active: true },
+  { id: 'dual', name: '双轨维持', color: '#7c3aed', y: 110, active: false },
+  { id: 'public', name: '公办直升', color: '#8b5cf6', y: 160, active: false },
   { id: 'international', name: '国际路线', color: '#94a3b8', y: 210, active: false },
 ];
 
@@ -21,7 +21,7 @@ const stages = [
 
 export default function RouteMapVisual() {
   return (
-    <div className="rounded-2xl border border-white/10 bg-black/[0.02] p-5 corner-accent backdrop-blur-sm">
+    <div className="rounded-2xl border border-border-subtle bg-surface p-5 corner-accent backdrop-blur-sm">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
           <Target className="w-3.5 h-3.5 text-primary" aria-hidden="true" />
@@ -41,19 +41,19 @@ export default function RouteMapVisual() {
       <svg viewBox="0 0 950 270" className="w-full h-auto" aria-label="多路线评估示意图">
         <defs>
           <pattern id="routeGrid" width="40" height="40" patternUnits="userSpaceOnUse">
-            <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(255,255,255,0.03)" strokeWidth="1" />
+            <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#e2e8f0" strokeWidth="1" />
           </pattern>
           <linearGradient id="routeActiveGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="#ff2d6a" stopOpacity="0.9" />
-            <stop offset="100%" stopColor="#ff5c8a" stopOpacity="0.3" />
+            <stop offset="0%" stopColor="#e11d48" stopOpacity="0.9" />
+            <stop offset="100%" stopColor="#f43f5e" stopOpacity="0.3" />
           </linearGradient>
         </defs>
         <rect width="950" height="270" fill="url(#routeGrid)" />
 
         {stages.map((stage) => (
           <g key={stage.label}>
-            <line x1={stage.x} y1="30" x2={stage.x} y2="240" stroke="rgba(255,255,255,0.05)" strokeWidth="1" />
-            <text x={stage.x} y="262" textAnchor="middle" fill="#6b6b7b" fontSize="11" fontFamily="var(--font-mono)">
+            <line x1={stage.x} y1="30" x2={stage.x} y2="240" stroke="#e2e8f0" strokeWidth="1" />
+            <text x={stage.x} y="262" textAnchor="middle" fill="#64748b" fontSize="11" fontFamily="var(--font-mono)">
               {stage.label}
             </text>
           </g>
@@ -76,7 +76,7 @@ export default function RouteMapVisual() {
               x="45"
               y={route.y + 4}
               textAnchor="end"
-              fill={route.active ? route.color : 'rgba(255,255,255,0.35)'}
+              fill={route.active ? route.color : '#64748b'}
               fontSize="11"
               fontFamily="var(--font-body)"
             >
@@ -92,12 +92,12 @@ export default function RouteMapVisual() {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 1 + index * 0.15, duration: 0.35 }}
           >
-            <circle cx={stage.x} cy={60} r="4" fill="#ff2d6a" />
+            <circle cx={stage.x} cy={60} r="4" fill="#e11d48" />
           </motion.g>
         ))}
       </svg>
 
-      <div className="mt-4 pt-4 border-t border-white/5 flex items-center justify-between text-xs">
+      <div className="mt-4 pt-4 border-t border-border-subtle flex items-center justify-between text-xs">
         <div className="flex items-center gap-4">
           <span className="text-text-muted">
             主路线: <span className="text-primary">三公冲刺型</span>

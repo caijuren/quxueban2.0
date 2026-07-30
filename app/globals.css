@@ -3,19 +3,19 @@
 @tailwind utilities;
 
 :root {
-  --font-display: 'Syne', 'PingFang SC', 'Microsoft YaHei', sans-serif;
-  --font-body: 'Manrope', 'PingFang SC', 'Microsoft YaHei', sans-serif;
-  --font-mono: 'JetBrains Mono', 'SF Mono', monospace;
+  --font-display: 'PingFang SC', 'Microsoft YaHei', 'SF Pro Display', 'Inter', sans-serif;
+  --font-body: 'PingFang SC', 'Microsoft YaHei', 'SF Pro Text', 'Inter', sans-serif;
+  --font-mono: 'SF Mono', 'SFMono-Regular', 'Menlo', 'Monaco', monospace;
 
-  /* Command center theme v2 */
-  --color-primary: #ff2d6a;
-  --color-primary-glow: #ff5c8a;
-  --color-primary-dim: rgba(255, 45, 106, 0.12);
-  --color-secondary: #8b5cf6;
-  --color-secondary-glow: #a78bfa;
-  --color-secondary-dim: rgba(139, 92, 246, 0.12);
-  --shadow-primary: rgba(255, 45, 106, 0.22);
-  --shadow-secondary: rgba(139, 92, 246, 0.22);
+  /* Cockpit design system */
+  --color-primary: #e11d48;
+  --color-primary-glow: #f43f5e;
+  --color-primary-dim: rgba(225, 29, 72, 0.08);
+  --color-secondary: #7c3aed;
+  --color-secondary-glow: #8b5cf6;
+  --color-secondary-dim: rgba(124, 58, 237, 0.08);
+  --shadow-primary: rgba(225, 29, 72, 0.12);
+  --shadow-secondary: rgba(124, 58, 237, 0.12);
 }
 
 html {
@@ -23,7 +23,7 @@ html {
 }
 
 body {
-  background-color: #f4f6f8;
+  background-color: #f7f8fa;
   color: #0f172a;
   font-family: var(--font-body);
   -webkit-font-smoothing: antialiased;
@@ -41,18 +41,18 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(15, 23, 42, 0.15);
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: color-mix(in srgb, var(--color-primary) 40%, transparent);
+  background: rgba(15, 23, 42, 0.25);
 }
 
 /* Selection */
 ::selection {
-  background: color-mix(in srgb, var(--color-primary) 25%, transparent);
-  color: #ffffff;
+  background: rgba(225, 29, 72, 0.18);
+  color: #0f172a;
 }
 
 /* Gradient text */
@@ -85,35 +85,34 @@ body {
 
 /* Glass effect - deeper, less border noise */
 .glass {
-  background: rgba(255, 255, 255, 0.92);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  border: 1px solid rgba(15, 23, 42, 0.08);
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(226, 232, 240, 0.8);
 }
 
 /* Command center ambient background - neon command deck */
 .animated-bg {
   background:
-    radial-gradient(ellipse at 85% 10%, color-mix(in srgb, var(--color-primary) 14%, transparent) 0%, transparent 50%),
-    radial-gradient(ellipse at 15% 90%, color-mix(in srgb, var(--color-secondary) 10%, transparent) 0%, transparent 50%),
-    radial-gradient(ellipse at 50% 50%, rgba(241, 243, 246, 0.95) 0%, transparent 70%),
-    #f4f6f8;
+    radial-gradient(ellipse at 80% 0%, color-mix(in srgb, var(--color-primary) 8%, transparent) 0%, transparent 45%),
+    radial-gradient(ellipse at 20% 100%, color-mix(in srgb, var(--color-secondary) 6%, transparent) 0%, transparent 45%),
+    #f7f8fa;
 }
 
 /* Deeper ambient glow for hero / landing */
 .animated-bg-strong {
   background:
-    radial-gradient(ellipse at 70% 20%, color-mix(in srgb, var(--color-primary) 22%, transparent) 0%, transparent 55%),
-    radial-gradient(ellipse at 30% 80%, color-mix(in srgb, var(--color-secondary) 16%, transparent) 0%, transparent 55%),
-    radial-gradient(circle at 50% 50%, rgba(232, 235, 240, 0.90) 0%, transparent 65%),
-    #f4f6f8;
+    radial-gradient(ellipse at 70% 20%, color-mix(in srgb, var(--color-primary) 12%, transparent) 0%, transparent 55%),
+    radial-gradient(ellipse at 30% 80%, color-mix(in srgb, var(--color-secondary) 10%, transparent) 0%, transparent 55%),
+    radial-gradient(circle at 50% 50%, rgba(241, 245, 249, 0.90) 0%, transparent 65%),
+    #f7f8fa;
 }
 
 /* Grid pattern overlay - finer, more technical */
 .grid-pattern {
   background-image:
-    linear-gradient(rgba(15, 23, 42, 0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(15, 23, 42, 0.04) 1px, transparent 1px);
+    linear-gradient(rgba(15, 23, 42, 0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(15, 23, 42, 0.025) 1px, transparent 1px);
   background-size: 48px 48px;
   mask-image: radial-gradient(ellipse at center, black 0%, transparent 80%);
   -webkit-mask-image: radial-gradient(ellipse at center, black 0%, transparent 80%);
@@ -122,8 +121,8 @@ body {
 /* Tactical grid - denser, sharper */
 .tactical-grid {
   background-image:
-    linear-gradient(rgba(15, 23, 42, 0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(15, 23, 42, 0.05) 1px, transparent 1px);
+    linear-gradient(rgba(15, 23, 42, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(15, 23, 42, 0.03) 1px, transparent 1px);
   background-size: 32px 32px;
 }
 
@@ -136,9 +135,9 @@ body {
 .corner-accent::after {
   content: '';
   position: absolute;
-  width: 10px;
-  height: 10px;
-  border-color: color-mix(in srgb, var(--color-primary) 45%, transparent);
+  width: 8px;
+  height: 8px;
+  border-color: rgba(225, 29, 72, 0.35);
   border-style: solid;
   pointer-events: none;
   transition: border-color 0.2s ease;
@@ -147,40 +146,36 @@ body {
 .corner-accent::before {
   top: 0;
   left: 0;
-  border-width: 1.5px 0 0 1.5px;
+  border-width: 1px 0 0 1px;
 }
 
 .corner-accent::after {
   bottom: 0;
   right: 0;
-  border-width: 0 1.5px 1.5px 0;
+  border-width: 0 1px 1px 0;
 }
 
-/* Neon text glow */
+/* Subtle text accent - no glow */
 .neon-text {
-  text-shadow:
-    0 0 8px color-mix(in srgb, var(--color-primary) 40%, transparent),
-    0 0 24px color-mix(in srgb, var(--color-primary) 25%, transparent);
+  color: var(--color-primary);
 }
 
 .neon-text-violet {
-  text-shadow:
-    0 0 8px color-mix(in srgb, var(--color-secondary) 40%, transparent),
-    0 0 24px color-mix(in srgb, var(--color-secondary) 25%, transparent);
+  color: var(--color-secondary);
 }
 
-/* Neon border glow on hover */
+/* Subtle border accent on hover */
 .neon-border {
-  border: 1px solid rgba(15, 23, 42, 0.10);
+  border: 1px solid #e2e8f0;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .neon-border:hover {
-  border-color: color-mix(in srgb, var(--color-primary) 50%, transparent);
-  box-shadow: 0 0 18px color-mix(in srgb, var(--color-primary) 18%, transparent), inset 0 0 12px color-mix(in srgb, var(--color-primary) 6%, transparent);
+  border-color: rgba(225, 29, 72, 0.30);
+  box-shadow: 0 0 12px rgba(225, 29, 72, 0.08);
 }
 
-/* Soft scanline overlay for command center vibe */
+/* Soft scanline overlay - very subtle */
 .scanlines::after {
   content: '';
   position: absolute;
@@ -188,66 +183,68 @@ body {
   pointer-events: none;
   background: repeating-linear-gradient(
     0deg,
-    rgba(15, 23, 42, 0.015),
-    rgba(15, 23, 42, 0.015) 1px,
+    rgba(15, 23, 42, 0.005),
+    rgba(15, 23, 42, 0.005) 1px,
     transparent 1px,
     transparent 3px
   );
-  opacity: 0.15;
+  opacity: 0.10;
 }
 
 /* Command panel - refined card */
 .command-panel {
-  @apply rounded-2xl bg-surface border border-border-default transition-all duration-200;
+  @apply rounded-2xl bg-surface border border-border-subtle transition-all duration-200;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04), 0 1px 2px rgba(15, 23, 42, 0.02);
 }
 
 .command-panel:hover {
-  border-color: rgba(15, 23, 42, 0.22);
+  border-color: #cbd5e1;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
 }
 
 .command-panel-active {
-  @apply rounded-2xl bg-surface-light;
-  border: 1px solid color-mix(in srgb, var(--color-primary) 35%, transparent);
-  box-shadow: 0 0 28px var(--shadow-primary);
+  @apply rounded-2xl bg-surface;
+  border: 1px solid rgba(225, 29, 72, 0.25);
+  box-shadow: 0 0 20px rgba(225, 29, 72, 0.10);
 }
 
 /* Surface gradient cards */
 .surface-gradient {
-  background: linear-gradient(145deg, rgba(15, 23, 42, 0.03) 0%, rgba(15, 23, 42, 0.01) 100%);
+  background: linear-gradient(145deg, rgba(241, 245, 249, 0.80) 0%, rgba(255, 255, 255, 0.50) 100%);
 }
 
 /* Horizontal neon rule */
 .neon-rule {
   height: 1px;
-  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--color-primary) 50%, transparent), transparent);
+  background: linear-gradient(90deg, transparent, rgba(225, 29, 72, 0.40), transparent);
 }
 
 /* Typography scale - balanced, not too big, not too small */
 .text-h1 {
-  font-size: clamp(1.875rem, 5vw, 2.75rem);
-  line-height: 1.1;
-  letter-spacing: -0.02em;
-  font-weight: 900;
-}
-
-.text-h2 {
-  font-size: clamp(1.5rem, 4vw, 2.125rem);
+  font-size: clamp(1.75rem, 4.5vw, 2.5rem);
   line-height: 1.15;
-  letter-spacing: -0.015em;
+  letter-spacing: -0.02em;
   font-weight: 800;
 }
 
-.text-h3 {
-  font-size: clamp(1.125rem, 2.5vw, 1.375rem);
-  line-height: 1.25;
-  letter-spacing: -0.01em;
+.text-h2 {
+  font-size: clamp(1.375rem, 3.5vw, 1.875rem);
+  line-height: 1.2;
+  letter-spacing: -0.015em;
   font-weight: 700;
 }
 
-.text-h4 {
-  font-size: clamp(1rem, 2vw, 1.125rem);
+.text-h3 {
+  font-size: clamp(1.0625rem, 2.2vw, 1.25rem);
   line-height: 1.3;
-  font-weight: 700;
+  letter-spacing: -0.01em;
+  font-weight: 600;
+}
+
+.text-h4 {
+  font-size: clamp(0.9375rem, 1.8vw, 1.0625rem);
+  line-height: 1.35;
+  font-weight: 600;
 }
 
 .text-body {
@@ -279,10 +276,10 @@ body {
 
 /* HUD panel - command center card */
 .hud-panel {
-  @apply rounded-2xl bg-surface border border-border-default backdrop-blur-xl;
+  @apply rounded-2xl bg-surface border border-border-subtle;
   box-shadow:
-    0 8px 32px rgba(15, 23, 42, 0.10),
-    inset 0 1px 0 rgba(255, 255, 255, 0.50);
+    0 1px 3px rgba(15, 23, 42, 0.04),
+    0 1px 2px rgba(15, 23, 42, 0.02);
 }
 
 .hud-panel-hover {
@@ -290,19 +287,16 @@ body {
 }
 
 .hud-panel-hover:hover {
-  border-color: color-mix(in srgb, var(--color-primary) 30%, transparent);
-  box-shadow:
-    0 12px 40px rgba(15, 23, 42, 0.14),
-    0 0 24px color-mix(in srgb, var(--color-primary) 10%, transparent),
-    inset 0 1px 0 rgba(255, 255, 255, 0.60);
+  border-color: #cbd5e1;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
   transform: translateY(-1px);
 }
 
 /* Neon line divider */
 .neon-line {
   height: 1px;
-  background: linear-gradient(90deg, transparent 0%, var(--color-primary) 50%, transparent 100%);
-  opacity: 0.4;
+  background: linear-gradient(90deg, transparent 0%, rgba(225, 29, 72, 0.35) 50%, transparent 100%);
+  opacity: 0.8;
 }
 
 /* Active indicator dot */
@@ -311,7 +305,7 @@ body {
   height: 6px;
   border-radius: 50%;
   background: var(--color-primary);
-  box-shadow: 0 0 8px var(--color-primary);
+  box-shadow: 0 0 6px rgba(225, 29, 72, 0.40);
 }
 
 /* Shimmer loading / accent */
@@ -319,7 +313,7 @@ body {
   background: linear-gradient(
     90deg,
     transparent 0%,
-    color-mix(in srgb, var(--color-primary) 12%, transparent) 50%,
+    rgba(225, 29, 72, 0.08) 50%,
     transparent 100%
   );
   background-size: 200% 100%;

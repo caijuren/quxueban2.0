@@ -45,7 +45,7 @@ export default function ForgotPasswordPage() {
             <span className="gradient-text">找回账户</span>
           </h1>
 
-          <p className="text-base text-slate-600 leading-relaxed mb-10 max-w-md">
+          <p className="text-base text-text-secondary leading-relaxed mb-10 max-w-md">
             输入注册时使用的邮箱，我们会发送密码重置链接。如果暂未绑定邮箱，请联系管理员处理。
           </p>
         </motion.div>
@@ -58,7 +58,7 @@ export default function ForgotPasswordPage() {
           <div className="rounded-xl command-panel corner-accent p-6 sm:p-8">
             <div className="text-center mb-8">
               <h2 className="text-xl font-bold font-display mb-1.5">重置密码</h2>
-              <p className="text-sm text-slate-600">我们将发送重置链接到你的邮箱</p>
+              <p className="text-sm text-text-secondary">我们将发送重置链接到你的邮箱</p>
             </div>
 
             {submitted ? (
@@ -66,7 +66,7 @@ export default function ForgotPasswordPage() {
                 <div className="w-12 h-12 rounded-xl bg-success/10 flex items-center justify-center mx-auto border border-success/20">
                   <CheckCircle2 className="w-6 h-6 text-success" />
                 </div>
-                <p className="text-sm text-slate-700">如果该邮箱已注册，重置链接已发送。</p>
+                <p className="text-sm text-text-secondary">如果该邮箱已注册，重置链接已发送。</p>
                 <Link
                   href="/login"
                   className="inline-flex items-center gap-1.5 text-sm text-primary hover:text-primary-glow transition-colors"
@@ -77,11 +77,11 @@ export default function ForgotPasswordPage() {
             ) : (
               <form className="space-y-4" onSubmit={handleSubmit}>
                 <div>
-                  <label htmlFor="email" className="block text-sm font-medium text-slate-700 mb-1.5">
+                  <label htmlFor="email" className="block text-sm font-medium text-text-secondary mb-1.5">
                     邮箱
                   </label>
                   <div className="relative">
-                    <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-600" />
+                    <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-text-secondary" />
                     <input
                       id="email"
                       name="email"
@@ -91,7 +91,7 @@ export default function ForgotPasswordPage() {
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder="请输入注册邮箱"
-                      className="w-full pl-10 pr-4 py-2.5 rounded-lg bg-surface border border-black/[0.10] text-sm text-slate-900 placeholder:text-slate-600 focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/50 transition-colors"
+                      className="w-full pl-10 pr-4 py-2.5 rounded-lg bg-surface border border-border-default text-sm text-text-primary placeholder:text-text-tertiary focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/50 transition-colors"
                     />
                   </div>
                 </div>
@@ -104,7 +104,7 @@ export default function ForgotPasswordPage() {
                   {loading ? '发送中...' : '发送重置链接'}
                 </button>
 
-                <p className="text-center text-xs text-slate-600">
+                <p className="text-center text-xs text-text-secondary">
                   想起密码了？{' '}
                   <Link href="/login" className="text-primary hover:text-primary-glow transition-colors">
                     返回登录

@@ -111,7 +111,7 @@ function LoginForm() {
             <span className="gradient-text">指挥中心</span>
           </h1>
 
-          <p className="text-base text-slate-600 leading-relaxed mb-10 max-w-md">
+          <p className="text-base text-text-secondary leading-relaxed mb-10 max-w-md">
             选择路线、拆解任务、追踪进度、AI 检视调整。让每一步升学准备都心中有数。
           </p>
 
@@ -126,7 +126,7 @@ function LoginForm() {
                 initial={shouldReduceMotion ? false : { opacity: 0, x: -16 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.3 + index * 0.1, duration: 0.4 }}
-                className="flex items-center gap-3 text-sm text-slate-700"
+                className="flex items-center gap-3 text-sm text-text-secondary"
               >
                 <div className="w-5 h-5 rounded-full bg-success/10 flex items-center justify-center border border-success/20">
                   <div className="w-1.5 h-1.5 rounded-full bg-success" />
@@ -145,16 +145,16 @@ function LoginForm() {
           <div className="rounded-xl command-panel corner-accent p-6 sm:p-8">
             <div className="text-center mb-8">
               <h2 className="text-xl font-bold font-display mb-1.5">欢迎回来</h2>
-              <p className="text-sm text-slate-600">登录后继续规划孩子的升学路线</p>
+              <p className="text-sm text-text-secondary">登录后继续规划孩子的升学路线</p>
             </div>
 
             <form className="space-y-4" onSubmit={handleSubmit}>
               <div>
-                <label htmlFor="username" className="block text-sm font-medium text-slate-700 mb-1.5">
+                <label htmlFor="username" className="block text-sm font-medium text-text-secondary mb-1.5">
                   用户名
                 </label>
                 <div className="relative">
-                  <User className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-600" />
+                  <User className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-text-secondary" />
                   <input
                     id="username"
                     name="username"
@@ -164,17 +164,17 @@ function LoginForm() {
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
                     placeholder="请输入用户名"
-                    className="w-full pl-10 pr-4 py-2.5 rounded-lg bg-surface border border-black/[0.10] text-sm text-slate-900 placeholder:text-slate-600 focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/50 transition-colors"
+                    className="w-full pl-10 pr-4 py-2.5 rounded-lg bg-surface border border-border-default text-sm text-text-primary placeholder:text-text-tertiary focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/50 transition-colors"
                   />
                 </div>
               </div>
 
               <div>
-                <label htmlFor="password" className="block text-sm font-medium text-slate-700 mb-1.5">
+                <label htmlFor="password" className="block text-sm font-medium text-text-secondary mb-1.5">
                   密码
                 </label>
                 <div className="relative">
-                  <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-600" />
+                  <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-text-secondary" />
                   <input
                     id="password"
                     name="password"
@@ -184,22 +184,22 @@ function LoginForm() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="请输入密码"
-                    className="w-full pl-10 pr-4 py-2.5 rounded-lg bg-surface border border-black/[0.10] text-sm text-slate-900 placeholder:text-slate-600 focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/50 transition-colors"
+                    className="w-full pl-10 pr-4 py-2.5 rounded-lg bg-surface border border-border-default text-sm text-text-primary placeholder:text-text-tertiary focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/50 transition-colors"
                   />
                 </div>
               </div>
 
               <div className="flex items-center justify-between text-xs">
-                <label className="flex items-center gap-2 text-slate-600 cursor-pointer">
+                <label className="flex items-center gap-2 text-text-secondary cursor-pointer">
                   <input
                     type="checkbox"
                     checked={rememberMe}
                     onChange={(e) => setRememberMe(e.target.checked)}
-                    className="rounded border-white/10 bg-surface text-primary focus:ring-primary/50"
+                    className="rounded border-border-subtle bg-surface text-primary focus:ring-primary/50"
                   />
                   记住我
                 </label>
-                <Link href="/forgot-password" className="text-slate-600 hover:text-primary transition-colors">
+                <Link href="/forgot-password" className="text-text-secondary hover:text-primary transition-colors">
                   忘记密码？
                 </Link>
               </div>
@@ -232,10 +232,10 @@ function LoginForm() {
 
               <div className="relative py-2">
                 <div className="absolute inset-0 flex items-center">
-                  <div className="w-full border-t border-black/[0.08]" />
+                  <div className="w-full border-t border-border-subtle" />
                 </div>
                 <div className="relative flex justify-center">
-                  <span className="px-2 bg-[#0f0f16] text-[10px] text-slate-600 uppercase tracking-wider">or</span>
+                  <span className="px-2 bg-background text-[10px] text-text-secondary uppercase tracking-wider">or</span>
                 </div>
               </div>
 
@@ -251,7 +251,7 @@ function LoginForm() {
               </button>
             </form>
 
-            <p className="mt-6 text-center text-xs text-slate-600">
+            <p className="mt-6 text-center text-xs text-text-secondary">
               还没有账号？{' '}
               <Link href="/register" className="text-primary hover:text-primary-glow transition-colors">
                 注册账号
@@ -281,7 +281,7 @@ function LoginForm() {
               <button
                 type="button"
                 onClick={() => setShowWechatModal(false)}
-                className="absolute top-4 right-4 w-7 h-7 rounded-lg bg-black/5 flex items-center justify-center text-slate-600 hover:bg-black/10 hover:text-slate-800 transition-colors focus-ring"
+                className="absolute top-4 right-4 w-7 h-7 rounded-lg bg-surface-light flex items-center justify-center text-text-secondary hover:bg-surface-highlight hover:text-text-primary transition-colors focus-ring"
                 aria-label="关闭"
               >
                 <X className="w-4 h-4" />
@@ -292,22 +292,22 @@ function LoginForm() {
                   <QrCode className="w-6 h-6 text-[#07C160]" />
                 </div>
                 <h3 className="text-lg font-bold font-display mb-1">微信登录即将上线</h3>
-                <p className="text-xs text-slate-600">
+                <p className="text-xs text-text-secondary">
                   正式版将支持微信扫码一键登录，当前请先使用账号密码登录。
                 </p>
               </div>
 
-              <div className="aspect-square max-w-[180px] mx-auto rounded-lg bg-black/5 border border-black/[0.08] flex items-center justify-center mb-5">
+              <div className="aspect-square max-w-[180px] mx-auto rounded-lg bg-surface-light border border-border-subtle flex items-center justify-center mb-5">
                 <div className="text-center p-4">
-                  <QrCode className="w-10 h-10 text-slate-600 mx-auto mb-2" />
-                  <span className="text-[10px] text-slate-600">微信扫码入口占位</span>
+                  <QrCode className="w-10 h-10 text-text-secondary mx-auto mb-2" />
+                  <span className="text-[10px] text-text-secondary">微信扫码入口占位</span>
                 </div>
               </div>
 
               <button
                 type="button"
                 onClick={() => setShowWechatModal(false)}
-                className="w-full py-2 rounded-lg bg-black/5 text-sm text-slate-700 hover:bg-black/10 transition-colors focus-ring"
+                className="w-full py-2 rounded-lg bg-surface-light text-sm text-text-secondary hover:bg-surface-highlight transition-colors focus-ring"
               >
                 知道了
               </button>

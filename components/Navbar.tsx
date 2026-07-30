@@ -48,7 +48,7 @@ export default function Navbar() {
                     className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-all duration-200 ${
                       active
                         ? 'text-primary bg-primary/10 shadow-glow-sm'
-                        : 'text-text-tertiary hover:text-text-primary hover:bg-black/5'
+                        : 'text-text-tertiary hover:text-text-primary hover:bg-surface-highlight'
                     }`}
                   >
                     <item.icon className="w-3.5 h-3.5" aria-hidden="true" />
@@ -67,7 +67,7 @@ export default function Navbar() {
             </Link>
             <button
               onClick={() => setMobileOpen((prev) => !prev)}
-              className="md:hidden p-2 rounded-lg text-text-tertiary hover:text-text-primary hover:bg-black/5 transition-colors focus-ring"
+              className="md:hidden p-2 rounded-lg text-text-tertiary hover:text-text-primary hover:bg-surface-highlight transition-colors focus-ring"
               aria-expanded={mobileOpen}
               aria-controls="mobile-menu"
               aria-label={mobileOpen ? '关闭菜单' : '打开菜单'}
@@ -100,7 +100,7 @@ export default function Navbar() {
                     className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
                       active
                         ? 'text-primary bg-primary/10'
-                        : 'text-text-tertiary hover:text-text-primary hover:bg-black/5'
+                        : 'text-text-tertiary hover:text-text-primary hover:bg-surface-highlight'
                     }`}
                   >
                     <item.icon className="w-4 h-4" aria-hidden="true" />
@@ -108,7 +108,7 @@ export default function Navbar() {
                   </Link>
                 );
               })}
-              <div className="pt-2 border-t border-white/5 mt-2">
+              <div className="pt-2 border-t border-border-subtle mt-2">
                 <Link
                   href="/login"
                   onClick={() => setMobileOpen(false)}

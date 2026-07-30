@@ -156,11 +156,7 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
       initial={{ y: -16, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-      className="fixed top-0 right-0 left-0 lg:left-64 h-16 lg:h-[70px] glass border-b border-border-default z-30 px-3 sm:px-5 flex items-center justify-between"
-      style={{
-        background: 'rgba(255, 255, 255, 0.88)',
-        boxShadow: '0 1px 0 0 rgba(15, 23, 42, 0.06)',
-      }}
+      className="fixed top-0 right-0 left-0 lg:left-64 h-16 lg:h-[70px] glass border-b border-border-default shadow-card z-30 px-3 sm:px-5 flex items-center justify-between"
     >
       <div className="flex items-center gap-3 flex-1 min-w-0">
         <button
@@ -179,7 +175,7 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             onKeyDown={handleSearch}
-            className="w-full sm:w-64 lg:w-80 pl-10 pr-4 py-2.5 rounded-xl bg-surface border border-border-default text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/40 focus:shadow-[0_0_20px_rgba(255,45,106,0.12)] transition-all"
+            className="w-full sm:w-64 lg:w-80 pl-10 pr-4 py-2.5 rounded-xl bg-surface border border-border-default text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/40 focus:shadow-glow-accent transition-all"
           />
         </div>
       </div>
@@ -188,12 +184,12 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
         <div className="relative" ref={notificationRef}>
           <button
             onClick={() => setNotificationOpen((prev) => !prev)}
-            className="relative w-11 h-11 rounded-xl bg-surface border border-border-default flex items-center justify-center text-text-secondary hover:text-text-primary hover:border-primary/30 hover:bg-surface-light hover:shadow-[0_0_16px_rgba(255,45,106,0.12)] transition-all focus-ring"
+            className="relative w-11 h-11 rounded-xl bg-surface border border-border-default flex items-center justify-center text-text-secondary hover:text-text-primary hover:border-primary/30 hover:bg-surface-light hover:shadow-glow-accent transition-all focus-ring"
             aria-label="通知"
           >
             <Bell className="w-5 h-5" />
             {unreadCount > 0 && (
-              <span className="absolute top-2 right-2 min-w-[18px] h-[18px] px-1 rounded-full bg-primary text-[10px] font-bold text-text-primary flex items-center justify-center tabular-nums shadow-glow-primary">
+              <span className="absolute top-2 right-2 min-w-[18px] h-[18px] px-1 rounded-full bg-primary text-[10px] font-bold text-white flex items-center justify-center tabular-nums shadow-glow-primary">
                 {unreadCount > 9 ? '9+' : unreadCount}
               </span>
             )}
@@ -255,20 +251,20 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
         <div className="relative" ref={childDropdownRef}>
           <button
             onClick={() => setChildDropdownOpen((prev) => !prev)}
-            className="flex items-center gap-2.5 pl-1.5 pr-2.5 py-1.5 rounded-xl bg-surface border border-border-default hover:border-primary/30 hover:bg-surface-light hover:shadow-[0_0_16px_rgba(255,45,106,0.10)] text-left focus-ring transition-all"
+            className="flex items-center gap-2.5 pl-1.5 pr-2.5 py-1.5 rounded-xl bg-surface border border-border-default hover:border-primary/30 hover:bg-surface-light hover:shadow-glow-accent text-left focus-ring transition-all"
             aria-label="切换孩子"
             aria-haspopup="listbox"
             aria-expanded={childDropdownOpen}
             aria-controls="child-listbox"
           >
             <div
-              className="w-9 h-9 rounded-lg flex items-center justify-center text-text-primary text-sm font-bold overflow-hidden shrink-0 ring-1 ring-black/10"
-              style={{
-                background: currentChild
-                  ? `linear-gradient(135deg, ${currentChild.avatarColor}, ${currentChild.avatarColor}88)`
-                  : 'linear-gradient(135deg, #475569, #64748b)',
-              }}
-            >
+            className="w-9 h-9 rounded-lg flex items-center justify-center text-text-primary text-sm font-bold overflow-hidden shrink-0 ring-1 ring-border-default"
+            style={{
+              background: currentChild
+                ? `linear-gradient(135deg, ${currentChild.avatarColor}, ${currentChild.avatarColor}88)`
+                : 'linear-gradient(135deg, #f1f5f9, #e2e8f0)',
+            }}
+          >
               {currentChild?.avatarUrl?.startsWith('data:image') ? (
                 <img
                   src={currentChild.avatarUrl}
@@ -331,7 +327,7 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
                       }`}
                     >
                       <div
-                        className="w-8 h-8 rounded-lg flex items-center justify-center text-text-primary text-xs font-bold shrink-0 overflow-hidden ring-1 ring-black/10"
+                        className="w-8 h-8 rounded-lg flex items-center justify-center text-text-primary text-xs font-bold shrink-0 overflow-hidden ring-1 ring-border-default"
                         style={{
                           background: `linear-gradient(135deg, ${child.avatarColor}, ${child.avatarColor}88)`,
                         }}

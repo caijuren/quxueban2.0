@@ -339,7 +339,7 @@ export default function PlanRoadmap({
                     y1={60}
                     x2={x}
                     y2={360}
-                    stroke="rgba(255,255,255,0.08)"
+                    className="stroke-border-subtle/40"
                     strokeWidth="1"
                     strokeDasharray="4 4"
                   />
@@ -434,8 +434,8 @@ export default function PlanRoadmap({
                       cx={p.x ?? 0}
                       cy={p.y ?? 0}
                       r={p.size ?? 1}
-                      fill="white"
-                      initial={{ opacity: 0.1 }}
+                    className="fill-text-muted/30"
+                    initial={{ opacity: 0.1 }}
                       animate={{
                         opacity: [0.1, 0.6, 0.1],
                         cy: [p.y, p.y - 10, p.y],
@@ -541,16 +541,15 @@ export default function PlanRoadmap({
                         }}
                       >
                         <span
-                          className="px-2 py-0.5 rounded-full text-micro font-bold"
+                          className="px-2 py-0.5 rounded-full text-micro font-bold text-text-primary"
                           style={{
                             backgroundColor: route.color,
-                            color: '#0f172a',
                           }}
                         >
                           {outcome.label}
                         </span>
                         <div className="flex flex-col leading-none">
-                          <span className="text-micro text-slate-600">{outcome.name}</span>
+                          <span className="text-micro text-text-secondary">{outcome.name}</span>
                           <span className="text-small font-bold data-value" style={{ color: route.color }}>
                             {outcome.prob}%
                           </span>
@@ -739,37 +738,35 @@ export default function PlanRoadmap({
               <g opacity={hoveredRoute && hoveredRoute !== 'sg' && hoveredRoute !== 'dual' ? 0.2 : 0.45}>
                 <defs>
                   <marker id="fallback-arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto" markerUnits="strokeWidth">
-                    <path d="M0,0 L0,6 L7,3 z" fill="#94a3b8" opacity="0.7" />
+                    <path d="M0,0 L0,6 L7,3 z" className="fill-border-strong" opacity="0.7" />
                   </marker>
                 </defs>
                 <motion.path
                   d="M 920 125 Q 960 125 960 155 Q 960 185 920 185"
                   fill="none"
-                  stroke="#94a3b8"
+                  className="stroke-border-strong"
                   strokeWidth="1.5"
                   strokeDasharray="4 4"
                   markerEnd="url(#fallback-arrow)"
                   initial={{ pathLength: 0 }}
                   animate={{ pathLength: 1 }}
                   transition={{ duration: 1, delay: 1.2 }}
-                  style={{ filter: 'drop-shadow(0 0 4px rgba(148,163,184,0.3))' }}
                 />
                 <motion.path
                   d="M 920 205 Q 960 205 960 235 Q 960 265 920 265"
                   fill="none"
-                  stroke="#94a3b8"
+                  className="stroke-border-strong"
                   strokeWidth="1.5"
                   strokeDasharray="4 4"
                   markerEnd="url(#fallback-arrow)"
                   initial={{ pathLength: 0 }}
                   animate={{ pathLength: 1 }}
                   transition={{ duration: 1, delay: 1.4 }}
-                  style={{ filter: 'drop-shadow(0 0 4px rgba(148,163,184,0.3))' }}
                 />
-                <text x={975} y={158} fill="#64748b" fontSize="9" textAnchor="middle">
+                <text x={975} y={158} className="fill-text-secondary" fontSize="9" textAnchor="middle">
                   未录取
                 </text>
-                <text x={975} y={238} fill="#64748b" fontSize="9" textAnchor="middle">
+                <text x={975} y={238} className="fill-text-secondary" fontSize="9" textAnchor="middle">
                   未摇中
                 </text>
               </g>
@@ -780,20 +777,20 @@ export default function PlanRoadmap({
                 y1={60}
                 x2={231}
                 y2={410}
-                stroke="#f43f5e"
+                className="stroke-primary"
                 strokeWidth="1"
                 strokeDasharray="6 4"
                 opacity="0.5"
-                style={{ filter: 'drop-shadow(0 0 10px rgba(244,63,94,0.6))' }}
+                style={{ filter: 'drop-shadow(0 0 10px var(--shadow-primary))' }}
               />
               <motion.circle
                 cx={231}
                 cy={410}
                 r={5}
-                fill="#f43f5e"
+                className="fill-primary"
                 animate={{ opacity: [0.5, 1, 0.5], scale: [1, 1.3, 1] }}
                 transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-                style={{ filter: 'drop-shadow(0 0 10px rgba(244,63,94,0.8))' }}
+                style={{ filter: 'drop-shadow(0 0 10px var(--shadow-primary))' }}
               />
 
               {/* Year labels */}
@@ -803,20 +800,20 @@ export default function PlanRoadmap({
                 return (
                   <g key={year.year}>
                     {isCurrent && (
-                      <circle cx={x} cy={400} r={24} fill="rgba(244,63,94,0.1)" style={{ filter: 'drop-shadow(0 0 16px rgba(244,63,94,0.4))' }} />
+                      <circle cx={x} cy={400} r={24} className="fill-primary/10" style={{ filter: 'drop-shadow(0 0 16px var(--shadow-primary))' }} />
                     )}
                     <text
                       x={x}
                       y={390}
-                      fill={isCurrent ? '#f43f5e' : '#94a3b8'}
+                      className={isCurrent ? 'fill-primary' : 'fill-text-muted'}
                       fontSize="12"
                       fontWeight={isCurrent ? '700' : '400'}
                       textAnchor="middle"
-                      style={isCurrent ? { filter: 'drop-shadow(0 0 10px rgba(244,63,94,0.6))' } : undefined}
+                      style={isCurrent ? { filter: 'drop-shadow(0 0 10px var(--shadow-primary))' } : undefined}
                     >
                       {year.year}
                     </text>
-                    <text x={x} y={410} fill={isCurrent ? '#fda4af' : '#64748b'} fontSize="11" textAnchor="middle">
+                    <text x={x} y={410} className={isCurrent ? 'fill-primary/60' : 'fill-text-secondary'} fontSize="11" textAnchor="middle">
                       {year.grade}
                     </text>
                   </g>
@@ -903,8 +900,8 @@ export default function PlanRoadmap({
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-2.5">
                 <span
-                  className="px-2.5 py-1 rounded-full text-micro font-bold"
-                  style={{ backgroundColor: volunteer.color, color: '#050508' }}
+                  className="px-2.5 py-1 rounded-full text-micro font-bold text-text-primary"
+                  style={{ backgroundColor: volunteer.color }}
                 >
                   {volunteer.type.split('（')[1]?.replace('）', '') || volunteer.type}
                 </span>

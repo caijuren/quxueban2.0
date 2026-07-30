@@ -52,21 +52,21 @@ export default function HelpSection() {
             return (
               <div
                 key={index}
-                className="rounded-xl bg-black/[0.03] border border-black/[0.08] overflow-hidden"
+                className="rounded-xl bg-surface-light border border-border-subtle overflow-hidden"
               >
                 <button
                   onClick={() => setOpenIndex(isOpen ? null : index)}
-                  className="w-full flex items-center justify-between p-4 text-left hover:bg-black/[0.02] transition-colors"
+                  className="w-full flex items-center justify-between p-4 text-left hover:bg-surface transition-colors"
                 >
-                  <span className="text-sm font-medium text-slate-800">{item.q}</span>
+                  <span className="text-sm font-medium text-text-primary">{item.q}</span>
                   {isOpen ? (
-                    <ChevronUp className="w-4 h-4 text-slate-600" />
+                    <ChevronUp className="w-4 h-4 text-text-tertiary" />
                   ) : (
-                    <ChevronDown className="w-4 h-4 text-slate-600" />
+                    <ChevronDown className="w-4 h-4 text-text-tertiary" />
                   )}
                 </button>
                 {isOpen && (
-                  <div className="px-4 pb-4 text-sm text-slate-600 leading-relaxed">
+                  <div className="px-4 pb-4 text-sm text-text-tertiary leading-relaxed">
                     {item.a}
                   </div>
                 )}
@@ -83,14 +83,14 @@ export default function HelpSection() {
             onChange={(e) => setFeedback(e.target.value)}
             placeholder="请描述你遇到的问题或建议..."
             rows={4}
-            className="w-full px-4 py-3 rounded-xl bg-black/5 border border-white/10 text-sm text-slate-800 placeholder-slate-500 focus:outline-none focus:border-primary transition-all resize-none"
+            className="w-full px-4 py-3 rounded-xl bg-surface-light border border-border-subtle text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-primary transition-all resize-none"
           />
           <input
             type="text"
             value={contact}
             onChange={(e) => setContact(e.target.value)}
             placeholder="联系方式（选填）"
-            className="w-full px-4 py-2.5 rounded-xl bg-black/5 border border-white/10 text-sm text-slate-800 placeholder-slate-500 focus:outline-none focus:border-primary transition-all"
+            className="w-full px-4 py-2.5 rounded-xl bg-surface-light border border-border-subtle text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-primary transition-all"
           />
           {submitted && (
             <div className="text-sm px-4 py-2 rounded-lg bg-success/10 text-success border border-success/20">
@@ -115,21 +115,21 @@ export default function HelpSection() {
           <a
             href="/terms"
             target="_blank"
-            className="flex items-center gap-3 p-4 rounded-xl bg-black/[0.03] border border-black/[0.08] hover:bg-black/[0.05] transition-colors"
+            className="flex items-center gap-3 p-4 rounded-xl bg-surface-light border border-border-subtle hover:bg-surface-light transition-colors"
           >
             <FileText className="w-5 h-5 text-primary" />
-            <span className="text-sm text-slate-800">用户协议</span>
+            <span className="text-sm text-text-primary">用户协议</span>
           </a>
           <a
             href="/privacy"
             target="_blank"
-            className="flex items-center gap-3 p-4 rounded-xl bg-black/[0.03] border border-black/[0.08] hover:bg-black/[0.05] transition-colors"
+            className="flex items-center gap-3 p-4 rounded-xl bg-surface-light border border-border-subtle hover:bg-surface-light transition-colors"
           >
             <FileText className="w-5 h-5 text-secondary" />
-            <span className="text-sm text-slate-800">隐私政策</span>
+            <span className="text-sm text-text-primary">隐私政策</span>
           </a>
         </div>
-        <p className="mt-4 text-xs text-slate-600 text-center">
+        <p className="mt-4 text-xs text-text-tertiary text-center">
           趣学伴 v{packageInfo.version} · 升学作战指挥中心
         </p>
       </SettingsSection>
