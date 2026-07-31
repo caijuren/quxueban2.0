@@ -73,8 +73,9 @@ COPY --from=builder /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
-# Prisma schema 供迁移命令使用
+# Prisma schema 与迁移文件供迁移命令使用
 COPY --from=builder --chown=nextjs:nodejs /app/prisma/schema.prisma ./prisma/schema.prisma
+COPY --from=builder --chown=nextjs:nodejs /app/prisma/migrations ./prisma/migrations
 
 # 在独立目录安装 Prisma CLI，避免 pnpm 软链在复制后失效
 RUN mkdir -p /app/prisma-cli && \

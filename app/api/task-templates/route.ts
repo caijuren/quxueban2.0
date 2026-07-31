@@ -28,48 +28,56 @@ function normalizeTemplate(tpl: any) {
 }
 
 export async function GET(req: Request) {
-  const session = await getServerSession(authOptions);
-  if (!session?.user?.id) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-  }
+  try {
+    const session = await getServerSession(authOptions);
+    if (!session?.user?.id) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
 
-  const { searchParams } = new URL(req.url);
-  const category = searchParams.get('category') as TaskCategory | null;
-  const status = searchParams.get('status') as 'active' | 'archived' | 'all' | null;
+    const { searchParams } = new URL(req.url);
+    const category = searchParams.get('category') as TaskCategory | null;
+    const status = searchParams.get('status') as 'active' | 'archived' | 'all' | null;
 
-  // Auto-seed system presets for existing users on first load
-  await seedSystemTaskTemplatesForUser(prisma, session.user.id);
-  await seedSystemCapabilities(prisma);
+    // Auto-seed system presets for existing users on first load
+    await seedSystemTaskTemplatesForUser(prisma, session.user.id);
+    await seedSystemCapabilities(prisma);
 
-  const where: Record<string, unknown> = {
-    userId: session.user.id,
-  };
+    const where: Record<string, unknown> = {
+      userId: session.user.id,
+    };
 
-  if (status === 'active' || !status) {
-    where.isActive = true;
-    where.archivedAt = null;
-  } else if (status === 'archived') {
-    where.archivedAt = { not: null };
-  }
-  // status === 'all' 不附加过滤条件
+    if (status === 'active' || !status) {
+      where.isActive = true;
+      where.archivedAt = null;
+    } else if (status === 'archived') {
+      where.archivedAt = { not: null };
+    }
+    // status === 'all' 不附加过滤条件
 
-  if (category) {
-    where.category = category.toUpperCase();
-  }
+    if (category) {
+      where.category = category.toUpperCase();
+    }
 
-  const templates = await prisma.taskTemplate.findMany({
-    where,
-    orderBy: [{ source: 'asc' }, { category: 'asc' }, { createdAt: 'desc' }],
-    include: {
-      capabilityLinks: {
-        include: {
-          capability: true,
+    const templates = await prisma.taskTemplate.findMany({
+      where,
+      orderBy: [{ source: 'asc' }, { category: 'asc' }, { createdAt: 'desc' }],
+      include: {
+        capabilityLinks: {
+          include: {
+            capability: true,
+          },
         },
       },
-    },
-  });
+    });
 
-  return NextResponse.json(templates.map(normalizeTemplate));
+    return NextResponse.json(templates.map(normalizeTemplate));
+  } catch (err: any) {
+    console.error('[task-templates GET]', err);
+    return NextResponse.json(
+      { error: err?.message || '加载任务库失败' },
+      { status: 500 }
+    );
+  }
 }
 
 export async function POST(req: Request) {

@@ -146,7 +146,10 @@ export default function TaskLibrarySection() {
       if (filterCategory !== 'all') params.set('category', filterCategory);
       params.set('status', filterStatus);
       const res = await fetch(`/api/task-templates?${params.toString()}`);
-      if (!res.ok) throw new Error('加载失败');
+      if (!res.ok) {
+        const errBody = await res.json().catch(() => ({}));
+        throw new Error(errBody.error || errBody.message || `加载失败 (${res.status})`);
+      }
       const data = await res.json();
       setTemplates(data);
       setError('');
