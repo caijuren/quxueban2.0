@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { Calculator, ArrowLeft, AlertCircle } from 'lucide-react';
 import Link from 'next/link';
 import { useChildren } from '@/components/dashboard/ChildrenContext';
+import ChildEmptyState from '@/components/dashboard/ChildEmptyState';
 import { gradeLabel } from '@/lib/children';
 import { getMathStatusByGrade, getMathPlanByGrade } from '@/lib/subjects/math';
 import MathTrackMap from './MathTrackMap';
@@ -15,7 +16,17 @@ import MathExamTimeline from './MathExamTimeline';
 
 export default function MathSubjectPage() {
   const { currentChild } = useChildren();
-  const grade = currentChild?.grade || 2;
+
+  if (!currentChild) {
+    return (
+      <div className="space-y-8">
+        <h1 className="text-3xl font-bold font-display">数学学科路径</h1>
+        <ChildEmptyState description="添加孩子后，系统会根据年级生成数学学科路径与打卡任务" />
+      </div>
+    );
+  }
+
+  const grade = currentChild.grade;
   const status = getMathStatusByGrade(grade);
   const mathPlan = getMathPlanByGrade(grade);
   const checkInTasks = mathPlan.weeklyTemplate.map((t) => ({
@@ -39,7 +50,7 @@ export default function MathSubjectPage() {
             className="inline-flex items-center gap-1 text-sm text-slate-400 hover:text-primary transition-colors mb-2"
           >
             <ArrowLeft className="w-4 h-4" />
-            返回仪表盘
+            返回总览
           </Link>
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-violet-500 flex items-center justify-center">
@@ -48,7 +59,7 @@ export default function MathSubjectPage() {
             <div>
               <h1 className="text-3xl font-bold font-display">数学学科路径</h1>
               <p className="text-sm text-slate-400">
-                {currentChild ? `${currentChild.name} · ${gradeLabel(grade)} · 从当前到三公录取的数学能力作战地图` : '从当前到三公录取的数学能力作战地图'}
+                {currentChild ? `${currentChild.name} · ${gradeLabel(grade)} · 从当前到三公录取的数学能力规划地图` : '从当前到三公录取的数学能力规划地图'}
               </p>
             </div>
           </div>

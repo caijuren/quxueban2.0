@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 
 const features = [
   {
-    title: '可视化进度仪表盘',
+    title: '可视化进度总览',
     description: '数学、英语、语文、竞赛等能力项以图表形式展示，直观对比当前水平与目标要求之间的差距。',
   },
   {

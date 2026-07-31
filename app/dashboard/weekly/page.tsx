@@ -16,8 +16,6 @@ import {
   RotateCcw,
   Send,
   BookOpen,
-  Calculator,
-  Languages,
   X,
   Trophy,
   TrendingUp,
@@ -33,10 +31,12 @@ import {
   Copy,
   AlertTriangle,
   Share2,
+  Loader2,
 } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useChildren } from '@/components/dashboard/ChildrenContext';
 import EmptyState from '@/components/ui/EmptyState';
+import ChildEmptyState from '@/components/dashboard/ChildEmptyState';
 import CommandCard from '@/components/ui/CommandCard';
 import MetricRing from '@/components/ui/MetricRing';
 import WeeklyReportExport from '@/components/weekly/WeeklyReportExport';
@@ -45,7 +45,6 @@ import {
   type WeeklyPlan,
   type WeeklyTaskItem,
   type TaskStatus,
-  type SubjectId,
   type DayOfWeek,
   type TaskCategory,
   type TaskTemplate,
@@ -76,16 +75,37 @@ import {
   getAlignmentColorClass,
   computeTaskAlignment,
 } from '@/lib/taskAlignment';
+import TaskRationalityPanel from '@/components/ai/TaskRationalityPanel';
+import {
+  TaskRationalityAssessment,
+  AssessmentTaskInput,
+} from '@/lib/ai/taskAssessment';
 
 const categoryIcons: Record<TaskCategory, typeof BookOpen> = {
-  chinese: BookOpen,
-  math: Calculator,
-  english: Languages,
   school: Backpack,
   reading: BookOpen,
   sport: Dumbbell,
   interest: Palette,
+  ability: Trophy,
   other: GraduationCap,
+};
+
+const DIFFICULTY_LABELS: Record<string, string> = {
+  easy: '基础',
+  medium: '巩固',
+  hard: '拓展',
+};
+
+const DIFFICULTY_COLORS: Record<string, string> = {
+  easy: 'bg-success/10 text-success border-success/20',
+  medium: 'bg-warning/10 text-warning border-warning/20',
+  hard: 'bg-error/10 text-error border-error/20',
+};
+
+const SEMESTER_LABELS: Record<string, string> = {
+  semester: '开学期',
+  vacation: '寒暑假',
+  exam: '考前冲刺',
 };
 
 type ViewMode = 'day' | 'matrix';
@@ -147,13 +167,11 @@ interface EditPlanModalProps {
 }
 
 const allCategories: TaskCategory[] = [
-  'chinese',
-  'math',
-  'english',
   'school',
   'reading',
   'sport',
   'interest',
+  'ability',
   'other',
 ];
 
@@ -320,7 +338,7 @@ function EditPlanModal({ plan, onClose, onSave }: EditPlanModalProps) {
               <Pencil className="w-5 h-5 text-white" />
             </div>
             <div>
-              <h2 id="edit-plan-title" className="text-xl font-bold font-display">编辑周任务</h2>
+              <h2 id="edit-plan-title" className="text-xl font-bold font-display">编辑周计划</h2>
               <p className="text-xs text-slate-400">
                 按星期分组管理，支持复制到多天
               </p>
@@ -736,7 +754,6 @@ function UnsavedPrompt({ onCancel, onConfirm }: UnsavedPromptProps) {
 
 interface TaskLibraryModalProps {
   childId: string;
-  childGrade: number;
   childRouteId?: string | null;
   weekId: string;
   existingTasks: WeeklyTaskItem[];
@@ -746,7 +763,6 @@ interface TaskLibraryModalProps {
 
 function TaskLibraryModal({
   childId,
-  childGrade,
   childRouteId,
   weekId,
   existingTasks,
@@ -758,6 +774,8 @@ function TaskLibraryModal({
   const [selectedCategory, setSelectedCategory] = useState<TaskCategory | 'all'>('all');
   const [selectedTemplateIds, setSelectedTemplateIds] = useState<Set<string>>(new Set());
   const [selectedDay, setSelectedDay] = useState<DayOfWeek>('周一');
+  const [assessments, setAssessments] = useState<TaskRationalityAssessment[] | null>(null);
+  const [assessing, setAssessing] = useState(false);
   const shouldReduceMotion = useReducedMotion();
 
   useEffect(() => {
@@ -770,6 +788,10 @@ function TaskLibraryModal({
       .catch(() => setLoading(false));
   }, []);
 
+  useEffect(() => {
+    setAssessments(null);
+  }, [selectedTemplateIds, selectedDay]);
+
   const filteredTemplates = useMemo(
     () => {
       let list = templates;
@@ -779,12 +801,12 @@ function TaskLibraryModal({
       return list.map((tpl) => ({
         ...tpl,
         alignment: computeTaskAlignment({
-          child: { grade: childGrade, routeId: childRouteId },
+          child: { routeId: childRouteId },
           template: tpl,
         }),
       })) as (TaskTemplate & { alignment: TaskAlignment })[];
     },
-    [templates, selectedCategory, childGrade, childRouteId]
+    [templates, selectedCategory, childRouteId]
   );
 
   const toggleTemplate = (id: string) => {
@@ -796,20 +818,67 @@ function TaskLibraryModal({
     });
   };
 
+  const selectedTemplates = useMemo(
+    () => templates.filter((t) => selectedTemplateIds.has(t.id)),
+    [templates, selectedTemplateIds]
+  );
+
+  const runAssessment = async () => {
+    if (selectedTemplates.length === 0) return;
+    try {
+      setAssessing(true);
+      const inputs: AssessmentTaskInput[] = selectedTemplates.map((tpl) => ({
+        title: tpl.title,
+        category: tpl.category,
+        difficulty: tpl.difficulty,
+        duration: tpl.duration,
+        taskType: tpl.taskType,
+        frequency: tpl.frequency,
+        routeTags: tpl.routeTags,
+        milestoneTag: tpl.milestoneTag,
+        capabilityLinks: tpl.capabilityLinks?.map((l) => ({
+          capabilityName: l.capability?.name ?? l.capabilityId,
+          weight: l.weight,
+        })),
+      }));
+
+      const results = await Promise.all(
+        inputs.map((task) =>
+          fetch('/api/ai/task-assessment', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              childId,
+              task,
+              context: { existingTasks, selectedDay },
+            }),
+          }).then((res) => res.json())
+        )
+      );
+      setAssessments(results);
+    } catch {
+      // 评估失败不阻塞添加
+      setAssessments(null);
+    } finally {
+      setAssessing(false);
+    }
+  };
+
   const handleAdd = () => {
-    const selected = templates.filter((t) => selectedTemplateIds.has(t.id));
-    const newTasks: WeeklyTaskItem[] = selected.map((tpl) => {
+    if (!assessments) {
+      runAssessment();
+      return;
+    }
+
+    const newTasks: WeeklyTaskItem[] = selectedTemplates.map((tpl) => {
       const category = tpl.category as TaskCategory;
       const alignment = computeTaskAlignment({
-        child: { grade: childGrade, routeId: childRouteId },
+        child: { routeId: childRouteId },
         template: tpl,
       });
       return {
         id: `library-${tpl.id}-${Date.now()}-${Math.random().toString(36).slice(2, 5)}`,
         category,
-        subjectId: ['chinese', 'math', 'english'].includes(category)
-          ? (category as SubjectId)
-          : undefined,
         source: 'library',
         templateId: tpl.id,
         day: selectedDay,
@@ -848,9 +917,11 @@ function TaskLibraryModal({
               <Library className="w-5 h-5 text-white" />
             </div>
             <div>
-              <h2 id="library-title" className="text-xl font-bold font-display">从任务库选择</h2>
+              <div className="flex items-center gap-2">
+                <h2 id="library-title" className="text-xl font-bold font-display">从任务库选择</h2>
+              </div>
               <p className="text-xs text-slate-400">
-                勾选常用任务，一键添加到{selectedDay}
+                勾选常用任务一键添加到{selectedDay}
               </p>
             </div>
           </div>
@@ -908,13 +979,16 @@ function TaskLibraryModal({
         {loading ? (
           <div className="py-12 text-center text-slate-500 text-sm">加载中...</div>
         ) : filteredTemplates.length === 0 ? (
-          <div className="py-12 text-center text-slate-500 text-sm">暂无任务模板</div>
+          <div className="py-12 text-center text-slate-500 text-sm">
+            暂无任务模板
+          </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6 max-h-[50vh] overflow-y-auto pr-1">
             {filteredTemplates.map((tpl) => {
               const selected = selectedTemplateIds.has(tpl.id);
               const CategoryIcon = categoryIcons[tpl.category];
               const alignment = tpl.alignment;
+              const difficultyColor = tpl.difficulty ? DIFFICULTY_COLORS[tpl.difficulty] : '';
               return (
                 <button
                   key={tpl.id}
@@ -930,9 +1004,19 @@ function TaskLibraryModal({
                       {selected && <CheckCircle2 className="w-3.5 h-3.5 text-white" />}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 mb-1">
+                      <div className="flex flex-wrap items-center gap-1.5 mb-1">
                         <CategoryIcon className="w-3.5 h-3.5 text-slate-400" />
                         <span className="text-[10px] text-slate-400">{TASK_CATEGORY_LABELS[tpl.category]}</span>
+                        {tpl.difficulty && DIFFICULTY_LABELS[tpl.difficulty] && (
+                          <span className={`text-[10px] px-1.5 py-0.5 rounded border ${difficultyColor}`}>
+                            {DIFFICULTY_LABELS[tpl.difficulty]}
+                          </span>
+                        )}
+                        {tpl.semesterTag && SEMESTER_LABELS[tpl.semesterTag] && (
+                          <span className="text-[10px] px-1.5 py-0.5 rounded bg-info/10 text-info border border-info/20">
+                            {SEMESTER_LABELS[tpl.semesterTag]}
+                          </span>
+                        )}
                         {alignment && alignment !== 'unrelated' && (
                           <span className={`text-[10px] px-1.5 py-0.5 rounded border ${getAlignmentColorClass(alignment)}`}>
                             {TASK_ALIGNMENT_LABELS[alignment]}
@@ -948,6 +1032,20 @@ function TaskLibraryModal({
                       <p className="text-sm font-semibold text-slate-200 mb-1 truncate">{tpl.title}</p>
                       {tpl.description && (
                         <p className="text-[10px] text-slate-500 line-clamp-2 mb-1">{tpl.description}</p>
+                      )}
+                      {tpl.tags.length > 0 && (
+                        <div className="flex flex-wrap gap-1 mb-1">
+                          {tpl.tags.slice(0, 3).map((tag) => (
+                            <span key={tag} className="text-[9px] px-1 py-0.5 rounded bg-white/5 text-slate-500">
+                              {tag}
+                            </span>
+                          ))}
+                          {tpl.tags.length > 3 && (
+                            <span className="text-[9px] px-1 py-0.5 rounded bg-white/5 text-slate-500">
+                              +{tpl.tags.length - 3}
+                            </span>
+                          )}
+                        </div>
                       )}
                       {tpl.routeTags.length > 0 && (
                         <div className="flex flex-wrap gap-1">
@@ -966,6 +1064,16 @@ function TaskLibraryModal({
           </div>
         )}
 
+        {assessments && selectedTemplateIds.size > 0 && (
+          <div className="mb-4">
+            <TaskRationalityPanel
+              assessments={assessments}
+              taskTitles={selectedTemplates.map((t) => t.title)}
+              compact={assessments.length > 1}
+            />
+          </div>
+        )}
+
         <div className="flex items-center justify-between">
           <p className="text-xs text-slate-500">
             已选 {selectedTemplateIds.size} 项
@@ -979,11 +1087,25 @@ function TaskLibraryModal({
             </button>
             <button
               onClick={handleAdd}
-              disabled={selectedTemplateIds.size === 0}
+              disabled={selectedTemplateIds.size === 0 || assessing}
               className="flex items-center gap-2 px-6 py-2 rounded-xl bg-gradient-to-r from-secondary to-secondary-glow text-white font-semibold disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-[0_0_30px_rgba(139,92,246,0.4)] transition-all"
             >
-              <Plus className="w-4 h-4" />
-              添加选中任务
+              {assessing ? (
+                <>
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                  评估中...
+                </>
+              ) : assessments ? (
+                <>
+                  <CheckCircle2 className="w-4 h-4" />
+                  确认添加
+                </>
+              ) : (
+                <>
+                  <Sparkles className="w-4 h-4" />
+                  AI 评估并添加
+                </>
+              )}
             </button>
           </div>
         </div>
@@ -1146,12 +1268,8 @@ function WeeklyTasksContent() {
   if (!currentChild) {
     return (
       <div className="space-y-8">
-        <h1 className="text-3xl font-bold font-display">周任务作战室</h1>
-        <EmptyState
-          icon={Target}
-          title="还没有孩子档案"
-          description="添加孩子后，系统会根据年级自动生成每周任务计划"
-        />
+        <h1 className="text-3xl font-bold font-display">周计划</h1>
+        <ChildEmptyState description="添加孩子后，系统会根据年级自动生成每周计划计划" />
       </div>
     );
   }
@@ -1196,7 +1314,7 @@ function WeeklyTasksContent() {
               <Calendar className="w-5 h-5 text-white" />
             </div>
             <div>
-              <h1 className="text-3xl font-bold font-display">周任务作战室</h1>
+              <h1 className="text-3xl font-bold font-display">周计划</h1>
               <p className="text-sm text-slate-400">
                 {currentChild.name} · {gradeLabel(currentChild.grade)} · {formatWeekLabel(weekId)}
               </p>
@@ -1279,6 +1397,13 @@ function WeeklyTasksContent() {
           )}
           {displayPlan && (
             <>
+              <button
+                onClick={() => setEditOpen(true)}
+                className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-white/5 hover:bg-white/10 text-slate-300 text-sm transition-colors focus-ring"
+              >
+                <Plus className="w-3.5 h-3.5" />
+                手动添加任务
+              </button>
               <button
                 onClick={() => setLibraryOpen(true)}
                 className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-white/5 hover:bg-white/10 text-slate-300 text-sm transition-colors focus-ring"
@@ -1394,7 +1519,7 @@ function WeeklyTasksContent() {
               <p className="text-xs text-slate-500">分类完成</p>
             </div>
             <div className="space-y-1 max-h-[72px] overflow-y-auto">
-              {(['chinese', 'math', 'english', 'school', 'reading', 'sport', 'interest', 'other'] as TaskCategory[])
+              {(['school', 'reading', 'sport', 'interest', 'ability', 'other'] as TaskCategory[])
                 .filter((cat) => stats.byCategory[cat].total > 0)
                 .map((cat) => {
                   const s = stats.byCategory[cat];
@@ -1439,7 +1564,7 @@ function WeeklyTasksContent() {
             </div>
             <h3 className="text-xl font-bold font-display mb-2">本周计划尚未发布</h3>
             <p className="text-sm text-slate-400 mb-6 max-w-md mx-auto">
-              系统会根据 {currentChild.name} 的年级，从语数英三科模板自动生成本周任务。发布后即可每日打卡。
+              系统会根据 {currentChild.name} 的年级，从语数英三科模板自动生成本周计划。发布后即可每日打卡。
             </p>
             <button
               onClick={handleGenerate}
@@ -1891,7 +2016,6 @@ function WeeklyTasksContent() {
       {libraryOpen && currentChild && displayPlan && (
         <TaskLibraryModal
           childId={currentChild.id}
-          childGrade={currentChild.grade}
           childRouteId={currentChild.routeId}
           weekId={weekId}
           existingTasks={displayPlan.tasks}

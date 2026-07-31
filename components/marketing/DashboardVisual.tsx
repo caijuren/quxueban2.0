@@ -23,7 +23,7 @@ export default function DashboardVisual() {
         <div className="flex items-center gap-2">
           <BarChart3 className="w-3.5 h-3.5 text-primary" aria-hidden="true" />
           <span className="text-[11px] font-mono text-slate-400 uppercase tracking-wider">
-            实时进度仪表盘
+            实时进度总览
           </span>
         </div>
         <div className="flex items-center gap-1.5">

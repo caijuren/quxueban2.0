@@ -161,7 +161,7 @@ export default function WeeklyReportExport({
 
           <div className="flex items-center gap-2 text-[10px] text-slate-500">
             <Target className="w-3 h-3" />
-            趣学伴 · 升学作战指挥中心
+            趣学伴 · 升学规划中心
           </div>
         </div>
 

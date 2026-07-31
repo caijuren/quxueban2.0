@@ -139,7 +139,7 @@ export default function AlertsPage() {
         className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
       >
         <div>
-          <h1 className="text-2xl sm:text-3xl font-bold font-display mb-1">作战室</h1>
+          <h1 className="text-2xl sm:text-3xl font-bold font-display mb-1">提醒中心</h1>
           <p className="text-sm text-slate-500">
             {alerts.length > 0
               ? `共 ${alerts.length} 条提醒，其中 ${urgentCount} 条需立即处理`
@@ -173,7 +173,7 @@ export default function AlertsPage() {
             title="一切正常"
             description="今日任务已完成，本周节奏稳定，继续保持。"
             action={{
-              label: '查看周任务',
+              label: '查看周计划',
               onClick: () => router.push('/dashboard/weekly'),
             }}
           />

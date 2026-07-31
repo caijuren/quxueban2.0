@@ -3,67 +3,38 @@
 import { useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import {
-  Target,
-  Calendar,
-  TrendingUp,
-  School,
-  Users,
-  Plus,
-  Sparkles,
-  ArrowRight,
   LayoutGrid,
   User,
+  Target,
+  Sparkles,
+  MapPin,
+  AlertCircle,
+  CalendarDays,
+  Route,
+  TrendingUp,
   CheckCircle2,
   Circle,
-  BookOpen,
-  Calculator,
-  Languages,
-  Backpack,
-  Dumbbell,
-  Palette,
-  GraduationCap,
+  Clock,
+  ChevronRight,
+  Plus,
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useChildren } from '@/components/dashboard/ChildrenContext';
-import { Child, gradeLabel, gradeToStage, getInitials } from '@/lib/children';
-import { getRouteById } from '@/lib/plans';
+import { Child, gradeLabel, gradeToStage } from '@/lib/children';
+import { getPlanStats, getCurrentWeekId } from '@/lib/weeklyTasks';
 import {
-  getCurrentWeekId,
-  getPlanStats,
-  generateAiReview,
-  getTodayName,
-  toggleTaskStatus,
-} from '@/lib/weeklyTasks';
-import { TASK_CATEGORY_LABELS } from '@/lib/taskTemplates';
-import { getCategoryColorClass } from '@/lib/taskAlignment';
-import { TaskCategory } from '@/lib/storage.types';
-import EmptyState from '@/components/ui/EmptyState';
+  getStrategicTimeline,
+  getUpcomingMilestones,
+  generateStrategicAdvice,
+  getRouteSummary,
+  type TimelineItem,
+} from '@/lib/dashboard';
+import ChildAvatar from '@/components/dashboard/ChildAvatar';
+import ChildEmptyState from '@/components/dashboard/ChildEmptyState';
+import ChildModal from '@/components/dashboard/ChildModal';
 import CommandCard from '@/components/ui/CommandCard';
-import MetricRing from '@/components/ui/MetricRing';
 import DataBadge from '@/components/ui/DataBadge';
-import ProgressPanel from '@/components/dashboard/ProgressPanel';
-
-const categoryIcons: Record<TaskCategory, typeof BookOpen> = {
-  chinese: BookOpen,
-  math: Calculator,
-  english: Languages,
-  school: Backpack,
-  reading: BookOpen,
-  sport: Dumbbell,
-  interest: Palette,
-  other: GraduationCap,
-};
-
-const allCategories: TaskCategory[] = [
-  'chinese',
-  'math',
-  'english',
-  'school',
-  'reading',
-  'sport',
-  'interest',
-  'other',
-];
+import EmptyState from '@/components/ui/EmptyState';
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -82,204 +53,433 @@ const itemVariants = {
   },
 };
 
-type ViewMode = 'detail' | 'overview';
+type ViewMode = 'command' | 'overview';
 
-function getChildSnapshot(childId: string, getWeeklyPlan: ReturnType<typeof useChildren>['getWeeklyPlan']) {
-  const currentWeekPlan = getWeeklyPlan(getCurrentWeekId(), childId);
-  const weeklyStats = currentWeekPlan ? getPlanStats(currentWeekPlan) : null;
-  const todayName = getTodayName();
-  const todayTasks = currentWeekPlan?.tasks.filter((t) => t.day === todayName) ?? [];
-  const pendingToday = todayTasks.filter((t) => t.status !== 'done').length;
-
-  return {
-    completionRate: weeklyStats?.completionRate ?? 0,
-    todayPending: pendingToday,
-    todayTotal: todayTasks.length,
-    weeklyDone: weeklyStats?.done ?? 0,
-    weeklyTotal: weeklyStats?.total ?? 0,
-  };
+function getCompletionRate(child: Child, getWeeklyPlan: ReturnType<typeof useChildren>['getWeeklyPlan']) {
+  const plan = getWeeklyPlan(getCurrentWeekId(), child.id);
+  if (!plan) return null;
+  return getPlanStats(plan).completionRate;
 }
 
-function ChildSwitchCard({
-  child,
-  isActive,
-  onClick,
-  getWeeklyPlan,
+function ViewToggle({
+  mode,
+  onChange,
 }: {
-  child: Child;
-  isActive: boolean;
-  onClick: () => void;
-  getWeeklyPlan: ReturnType<typeof useChildren>['getWeeklyPlan'];
+  mode: ViewMode;
+  onChange: (mode: ViewMode) => void;
 }) {
-  const stage = gradeToStage(child.grade);
-  const snapshot = getChildSnapshot(child.id, getWeeklyPlan);
-  const hasTodayTasks = snapshot.todayTotal > 0;
+  return (
+    <div className="flex items-center gap-1 rounded-xl bg-surface border border-border-default p-1">
+      <button
+        onClick={() => onChange('command')}
+        className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+          mode === 'command'
+            ? 'bg-primary/10 text-primary border border-primary/20'
+            : 'text-text-tertiary hover:text-text-secondary'
+        }`}
+      >
+        <User className="w-3.5 h-3.5" />
+        当前孩子
+      </button>
+      <button
+        onClick={() => onChange('overview')}
+        className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+          mode === 'overview'
+            ? 'bg-primary/10 text-primary border border-primary/20'
+            : 'text-text-tertiary hover:text-text-secondary'
+        }`}
+      >
+        <LayoutGrid className="w-3.5 h-3.5" />
+        全家总览
+      </button>
+    </div>
+  );
+}
+
+function IdentityCard({ child }: { child: Child }) {
+  const router = useRouter();
+  const routeSummary = getRouteSummary(child);
 
   return (
-    <CommandCard active={isActive} hover onClick={onClick} className="p-4 h-full">
-      <div className="flex items-center gap-3">
-        <div
-          className="w-10 h-10 rounded-full flex items-center justify-center text-white text-sm font-bold shrink-0"
-          style={{
-            background: `linear-gradient(135deg, ${child.avatarColor}, ${child.avatarColor}88)`,
-          }}
-        >
-          {getInitials(child.name)}
-        </div>
+    <CommandCard active corner className="p-5 sm:p-6">
+      <div className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-6">
+        <ChildAvatar child={child} size="2xl" shape="rounded" />
+
         <div className="flex-1 min-w-0">
-          <p className={`font-semibold text-sm truncate ${isActive ? 'text-primary' : 'text-slate-200'}`}>
-            {child.name}
-          </p>
-          <p className="text-xs text-slate-500">
-            {gradeLabel(child.grade)} · {stage}
+          <div className="flex flex-wrap items-center gap-2 mb-2">
+            <h2 className="text-xl sm:text-2xl font-bold font-display text-text-primary">
+              {child.name}
+            </h2>
+            <DataBadge variant="primary" size="sm">
+              {gradeToStage(child.grade)}
+            </DataBadge>
+            <DataBadge variant={routeSummary.type === 'primary' ? 'success' : 'secondary'} size="sm">
+              {routeSummary.type === 'primary' ? '主路线' : '备选路线'}
+            </DataBadge>
+          </div>
+
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-text-secondary">
+            <span>{gradeLabel(child.grade)}</span>
+            <span className="text-border-strong">·</span>
+            <span className="truncate">{routeSummary.name}</span>
+            {child.targetSchool && (
+              <>
+                <span className="text-border-strong hidden sm:inline">·</span>
+                <span className="text-primary truncate">目标：{child.targetSchool}</span>
+              </>
+            )}
+          </div>
+
+          <p className="mt-2 text-sm text-text-tertiary line-clamp-2">
+            {routeSummary.description}
           </p>
         </div>
-        <div className="flex flex-col items-end gap-1.5 shrink-0">
-          <MetricRing rate={snapshot.completionRate} size={32} strokeWidth={4} />
-          {hasTodayTasks && (
-            <span
-              className={`text-[10px] px-1.5 py-0.5 rounded-full font-medium ${
-                snapshot.todayPending > 0
-                  ? 'bg-warning/15 text-warning'
-                  : 'bg-success/15 text-success'
-              }`}
-            >
-              今日 {snapshot.todayPending}/{snapshot.todayTotal}
-            </span>
-          )}
+
+        <div className="flex items-center gap-4 sm:text-right shrink-0">
+          <div>
+            <p className="text-xs text-text-tertiary mb-1">路线匹配度</p>
+            <p className="text-2xl font-bold font-display tabular-nums text-text-primary">
+              {routeSummary.probability}%
+            </p>
+          </div>
+          <div className="w-12 h-12 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center">
+            <Target className="w-6 h-6 text-primary" />
+          </div>
         </div>
       </div>
+
+      <div className="mt-5 pt-5 border-t border-border-subtle flex flex-wrap gap-2">
+        <button
+          onClick={() => router.push('/dashboard/plan')}
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-light border border-border-default text-xs font-medium text-text-secondary hover:text-text-primary hover:border-border-strong transition-all"
+        >
+          <Route className="w-3.5 h-3.5" />
+          查看路线方案
+        </button>
+        <button
+          onClick={() => router.push('/dashboard/weekly')}
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-light border border-border-default text-xs font-medium text-text-secondary hover:text-text-primary hover:border-border-strong transition-all"
+        >
+          <CalendarDays className="w-3.5 h-3.5" />
+          周计划
+        </button>
+        <button
+          onClick={() => router.push('/dashboard/ai')}
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-light border border-border-default text-xs font-medium text-text-secondary hover:text-text-primary hover:border-border-strong transition-all"
+        >
+          <Sparkles className="w-3.5 h-3.5" />
+          AI 诊断
+        </button>
+      </div>
+    </CommandCard>
+  );
+}
+
+function TimelineNode({ item, isLast }: { item: TimelineItem; isLast: boolean }) {
+  const statusConfig = {
+    past: {
+      icon: CheckCircle2,
+      dotClass: 'bg-text-muted',
+      ringClass: 'ring-text-muted/30',
+      textClass: 'text-text-tertiary',
+      lineClass: 'bg-border-default',
+    },
+    current: {
+      icon: MapPin,
+      dotClass: 'bg-primary',
+      ringClass: 'ring-primary/40 shadow-glow-primary',
+      textClass: 'text-text-primary',
+      lineClass: 'bg-primary/30',
+    },
+    future: {
+      icon: Circle,
+      dotClass: 'bg-surface-highlight border border-border-strong',
+      ringClass: 'ring-border-default',
+      textClass: 'text-text-secondary',
+      lineClass: 'bg-border-default',
+    },
+  };
+
+  const config = statusConfig[item.status];
+  const Icon = config.icon;
+
+  return (
+    <div className="relative flex gap-4">
+      {/* Line */}
+      {!isLast && (
+        <div
+          className={`absolute left-[11px] top-7 w-px h-[calc(100%-14px)] ${config.lineClass}`}
+        />
+      )}
+
+      {/* Dot */}
+      <div
+        className={`relative z-10 w-6 h-6 rounded-full flex items-center justify-center shrink-0 ring-4 ${config.dotClass} ${config.ringClass}`}
+      >
+        <Icon className={`w-3 h-3 ${item.status === 'future' ? 'text-text-tertiary' : 'text-white'}`} />
+      </div>
+
+      {/* Content */}
+      <div className="flex-1 pb-6 min-w-0">
+        <div className="flex flex-wrap items-center gap-2 mb-1">
+          <span className={`text-xs font-medium px-2 py-0.5 rounded-full bg-surface-light border border-border-default ${config.textClass}`}>
+            {item.time}
+          </span>
+          {item.status === 'current' && (
+            <span className="text-[10px] font-medium text-primary">当前节点</span>
+          )}
+        </div>
+        <h3 className={`text-sm font-semibold ${config.textClass}`}>{item.title}</h3>
+        <p className="text-sm text-text-tertiary mt-0.5">{item.description}</p>
+        {item.fallback && (
+          <p className="text-xs text-warning mt-2 bg-warning/5 border border-warning/10 rounded-lg p-2">
+            {item.fallback}
+          </p>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function TimelineSection({ child }: { child: Child }) {
+  const timeline = getStrategicTimeline(child);
+
+  if (timeline.length === 0) {
+    return (
+      <CommandCard className="p-5">
+        <div className="flex items-center gap-2 mb-4">
+          <TrendingUp className="w-4 h-4 text-primary" />
+          <h2 className="text-base font-bold font-display">升学时间轴</h2>
+        </div>
+        <EmptyState
+          icon={CalendarDays}
+          title="暂无时间轴数据"
+          description="当前阶段还没有配置详细的升学里程碑"
+        />
+      </CommandCard>
+    );
+  }
+
+  return (
+    <CommandCard className="p-5">
+      <div className="flex items-center gap-2 mb-6">
+        <TrendingUp className="w-4 h-4 text-primary" />
+        <h2 className="text-base font-bold font-display">升学时间轴</h2>
+        <span className="ml-auto text-xs text-text-tertiary">
+          {timeline.filter((t) => t.status === 'past').length} 个已过 /{' '}
+          {timeline.filter((t) => t.status === 'future').length} 个待完成
+        </span>
+      </div>
+
+      <div className="pl-1">
+        {timeline.map((item, index) => (
+          <TimelineNode
+            key={item.id}
+            item={item}
+            isLast={index === timeline.length - 1}
+          />
+        ))}
+      </div>
+    </CommandCard>
+  );
+}
+
+function UpcomingMilestonesCard({ child }: { child: Child }) {
+  const milestones = getUpcomingMilestones(child, 3);
+
+  return (
+    <CommandCard className="p-5 h-full">
+      <div className="flex items-center gap-2 mb-4">
+        <AlertCircle className="w-4 h-4 text-warning" />
+        <h2 className="text-base font-bold font-display">关键节点预警</h2>
+      </div>
+
+      {milestones.length === 0 ? (
+        <div className="text-center py-8 text-sm text-text-tertiary">
+          暂无即将到来的关键节点
+        </div>
+      ) : (
+        <div className="space-y-3">
+          {milestones.map((milestone, index) => (
+            <div
+              key={milestone.id}
+              className="p-3 rounded-xl bg-surface-light border border-border-default hover:border-border-strong transition-all"
+            >
+              <div className="flex items-center gap-2 mb-1.5">
+                <span className="text-[10px] font-medium px-1.5 py-0.5 rounded bg-warning/10 text-warning">
+                  #{index + 1}
+                </span>
+                <span className="text-xs text-text-tertiary">{milestone.time}</span>
+              </div>
+              <h3 className="text-sm font-semibold text-text-secondary">{milestone.title}</h3>
+              <p className="text-xs text-text-tertiary mt-0.5 line-clamp-2">
+                {milestone.description}
+              </p>
+            </div>
+          ))}
+        </div>
+      )}
+    </CommandCard>
+  );
+}
+
+function AIStrategyCard({
+  child,
+  completionRate,
+}: {
+  child: Child;
+  completionRate: number | null;
+}) {
+  // Avoid passing full PlanStats to keep this card lightweight
+  const advice = generateStrategicAdvice(
+    child,
+    completionRate !== null
+      ? ({ completionRate, total: 1, done: 0, skipped: 0, pending: 0 } as ReturnType<typeof getPlanStats>)
+      : null
+  );
+
+  return (
+    <CommandCard className="p-5 h-full border-secondary/10">
+      <div className="flex items-center gap-2 mb-4">
+        <Sparkles className="w-4 h-4 text-secondary" />
+        <h2 className="text-base font-bold font-display">AI 战略建议</h2>
+      </div>
+
+      <p className="text-sm text-text-secondary leading-relaxed">{advice}</p>
+
+      {completionRate !== null && (
+        <div className="mt-4 pt-4 border-t border-border-subtle">
+          <div className="flex items-center justify-between text-xs mb-2">
+            <span className="text-text-tertiary">本周执行节奏</span>
+            <span className="text-text-secondary font-medium">{completionRate}%</span>
+          </div>
+          <div className="h-1.5 rounded-full bg-white/10 overflow-hidden">
+            <div
+              className="h-full rounded-full bg-gradient-to-r from-primary to-secondary transition-all duration-500"
+              style={{ width: `${completionRate}%` }}
+            />
+          </div>
+        </div>
+      )}
     </CommandCard>
   );
 }
 
 function OverviewChildCard({
   child,
-  onView,
+  onSelect,
   getWeeklyPlan,
 }: {
   child: Child;
-  onView: () => void;
+  onSelect: () => void;
   getWeeklyPlan: ReturnType<typeof useChildren>['getWeeklyPlan'];
 }) {
-  const snapshot = getChildSnapshot(child.id, getWeeklyPlan);
-  const stage = gradeToStage(child.grade);
-  const routeName = child.routeId
-    ? getRouteById(child.routeId)?.name ?? child.routeId
-    : getStageRoute(stage).name;
+  const router = useRouter();
+  const routeSummary = getRouteSummary(child);
+  const upcoming = getUpcomingMilestones(child, 1);
+  const completionRate = getCompletionRate(child, getWeeklyPlan);
+  const advice = generateStrategicAdvice(child);
 
   return (
-    <CommandCard className="p-5">
-      <div className="flex items-start gap-4 mb-5">
-        <div
-          className="w-12 h-12 rounded-xl flex items-center justify-center text-white font-bold text-lg shrink-0"
-          style={{
-            background: `linear-gradient(135deg, ${child.avatarColor}, ${child.avatarColor}88)`,
-          }}
-        >
-          {getInitials(child.name)}
-        </div>
+    <CommandCard hover onClick={onSelect} className="p-5 h-full">
+      <div className="flex items-start gap-4 mb-4">
+        <ChildAvatar child={child} size="xl" shape="rounded" />
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 mb-1">
-            <h2 className="text-lg font-bold font-display">{child.name}</h2>
-            <DataBadge variant="primary" size="sm">{stage}</DataBadge>
+            <h3 className="text-lg font-bold font-display text-text-primary truncate">
+              {child.name}
+            </h3>
+            <DataBadge variant="primary" size="sm">
+              {gradeToStage(child.grade)}
+            </DataBadge>
           </div>
-          <p className="text-sm text-slate-500 truncate">
+          <p className="text-sm text-text-tertiary truncate">
             {gradeLabel(child.grade)}
-            {child.currentSchool ? ` · ${child.currentSchool}` : ''}
-            {routeName ? ` · ${routeName}` : ''}
+            {child.targetSchool ? ` · 目标 ${child.targetSchool}` : ''}
           </p>
         </div>
-        <div className="text-right shrink-0">
-          <p className="text-xs text-slate-500 mb-1">本周完成率</p>
-          <p className="text-xl font-bold font-display tabular-nums text-white">
-            {snapshot.completionRate}%
-          </p>
-        </div>
+        <ChevronRight className="w-5 h-5 text-text-muted shrink-0" />
       </div>
 
-      <div className="grid grid-cols-3 gap-3 mb-5">
-        <div className="rounded-lg bg-white/[0.03] p-3 text-center">
-          <p className="text-lg font-bold font-display text-slate-100">
-            {snapshot.weeklyDone}/{snapshot.weeklyTotal}
-          </p>
-          <p className="text-[10px] text-slate-500 mt-0.5">本周任务</p>
+      <div className="space-y-3 mb-4">
+        <div className="flex items-center justify-between p-3 rounded-xl bg-surface-light border border-border-default">
+          <span className="text-xs text-text-tertiary">当前路线</span>
+          <span className="text-sm font-medium text-text-secondary truncate max-w-[60%]">
+            {routeSummary.name}
+          </span>
         </div>
-        <div className="rounded-lg bg-white/[0.03] p-3 text-center">
-          <p className="text-lg font-bold font-display text-slate-100">
-            {snapshot.todayPending}
-          </p>
-          <p className="text-[10px] text-slate-500 mt-0.5">今日待办</p>
-        </div>
-        <div className="rounded-lg bg-white/[0.03] p-3 text-center">
-          <p className="text-lg font-bold font-display text-slate-100 truncate">
-            {child.targetSchool || '未设置'}
-          </p>
-          <p className="text-[10px] text-slate-500 mt-0.5">目标学校</p>
-        </div>
+
+        {upcoming[0] && (
+          <div className="flex items-start gap-2 p-3 rounded-xl bg-warning/5 border border-warning/10">
+            <Clock className="w-4 h-4 text-warning shrink-0 mt-0.5" />
+            <div className="min-w-0">
+              <p className="text-xs text-warning font-medium">下一个节点：{upcoming[0].time}</p>
+              <p className="text-sm text-text-secondary truncate">{upcoming[0].title}</p>
+            </div>
+          </div>
+        )}
+
+        {completionRate !== null && (
+          <div className="flex items-center justify-between p-3 rounded-xl bg-surface-light border border-border-default">
+            <span className="text-xs text-text-tertiary">本周完成率</span>
+            <span className="text-sm font-bold text-text-primary tabular-nums">
+              {completionRate}%
+            </span>
+          </div>
+        )}
       </div>
 
-      <button
-        onClick={onView}
-        className="w-full py-2 rounded-lg bg-primary/10 border border-primary/20 text-primary text-sm font-semibold hover:bg-primary/15 hover:shadow-glow-primary transition-all duration-200"
-      >
-        查看 {child.name} 的作战室
-      </button>
+      <div className="p-3 rounded-xl bg-secondary/5 border border-secondary/10 mb-4">
+        <p className="text-xs text-secondary font-medium mb-1">AI 战略提示</p>
+        <p className="text-xs text-text-tertiary line-clamp-2">{advice}</p>
+      </div>
+
+      <div className="flex gap-2">
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            router.push('/dashboard/plan');
+          }}
+          className="flex-1 py-2 rounded-lg bg-primary/10 border border-primary/20 text-primary text-xs font-semibold hover:bg-primary/15 transition-all"
+        >
+          路线
+        </button>
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            router.push('/dashboard/weekly');
+          }}
+          className="flex-1 py-2 rounded-lg bg-surface-light border border-border-default text-text-secondary text-xs font-semibold hover:text-text-primary hover:border-border-strong transition-all"
+        >
+          周计划
+        </button>
+      </div>
     </CommandCard>
   );
 }
 
-function getStageRoute(stage: string) {
-  switch (stage) {
-    case '小升初':
-      return { name: '三公 / 民办摇号', schools: '3 所目标校' };
-    case '中考':
-      return { name: '市重点 / 名额分配', schools: '4 所目标校' };
-    default:
-      return { name: '高考综评 / 强基', schools: '2 所目标校' };
-  }
-}
-
 export default function DashboardPage() {
-  const router = useRouter();
   const shouldReduceMotion = useReducedMotion();
   const {
     children,
     currentChild,
     setCurrentChildId,
     getWeeklyPlan,
-    updateTaskStatus,
   } = useChildren();
-  const [viewMode, setViewMode] = useState<ViewMode>('detail');
+  const [viewMode, setViewMode] = useState<ViewMode>('command');
+  const [childModalOpen, setChildModalOpen] = useState(false);
 
-  const currentWeekPlan = currentChild
-    ? getWeeklyPlan(getCurrentWeekId(), currentChild.id)
-    : undefined;
-  const weeklyStats = currentWeekPlan ? getPlanStats(currentWeekPlan) : null;
-  const aiReview = currentChild && currentWeekPlan
-    ? generateAiReview(currentWeekPlan, currentChild.name)
-    : null;
-
-  const todayName = getTodayName();
-  const todayTasks = currentWeekPlan?.tasks.filter((t) => t.day === todayName) ?? [];
-  const pendingTasks = currentWeekPlan?.tasks.filter((t) => t.status !== 'done') ?? [];
-  const recentTasks = todayTasks.length > 0 ? todayTasks : pendingTasks.slice(0, 4);
-
-  const completionRate = weeklyStats?.completionRate ?? 0;
-
-  const handleViewChild = (id: string) => {
-    setCurrentChildId(id);
-    setViewMode('detail');
-    router.push('/dashboard/plan');
-  };
-
-  const handleSwitchChild = (id: string) => {
-    setCurrentChildId(id);
-    setViewMode('detail');
-  };
-
-  const hasChildren = children.length > 0;
   const canOverview = children.length >= 2;
+  const completionRate = currentChild ? getCompletionRate(currentChild, getWeeklyPlan) : null;
+
+  const handleSelectChild = (id: string) => {
+    setCurrentChildId(id);
+    setViewMode('command');
+  };
+
+  if (children.length === 0) {
+    return <ChildEmptyState description="添加孩子后，这里会显示每个孩子的升学规划总览" />;
+  }
 
   return (
     <div className="space-y-6">
@@ -291,62 +491,32 @@ export default function DashboardPage() {
         className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3"
       >
         <div>
-          <h1 className="text-2xl sm:text-3xl font-bold font-display mb-1">作战指挥中心</h1>
-          <p className="text-sm text-slate-500">
-            {hasChildren
-              ? `监控 ${children.length} 名孩子 · 当前：${currentChild?.name || '未选择'}`
-              : '请先添加孩子档案'}
+          <h1 className="text-2xl sm:text-3xl font-bold font-display mb-1">升学规划中心</h1>
+          <p className="text-sm text-text-tertiary">
+            {viewMode === 'command'
+              ? `查看 ${currentChild?.name || ''} 的升学战略看板`
+              : `监控 ${children.length} 名孩子的整体升学状态`}
           </p>
         </div>
 
         {canOverview && (
-          <div className="flex items-center gap-1 rounded-lg bg-white/[0.03] border border-white/[0.06] p-1">
-            <button
-              onClick={() => setViewMode('detail')}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-all ${
-                viewMode === 'detail'
-                  ? 'bg-primary/10 text-primary'
-                  : 'text-slate-500 hover:text-slate-300'
-              }`}
-            >
-              <User className="w-3.5 h-3.5" />
-              单个详情
-            </button>
-            <button
-              onClick={() => setViewMode('overview')}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-all ${
-                viewMode === 'overview'
-                  ? 'bg-primary/10 text-primary'
-                  : 'text-slate-500 hover:text-slate-300'
-              }`}
-            >
-              <LayoutGrid className="w-3.5 h-3.5" />
-              总览对比
-            </button>
-          </div>
+          <ViewToggle mode={viewMode} onChange={setViewMode} />
         )}
       </motion.div>
 
-      {/* Children overview */}
-      {children.length === 0 ? (
-        <EmptyState
-          icon={Users}
-          title="还没有孩子档案"
-          description="添加孩子后，这里会显示每个孩子的升学阶段概览，方便快速切换"
-        />
-      ) : (
+      {/* Overview mode */}
+      {viewMode === 'overview' && (
         <motion.div
           variants={containerVariants}
           initial={shouldReduceMotion ? false : 'hidden'}
           animate="visible"
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3"
+          className="grid grid-cols-1 md:grid-cols-2 gap-4"
         >
           {children.map((child) => (
             <motion.div key={child.id} variants={itemVariants}>
-              <ChildSwitchCard
+              <OverviewChildCard
                 child={child}
-                isActive={currentChild?.id === child.id}
-                onClick={() => handleSwitchChild(child.id)}
+                onSelect={() => handleSelectChild(child.id)}
                 getWeeklyPlan={getWeeklyPlan}
               />
             </motion.div>
@@ -354,300 +524,59 @@ export default function DashboardPage() {
 
           <motion.button
             variants={itemVariants}
-            onClick={() => router.push('/dashboard/plan')}
-            className="rounded-xl border border-dashed border-white/[0.08] bg-white/[0.02] p-4 flex items-center justify-center gap-2 text-slate-500 hover:text-slate-300 hover:bg-white/[0.04] hover:border-white/[0.12] transition-all text-sm"
+            onClick={() => setChildModalOpen(true)}
+            className="rounded-2xl border border-dashed border-border-default bg-surface/[0.5] p-5 flex flex-col items-center justify-center gap-2 text-text-tertiary hover:text-text-secondary hover:bg-surface-light hover:border-border-strong transition-all text-sm min-h-[200px]"
           >
-            <Plus className="w-4 h-4" />
+            <div className="w-12 h-12 rounded-xl bg-surface-light border border-border-default flex items-center justify-center">
+              <Plus className="w-5 h-5" />
+            </div>
             <span className="font-medium">添加孩子</span>
           </motion.button>
         </motion.div>
       )}
 
-      {/* Overview mode */}
-      {viewMode === 'overview' && hasChildren && (
-        <motion.div
-          initial={shouldReduceMotion ? false : { opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="grid grid-cols-1 lg:grid-cols-2 gap-4"
-        >
-          {children.map((child) => (
-            <OverviewChildCard
-              key={child.id}
-              child={child}
-              onView={() => handleViewChild(child.id)}
-              getWeeklyPlan={getWeeklyPlan}
-            />
-          ))}
-        </motion.div>
-      )}
-
-      {/* Current child detail */}
-      {currentChild && viewMode === 'detail' && (
+      {/* Command mode */}
+      {viewMode === 'command' && currentChild && (
         <>
-          {/* Route health */}
           <motion.div
             initial={shouldReduceMotion ? false : { opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
+            transition={{ duration: 0.5 }}
           >
-            <CommandCard active corner className="p-5">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                <div className="flex items-start gap-4">
-                  <div
-                    className="w-12 h-12 rounded-xl flex items-center justify-center text-white font-bold text-lg shrink-0 overflow-hidden"
-                    style={{
-                      background: `linear-gradient(135deg, ${currentChild.avatarColor}, ${currentChild.avatarColor}88)`,
-                    }}
-                  >
-                    {currentChild.avatarUrl?.startsWith('data:image') ? (
-                      <img
-                        src={currentChild.avatarUrl}
-                        alt={currentChild.name}
-                        className="w-full h-full object-cover"
-                      />
-                    ) : currentChild.avatarUrl ? (
-                      <span className="text-2xl">{currentChild.avatarUrl}</span>
-                    ) : (
-                      getInitials(currentChild.name)
-                    )}
-                  </div>
-                  <div>
-                    <div className="flex items-center gap-2 mb-1">
-                      <h2 className="text-lg font-bold font-display">{currentChild.name}</h2>
-                      <DataBadge variant="primary" size="sm">
-                        {gradeToStage(currentChild.grade)}
-                      </DataBadge>
-                    </div>
-                    <p className="text-sm text-slate-500">
-                      {gradeLabel(currentChild.grade)}
-                      {currentChild.currentSchool ? ` · ${currentChild.currentSchool}` : ''}
-                      {currentChild.routeId
-                        ? ` · ${getRouteById(currentChild.routeId)?.name ?? currentChild.routeId}`
-                        : ` · ${getStageRoute(gradeToStage(currentChild.grade)).name}`}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-4">
-                  <div className="text-right">
-                    <p className="text-xs text-slate-500 mb-1">本周完成率</p>
-                    <p className="text-xl font-bold font-display tabular-nums text-white">
-                      {completionRate}%
-                    </p>
-                  </div>
-                  <MetricRing rate={completionRate} size={72} strokeWidth={7} />
-                </div>
-              </div>
-            </CommandCard>
+            <IdentityCard child={currentChild} />
           </motion.div>
-
-          {/* Stats grid */}
-          <motion.div
-            variants={containerVariants}
-            initial={shouldReduceMotion ? false : 'hidden'}
-            animate="visible"
-            className="grid grid-cols-2 lg:grid-cols-4 gap-3"
-          >
-            {[
-              {
-                title: '当前方案',
-                value: currentChild.routeId
-                  ? getRouteById(currentChild.routeId)?.name ?? '未绑定'
-                  : getStageRoute(gradeToStage(currentChild.grade)).name,
-                subtext: currentChild.routeId
-                  ? (getRouteById(currentChild.routeId)?.type === 'primary' ? '主路线' : '备选路线')
-                  : getStageRoute(gradeToStage(currentChild.grade)).schools,
-                icon: Target,
-                color: 'text-primary',
-                bg: 'bg-primary/10',
-              },
-              {
-                title: '本周任务',
-                value: weeklyStats ? `${weeklyStats.done}/${weeklyStats.total}` : '—',
-                subtext: weeklyStats ? `${weeklyStats.pending} 个待完成` : '未发布计划',
-                icon: Calendar,
-                color: 'text-secondary',
-                bg: 'bg-secondary/10',
-              },
-              {
-                title: '总体进度',
-                value: `${completionRate}%`,
-                subtext: completionRate >= 60 ? '节奏良好' : '需要加油',
-                icon: TrendingUp,
-                color: 'text-accent',
-                bg: 'bg-accent/10',
-              },
-              {
-                title: '目标学校',
-                value: currentChild.targetSchool || '未设置',
-                subtext: currentChild.targetSchool ? '已设定升学目标' : '点击编辑孩子设置',
-                icon: School,
-                color: 'text-warning',
-                bg: 'bg-warning/10',
-              },
-            ].map((stat) => (
-              <motion.div key={stat.title} variants={itemVariants}>
-                <CommandCard hover className="p-4">
-                  <div className="flex items-start justify-between mb-3">
-                    <p className="text-xs text-slate-500">{stat.title}</p>
-                    <div className={`w-8 h-8 rounded-lg ${stat.bg} flex items-center justify-center`}>
-                      <stat.icon className={`w-4 h-4 ${stat.color}`} />
-                    </div>
-                  </div>
-                  <p className="text-lg font-bold font-display text-slate-100 truncate">{stat.value}</p>
-                  <p className="text-[11px] text-slate-500 mt-0.5">{stat.subtext}</p>
-                </CommandCard>
-              </motion.div>
-            ))}
-          </motion.div>
-
-          {/* Progress tracking */}
-          <ProgressPanel child={currentChild} />
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-            {/* Today's tasks timeline */}
             <motion.div
               initial={shouldReduceMotion ? false : { opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
+              transition={{ duration: 0.5, delay: 0.1 }}
               className="lg:col-span-2"
             >
-              <CommandCard className="p-5 h-full">
-                <div className="flex items-center justify-between mb-4">
-                  <div className="flex items-center gap-2">
-                    <Calendar className="w-4 h-4 text-primary" />
-                    <h2 className="text-base font-bold font-display">今日任务 · {todayName}</h2>
-                    {todayTasks.length > 0 && (
-                      <span className="text-[11px] px-2 py-0.5 rounded-full bg-white/5 text-slate-400">
-                        {todayTasks.filter((t) => t.status === 'done').length}/{todayTasks.length} 完成
-                      </span>
-                    )}
-                  </div>
-                  <button
-                    onClick={() => router.push('/dashboard/weekly')}
-                    className="flex items-center gap-1 text-xs text-primary hover:text-primary-glow transition-colors"
-                  >
-                    周视图 <ArrowRight className="w-3 h-3" />
-                  </button>
-                </div>
-
-                {recentTasks.length === 0 ? (
-                  <div className="text-center py-8 text-sm text-slate-500">
-                    今日暂无任务，去周任务页面生成计划
-                  </div>
-                ) : (
-                  <div className="space-y-4">
-                    {allCategories
-                      .filter((cat) => recentTasks.some((t) => (t.category || 'other') === cat))
-                      .map((category) => {
-                        const CategoryIcon = categoryIcons[category];
-                        const catTasks = recentTasks.filter((t) => (t.category || 'other') === category);
-                        return (
-                          <div key={category}>
-                            <div className="flex items-center gap-2 mb-2">
-                              <div
-                                className={`w-6 h-6 rounded-md flex items-center justify-center ${getCategoryColorClass(
-                                  category
-                                )}`}
-                              >
-                                <CategoryIcon className="w-3 h-3" />
-                              </div>
-                              <span className="text-xs font-medium text-slate-300">
-                                {TASK_CATEGORY_LABELS[category]}
-                              </span>
-                            </div>
-                            <div className="space-y-2">
-                              {catTasks.map((task) => {
-                                const isDone = task.status === 'done';
-                                return (
-                                  <div
-                                    key={task.id}
-                                    className={`flex items-start gap-3 p-3 rounded-xl border transition-all ${
-                                      isDone
-                                        ? 'bg-success/5 border-success/10'
-                                        : 'bg-white/[0.03] border-white/[0.06] hover:bg-white/[0.05]'
-                                    }`}
-                                  >
-                                    <button
-                                      onClick={() =>
-                                        currentChild &&
-                                        currentWeekPlan?.id &&
-                                        updateTaskStatus(
-                                          currentChild.id,
-                                          getCurrentWeekId(),
-                                          task.id,
-                                          toggleTaskStatus(task.status)
-                                        )
-                                      }
-                                      className="mt-0.5 text-slate-400 hover:text-primary transition-colors focus-ring rounded-full shrink-0"
-                                      aria-label={isDone ? '标记为未完成' : '标记为完成'}
-                                    >
-                                      {isDone ? (
-                                        <CheckCircle2 className="w-5 h-5 text-success" />
-                                      ) : (
-                                        <Circle className="w-5 h-5" />
-                                      )}
-                                    </button>
-                                    <button
-                                      onClick={() => router.push('/dashboard/weekly')}
-                                      className="flex-1 text-left min-w-0"
-                                    >
-                                      <div className="flex items-center justify-between mb-1">
-                                        <span
-                                          className={`text-sm font-semibold ${
-                                            isDone ? 'text-slate-500 line-through' : 'text-slate-200'
-                                          }`}
-                                        >
-                                          {task.focus}
-                                        </span>
-                                        <span className="text-[10px] px-1.5 py-0.5 rounded bg-white/[0.05] text-slate-300 shrink-0 ml-2">
-                                          {task.duration}
-                                        </span>
-                                      </div>
-                                      <p className="text-[11px] text-slate-500">
-                                        {task.materials.join('、') || '无指定材料'}
-                                      </p>
-                                    </button>
-                                  </div>
-                                );
-                              })}
-                            </div>
-                          </div>
-                        );
-                      })}
-                  </div>
-                )}
-              </CommandCard>
+              <TimelineSection child={currentChild} />
             </motion.div>
 
-            {/* AI Insights */}
             <motion.div
-              initial={shouldReduceMotion ? false : { opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.3 }}
+              variants={containerVariants}
+              initial={shouldReduceMotion ? false : 'hidden'}
+              animate="visible"
+              className="space-y-4"
             >
-              <CommandCard className="p-5 h-full border-secondary/10">
-                <div className="flex items-center gap-2 mb-4">
-                  <Sparkles className="w-4 h-4 text-secondary" />
-                  <h2 className="text-base font-bold font-display">AI 检视</h2>
-                </div>
-
-                <p className="text-sm text-slate-400 leading-relaxed mb-5">
-                  {aiReview ?? '暂无数据，发布本周计划后将自动生成 AI 诊断。'}
-                </p>
-
-                <button
-                  onClick={() => router.push('/dashboard/ai')}
-                  className="w-full py-2 rounded-lg bg-secondary/10 border border-secondary/20 text-secondary text-sm font-semibold hover:bg-secondary/15 hover:shadow-glow-secondary transition-all duration-200 focus-ring"
-                >
-                  查看完整报告
-                </button>
-              </CommandCard>
+              <motion.div variants={itemVariants}>
+                <UpcomingMilestonesCard child={currentChild} />
+              </motion.div>
+              <motion.div variants={itemVariants}>
+                <AIStrategyCard
+                  child={currentChild}
+                  completionRate={completionRate}
+                />
+              </motion.div>
             </motion.div>
           </div>
         </>
       )}
+
+      <ChildModal isOpen={childModalOpen} onClose={() => setChildModalOpen(false)} />
     </div>
   );
 }

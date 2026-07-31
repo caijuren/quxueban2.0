@@ -577,7 +577,7 @@ export function getEnglishProgress(odUnit: number, odTotal: number) {
   };
 }
 
-// 图表节点：用于英语三条线作战地图横向时间轴
+// 图表节点：用于英语三条线规划地图横向时间轴
 export interface TrackNode {
   id: string;
   track: 'raz' | 'od' | 'exam';

@@ -12,11 +12,11 @@ const FAQS = [
   },
   {
     q: '周计划是如何生成的？',
-    a: '系统会根据孩子当前年级和已绑定的升学路线，自动生成每周学习任务，你也可以在周任务页面手动调整。',
+    a: '系统会根据孩子当前年级和已绑定的升学路线，自动生成每周学习任务，你也可以在周计划页面手动调整。',
   },
   {
-    q: 'AI 检视报告什么时候更新？',
-    a: '发布本周计划后，AI 会根据任务完成情况和孩子的阶段生成诊断报告，可在「AI 检视」页面查看。',
+    q: 'AI 诊断报告什么时候更新？',
+    a: '发布本周计划后，AI 会根据任务完成情况和孩子的阶段生成诊断报告，可在「AI 诊断」页面查看。',
   },
   {
     q: '支持微信登录吗？',
@@ -130,7 +130,7 @@ export default function HelpSection() {
           </a>
         </div>
         <p className="mt-4 text-xs text-slate-500 text-center">
-          趣学伴 v{packageInfo.version} · 升学作战指挥中心
+          趣学伴 v{packageInfo.version} · 升学规划中心
         </p>
       </SettingsSection>
     </div>

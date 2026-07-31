@@ -1,7 +1,8 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { Suspense, useEffect, useRef, useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
+import { useSearchParams } from 'next/navigation';
 import {
   User,
   Bell,
@@ -11,7 +12,6 @@ import {
   HelpCircle,
   ChevronDown,
   Loader2,
-  Library,
 } from 'lucide-react';
 import { UserWithSettings, applySettingsToDocument } from '@/lib/settings';
 import AccountSection from '@/components/settings/AccountSection';
@@ -20,14 +20,15 @@ import AppearanceSection from '@/components/settings/AppearanceSection';
 import ChildrenSection from '@/components/settings/ChildrenSection';
 import DataPrivacySection from '@/components/settings/DataPrivacySection';
 import HelpSection from '@/components/settings/HelpSection';
-import TaskLibrarySection from '@/components/settings/TaskLibrarySection';
+import CapabilitySection from '@/components/settings/CapabilitySection';
+import { Target } from 'lucide-react';
 
 const CATEGORIES = [
   { id: 'account', label: '账号与安全', icon: Shield },
   { id: 'notifications', label: '消息通知', icon: Bell },
   { id: 'appearance', label: '界面偏好', icon: Palette },
   { id: 'children', label: '孩子管理', icon: Users },
-  { id: 'library', label: '任务库', icon: Library },
+  { id: 'capabilities', label: '能力模型', icon: Target },
   { id: 'data', label: '数据与隐私', icon: User },
   { id: 'help', label: '帮助与关于', icon: HelpCircle },
 ];
@@ -38,12 +39,16 @@ async function fetchUser() {
   return res.json() as Promise<UserWithSettings>;
 }
 
-export default function SettingsPage() {
+function SettingsPageInner() {
   const shouldReduceMotion = useReducedMotion();
+  const searchParams = useSearchParams();
   const [user, setUser] = useState<UserWithSettings | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const [activeCategory, setActiveCategory] = useState('account');
+  const [activeCategory, setActiveCategory] = useState(() => {
+    const tab = searchParams.get('tab');
+    return CATEGORIES.some((c) => c.id === tab) ? tab! : 'account';
+  });
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -192,10 +197,24 @@ export default function SettingsPage() {
           <AppearanceSection settings={user.settings} onUpdate={handleSettingsUpdate} />
         )}
         {activeCategory === 'children' && <ChildrenSection />}
-        {activeCategory === 'library' && <TaskLibrarySection />}
+        {activeCategory === 'capabilities' && <CapabilitySection />}
         {activeCategory === 'data' && <DataPrivacySection />}
         {activeCategory === 'help' && <HelpSection />}
       </div>
     </div>
+  );
+}
+
+export default function SettingsPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex h-[60vh] items-center justify-center">
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        </div>
+      }
+    >
+      <SettingsPageInner />
+    </Suspense>
   );
 }

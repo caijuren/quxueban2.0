@@ -3,14 +3,14 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { Target, Calendar, Bell, Route, User } from 'lucide-react';
+import { Target, Calendar, Bell, Wrench, Settings } from 'lucide-react';
 
 const navItems = [
-  { name: '今日作战', href: '/dashboard/today', icon: Target },
-  { name: '周任务', href: '/dashboard/weekly', icon: Calendar },
-  { name: '作战室', href: '/dashboard/alerts', icon: Bell },
-  { name: '路线方案', href: '/dashboard/plan', icon: Route },
-  { name: '我的', href: '/dashboard/settings', icon: User },
+  { name: '今日任务', href: '/dashboard/today', icon: Target },
+  { name: '周计划', href: '/dashboard/weekly', icon: Calendar },
+  { name: '提醒中心', href: '/dashboard/alerts', icon: Bell },
+  { name: '规划工具', href: '/dashboard/toolbox', icon: Wrench },
+  { name: '设置', href: '/dashboard/settings', icon: Settings },
 ];
 
 export default function MobileBottomNav() {

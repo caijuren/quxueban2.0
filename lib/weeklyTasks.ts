@@ -114,17 +114,15 @@ export function generateWeeklyPlan(
   (Object.keys(subjectPlans) as SubjectId[]).forEach((subjectId) => {
     subjectPlans[subjectId].weeklyTemplate.forEach((template, index) => {
       const alignment = computeTaskAlignment({
-        child: { grade: child.grade, routeId: child.routeId },
+        child: { routeId: child.routeId },
         template: {
-          gradeMin: 1,
-          gradeMax: 12,
           routeTags: subjectRouteTags[subjectId],
         },
       });
 
       tasks.push({
         id: generateTaskId(subjectId, index),
-        category: subjectId,
+        category: 'ability',
         subjectId,
         source: 'auto',
         day: template.day as DayOfWeek,
@@ -152,21 +150,20 @@ export function generateWeeklyPlanFromLibrary(
     if (tpl.routeTags.length === 0) return true;
     if (!child.routeId) return false;
     return tpl.routeTags.includes(child.routeId);
-  }).filter((tpl) => child.grade >= tpl.gradeMin && child.grade <= tpl.gradeMax);
+  });
 
   const tasks: WeeklyTaskItem[] = [];
   const days: DayOfWeek[] = ['周一', '周二', '周三', '周四', '周五', '周六', '周日'];
 
   candidates.forEach((tpl, index) => {
     const alignment = computeTaskAlignment({
-      child: { grade: child.grade, routeId: child.routeId },
+      child: { routeId: child.routeId },
       template: tpl,
     });
 
     tasks.push({
       id: `library-${tpl.id}-${index}-${Math.random().toString(36).slice(2, 7)}`,
       category: tpl.category,
-      subjectId: ['chinese', 'math', 'english'].includes(tpl.category) ? (tpl.category as SubjectId) : undefined,
       source: 'library',
       templateId: tpl.id,
       alignment,
@@ -227,13 +224,11 @@ export interface PlanStats {
 }
 
 const defaultCategories: TaskCategory[] = [
-  'chinese',
-  'math',
-  'english',
   'school',
   'reading',
   'sport',
   'interest',
+  'ability',
   'other',
 ];
 

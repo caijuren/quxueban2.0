@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import {
   Library,
@@ -12,18 +12,25 @@ import {
   Save,
   Loader2,
   BookOpen,
-  Calculator,
-  Languages,
   Backpack,
+  Calculator,
   Dumbbell,
   Palette,
   GraduationCap,
   Sparkles,
   Filter,
+  Archive,
+  RotateCcw,
+  Tag,
 } from 'lucide-react';
 import {
   TaskTemplate,
   TaskCategory,
+  Capability,
+  TaskCapabilityLink,
+  AssessmentCriterion,
+  TaskType,
+  TaskFrequency,
 } from '@/lib/storage.types';
 import {
   TASK_CATEGORY_LABELS,
@@ -32,26 +39,34 @@ import { getCategoryColorClass } from '@/lib/taskAlignment';
 import SettingsSection from './SettingsSection';
 
 const categoryIcons: Record<TaskCategory, typeof BookOpen> = {
-  chinese: BookOpen,
-  math: Calculator,
-  english: Languages,
   school: Backpack,
   reading: BookOpen,
   sport: Dumbbell,
   interest: Palette,
+  ability: Calculator,
   other: GraduationCap,
 };
 
 const allCategories: TaskCategory[] = [
-  'chinese',
-  'math',
-  'english',
   'school',
   'reading',
   'sport',
   'interest',
+  'ability',
   'other',
 ];
+
+const difficultyOptions = [
+  { value: 'easy', label: '基础', color: 'bg-success/10 text-success border-success/20' },
+  { value: 'medium', label: '提高', color: 'bg-warning/10 text-warning border-warning/20' },
+  { value: 'hard', label: '挑战', color: 'bg-error/10 text-error border-error/20' },
+] as const;
+
+const semesterOptions = [
+  { value: 'semester', label: '开学期' },
+  { value: 'vacation', label: '寒暑假' },
+  { value: 'exam', label: '考前冲刺' },
+] as const;
 
 const routeOptions = [
   { value: 'sanchu_gongban', label: '三公公办' },
@@ -64,37 +79,73 @@ const routeOptions = [
   { value: 'gongban_duikou', label: '公办对口' },
 ];
 
-const emptyTemplate: Omit<TaskTemplate, 'id' | 'userId' | 'createdAt' | 'updatedAt'> = {
+const taskTypeOptions = [
+  { value: 'daily', label: '日常任务' },
+  { value: 'milestone', label: '里程碑任务' },
+  { value: 'remedial', label: '补救任务' },
+  { value: 'sprint', label: '冲刺任务' },
+  { value: 'diagnostic', label: '诊断任务' },
+] as const;
+
+const frequencyOptions = [
+  { value: 'once', label: '一次性' },
+  { value: 'daily', label: '每天' },
+  { value: 'weekly', label: '每周' },
+  { value: 'custom', label: '自定义' },
+] as const;
+
+const capabilityCategoryLabels: Record<string, string> = {
+  chinese: '语文',
+  math: '数学',
+  english: '英语',
+  general: '通用能力',
+  exam: '考试能力',
+  admission: '升学事务',
+};
+
+const emptyTemplate: Omit<TaskTemplate, 'id' | 'userId' | 'createdAt' | 'updatedAt' | 'archivedAt' | 'useCount' | 'lastUsedAt'> = {
   title: '',
   category: 'school',
-  gradeMin: 1,
-  gradeMax: 12,
   duration: '30分钟',
+  difficulty: 'medium',
   materials: [],
   description: '',
   routeTags: [],
   milestoneTag: '',
+  semesterTag: '',
+  tags: [],
   source: 'user',
   isActive: true,
+  taskType: 'daily',
+  frequency: 'once',
+  customFrequency: null,
+  assessmentCriteria: [],
+  capabilityLinks: [],
 };
 
 export default function TaskLibrarySection() {
   const shouldReduceMotion = useReducedMotion();
   const [templates, setTemplates] = useState<TaskTemplate[]>([]);
+  const [capabilities, setCapabilities] = useState<Capability[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [search, setSearch] = useState('');
   const [filterCategory, setFilterCategory] = useState<TaskCategory | 'all'>('all');
   const [filterSource, setFilterSource] = useState<'all' | 'system' | 'user'>('all');
+  const [filterStatus, setFilterStatus] = useState<'active' | 'archived' | 'all'>('active');
   const [modalOpen, setModalOpen] = useState(false);
   const [editing, setEditing] = useState<TaskTemplate | null>(null);
   const [saving, setSaving] = useState(false);
   const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [archivingId, setArchivingId] = useState<string | null>(null);
 
-  const fetchTemplates = async () => {
+  const fetchTemplates = useCallback(async () => {
     try {
       setLoading(true);
-      const res = await fetch('/api/task-templates');
+      const params = new URLSearchParams();
+      if (filterCategory !== 'all') params.set('category', filterCategory);
+      params.set('status', filterStatus);
+      const res = await fetch(`/api/task-templates?${params.toString()}`);
       if (!res.ok) throw new Error('加载失败');
       const data = await res.json();
       setTemplates(data);
@@ -104,21 +155,32 @@ export default function TaskLibrarySection() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [filterCategory, filterStatus]);
+
+  const fetchCapabilities = useCallback(async () => {
+    try {
+      const res = await fetch('/api/capabilities');
+      if (!res.ok) throw new Error('加载能力失败');
+      const data = await res.json();
+      setCapabilities(data);
+    } catch {
+      // 能力加载失败不阻塞任务库
+    }
+  }, []);
 
   useEffect(() => {
     fetchTemplates();
-  }, []);
+    fetchCapabilities();
+  }, [fetchTemplates, fetchCapabilities]);
 
   const filteredTemplates = useMemo(() => {
     return templates.filter((t) => {
       const matchesSearch = t.title.toLowerCase().includes(search.toLowerCase()) ||
         (t.description?.toLowerCase().includes(search.toLowerCase()) ?? false);
-      const matchesCategory = filterCategory === 'all' || t.category === filterCategory;
       const matchesSource = filterSource === 'all' || t.source === filterSource;
-      return matchesSearch && matchesCategory && matchesSource;
+      return matchesSearch && matchesSource;
     });
-  }, [templates, search, filterCategory, filterSource]);
+  }, [templates, search, filterSource]);
 
   const handleAdd = () => {
     setEditing(null);
@@ -144,6 +206,28 @@ export default function TaskLibrarySection() {
     }
   };
 
+  const handleArchive = async (id: string, archive: boolean) => {
+    try {
+      setArchivingId(id);
+      const res = await fetch(`/api/task-templates/${id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ archive }),
+      });
+      if (!res.ok) throw new Error(archive ? '归档失败' : '恢复失败');
+      const updated = await res.json();
+      setTemplates((prev) =>
+        filterStatus === 'active' && archive
+          ? prev.filter((t) => t.id !== id)
+          : prev.map((t) => (t.id === id ? updated : t))
+      );
+    } catch (err) {
+      alert(err instanceof Error ? err.message : archive ? '归档失败' : '恢复失败');
+    } finally {
+      setArchivingId(null);
+    }
+  };
+
   const handleSave = async (data: typeof emptyTemplate) => {
     try {
       setSaving(true);
@@ -151,6 +235,7 @@ export default function TaskLibrarySection() {
         ...data,
         materials: data.materials.filter(Boolean),
         routeTags: data.routeTags.filter(Boolean),
+        tags: data.tags.filter(Boolean),
       };
 
       if (editing) {
@@ -200,7 +285,7 @@ export default function TaskLibrarySection() {
             />
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 flex-wrap">
             <Filter className="w-3.5 h-3.5 text-slate-500" />
             <select
               value={filterCategory}
@@ -223,6 +308,15 @@ export default function TaskLibrarySection() {
               <option value="system">系统预设</option>
               <option value="user">自定义</option>
             </select>
+            <select
+              value={filterStatus}
+              onChange={(e) => setFilterStatus(e.target.value as typeof filterStatus)}
+              className="text-xs bg-white/5 border border-white/[0.08] rounded-lg px-2 py-2 text-slate-200 focus:outline-none focus:border-primary/50"
+            >
+              <option value="active">使用中</option>
+              <option value="archived">已归档</option>
+              <option value="all">全部</option>
+            </select>
           </div>
         </div>
 
@@ -238,23 +332,30 @@ export default function TaskLibrarySection() {
             未找到匹配的任务模板
           </div>
         ) : (
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3">
             {filteredTemplates.map((tpl) => {
               const CategoryIcon = categoryIcons[tpl.category];
+              const difficultyInfo = difficultyOptions.find((d) => d.value === (tpl.difficulty || 'medium'));
+              const semesterInfo = semesterOptions.find((s) => s.value === tpl.semesterTag);
+              const isArchived = !!tpl.archivedAt;
               return (
                 <motion.div
                   key={tpl.id}
                   initial={shouldReduceMotion ? false : { opacity: 0, y: 8 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="group rounded-xl bg-white/[0.03] border border-white/[0.06] hover:border-white/[0.12] transition-all p-4"
+                  className={`group rounded-xl border transition-all p-3 ${
+                    isArchived
+                      ? 'bg-white/[0.015] border-white/[0.04] opacity-70'
+                      : 'bg-white/[0.03] border-white/[0.06] hover:border-white/[0.12]'
+                  }`}
                 >
-                  <div className="flex items-start gap-3">
+                  <div className="flex items-start gap-2.5">
                     <div
-                      className={`w-9 h-9 rounded-lg flex items-center justify-center shrink-0 ${getCategoryColorClass(
+                      className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${getCategoryColorClass(
                         tpl.category
                       )}`}
                     >
-                      <CategoryIcon className="w-4 h-4" />
+                      <CategoryIcon className="w-3.5 h-3.5" />
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 mb-1">
@@ -271,8 +372,23 @@ export default function TaskLibrarySection() {
                             自定义
                           </span>
                         )}
+                        {isArchived && (
+                          <span className="text-[10px] px-1.5 py-0.5 rounded bg-slate-500/10 text-slate-400 border border-slate-500/20 shrink-0">
+                            已归档
+                          </span>
+                        )}
+                        {tpl.taskType && (
+                          <span className="text-[10px] px-1.5 py-0.5 rounded bg-accent/10 text-accent border border-accent/20 shrink-0">
+                            {taskTypeOptions.find((t) => t.value === tpl.taskType)?.label || tpl.taskType}
+                          </span>
+                        )}
+                        {tpl.capabilityLinks.length > 0 && (
+                          <span className="text-[10px] px-1.5 py-0.5 rounded bg-secondary/10 text-secondary border border-secondary/20 shrink-0">
+                            {tpl.capabilityLinks.length} 项能力
+                          </span>
+                        )}
                       </div>
-                      <p className="text-[11px] text-slate-500 mb-2 line-clamp-2">
+                      <p className="text-[11px] text-slate-500 mb-1.5 line-clamp-1">
                         {tpl.description || '暂无描述'}
                       </p>
                       <div className="flex flex-wrap items-center gap-2 text-[10px] text-slate-400">
@@ -282,15 +398,35 @@ export default function TaskLibrarySection() {
                         <span className="px-1.5 py-0.5 rounded bg-white/5">
                           {tpl.duration}
                         </span>
-                        <span className="px-1.5 py-0.5 rounded bg-white/5">
-                          {tpl.gradeMin}-{tpl.gradeMax} 年级
-                        </span>
+                        {difficultyInfo && (
+                          <span className={`px-1.5 py-0.5 rounded border ${difficultyInfo.color}`}>
+                            {difficultyInfo.label}
+                          </span>
+                        )}
+                        {semesterInfo && (
+                          <span className="px-1.5 py-0.5 rounded bg-info/10 text-info border border-info/20">
+                            {semesterInfo.label}
+                          </span>
+                        )}
                         {tpl.milestoneTag && (
                           <span className="px-1.5 py-0.5 rounded bg-warning/10 text-warning border border-warning/20">
                             {tpl.milestoneTag}
                           </span>
                         )}
                       </div>
+                      {tpl.tags.length > 0 && (
+                        <div className="flex flex-wrap gap-1 mt-2">
+                          {tpl.tags.map((tag) => (
+                            <span
+                              key={tag}
+                              className="text-[9px] px-1.5 py-0.5 rounded bg-white/5 text-slate-500 flex items-center gap-0.5"
+                            >
+                              <Tag className="w-2.5 h-2.5" />
+                              {tag}
+                            </span>
+                          ))}
+                        </div>
+                      )}
                       {tpl.routeTags.length > 0 && (
                         <div className="flex flex-wrap gap-1 mt-2">
                           {tpl.routeTags.map((tag) => {
@@ -316,6 +452,24 @@ export default function TaskLibrarySection() {
                     >
                       <Pencil className="w-3 h-3" />
                       编辑
+                    </button>
+                    <button
+                      onClick={() => handleArchive(tpl.id, !isArchived)}
+                      disabled={archivingId === tpl.id}
+                      className={`flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs transition-colors disabled:opacity-50 ${
+                        isArchived
+                          ? 'bg-success/10 text-success hover:bg-success/15'
+                          : 'bg-slate-500/10 text-slate-400 hover:bg-slate-500/15'
+                      }`}
+                    >
+                      {archivingId === tpl.id ? (
+                        <Loader2 className="w-3 h-3 animate-spin" />
+                      ) : isArchived ? (
+                        <RotateCcw className="w-3 h-3" />
+                      ) : (
+                        <Archive className="w-3 h-3" />
+                      )}
+                      {isArchived ? '恢复' : '归档'}
                     </button>
                     <button
                       onClick={() => handleDelete(tpl.id)}
@@ -349,6 +503,7 @@ export default function TaskLibrarySection() {
         {modalOpen && (
           <TaskTemplateModal
             initial={editing}
+            capabilities={capabilities}
             onClose={() => setModalOpen(false)}
             onSave={handleSave}
             saving={saving}
@@ -361,27 +516,34 @@ export default function TaskLibrarySection() {
 
 interface TaskTemplateModalProps {
   initial: TaskTemplate | null;
+  capabilities: Capability[];
   onClose: () => void;
   onSave: (data: typeof emptyTemplate) => void;
   saving: boolean;
 }
 
-function TaskTemplateModal({ initial, onClose, onSave, saving }: TaskTemplateModalProps) {
+function TaskTemplateModal({ initial, capabilities, onClose, onSave, saving }: TaskTemplateModalProps) {
   const shouldReduceMotion = useReducedMotion();
   const [form, setForm] = useState(() =>
     initial
       ? {
           title: initial.title,
           category: initial.category,
-          gradeMin: initial.gradeMin,
-          gradeMax: initial.gradeMax,
           duration: initial.duration,
+          difficulty: initial.difficulty ?? 'medium',
           materials: initial.materials,
           description: initial.description ?? '',
           routeTags: initial.routeTags,
           milestoneTag: initial.milestoneTag ?? '',
+          semesterTag: initial.semesterTag ?? '',
+          tags: initial.tags,
           source: initial.source,
           isActive: initial.isActive,
+          taskType: initial.taskType ?? 'daily',
+          frequency: initial.frequency ?? 'once',
+          customFrequency: initial.customFrequency ?? null,
+          assessmentCriteria: initial.assessmentCriteria ?? [],
+          capabilityLinks: initial.capabilityLinks ?? [],
         }
       : { ...emptyTemplate }
   );
@@ -401,6 +563,56 @@ function TaskTemplateModal({ initial, onClose, onSave, saving }: TaskTemplateMod
         routeTags: has ? prev.routeTags.filter((t) => t !== tag) : [...prev.routeTags, tag],
       };
     });
+  };
+
+  const addCapabilityLink = (capabilityId: string) => {
+    setForm((prev) => {
+      if (prev.capabilityLinks.some((l) => l.capabilityId === capabilityId)) return prev;
+      return {
+        ...prev,
+        capabilityLinks: [
+          ...prev.capabilityLinks,
+          { capabilityId, weight: 1, expectedProgress: 0 } as TaskCapabilityLink,
+        ],
+      };
+    });
+  };
+
+  const updateCapabilityLink = (capabilityId: string, updates: Partial<TaskCapabilityLink>) => {
+    setForm((prev) => ({
+      ...prev,
+      capabilityLinks: prev.capabilityLinks.map((l) =>
+        l.capabilityId === capabilityId ? { ...l, ...updates } : l
+      ),
+    }));
+  };
+
+  const removeCapabilityLink = (capabilityId: string) => {
+    setForm((prev) => ({
+      ...prev,
+      capabilityLinks: prev.capabilityLinks.filter((l) => l.capabilityId !== capabilityId),
+    }));
+  };
+
+  const addAssessmentCriterion = () => {
+    setForm((prev) => ({
+      ...prev,
+      assessmentCriteria: [...prev.assessmentCriteria, { metric: '', target: '', selfReport: true }],
+    }));
+  };
+
+  const updateAssessmentCriterion = (index: number, updates: Partial<AssessmentCriterion>) => {
+    setForm((prev) => ({
+      ...prev,
+      assessmentCriteria: prev.assessmentCriteria.map((c, i) => (i === index ? { ...c, ...updates } : c)),
+    }));
+  };
+
+  const removeAssessmentCriterion = (index: number) => {
+    setForm((prev) => ({
+      ...prev,
+      assessmentCriteria: prev.assessmentCriteria.filter((_, i) => i !== index),
+    }));
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -437,7 +649,7 @@ function TaskTemplateModal({ initial, onClose, onSave, saving }: TaskTemplateMod
                 {initial ? '编辑任务模板' : '新增任务模板'}
               </h2>
               <p className="text-xs text-slate-400">
-                {initial ? '修改后所有未来周计划引用都会更新' : '创建后可在周任务中一键选用'}
+                {initial ? '修改后所有未来周计划引用都会更新' : '创建后可在周计划中一键选用'}
               </p>
             </div>
           </div>
@@ -465,7 +677,7 @@ function TaskTemplateModal({ initial, onClose, onSave, saving }: TaskTemplateMod
             />
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div>
               <label className="block text-xs text-slate-400 mb-1.5">分类</label>
               <select
@@ -490,30 +702,19 @@ function TaskTemplateModal({ initial, onClose, onSave, saving }: TaskTemplateMod
                 className="w-full text-sm bg-white/5 border border-white/[0.08] rounded-lg px-3 py-2 text-slate-200 placeholder:text-slate-600 focus:outline-none focus:border-primary/50"
               />
             </div>
-          </div>
-
-          <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs text-slate-400 mb-1.5">最低年级</label>
-              <input
-                type="number"
-                min={1}
-                max={12}
-                value={form.gradeMin}
-                onChange={(e) => updateField('gradeMin', parseInt(e.target.value || '1', 10))}
+              <label className="block text-xs text-slate-400 mb-1.5">难度</label>
+              <select
+                value={form.difficulty ?? 'medium'}
+                onChange={(e) => updateField('difficulty', e.target.value as 'easy' | 'medium' | 'hard')}
                 className="w-full text-sm bg-white/5 border border-white/[0.08] rounded-lg px-3 py-2 text-slate-200 focus:outline-none focus:border-primary/50"
-              />
-            </div>
-            <div>
-              <label className="block text-xs text-slate-400 mb-1.5">最高年级</label>
-              <input
-                type="number"
-                min={1}
-                max={12}
-                value={form.gradeMax}
-                onChange={(e) => updateField('gradeMax', parseInt(e.target.value || '12', 10))}
-                className="w-full text-sm bg-white/5 border border-white/[0.08] rounded-lg px-3 py-2 text-slate-200 focus:outline-none focus:border-primary/50"
-              />
+              >
+                {difficultyOptions.map((d) => (
+                  <option key={d.value} value={d.value}>
+                    {d.label}
+                  </option>
+                ))}
+              </select>
             </div>
           </div>
 
@@ -544,13 +745,46 @@ function TaskTemplateModal({ initial, onClose, onSave, saving }: TaskTemplateMod
             />
           </div>
 
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-xs text-slate-400 mb-1.5">关联里程碑标签</label>
+              <input
+                type="text"
+                value={form.milestoneTag ?? ''}
+                onChange={(e) => updateField('milestoneTag', e.target.value)}
+                placeholder="例如：AMC8 / 古诗文大会"
+                className="w-full text-sm bg-white/5 border border-white/[0.08] rounded-lg px-3 py-2 text-slate-200 placeholder:text-slate-600 focus:outline-none focus:border-primary/50"
+              />
+            </div>
+            <div>
+              <label className="block text-xs text-slate-400 mb-1.5">适用学期场景</label>
+              <select
+                value={form.semesterTag ?? ''}
+                onChange={(e) => updateField('semesterTag', e.target.value)}
+                className="w-full text-sm bg-white/5 border border-white/[0.08] rounded-lg px-3 py-2 text-slate-200 focus:outline-none focus:border-primary/50"
+              >
+                <option value="">全年通用</option>
+                {semesterOptions.map((s) => (
+                  <option key={s.value} value={s.value}>
+                    {s.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+
           <div>
-            <label className="block text-xs text-slate-400 mb-1.5">关联里程碑标签</label>
+            <label className="block text-xs text-slate-400 mb-1.5">自由标签（用逗号分隔）</label>
             <input
               type="text"
-              value={form.milestoneTag ?? ''}
-              onChange={(e) => updateField('milestoneTag', e.target.value)}
-              placeholder="例如：AMC8 / 古诗文大会"
+              value={form.tags.join('，')}
+              onChange={(e) =>
+                updateField(
+                  'tags',
+                  e.target.value.split(/[,，]/).map((s) => s.trim()).filter(Boolean)
+                )
+              }
+              placeholder="例如：晨读，睡前，周末补漏"
               className="w-full text-sm bg-white/5 border border-white/[0.08] rounded-lg px-3 py-2 text-slate-200 placeholder:text-slate-600 focus:outline-none focus:border-primary/50"
             />
           </div>
@@ -577,6 +811,205 @@ function TaskTemplateModal({ initial, onClose, onSave, saving }: TaskTemplateMod
                 );
               })}
             </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-xs text-slate-400 mb-1.5">任务类型</label>
+              <select
+                value={form.taskType}
+                onChange={(e) => updateField('taskType', e.target.value as TaskType)}
+                className="w-full text-sm bg-white/5 border border-white/[0.08] rounded-lg px-3 py-2 text-slate-200 focus:outline-none focus:border-primary/50"
+              >
+                {taskTypeOptions.map((t) => (
+                  <option key={t.value} value={t.value}>
+                    {t.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label className="block text-xs text-slate-400 mb-1.5">执行频率</label>
+              <select
+                value={form.frequency}
+                onChange={(e) => updateField('frequency', e.target.value as TaskFrequency)}
+                className="w-full text-sm bg-white/5 border border-white/[0.08] rounded-lg px-3 py-2 text-slate-200 focus:outline-none focus:border-primary/50"
+              >
+                {frequencyOptions.map((f) => (
+                  <option key={f.value} value={f.value}>
+                    {f.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+
+          {form.frequency === 'custom' && (
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-xs text-slate-400 mb-1.5">次数</label>
+                <input
+                  type="number"
+                  min={1}
+                  value={form.customFrequency?.times ?? 1}
+                  onChange={(e) =>
+                    updateField('customFrequency', {
+                      ...form.customFrequency,
+                      times: parseInt(e.target.value || '1', 10),
+                      period: form.customFrequency?.period ?? 'week',
+                    })
+                  }
+                  className="w-full text-sm bg-white/5 border border-white/[0.08] rounded-lg px-3 py-2 text-slate-200 focus:outline-none focus:border-primary/50"
+                />
+              </div>
+              <div>
+                <label className="block text-xs text-slate-400 mb-1.5">周期</label>
+                <select
+                  value={form.customFrequency?.period ?? 'week'}
+                  onChange={(e) =>
+                    updateField('customFrequency', {
+                      ...form.customFrequency,
+                      times: form.customFrequency?.times ?? 1,
+                      period: e.target.value as 'day' | 'week' | 'month',
+                    })
+                  }
+                  className="w-full text-sm bg-white/5 border border-white/[0.08] rounded-lg px-3 py-2 text-slate-200 focus:outline-none focus:border-primary/50"
+                >
+                  <option value="day">每天</option>
+                  <option value="week">每周</option>
+                  <option value="month">每月</option>
+                </select>
+              </div>
+            </div>
+          )}
+
+          <div>
+            <div className="flex items-center justify-between mb-2">
+              <label className="block text-xs text-slate-400">能力关联（用于 AI 分析）</label>
+              <span className="text-[10px] text-slate-500">权重越高，对能力影响越大</span>
+            </div>
+
+            {form.capabilityLinks.length > 0 && (
+              <div className="space-y-2 mb-3">
+                {form.capabilityLinks.map((link) => {
+                  const capability = capabilities.find((c) => c.id === link.capabilityId);
+                  if (!capability) return null;
+                  return (
+                    <div
+                      key={link.capabilityId}
+                      className="flex items-center gap-3 p-2.5 rounded-lg bg-white/5 border border-white/[0.06]"
+                    >
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2">
+                          <span className="text-sm font-medium text-slate-200">{capability.name}</span>
+                          <span className="text-[10px] px-1.5 py-0.5 rounded bg-white/5 text-slate-400">
+                            {capabilityCategoryLabels[capability.category] || capability.category}
+                          </span>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <input
+                          type="number"
+                          min={0}
+                          max={2}
+                          step={0.1}
+                          value={link.weight}
+                          onChange={(e) =>
+                            updateCapabilityLink(link.capabilityId, { weight: parseFloat(e.target.value) || 0 })
+                          }
+                          className="w-16 text-sm bg-white/5 border border-white/[0.08] rounded-lg px-2 py-1 text-slate-200 text-center focus:outline-none focus:border-primary/50"
+                          title="权重"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => removeCapabilityLink(link.capabilityId)}
+                          className="p-1.5 rounded-lg hover:bg-white/10 text-slate-400"
+                        >
+                          <X className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+
+            <select
+              value=""
+              onChange={(e) => {
+                if (e.target.value) {
+                  addCapabilityLink(e.target.value);
+                  e.target.value = '';
+                }
+              }}
+              className="w-full text-sm bg-white/5 border border-white/[0.08] rounded-lg px-3 py-2 text-slate-200 focus:outline-none focus:border-primary/50"
+            >
+              <option value="">+ 添加关联能力</option>
+              {capabilities
+                .filter((c) => !form.capabilityLinks.some((l) => l.capabilityId === c.id))
+                .map((c) => (
+                  <option key={c.id} value={c.id}>
+                    {c.name} ({capabilityCategoryLabels[c.category] || c.category})
+                  </option>
+                ))}
+            </select>
+          </div>
+
+          <div>
+            <div className="flex items-center justify-between mb-2">
+              <label className="block text-xs text-slate-400">评估标准</label>
+              <button
+                type="button"
+                onClick={addAssessmentCriterion}
+                className="text-[10px] text-primary hover:text-primary-glow transition-colors"
+              >
+                + 添加标准
+              </button>
+            </div>
+
+            {form.assessmentCriteria.length === 0 ? (
+              <p className="text-xs text-slate-500">未设置评估标准，AI 将默认以「是否完成」作为评估依据。</p>
+            ) : (
+              <div className="space-y-2">
+                {form.assessmentCriteria.map((criterion, index) => (
+                  <div
+                    key={index}
+                    className="grid grid-cols-[1fr_1fr_auto_auto] gap-2 items-center p-2.5 rounded-lg bg-white/5 border border-white/[0.06]"
+                  >
+                    <input
+                      type="text"
+                      value={criterion.metric}
+                      onChange={(e) => updateAssessmentCriterion(index, { metric: e.target.value })}
+                      placeholder="指标，例如：正确率"
+                      className="text-sm bg-transparent border-b border-white/[0.08] px-1 py-1 text-slate-200 placeholder:text-slate-600 focus:outline-none focus:border-primary/50"
+                    />
+                    <input
+                      type="text"
+                      value={criterion.target}
+                      onChange={(e) => updateAssessmentCriterion(index, { target: e.target.value })}
+                      placeholder="目标，例如：>= 80%"
+                      className="text-sm bg-transparent border-b border-white/[0.08] px-1 py-1 text-slate-200 placeholder:text-slate-600 focus:outline-none focus:border-primary/50"
+                    />
+                    <label className="flex items-center gap-1 text-[10px] text-slate-400 whitespace-nowrap cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={criterion.selfReport}
+                        onChange={(e) => updateAssessmentCriterion(index, { selfReport: e.target.checked })}
+                        className="rounded border-white/[0.08] bg-white/5 text-primary focus:ring-0"
+                      />
+                      自评
+                    </label>
+                    <button
+                      type="button"
+                      onClick={() => removeAssessmentCriterion(index)}
+                      className="p-1.5 rounded-lg hover:bg-white/10 text-slate-400"
+                    >
+                      <X className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
 
           <div className="flex items-center justify-end gap-3 pt-4 border-t border-white/[0.06]">

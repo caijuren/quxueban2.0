@@ -32,6 +32,7 @@ import MatchAnalysisModal from './MatchAnalysisModal';
 import NewPlanModal from './NewPlanModal';
 import ManageNodesModal from './ManageNodesModal';
 import EmptyState from '@/components/ui/EmptyState';
+import ChildEmptyState from '@/components/dashboard/ChildEmptyState';
 import CommandCard from '@/components/ui/CommandCard';
 import TimelineNode from '@/components/ui/TimelineNode';
 import { useChildren } from '@/components/dashboard/ChildrenContext';
@@ -152,11 +153,7 @@ function PlanPageContent() {
   return (
     <div className="space-y-6">
       {!currentChild && (
-        <EmptyState
-          icon={School}
-          title="还没有孩子档案"
-          description="请先在右上角添加孩子，系统会根据年级自动匹配对应阶段的路线方案"
-        />
+        <ChildEmptyState description="添加孩子后，系统会根据年级自动匹配对应阶段的路线方案" />
       )}
 
       {/* Header */}

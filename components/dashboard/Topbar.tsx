@@ -1,12 +1,13 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Bell, Search, Menu, Check, User, LogOut } from 'lucide-react';
+import { Bell, Search, Menu, Check, LogOut } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { signOut } from 'next-auth/react';
 import { useChildren } from '@/components/dashboard/ChildrenContext';
-import { gradeLabel, gradeToStage, getInitials } from '@/lib/children';
+import ChildAvatar from '@/components/dashboard/ChildAvatar';
+import { gradeLabel, gradeToStage } from '@/lib/children';
 
 interface Notification {
   id: string;
@@ -265,28 +266,7 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
             aria-expanded={childDropdownOpen}
             aria-controls="child-listbox"
           >
-            <div
-              className="w-9 h-9 rounded-lg flex items-center justify-center text-white text-sm font-bold overflow-hidden shrink-0 ring-1 ring-white/10"
-              style={{
-                background: currentChild
-                  ? `linear-gradient(135deg, ${currentChild.avatarColor}, ${currentChild.avatarColor}88)`
-                  : 'linear-gradient(135deg, #475569, #64748b)',
-              }}
-            >
-              {currentChild?.avatarUrl?.startsWith('data:image') ? (
-                <img
-                  src={currentChild.avatarUrl}
-                  alt={currentChild.name}
-                  className="w-full h-full object-cover"
-                />
-              ) : currentChild?.avatarUrl ? (
-                <span className="text-base">{currentChild.avatarUrl}</span>
-              ) : currentChild ? (
-                getInitials(currentChild.name)
-              ) : (
-                <User className="w-4 h-4" />
-              )}
-            </div>
+            <ChildAvatar child={currentChild} size="md" shape="rounded" fallbackIcon />
             <div className="text-right hidden sm:block">
               <p className="text-sm font-semibold text-white leading-tight">
                 {currentChild ? currentChild.name : '未选择孩子'}
@@ -318,7 +298,7 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
               className="absolute right-0 top-full mt-2 w-64 rounded-2xl glass border border-border-default overflow-hidden z-50 shadow-panel"
             >
               <div className="px-4 py-2.5 border-b border-border-subtle">
-                <p className="text-xs text-text-muted">切换作战档案</p>
+                <p className="text-xs text-text-muted">切换孩子档案</p>
               </div>
               <div className="p-1.5">
                 {children.map((child, index) => {
@@ -339,24 +319,7 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
                         isActive ? 'bg-primary-dim border border-primary/20' : 'hover:bg-surface-light'
                       }`}
                     >
-                      <div
-                        className="w-8 h-8 rounded-lg flex items-center justify-center text-white text-xs font-bold shrink-0 overflow-hidden ring-1 ring-white/10"
-                        style={{
-                          background: `linear-gradient(135deg, ${child.avatarColor}, ${child.avatarColor}88)`,
-                        }}
-                      >
-                        {child.avatarUrl?.startsWith('data:image') ? (
-                          <img
-                            src={child.avatarUrl}
-                            alt={child.name}
-                            className="w-full h-full object-cover"
-                          />
-                        ) : child.avatarUrl ? (
-                          <span className="text-sm">{child.avatarUrl}</span>
-                        ) : (
-                          getInitials(child.name)
-                        )}
-                      </div>
+                      <ChildAvatar child={child} size="sm" shape="rounded" />
                       <div className="flex-1 min-w-0">
                         <p className={`text-sm font-semibold truncate ${isActive ? 'text-primary' : 'text-white'}`}>
                           {child.name}

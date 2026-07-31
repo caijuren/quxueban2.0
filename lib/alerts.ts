@@ -31,13 +31,11 @@ export interface Alert {
 }
 
 const categoryOrder: TaskCategory[] = [
-  'chinese',
-  'math',
-  'english',
   'school',
   'reading',
   'sport',
   'interest',
+  'ability',
   'other',
 ];
 

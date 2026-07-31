@@ -18,7 +18,7 @@ export default function FinalCTA() {
         <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold font-display leading-tight mb-5">
           现在就为孩子绘制
           <br />
-          <span className="text-slate-500">第一张升学作战图</span>
+          <span className="text-slate-500">第一张升学规划图</span>
         </h2>
 
         <p className="text-base text-slate-400 max-w-lg mx-auto mb-8">

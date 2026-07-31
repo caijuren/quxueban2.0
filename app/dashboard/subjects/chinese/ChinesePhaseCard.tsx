@@ -74,7 +74,7 @@ export default function ChinesePhaseCard({ grade }: { grade: number }) {
       <div className="rounded-xl bg-white/[0.03] border border-white/5 p-4">
         <h3 className="font-bold text-slate-200 mb-4 flex items-center gap-2">
           <Clock className="w-4 h-4 text-accent" />
-          每周任务模板
+          每周计划模板
         </h3>
         <div className="grid grid-cols-1 lg:grid-cols-7 gap-2">
           {plan.weeklyTemplate.map((task) => (

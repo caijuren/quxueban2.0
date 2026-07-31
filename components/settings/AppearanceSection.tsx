@@ -37,9 +37,9 @@ const DENSITIES = [
 ];
 
 const LANDING_PAGES = [
-  { id: 'dashboard', label: '作战指挥中心', icon: Home },
-  { id: 'weekly', label: '周任务', icon: Layout },
-  { id: 'alerts', label: '预警提醒', icon: Eye },
+  { id: 'dashboard', label: '升学规划中心', icon: Home },
+  { id: 'weekly', label: '周计划', icon: Layout },
+  { id: 'alerts', label: '提醒中心', icon: Eye },
 ];
 
 const CHILD_MODES = [

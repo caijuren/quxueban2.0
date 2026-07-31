@@ -1,0 +1,80 @@
+'use client';
+
+import { User } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { Child, getInitials } from '@/lib/children';
+
+interface ChildAvatarProps {
+  child?: Child | null;
+  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl';
+  shape?: 'circle' | 'rounded';
+  className?: string;
+  fallbackIcon?: boolean;
+}
+
+const sizeMap = {
+  xs: 'w-6 h-6 text-[10px]',
+  sm: 'w-8 h-8 text-xs',
+  md: 'w-9 h-9 text-sm',
+  lg: 'w-10 h-10 text-sm',
+  xl: 'w-12 h-12 text-lg',
+  '2xl': 'w-14 h-14 text-xl',
+};
+
+export default function ChildAvatar({
+  child,
+  size = 'md',
+  shape = 'rounded',
+  className,
+  fallbackIcon = false,
+}: ChildAvatarProps) {
+  const isDataImage = child?.avatarUrl?.startsWith('data:image');
+  const isEmoji = child?.avatarUrl && !isDataImage;
+
+  const containerClass = cn(
+    'inline-flex items-center justify-center font-bold text-white shrink-0 overflow-hidden ring-1 ring-white/10',
+    shape === 'circle' ? 'rounded-full' : 'rounded-lg',
+    sizeMap[size],
+    className
+  );
+
+  const style: React.CSSProperties = child
+    ? {
+        background: `linear-gradient(135deg, ${child.avatarColor}, ${child.avatarColor}88)`,
+      }
+    : {
+        background: 'linear-gradient(135deg, #475569, #64748b)',
+      };
+
+  if (!child) {
+    return (
+      <div className={containerClass} style={style}>
+        {fallbackIcon ? <User className="w-1/2 h-1/2" /> : <span>?</span>}
+      </div>
+    );
+  }
+
+  if (isDataImage) {
+    return (
+      <div className={containerClass} style={style}>
+        <img
+          src={child.avatarUrl || undefined}
+          alt={child.name}
+          className="w-full h-full object-cover"
+        />
+      </div>
+    );
+  }
+
+  return (
+    <div className={containerClass} style={style}>
+      {isEmoji ? (
+        <span className={size === 'xs' || size === 'sm' ? 'text-base' : 'text-xl'}>
+          {child.avatarUrl}
+        </span>
+      ) : (
+        <span>{getInitials(child.name)}</span>
+      )}
+    </div>
+  );
+}

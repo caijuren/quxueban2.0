@@ -1,10 +1,10 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { CalendarCheck, Clock, CheckCircle2, Circle, AlertCircle, User } from 'lucide-react';
+import { CalendarCheck, Clock, CheckCircle2, Circle, AlertCircle } from 'lucide-react';
 import { useChildren } from '@/components/dashboard/ChildrenContext';
 import { gradeLabel } from '@/lib/children';
-import EmptyState from '@/components/ui/EmptyState';
+import ChildEmptyState from '@/components/dashboard/ChildEmptyState';
 
 const milestones = [
   {
@@ -64,11 +64,7 @@ export default function MilestonesPage() {
       </motion.div>
 
       {!currentChild && (
-        <EmptyState
-          icon={User}
-          title="还没有孩子档案"
-          description="请先在右上角添加孩子，系统会根据年级展示对应的里程碑任务"
-        />
+        <ChildEmptyState description="添加孩子后，系统会根据年级展示对应的里程碑任务" />
       )}
 
       <div className="space-y-6">

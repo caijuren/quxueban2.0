@@ -1,10 +1,10 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Sparkles, RefreshCw, AlertTriangle, CheckCircle2, Lightbulb, Calendar, User } from 'lucide-react';
+import { Sparkles, RefreshCw, AlertTriangle, CheckCircle2, Lightbulb, Calendar } from 'lucide-react';
 import { useChildren } from '@/components/dashboard/ChildrenContext';
 import { gradeLabel } from '@/lib/children';
-import EmptyState from '@/components/ui/EmptyState';
+import ChildEmptyState from '@/components/dashboard/ChildEmptyState';
 
 const reportSections = [
   {
@@ -62,7 +62,7 @@ export default function AIPage() {
       >
         <div>
           <h1 className="text-3xl font-bold font-display mb-2">
-            {currentChild ? `${currentChild.name}的 AI 检视` : 'AI 检视'}
+            {currentChild ? `${currentChild.name}的 AI 诊断` : 'AI 诊断'}
           </h1>
           <p className="text-slate-400">
             {currentChild
@@ -77,11 +77,7 @@ export default function AIPage() {
       </motion.div>
 
       {!currentChild && (
-        <EmptyState
-          icon={User}
-          title="还没有孩子档案"
-          description="请先在右上角添加孩子，系统会根据年级生成对应的 AI 诊断建议"
-        />
+        <ChildEmptyState description="添加孩子后，系统会根据年级生成对应的 AI 诊断建议" />
       )}
 
       <motion.div

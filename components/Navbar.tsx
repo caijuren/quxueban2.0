@@ -11,7 +11,7 @@ const navItems = [
   { name: '路线方案', href: '/plan', icon: Route },
   { name: '里程碑', href: '/milestones', icon: CalendarCheck },
   { name: '进度追踪', href: '/progress', icon: BarChart3 },
-  { name: 'AI 检视', href: '/ai', icon: Brain },
+  { name: 'AI 诊断', href: '/ai', icon: Brain },
 ];
 
 export default function Navbar() {

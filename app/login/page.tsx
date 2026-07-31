@@ -106,13 +106,13 @@ function LoginForm() {
           </div>
 
           <h1 className="text-4xl xl:text-5xl font-bold font-display leading-tight mb-5 text-balance">
-            升学作战
+            升学规划
             <br />
-            <span className="gradient-text">指挥中心</span>
+            <span className="gradient-text">中心</span>
           </h1>
 
           <p className="text-base text-slate-400 leading-relaxed mb-10 max-w-md">
-            选择路线、拆解任务、追踪进度、AI 检视调整。让每一步升学准备都心中有数。
+            选择路线、拆解任务、追踪进度、AI 诊断调整。让每一步升学准备都心中有数。
           </p>
 
           <div className="space-y-3">

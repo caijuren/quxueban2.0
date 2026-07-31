@@ -1,11 +1,12 @@
 'use client';
 
 import { motion, AnimatePresence } from 'framer-motion';
-import { School, MapPin, Trophy, Plus, Search, User, X } from 'lucide-react';
+import { School, MapPin, Trophy, Plus, Search, X } from 'lucide-react';
 import { Suspense, useMemo, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import EmptyState from '@/components/ui/EmptyState';
+import ChildEmptyState from '@/components/dashboard/ChildEmptyState';
 import { useChildren } from '@/components/dashboard/ChildrenContext';
 import { gradeLabel, gradeToStage } from '@/lib/children';
 import { schoolsData } from './[school]/SchoolDetail';
@@ -147,11 +148,7 @@ function SchoolsPageContent() {
       </div>
 
       {!currentChild && (
-        <EmptyState
-          icon={User}
-          title="还没有孩子档案"
-          description="请先在右上角添加孩子，系统会根据年级展示对应阶段的目标学校"
-        />
+        <ChildEmptyState description="添加孩子后，系统会根据年级展示对应阶段的目标学校" />
       )}
 
       {filteredSchools.length === 0 && (

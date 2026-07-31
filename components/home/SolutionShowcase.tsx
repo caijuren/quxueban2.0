@@ -27,7 +27,7 @@ export default function SolutionShowcase() {
                 <div className="flex items-center justify-between pb-4 border-b border-white/5">
                   <div className="flex items-center gap-2">
                     <div className="w-2 h-2 rounded-full bg-primary" />
-                    <span className="text-[11px] font-mono text-slate-500">趣学伴 · 仪表盘</span>
+                    <span className="text-[11px] font-mono text-slate-500">趣学伴 · 总览</span>
                   </div>
                   <span className="text-[11px] font-mono text-primary">LIVE</span>
                 </div>
@@ -58,7 +58,7 @@ export default function SolutionShowcase() {
                 </div>
 
                 <div className="p-4 rounded-lg bg-white/[0.03] border border-white/[0.06]">
-                  <div className="text-[11px] text-slate-500 mb-2">AI 检视摘要</div>
+                  <div className="text-[11px] text-slate-500 mb-2">AI 诊断摘要</div>
                   <p className="text-sm text-slate-300">英语进度良好，奥数需加强，建议本月完成机构试听。</p>
                 </div>
               </div>

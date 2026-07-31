@@ -6,10 +6,17 @@ import {
   getCurrentWeekId,
 } from '../lib/weeklyTasks';
 import { seedSystemTaskTemplatesForUser } from '../lib/seedTaskTemplates';
+import { seedSystemCapabilities } from '../lib/seedCapabilities';
 
 const prisma = new PrismaClient();
 
 async function main() {
+  // Seed system capabilities first
+  const seededCapabilities = await seedSystemCapabilities(prisma);
+  if (seededCapabilities > 0) {
+    console.log(`Seeded ${seededCapabilities} system capabilities`);
+  }
+
   const adminUsername = process.env.ADMIN_USERNAME || 'admin';
   const adminPassword = process.env.ADMIN_PASSWORD || 'admin123';
 

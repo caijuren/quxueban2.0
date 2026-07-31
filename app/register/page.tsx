@@ -76,7 +76,7 @@ export default function RegisterPage() {
           <h1 className="text-4xl xl:text-5xl font-bold font-display leading-tight mb-5 text-balance">
             开启升学
             <br />
-            <span className="gradient-text">作战指挥</span>
+            <span className="gradient-text">规划中心</span>
           </h1>
 
           <p className="text-base text-slate-400 leading-relaxed mb-10 max-w-md">

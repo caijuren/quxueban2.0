@@ -3,21 +3,16 @@ import { SYSTEM_TASK_TEMPLATES, SystemTaskTemplate } from './taskTemplates';
 import { TaskAlignment, TaskCategory, WeeklyTaskItem } from './storage.types';
 
 export interface AlignmentInput {
-  child: Pick<Child, 'grade' | 'routeId'>;
-  template: Pick<
-    SystemTaskTemplate,
-    'gradeMin' | 'gradeMax' | 'routeTags'
-  >;
+  child: Pick<Child, 'routeId'>;
+  template: Pick<SystemTaskTemplate, 'routeTags'>;
 }
 
 export function computeTaskAlignment({ child, template }: AlignmentInput): TaskAlignment {
-  const { grade, routeId } = child;
-  const { gradeMin, gradeMax, routeTags } = template;
+  const { routeId } = child;
+  const { routeTags } = template;
 
-  // 通用任务（无路线标签）不判断路线匹配，按年级判断
+  // 通用任务（无路线标签）视为可选补充
   if (!routeTags || routeTags.length === 0) {
-    if (grade < gradeMin) return 'ahead';
-    if (grade > gradeMax) return 'behind';
     return 'optional';
   }
 
@@ -26,21 +21,17 @@ export function computeTaskAlignment({ child, template }: AlignmentInput): TaskA
     return 'unrelated';
   }
 
-  // 路线匹配，按年级判断阶段
-  if (grade < gradeMin) return 'ahead';
-  if (grade > gradeMax) return 'behind';
+  // 路线匹配即视为当前阶段
   return 'ontrack';
 }
 
 export function getCategoryColorClass(category: TaskCategory): string {
   const map: Record<TaskCategory, string> = {
-    chinese: 'bg-rose-500/20 text-rose-300 border-rose-500/30',
-    math: 'bg-cyan-500/20 text-cyan-300 border-cyan-500/30',
-    english: 'bg-amber-500/20 text-amber-300 border-amber-500/30',
     school: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30',
     reading: 'bg-violet-500/20 text-violet-300 border-violet-500/30',
     sport: 'bg-orange-500/20 text-orange-300 border-orange-500/30',
     interest: 'bg-pink-500/20 text-pink-300 border-pink-500/30',
+    ability: 'bg-indigo-500/20 text-indigo-300 border-indigo-500/30',
     other: 'bg-slate-500/20 text-slate-300 border-slate-500/30',
   };
   return map[category] || map.other;

@@ -3,8 +3,9 @@
 import { useState } from 'react';
 import { Plus, Pencil, Trash2, Star, School, Route } from 'lucide-react';
 import { useChildren } from '@/components/dashboard/ChildrenContext';
+import ChildAvatar from '@/components/dashboard/ChildAvatar';
 import ChildModal from '@/components/dashboard/ChildModal';
-import { Child, gradeLabel, gradeToStage, getInitials } from '@/lib/children';
+import { Child, gradeLabel, gradeToStage } from '@/lib/children';
 import { getRouteById } from '@/lib/plans';
 import SettingsSection from './SettingsSection';
 
@@ -43,24 +44,7 @@ export default function ChildrenSection() {
                 </div>
               )}
               <div className="flex items-start gap-3 mb-4">
-                <div
-                  className="w-12 h-12 rounded-xl flex items-center justify-center text-white font-bold text-lg shrink-0"
-                  style={{
-                    background: `linear-gradient(135deg, ${child.avatarColor}, ${child.avatarColor}88)`,
-                  }}
-                >
-                  {child.avatarUrl?.startsWith('data:image') ? (
-                    <img
-                      src={child.avatarUrl}
-                      alt={child.name}
-                      className="w-full h-full object-cover"
-                    />
-                  ) : child.avatarUrl ? (
-                    <span className="text-2xl">{child.avatarUrl}</span>
-                  ) : (
-                    getInitials(child.name)
-                  )}
-                </div>
+                <ChildAvatar child={child} size="xl" shape="rounded" />
                 <div className="min-w-0">
                   <h3 className="text-base font-bold font-display text-slate-100 truncate">
                     {child.name}

@@ -151,7 +151,7 @@ export default function HeroV2() {
                 <div className="flex items-center gap-2">
                   <Target className="w-3.5 h-3.5 text-primary" aria-hidden="true" />
                   <span className="text-[11px] font-mono text-slate-400 uppercase tracking-wider">
-                    升学作战图 · 2025-2030
+                    升学规划图 · 2025-2030
                   </span>
                 </div>
                 <div className="flex items-center gap-1.5">

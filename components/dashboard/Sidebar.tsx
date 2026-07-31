@@ -2,17 +2,15 @@
 
 import {
   LayoutDashboard,
-  Route,
   Brain,
   Sparkles,
-  Languages,
-  Calculator,
-  BookText,
   Calendar,
   Bell,
   Target,
   Settings,
+  Wrench,
   X,
+  Library,
 } from 'lucide-react';
 import packageInfo from '@/package.json';
 import Link from 'next/link';
@@ -20,35 +18,31 @@ import { usePathname } from 'next/navigation';
 
 const menuGroups = [
   {
-    title: '核心规划',
+    title: '概览',
     items: [
-      { name: '仪表盘', href: '/dashboard', icon: LayoutDashboard },
-      { name: '路线方案', href: '/dashboard/plan', icon: Route },
+      { name: '总览', href: '/dashboard', icon: LayoutDashboard },
     ],
   },
   {
-    title: '学科作战室',
+    title: '任务',
     items: [
-      { name: '英语学科', href: '/dashboard/subjects/english', icon: Languages },
-      { name: '数学学科', href: '/dashboard/subjects/math', icon: Calculator },
-      { name: '语文学科', href: '/dashboard/subjects/chinese', icon: BookText },
+      { name: '今日任务', href: '/dashboard/today', icon: Target },
+      { name: '周计划', href: '/dashboard/weekly', icon: Calendar },
+      { name: '任务库', href: '/dashboard/task-library', icon: Library },
+      { name: '提醒中心', href: '/dashboard/alerts', icon: Bell },
     ],
   },
   {
-    title: '执行跟踪',
-    items: [
-      { name: '今日作战', href: '/dashboard/today', icon: Target },
-      { name: '周任务', href: '/dashboard/weekly', icon: Calendar },
-      { name: '作战室', href: '/dashboard/alerts', icon: Bell },
-    ],
+    title: 'AI 助手',
+    items: [{ name: 'AI 诊断', href: '/dashboard/ai', icon: Brain }],
   },
   {
-    title: '智能参谋',
-    items: [{ name: 'AI 检视', href: '/dashboard/ai', icon: Brain }],
+    title: '规划工具',
+    items: [{ name: '规划工具', href: '/dashboard/toolbox', icon: Wrench }],
   },
   {
-    title: '系统',
-    items: [{ name: '系统设置', href: '/dashboard/settings', icon: Settings }],
+    title: '设置',
+    items: [{ name: '设置', href: '/dashboard/settings', icon: Settings }],
   },
 ];
 
@@ -75,7 +69,7 @@ export default function Sidebar({ mobileMenuOpen, onLinkClick }: SidebarProps) {
             </div>
             <div>
               <span className="text-xl font-black font-display gradient-text tracking-tight">趣学伴</span>
-              <p className="text-[11px] text-text-muted leading-tight tracking-wide">升学作战指挥中心</p>
+              <p className="text-[11px] text-text-muted leading-tight tracking-wide">升学规划中心</p>
             </div>
           </Link>
           <button

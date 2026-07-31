@@ -44,7 +44,7 @@ export default function AIReportVisual() {
               <Sparkles className="w-4 h-4 text-secondary" aria-hidden="true" />
             </div>
             <div>
-              <h3 className="text-base font-bold font-display">AI 检视报告</h3>
+              <h3 className="text-base font-bold font-display">AI 诊断报告</h3>
               <p className="text-[11px] text-slate-500">基于当前进度生成 · 2025.07</p>
             </div>
           </div>

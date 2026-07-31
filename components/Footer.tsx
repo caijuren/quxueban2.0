@@ -8,7 +8,7 @@ const footerLinks = [
   { name: '路线方案', href: '/plan' },
   { name: '里程碑', href: '/milestones' },
   { name: '进度追踪', href: '/progress' },
-  { name: 'AI 检视', href: '/ai' },
+  { name: 'AI 诊断', href: '/ai' },
   { name: '隐私协议', href: '/privacy' },
   { name: '用户协议', href: '/terms' },
 ];

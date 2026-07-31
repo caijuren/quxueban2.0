@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { Languages, ArrowLeft, AlertCircle } from 'lucide-react';
 import Link from 'next/link';
 import { useChildren } from '@/components/dashboard/ChildrenContext';
+import ChildEmptyState from '@/components/dashboard/ChildEmptyState';
 import { gradeLabel } from '@/lib/children';
 import { getEnglishStatusByGrade, getEnglishPlanByGrade } from '@/lib/subjects/english';
 import EnglishTrackMap from './EnglishTrackMap';
@@ -19,7 +20,17 @@ import LexileReference from './LexileReference';
 
 export default function EnglishSubjectPage() {
   const { currentChild } = useChildren();
-  const grade = currentChild?.grade || 2;
+
+  if (!currentChild) {
+    return (
+      <div className="space-y-8">
+        <h1 className="text-3xl font-bold font-display">英语学科路径</h1>
+        <ChildEmptyState description="添加孩子后，系统会根据年级生成英语学科路径与打卡任务" />
+      </div>
+    );
+  }
+
+  const grade = currentChild.grade;
   const status = getEnglishStatusByGrade(grade);
   const englishPlan = getEnglishPlanByGrade(grade);
   const checkInTasks = englishPlan.weeklyTemplate.map((t) => ({
@@ -43,7 +54,7 @@ export default function EnglishSubjectPage() {
             className="inline-flex items-center gap-1 text-sm text-slate-400 hover:text-primary transition-colors mb-2"
           >
             <ArrowLeft className="w-4 h-4" />
-            返回仪表盘
+            返回总览
           </Link>
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-secondary to-violet-400 flex items-center justify-center">
@@ -52,7 +63,7 @@ export default function EnglishSubjectPage() {
             <div>
               <h1 className="text-3xl font-bold font-display">英语学科路径</h1>
               <p className="text-sm text-slate-400">
-                {currentChild ? `${currentChild.name} · ${gradeLabel(grade)} · 从当前到三公录取的英语能力作战地图` : '从当前到三公录取的英语能力作战地图'}
+                {currentChild ? `${currentChild.name} · ${gradeLabel(grade)} · 从当前到三公录取的英语能力规划地图` : '从当前到三公录取的英语能力规划地图'}
               </p>
             </div>
           </div>

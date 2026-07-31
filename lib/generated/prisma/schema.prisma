@@ -32,6 +32,7 @@ model User {
   notifications Notification[]
   settings      UserSetting?
   taskTemplates TaskTemplate[]
+  capabilities  Capability[]
 
   @@index([role])
 }
@@ -112,16 +113,27 @@ model TaskTemplate {
 
   title        String
   category     TaskCategory
-  gradeMin     Int          @default(1)
-  gradeMax     Int          @default(12)
   duration     String       @default("30分钟")
+  difficulty   String?      @default("medium")
   materials    String[]     @default([])
   description  String?
   routeTags    String[]     @default([])
   milestoneTag String?
+  semesterTag  String?
+  tags         String[]     @default([])
 
-  source   TaskTemplateSource @default(USER)
-  isActive Boolean            @default(true)
+  source     TaskTemplateSource @default(USER)
+  isActive   Boolean            @default(true)
+  archivedAt DateTime?
+  useCount   Int                @default(0)
+  lastUsedAt DateTime?
+
+  taskType           TaskType      @default(DAILY)
+  frequency          TaskFrequency @default(ONCE)
+  customFrequency    Json?
+  assessmentCriteria Json          @default("[]")
+
+  capabilityLinks TaskCapabilityLink[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -129,6 +141,45 @@ model TaskTemplate {
   @@index([userId])
   @@index([category])
   @@index([source])
+  @@index([archivedAt])
+  @@index([isActive])
+  @@index([taskType])
+  @@index([frequency])
+}
+
+model Capability {
+  id     String  @id @default(uuid())
+  userId String?
+  user   User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  name        String
+  category    CapabilityCategory
+  description String?
+  isSystem    Boolean            @default(false)
+
+  links TaskCapabilityLink[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@index([category])
+  @@index([isSystem])
+}
+
+model TaskCapabilityLink {
+  id               String @id @default(uuid())
+  taskTemplateId   String
+  capabilityId     String
+  weight           Float  @default(1.0)
+  expectedProgress Float  @default(0.0)
+
+  taskTemplate TaskTemplate @relation(fields: [taskTemplateId], references: [id], onDelete: Cascade)
+  capability   Capability   @relation(fields: [capabilityId], references: [id], onDelete: Cascade)
+
+  @@unique([taskTemplateId, capabilityId])
+  @@index([taskTemplateId])
+  @@index([capabilityId])
 }
 
 model WeeklyPlan {
@@ -152,19 +203,41 @@ model WeeklyPlan {
 }
 
 enum TaskCategory {
-  CHINESE
-  MATH
-  ENGLISH
   SCHOOL
   READING
   SPORT
   INTEREST
+  ABILITY
   OTHER
 }
 
 enum TaskTemplateSource {
   SYSTEM
   USER
+}
+
+enum TaskType {
+  DAILY
+  MILESTONE
+  REMEDIAL
+  SPRINT
+  DIAGNOSTIC
+}
+
+enum TaskFrequency {
+  ONCE
+  DAILY
+  WEEKLY
+  CUSTOM
+}
+
+enum CapabilityCategory {
+  CHINESE
+  MATH
+  ENGLISH
+  GENERAL
+  EXAM
+  ADMISSION
 }
 
 model Notification {

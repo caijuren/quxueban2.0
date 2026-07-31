@@ -93,7 +93,7 @@ export default function MathTrackMap() {
     >
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
         <div>
-          <h2 className="text-xl font-bold font-display">数学三条线作战地图</h2>
+          <h2 className="text-xl font-bold font-display">数学三条线规划地图</h2>
           <p className="text-sm text-slate-400 mt-1">从现在到三公，三条主线并行推进</p>
         </div>
         <div className="flex flex-wrap gap-2">

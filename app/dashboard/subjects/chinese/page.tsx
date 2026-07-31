@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { ScrollText, ArrowLeft, AlertCircle } from 'lucide-react';
 import Link from 'next/link';
 import { useChildren } from '@/components/dashboard/ChildrenContext';
+import ChildEmptyState from '@/components/dashboard/ChildEmptyState';
 import { gradeLabel } from '@/lib/children';
 import { getChineseStatusByGrade, getChinesePlanByGrade } from '@/lib/subjects/chinese';
 import ChineseTrackMap from './ChineseTrackMap';
@@ -15,7 +16,17 @@ import ChineseExamTimeline from './ChineseExamTimeline';
 
 export default function ChineseSubjectPage() {
   const { currentChild } = useChildren();
-  const grade = currentChild?.grade || 2;
+
+  if (!currentChild) {
+    return (
+      <div className="space-y-8">
+        <h1 className="text-3xl font-bold font-display">语文学科路径</h1>
+        <ChildEmptyState description="添加孩子后，系统会根据年级生成语文学科路径与打卡任务" />
+      </div>
+    );
+  }
+
+  const grade = currentChild.grade;
   const chinesePlan = getChinesePlanByGrade(grade);
   const checkInTasks = chinesePlan.weeklyTemplate.map((t) => ({
     id: t.day,
@@ -38,7 +49,7 @@ export default function ChineseSubjectPage() {
             className="inline-flex items-center gap-1 text-sm text-slate-400 hover:text-primary transition-colors mb-2"
           >
             <ArrowLeft className="w-4 h-4" />
-            返回仪表盘
+            返回总览
           </Link>
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-rose-500 to-amber-500 flex items-center justify-center">
@@ -47,7 +58,7 @@ export default function ChineseSubjectPage() {
             <div>
               <h1 className="text-3xl font-bold font-display">语文学科路径</h1>
               <p className="text-sm text-slate-400">
-                {currentChild ? `${currentChild.name} · ${gradeLabel(grade)} · 从当前到三公录取的语文素养作战地图` : '从当前到三公录取的语文素养作战地图'}
+                {currentChild ? `${currentChild.name} · ${gradeLabel(grade)} · 从当前到三公录取的语文素养规划地图` : '从当前到三公录取的语文素养规划地图'}
               </p>
             </div>
           </div>

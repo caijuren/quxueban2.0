@@ -6,7 +6,7 @@ import CommandCard from '@/components/ui/CommandCard';
 import { Target, AlertTriangle, TrendingUp } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'AI 检视 - 趣学伴',
+  title: 'AI 诊断 - 趣学伴',
   description: '基于孩子当前进度，AI 智能诊断路线匹配度、识别风险并给出调整建议',
 };
 
@@ -25,13 +25,13 @@ const features = [
   },
   {
     title: '月度重点建议',
-    description: '每月生成一份 AI 检视摘要，告诉你本月最值得投入精力的任务和需要关注的风险点。',
+    description: '每月生成一份 AI 诊断摘要，告诉你本月最值得投入精力的任务和需要关注的风险点。',
   },
 ];
 
 export default function AIMarketingPage() {
   return (
-    <PageLayout ctaText="体验 AI 检视">
+    <PageLayout ctaText="体验 AI 诊断">
       <MarketingHero
         eyebrow="AI Intelligence"
         eyebrowColor="secondary"

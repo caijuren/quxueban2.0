@@ -60,7 +60,7 @@ export default function DataPrivacySection() {
             </div>
             <div>
               <p className="text-sm font-medium text-slate-200">导出全部数据</p>
-              <p className="text-xs text-slate-500">包含孩子、计划、周任务和通知记录</p>
+              <p className="text-xs text-slate-500">包含孩子、计划、周计划和通知记录</p>
             </div>
           </div>
           <button

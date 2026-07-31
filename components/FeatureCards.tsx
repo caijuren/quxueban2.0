@@ -18,7 +18,7 @@ const features = [
   {
     icon: LineChart,
     title: '进度一目了然',
-    description: '可视化仪表盘实时掌握各科准备度，哪里超前、哪里落后，一眼看清',
+    description: '可视化总览实时掌握各科准备度，哪里超前、哪里落后，一眼看清',
   },
   {
     icon: Bot,

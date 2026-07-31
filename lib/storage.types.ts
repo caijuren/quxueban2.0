@@ -7,13 +7,11 @@ export type DayOfWeek = '周一' | '周二' | '周三' | '周四' | '周五' | '
 export type SubjectId = 'chinese' | 'math' | 'english';
 
 export type TaskCategory =
-  | 'chinese'
-  | 'math'
-  | 'english'
   | 'school'
   | 'reading'
   | 'sport'
   | 'interest'
+  | 'ability'
   | 'other';
 
 export type TaskSource = 'auto' | 'library' | 'manual';
@@ -46,20 +44,59 @@ export interface WeeklyPlan {
   tasks: WeeklyTaskItem[];
 }
 
+export type TaskType = 'daily' | 'milestone' | 'remedial' | 'sprint' | 'diagnostic';
+
+export type TaskFrequency = 'once' | 'daily' | 'weekly' | 'custom';
+
+export interface TaskCapabilityLink {
+  id: string;
+  taskTemplateId: string;
+  capabilityId: string;
+  weight: number;
+  expectedProgress: number;
+  capability?: Capability;
+}
+
+export interface Capability {
+  id: string;
+  userId?: string | null;
+  name: string;
+  category: 'chinese' | 'math' | 'english' | 'general' | 'exam' | 'admission';
+  description?: string | null;
+  isSystem: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface AssessmentCriterion {
+  metric: string;
+  target: string;
+  selfReport: boolean;
+}
+
 export interface TaskTemplate {
   id: string;
   userId: string;
   title: string;
   category: TaskCategory;
-  gradeMin: number;
-  gradeMax: number;
   duration: string;
+  difficulty: 'easy' | 'medium' | 'hard' | null;
   materials: string[];
   description?: string | null;
   routeTags: string[];
   milestoneTag?: string | null;
+  semesterTag?: string | null;
+  tags: string[];
   source: 'system' | 'user';
   isActive: boolean;
+  archivedAt?: string | null;
+  useCount: number;
+  lastUsedAt?: string | null;
+  taskType: TaskType;
+  frequency: TaskFrequency;
+  customFrequency?: { times: number; period: 'day' | 'week' | 'month' } | null;
+  assessmentCriteria: AssessmentCriterion[];
+  capabilityLinks: TaskCapabilityLink[];
   createdAt: string;
   updatedAt: string;
 }

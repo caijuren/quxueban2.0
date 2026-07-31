@@ -39,6 +39,16 @@ export type Plan = $Result.DefaultSelection<Prisma.$PlanPayload>
  */
 export type TaskTemplate = $Result.DefaultSelection<Prisma.$TaskTemplatePayload>
 /**
+ * Model Capability
+ * 
+ */
+export type Capability = $Result.DefaultSelection<Prisma.$CapabilityPayload>
+/**
+ * Model TaskCapabilityLink
+ * 
+ */
+export type TaskCapabilityLink = $Result.DefaultSelection<Prisma.$TaskCapabilityLinkPayload>
+/**
  * Model WeeklyPlan
  * 
  */
@@ -62,13 +72,11 @@ export type UserRole = (typeof UserRole)[keyof typeof UserRole]
 
 
 export const TaskCategory: {
-  CHINESE: 'CHINESE',
-  MATH: 'MATH',
-  ENGLISH: 'ENGLISH',
   SCHOOL: 'SCHOOL',
   READING: 'READING',
   SPORT: 'SPORT',
   INTEREST: 'INTEREST',
+  ABILITY: 'ABILITY',
   OTHER: 'OTHER'
 };
 
@@ -81,6 +89,39 @@ export const TaskTemplateSource: {
 };
 
 export type TaskTemplateSource = (typeof TaskTemplateSource)[keyof typeof TaskTemplateSource]
+
+
+export const TaskType: {
+  DAILY: 'DAILY',
+  MILESTONE: 'MILESTONE',
+  REMEDIAL: 'REMEDIAL',
+  SPRINT: 'SPRINT',
+  DIAGNOSTIC: 'DIAGNOSTIC'
+};
+
+export type TaskType = (typeof TaskType)[keyof typeof TaskType]
+
+
+export const TaskFrequency: {
+  ONCE: 'ONCE',
+  DAILY: 'DAILY',
+  WEEKLY: 'WEEKLY',
+  CUSTOM: 'CUSTOM'
+};
+
+export type TaskFrequency = (typeof TaskFrequency)[keyof typeof TaskFrequency]
+
+
+export const CapabilityCategory: {
+  CHINESE: 'CHINESE',
+  MATH: 'MATH',
+  ENGLISH: 'ENGLISH',
+  GENERAL: 'GENERAL',
+  EXAM: 'EXAM',
+  ADMISSION: 'ADMISSION'
+};
+
+export type CapabilityCategory = (typeof CapabilityCategory)[keyof typeof CapabilityCategory]
 
 }
 
@@ -95,6 +136,18 @@ export const TaskCategory: typeof $Enums.TaskCategory
 export type TaskTemplateSource = $Enums.TaskTemplateSource
 
 export const TaskTemplateSource: typeof $Enums.TaskTemplateSource
+
+export type TaskType = $Enums.TaskType
+
+export const TaskType: typeof $Enums.TaskType
+
+export type TaskFrequency = $Enums.TaskFrequency
+
+export const TaskFrequency: typeof $Enums.TaskFrequency
+
+export type CapabilityCategory = $Enums.CapabilityCategory
+
+export const CapabilityCategory: typeof $Enums.CapabilityCategory
 
 /**
  * ##  Prisma Client ʲˢ
@@ -268,6 +321,26 @@ export class PrismaClient<
     * ```
     */
   get taskTemplate(): Prisma.TaskTemplateDelegate<ExtArgs>;
+
+  /**
+   * `prisma.capability`: Exposes CRUD operations for the **Capability** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Capabilities
+    * const capabilities = await prisma.capability.findMany()
+    * ```
+    */
+  get capability(): Prisma.CapabilityDelegate<ExtArgs>;
+
+  /**
+   * `prisma.taskCapabilityLink`: Exposes CRUD operations for the **TaskCapabilityLink** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more TaskCapabilityLinks
+    * const taskCapabilityLinks = await prisma.taskCapabilityLink.findMany()
+    * ```
+    */
+  get taskCapabilityLink(): Prisma.TaskCapabilityLinkDelegate<ExtArgs>;
 
   /**
    * `prisma.weeklyPlan`: Exposes CRUD operations for the **WeeklyPlan** model.
@@ -734,6 +807,8 @@ export namespace Prisma {
     Child: 'Child',
     Plan: 'Plan',
     TaskTemplate: 'TaskTemplate',
+    Capability: 'Capability',
+    TaskCapabilityLink: 'TaskCapabilityLink',
     WeeklyPlan: 'WeeklyPlan',
     Notification: 'Notification'
   };
@@ -751,7 +826,7 @@ export namespace Prisma {
 
   export type TypeMap<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, ClientOptions = {}> = {
     meta: {
-      modelProps: "user" | "userSetting" | "child" | "plan" | "taskTemplate" | "weeklyPlan" | "notification"
+      modelProps: "user" | "userSetting" | "child" | "plan" | "taskTemplate" | "capability" | "taskCapabilityLink" | "weeklyPlan" | "notification"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1105,6 +1180,146 @@ export namespace Prisma {
           }
         }
       }
+      Capability: {
+        payload: Prisma.$CapabilityPayload<ExtArgs>
+        fields: Prisma.CapabilityFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.CapabilityFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CapabilityPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.CapabilityFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CapabilityPayload>
+          }
+          findFirst: {
+            args: Prisma.CapabilityFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CapabilityPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.CapabilityFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CapabilityPayload>
+          }
+          findMany: {
+            args: Prisma.CapabilityFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CapabilityPayload>[]
+          }
+          create: {
+            args: Prisma.CapabilityCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CapabilityPayload>
+          }
+          createMany: {
+            args: Prisma.CapabilityCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.CapabilityCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CapabilityPayload>[]
+          }
+          delete: {
+            args: Prisma.CapabilityDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CapabilityPayload>
+          }
+          update: {
+            args: Prisma.CapabilityUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CapabilityPayload>
+          }
+          deleteMany: {
+            args: Prisma.CapabilityDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.CapabilityUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.CapabilityUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CapabilityPayload>
+          }
+          aggregate: {
+            args: Prisma.CapabilityAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateCapability>
+          }
+          groupBy: {
+            args: Prisma.CapabilityGroupByArgs<ExtArgs>
+            result: $Utils.Optional<CapabilityGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.CapabilityCountArgs<ExtArgs>
+            result: $Utils.Optional<CapabilityCountAggregateOutputType> | number
+          }
+        }
+      }
+      TaskCapabilityLink: {
+        payload: Prisma.$TaskCapabilityLinkPayload<ExtArgs>
+        fields: Prisma.TaskCapabilityLinkFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.TaskCapabilityLinkFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TaskCapabilityLinkPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.TaskCapabilityLinkFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TaskCapabilityLinkPayload>
+          }
+          findFirst: {
+            args: Prisma.TaskCapabilityLinkFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TaskCapabilityLinkPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.TaskCapabilityLinkFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TaskCapabilityLinkPayload>
+          }
+          findMany: {
+            args: Prisma.TaskCapabilityLinkFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TaskCapabilityLinkPayload>[]
+          }
+          create: {
+            args: Prisma.TaskCapabilityLinkCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TaskCapabilityLinkPayload>
+          }
+          createMany: {
+            args: Prisma.TaskCapabilityLinkCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.TaskCapabilityLinkCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TaskCapabilityLinkPayload>[]
+          }
+          delete: {
+            args: Prisma.TaskCapabilityLinkDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TaskCapabilityLinkPayload>
+          }
+          update: {
+            args: Prisma.TaskCapabilityLinkUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TaskCapabilityLinkPayload>
+          }
+          deleteMany: {
+            args: Prisma.TaskCapabilityLinkDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.TaskCapabilityLinkUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.TaskCapabilityLinkUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TaskCapabilityLinkPayload>
+          }
+          aggregate: {
+            args: Prisma.TaskCapabilityLinkAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateTaskCapabilityLink>
+          }
+          groupBy: {
+            args: Prisma.TaskCapabilityLinkGroupByArgs<ExtArgs>
+            result: $Utils.Optional<TaskCapabilityLinkGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.TaskCapabilityLinkCountArgs<ExtArgs>
+            result: $Utils.Optional<TaskCapabilityLinkCountAggregateOutputType> | number
+          }
+        }
+      }
       WeeklyPlan: {
         payload: Prisma.$WeeklyPlanPayload<ExtArgs>
         fields: Prisma.WeeklyPlanFieldRefs
@@ -1411,6 +1626,7 @@ export namespace Prisma {
     weeklyPlans: number
     notifications: number
     taskTemplates: number
+    capabilities: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -1419,6 +1635,7 @@ export namespace Prisma {
     weeklyPlans?: boolean | UserCountOutputTypeCountWeeklyPlansArgs
     notifications?: boolean | UserCountOutputTypeCountNotificationsArgs
     taskTemplates?: boolean | UserCountOutputTypeCountTaskTemplatesArgs
+    capabilities?: boolean | UserCountOutputTypeCountCapabilitiesArgs
   }
 
   // Custom InputTypes
@@ -1467,6 +1684,13 @@ export namespace Prisma {
     where?: TaskTemplateWhereInput
   }
 
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountCapabilitiesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CapabilityWhereInput
+  }
+
 
   /**
    * Count Type ChildCountOutputType
@@ -1505,6 +1729,68 @@ export namespace Prisma {
    */
   export type ChildCountOutputTypeCountWeeklyPlansArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: WeeklyPlanWhereInput
+  }
+
+
+  /**
+   * Count Type TaskTemplateCountOutputType
+   */
+
+  export type TaskTemplateCountOutputType = {
+    capabilityLinks: number
+  }
+
+  export type TaskTemplateCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    capabilityLinks?: boolean | TaskTemplateCountOutputTypeCountCapabilityLinksArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * TaskTemplateCountOutputType without action
+   */
+  export type TaskTemplateCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TaskTemplateCountOutputType
+     */
+    select?: TaskTemplateCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * TaskTemplateCountOutputType without action
+   */
+  export type TaskTemplateCountOutputTypeCountCapabilityLinksArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TaskCapabilityLinkWhereInput
+  }
+
+
+  /**
+   * Count Type CapabilityCountOutputType
+   */
+
+  export type CapabilityCountOutputType = {
+    links: number
+  }
+
+  export type CapabilityCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    links?: boolean | CapabilityCountOutputTypeCountLinksArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * CapabilityCountOutputType without action
+   */
+  export type CapabilityCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CapabilityCountOutputType
+     */
+    select?: CapabilityCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * CapabilityCountOutputType without action
+   */
+  export type CapabilityCountOutputTypeCountLinksArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TaskCapabilityLinkWhereInput
   }
 
 
@@ -1730,6 +2016,7 @@ export namespace Prisma {
     notifications?: boolean | User$notificationsArgs<ExtArgs>
     settings?: boolean | User$settingsArgs<ExtArgs>
     taskTemplates?: boolean | User$taskTemplatesArgs<ExtArgs>
+    capabilities?: boolean | User$capabilitiesArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -1768,6 +2055,7 @@ export namespace Prisma {
     notifications?: boolean | User$notificationsArgs<ExtArgs>
     settings?: boolean | User$settingsArgs<ExtArgs>
     taskTemplates?: boolean | User$taskTemplatesArgs<ExtArgs>
+    capabilities?: boolean | User$capabilitiesArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -1781,6 +2069,7 @@ export namespace Prisma {
       notifications: Prisma.$NotificationPayload<ExtArgs>[]
       settings: Prisma.$UserSettingPayload<ExtArgs> | null
       taskTemplates: Prisma.$TaskTemplatePayload<ExtArgs>[]
+      capabilities: Prisma.$CapabilityPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -2164,6 +2453,7 @@ export namespace Prisma {
     notifications<T extends User$notificationsArgs<ExtArgs> = {}>(args?: Subset<T, User$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany"> | Null>
     settings<T extends User$settingsArgs<ExtArgs> = {}>(args?: Subset<T, User$settingsArgs<ExtArgs>>): Prisma__UserSettingClient<$Result.GetResult<Prisma.$UserSettingPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
     taskTemplates<T extends User$taskTemplatesArgs<ExtArgs> = {}>(args?: Subset<T, User$taskTemplatesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TaskTemplatePayload<ExtArgs>, T, "findMany"> | Null>
+    capabilities<T extends User$capabilitiesArgs<ExtArgs> = {}>(args?: Subset<T, User$capabilitiesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CapabilityPayload<ExtArgs>, T, "findMany"> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2630,6 +2920,26 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: TaskTemplateScalarFieldEnum | TaskTemplateScalarFieldEnum[]
+  }
+
+  /**
+   * User.capabilities
+   */
+  export type User$capabilitiesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Capability
+     */
+    select?: CapabilitySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CapabilityInclude<ExtArgs> | null
+    where?: CapabilityWhereInput
+    orderBy?: CapabilityOrderByWithRelationInput | CapabilityOrderByWithRelationInput[]
+    cursor?: CapabilityWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: CapabilityScalarFieldEnum | CapabilityScalarFieldEnum[]
   }
 
   /**
@@ -5891,13 +6201,11 @@ export namespace Prisma {
   }
 
   export type TaskTemplateAvgAggregateOutputType = {
-    gradeMin: number | null
-    gradeMax: number | null
+    useCount: number | null
   }
 
   export type TaskTemplateSumAggregateOutputType = {
-    gradeMin: number | null
-    gradeMax: number | null
+    useCount: number | null
   }
 
   export type TaskTemplateMinAggregateOutputType = {
@@ -5905,13 +6213,18 @@ export namespace Prisma {
     userId: string | null
     title: string | null
     category: $Enums.TaskCategory | null
-    gradeMin: number | null
-    gradeMax: number | null
     duration: string | null
+    difficulty: string | null
     description: string | null
     milestoneTag: string | null
+    semesterTag: string | null
     source: $Enums.TaskTemplateSource | null
     isActive: boolean | null
+    archivedAt: Date | null
+    useCount: number | null
+    lastUsedAt: Date | null
+    taskType: $Enums.TaskType | null
+    frequency: $Enums.TaskFrequency | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -5921,13 +6234,18 @@ export namespace Prisma {
     userId: string | null
     title: string | null
     category: $Enums.TaskCategory | null
-    gradeMin: number | null
-    gradeMax: number | null
     duration: string | null
+    difficulty: string | null
     description: string | null
     milestoneTag: string | null
+    semesterTag: string | null
     source: $Enums.TaskTemplateSource | null
     isActive: boolean | null
+    archivedAt: Date | null
+    useCount: number | null
+    lastUsedAt: Date | null
+    taskType: $Enums.TaskType | null
+    frequency: $Enums.TaskFrequency | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -5937,15 +6255,23 @@ export namespace Prisma {
     userId: number
     title: number
     category: number
-    gradeMin: number
-    gradeMax: number
     duration: number
+    difficulty: number
     materials: number
     description: number
     routeTags: number
     milestoneTag: number
+    semesterTag: number
+    tags: number
     source: number
     isActive: number
+    archivedAt: number
+    useCount: number
+    lastUsedAt: number
+    taskType: number
+    frequency: number
+    customFrequency: number
+    assessmentCriteria: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -5953,13 +6279,11 @@ export namespace Prisma {
 
 
   export type TaskTemplateAvgAggregateInputType = {
-    gradeMin?: true
-    gradeMax?: true
+    useCount?: true
   }
 
   export type TaskTemplateSumAggregateInputType = {
-    gradeMin?: true
-    gradeMax?: true
+    useCount?: true
   }
 
   export type TaskTemplateMinAggregateInputType = {
@@ -5967,13 +6291,18 @@ export namespace Prisma {
     userId?: true
     title?: true
     category?: true
-    gradeMin?: true
-    gradeMax?: true
     duration?: true
+    difficulty?: true
     description?: true
     milestoneTag?: true
+    semesterTag?: true
     source?: true
     isActive?: true
+    archivedAt?: true
+    useCount?: true
+    lastUsedAt?: true
+    taskType?: true
+    frequency?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -5983,13 +6312,18 @@ export namespace Prisma {
     userId?: true
     title?: true
     category?: true
-    gradeMin?: true
-    gradeMax?: true
     duration?: true
+    difficulty?: true
     description?: true
     milestoneTag?: true
+    semesterTag?: true
     source?: true
     isActive?: true
+    archivedAt?: true
+    useCount?: true
+    lastUsedAt?: true
+    taskType?: true
+    frequency?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -5999,15 +6333,23 @@ export namespace Prisma {
     userId?: true
     title?: true
     category?: true
-    gradeMin?: true
-    gradeMax?: true
     duration?: true
+    difficulty?: true
     materials?: true
     description?: true
     routeTags?: true
     milestoneTag?: true
+    semesterTag?: true
+    tags?: true
     source?: true
     isActive?: true
+    archivedAt?: true
+    useCount?: true
+    lastUsedAt?: true
+    taskType?: true
+    frequency?: true
+    customFrequency?: true
+    assessmentCriteria?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -6104,15 +6446,23 @@ export namespace Prisma {
     userId: string
     title: string
     category: $Enums.TaskCategory
-    gradeMin: number
-    gradeMax: number
     duration: string
+    difficulty: string | null
     materials: string[]
     description: string | null
     routeTags: string[]
     milestoneTag: string | null
+    semesterTag: string | null
+    tags: string[]
     source: $Enums.TaskTemplateSource
     isActive: boolean
+    archivedAt: Date | null
+    useCount: number
+    lastUsedAt: Date | null
+    taskType: $Enums.TaskType
+    frequency: $Enums.TaskFrequency
+    customFrequency: JsonValue | null
+    assessmentCriteria: JsonValue
     createdAt: Date
     updatedAt: Date
     _count: TaskTemplateCountAggregateOutputType | null
@@ -6141,18 +6491,28 @@ export namespace Prisma {
     userId?: boolean
     title?: boolean
     category?: boolean
-    gradeMin?: boolean
-    gradeMax?: boolean
     duration?: boolean
+    difficulty?: boolean
     materials?: boolean
     description?: boolean
     routeTags?: boolean
     milestoneTag?: boolean
+    semesterTag?: boolean
+    tags?: boolean
     source?: boolean
     isActive?: boolean
+    archivedAt?: boolean
+    useCount?: boolean
+    lastUsedAt?: boolean
+    taskType?: boolean
+    frequency?: boolean
+    customFrequency?: boolean
+    assessmentCriteria?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
+    capabilityLinks?: boolean | TaskTemplate$capabilityLinksArgs<ExtArgs>
+    _count?: boolean | TaskTemplateCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["taskTemplate"]>
 
   export type TaskTemplateSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -6160,15 +6520,23 @@ export namespace Prisma {
     userId?: boolean
     title?: boolean
     category?: boolean
-    gradeMin?: boolean
-    gradeMax?: boolean
     duration?: boolean
+    difficulty?: boolean
     materials?: boolean
     description?: boolean
     routeTags?: boolean
     milestoneTag?: boolean
+    semesterTag?: boolean
+    tags?: boolean
     source?: boolean
     isActive?: boolean
+    archivedAt?: boolean
+    useCount?: boolean
+    lastUsedAt?: boolean
+    taskType?: boolean
+    frequency?: boolean
+    customFrequency?: boolean
+    assessmentCriteria?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -6179,21 +6547,31 @@ export namespace Prisma {
     userId?: boolean
     title?: boolean
     category?: boolean
-    gradeMin?: boolean
-    gradeMax?: boolean
     duration?: boolean
+    difficulty?: boolean
     materials?: boolean
     description?: boolean
     routeTags?: boolean
     milestoneTag?: boolean
+    semesterTag?: boolean
+    tags?: boolean
     source?: boolean
     isActive?: boolean
+    archivedAt?: boolean
+    useCount?: boolean
+    lastUsedAt?: boolean
+    taskType?: boolean
+    frequency?: boolean
+    customFrequency?: boolean
+    assessmentCriteria?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
   export type TaskTemplateInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
+    capabilityLinks?: boolean | TaskTemplate$capabilityLinksArgs<ExtArgs>
+    _count?: boolean | TaskTemplateCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type TaskTemplateIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -6203,21 +6581,30 @@ export namespace Prisma {
     name: "TaskTemplate"
     objects: {
       user: Prisma.$UserPayload<ExtArgs>
+      capabilityLinks: Prisma.$TaskCapabilityLinkPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
       userId: string
       title: string
       category: $Enums.TaskCategory
-      gradeMin: number
-      gradeMax: number
       duration: string
+      difficulty: string | null
       materials: string[]
       description: string | null
       routeTags: string[]
       milestoneTag: string | null
+      semesterTag: string | null
+      tags: string[]
       source: $Enums.TaskTemplateSource
       isActive: boolean
+      archivedAt: Date | null
+      useCount: number
+      lastUsedAt: Date | null
+      taskType: $Enums.TaskType
+      frequency: $Enums.TaskFrequency
+      customFrequency: Prisma.JsonValue | null
+      assessmentCriteria: Prisma.JsonValue
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["taskTemplate"]>
@@ -6585,6 +6972,7 @@ export namespace Prisma {
   export interface Prisma__TaskTemplateClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    capabilityLinks<T extends TaskTemplate$capabilityLinksArgs<ExtArgs> = {}>(args?: Subset<T, TaskTemplate$capabilityLinksArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TaskCapabilityLinkPayload<ExtArgs>, T, "findMany"> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -6618,15 +7006,23 @@ export namespace Prisma {
     readonly userId: FieldRef<"TaskTemplate", 'String'>
     readonly title: FieldRef<"TaskTemplate", 'String'>
     readonly category: FieldRef<"TaskTemplate", 'TaskCategory'>
-    readonly gradeMin: FieldRef<"TaskTemplate", 'Int'>
-    readonly gradeMax: FieldRef<"TaskTemplate", 'Int'>
     readonly duration: FieldRef<"TaskTemplate", 'String'>
+    readonly difficulty: FieldRef<"TaskTemplate", 'String'>
     readonly materials: FieldRef<"TaskTemplate", 'String[]'>
     readonly description: FieldRef<"TaskTemplate", 'String'>
     readonly routeTags: FieldRef<"TaskTemplate", 'String[]'>
     readonly milestoneTag: FieldRef<"TaskTemplate", 'String'>
+    readonly semesterTag: FieldRef<"TaskTemplate", 'String'>
+    readonly tags: FieldRef<"TaskTemplate", 'String[]'>
     readonly source: FieldRef<"TaskTemplate", 'TaskTemplateSource'>
     readonly isActive: FieldRef<"TaskTemplate", 'Boolean'>
+    readonly archivedAt: FieldRef<"TaskTemplate", 'DateTime'>
+    readonly useCount: FieldRef<"TaskTemplate", 'Int'>
+    readonly lastUsedAt: FieldRef<"TaskTemplate", 'DateTime'>
+    readonly taskType: FieldRef<"TaskTemplate", 'TaskType'>
+    readonly frequency: FieldRef<"TaskTemplate", 'TaskFrequency'>
+    readonly customFrequency: FieldRef<"TaskTemplate", 'Json'>
+    readonly assessmentCriteria: FieldRef<"TaskTemplate", 'Json'>
     readonly createdAt: FieldRef<"TaskTemplate", 'DateTime'>
     readonly updatedAt: FieldRef<"TaskTemplate", 'DateTime'>
   }
@@ -6947,6 +7343,26 @@ export namespace Prisma {
   }
 
   /**
+   * TaskTemplate.capabilityLinks
+   */
+  export type TaskTemplate$capabilityLinksArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TaskCapabilityLink
+     */
+    select?: TaskCapabilityLinkSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TaskCapabilityLinkInclude<ExtArgs> | null
+    where?: TaskCapabilityLinkWhereInput
+    orderBy?: TaskCapabilityLinkOrderByWithRelationInput | TaskCapabilityLinkOrderByWithRelationInput[]
+    cursor?: TaskCapabilityLinkWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: TaskCapabilityLinkScalarFieldEnum | TaskCapabilityLinkScalarFieldEnum[]
+  }
+
+  /**
    * TaskTemplate without action
    */
   export type TaskTemplateDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -6958,6 +7374,1993 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: TaskTemplateInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model Capability
+   */
+
+  export type AggregateCapability = {
+    _count: CapabilityCountAggregateOutputType | null
+    _min: CapabilityMinAggregateOutputType | null
+    _max: CapabilityMaxAggregateOutputType | null
+  }
+
+  export type CapabilityMinAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    name: string | null
+    category: $Enums.CapabilityCategory | null
+    description: string | null
+    isSystem: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type CapabilityMaxAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    name: string | null
+    category: $Enums.CapabilityCategory | null
+    description: string | null
+    isSystem: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type CapabilityCountAggregateOutputType = {
+    id: number
+    userId: number
+    name: number
+    category: number
+    description: number
+    isSystem: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type CapabilityMinAggregateInputType = {
+    id?: true
+    userId?: true
+    name?: true
+    category?: true
+    description?: true
+    isSystem?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type CapabilityMaxAggregateInputType = {
+    id?: true
+    userId?: true
+    name?: true
+    category?: true
+    description?: true
+    isSystem?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type CapabilityCountAggregateInputType = {
+    id?: true
+    userId?: true
+    name?: true
+    category?: true
+    description?: true
+    isSystem?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type CapabilityAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Capability to aggregate.
+     */
+    where?: CapabilityWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Capabilities to fetch.
+     */
+    orderBy?: CapabilityOrderByWithRelationInput | CapabilityOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: CapabilityWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Capabilities from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Capabilities.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Capabilities
+    **/
+    _count?: true | CapabilityCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: CapabilityMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: CapabilityMaxAggregateInputType
+  }
+
+  export type GetCapabilityAggregateType<T extends CapabilityAggregateArgs> = {
+        [P in keyof T & keyof AggregateCapability]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateCapability[P]>
+      : GetScalarType<T[P], AggregateCapability[P]>
+  }
+
+
+
+
+  export type CapabilityGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CapabilityWhereInput
+    orderBy?: CapabilityOrderByWithAggregationInput | CapabilityOrderByWithAggregationInput[]
+    by: CapabilityScalarFieldEnum[] | CapabilityScalarFieldEnum
+    having?: CapabilityScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: CapabilityCountAggregateInputType | true
+    _min?: CapabilityMinAggregateInputType
+    _max?: CapabilityMaxAggregateInputType
+  }
+
+  export type CapabilityGroupByOutputType = {
+    id: string
+    userId: string | null
+    name: string
+    category: $Enums.CapabilityCategory
+    description: string | null
+    isSystem: boolean
+    createdAt: Date
+    updatedAt: Date
+    _count: CapabilityCountAggregateOutputType | null
+    _min: CapabilityMinAggregateOutputType | null
+    _max: CapabilityMaxAggregateOutputType | null
+  }
+
+  type GetCapabilityGroupByPayload<T extends CapabilityGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<CapabilityGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof CapabilityGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], CapabilityGroupByOutputType[P]>
+            : GetScalarType<T[P], CapabilityGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type CapabilitySelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    name?: boolean
+    category?: boolean
+    description?: boolean
+    isSystem?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | Capability$userArgs<ExtArgs>
+    links?: boolean | Capability$linksArgs<ExtArgs>
+    _count?: boolean | CapabilityCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["capability"]>
+
+  export type CapabilitySelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    name?: boolean
+    category?: boolean
+    description?: boolean
+    isSystem?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | Capability$userArgs<ExtArgs>
+  }, ExtArgs["result"]["capability"]>
+
+  export type CapabilitySelectScalar = {
+    id?: boolean
+    userId?: boolean
+    name?: boolean
+    category?: boolean
+    description?: boolean
+    isSystem?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type CapabilityInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | Capability$userArgs<ExtArgs>
+    links?: boolean | Capability$linksArgs<ExtArgs>
+    _count?: boolean | CapabilityCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type CapabilityIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | Capability$userArgs<ExtArgs>
+  }
+
+  export type $CapabilityPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Capability"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs> | null
+      links: Prisma.$TaskCapabilityLinkPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      userId: string | null
+      name: string
+      category: $Enums.CapabilityCategory
+      description: string | null
+      isSystem: boolean
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["capability"]>
+    composites: {}
+  }
+
+  type CapabilityGetPayload<S extends boolean | null | undefined | CapabilityDefaultArgs> = $Result.GetResult<Prisma.$CapabilityPayload, S>
+
+  type CapabilityCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<CapabilityFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: CapabilityCountAggregateInputType | true
+    }
+
+  export interface CapabilityDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Capability'], meta: { name: 'Capability' } }
+    /**
+     * Find zero or one Capability that matches the filter.
+     * @param {CapabilityFindUniqueArgs} args - Arguments to find a Capability
+     * @example
+     * // Get one Capability
+     * const capability = await prisma.capability.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends CapabilityFindUniqueArgs>(args: SelectSubset<T, CapabilityFindUniqueArgs<ExtArgs>>): Prisma__CapabilityClient<$Result.GetResult<Prisma.$CapabilityPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one Capability that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {CapabilityFindUniqueOrThrowArgs} args - Arguments to find a Capability
+     * @example
+     * // Get one Capability
+     * const capability = await prisma.capability.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends CapabilityFindUniqueOrThrowArgs>(args: SelectSubset<T, CapabilityFindUniqueOrThrowArgs<ExtArgs>>): Prisma__CapabilityClient<$Result.GetResult<Prisma.$CapabilityPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first Capability that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CapabilityFindFirstArgs} args - Arguments to find a Capability
+     * @example
+     * // Get one Capability
+     * const capability = await prisma.capability.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends CapabilityFindFirstArgs>(args?: SelectSubset<T, CapabilityFindFirstArgs<ExtArgs>>): Prisma__CapabilityClient<$Result.GetResult<Prisma.$CapabilityPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first Capability that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CapabilityFindFirstOrThrowArgs} args - Arguments to find a Capability
+     * @example
+     * // Get one Capability
+     * const capability = await prisma.capability.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends CapabilityFindFirstOrThrowArgs>(args?: SelectSubset<T, CapabilityFindFirstOrThrowArgs<ExtArgs>>): Prisma__CapabilityClient<$Result.GetResult<Prisma.$CapabilityPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more Capabilities that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CapabilityFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Capabilities
+     * const capabilities = await prisma.capability.findMany()
+     * 
+     * // Get first 10 Capabilities
+     * const capabilities = await prisma.capability.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const capabilityWithIdOnly = await prisma.capability.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends CapabilityFindManyArgs>(args?: SelectSubset<T, CapabilityFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CapabilityPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a Capability.
+     * @param {CapabilityCreateArgs} args - Arguments to create a Capability.
+     * @example
+     * // Create one Capability
+     * const Capability = await prisma.capability.create({
+     *   data: {
+     *     // ... data to create a Capability
+     *   }
+     * })
+     * 
+     */
+    create<T extends CapabilityCreateArgs>(args: SelectSubset<T, CapabilityCreateArgs<ExtArgs>>): Prisma__CapabilityClient<$Result.GetResult<Prisma.$CapabilityPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many Capabilities.
+     * @param {CapabilityCreateManyArgs} args - Arguments to create many Capabilities.
+     * @example
+     * // Create many Capabilities
+     * const capability = await prisma.capability.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends CapabilityCreateManyArgs>(args?: SelectSubset<T, CapabilityCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Capabilities and returns the data saved in the database.
+     * @param {CapabilityCreateManyAndReturnArgs} args - Arguments to create many Capabilities.
+     * @example
+     * // Create many Capabilities
+     * const capability = await prisma.capability.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Capabilities and only return the `id`
+     * const capabilityWithIdOnly = await prisma.capability.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends CapabilityCreateManyAndReturnArgs>(args?: SelectSubset<T, CapabilityCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CapabilityPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a Capability.
+     * @param {CapabilityDeleteArgs} args - Arguments to delete one Capability.
+     * @example
+     * // Delete one Capability
+     * const Capability = await prisma.capability.delete({
+     *   where: {
+     *     // ... filter to delete one Capability
+     *   }
+     * })
+     * 
+     */
+    delete<T extends CapabilityDeleteArgs>(args: SelectSubset<T, CapabilityDeleteArgs<ExtArgs>>): Prisma__CapabilityClient<$Result.GetResult<Prisma.$CapabilityPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one Capability.
+     * @param {CapabilityUpdateArgs} args - Arguments to update one Capability.
+     * @example
+     * // Update one Capability
+     * const capability = await prisma.capability.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends CapabilityUpdateArgs>(args: SelectSubset<T, CapabilityUpdateArgs<ExtArgs>>): Prisma__CapabilityClient<$Result.GetResult<Prisma.$CapabilityPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more Capabilities.
+     * @param {CapabilityDeleteManyArgs} args - Arguments to filter Capabilities to delete.
+     * @example
+     * // Delete a few Capabilities
+     * const { count } = await prisma.capability.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends CapabilityDeleteManyArgs>(args?: SelectSubset<T, CapabilityDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Capabilities.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CapabilityUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Capabilities
+     * const capability = await prisma.capability.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends CapabilityUpdateManyArgs>(args: SelectSubset<T, CapabilityUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one Capability.
+     * @param {CapabilityUpsertArgs} args - Arguments to update or create a Capability.
+     * @example
+     * // Update or create a Capability
+     * const capability = await prisma.capability.upsert({
+     *   create: {
+     *     // ... data to create a Capability
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Capability we want to update
+     *   }
+     * })
+     */
+    upsert<T extends CapabilityUpsertArgs>(args: SelectSubset<T, CapabilityUpsertArgs<ExtArgs>>): Prisma__CapabilityClient<$Result.GetResult<Prisma.$CapabilityPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of Capabilities.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CapabilityCountArgs} args - Arguments to filter Capabilities to count.
+     * @example
+     * // Count the number of Capabilities
+     * const count = await prisma.capability.count({
+     *   where: {
+     *     // ... the filter for the Capabilities we want to count
+     *   }
+     * })
+    **/
+    count<T extends CapabilityCountArgs>(
+      args?: Subset<T, CapabilityCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], CapabilityCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Capability.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CapabilityAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends CapabilityAggregateArgs>(args: Subset<T, CapabilityAggregateArgs>): Prisma.PrismaPromise<GetCapabilityAggregateType<T>>
+
+    /**
+     * Group by Capability.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CapabilityGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends CapabilityGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: CapabilityGroupByArgs['orderBy'] }
+        : { orderBy?: CapabilityGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, CapabilityGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetCapabilityGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Capability model
+   */
+  readonly fields: CapabilityFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Capability.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__CapabilityClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends Capability$userArgs<ExtArgs> = {}>(args?: Subset<T, Capability$userArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
+    links<T extends Capability$linksArgs<ExtArgs> = {}>(args?: Subset<T, Capability$linksArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TaskCapabilityLinkPayload<ExtArgs>, T, "findMany"> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Capability model
+   */ 
+  interface CapabilityFieldRefs {
+    readonly id: FieldRef<"Capability", 'String'>
+    readonly userId: FieldRef<"Capability", 'String'>
+    readonly name: FieldRef<"Capability", 'String'>
+    readonly category: FieldRef<"Capability", 'CapabilityCategory'>
+    readonly description: FieldRef<"Capability", 'String'>
+    readonly isSystem: FieldRef<"Capability", 'Boolean'>
+    readonly createdAt: FieldRef<"Capability", 'DateTime'>
+    readonly updatedAt: FieldRef<"Capability", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Capability findUnique
+   */
+  export type CapabilityFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Capability
+     */
+    select?: CapabilitySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CapabilityInclude<ExtArgs> | null
+    /**
+     * Filter, which Capability to fetch.
+     */
+    where: CapabilityWhereUniqueInput
+  }
+
+  /**
+   * Capability findUniqueOrThrow
+   */
+  export type CapabilityFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Capability
+     */
+    select?: CapabilitySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CapabilityInclude<ExtArgs> | null
+    /**
+     * Filter, which Capability to fetch.
+     */
+    where: CapabilityWhereUniqueInput
+  }
+
+  /**
+   * Capability findFirst
+   */
+  export type CapabilityFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Capability
+     */
+    select?: CapabilitySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CapabilityInclude<ExtArgs> | null
+    /**
+     * Filter, which Capability to fetch.
+     */
+    where?: CapabilityWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Capabilities to fetch.
+     */
+    orderBy?: CapabilityOrderByWithRelationInput | CapabilityOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Capabilities.
+     */
+    cursor?: CapabilityWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Capabilities from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Capabilities.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Capabilities.
+     */
+    distinct?: CapabilityScalarFieldEnum | CapabilityScalarFieldEnum[]
+  }
+
+  /**
+   * Capability findFirstOrThrow
+   */
+  export type CapabilityFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Capability
+     */
+    select?: CapabilitySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CapabilityInclude<ExtArgs> | null
+    /**
+     * Filter, which Capability to fetch.
+     */
+    where?: CapabilityWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Capabilities to fetch.
+     */
+    orderBy?: CapabilityOrderByWithRelationInput | CapabilityOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Capabilities.
+     */
+    cursor?: CapabilityWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Capabilities from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Capabilities.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Capabilities.
+     */
+    distinct?: CapabilityScalarFieldEnum | CapabilityScalarFieldEnum[]
+  }
+
+  /**
+   * Capability findMany
+   */
+  export type CapabilityFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Capability
+     */
+    select?: CapabilitySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CapabilityInclude<ExtArgs> | null
+    /**
+     * Filter, which Capabilities to fetch.
+     */
+    where?: CapabilityWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Capabilities to fetch.
+     */
+    orderBy?: CapabilityOrderByWithRelationInput | CapabilityOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Capabilities.
+     */
+    cursor?: CapabilityWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Capabilities from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Capabilities.
+     */
+    skip?: number
+    distinct?: CapabilityScalarFieldEnum | CapabilityScalarFieldEnum[]
+  }
+
+  /**
+   * Capability create
+   */
+  export type CapabilityCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Capability
+     */
+    select?: CapabilitySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CapabilityInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Capability.
+     */
+    data: XOR<CapabilityCreateInput, CapabilityUncheckedCreateInput>
+  }
+
+  /**
+   * Capability createMany
+   */
+  export type CapabilityCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Capabilities.
+     */
+    data: CapabilityCreateManyInput | CapabilityCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Capability createManyAndReturn
+   */
+  export type CapabilityCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Capability
+     */
+    select?: CapabilitySelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many Capabilities.
+     */
+    data: CapabilityCreateManyInput | CapabilityCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CapabilityIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Capability update
+   */
+  export type CapabilityUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Capability
+     */
+    select?: CapabilitySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CapabilityInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Capability.
+     */
+    data: XOR<CapabilityUpdateInput, CapabilityUncheckedUpdateInput>
+    /**
+     * Choose, which Capability to update.
+     */
+    where: CapabilityWhereUniqueInput
+  }
+
+  /**
+   * Capability updateMany
+   */
+  export type CapabilityUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Capabilities.
+     */
+    data: XOR<CapabilityUpdateManyMutationInput, CapabilityUncheckedUpdateManyInput>
+    /**
+     * Filter which Capabilities to update
+     */
+    where?: CapabilityWhereInput
+  }
+
+  /**
+   * Capability upsert
+   */
+  export type CapabilityUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Capability
+     */
+    select?: CapabilitySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CapabilityInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Capability to update in case it exists.
+     */
+    where: CapabilityWhereUniqueInput
+    /**
+     * In case the Capability found by the `where` argument doesn't exist, create a new Capability with this data.
+     */
+    create: XOR<CapabilityCreateInput, CapabilityUncheckedCreateInput>
+    /**
+     * In case the Capability was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<CapabilityUpdateInput, CapabilityUncheckedUpdateInput>
+  }
+
+  /**
+   * Capability delete
+   */
+  export type CapabilityDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Capability
+     */
+    select?: CapabilitySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CapabilityInclude<ExtArgs> | null
+    /**
+     * Filter which Capability to delete.
+     */
+    where: CapabilityWhereUniqueInput
+  }
+
+  /**
+   * Capability deleteMany
+   */
+  export type CapabilityDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Capabilities to delete
+     */
+    where?: CapabilityWhereInput
+  }
+
+  /**
+   * Capability.user
+   */
+  export type Capability$userArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+  }
+
+  /**
+   * Capability.links
+   */
+  export type Capability$linksArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TaskCapabilityLink
+     */
+    select?: TaskCapabilityLinkSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TaskCapabilityLinkInclude<ExtArgs> | null
+    where?: TaskCapabilityLinkWhereInput
+    orderBy?: TaskCapabilityLinkOrderByWithRelationInput | TaskCapabilityLinkOrderByWithRelationInput[]
+    cursor?: TaskCapabilityLinkWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: TaskCapabilityLinkScalarFieldEnum | TaskCapabilityLinkScalarFieldEnum[]
+  }
+
+  /**
+   * Capability without action
+   */
+  export type CapabilityDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Capability
+     */
+    select?: CapabilitySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CapabilityInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model TaskCapabilityLink
+   */
+
+  export type AggregateTaskCapabilityLink = {
+    _count: TaskCapabilityLinkCountAggregateOutputType | null
+    _avg: TaskCapabilityLinkAvgAggregateOutputType | null
+    _sum: TaskCapabilityLinkSumAggregateOutputType | null
+    _min: TaskCapabilityLinkMinAggregateOutputType | null
+    _max: TaskCapabilityLinkMaxAggregateOutputType | null
+  }
+
+  export type TaskCapabilityLinkAvgAggregateOutputType = {
+    weight: number | null
+    expectedProgress: number | null
+  }
+
+  export type TaskCapabilityLinkSumAggregateOutputType = {
+    weight: number | null
+    expectedProgress: number | null
+  }
+
+  export type TaskCapabilityLinkMinAggregateOutputType = {
+    id: string | null
+    taskTemplateId: string | null
+    capabilityId: string | null
+    weight: number | null
+    expectedProgress: number | null
+  }
+
+  export type TaskCapabilityLinkMaxAggregateOutputType = {
+    id: string | null
+    taskTemplateId: string | null
+    capabilityId: string | null
+    weight: number | null
+    expectedProgress: number | null
+  }
+
+  export type TaskCapabilityLinkCountAggregateOutputType = {
+    id: number
+    taskTemplateId: number
+    capabilityId: number
+    weight: number
+    expectedProgress: number
+    _all: number
+  }
+
+
+  export type TaskCapabilityLinkAvgAggregateInputType = {
+    weight?: true
+    expectedProgress?: true
+  }
+
+  export type TaskCapabilityLinkSumAggregateInputType = {
+    weight?: true
+    expectedProgress?: true
+  }
+
+  export type TaskCapabilityLinkMinAggregateInputType = {
+    id?: true
+    taskTemplateId?: true
+    capabilityId?: true
+    weight?: true
+    expectedProgress?: true
+  }
+
+  export type TaskCapabilityLinkMaxAggregateInputType = {
+    id?: true
+    taskTemplateId?: true
+    capabilityId?: true
+    weight?: true
+    expectedProgress?: true
+  }
+
+  export type TaskCapabilityLinkCountAggregateInputType = {
+    id?: true
+    taskTemplateId?: true
+    capabilityId?: true
+    weight?: true
+    expectedProgress?: true
+    _all?: true
+  }
+
+  export type TaskCapabilityLinkAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which TaskCapabilityLink to aggregate.
+     */
+    where?: TaskCapabilityLinkWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TaskCapabilityLinks to fetch.
+     */
+    orderBy?: TaskCapabilityLinkOrderByWithRelationInput | TaskCapabilityLinkOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: TaskCapabilityLinkWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TaskCapabilityLinks from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TaskCapabilityLinks.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned TaskCapabilityLinks
+    **/
+    _count?: true | TaskCapabilityLinkCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: TaskCapabilityLinkAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: TaskCapabilityLinkSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: TaskCapabilityLinkMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: TaskCapabilityLinkMaxAggregateInputType
+  }
+
+  export type GetTaskCapabilityLinkAggregateType<T extends TaskCapabilityLinkAggregateArgs> = {
+        [P in keyof T & keyof AggregateTaskCapabilityLink]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateTaskCapabilityLink[P]>
+      : GetScalarType<T[P], AggregateTaskCapabilityLink[P]>
+  }
+
+
+
+
+  export type TaskCapabilityLinkGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TaskCapabilityLinkWhereInput
+    orderBy?: TaskCapabilityLinkOrderByWithAggregationInput | TaskCapabilityLinkOrderByWithAggregationInput[]
+    by: TaskCapabilityLinkScalarFieldEnum[] | TaskCapabilityLinkScalarFieldEnum
+    having?: TaskCapabilityLinkScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: TaskCapabilityLinkCountAggregateInputType | true
+    _avg?: TaskCapabilityLinkAvgAggregateInputType
+    _sum?: TaskCapabilityLinkSumAggregateInputType
+    _min?: TaskCapabilityLinkMinAggregateInputType
+    _max?: TaskCapabilityLinkMaxAggregateInputType
+  }
+
+  export type TaskCapabilityLinkGroupByOutputType = {
+    id: string
+    taskTemplateId: string
+    capabilityId: string
+    weight: number
+    expectedProgress: number
+    _count: TaskCapabilityLinkCountAggregateOutputType | null
+    _avg: TaskCapabilityLinkAvgAggregateOutputType | null
+    _sum: TaskCapabilityLinkSumAggregateOutputType | null
+    _min: TaskCapabilityLinkMinAggregateOutputType | null
+    _max: TaskCapabilityLinkMaxAggregateOutputType | null
+  }
+
+  type GetTaskCapabilityLinkGroupByPayload<T extends TaskCapabilityLinkGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<TaskCapabilityLinkGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof TaskCapabilityLinkGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], TaskCapabilityLinkGroupByOutputType[P]>
+            : GetScalarType<T[P], TaskCapabilityLinkGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type TaskCapabilityLinkSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    taskTemplateId?: boolean
+    capabilityId?: boolean
+    weight?: boolean
+    expectedProgress?: boolean
+    taskTemplate?: boolean | TaskTemplateDefaultArgs<ExtArgs>
+    capability?: boolean | CapabilityDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["taskCapabilityLink"]>
+
+  export type TaskCapabilityLinkSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    taskTemplateId?: boolean
+    capabilityId?: boolean
+    weight?: boolean
+    expectedProgress?: boolean
+    taskTemplate?: boolean | TaskTemplateDefaultArgs<ExtArgs>
+    capability?: boolean | CapabilityDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["taskCapabilityLink"]>
+
+  export type TaskCapabilityLinkSelectScalar = {
+    id?: boolean
+    taskTemplateId?: boolean
+    capabilityId?: boolean
+    weight?: boolean
+    expectedProgress?: boolean
+  }
+
+  export type TaskCapabilityLinkInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    taskTemplate?: boolean | TaskTemplateDefaultArgs<ExtArgs>
+    capability?: boolean | CapabilityDefaultArgs<ExtArgs>
+  }
+  export type TaskCapabilityLinkIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    taskTemplate?: boolean | TaskTemplateDefaultArgs<ExtArgs>
+    capability?: boolean | CapabilityDefaultArgs<ExtArgs>
+  }
+
+  export type $TaskCapabilityLinkPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "TaskCapabilityLink"
+    objects: {
+      taskTemplate: Prisma.$TaskTemplatePayload<ExtArgs>
+      capability: Prisma.$CapabilityPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      taskTemplateId: string
+      capabilityId: string
+      weight: number
+      expectedProgress: number
+    }, ExtArgs["result"]["taskCapabilityLink"]>
+    composites: {}
+  }
+
+  type TaskCapabilityLinkGetPayload<S extends boolean | null | undefined | TaskCapabilityLinkDefaultArgs> = $Result.GetResult<Prisma.$TaskCapabilityLinkPayload, S>
+
+  type TaskCapabilityLinkCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<TaskCapabilityLinkFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: TaskCapabilityLinkCountAggregateInputType | true
+    }
+
+  export interface TaskCapabilityLinkDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['TaskCapabilityLink'], meta: { name: 'TaskCapabilityLink' } }
+    /**
+     * Find zero or one TaskCapabilityLink that matches the filter.
+     * @param {TaskCapabilityLinkFindUniqueArgs} args - Arguments to find a TaskCapabilityLink
+     * @example
+     * // Get one TaskCapabilityLink
+     * const taskCapabilityLink = await prisma.taskCapabilityLink.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends TaskCapabilityLinkFindUniqueArgs>(args: SelectSubset<T, TaskCapabilityLinkFindUniqueArgs<ExtArgs>>): Prisma__TaskCapabilityLinkClient<$Result.GetResult<Prisma.$TaskCapabilityLinkPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one TaskCapabilityLink that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {TaskCapabilityLinkFindUniqueOrThrowArgs} args - Arguments to find a TaskCapabilityLink
+     * @example
+     * // Get one TaskCapabilityLink
+     * const taskCapabilityLink = await prisma.taskCapabilityLink.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends TaskCapabilityLinkFindUniqueOrThrowArgs>(args: SelectSubset<T, TaskCapabilityLinkFindUniqueOrThrowArgs<ExtArgs>>): Prisma__TaskCapabilityLinkClient<$Result.GetResult<Prisma.$TaskCapabilityLinkPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first TaskCapabilityLink that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TaskCapabilityLinkFindFirstArgs} args - Arguments to find a TaskCapabilityLink
+     * @example
+     * // Get one TaskCapabilityLink
+     * const taskCapabilityLink = await prisma.taskCapabilityLink.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends TaskCapabilityLinkFindFirstArgs>(args?: SelectSubset<T, TaskCapabilityLinkFindFirstArgs<ExtArgs>>): Prisma__TaskCapabilityLinkClient<$Result.GetResult<Prisma.$TaskCapabilityLinkPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first TaskCapabilityLink that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TaskCapabilityLinkFindFirstOrThrowArgs} args - Arguments to find a TaskCapabilityLink
+     * @example
+     * // Get one TaskCapabilityLink
+     * const taskCapabilityLink = await prisma.taskCapabilityLink.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends TaskCapabilityLinkFindFirstOrThrowArgs>(args?: SelectSubset<T, TaskCapabilityLinkFindFirstOrThrowArgs<ExtArgs>>): Prisma__TaskCapabilityLinkClient<$Result.GetResult<Prisma.$TaskCapabilityLinkPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more TaskCapabilityLinks that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TaskCapabilityLinkFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all TaskCapabilityLinks
+     * const taskCapabilityLinks = await prisma.taskCapabilityLink.findMany()
+     * 
+     * // Get first 10 TaskCapabilityLinks
+     * const taskCapabilityLinks = await prisma.taskCapabilityLink.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const taskCapabilityLinkWithIdOnly = await prisma.taskCapabilityLink.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends TaskCapabilityLinkFindManyArgs>(args?: SelectSubset<T, TaskCapabilityLinkFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TaskCapabilityLinkPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a TaskCapabilityLink.
+     * @param {TaskCapabilityLinkCreateArgs} args - Arguments to create a TaskCapabilityLink.
+     * @example
+     * // Create one TaskCapabilityLink
+     * const TaskCapabilityLink = await prisma.taskCapabilityLink.create({
+     *   data: {
+     *     // ... data to create a TaskCapabilityLink
+     *   }
+     * })
+     * 
+     */
+    create<T extends TaskCapabilityLinkCreateArgs>(args: SelectSubset<T, TaskCapabilityLinkCreateArgs<ExtArgs>>): Prisma__TaskCapabilityLinkClient<$Result.GetResult<Prisma.$TaskCapabilityLinkPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many TaskCapabilityLinks.
+     * @param {TaskCapabilityLinkCreateManyArgs} args - Arguments to create many TaskCapabilityLinks.
+     * @example
+     * // Create many TaskCapabilityLinks
+     * const taskCapabilityLink = await prisma.taskCapabilityLink.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends TaskCapabilityLinkCreateManyArgs>(args?: SelectSubset<T, TaskCapabilityLinkCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many TaskCapabilityLinks and returns the data saved in the database.
+     * @param {TaskCapabilityLinkCreateManyAndReturnArgs} args - Arguments to create many TaskCapabilityLinks.
+     * @example
+     * // Create many TaskCapabilityLinks
+     * const taskCapabilityLink = await prisma.taskCapabilityLink.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many TaskCapabilityLinks and only return the `id`
+     * const taskCapabilityLinkWithIdOnly = await prisma.taskCapabilityLink.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends TaskCapabilityLinkCreateManyAndReturnArgs>(args?: SelectSubset<T, TaskCapabilityLinkCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TaskCapabilityLinkPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a TaskCapabilityLink.
+     * @param {TaskCapabilityLinkDeleteArgs} args - Arguments to delete one TaskCapabilityLink.
+     * @example
+     * // Delete one TaskCapabilityLink
+     * const TaskCapabilityLink = await prisma.taskCapabilityLink.delete({
+     *   where: {
+     *     // ... filter to delete one TaskCapabilityLink
+     *   }
+     * })
+     * 
+     */
+    delete<T extends TaskCapabilityLinkDeleteArgs>(args: SelectSubset<T, TaskCapabilityLinkDeleteArgs<ExtArgs>>): Prisma__TaskCapabilityLinkClient<$Result.GetResult<Prisma.$TaskCapabilityLinkPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one TaskCapabilityLink.
+     * @param {TaskCapabilityLinkUpdateArgs} args - Arguments to update one TaskCapabilityLink.
+     * @example
+     * // Update one TaskCapabilityLink
+     * const taskCapabilityLink = await prisma.taskCapabilityLink.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends TaskCapabilityLinkUpdateArgs>(args: SelectSubset<T, TaskCapabilityLinkUpdateArgs<ExtArgs>>): Prisma__TaskCapabilityLinkClient<$Result.GetResult<Prisma.$TaskCapabilityLinkPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more TaskCapabilityLinks.
+     * @param {TaskCapabilityLinkDeleteManyArgs} args - Arguments to filter TaskCapabilityLinks to delete.
+     * @example
+     * // Delete a few TaskCapabilityLinks
+     * const { count } = await prisma.taskCapabilityLink.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends TaskCapabilityLinkDeleteManyArgs>(args?: SelectSubset<T, TaskCapabilityLinkDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more TaskCapabilityLinks.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TaskCapabilityLinkUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many TaskCapabilityLinks
+     * const taskCapabilityLink = await prisma.taskCapabilityLink.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends TaskCapabilityLinkUpdateManyArgs>(args: SelectSubset<T, TaskCapabilityLinkUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one TaskCapabilityLink.
+     * @param {TaskCapabilityLinkUpsertArgs} args - Arguments to update or create a TaskCapabilityLink.
+     * @example
+     * // Update or create a TaskCapabilityLink
+     * const taskCapabilityLink = await prisma.taskCapabilityLink.upsert({
+     *   create: {
+     *     // ... data to create a TaskCapabilityLink
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the TaskCapabilityLink we want to update
+     *   }
+     * })
+     */
+    upsert<T extends TaskCapabilityLinkUpsertArgs>(args: SelectSubset<T, TaskCapabilityLinkUpsertArgs<ExtArgs>>): Prisma__TaskCapabilityLinkClient<$Result.GetResult<Prisma.$TaskCapabilityLinkPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of TaskCapabilityLinks.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TaskCapabilityLinkCountArgs} args - Arguments to filter TaskCapabilityLinks to count.
+     * @example
+     * // Count the number of TaskCapabilityLinks
+     * const count = await prisma.taskCapabilityLink.count({
+     *   where: {
+     *     // ... the filter for the TaskCapabilityLinks we want to count
+     *   }
+     * })
+    **/
+    count<T extends TaskCapabilityLinkCountArgs>(
+      args?: Subset<T, TaskCapabilityLinkCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], TaskCapabilityLinkCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a TaskCapabilityLink.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TaskCapabilityLinkAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends TaskCapabilityLinkAggregateArgs>(args: Subset<T, TaskCapabilityLinkAggregateArgs>): Prisma.PrismaPromise<GetTaskCapabilityLinkAggregateType<T>>
+
+    /**
+     * Group by TaskCapabilityLink.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TaskCapabilityLinkGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends TaskCapabilityLinkGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: TaskCapabilityLinkGroupByArgs['orderBy'] }
+        : { orderBy?: TaskCapabilityLinkGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, TaskCapabilityLinkGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetTaskCapabilityLinkGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the TaskCapabilityLink model
+   */
+  readonly fields: TaskCapabilityLinkFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for TaskCapabilityLink.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__TaskCapabilityLinkClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    taskTemplate<T extends TaskTemplateDefaultArgs<ExtArgs> = {}>(args?: Subset<T, TaskTemplateDefaultArgs<ExtArgs>>): Prisma__TaskTemplateClient<$Result.GetResult<Prisma.$TaskTemplatePayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    capability<T extends CapabilityDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CapabilityDefaultArgs<ExtArgs>>): Prisma__CapabilityClient<$Result.GetResult<Prisma.$CapabilityPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the TaskCapabilityLink model
+   */ 
+  interface TaskCapabilityLinkFieldRefs {
+    readonly id: FieldRef<"TaskCapabilityLink", 'String'>
+    readonly taskTemplateId: FieldRef<"TaskCapabilityLink", 'String'>
+    readonly capabilityId: FieldRef<"TaskCapabilityLink", 'String'>
+    readonly weight: FieldRef<"TaskCapabilityLink", 'Float'>
+    readonly expectedProgress: FieldRef<"TaskCapabilityLink", 'Float'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * TaskCapabilityLink findUnique
+   */
+  export type TaskCapabilityLinkFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TaskCapabilityLink
+     */
+    select?: TaskCapabilityLinkSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TaskCapabilityLinkInclude<ExtArgs> | null
+    /**
+     * Filter, which TaskCapabilityLink to fetch.
+     */
+    where: TaskCapabilityLinkWhereUniqueInput
+  }
+
+  /**
+   * TaskCapabilityLink findUniqueOrThrow
+   */
+  export type TaskCapabilityLinkFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TaskCapabilityLink
+     */
+    select?: TaskCapabilityLinkSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TaskCapabilityLinkInclude<ExtArgs> | null
+    /**
+     * Filter, which TaskCapabilityLink to fetch.
+     */
+    where: TaskCapabilityLinkWhereUniqueInput
+  }
+
+  /**
+   * TaskCapabilityLink findFirst
+   */
+  export type TaskCapabilityLinkFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TaskCapabilityLink
+     */
+    select?: TaskCapabilityLinkSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TaskCapabilityLinkInclude<ExtArgs> | null
+    /**
+     * Filter, which TaskCapabilityLink to fetch.
+     */
+    where?: TaskCapabilityLinkWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TaskCapabilityLinks to fetch.
+     */
+    orderBy?: TaskCapabilityLinkOrderByWithRelationInput | TaskCapabilityLinkOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for TaskCapabilityLinks.
+     */
+    cursor?: TaskCapabilityLinkWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TaskCapabilityLinks from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TaskCapabilityLinks.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of TaskCapabilityLinks.
+     */
+    distinct?: TaskCapabilityLinkScalarFieldEnum | TaskCapabilityLinkScalarFieldEnum[]
+  }
+
+  /**
+   * TaskCapabilityLink findFirstOrThrow
+   */
+  export type TaskCapabilityLinkFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TaskCapabilityLink
+     */
+    select?: TaskCapabilityLinkSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TaskCapabilityLinkInclude<ExtArgs> | null
+    /**
+     * Filter, which TaskCapabilityLink to fetch.
+     */
+    where?: TaskCapabilityLinkWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TaskCapabilityLinks to fetch.
+     */
+    orderBy?: TaskCapabilityLinkOrderByWithRelationInput | TaskCapabilityLinkOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for TaskCapabilityLinks.
+     */
+    cursor?: TaskCapabilityLinkWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TaskCapabilityLinks from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TaskCapabilityLinks.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of TaskCapabilityLinks.
+     */
+    distinct?: TaskCapabilityLinkScalarFieldEnum | TaskCapabilityLinkScalarFieldEnum[]
+  }
+
+  /**
+   * TaskCapabilityLink findMany
+   */
+  export type TaskCapabilityLinkFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TaskCapabilityLink
+     */
+    select?: TaskCapabilityLinkSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TaskCapabilityLinkInclude<ExtArgs> | null
+    /**
+     * Filter, which TaskCapabilityLinks to fetch.
+     */
+    where?: TaskCapabilityLinkWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TaskCapabilityLinks to fetch.
+     */
+    orderBy?: TaskCapabilityLinkOrderByWithRelationInput | TaskCapabilityLinkOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing TaskCapabilityLinks.
+     */
+    cursor?: TaskCapabilityLinkWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TaskCapabilityLinks from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TaskCapabilityLinks.
+     */
+    skip?: number
+    distinct?: TaskCapabilityLinkScalarFieldEnum | TaskCapabilityLinkScalarFieldEnum[]
+  }
+
+  /**
+   * TaskCapabilityLink create
+   */
+  export type TaskCapabilityLinkCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TaskCapabilityLink
+     */
+    select?: TaskCapabilityLinkSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TaskCapabilityLinkInclude<ExtArgs> | null
+    /**
+     * The data needed to create a TaskCapabilityLink.
+     */
+    data: XOR<TaskCapabilityLinkCreateInput, TaskCapabilityLinkUncheckedCreateInput>
+  }
+
+  /**
+   * TaskCapabilityLink createMany
+   */
+  export type TaskCapabilityLinkCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many TaskCapabilityLinks.
+     */
+    data: TaskCapabilityLinkCreateManyInput | TaskCapabilityLinkCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * TaskCapabilityLink createManyAndReturn
+   */
+  export type TaskCapabilityLinkCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TaskCapabilityLink
+     */
+    select?: TaskCapabilityLinkSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many TaskCapabilityLinks.
+     */
+    data: TaskCapabilityLinkCreateManyInput | TaskCapabilityLinkCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TaskCapabilityLinkIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * TaskCapabilityLink update
+   */
+  export type TaskCapabilityLinkUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TaskCapabilityLink
+     */
+    select?: TaskCapabilityLinkSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TaskCapabilityLinkInclude<ExtArgs> | null
+    /**
+     * The data needed to update a TaskCapabilityLink.
+     */
+    data: XOR<TaskCapabilityLinkUpdateInput, TaskCapabilityLinkUncheckedUpdateInput>
+    /**
+     * Choose, which TaskCapabilityLink to update.
+     */
+    where: TaskCapabilityLinkWhereUniqueInput
+  }
+
+  /**
+   * TaskCapabilityLink updateMany
+   */
+  export type TaskCapabilityLinkUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update TaskCapabilityLinks.
+     */
+    data: XOR<TaskCapabilityLinkUpdateManyMutationInput, TaskCapabilityLinkUncheckedUpdateManyInput>
+    /**
+     * Filter which TaskCapabilityLinks to update
+     */
+    where?: TaskCapabilityLinkWhereInput
+  }
+
+  /**
+   * TaskCapabilityLink upsert
+   */
+  export type TaskCapabilityLinkUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TaskCapabilityLink
+     */
+    select?: TaskCapabilityLinkSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TaskCapabilityLinkInclude<ExtArgs> | null
+    /**
+     * The filter to search for the TaskCapabilityLink to update in case it exists.
+     */
+    where: TaskCapabilityLinkWhereUniqueInput
+    /**
+     * In case the TaskCapabilityLink found by the `where` argument doesn't exist, create a new TaskCapabilityLink with this data.
+     */
+    create: XOR<TaskCapabilityLinkCreateInput, TaskCapabilityLinkUncheckedCreateInput>
+    /**
+     * In case the TaskCapabilityLink was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<TaskCapabilityLinkUpdateInput, TaskCapabilityLinkUncheckedUpdateInput>
+  }
+
+  /**
+   * TaskCapabilityLink delete
+   */
+  export type TaskCapabilityLinkDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TaskCapabilityLink
+     */
+    select?: TaskCapabilityLinkSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TaskCapabilityLinkInclude<ExtArgs> | null
+    /**
+     * Filter which TaskCapabilityLink to delete.
+     */
+    where: TaskCapabilityLinkWhereUniqueInput
+  }
+
+  /**
+   * TaskCapabilityLink deleteMany
+   */
+  export type TaskCapabilityLinkDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which TaskCapabilityLinks to delete
+     */
+    where?: TaskCapabilityLinkWhereInput
+  }
+
+  /**
+   * TaskCapabilityLink without action
+   */
+  export type TaskCapabilityLinkDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TaskCapabilityLink
+     */
+    select?: TaskCapabilityLinkSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TaskCapabilityLinkInclude<ExtArgs> | null
   }
 
 
@@ -8997,20 +11400,53 @@ export namespace Prisma {
     userId: 'userId',
     title: 'title',
     category: 'category',
-    gradeMin: 'gradeMin',
-    gradeMax: 'gradeMax',
     duration: 'duration',
+    difficulty: 'difficulty',
     materials: 'materials',
     description: 'description',
     routeTags: 'routeTags',
     milestoneTag: 'milestoneTag',
+    semesterTag: 'semesterTag',
+    tags: 'tags',
     source: 'source',
     isActive: 'isActive',
+    archivedAt: 'archivedAt',
+    useCount: 'useCount',
+    lastUsedAt: 'lastUsedAt',
+    taskType: 'taskType',
+    frequency: 'frequency',
+    customFrequency: 'customFrequency',
+    assessmentCriteria: 'assessmentCriteria',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
 
   export type TaskTemplateScalarFieldEnum = (typeof TaskTemplateScalarFieldEnum)[keyof typeof TaskTemplateScalarFieldEnum]
+
+
+  export const CapabilityScalarFieldEnum: {
+    id: 'id',
+    userId: 'userId',
+    name: 'name',
+    category: 'category',
+    description: 'description',
+    isSystem: 'isSystem',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type CapabilityScalarFieldEnum = (typeof CapabilityScalarFieldEnum)[keyof typeof CapabilityScalarFieldEnum]
+
+
+  export const TaskCapabilityLinkScalarFieldEnum: {
+    id: 'id',
+    taskTemplateId: 'taskTemplateId',
+    capabilityId: 'capabilityId',
+    weight: 'weight',
+    expectedProgress: 'expectedProgress'
+  };
+
+  export type TaskCapabilityLinkScalarFieldEnum = (typeof TaskCapabilityLinkScalarFieldEnum)[keyof typeof TaskCapabilityLinkScalarFieldEnum]
 
 
   export const WeeklyPlanScalarFieldEnum: {
@@ -9193,6 +11629,48 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'TaskType'
+   */
+  export type EnumTaskTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TaskType'>
+    
+
+
+  /**
+   * Reference to a field of type 'TaskType[]'
+   */
+  export type ListEnumTaskTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TaskType[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'TaskFrequency'
+   */
+  export type EnumTaskFrequencyFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TaskFrequency'>
+    
+
+
+  /**
+   * Reference to a field of type 'TaskFrequency[]'
+   */
+  export type ListEnumTaskFrequencyFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TaskFrequency[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'CapabilityCategory'
+   */
+  export type EnumCapabilityCategoryFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CapabilityCategory'>
+    
+
+
+  /**
+   * Reference to a field of type 'CapabilityCategory[]'
+   */
+  export type ListEnumCapabilityCategoryFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CapabilityCategory[]'>
+    
+
+
+  /**
    * Reference to a field of type 'Float'
    */
   export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
@@ -9230,6 +11708,7 @@ export namespace Prisma {
     notifications?: NotificationListRelationFilter
     settings?: XOR<UserSettingNullableRelationFilter, UserSettingWhereInput> | null
     taskTemplates?: TaskTemplateListRelationFilter
+    capabilities?: CapabilityListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -9250,6 +11729,7 @@ export namespace Prisma {
     notifications?: NotificationOrderByRelationAggregateInput
     settings?: UserSettingOrderByWithRelationInput
     taskTemplates?: TaskTemplateOrderByRelationAggregateInput
+    capabilities?: CapabilityOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -9273,6 +11753,7 @@ export namespace Prisma {
     notifications?: NotificationListRelationFilter
     settings?: XOR<UserSettingNullableRelationFilter, UserSettingWhereInput> | null
     taskTemplates?: TaskTemplateListRelationFilter
+    capabilities?: CapabilityListRelationFilter
   }, "id" | "username" | "wechatOpenId">
 
   export type UserOrderByWithAggregationInput = {
@@ -9630,18 +12111,27 @@ export namespace Prisma {
     userId?: StringFilter<"TaskTemplate"> | string
     title?: StringFilter<"TaskTemplate"> | string
     category?: EnumTaskCategoryFilter<"TaskTemplate"> | $Enums.TaskCategory
-    gradeMin?: IntFilter<"TaskTemplate"> | number
-    gradeMax?: IntFilter<"TaskTemplate"> | number
     duration?: StringFilter<"TaskTemplate"> | string
+    difficulty?: StringNullableFilter<"TaskTemplate"> | string | null
     materials?: StringNullableListFilter<"TaskTemplate">
     description?: StringNullableFilter<"TaskTemplate"> | string | null
     routeTags?: StringNullableListFilter<"TaskTemplate">
     milestoneTag?: StringNullableFilter<"TaskTemplate"> | string | null
+    semesterTag?: StringNullableFilter<"TaskTemplate"> | string | null
+    tags?: StringNullableListFilter<"TaskTemplate">
     source?: EnumTaskTemplateSourceFilter<"TaskTemplate"> | $Enums.TaskTemplateSource
     isActive?: BoolFilter<"TaskTemplate"> | boolean
+    archivedAt?: DateTimeNullableFilter<"TaskTemplate"> | Date | string | null
+    useCount?: IntFilter<"TaskTemplate"> | number
+    lastUsedAt?: DateTimeNullableFilter<"TaskTemplate"> | Date | string | null
+    taskType?: EnumTaskTypeFilter<"TaskTemplate"> | $Enums.TaskType
+    frequency?: EnumTaskFrequencyFilter<"TaskTemplate"> | $Enums.TaskFrequency
+    customFrequency?: JsonNullableFilter<"TaskTemplate">
+    assessmentCriteria?: JsonFilter<"TaskTemplate">
     createdAt?: DateTimeFilter<"TaskTemplate"> | Date | string
     updatedAt?: DateTimeFilter<"TaskTemplate"> | Date | string
     user?: XOR<UserRelationFilter, UserWhereInput>
+    capabilityLinks?: TaskCapabilityLinkListRelationFilter
   }
 
   export type TaskTemplateOrderByWithRelationInput = {
@@ -9649,18 +12139,27 @@ export namespace Prisma {
     userId?: SortOrder
     title?: SortOrder
     category?: SortOrder
-    gradeMin?: SortOrder
-    gradeMax?: SortOrder
     duration?: SortOrder
+    difficulty?: SortOrderInput | SortOrder
     materials?: SortOrder
     description?: SortOrderInput | SortOrder
     routeTags?: SortOrder
     milestoneTag?: SortOrderInput | SortOrder
+    semesterTag?: SortOrderInput | SortOrder
+    tags?: SortOrder
     source?: SortOrder
     isActive?: SortOrder
+    archivedAt?: SortOrderInput | SortOrder
+    useCount?: SortOrder
+    lastUsedAt?: SortOrderInput | SortOrder
+    taskType?: SortOrder
+    frequency?: SortOrder
+    customFrequency?: SortOrderInput | SortOrder
+    assessmentCriteria?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     user?: UserOrderByWithRelationInput
+    capabilityLinks?: TaskCapabilityLinkOrderByRelationAggregateInput
   }
 
   export type TaskTemplateWhereUniqueInput = Prisma.AtLeast<{
@@ -9671,18 +12170,27 @@ export namespace Prisma {
     userId?: StringFilter<"TaskTemplate"> | string
     title?: StringFilter<"TaskTemplate"> | string
     category?: EnumTaskCategoryFilter<"TaskTemplate"> | $Enums.TaskCategory
-    gradeMin?: IntFilter<"TaskTemplate"> | number
-    gradeMax?: IntFilter<"TaskTemplate"> | number
     duration?: StringFilter<"TaskTemplate"> | string
+    difficulty?: StringNullableFilter<"TaskTemplate"> | string | null
     materials?: StringNullableListFilter<"TaskTemplate">
     description?: StringNullableFilter<"TaskTemplate"> | string | null
     routeTags?: StringNullableListFilter<"TaskTemplate">
     milestoneTag?: StringNullableFilter<"TaskTemplate"> | string | null
+    semesterTag?: StringNullableFilter<"TaskTemplate"> | string | null
+    tags?: StringNullableListFilter<"TaskTemplate">
     source?: EnumTaskTemplateSourceFilter<"TaskTemplate"> | $Enums.TaskTemplateSource
     isActive?: BoolFilter<"TaskTemplate"> | boolean
+    archivedAt?: DateTimeNullableFilter<"TaskTemplate"> | Date | string | null
+    useCount?: IntFilter<"TaskTemplate"> | number
+    lastUsedAt?: DateTimeNullableFilter<"TaskTemplate"> | Date | string | null
+    taskType?: EnumTaskTypeFilter<"TaskTemplate"> | $Enums.TaskType
+    frequency?: EnumTaskFrequencyFilter<"TaskTemplate"> | $Enums.TaskFrequency
+    customFrequency?: JsonNullableFilter<"TaskTemplate">
+    assessmentCriteria?: JsonFilter<"TaskTemplate">
     createdAt?: DateTimeFilter<"TaskTemplate"> | Date | string
     updatedAt?: DateTimeFilter<"TaskTemplate"> | Date | string
     user?: XOR<UserRelationFilter, UserWhereInput>
+    capabilityLinks?: TaskCapabilityLinkListRelationFilter
   }, "id">
 
   export type TaskTemplateOrderByWithAggregationInput = {
@@ -9690,15 +12198,23 @@ export namespace Prisma {
     userId?: SortOrder
     title?: SortOrder
     category?: SortOrder
-    gradeMin?: SortOrder
-    gradeMax?: SortOrder
     duration?: SortOrder
+    difficulty?: SortOrderInput | SortOrder
     materials?: SortOrder
     description?: SortOrderInput | SortOrder
     routeTags?: SortOrder
     milestoneTag?: SortOrderInput | SortOrder
+    semesterTag?: SortOrderInput | SortOrder
+    tags?: SortOrder
     source?: SortOrder
     isActive?: SortOrder
+    archivedAt?: SortOrderInput | SortOrder
+    useCount?: SortOrder
+    lastUsedAt?: SortOrderInput | SortOrder
+    taskType?: SortOrder
+    frequency?: SortOrder
+    customFrequency?: SortOrderInput | SortOrder
+    assessmentCriteria?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: TaskTemplateCountOrderByAggregateInput
@@ -9716,17 +12232,159 @@ export namespace Prisma {
     userId?: StringWithAggregatesFilter<"TaskTemplate"> | string
     title?: StringWithAggregatesFilter<"TaskTemplate"> | string
     category?: EnumTaskCategoryWithAggregatesFilter<"TaskTemplate"> | $Enums.TaskCategory
-    gradeMin?: IntWithAggregatesFilter<"TaskTemplate"> | number
-    gradeMax?: IntWithAggregatesFilter<"TaskTemplate"> | number
     duration?: StringWithAggregatesFilter<"TaskTemplate"> | string
+    difficulty?: StringNullableWithAggregatesFilter<"TaskTemplate"> | string | null
     materials?: StringNullableListFilter<"TaskTemplate">
     description?: StringNullableWithAggregatesFilter<"TaskTemplate"> | string | null
     routeTags?: StringNullableListFilter<"TaskTemplate">
     milestoneTag?: StringNullableWithAggregatesFilter<"TaskTemplate"> | string | null
+    semesterTag?: StringNullableWithAggregatesFilter<"TaskTemplate"> | string | null
+    tags?: StringNullableListFilter<"TaskTemplate">
     source?: EnumTaskTemplateSourceWithAggregatesFilter<"TaskTemplate"> | $Enums.TaskTemplateSource
     isActive?: BoolWithAggregatesFilter<"TaskTemplate"> | boolean
+    archivedAt?: DateTimeNullableWithAggregatesFilter<"TaskTemplate"> | Date | string | null
+    useCount?: IntWithAggregatesFilter<"TaskTemplate"> | number
+    lastUsedAt?: DateTimeNullableWithAggregatesFilter<"TaskTemplate"> | Date | string | null
+    taskType?: EnumTaskTypeWithAggregatesFilter<"TaskTemplate"> | $Enums.TaskType
+    frequency?: EnumTaskFrequencyWithAggregatesFilter<"TaskTemplate"> | $Enums.TaskFrequency
+    customFrequency?: JsonNullableWithAggregatesFilter<"TaskTemplate">
+    assessmentCriteria?: JsonWithAggregatesFilter<"TaskTemplate">
     createdAt?: DateTimeWithAggregatesFilter<"TaskTemplate"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"TaskTemplate"> | Date | string
+  }
+
+  export type CapabilityWhereInput = {
+    AND?: CapabilityWhereInput | CapabilityWhereInput[]
+    OR?: CapabilityWhereInput[]
+    NOT?: CapabilityWhereInput | CapabilityWhereInput[]
+    id?: StringFilter<"Capability"> | string
+    userId?: StringNullableFilter<"Capability"> | string | null
+    name?: StringFilter<"Capability"> | string
+    category?: EnumCapabilityCategoryFilter<"Capability"> | $Enums.CapabilityCategory
+    description?: StringNullableFilter<"Capability"> | string | null
+    isSystem?: BoolFilter<"Capability"> | boolean
+    createdAt?: DateTimeFilter<"Capability"> | Date | string
+    updatedAt?: DateTimeFilter<"Capability"> | Date | string
+    user?: XOR<UserNullableRelationFilter, UserWhereInput> | null
+    links?: TaskCapabilityLinkListRelationFilter
+  }
+
+  export type CapabilityOrderByWithRelationInput = {
+    id?: SortOrder
+    userId?: SortOrderInput | SortOrder
+    name?: SortOrder
+    category?: SortOrder
+    description?: SortOrderInput | SortOrder
+    isSystem?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    user?: UserOrderByWithRelationInput
+    links?: TaskCapabilityLinkOrderByRelationAggregateInput
+  }
+
+  export type CapabilityWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: CapabilityWhereInput | CapabilityWhereInput[]
+    OR?: CapabilityWhereInput[]
+    NOT?: CapabilityWhereInput | CapabilityWhereInput[]
+    userId?: StringNullableFilter<"Capability"> | string | null
+    name?: StringFilter<"Capability"> | string
+    category?: EnumCapabilityCategoryFilter<"Capability"> | $Enums.CapabilityCategory
+    description?: StringNullableFilter<"Capability"> | string | null
+    isSystem?: BoolFilter<"Capability"> | boolean
+    createdAt?: DateTimeFilter<"Capability"> | Date | string
+    updatedAt?: DateTimeFilter<"Capability"> | Date | string
+    user?: XOR<UserNullableRelationFilter, UserWhereInput> | null
+    links?: TaskCapabilityLinkListRelationFilter
+  }, "id">
+
+  export type CapabilityOrderByWithAggregationInput = {
+    id?: SortOrder
+    userId?: SortOrderInput | SortOrder
+    name?: SortOrder
+    category?: SortOrder
+    description?: SortOrderInput | SortOrder
+    isSystem?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: CapabilityCountOrderByAggregateInput
+    _max?: CapabilityMaxOrderByAggregateInput
+    _min?: CapabilityMinOrderByAggregateInput
+  }
+
+  export type CapabilityScalarWhereWithAggregatesInput = {
+    AND?: CapabilityScalarWhereWithAggregatesInput | CapabilityScalarWhereWithAggregatesInput[]
+    OR?: CapabilityScalarWhereWithAggregatesInput[]
+    NOT?: CapabilityScalarWhereWithAggregatesInput | CapabilityScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Capability"> | string
+    userId?: StringNullableWithAggregatesFilter<"Capability"> | string | null
+    name?: StringWithAggregatesFilter<"Capability"> | string
+    category?: EnumCapabilityCategoryWithAggregatesFilter<"Capability"> | $Enums.CapabilityCategory
+    description?: StringNullableWithAggregatesFilter<"Capability"> | string | null
+    isSystem?: BoolWithAggregatesFilter<"Capability"> | boolean
+    createdAt?: DateTimeWithAggregatesFilter<"Capability"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Capability"> | Date | string
+  }
+
+  export type TaskCapabilityLinkWhereInput = {
+    AND?: TaskCapabilityLinkWhereInput | TaskCapabilityLinkWhereInput[]
+    OR?: TaskCapabilityLinkWhereInput[]
+    NOT?: TaskCapabilityLinkWhereInput | TaskCapabilityLinkWhereInput[]
+    id?: StringFilter<"TaskCapabilityLink"> | string
+    taskTemplateId?: StringFilter<"TaskCapabilityLink"> | string
+    capabilityId?: StringFilter<"TaskCapabilityLink"> | string
+    weight?: FloatFilter<"TaskCapabilityLink"> | number
+    expectedProgress?: FloatFilter<"TaskCapabilityLink"> | number
+    taskTemplate?: XOR<TaskTemplateRelationFilter, TaskTemplateWhereInput>
+    capability?: XOR<CapabilityRelationFilter, CapabilityWhereInput>
+  }
+
+  export type TaskCapabilityLinkOrderByWithRelationInput = {
+    id?: SortOrder
+    taskTemplateId?: SortOrder
+    capabilityId?: SortOrder
+    weight?: SortOrder
+    expectedProgress?: SortOrder
+    taskTemplate?: TaskTemplateOrderByWithRelationInput
+    capability?: CapabilityOrderByWithRelationInput
+  }
+
+  export type TaskCapabilityLinkWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    taskTemplateId_capabilityId?: TaskCapabilityLinkTaskTemplateIdCapabilityIdCompoundUniqueInput
+    AND?: TaskCapabilityLinkWhereInput | TaskCapabilityLinkWhereInput[]
+    OR?: TaskCapabilityLinkWhereInput[]
+    NOT?: TaskCapabilityLinkWhereInput | TaskCapabilityLinkWhereInput[]
+    taskTemplateId?: StringFilter<"TaskCapabilityLink"> | string
+    capabilityId?: StringFilter<"TaskCapabilityLink"> | string
+    weight?: FloatFilter<"TaskCapabilityLink"> | number
+    expectedProgress?: FloatFilter<"TaskCapabilityLink"> | number
+    taskTemplate?: XOR<TaskTemplateRelationFilter, TaskTemplateWhereInput>
+    capability?: XOR<CapabilityRelationFilter, CapabilityWhereInput>
+  }, "id" | "taskTemplateId_capabilityId">
+
+  export type TaskCapabilityLinkOrderByWithAggregationInput = {
+    id?: SortOrder
+    taskTemplateId?: SortOrder
+    capabilityId?: SortOrder
+    weight?: SortOrder
+    expectedProgress?: SortOrder
+    _count?: TaskCapabilityLinkCountOrderByAggregateInput
+    _avg?: TaskCapabilityLinkAvgOrderByAggregateInput
+    _max?: TaskCapabilityLinkMaxOrderByAggregateInput
+    _min?: TaskCapabilityLinkMinOrderByAggregateInput
+    _sum?: TaskCapabilityLinkSumOrderByAggregateInput
+  }
+
+  export type TaskCapabilityLinkScalarWhereWithAggregatesInput = {
+    AND?: TaskCapabilityLinkScalarWhereWithAggregatesInput | TaskCapabilityLinkScalarWhereWithAggregatesInput[]
+    OR?: TaskCapabilityLinkScalarWhereWithAggregatesInput[]
+    NOT?: TaskCapabilityLinkScalarWhereWithAggregatesInput | TaskCapabilityLinkScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"TaskCapabilityLink"> | string
+    taskTemplateId?: StringWithAggregatesFilter<"TaskCapabilityLink"> | string
+    capabilityId?: StringWithAggregatesFilter<"TaskCapabilityLink"> | string
+    weight?: FloatWithAggregatesFilter<"TaskCapabilityLink"> | number
+    expectedProgress?: FloatWithAggregatesFilter<"TaskCapabilityLink"> | number
   }
 
   export type WeeklyPlanWhereInput = {
@@ -9891,6 +12549,7 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     settings?: UserSettingCreateNestedOneWithoutUserInput
     taskTemplates?: TaskTemplateCreateNestedManyWithoutUserInput
+    capabilities?: CapabilityCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -9911,6 +12570,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     settings?: UserSettingUncheckedCreateNestedOneWithoutUserInput
     taskTemplates?: TaskTemplateUncheckedCreateNestedManyWithoutUserInput
+    capabilities?: CapabilityUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserUpdateInput = {
@@ -9931,6 +12591,7 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     settings?: UserSettingUpdateOneWithoutUserNestedInput
     taskTemplates?: TaskTemplateUpdateManyWithoutUserNestedInput
+    capabilities?: CapabilityUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -9951,6 +12612,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     settings?: UserSettingUncheckedUpdateOneWithoutUserNestedInput
     taskTemplates?: TaskTemplateUncheckedUpdateManyWithoutUserNestedInput
+    capabilities?: CapabilityUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -10360,18 +13022,27 @@ export namespace Prisma {
     id?: string
     title: string
     category: $Enums.TaskCategory
-    gradeMin?: number
-    gradeMax?: number
     duration?: string
+    difficulty?: string | null
     materials?: TaskTemplateCreatematerialsInput | string[]
     description?: string | null
     routeTags?: TaskTemplateCreaterouteTagsInput | string[]
     milestoneTag?: string | null
+    semesterTag?: string | null
+    tags?: TaskTemplateCreatetagsInput | string[]
     source?: $Enums.TaskTemplateSource
     isActive?: boolean
+    archivedAt?: Date | string | null
+    useCount?: number
+    lastUsedAt?: Date | string | null
+    taskType?: $Enums.TaskType
+    frequency?: $Enums.TaskFrequency
+    customFrequency?: NullableJsonNullValueInput | InputJsonValue
+    assessmentCriteria?: JsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
     user: UserCreateNestedOneWithoutTaskTemplatesInput
+    capabilityLinks?: TaskCapabilityLinkCreateNestedManyWithoutTaskTemplateInput
   }
 
   export type TaskTemplateUncheckedCreateInput = {
@@ -10379,35 +13050,53 @@ export namespace Prisma {
     userId: string
     title: string
     category: $Enums.TaskCategory
-    gradeMin?: number
-    gradeMax?: number
     duration?: string
+    difficulty?: string | null
     materials?: TaskTemplateCreatematerialsInput | string[]
     description?: string | null
     routeTags?: TaskTemplateCreaterouteTagsInput | string[]
     milestoneTag?: string | null
+    semesterTag?: string | null
+    tags?: TaskTemplateCreatetagsInput | string[]
     source?: $Enums.TaskTemplateSource
     isActive?: boolean
+    archivedAt?: Date | string | null
+    useCount?: number
+    lastUsedAt?: Date | string | null
+    taskType?: $Enums.TaskType
+    frequency?: $Enums.TaskFrequency
+    customFrequency?: NullableJsonNullValueInput | InputJsonValue
+    assessmentCriteria?: JsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
+    capabilityLinks?: TaskCapabilityLinkUncheckedCreateNestedManyWithoutTaskTemplateInput
   }
 
   export type TaskTemplateUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     category?: EnumTaskCategoryFieldUpdateOperationsInput | $Enums.TaskCategory
-    gradeMin?: IntFieldUpdateOperationsInput | number
-    gradeMax?: IntFieldUpdateOperationsInput | number
     duration?: StringFieldUpdateOperationsInput | string
+    difficulty?: NullableStringFieldUpdateOperationsInput | string | null
     materials?: TaskTemplateUpdatematerialsInput | string[]
     description?: NullableStringFieldUpdateOperationsInput | string | null
     routeTags?: TaskTemplateUpdaterouteTagsInput | string[]
     milestoneTag?: NullableStringFieldUpdateOperationsInput | string | null
+    semesterTag?: NullableStringFieldUpdateOperationsInput | string | null
+    tags?: TaskTemplateUpdatetagsInput | string[]
     source?: EnumTaskTemplateSourceFieldUpdateOperationsInput | $Enums.TaskTemplateSource
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    archivedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    useCount?: IntFieldUpdateOperationsInput | number
+    lastUsedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    taskType?: EnumTaskTypeFieldUpdateOperationsInput | $Enums.TaskType
+    frequency?: EnumTaskFrequencyFieldUpdateOperationsInput | $Enums.TaskFrequency
+    customFrequency?: NullableJsonNullValueInput | InputJsonValue
+    assessmentCriteria?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutTaskTemplatesNestedInput
+    capabilityLinks?: TaskCapabilityLinkUpdateManyWithoutTaskTemplateNestedInput
   }
 
   export type TaskTemplateUncheckedUpdateInput = {
@@ -10415,17 +13104,26 @@ export namespace Prisma {
     userId?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     category?: EnumTaskCategoryFieldUpdateOperationsInput | $Enums.TaskCategory
-    gradeMin?: IntFieldUpdateOperationsInput | number
-    gradeMax?: IntFieldUpdateOperationsInput | number
     duration?: StringFieldUpdateOperationsInput | string
+    difficulty?: NullableStringFieldUpdateOperationsInput | string | null
     materials?: TaskTemplateUpdatematerialsInput | string[]
     description?: NullableStringFieldUpdateOperationsInput | string | null
     routeTags?: TaskTemplateUpdaterouteTagsInput | string[]
     milestoneTag?: NullableStringFieldUpdateOperationsInput | string | null
+    semesterTag?: NullableStringFieldUpdateOperationsInput | string | null
+    tags?: TaskTemplateUpdatetagsInput | string[]
     source?: EnumTaskTemplateSourceFieldUpdateOperationsInput | $Enums.TaskTemplateSource
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    archivedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    useCount?: IntFieldUpdateOperationsInput | number
+    lastUsedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    taskType?: EnumTaskTypeFieldUpdateOperationsInput | $Enums.TaskType
+    frequency?: EnumTaskFrequencyFieldUpdateOperationsInput | $Enums.TaskFrequency
+    customFrequency?: NullableJsonNullValueInput | InputJsonValue
+    assessmentCriteria?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    capabilityLinks?: TaskCapabilityLinkUncheckedUpdateManyWithoutTaskTemplateNestedInput
   }
 
   export type TaskTemplateCreateManyInput = {
@@ -10433,15 +13131,23 @@ export namespace Prisma {
     userId: string
     title: string
     category: $Enums.TaskCategory
-    gradeMin?: number
-    gradeMax?: number
     duration?: string
+    difficulty?: string | null
     materials?: TaskTemplateCreatematerialsInput | string[]
     description?: string | null
     routeTags?: TaskTemplateCreaterouteTagsInput | string[]
     milestoneTag?: string | null
+    semesterTag?: string | null
+    tags?: TaskTemplateCreatetagsInput | string[]
     source?: $Enums.TaskTemplateSource
     isActive?: boolean
+    archivedAt?: Date | string | null
+    useCount?: number
+    lastUsedAt?: Date | string | null
+    taskType?: $Enums.TaskType
+    frequency?: $Enums.TaskFrequency
+    customFrequency?: NullableJsonNullValueInput | InputJsonValue
+    assessmentCriteria?: JsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -10450,15 +13156,23 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     category?: EnumTaskCategoryFieldUpdateOperationsInput | $Enums.TaskCategory
-    gradeMin?: IntFieldUpdateOperationsInput | number
-    gradeMax?: IntFieldUpdateOperationsInput | number
     duration?: StringFieldUpdateOperationsInput | string
+    difficulty?: NullableStringFieldUpdateOperationsInput | string | null
     materials?: TaskTemplateUpdatematerialsInput | string[]
     description?: NullableStringFieldUpdateOperationsInput | string | null
     routeTags?: TaskTemplateUpdaterouteTagsInput | string[]
     milestoneTag?: NullableStringFieldUpdateOperationsInput | string | null
+    semesterTag?: NullableStringFieldUpdateOperationsInput | string | null
+    tags?: TaskTemplateUpdatetagsInput | string[]
     source?: EnumTaskTemplateSourceFieldUpdateOperationsInput | $Enums.TaskTemplateSource
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    archivedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    useCount?: IntFieldUpdateOperationsInput | number
+    lastUsedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    taskType?: EnumTaskTypeFieldUpdateOperationsInput | $Enums.TaskType
+    frequency?: EnumTaskFrequencyFieldUpdateOperationsInput | $Enums.TaskFrequency
+    customFrequency?: NullableJsonNullValueInput | InputJsonValue
+    assessmentCriteria?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -10468,17 +13182,159 @@ export namespace Prisma {
     userId?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     category?: EnumTaskCategoryFieldUpdateOperationsInput | $Enums.TaskCategory
-    gradeMin?: IntFieldUpdateOperationsInput | number
-    gradeMax?: IntFieldUpdateOperationsInput | number
     duration?: StringFieldUpdateOperationsInput | string
+    difficulty?: NullableStringFieldUpdateOperationsInput | string | null
     materials?: TaskTemplateUpdatematerialsInput | string[]
     description?: NullableStringFieldUpdateOperationsInput | string | null
     routeTags?: TaskTemplateUpdaterouteTagsInput | string[]
     milestoneTag?: NullableStringFieldUpdateOperationsInput | string | null
+    semesterTag?: NullableStringFieldUpdateOperationsInput | string | null
+    tags?: TaskTemplateUpdatetagsInput | string[]
     source?: EnumTaskTemplateSourceFieldUpdateOperationsInput | $Enums.TaskTemplateSource
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    archivedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    useCount?: IntFieldUpdateOperationsInput | number
+    lastUsedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    taskType?: EnumTaskTypeFieldUpdateOperationsInput | $Enums.TaskType
+    frequency?: EnumTaskFrequencyFieldUpdateOperationsInput | $Enums.TaskFrequency
+    customFrequency?: NullableJsonNullValueInput | InputJsonValue
+    assessmentCriteria?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CapabilityCreateInput = {
+    id?: string
+    name: string
+    category: $Enums.CapabilityCategory
+    description?: string | null
+    isSystem?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user?: UserCreateNestedOneWithoutCapabilitiesInput
+    links?: TaskCapabilityLinkCreateNestedManyWithoutCapabilityInput
+  }
+
+  export type CapabilityUncheckedCreateInput = {
+    id?: string
+    userId?: string | null
+    name: string
+    category: $Enums.CapabilityCategory
+    description?: string | null
+    isSystem?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    links?: TaskCapabilityLinkUncheckedCreateNestedManyWithoutCapabilityInput
+  }
+
+  export type CapabilityUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    category?: EnumCapabilityCategoryFieldUpdateOperationsInput | $Enums.CapabilityCategory
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isSystem?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneWithoutCapabilitiesNestedInput
+    links?: TaskCapabilityLinkUpdateManyWithoutCapabilityNestedInput
+  }
+
+  export type CapabilityUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    category?: EnumCapabilityCategoryFieldUpdateOperationsInput | $Enums.CapabilityCategory
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isSystem?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    links?: TaskCapabilityLinkUncheckedUpdateManyWithoutCapabilityNestedInput
+  }
+
+  export type CapabilityCreateManyInput = {
+    id?: string
+    userId?: string | null
+    name: string
+    category: $Enums.CapabilityCategory
+    description?: string | null
+    isSystem?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type CapabilityUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    category?: EnumCapabilityCategoryFieldUpdateOperationsInput | $Enums.CapabilityCategory
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isSystem?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CapabilityUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    category?: EnumCapabilityCategoryFieldUpdateOperationsInput | $Enums.CapabilityCategory
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isSystem?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TaskCapabilityLinkCreateInput = {
+    id?: string
+    weight?: number
+    expectedProgress?: number
+    taskTemplate: TaskTemplateCreateNestedOneWithoutCapabilityLinksInput
+    capability: CapabilityCreateNestedOneWithoutLinksInput
+  }
+
+  export type TaskCapabilityLinkUncheckedCreateInput = {
+    id?: string
+    taskTemplateId: string
+    capabilityId: string
+    weight?: number
+    expectedProgress?: number
+  }
+
+  export type TaskCapabilityLinkUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    weight?: FloatFieldUpdateOperationsInput | number
+    expectedProgress?: FloatFieldUpdateOperationsInput | number
+    taskTemplate?: TaskTemplateUpdateOneRequiredWithoutCapabilityLinksNestedInput
+    capability?: CapabilityUpdateOneRequiredWithoutLinksNestedInput
+  }
+
+  export type TaskCapabilityLinkUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    taskTemplateId?: StringFieldUpdateOperationsInput | string
+    capabilityId?: StringFieldUpdateOperationsInput | string
+    weight?: FloatFieldUpdateOperationsInput | number
+    expectedProgress?: FloatFieldUpdateOperationsInput | number
+  }
+
+  export type TaskCapabilityLinkCreateManyInput = {
+    id?: string
+    taskTemplateId: string
+    capabilityId: string
+    weight?: number
+    expectedProgress?: number
+  }
+
+  export type TaskCapabilityLinkUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    weight?: FloatFieldUpdateOperationsInput | number
+    expectedProgress?: FloatFieldUpdateOperationsInput | number
+  }
+
+  export type TaskCapabilityLinkUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    taskTemplateId?: StringFieldUpdateOperationsInput | string
+    capabilityId?: StringFieldUpdateOperationsInput | string
+    weight?: FloatFieldUpdateOperationsInput | number
+    expectedProgress?: FloatFieldUpdateOperationsInput | number
   }
 
   export type WeeklyPlanCreateInput = {
@@ -10715,6 +13571,12 @@ export namespace Prisma {
     none?: TaskTemplateWhereInput
   }
 
+  export type CapabilityListRelationFilter = {
+    every?: CapabilityWhereInput
+    some?: CapabilityWhereInput
+    none?: CapabilityWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -10737,6 +13599,10 @@ export namespace Prisma {
   }
 
   export type TaskTemplateOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type CapabilityOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -11194,27 +14060,58 @@ export namespace Prisma {
     not?: NestedEnumTaskTemplateSourceFilter<$PrismaModel> | $Enums.TaskTemplateSource
   }
 
+  export type EnumTaskTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.TaskType | EnumTaskTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.TaskType[] | ListEnumTaskTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TaskType[] | ListEnumTaskTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumTaskTypeFilter<$PrismaModel> | $Enums.TaskType
+  }
+
+  export type EnumTaskFrequencyFilter<$PrismaModel = never> = {
+    equals?: $Enums.TaskFrequency | EnumTaskFrequencyFieldRefInput<$PrismaModel>
+    in?: $Enums.TaskFrequency[] | ListEnumTaskFrequencyFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TaskFrequency[] | ListEnumTaskFrequencyFieldRefInput<$PrismaModel>
+    not?: NestedEnumTaskFrequencyFilter<$PrismaModel> | $Enums.TaskFrequency
+  }
+
+  export type TaskCapabilityLinkListRelationFilter = {
+    every?: TaskCapabilityLinkWhereInput
+    some?: TaskCapabilityLinkWhereInput
+    none?: TaskCapabilityLinkWhereInput
+  }
+
+  export type TaskCapabilityLinkOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
   export type TaskTemplateCountOrderByAggregateInput = {
     id?: SortOrder
     userId?: SortOrder
     title?: SortOrder
     category?: SortOrder
-    gradeMin?: SortOrder
-    gradeMax?: SortOrder
     duration?: SortOrder
+    difficulty?: SortOrder
     materials?: SortOrder
     description?: SortOrder
     routeTags?: SortOrder
     milestoneTag?: SortOrder
+    semesterTag?: SortOrder
+    tags?: SortOrder
     source?: SortOrder
     isActive?: SortOrder
+    archivedAt?: SortOrder
+    useCount?: SortOrder
+    lastUsedAt?: SortOrder
+    taskType?: SortOrder
+    frequency?: SortOrder
+    customFrequency?: SortOrder
+    assessmentCriteria?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
 
   export type TaskTemplateAvgOrderByAggregateInput = {
-    gradeMin?: SortOrder
-    gradeMax?: SortOrder
+    useCount?: SortOrder
   }
 
   export type TaskTemplateMaxOrderByAggregateInput = {
@@ -11222,13 +14119,18 @@ export namespace Prisma {
     userId?: SortOrder
     title?: SortOrder
     category?: SortOrder
-    gradeMin?: SortOrder
-    gradeMax?: SortOrder
     duration?: SortOrder
+    difficulty?: SortOrder
     description?: SortOrder
     milestoneTag?: SortOrder
+    semesterTag?: SortOrder
     source?: SortOrder
     isActive?: SortOrder
+    archivedAt?: SortOrder
+    useCount?: SortOrder
+    lastUsedAt?: SortOrder
+    taskType?: SortOrder
+    frequency?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -11238,20 +14140,24 @@ export namespace Prisma {
     userId?: SortOrder
     title?: SortOrder
     category?: SortOrder
-    gradeMin?: SortOrder
-    gradeMax?: SortOrder
     duration?: SortOrder
+    difficulty?: SortOrder
     description?: SortOrder
     milestoneTag?: SortOrder
+    semesterTag?: SortOrder
     source?: SortOrder
     isActive?: SortOrder
+    archivedAt?: SortOrder
+    useCount?: SortOrder
+    lastUsedAt?: SortOrder
+    taskType?: SortOrder
+    frequency?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
 
   export type TaskTemplateSumOrderByAggregateInput = {
-    gradeMin?: SortOrder
-    gradeMax?: SortOrder
+    useCount?: SortOrder
   }
 
   export type EnumTaskCategoryWithAggregatesFilter<$PrismaModel = never> = {
@@ -11272,6 +14178,157 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumTaskTemplateSourceFilter<$PrismaModel>
     _max?: NestedEnumTaskTemplateSourceFilter<$PrismaModel>
+  }
+
+  export type EnumTaskTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.TaskType | EnumTaskTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.TaskType[] | ListEnumTaskTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TaskType[] | ListEnumTaskTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumTaskTypeWithAggregatesFilter<$PrismaModel> | $Enums.TaskType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumTaskTypeFilter<$PrismaModel>
+    _max?: NestedEnumTaskTypeFilter<$PrismaModel>
+  }
+
+  export type EnumTaskFrequencyWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.TaskFrequency | EnumTaskFrequencyFieldRefInput<$PrismaModel>
+    in?: $Enums.TaskFrequency[] | ListEnumTaskFrequencyFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TaskFrequency[] | ListEnumTaskFrequencyFieldRefInput<$PrismaModel>
+    not?: NestedEnumTaskFrequencyWithAggregatesFilter<$PrismaModel> | $Enums.TaskFrequency
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumTaskFrequencyFilter<$PrismaModel>
+    _max?: NestedEnumTaskFrequencyFilter<$PrismaModel>
+  }
+
+  export type EnumCapabilityCategoryFilter<$PrismaModel = never> = {
+    equals?: $Enums.CapabilityCategory | EnumCapabilityCategoryFieldRefInput<$PrismaModel>
+    in?: $Enums.CapabilityCategory[] | ListEnumCapabilityCategoryFieldRefInput<$PrismaModel>
+    notIn?: $Enums.CapabilityCategory[] | ListEnumCapabilityCategoryFieldRefInput<$PrismaModel>
+    not?: NestedEnumCapabilityCategoryFilter<$PrismaModel> | $Enums.CapabilityCategory
+  }
+
+  export type UserNullableRelationFilter = {
+    is?: UserWhereInput | null
+    isNot?: UserWhereInput | null
+  }
+
+  export type CapabilityCountOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    name?: SortOrder
+    category?: SortOrder
+    description?: SortOrder
+    isSystem?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type CapabilityMaxOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    name?: SortOrder
+    category?: SortOrder
+    description?: SortOrder
+    isSystem?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type CapabilityMinOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    name?: SortOrder
+    category?: SortOrder
+    description?: SortOrder
+    isSystem?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type EnumCapabilityCategoryWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.CapabilityCategory | EnumCapabilityCategoryFieldRefInput<$PrismaModel>
+    in?: $Enums.CapabilityCategory[] | ListEnumCapabilityCategoryFieldRefInput<$PrismaModel>
+    notIn?: $Enums.CapabilityCategory[] | ListEnumCapabilityCategoryFieldRefInput<$PrismaModel>
+    not?: NestedEnumCapabilityCategoryWithAggregatesFilter<$PrismaModel> | $Enums.CapabilityCategory
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumCapabilityCategoryFilter<$PrismaModel>
+    _max?: NestedEnumCapabilityCategoryFilter<$PrismaModel>
+  }
+
+  export type FloatFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatFilter<$PrismaModel> | number
+  }
+
+  export type TaskTemplateRelationFilter = {
+    is?: TaskTemplateWhereInput
+    isNot?: TaskTemplateWhereInput
+  }
+
+  export type CapabilityRelationFilter = {
+    is?: CapabilityWhereInput
+    isNot?: CapabilityWhereInput
+  }
+
+  export type TaskCapabilityLinkTaskTemplateIdCapabilityIdCompoundUniqueInput = {
+    taskTemplateId: string
+    capabilityId: string
+  }
+
+  export type TaskCapabilityLinkCountOrderByAggregateInput = {
+    id?: SortOrder
+    taskTemplateId?: SortOrder
+    capabilityId?: SortOrder
+    weight?: SortOrder
+    expectedProgress?: SortOrder
+  }
+
+  export type TaskCapabilityLinkAvgOrderByAggregateInput = {
+    weight?: SortOrder
+    expectedProgress?: SortOrder
+  }
+
+  export type TaskCapabilityLinkMaxOrderByAggregateInput = {
+    id?: SortOrder
+    taskTemplateId?: SortOrder
+    capabilityId?: SortOrder
+    weight?: SortOrder
+    expectedProgress?: SortOrder
+  }
+
+  export type TaskCapabilityLinkMinOrderByAggregateInput = {
+    id?: SortOrder
+    taskTemplateId?: SortOrder
+    capabilityId?: SortOrder
+    weight?: SortOrder
+    expectedProgress?: SortOrder
+  }
+
+  export type TaskCapabilityLinkSumOrderByAggregateInput = {
+    weight?: SortOrder
+    expectedProgress?: SortOrder
+  }
+
+  export type FloatWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedFloatFilter<$PrismaModel>
+    _min?: NestedFloatFilter<$PrismaModel>
+    _max?: NestedFloatFilter<$PrismaModel>
   }
 
   export type WeeklyPlanChildIdWeekIdCompoundUniqueInput = {
@@ -11384,6 +14441,13 @@ export namespace Prisma {
     connect?: TaskTemplateWhereUniqueInput | TaskTemplateWhereUniqueInput[]
   }
 
+  export type CapabilityCreateNestedManyWithoutUserInput = {
+    create?: XOR<CapabilityCreateWithoutUserInput, CapabilityUncheckedCreateWithoutUserInput> | CapabilityCreateWithoutUserInput[] | CapabilityUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: CapabilityCreateOrConnectWithoutUserInput | CapabilityCreateOrConnectWithoutUserInput[]
+    createMany?: CapabilityCreateManyUserInputEnvelope
+    connect?: CapabilityWhereUniqueInput | CapabilityWhereUniqueInput[]
+  }
+
   export type ChildUncheckedCreateNestedManyWithoutUserInput = {
     create?: XOR<ChildCreateWithoutUserInput, ChildUncheckedCreateWithoutUserInput> | ChildCreateWithoutUserInput[] | ChildUncheckedCreateWithoutUserInput[]
     connectOrCreate?: ChildCreateOrConnectWithoutUserInput | ChildCreateOrConnectWithoutUserInput[]
@@ -11423,6 +14487,13 @@ export namespace Prisma {
     connectOrCreate?: TaskTemplateCreateOrConnectWithoutUserInput | TaskTemplateCreateOrConnectWithoutUserInput[]
     createMany?: TaskTemplateCreateManyUserInputEnvelope
     connect?: TaskTemplateWhereUniqueInput | TaskTemplateWhereUniqueInput[]
+  }
+
+  export type CapabilityUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<CapabilityCreateWithoutUserInput, CapabilityUncheckedCreateWithoutUserInput> | CapabilityCreateWithoutUserInput[] | CapabilityUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: CapabilityCreateOrConnectWithoutUserInput | CapabilityCreateOrConnectWithoutUserInput[]
+    createMany?: CapabilityCreateManyUserInputEnvelope
+    connect?: CapabilityWhereUniqueInput | CapabilityWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -11521,6 +14592,20 @@ export namespace Prisma {
     deleteMany?: TaskTemplateScalarWhereInput | TaskTemplateScalarWhereInput[]
   }
 
+  export type CapabilityUpdateManyWithoutUserNestedInput = {
+    create?: XOR<CapabilityCreateWithoutUserInput, CapabilityUncheckedCreateWithoutUserInput> | CapabilityCreateWithoutUserInput[] | CapabilityUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: CapabilityCreateOrConnectWithoutUserInput | CapabilityCreateOrConnectWithoutUserInput[]
+    upsert?: CapabilityUpsertWithWhereUniqueWithoutUserInput | CapabilityUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: CapabilityCreateManyUserInputEnvelope
+    set?: CapabilityWhereUniqueInput | CapabilityWhereUniqueInput[]
+    disconnect?: CapabilityWhereUniqueInput | CapabilityWhereUniqueInput[]
+    delete?: CapabilityWhereUniqueInput | CapabilityWhereUniqueInput[]
+    connect?: CapabilityWhereUniqueInput | CapabilityWhereUniqueInput[]
+    update?: CapabilityUpdateWithWhereUniqueWithoutUserInput | CapabilityUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: CapabilityUpdateManyWithWhereWithoutUserInput | CapabilityUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: CapabilityScalarWhereInput | CapabilityScalarWhereInput[]
+  }
+
   export type ChildUncheckedUpdateManyWithoutUserNestedInput = {
     create?: XOR<ChildCreateWithoutUserInput, ChildUncheckedCreateWithoutUserInput> | ChildCreateWithoutUserInput[] | ChildUncheckedCreateWithoutUserInput[]
     connectOrCreate?: ChildCreateOrConnectWithoutUserInput | ChildCreateOrConnectWithoutUserInput[]
@@ -11599,6 +14684,20 @@ export namespace Prisma {
     update?: TaskTemplateUpdateWithWhereUniqueWithoutUserInput | TaskTemplateUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: TaskTemplateUpdateManyWithWhereWithoutUserInput | TaskTemplateUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: TaskTemplateScalarWhereInput | TaskTemplateScalarWhereInput[]
+  }
+
+  export type CapabilityUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<CapabilityCreateWithoutUserInput, CapabilityUncheckedCreateWithoutUserInput> | CapabilityCreateWithoutUserInput[] | CapabilityUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: CapabilityCreateOrConnectWithoutUserInput | CapabilityCreateOrConnectWithoutUserInput[]
+    upsert?: CapabilityUpsertWithWhereUniqueWithoutUserInput | CapabilityUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: CapabilityCreateManyUserInputEnvelope
+    set?: CapabilityWhereUniqueInput | CapabilityWhereUniqueInput[]
+    disconnect?: CapabilityWhereUniqueInput | CapabilityWhereUniqueInput[]
+    delete?: CapabilityWhereUniqueInput | CapabilityWhereUniqueInput[]
+    connect?: CapabilityWhereUniqueInput | CapabilityWhereUniqueInput[]
+    update?: CapabilityUpdateWithWhereUniqueWithoutUserInput | CapabilityUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: CapabilityUpdateManyWithWhereWithoutUserInput | CapabilityUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: CapabilityScalarWhereInput | CapabilityScalarWhereInput[]
   }
 
   export type UserCreateNestedOneWithoutSettingsInput = {
@@ -11765,10 +14864,28 @@ export namespace Prisma {
     set: string[]
   }
 
+  export type TaskTemplateCreatetagsInput = {
+    set: string[]
+  }
+
   export type UserCreateNestedOneWithoutTaskTemplatesInput = {
     create?: XOR<UserCreateWithoutTaskTemplatesInput, UserUncheckedCreateWithoutTaskTemplatesInput>
     connectOrCreate?: UserCreateOrConnectWithoutTaskTemplatesInput
     connect?: UserWhereUniqueInput
+  }
+
+  export type TaskCapabilityLinkCreateNestedManyWithoutTaskTemplateInput = {
+    create?: XOR<TaskCapabilityLinkCreateWithoutTaskTemplateInput, TaskCapabilityLinkUncheckedCreateWithoutTaskTemplateInput> | TaskCapabilityLinkCreateWithoutTaskTemplateInput[] | TaskCapabilityLinkUncheckedCreateWithoutTaskTemplateInput[]
+    connectOrCreate?: TaskCapabilityLinkCreateOrConnectWithoutTaskTemplateInput | TaskCapabilityLinkCreateOrConnectWithoutTaskTemplateInput[]
+    createMany?: TaskCapabilityLinkCreateManyTaskTemplateInputEnvelope
+    connect?: TaskCapabilityLinkWhereUniqueInput | TaskCapabilityLinkWhereUniqueInput[]
+  }
+
+  export type TaskCapabilityLinkUncheckedCreateNestedManyWithoutTaskTemplateInput = {
+    create?: XOR<TaskCapabilityLinkCreateWithoutTaskTemplateInput, TaskCapabilityLinkUncheckedCreateWithoutTaskTemplateInput> | TaskCapabilityLinkCreateWithoutTaskTemplateInput[] | TaskCapabilityLinkUncheckedCreateWithoutTaskTemplateInput[]
+    connectOrCreate?: TaskCapabilityLinkCreateOrConnectWithoutTaskTemplateInput | TaskCapabilityLinkCreateOrConnectWithoutTaskTemplateInput[]
+    createMany?: TaskCapabilityLinkCreateManyTaskTemplateInputEnvelope
+    connect?: TaskCapabilityLinkWhereUniqueInput | TaskCapabilityLinkWhereUniqueInput[]
   }
 
   export type EnumTaskCategoryFieldUpdateOperationsInput = {
@@ -11785,8 +14902,21 @@ export namespace Prisma {
     push?: string | string[]
   }
 
+  export type TaskTemplateUpdatetagsInput = {
+    set?: string[]
+    push?: string | string[]
+  }
+
   export type EnumTaskTemplateSourceFieldUpdateOperationsInput = {
     set?: $Enums.TaskTemplateSource
+  }
+
+  export type EnumTaskTypeFieldUpdateOperationsInput = {
+    set?: $Enums.TaskType
+  }
+
+  export type EnumTaskFrequencyFieldUpdateOperationsInput = {
+    set?: $Enums.TaskFrequency
   }
 
   export type UserUpdateOneRequiredWithoutTaskTemplatesNestedInput = {
@@ -11795,6 +14925,132 @@ export namespace Prisma {
     upsert?: UserUpsertWithoutTaskTemplatesInput
     connect?: UserWhereUniqueInput
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutTaskTemplatesInput, UserUpdateWithoutTaskTemplatesInput>, UserUncheckedUpdateWithoutTaskTemplatesInput>
+  }
+
+  export type TaskCapabilityLinkUpdateManyWithoutTaskTemplateNestedInput = {
+    create?: XOR<TaskCapabilityLinkCreateWithoutTaskTemplateInput, TaskCapabilityLinkUncheckedCreateWithoutTaskTemplateInput> | TaskCapabilityLinkCreateWithoutTaskTemplateInput[] | TaskCapabilityLinkUncheckedCreateWithoutTaskTemplateInput[]
+    connectOrCreate?: TaskCapabilityLinkCreateOrConnectWithoutTaskTemplateInput | TaskCapabilityLinkCreateOrConnectWithoutTaskTemplateInput[]
+    upsert?: TaskCapabilityLinkUpsertWithWhereUniqueWithoutTaskTemplateInput | TaskCapabilityLinkUpsertWithWhereUniqueWithoutTaskTemplateInput[]
+    createMany?: TaskCapabilityLinkCreateManyTaskTemplateInputEnvelope
+    set?: TaskCapabilityLinkWhereUniqueInput | TaskCapabilityLinkWhereUniqueInput[]
+    disconnect?: TaskCapabilityLinkWhereUniqueInput | TaskCapabilityLinkWhereUniqueInput[]
+    delete?: TaskCapabilityLinkWhereUniqueInput | TaskCapabilityLinkWhereUniqueInput[]
+    connect?: TaskCapabilityLinkWhereUniqueInput | TaskCapabilityLinkWhereUniqueInput[]
+    update?: TaskCapabilityLinkUpdateWithWhereUniqueWithoutTaskTemplateInput | TaskCapabilityLinkUpdateWithWhereUniqueWithoutTaskTemplateInput[]
+    updateMany?: TaskCapabilityLinkUpdateManyWithWhereWithoutTaskTemplateInput | TaskCapabilityLinkUpdateManyWithWhereWithoutTaskTemplateInput[]
+    deleteMany?: TaskCapabilityLinkScalarWhereInput | TaskCapabilityLinkScalarWhereInput[]
+  }
+
+  export type TaskCapabilityLinkUncheckedUpdateManyWithoutTaskTemplateNestedInput = {
+    create?: XOR<TaskCapabilityLinkCreateWithoutTaskTemplateInput, TaskCapabilityLinkUncheckedCreateWithoutTaskTemplateInput> | TaskCapabilityLinkCreateWithoutTaskTemplateInput[] | TaskCapabilityLinkUncheckedCreateWithoutTaskTemplateInput[]
+    connectOrCreate?: TaskCapabilityLinkCreateOrConnectWithoutTaskTemplateInput | TaskCapabilityLinkCreateOrConnectWithoutTaskTemplateInput[]
+    upsert?: TaskCapabilityLinkUpsertWithWhereUniqueWithoutTaskTemplateInput | TaskCapabilityLinkUpsertWithWhereUniqueWithoutTaskTemplateInput[]
+    createMany?: TaskCapabilityLinkCreateManyTaskTemplateInputEnvelope
+    set?: TaskCapabilityLinkWhereUniqueInput | TaskCapabilityLinkWhereUniqueInput[]
+    disconnect?: TaskCapabilityLinkWhereUniqueInput | TaskCapabilityLinkWhereUniqueInput[]
+    delete?: TaskCapabilityLinkWhereUniqueInput | TaskCapabilityLinkWhereUniqueInput[]
+    connect?: TaskCapabilityLinkWhereUniqueInput | TaskCapabilityLinkWhereUniqueInput[]
+    update?: TaskCapabilityLinkUpdateWithWhereUniqueWithoutTaskTemplateInput | TaskCapabilityLinkUpdateWithWhereUniqueWithoutTaskTemplateInput[]
+    updateMany?: TaskCapabilityLinkUpdateManyWithWhereWithoutTaskTemplateInput | TaskCapabilityLinkUpdateManyWithWhereWithoutTaskTemplateInput[]
+    deleteMany?: TaskCapabilityLinkScalarWhereInput | TaskCapabilityLinkScalarWhereInput[]
+  }
+
+  export type UserCreateNestedOneWithoutCapabilitiesInput = {
+    create?: XOR<UserCreateWithoutCapabilitiesInput, UserUncheckedCreateWithoutCapabilitiesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutCapabilitiesInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type TaskCapabilityLinkCreateNestedManyWithoutCapabilityInput = {
+    create?: XOR<TaskCapabilityLinkCreateWithoutCapabilityInput, TaskCapabilityLinkUncheckedCreateWithoutCapabilityInput> | TaskCapabilityLinkCreateWithoutCapabilityInput[] | TaskCapabilityLinkUncheckedCreateWithoutCapabilityInput[]
+    connectOrCreate?: TaskCapabilityLinkCreateOrConnectWithoutCapabilityInput | TaskCapabilityLinkCreateOrConnectWithoutCapabilityInput[]
+    createMany?: TaskCapabilityLinkCreateManyCapabilityInputEnvelope
+    connect?: TaskCapabilityLinkWhereUniqueInput | TaskCapabilityLinkWhereUniqueInput[]
+  }
+
+  export type TaskCapabilityLinkUncheckedCreateNestedManyWithoutCapabilityInput = {
+    create?: XOR<TaskCapabilityLinkCreateWithoutCapabilityInput, TaskCapabilityLinkUncheckedCreateWithoutCapabilityInput> | TaskCapabilityLinkCreateWithoutCapabilityInput[] | TaskCapabilityLinkUncheckedCreateWithoutCapabilityInput[]
+    connectOrCreate?: TaskCapabilityLinkCreateOrConnectWithoutCapabilityInput | TaskCapabilityLinkCreateOrConnectWithoutCapabilityInput[]
+    createMany?: TaskCapabilityLinkCreateManyCapabilityInputEnvelope
+    connect?: TaskCapabilityLinkWhereUniqueInput | TaskCapabilityLinkWhereUniqueInput[]
+  }
+
+  export type EnumCapabilityCategoryFieldUpdateOperationsInput = {
+    set?: $Enums.CapabilityCategory
+  }
+
+  export type UserUpdateOneWithoutCapabilitiesNestedInput = {
+    create?: XOR<UserCreateWithoutCapabilitiesInput, UserUncheckedCreateWithoutCapabilitiesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutCapabilitiesInput
+    upsert?: UserUpsertWithoutCapabilitiesInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutCapabilitiesInput, UserUpdateWithoutCapabilitiesInput>, UserUncheckedUpdateWithoutCapabilitiesInput>
+  }
+
+  export type TaskCapabilityLinkUpdateManyWithoutCapabilityNestedInput = {
+    create?: XOR<TaskCapabilityLinkCreateWithoutCapabilityInput, TaskCapabilityLinkUncheckedCreateWithoutCapabilityInput> | TaskCapabilityLinkCreateWithoutCapabilityInput[] | TaskCapabilityLinkUncheckedCreateWithoutCapabilityInput[]
+    connectOrCreate?: TaskCapabilityLinkCreateOrConnectWithoutCapabilityInput | TaskCapabilityLinkCreateOrConnectWithoutCapabilityInput[]
+    upsert?: TaskCapabilityLinkUpsertWithWhereUniqueWithoutCapabilityInput | TaskCapabilityLinkUpsertWithWhereUniqueWithoutCapabilityInput[]
+    createMany?: TaskCapabilityLinkCreateManyCapabilityInputEnvelope
+    set?: TaskCapabilityLinkWhereUniqueInput | TaskCapabilityLinkWhereUniqueInput[]
+    disconnect?: TaskCapabilityLinkWhereUniqueInput | TaskCapabilityLinkWhereUniqueInput[]
+    delete?: TaskCapabilityLinkWhereUniqueInput | TaskCapabilityLinkWhereUniqueInput[]
+    connect?: TaskCapabilityLinkWhereUniqueInput | TaskCapabilityLinkWhereUniqueInput[]
+    update?: TaskCapabilityLinkUpdateWithWhereUniqueWithoutCapabilityInput | TaskCapabilityLinkUpdateWithWhereUniqueWithoutCapabilityInput[]
+    updateMany?: TaskCapabilityLinkUpdateManyWithWhereWithoutCapabilityInput | TaskCapabilityLinkUpdateManyWithWhereWithoutCapabilityInput[]
+    deleteMany?: TaskCapabilityLinkScalarWhereInput | TaskCapabilityLinkScalarWhereInput[]
+  }
+
+  export type TaskCapabilityLinkUncheckedUpdateManyWithoutCapabilityNestedInput = {
+    create?: XOR<TaskCapabilityLinkCreateWithoutCapabilityInput, TaskCapabilityLinkUncheckedCreateWithoutCapabilityInput> | TaskCapabilityLinkCreateWithoutCapabilityInput[] | TaskCapabilityLinkUncheckedCreateWithoutCapabilityInput[]
+    connectOrCreate?: TaskCapabilityLinkCreateOrConnectWithoutCapabilityInput | TaskCapabilityLinkCreateOrConnectWithoutCapabilityInput[]
+    upsert?: TaskCapabilityLinkUpsertWithWhereUniqueWithoutCapabilityInput | TaskCapabilityLinkUpsertWithWhereUniqueWithoutCapabilityInput[]
+    createMany?: TaskCapabilityLinkCreateManyCapabilityInputEnvelope
+    set?: TaskCapabilityLinkWhereUniqueInput | TaskCapabilityLinkWhereUniqueInput[]
+    disconnect?: TaskCapabilityLinkWhereUniqueInput | TaskCapabilityLinkWhereUniqueInput[]
+    delete?: TaskCapabilityLinkWhereUniqueInput | TaskCapabilityLinkWhereUniqueInput[]
+    connect?: TaskCapabilityLinkWhereUniqueInput | TaskCapabilityLinkWhereUniqueInput[]
+    update?: TaskCapabilityLinkUpdateWithWhereUniqueWithoutCapabilityInput | TaskCapabilityLinkUpdateWithWhereUniqueWithoutCapabilityInput[]
+    updateMany?: TaskCapabilityLinkUpdateManyWithWhereWithoutCapabilityInput | TaskCapabilityLinkUpdateManyWithWhereWithoutCapabilityInput[]
+    deleteMany?: TaskCapabilityLinkScalarWhereInput | TaskCapabilityLinkScalarWhereInput[]
+  }
+
+  export type TaskTemplateCreateNestedOneWithoutCapabilityLinksInput = {
+    create?: XOR<TaskTemplateCreateWithoutCapabilityLinksInput, TaskTemplateUncheckedCreateWithoutCapabilityLinksInput>
+    connectOrCreate?: TaskTemplateCreateOrConnectWithoutCapabilityLinksInput
+    connect?: TaskTemplateWhereUniqueInput
+  }
+
+  export type CapabilityCreateNestedOneWithoutLinksInput = {
+    create?: XOR<CapabilityCreateWithoutLinksInput, CapabilityUncheckedCreateWithoutLinksInput>
+    connectOrCreate?: CapabilityCreateOrConnectWithoutLinksInput
+    connect?: CapabilityWhereUniqueInput
+  }
+
+  export type FloatFieldUpdateOperationsInput = {
+    set?: number
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
+  export type TaskTemplateUpdateOneRequiredWithoutCapabilityLinksNestedInput = {
+    create?: XOR<TaskTemplateCreateWithoutCapabilityLinksInput, TaskTemplateUncheckedCreateWithoutCapabilityLinksInput>
+    connectOrCreate?: TaskTemplateCreateOrConnectWithoutCapabilityLinksInput
+    upsert?: TaskTemplateUpsertWithoutCapabilityLinksInput
+    connect?: TaskTemplateWhereUniqueInput
+    update?: XOR<XOR<TaskTemplateUpdateToOneWithWhereWithoutCapabilityLinksInput, TaskTemplateUpdateWithoutCapabilityLinksInput>, TaskTemplateUncheckedUpdateWithoutCapabilityLinksInput>
+  }
+
+  export type CapabilityUpdateOneRequiredWithoutLinksNestedInput = {
+    create?: XOR<CapabilityCreateWithoutLinksInput, CapabilityUncheckedCreateWithoutLinksInput>
+    connectOrCreate?: CapabilityCreateOrConnectWithoutLinksInput
+    upsert?: CapabilityUpsertWithoutLinksInput
+    connect?: CapabilityWhereUniqueInput
+    update?: XOR<XOR<CapabilityUpdateToOneWithWhereWithoutLinksInput, CapabilityUpdateWithoutLinksInput>, CapabilityUncheckedUpdateWithoutLinksInput>
   }
 
   export type UserCreateNestedOneWithoutWeeklyPlansInput = {
@@ -12088,6 +15344,20 @@ export namespace Prisma {
     not?: NestedEnumTaskTemplateSourceFilter<$PrismaModel> | $Enums.TaskTemplateSource
   }
 
+  export type NestedEnumTaskTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.TaskType | EnumTaskTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.TaskType[] | ListEnumTaskTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TaskType[] | ListEnumTaskTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumTaskTypeFilter<$PrismaModel> | $Enums.TaskType
+  }
+
+  export type NestedEnumTaskFrequencyFilter<$PrismaModel = never> = {
+    equals?: $Enums.TaskFrequency | EnumTaskFrequencyFieldRefInput<$PrismaModel>
+    in?: $Enums.TaskFrequency[] | ListEnumTaskFrequencyFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TaskFrequency[] | ListEnumTaskFrequencyFieldRefInput<$PrismaModel>
+    not?: NestedEnumTaskFrequencyFilter<$PrismaModel> | $Enums.TaskFrequency
+  }
+
   export type NestedEnumTaskCategoryWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.TaskCategory | EnumTaskCategoryFieldRefInput<$PrismaModel>
     in?: $Enums.TaskCategory[] | ListEnumTaskCategoryFieldRefInput<$PrismaModel>
@@ -12106,6 +15376,59 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumTaskTemplateSourceFilter<$PrismaModel>
     _max?: NestedEnumTaskTemplateSourceFilter<$PrismaModel>
+  }
+
+  export type NestedEnumTaskTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.TaskType | EnumTaskTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.TaskType[] | ListEnumTaskTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TaskType[] | ListEnumTaskTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumTaskTypeWithAggregatesFilter<$PrismaModel> | $Enums.TaskType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumTaskTypeFilter<$PrismaModel>
+    _max?: NestedEnumTaskTypeFilter<$PrismaModel>
+  }
+
+  export type NestedEnumTaskFrequencyWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.TaskFrequency | EnumTaskFrequencyFieldRefInput<$PrismaModel>
+    in?: $Enums.TaskFrequency[] | ListEnumTaskFrequencyFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TaskFrequency[] | ListEnumTaskFrequencyFieldRefInput<$PrismaModel>
+    not?: NestedEnumTaskFrequencyWithAggregatesFilter<$PrismaModel> | $Enums.TaskFrequency
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumTaskFrequencyFilter<$PrismaModel>
+    _max?: NestedEnumTaskFrequencyFilter<$PrismaModel>
+  }
+
+  export type NestedEnumCapabilityCategoryFilter<$PrismaModel = never> = {
+    equals?: $Enums.CapabilityCategory | EnumCapabilityCategoryFieldRefInput<$PrismaModel>
+    in?: $Enums.CapabilityCategory[] | ListEnumCapabilityCategoryFieldRefInput<$PrismaModel>
+    notIn?: $Enums.CapabilityCategory[] | ListEnumCapabilityCategoryFieldRefInput<$PrismaModel>
+    not?: NestedEnumCapabilityCategoryFilter<$PrismaModel> | $Enums.CapabilityCategory
+  }
+
+  export type NestedEnumCapabilityCategoryWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.CapabilityCategory | EnumCapabilityCategoryFieldRefInput<$PrismaModel>
+    in?: $Enums.CapabilityCategory[] | ListEnumCapabilityCategoryFieldRefInput<$PrismaModel>
+    notIn?: $Enums.CapabilityCategory[] | ListEnumCapabilityCategoryFieldRefInput<$PrismaModel>
+    not?: NestedEnumCapabilityCategoryWithAggregatesFilter<$PrismaModel> | $Enums.CapabilityCategory
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumCapabilityCategoryFilter<$PrismaModel>
+    _max?: NestedEnumCapabilityCategoryFilter<$PrismaModel>
+  }
+
+  export type NestedFloatWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedFloatFilter<$PrismaModel>
+    _min?: NestedFloatFilter<$PrismaModel>
+    _max?: NestedFloatFilter<$PrismaModel>
   }
 
   export type ChildCreateWithoutUserInput = {
@@ -12297,34 +15620,52 @@ export namespace Prisma {
     id?: string
     title: string
     category: $Enums.TaskCategory
-    gradeMin?: number
-    gradeMax?: number
     duration?: string
+    difficulty?: string | null
     materials?: TaskTemplateCreatematerialsInput | string[]
     description?: string | null
     routeTags?: TaskTemplateCreaterouteTagsInput | string[]
     milestoneTag?: string | null
+    semesterTag?: string | null
+    tags?: TaskTemplateCreatetagsInput | string[]
     source?: $Enums.TaskTemplateSource
     isActive?: boolean
+    archivedAt?: Date | string | null
+    useCount?: number
+    lastUsedAt?: Date | string | null
+    taskType?: $Enums.TaskType
+    frequency?: $Enums.TaskFrequency
+    customFrequency?: NullableJsonNullValueInput | InputJsonValue
+    assessmentCriteria?: JsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
+    capabilityLinks?: TaskCapabilityLinkCreateNestedManyWithoutTaskTemplateInput
   }
 
   export type TaskTemplateUncheckedCreateWithoutUserInput = {
     id?: string
     title: string
     category: $Enums.TaskCategory
-    gradeMin?: number
-    gradeMax?: number
     duration?: string
+    difficulty?: string | null
     materials?: TaskTemplateCreatematerialsInput | string[]
     description?: string | null
     routeTags?: TaskTemplateCreaterouteTagsInput | string[]
     milestoneTag?: string | null
+    semesterTag?: string | null
+    tags?: TaskTemplateCreatetagsInput | string[]
     source?: $Enums.TaskTemplateSource
     isActive?: boolean
+    archivedAt?: Date | string | null
+    useCount?: number
+    lastUsedAt?: Date | string | null
+    taskType?: $Enums.TaskType
+    frequency?: $Enums.TaskFrequency
+    customFrequency?: NullableJsonNullValueInput | InputJsonValue
+    assessmentCriteria?: JsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
+    capabilityLinks?: TaskCapabilityLinkUncheckedCreateNestedManyWithoutTaskTemplateInput
   }
 
   export type TaskTemplateCreateOrConnectWithoutUserInput = {
@@ -12334,6 +15675,38 @@ export namespace Prisma {
 
   export type TaskTemplateCreateManyUserInputEnvelope = {
     data: TaskTemplateCreateManyUserInput | TaskTemplateCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type CapabilityCreateWithoutUserInput = {
+    id?: string
+    name: string
+    category: $Enums.CapabilityCategory
+    description?: string | null
+    isSystem?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    links?: TaskCapabilityLinkCreateNestedManyWithoutCapabilityInput
+  }
+
+  export type CapabilityUncheckedCreateWithoutUserInput = {
+    id?: string
+    name: string
+    category: $Enums.CapabilityCategory
+    description?: string | null
+    isSystem?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    links?: TaskCapabilityLinkUncheckedCreateNestedManyWithoutCapabilityInput
+  }
+
+  export type CapabilityCreateOrConnectWithoutUserInput = {
+    where: CapabilityWhereUniqueInput
+    create: XOR<CapabilityCreateWithoutUserInput, CapabilityUncheckedCreateWithoutUserInput>
+  }
+
+  export type CapabilityCreateManyUserInputEnvelope = {
+    data: CapabilityCreateManyUserInput | CapabilityCreateManyUserInput[]
     skipDuplicates?: boolean
   }
 
@@ -12537,17 +15910,55 @@ export namespace Prisma {
     userId?: StringFilter<"TaskTemplate"> | string
     title?: StringFilter<"TaskTemplate"> | string
     category?: EnumTaskCategoryFilter<"TaskTemplate"> | $Enums.TaskCategory
-    gradeMin?: IntFilter<"TaskTemplate"> | number
-    gradeMax?: IntFilter<"TaskTemplate"> | number
     duration?: StringFilter<"TaskTemplate"> | string
+    difficulty?: StringNullableFilter<"TaskTemplate"> | string | null
     materials?: StringNullableListFilter<"TaskTemplate">
     description?: StringNullableFilter<"TaskTemplate"> | string | null
     routeTags?: StringNullableListFilter<"TaskTemplate">
     milestoneTag?: StringNullableFilter<"TaskTemplate"> | string | null
+    semesterTag?: StringNullableFilter<"TaskTemplate"> | string | null
+    tags?: StringNullableListFilter<"TaskTemplate">
     source?: EnumTaskTemplateSourceFilter<"TaskTemplate"> | $Enums.TaskTemplateSource
     isActive?: BoolFilter<"TaskTemplate"> | boolean
+    archivedAt?: DateTimeNullableFilter<"TaskTemplate"> | Date | string | null
+    useCount?: IntFilter<"TaskTemplate"> | number
+    lastUsedAt?: DateTimeNullableFilter<"TaskTemplate"> | Date | string | null
+    taskType?: EnumTaskTypeFilter<"TaskTemplate"> | $Enums.TaskType
+    frequency?: EnumTaskFrequencyFilter<"TaskTemplate"> | $Enums.TaskFrequency
+    customFrequency?: JsonNullableFilter<"TaskTemplate">
+    assessmentCriteria?: JsonFilter<"TaskTemplate">
     createdAt?: DateTimeFilter<"TaskTemplate"> | Date | string
     updatedAt?: DateTimeFilter<"TaskTemplate"> | Date | string
+  }
+
+  export type CapabilityUpsertWithWhereUniqueWithoutUserInput = {
+    where: CapabilityWhereUniqueInput
+    update: XOR<CapabilityUpdateWithoutUserInput, CapabilityUncheckedUpdateWithoutUserInput>
+    create: XOR<CapabilityCreateWithoutUserInput, CapabilityUncheckedCreateWithoutUserInput>
+  }
+
+  export type CapabilityUpdateWithWhereUniqueWithoutUserInput = {
+    where: CapabilityWhereUniqueInput
+    data: XOR<CapabilityUpdateWithoutUserInput, CapabilityUncheckedUpdateWithoutUserInput>
+  }
+
+  export type CapabilityUpdateManyWithWhereWithoutUserInput = {
+    where: CapabilityScalarWhereInput
+    data: XOR<CapabilityUpdateManyMutationInput, CapabilityUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type CapabilityScalarWhereInput = {
+    AND?: CapabilityScalarWhereInput | CapabilityScalarWhereInput[]
+    OR?: CapabilityScalarWhereInput[]
+    NOT?: CapabilityScalarWhereInput | CapabilityScalarWhereInput[]
+    id?: StringFilter<"Capability"> | string
+    userId?: StringNullableFilter<"Capability"> | string | null
+    name?: StringFilter<"Capability"> | string
+    category?: EnumCapabilityCategoryFilter<"Capability"> | $Enums.CapabilityCategory
+    description?: StringNullableFilter<"Capability"> | string | null
+    isSystem?: BoolFilter<"Capability"> | boolean
+    createdAt?: DateTimeFilter<"Capability"> | Date | string
+    updatedAt?: DateTimeFilter<"Capability"> | Date | string
   }
 
   export type UserCreateWithoutSettingsInput = {
@@ -12567,6 +15978,7 @@ export namespace Prisma {
     weeklyPlans?: WeeklyPlanCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     taskTemplates?: TaskTemplateCreateNestedManyWithoutUserInput
+    capabilities?: CapabilityCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutSettingsInput = {
@@ -12586,6 +15998,7 @@ export namespace Prisma {
     weeklyPlans?: WeeklyPlanUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     taskTemplates?: TaskTemplateUncheckedCreateNestedManyWithoutUserInput
+    capabilities?: CapabilityUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutSettingsInput = {
@@ -12621,6 +16034,7 @@ export namespace Prisma {
     weeklyPlans?: WeeklyPlanUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     taskTemplates?: TaskTemplateUpdateManyWithoutUserNestedInput
+    capabilities?: CapabilityUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSettingsInput = {
@@ -12640,6 +16054,7 @@ export namespace Prisma {
     weeklyPlans?: WeeklyPlanUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     taskTemplates?: TaskTemplateUncheckedUpdateManyWithoutUserNestedInput
+    capabilities?: CapabilityUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutChildrenInput = {
@@ -12659,6 +16074,7 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     settings?: UserSettingCreateNestedOneWithoutUserInput
     taskTemplates?: TaskTemplateCreateNestedManyWithoutUserInput
+    capabilities?: CapabilityCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutChildrenInput = {
@@ -12678,6 +16094,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     settings?: UserSettingUncheckedCreateNestedOneWithoutUserInput
     taskTemplates?: TaskTemplateUncheckedCreateNestedManyWithoutUserInput
+    capabilities?: CapabilityUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutChildrenInput = {
@@ -12789,6 +16206,7 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     settings?: UserSettingUpdateOneWithoutUserNestedInput
     taskTemplates?: TaskTemplateUpdateManyWithoutUserNestedInput
+    capabilities?: CapabilityUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutChildrenInput = {
@@ -12808,6 +16226,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     settings?: UserSettingUncheckedUpdateOneWithoutUserNestedInput
     taskTemplates?: TaskTemplateUncheckedUpdateManyWithoutUserNestedInput
+    capabilities?: CapabilityUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type PlanUpsertWithWhereUniqueWithoutChildInput = {
@@ -12859,6 +16278,7 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     settings?: UserSettingCreateNestedOneWithoutUserInput
     taskTemplates?: TaskTemplateCreateNestedManyWithoutUserInput
+    capabilities?: CapabilityCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutPlansInput = {
@@ -12878,6 +16298,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     settings?: UserSettingUncheckedCreateNestedOneWithoutUserInput
     taskTemplates?: TaskTemplateUncheckedCreateNestedManyWithoutUserInput
+    capabilities?: CapabilityUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutPlansInput = {
@@ -12952,6 +16373,7 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     settings?: UserSettingUpdateOneWithoutUserNestedInput
     taskTemplates?: TaskTemplateUpdateManyWithoutUserNestedInput
+    capabilities?: CapabilityUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPlansInput = {
@@ -12971,6 +16393,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     settings?: UserSettingUncheckedUpdateOneWithoutUserNestedInput
     taskTemplates?: TaskTemplateUncheckedUpdateManyWithoutUserNestedInput
+    capabilities?: CapabilityUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type ChildUpsertWithoutPlansInput = {
@@ -13035,6 +16458,7 @@ export namespace Prisma {
     weeklyPlans?: WeeklyPlanCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     settings?: UserSettingCreateNestedOneWithoutUserInput
+    capabilities?: CapabilityCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutTaskTemplatesInput = {
@@ -13054,11 +16478,36 @@ export namespace Prisma {
     weeklyPlans?: WeeklyPlanUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     settings?: UserSettingUncheckedCreateNestedOneWithoutUserInput
+    capabilities?: CapabilityUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutTaskTemplatesInput = {
     where: UserWhereUniqueInput
     create: XOR<UserCreateWithoutTaskTemplatesInput, UserUncheckedCreateWithoutTaskTemplatesInput>
+  }
+
+  export type TaskCapabilityLinkCreateWithoutTaskTemplateInput = {
+    id?: string
+    weight?: number
+    expectedProgress?: number
+    capability: CapabilityCreateNestedOneWithoutLinksInput
+  }
+
+  export type TaskCapabilityLinkUncheckedCreateWithoutTaskTemplateInput = {
+    id?: string
+    capabilityId: string
+    weight?: number
+    expectedProgress?: number
+  }
+
+  export type TaskCapabilityLinkCreateOrConnectWithoutTaskTemplateInput = {
+    where: TaskCapabilityLinkWhereUniqueInput
+    create: XOR<TaskCapabilityLinkCreateWithoutTaskTemplateInput, TaskCapabilityLinkUncheckedCreateWithoutTaskTemplateInput>
+  }
+
+  export type TaskCapabilityLinkCreateManyTaskTemplateInputEnvelope = {
+    data: TaskCapabilityLinkCreateManyTaskTemplateInput | TaskCapabilityLinkCreateManyTaskTemplateInput[]
+    skipDuplicates?: boolean
   }
 
   export type UserUpsertWithoutTaskTemplatesInput = {
@@ -13089,6 +16538,7 @@ export namespace Prisma {
     weeklyPlans?: WeeklyPlanUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     settings?: UserSettingUpdateOneWithoutUserNestedInput
+    capabilities?: CapabilityUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutTaskTemplatesInput = {
@@ -13108,6 +16558,350 @@ export namespace Prisma {
     weeklyPlans?: WeeklyPlanUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     settings?: UserSettingUncheckedUpdateOneWithoutUserNestedInput
+    capabilities?: CapabilityUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type TaskCapabilityLinkUpsertWithWhereUniqueWithoutTaskTemplateInput = {
+    where: TaskCapabilityLinkWhereUniqueInput
+    update: XOR<TaskCapabilityLinkUpdateWithoutTaskTemplateInput, TaskCapabilityLinkUncheckedUpdateWithoutTaskTemplateInput>
+    create: XOR<TaskCapabilityLinkCreateWithoutTaskTemplateInput, TaskCapabilityLinkUncheckedCreateWithoutTaskTemplateInput>
+  }
+
+  export type TaskCapabilityLinkUpdateWithWhereUniqueWithoutTaskTemplateInput = {
+    where: TaskCapabilityLinkWhereUniqueInput
+    data: XOR<TaskCapabilityLinkUpdateWithoutTaskTemplateInput, TaskCapabilityLinkUncheckedUpdateWithoutTaskTemplateInput>
+  }
+
+  export type TaskCapabilityLinkUpdateManyWithWhereWithoutTaskTemplateInput = {
+    where: TaskCapabilityLinkScalarWhereInput
+    data: XOR<TaskCapabilityLinkUpdateManyMutationInput, TaskCapabilityLinkUncheckedUpdateManyWithoutTaskTemplateInput>
+  }
+
+  export type TaskCapabilityLinkScalarWhereInput = {
+    AND?: TaskCapabilityLinkScalarWhereInput | TaskCapabilityLinkScalarWhereInput[]
+    OR?: TaskCapabilityLinkScalarWhereInput[]
+    NOT?: TaskCapabilityLinkScalarWhereInput | TaskCapabilityLinkScalarWhereInput[]
+    id?: StringFilter<"TaskCapabilityLink"> | string
+    taskTemplateId?: StringFilter<"TaskCapabilityLink"> | string
+    capabilityId?: StringFilter<"TaskCapabilityLink"> | string
+    weight?: FloatFilter<"TaskCapabilityLink"> | number
+    expectedProgress?: FloatFilter<"TaskCapabilityLink"> | number
+  }
+
+  export type UserCreateWithoutCapabilitiesInput = {
+    id?: string
+    username: string
+    passwordHash: string
+    name?: string | null
+    role?: $Enums.UserRole
+    avatarUrl?: string | null
+    phone?: string | null
+    email?: string | null
+    wechatOpenId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    children?: ChildCreateNestedManyWithoutUserInput
+    plans?: PlanCreateNestedManyWithoutUserInput
+    weeklyPlans?: WeeklyPlanCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    settings?: UserSettingCreateNestedOneWithoutUserInput
+    taskTemplates?: TaskTemplateCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutCapabilitiesInput = {
+    id?: string
+    username: string
+    passwordHash: string
+    name?: string | null
+    role?: $Enums.UserRole
+    avatarUrl?: string | null
+    phone?: string | null
+    email?: string | null
+    wechatOpenId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    children?: ChildUncheckedCreateNestedManyWithoutUserInput
+    plans?: PlanUncheckedCreateNestedManyWithoutUserInput
+    weeklyPlans?: WeeklyPlanUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    settings?: UserSettingUncheckedCreateNestedOneWithoutUserInput
+    taskTemplates?: TaskTemplateUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutCapabilitiesInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutCapabilitiesInput, UserUncheckedCreateWithoutCapabilitiesInput>
+  }
+
+  export type TaskCapabilityLinkCreateWithoutCapabilityInput = {
+    id?: string
+    weight?: number
+    expectedProgress?: number
+    taskTemplate: TaskTemplateCreateNestedOneWithoutCapabilityLinksInput
+  }
+
+  export type TaskCapabilityLinkUncheckedCreateWithoutCapabilityInput = {
+    id?: string
+    taskTemplateId: string
+    weight?: number
+    expectedProgress?: number
+  }
+
+  export type TaskCapabilityLinkCreateOrConnectWithoutCapabilityInput = {
+    where: TaskCapabilityLinkWhereUniqueInput
+    create: XOR<TaskCapabilityLinkCreateWithoutCapabilityInput, TaskCapabilityLinkUncheckedCreateWithoutCapabilityInput>
+  }
+
+  export type TaskCapabilityLinkCreateManyCapabilityInputEnvelope = {
+    data: TaskCapabilityLinkCreateManyCapabilityInput | TaskCapabilityLinkCreateManyCapabilityInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type UserUpsertWithoutCapabilitiesInput = {
+    update: XOR<UserUpdateWithoutCapabilitiesInput, UserUncheckedUpdateWithoutCapabilitiesInput>
+    create: XOR<UserCreateWithoutCapabilitiesInput, UserUncheckedCreateWithoutCapabilitiesInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutCapabilitiesInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutCapabilitiesInput, UserUncheckedUpdateWithoutCapabilitiesInput>
+  }
+
+  export type UserUpdateWithoutCapabilitiesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    wechatOpenId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    children?: ChildUpdateManyWithoutUserNestedInput
+    plans?: PlanUpdateManyWithoutUserNestedInput
+    weeklyPlans?: WeeklyPlanUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    settings?: UserSettingUpdateOneWithoutUserNestedInput
+    taskTemplates?: TaskTemplateUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutCapabilitiesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    wechatOpenId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    children?: ChildUncheckedUpdateManyWithoutUserNestedInput
+    plans?: PlanUncheckedUpdateManyWithoutUserNestedInput
+    weeklyPlans?: WeeklyPlanUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    settings?: UserSettingUncheckedUpdateOneWithoutUserNestedInput
+    taskTemplates?: TaskTemplateUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type TaskCapabilityLinkUpsertWithWhereUniqueWithoutCapabilityInput = {
+    where: TaskCapabilityLinkWhereUniqueInput
+    update: XOR<TaskCapabilityLinkUpdateWithoutCapabilityInput, TaskCapabilityLinkUncheckedUpdateWithoutCapabilityInput>
+    create: XOR<TaskCapabilityLinkCreateWithoutCapabilityInput, TaskCapabilityLinkUncheckedCreateWithoutCapabilityInput>
+  }
+
+  export type TaskCapabilityLinkUpdateWithWhereUniqueWithoutCapabilityInput = {
+    where: TaskCapabilityLinkWhereUniqueInput
+    data: XOR<TaskCapabilityLinkUpdateWithoutCapabilityInput, TaskCapabilityLinkUncheckedUpdateWithoutCapabilityInput>
+  }
+
+  export type TaskCapabilityLinkUpdateManyWithWhereWithoutCapabilityInput = {
+    where: TaskCapabilityLinkScalarWhereInput
+    data: XOR<TaskCapabilityLinkUpdateManyMutationInput, TaskCapabilityLinkUncheckedUpdateManyWithoutCapabilityInput>
+  }
+
+  export type TaskTemplateCreateWithoutCapabilityLinksInput = {
+    id?: string
+    title: string
+    category: $Enums.TaskCategory
+    duration?: string
+    difficulty?: string | null
+    materials?: TaskTemplateCreatematerialsInput | string[]
+    description?: string | null
+    routeTags?: TaskTemplateCreaterouteTagsInput | string[]
+    milestoneTag?: string | null
+    semesterTag?: string | null
+    tags?: TaskTemplateCreatetagsInput | string[]
+    source?: $Enums.TaskTemplateSource
+    isActive?: boolean
+    archivedAt?: Date | string | null
+    useCount?: number
+    lastUsedAt?: Date | string | null
+    taskType?: $Enums.TaskType
+    frequency?: $Enums.TaskFrequency
+    customFrequency?: NullableJsonNullValueInput | InputJsonValue
+    assessmentCriteria?: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutTaskTemplatesInput
+  }
+
+  export type TaskTemplateUncheckedCreateWithoutCapabilityLinksInput = {
+    id?: string
+    userId: string
+    title: string
+    category: $Enums.TaskCategory
+    duration?: string
+    difficulty?: string | null
+    materials?: TaskTemplateCreatematerialsInput | string[]
+    description?: string | null
+    routeTags?: TaskTemplateCreaterouteTagsInput | string[]
+    milestoneTag?: string | null
+    semesterTag?: string | null
+    tags?: TaskTemplateCreatetagsInput | string[]
+    source?: $Enums.TaskTemplateSource
+    isActive?: boolean
+    archivedAt?: Date | string | null
+    useCount?: number
+    lastUsedAt?: Date | string | null
+    taskType?: $Enums.TaskType
+    frequency?: $Enums.TaskFrequency
+    customFrequency?: NullableJsonNullValueInput | InputJsonValue
+    assessmentCriteria?: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type TaskTemplateCreateOrConnectWithoutCapabilityLinksInput = {
+    where: TaskTemplateWhereUniqueInput
+    create: XOR<TaskTemplateCreateWithoutCapabilityLinksInput, TaskTemplateUncheckedCreateWithoutCapabilityLinksInput>
+  }
+
+  export type CapabilityCreateWithoutLinksInput = {
+    id?: string
+    name: string
+    category: $Enums.CapabilityCategory
+    description?: string | null
+    isSystem?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user?: UserCreateNestedOneWithoutCapabilitiesInput
+  }
+
+  export type CapabilityUncheckedCreateWithoutLinksInput = {
+    id?: string
+    userId?: string | null
+    name: string
+    category: $Enums.CapabilityCategory
+    description?: string | null
+    isSystem?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type CapabilityCreateOrConnectWithoutLinksInput = {
+    where: CapabilityWhereUniqueInput
+    create: XOR<CapabilityCreateWithoutLinksInput, CapabilityUncheckedCreateWithoutLinksInput>
+  }
+
+  export type TaskTemplateUpsertWithoutCapabilityLinksInput = {
+    update: XOR<TaskTemplateUpdateWithoutCapabilityLinksInput, TaskTemplateUncheckedUpdateWithoutCapabilityLinksInput>
+    create: XOR<TaskTemplateCreateWithoutCapabilityLinksInput, TaskTemplateUncheckedCreateWithoutCapabilityLinksInput>
+    where?: TaskTemplateWhereInput
+  }
+
+  export type TaskTemplateUpdateToOneWithWhereWithoutCapabilityLinksInput = {
+    where?: TaskTemplateWhereInput
+    data: XOR<TaskTemplateUpdateWithoutCapabilityLinksInput, TaskTemplateUncheckedUpdateWithoutCapabilityLinksInput>
+  }
+
+  export type TaskTemplateUpdateWithoutCapabilityLinksInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    category?: EnumTaskCategoryFieldUpdateOperationsInput | $Enums.TaskCategory
+    duration?: StringFieldUpdateOperationsInput | string
+    difficulty?: NullableStringFieldUpdateOperationsInput | string | null
+    materials?: TaskTemplateUpdatematerialsInput | string[]
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    routeTags?: TaskTemplateUpdaterouteTagsInput | string[]
+    milestoneTag?: NullableStringFieldUpdateOperationsInput | string | null
+    semesterTag?: NullableStringFieldUpdateOperationsInput | string | null
+    tags?: TaskTemplateUpdatetagsInput | string[]
+    source?: EnumTaskTemplateSourceFieldUpdateOperationsInput | $Enums.TaskTemplateSource
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    archivedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    useCount?: IntFieldUpdateOperationsInput | number
+    lastUsedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    taskType?: EnumTaskTypeFieldUpdateOperationsInput | $Enums.TaskType
+    frequency?: EnumTaskFrequencyFieldUpdateOperationsInput | $Enums.TaskFrequency
+    customFrequency?: NullableJsonNullValueInput | InputJsonValue
+    assessmentCriteria?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutTaskTemplatesNestedInput
+  }
+
+  export type TaskTemplateUncheckedUpdateWithoutCapabilityLinksInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    category?: EnumTaskCategoryFieldUpdateOperationsInput | $Enums.TaskCategory
+    duration?: StringFieldUpdateOperationsInput | string
+    difficulty?: NullableStringFieldUpdateOperationsInput | string | null
+    materials?: TaskTemplateUpdatematerialsInput | string[]
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    routeTags?: TaskTemplateUpdaterouteTagsInput | string[]
+    milestoneTag?: NullableStringFieldUpdateOperationsInput | string | null
+    semesterTag?: NullableStringFieldUpdateOperationsInput | string | null
+    tags?: TaskTemplateUpdatetagsInput | string[]
+    source?: EnumTaskTemplateSourceFieldUpdateOperationsInput | $Enums.TaskTemplateSource
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    archivedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    useCount?: IntFieldUpdateOperationsInput | number
+    lastUsedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    taskType?: EnumTaskTypeFieldUpdateOperationsInput | $Enums.TaskType
+    frequency?: EnumTaskFrequencyFieldUpdateOperationsInput | $Enums.TaskFrequency
+    customFrequency?: NullableJsonNullValueInput | InputJsonValue
+    assessmentCriteria?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CapabilityUpsertWithoutLinksInput = {
+    update: XOR<CapabilityUpdateWithoutLinksInput, CapabilityUncheckedUpdateWithoutLinksInput>
+    create: XOR<CapabilityCreateWithoutLinksInput, CapabilityUncheckedCreateWithoutLinksInput>
+    where?: CapabilityWhereInput
+  }
+
+  export type CapabilityUpdateToOneWithWhereWithoutLinksInput = {
+    where?: CapabilityWhereInput
+    data: XOR<CapabilityUpdateWithoutLinksInput, CapabilityUncheckedUpdateWithoutLinksInput>
+  }
+
+  export type CapabilityUpdateWithoutLinksInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    category?: EnumCapabilityCategoryFieldUpdateOperationsInput | $Enums.CapabilityCategory
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isSystem?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneWithoutCapabilitiesNestedInput
+  }
+
+  export type CapabilityUncheckedUpdateWithoutLinksInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    category?: EnumCapabilityCategoryFieldUpdateOperationsInput | $Enums.CapabilityCategory
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isSystem?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type UserCreateWithoutWeeklyPlansInput = {
@@ -13127,6 +16921,7 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     settings?: UserSettingCreateNestedOneWithoutUserInput
     taskTemplates?: TaskTemplateCreateNestedManyWithoutUserInput
+    capabilities?: CapabilityCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutWeeklyPlansInput = {
@@ -13146,6 +16941,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     settings?: UserSettingUncheckedCreateNestedOneWithoutUserInput
     taskTemplates?: TaskTemplateUncheckedCreateNestedManyWithoutUserInput
+    capabilities?: CapabilityUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutWeeklyPlansInput = {
@@ -13220,6 +17016,7 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     settings?: UserSettingUpdateOneWithoutUserNestedInput
     taskTemplates?: TaskTemplateUpdateManyWithoutUserNestedInput
+    capabilities?: CapabilityUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutWeeklyPlansInput = {
@@ -13239,6 +17036,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     settings?: UserSettingUncheckedUpdateOneWithoutUserNestedInput
     taskTemplates?: TaskTemplateUncheckedUpdateManyWithoutUserNestedInput
+    capabilities?: CapabilityUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type ChildUpsertWithoutWeeklyPlansInput = {
@@ -13303,6 +17101,7 @@ export namespace Prisma {
     weeklyPlans?: WeeklyPlanCreateNestedManyWithoutUserInput
     settings?: UserSettingCreateNestedOneWithoutUserInput
     taskTemplates?: TaskTemplateCreateNestedManyWithoutUserInput
+    capabilities?: CapabilityCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutNotificationsInput = {
@@ -13322,6 +17121,7 @@ export namespace Prisma {
     weeklyPlans?: WeeklyPlanUncheckedCreateNestedManyWithoutUserInput
     settings?: UserSettingUncheckedCreateNestedOneWithoutUserInput
     taskTemplates?: TaskTemplateUncheckedCreateNestedManyWithoutUserInput
+    capabilities?: CapabilityUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutNotificationsInput = {
@@ -13357,6 +17157,7 @@ export namespace Prisma {
     weeklyPlans?: WeeklyPlanUpdateManyWithoutUserNestedInput
     settings?: UserSettingUpdateOneWithoutUserNestedInput
     taskTemplates?: TaskTemplateUpdateManyWithoutUserNestedInput
+    capabilities?: CapabilityUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutNotificationsInput = {
@@ -13376,6 +17177,7 @@ export namespace Prisma {
     weeklyPlans?: WeeklyPlanUncheckedUpdateManyWithoutUserNestedInput
     settings?: UserSettingUncheckedUpdateOneWithoutUserNestedInput
     taskTemplates?: TaskTemplateUncheckedUpdateManyWithoutUserNestedInput
+    capabilities?: CapabilityUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type ChildCreateManyUserInput = {
@@ -13433,15 +17235,33 @@ export namespace Prisma {
     id?: string
     title: string
     category: $Enums.TaskCategory
-    gradeMin?: number
-    gradeMax?: number
     duration?: string
+    difficulty?: string | null
     materials?: TaskTemplateCreatematerialsInput | string[]
     description?: string | null
     routeTags?: TaskTemplateCreaterouteTagsInput | string[]
     milestoneTag?: string | null
+    semesterTag?: string | null
+    tags?: TaskTemplateCreatetagsInput | string[]
     source?: $Enums.TaskTemplateSource
     isActive?: boolean
+    archivedAt?: Date | string | null
+    useCount?: number
+    lastUsedAt?: Date | string | null
+    taskType?: $Enums.TaskType
+    frequency?: $Enums.TaskFrequency
+    customFrequency?: NullableJsonNullValueInput | InputJsonValue
+    assessmentCriteria?: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type CapabilityCreateManyUserInput = {
+    id?: string
+    name: string
+    category: $Enums.CapabilityCategory
+    description?: string | null
+    isSystem?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -13607,49 +17427,107 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     category?: EnumTaskCategoryFieldUpdateOperationsInput | $Enums.TaskCategory
-    gradeMin?: IntFieldUpdateOperationsInput | number
-    gradeMax?: IntFieldUpdateOperationsInput | number
     duration?: StringFieldUpdateOperationsInput | string
+    difficulty?: NullableStringFieldUpdateOperationsInput | string | null
     materials?: TaskTemplateUpdatematerialsInput | string[]
     description?: NullableStringFieldUpdateOperationsInput | string | null
     routeTags?: TaskTemplateUpdaterouteTagsInput | string[]
     milestoneTag?: NullableStringFieldUpdateOperationsInput | string | null
+    semesterTag?: NullableStringFieldUpdateOperationsInput | string | null
+    tags?: TaskTemplateUpdatetagsInput | string[]
     source?: EnumTaskTemplateSourceFieldUpdateOperationsInput | $Enums.TaskTemplateSource
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    archivedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    useCount?: IntFieldUpdateOperationsInput | number
+    lastUsedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    taskType?: EnumTaskTypeFieldUpdateOperationsInput | $Enums.TaskType
+    frequency?: EnumTaskFrequencyFieldUpdateOperationsInput | $Enums.TaskFrequency
+    customFrequency?: NullableJsonNullValueInput | InputJsonValue
+    assessmentCriteria?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    capabilityLinks?: TaskCapabilityLinkUpdateManyWithoutTaskTemplateNestedInput
   }
 
   export type TaskTemplateUncheckedUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     category?: EnumTaskCategoryFieldUpdateOperationsInput | $Enums.TaskCategory
-    gradeMin?: IntFieldUpdateOperationsInput | number
-    gradeMax?: IntFieldUpdateOperationsInput | number
     duration?: StringFieldUpdateOperationsInput | string
+    difficulty?: NullableStringFieldUpdateOperationsInput | string | null
     materials?: TaskTemplateUpdatematerialsInput | string[]
     description?: NullableStringFieldUpdateOperationsInput | string | null
     routeTags?: TaskTemplateUpdaterouteTagsInput | string[]
     milestoneTag?: NullableStringFieldUpdateOperationsInput | string | null
+    semesterTag?: NullableStringFieldUpdateOperationsInput | string | null
+    tags?: TaskTemplateUpdatetagsInput | string[]
     source?: EnumTaskTemplateSourceFieldUpdateOperationsInput | $Enums.TaskTemplateSource
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    archivedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    useCount?: IntFieldUpdateOperationsInput | number
+    lastUsedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    taskType?: EnumTaskTypeFieldUpdateOperationsInput | $Enums.TaskType
+    frequency?: EnumTaskFrequencyFieldUpdateOperationsInput | $Enums.TaskFrequency
+    customFrequency?: NullableJsonNullValueInput | InputJsonValue
+    assessmentCriteria?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    capabilityLinks?: TaskCapabilityLinkUncheckedUpdateManyWithoutTaskTemplateNestedInput
   }
 
   export type TaskTemplateUncheckedUpdateManyWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     category?: EnumTaskCategoryFieldUpdateOperationsInput | $Enums.TaskCategory
-    gradeMin?: IntFieldUpdateOperationsInput | number
-    gradeMax?: IntFieldUpdateOperationsInput | number
     duration?: StringFieldUpdateOperationsInput | string
+    difficulty?: NullableStringFieldUpdateOperationsInput | string | null
     materials?: TaskTemplateUpdatematerialsInput | string[]
     description?: NullableStringFieldUpdateOperationsInput | string | null
     routeTags?: TaskTemplateUpdaterouteTagsInput | string[]
     milestoneTag?: NullableStringFieldUpdateOperationsInput | string | null
+    semesterTag?: NullableStringFieldUpdateOperationsInput | string | null
+    tags?: TaskTemplateUpdatetagsInput | string[]
     source?: EnumTaskTemplateSourceFieldUpdateOperationsInput | $Enums.TaskTemplateSource
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    archivedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    useCount?: IntFieldUpdateOperationsInput | number
+    lastUsedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    taskType?: EnumTaskTypeFieldUpdateOperationsInput | $Enums.TaskType
+    frequency?: EnumTaskFrequencyFieldUpdateOperationsInput | $Enums.TaskFrequency
+    customFrequency?: NullableJsonNullValueInput | InputJsonValue
+    assessmentCriteria?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CapabilityUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    category?: EnumCapabilityCategoryFieldUpdateOperationsInput | $Enums.CapabilityCategory
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isSystem?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    links?: TaskCapabilityLinkUpdateManyWithoutCapabilityNestedInput
+  }
+
+  export type CapabilityUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    category?: EnumCapabilityCategoryFieldUpdateOperationsInput | $Enums.CapabilityCategory
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isSystem?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    links?: TaskCapabilityLinkUncheckedUpdateManyWithoutCapabilityNestedInput
+  }
+
+  export type CapabilityUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    category?: EnumCapabilityCategoryFieldUpdateOperationsInput | $Enums.CapabilityCategory
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isSystem?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -13766,6 +17644,62 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type TaskCapabilityLinkCreateManyTaskTemplateInput = {
+    id?: string
+    capabilityId: string
+    weight?: number
+    expectedProgress?: number
+  }
+
+  export type TaskCapabilityLinkUpdateWithoutTaskTemplateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    weight?: FloatFieldUpdateOperationsInput | number
+    expectedProgress?: FloatFieldUpdateOperationsInput | number
+    capability?: CapabilityUpdateOneRequiredWithoutLinksNestedInput
+  }
+
+  export type TaskCapabilityLinkUncheckedUpdateWithoutTaskTemplateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    capabilityId?: StringFieldUpdateOperationsInput | string
+    weight?: FloatFieldUpdateOperationsInput | number
+    expectedProgress?: FloatFieldUpdateOperationsInput | number
+  }
+
+  export type TaskCapabilityLinkUncheckedUpdateManyWithoutTaskTemplateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    capabilityId?: StringFieldUpdateOperationsInput | string
+    weight?: FloatFieldUpdateOperationsInput | number
+    expectedProgress?: FloatFieldUpdateOperationsInput | number
+  }
+
+  export type TaskCapabilityLinkCreateManyCapabilityInput = {
+    id?: string
+    taskTemplateId: string
+    weight?: number
+    expectedProgress?: number
+  }
+
+  export type TaskCapabilityLinkUpdateWithoutCapabilityInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    weight?: FloatFieldUpdateOperationsInput | number
+    expectedProgress?: FloatFieldUpdateOperationsInput | number
+    taskTemplate?: TaskTemplateUpdateOneRequiredWithoutCapabilityLinksNestedInput
+  }
+
+  export type TaskCapabilityLinkUncheckedUpdateWithoutCapabilityInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    taskTemplateId?: StringFieldUpdateOperationsInput | string
+    weight?: FloatFieldUpdateOperationsInput | number
+    expectedProgress?: FloatFieldUpdateOperationsInput | number
+  }
+
+  export type TaskCapabilityLinkUncheckedUpdateManyWithoutCapabilityInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    taskTemplateId?: StringFieldUpdateOperationsInput | string
+    weight?: FloatFieldUpdateOperationsInput | number
+    expectedProgress?: FloatFieldUpdateOperationsInput | number
+  }
+
 
 
   /**
@@ -13779,6 +17713,14 @@ export namespace Prisma {
      * @deprecated Use ChildCountOutputTypeDefaultArgs instead
      */
     export type ChildCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = ChildCountOutputTypeDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use TaskTemplateCountOutputTypeDefaultArgs instead
+     */
+    export type TaskTemplateCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = TaskTemplateCountOutputTypeDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use CapabilityCountOutputTypeDefaultArgs instead
+     */
+    export type CapabilityCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = CapabilityCountOutputTypeDefaultArgs<ExtArgs>
     /**
      * @deprecated Use UserDefaultArgs instead
      */
@@ -13799,6 +17741,14 @@ export namespace Prisma {
      * @deprecated Use TaskTemplateDefaultArgs instead
      */
     export type TaskTemplateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = TaskTemplateDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use CapabilityDefaultArgs instead
+     */
+    export type CapabilityArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = CapabilityDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use TaskCapabilityLinkDefaultArgs instead
+     */
+    export type TaskCapabilityLinkArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = TaskCapabilityLinkDefaultArgs<ExtArgs>
     /**
      * @deprecated Use WeeklyPlanDefaultArgs instead
      */
