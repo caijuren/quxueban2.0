@@ -12,7 +12,6 @@ export default function TaskLibraryPage() {
         </div>
         <div>
           <h1 className="text-2xl sm:text-3xl font-bold font-display">任务库</h1>
-          <p className="text-xs text-slate-400">管理和维护任务模板，生成周计划时可直接选用</p>
         </div>
       </div>
       <TaskLibrarySection />

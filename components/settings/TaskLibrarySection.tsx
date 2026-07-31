@@ -3,7 +3,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import {
-  Library,
   Plus,
   Pencil,
   Trash2,
@@ -21,9 +20,7 @@ import {
   Filter,
   Archive,
   RotateCcw,
-  Tag,
   Info,
-  User,
 } from 'lucide-react';
 import {
   TaskTemplate,
@@ -42,7 +39,6 @@ import { getCategoryColorClass } from '@/lib/taskAlignment';
 import { useChildren } from '@/components/dashboard/ChildrenContext';
 import { gradeToStage } from '@/lib/children';
 import { getStageByRouteId } from '@/lib/plans';
-import SettingsSection from './SettingsSection';
 
 const categoryIcons: Record<TaskCategory, typeof BookOpen> = {
   school: Backpack,
@@ -200,6 +196,18 @@ export default function TaskLibrarySection() {
     fetchCapabilities();
   }, [fetchTemplates, fetchCapabilities]);
 
+  // Lock body scroll while modal is open
+  useEffect(() => {
+    if (modalOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [modalOpen]);
+
   const filteredTemplates = useMemo(() => {
     return templates.filter((t) => {
       const matchesSearch = t.title.toLowerCase().includes(search.toLowerCase()) ||
@@ -299,18 +307,7 @@ export default function TaskLibrarySection() {
 
   return (
     <div className="space-y-4">
-      <SettingsSection title="任务库管理">
-        {currentChild && currentStage && (
-          <div className="flex items-center gap-2 mb-4 px-3 py-2 rounded-lg bg-white/[0.03] border border-white/[0.06] text-xs text-slate-400">
-            <User className="w-3.5 h-3.5 text-primary" />
-            <span>当前孩子：{currentChild.name}</span>
-            <span className="text-white/[0.08]">|</span>
-            <span>匹配学段：{currentStage}</span>
-            <span className="ml-auto text-[10px] text-slate-500">已按孩子年级自动过滤任务</span>
-          </div>
-        )}
-
-        <div className="flex flex-col sm:flex-row gap-3 mb-4">
+      <div className="flex flex-col sm:flex-row gap-3">
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-500" />
             <input
@@ -391,7 +388,7 @@ export default function TaskLibrarySection() {
                   key={tpl.id}
                   initial={shouldReduceMotion ? false : { opacity: 0, y: 8 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className={`group rounded-xl border transition-all p-3 ${
+                  className={`group rounded-xl border transition-all p-3 flex flex-col h-full ${
                     isArchived
                       ? 'bg-white/[0.015] border-white/[0.04] opacity-70'
                       : 'bg-white/[0.03] border-white/[0.06] hover:border-white/[0.12]'
@@ -406,10 +403,13 @@ export default function TaskLibrarySection() {
                       <CategoryIcon className="w-3.5 h-3.5" />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 mb-1">
-                        <h3 className="text-sm font-bold text-slate-200 truncate">
-                          {tpl.title}
-                        </h3>
+                      <h3
+                        className="text-sm font-bold text-slate-200 truncate"
+                        title={tpl.title}
+                      >
+                        {tpl.title}
+                      </h3>
+                      <div className="flex flex-wrap items-center gap-1.5 mt-1.5">
                         {tpl.source === 'system' && (
                           <span className="text-[10px] px-1.5 py-0.5 rounded bg-secondary/10 text-secondary border border-secondary/20 shrink-0">
                             系统预设
@@ -436,74 +436,64 @@ export default function TaskLibrarySection() {
                           </span>
                         )}
                       </div>
-                      <p className="text-[11px] text-slate-500 mb-1.5 line-clamp-1">
-                        {tpl.description || '暂无描述'}
-                      </p>
-                      <div className="flex flex-wrap items-center gap-2 text-[10px] text-slate-400">
-                        <span className="px-1.5 py-0.5 rounded bg-white/5">
-                          {TASK_CATEGORY_LABELS[tpl.category]}
-                        </span>
-                        <span className="px-1.5 py-0.5 rounded bg-white/5">
-                          {tpl.duration}
-                        </span>
-                        {difficultyInfo && (
-                          <span className={`px-1.5 py-0.5 rounded border ${difficultyInfo.color}`}>
-                            {difficultyInfo.label}
-                          </span>
-                        )}
-                        {semesterInfo && (
-                          <span className="px-1.5 py-0.5 rounded bg-info/10 text-info border border-info/20">
-                            {semesterInfo.label}
-                          </span>
-                        )}
-                        {tpl.milestoneTag && (
-                          <span className="px-1.5 py-0.5 rounded bg-warning/10 text-warning border border-warning/20">
-                            {tpl.milestoneTag}
-                          </span>
-                        )}
-                        {stage !== 'general' && (
-                          <span className="px-1.5 py-0.5 rounded bg-primary/10 text-primary border border-primary/20">
-                            {stage}
-                          </span>
-                        )}
-                        {stage === 'general' && (
-                          <span className="px-1.5 py-0.5 rounded bg-white/5 text-slate-400 border border-white/[0.06]">
-                            全学段
-                          </span>
-                        )}
-                      </div>
-                      {tpl.tags.length > 0 && (
-                        <div className="flex flex-wrap gap-1 mt-2">
-                          {tpl.tags.map((tag) => (
-                            <span
-                              key={tag}
-                              className="text-[9px] px-1.5 py-0.5 rounded bg-white/5 text-slate-500 flex items-center gap-0.5"
-                            >
-                              <Tag className="w-2.5 h-2.5" />
-                              {tag}
-                            </span>
-                          ))}
-                        </div>
-                      )}
-                      {tpl.routeTags.length > 0 && (
-                        <div className="flex flex-wrap gap-1 mt-2">
-                          {tpl.routeTags.map((tag) => {
-                            const routeLabel = routeOptions.find((r) => r.value === tag)?.label || tag;
-                            return (
-                              <span
-                                key={tag}
-                                className="text-[9px] px-1.5 py-0.5 rounded bg-white/5 text-slate-500"
-                              >
-                                {routeLabel}
-                              </span>
-                            );
-                          })}
-                        </div>
-                      )}
                     </div>
                   </div>
 
-                  <div className="flex items-center justify-end gap-2 mt-4 pt-3 border-t border-white/[0.06]">
+                  <p className="text-[11px] text-slate-500 mt-2 line-clamp-1">
+                    {tpl.description || '暂无描述'}
+                  </p>
+
+                  <div className="flex flex-wrap items-center gap-2 mt-2 text-[10px] text-slate-400">
+                    <span className="px-1.5 py-0.5 rounded bg-white/5">
+                      {TASK_CATEGORY_LABELS[tpl.category]}
+                    </span>
+                    <span className="px-1.5 py-0.5 rounded bg-white/5">
+                      {tpl.duration}
+                    </span>
+                    {difficultyInfo && (
+                      <span className={`px-1.5 py-0.5 rounded border ${difficultyInfo.color}`}>
+                        {difficultyInfo.label}
+                      </span>
+                    )}
+                    {semesterInfo && (
+                      <span className="px-1.5 py-0.5 rounded bg-info/10 text-info border border-info/20">
+                        {semesterInfo.label}
+                      </span>
+                    )}
+                    {tpl.milestoneTag && (
+                      <span className="px-1.5 py-0.5 rounded bg-warning/10 text-warning border border-warning/20">
+                        {tpl.milestoneTag}
+                      </span>
+                    )}
+                    {stage !== 'general' && (
+                      <span className="px-1.5 py-0.5 rounded bg-primary/10 text-primary border border-primary/20">
+                        {stage}
+                      </span>
+                    )}
+                    {stage === 'general' && (
+                      <span className="px-1.5 py-0.5 rounded bg-white/5 text-slate-400 border border-white/[0.06]">
+                        全学段
+                      </span>
+                    )}
+                  </div>
+
+                  {tpl.routeTags.length > 0 && (
+                    <div className="flex flex-wrap gap-1 mt-2">
+                      {tpl.routeTags.map((tag) => {
+                        const routeLabel = routeOptions.find((r) => r.value === tag)?.label || tag;
+                        return (
+                          <span
+                            key={tag}
+                            className="text-[9px] px-1.5 py-0.5 rounded bg-white/5 text-slate-500"
+                          >
+                            {routeLabel}
+                          </span>
+                        );
+                      })}
+                    </div>
+                  )}
+
+                  <div className="mt-auto pt-3 border-t border-white/[0.06] flex items-center justify-end gap-2">
                     <button
                       onClick={() => handleEdit(tpl)}
                       className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-white/5 text-slate-300 text-xs hover:bg-white/10 transition-colors"
@@ -547,8 +537,6 @@ export default function TaskLibrarySection() {
             })}
           </div>
         )}
-
-      </SettingsSection>
 
       <AnimatePresence>
         {modalOpen && (
@@ -605,6 +593,14 @@ function TaskTemplateModal({ initial, capabilities, onClose, onSave, saving }: T
       ? initial.milestoneTag
       : ''
   );
+
+  // Lock body scroll while modal is open
+  useEffect(() => {
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, []);
 
   const milestoneSelectValue = useMemo(() => {
     if (!form.milestoneTag) return '';
@@ -864,33 +860,6 @@ function TaskTemplateModal({ initial, capabilities, onClose, onSave, saving }: T
                 ))}
               </select>
             </div>
-          </div>
-
-          <div>
-            <div className="flex items-center gap-1.5 mb-1.5">
-              <label className="block text-xs text-slate-400">自由标签（用逗号分隔）</label>
-              <span
-                className="text-slate-500 cursor-help"
-                title="标签用于快速筛选和识别任务，例如：晨读、睡前、周末补漏"
-              >
-                <Info className="w-3 h-3" />
-              </span>
-            </div>
-            <input
-              type="text"
-              value={form.tags.join('，')}
-              onChange={(e) =>
-                updateField(
-                  'tags',
-                  e.target.value.split(/[,，]/).map((s) => s.trim()).filter(Boolean)
-                )
-              }
-              placeholder="例如：晨读，睡前，周末补漏"
-              className="w-full text-sm bg-white/5 border border-white/[0.08] rounded-lg px-3 py-2 text-slate-200 placeholder:text-slate-600 focus:outline-none focus:border-primary/50"
-            />
-            <p className="mt-1.5 text-[10px] text-slate-500">
-              标签用于快速筛选和识别任务场景，不影响路线匹配。
-            </p>
           </div>
 
           <div>
