@@ -86,26 +86,26 @@ docker compose up -d app
 # 5. 访问 http://localhost:3000
 ```
 
-### 5.2 生产环境（Docker 镜像）
+### 5.2 生产环境（Docker Compose）
+
+生产服务器路径：`/srv/apps/quxueban2.0`
 
 ```bash
-# 构建镜像
-docker build -t quxueban:v1.0.0 .
+# 切换到发布标签
+cd /srv/apps/quxueban2.0
+git fetch origin
+git checkout v1.7.0
 
-# 运行（注入生产环境变量）
-docker run -d \
-  -p 3000:3000 \
-  --env-file .env.production \
-  --name quxueban \
-  quxueban:v1.0.0
+# 重启部署
+docker compose down
+docker compose up -d db
+sleep 10
+docker compose run --rm seed
+docker compose up -d --build app
+docker image prune -f
 ```
 
-首次部署后需进入容器执行迁移与 seed：
-
-```bash
-docker exec quxueban npx prisma migrate deploy
-docker exec quxueban npx tsx prisma/seed.ts
-```
+> 注意：生产环境直接使用仓库内的 `docker-compose.yml`，不额外使用 `docker-compose.prod.yml`。
 
 ### 5.3 关键文件说明
 
@@ -161,20 +161,50 @@ git checkout -b hotfix/xxx v1.0.0
 
 ## 8. 版本发布命令示例
 
+### 8.1 创建发布分支与标签
+
 ```bash
 git checkout main
 git pull origin main
 
-# 更新版本号
-npm version major  # 1.0.0
+# 从 main 切出发布分支
+git checkout -b release/v1.7.0
 
-# 推送代码和标签
-git push origin main --tags
+# 手动更新 package.json 版本号为 1.7.0
+# 提交后打标签
+git add package.json
+git commit -m "chore(release): v1.7.0"
+git tag -a v1.7.0 -m "Release v1.7.0"
 
-# 构建并推送生产镜像
-docker build -t quxueban:v1.0.0 .
-docker tag quxueban:v1.0.0 your-registry/quxueban:v1.0.0
-docker push your-registry/quxueban:v1.0.0
+# 推送分支和标签
+git push origin release/v1.7.0
+git push origin v1.7.0
+```
+
+### 8.2 自动部署（GitHub Actions）
+
+将 `release/v1.7.0` 合并到 `main` 并推送，触发自动部署：
+
+```bash
+git checkout main
+git merge release/v1.7.0
+git push origin main
+```
+
+### 8.3 手动部署到生产服务器
+
+```bash
+ssh ubuntu@your-server-ip
+cd /srv/apps/quxueban2.0
+git fetch origin
+git checkout v1.7.0
+
+docker compose down
+docker compose up -d db
+sleep 10
+docker compose run --rm seed
+docker compose up -d --build app
+docker image prune -f
 ```
 
 ---
