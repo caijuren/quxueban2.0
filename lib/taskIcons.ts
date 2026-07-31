@@ -1,32 +1,27 @@
 import {
   BookOpen,
-  Calculator,
-  Languages,
   Backpack,
   Dumbbell,
   Palette,
   GraduationCap,
+  Zap,
 } from 'lucide-react';
 import { TaskCategory } from './storage.types';
 
 export const categoryIcons: Record<TaskCategory, typeof BookOpen> = {
-  chinese: BookOpen,
-  math: Calculator,
-  english: Languages,
   school: Backpack,
   reading: BookOpen,
   sport: Dumbbell,
   interest: Palette,
+  ability: Zap,
   other: GraduationCap,
 };
 
 export const allCategories: TaskCategory[] = [
-  'chinese',
-  'math',
-  'english',
   'school',
   'reading',
   'sport',
   'interest',
+  'ability',
   'other',
 ];
