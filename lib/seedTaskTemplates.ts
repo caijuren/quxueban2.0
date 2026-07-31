@@ -43,7 +43,38 @@ export async function seedSystemTaskTemplatesForUser(
   // 同步创建系统模板的能力关联（已存在模板时也会补全缺失的关联）
   await seedSystemTemplateCapabilityLinks(prisma, userId);
 
+  // 同步更新已存在系统模板的路线标签（修正路线 ID 与最新定义保持一致）
+  await syncSystemTemplateRouteTags(prisma, userId);
+
   return createdCount;
+}
+
+async function syncSystemTemplateRouteTags(
+  prisma: PrismaClient,
+  userId: string
+): Promise<void> {
+  const systemTemplates = await prisma.taskTemplate.findMany({
+    where: { userId, source: 'SYSTEM' },
+  });
+
+  for (const dbTpl of systemTemplates) {
+    const latest = SYSTEM_TASK_TEMPLATES.find((t) => t.title === dbTpl.title);
+    if (!latest) continue;
+
+    const latestTags = latest.routeTags ?? [];
+    const currentTags = dbTpl.routeTags ?? [];
+    const needsUpdate =
+      latestTags.length !== currentTags.length ||
+      latestTags.some((tag) => !currentTags.includes(tag)) ||
+      currentTags.some((tag) => !latestTags.includes(tag));
+
+    if (needsUpdate) {
+      await prisma.taskTemplate.update({
+        where: { id: dbTpl.id },
+        data: { routeTags: latestTags },
+      });
+    }
+  }
 }
 
 async function seedSystemTemplateCapabilityLinks(

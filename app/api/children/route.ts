@@ -28,6 +28,7 @@ export async function POST(req: Request) {
     const {
       name,
       grade,
+      educationSystem,
       avatarColor,
       avatarUrl,
       targetSchool,
@@ -46,6 +47,7 @@ export async function POST(req: Request) {
         userId: session.user.id,
         name,
         grade,
+        educationSystem: educationSystem === 'five-four' ? 'five-four' : 'six-three',
         avatarColor: avatarColor || '#f43f5e',
         avatarUrl: avatarUrl || null,
         targetSchool: targetSchool || null,

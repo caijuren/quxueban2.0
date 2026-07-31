@@ -71,7 +71,7 @@ function SchoolsPageContent() {
           </h1>
           <p className="text-slate-400">
             {currentChild
-              ? `当前阶段：${gradeToStage(currentChild.grade)}（${gradeLabel(currentChild.grade)}） · 管理冲刺、备选、保底目标`
+              ? `当前阶段：${gradeToStage(currentChild.grade, currentChild.educationSystem)}（${gradeLabel(currentChild.grade, currentChild.educationSystem)}） · 管理冲刺、备选、保底目标`
               : '管理冲刺、备选、保底目标学校及录取概率'}
           </p>
         </div>

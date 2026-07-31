@@ -34,6 +34,7 @@ export async function PATCH(req: Request, { params }: Params) {
 
     setIfDefined('name', body.name);
     setIfDefined('grade', body.grade);
+    setIfDefined('educationSystem', body.educationSystem === 'five-four' ? 'five-four' : 'six-three');
     setIfDefined('avatarColor', body.avatarColor);
     setIfDefined('avatarUrl', body.avatarUrl ?? null);
     setIfDefined('targetSchool', body.targetSchool ?? null);

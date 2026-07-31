@@ -150,7 +150,7 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
     router.push('/');
   };
 
-  const currentStage = currentChild ? gradeToStage(currentChild.grade) : null;
+  const currentStage = currentChild ? gradeToStage(currentChild.grade, currentChild.educationSystem) : null;
 
   return (
     <motion.header
@@ -273,7 +273,7 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
               </p>
               <p className="text-[11px] text-text-tertiary">
                 {currentChild && currentStage
-                  ? `${gradeLabel(currentChild.grade)} · ${currentStage}`
+                  ? `${gradeLabel(currentChild.grade, currentChild.educationSystem)} · ${currentStage}`
                   : '请选择孩子'}
               </p>
             </div>
@@ -324,7 +324,7 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
                         <p className={`text-sm font-semibold truncate ${isActive ? 'text-primary' : 'text-white'}`}>
                           {child.name}
                         </p>
-                        <p className="text-xs text-text-tertiary">{gradeLabel(child.grade)}</p>
+                        <p className="text-xs text-text-tertiary">{gradeLabel(child.grade, child.educationSystem)}</p>
                       </div>
                       {isActive && <Check className="w-4 h-4 text-primary shrink-0" />}
                     </button>

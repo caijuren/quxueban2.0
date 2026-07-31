@@ -896,3 +896,17 @@ export function getRoutesByStage(stage: '小升初' | '中考' | '高考'): Rout
 export function getRouteById(id: string): RoutePlan | undefined {
   return [...plans, ...middleSchoolPlans].find((p) => p.id === id);
 }
+
+export const ROUTE_STAGE_MAP: Record<string, '小升初' | '中考' | '高考'> = {
+  sg: '小升初',
+  yaohao: '小升初',
+  gongban: '小升初',
+  sizhong: '中考',
+  shizhong: '中考',
+  quzhong: '中考',
+};
+
+export function getStageByRouteId(routeId?: string): '小升初' | '中考' | '高考' | null {
+  if (!routeId) return null;
+  return ROUTE_STAGE_MAP[routeId] ?? null;
+}

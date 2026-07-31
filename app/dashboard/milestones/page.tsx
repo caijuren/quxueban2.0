@@ -58,7 +58,7 @@ export default function MilestonesPage() {
         </h1>
         <p className="text-slate-400">
           {currentChild
-            ? `当前阶段：${gradeLabel(currentChild.grade)} · 按年级拆解升学准备任务`
+            ? `当前阶段：${gradeLabel(currentChild.grade, currentChild.educationSystem)} · 按年级拆解升学准备任务`
             : '按年级拆解升学准备任务，追踪每个阶段完成情况'}
         </p>
       </motion.div>

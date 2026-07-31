@@ -22,6 +22,8 @@ import {
   Archive,
   RotateCcw,
   Tag,
+  Info,
+  User,
 } from 'lucide-react';
 import {
   TaskTemplate,
@@ -34,8 +36,12 @@ import {
 } from '@/lib/storage.types';
 import {
   TASK_CATEGORY_LABELS,
+  getTemplateStage,
 } from '@/lib/taskTemplates';
 import { getCategoryColorClass } from '@/lib/taskAlignment';
+import { useChildren } from '@/components/dashboard/ChildrenContext';
+import { gradeToStage } from '@/lib/children';
+import { getStageByRouteId } from '@/lib/plans';
 import SettingsSection from './SettingsSection';
 
 const categoryIcons: Record<TaskCategory, typeof BookOpen> = {
@@ -69,14 +75,29 @@ const semesterOptions = [
 ] as const;
 
 const routeOptions = [
-  { value: 'sanchu_gongban', label: '三公公办' },
-  { value: 'sanchu_minban', label: '三公民办' },
-  { value: 'sanchu_guoji', label: '三公国际' },
-  { value: 'zhongkao_putong', label: '中考普通' },
-  { value: 'zhongkao_tese', label: '中考特色' },
-  { value: 'gaokao_zongping', label: '高考综评' },
-  { value: 'gaokao_qiangji', label: '高考强基' },
-  { value: 'gongban_duikou', label: '公办对口' },
+  { value: 'sg', label: '三公冲刺' },
+  { value: 'yaohao', label: '私立摇号' },
+  { value: 'gongban', label: '公办对口/直升' },
+  { value: 'sizhong', label: '四校八大自招冲刺' },
+  { value: 'shizhong', label: '嘉定区市重点冲刺' },
+  { value: 'quzhong', label: '区重点/特色高中' },
+];
+
+const milestoneOptions = [
+  { value: '', label: '无' },
+  { value: 'AMC8', label: 'AMC8' },
+  { value: 'KET', label: 'KET' },
+  { value: 'PET', label: 'PET' },
+  { value: 'TOEFL Junior', label: '小托福 / TOEFL Junior' },
+  { value: '古诗文大会', label: '古诗文大会' },
+  { value: '汉字小达人', label: '汉字小达人' },
+  { value: '三公网申', label: '三公网申' },
+  { value: '面谈准备', label: '面谈准备' },
+  { value: '中考数学', label: '中考数学' },
+  { value: '中考语文', label: '中考语文' },
+  { value: '中考英语', label: '中考英语' },
+  { value: '中考体育', label: '中考体育' },
+  { value: '__custom__', label: '其他（手动输入）' },
 ];
 
 const taskTypeOptions = [
@@ -124,6 +145,9 @@ const emptyTemplate: Omit<TaskTemplate, 'id' | 'userId' | 'createdAt' | 'updated
 };
 
 export default function TaskLibrarySection() {
+  const { currentChild } = useChildren();
+  const currentStage = currentChild ? gradeToStage(currentChild.grade, currentChild.educationSystem) : null;
+
   const shouldReduceMotion = useReducedMotion();
   const [templates, setTemplates] = useState<TaskTemplate[]>([]);
   const [capabilities, setCapabilities] = useState<Capability[]>([]);
@@ -181,9 +205,12 @@ export default function TaskLibrarySection() {
       const matchesSearch = t.title.toLowerCase().includes(search.toLowerCase()) ||
         (t.description?.toLowerCase().includes(search.toLowerCase()) ?? false);
       const matchesSource = filterSource === 'all' || t.source === filterSource;
-      return matchesSearch && matchesSource;
+      const stage = getTemplateStage(t);
+      const matchesStage =
+        !currentStage || stage === 'general' || stage === currentStage;
+      return matchesSearch && matchesSource && matchesStage;
     });
-  }, [templates, search, filterSource]);
+  }, [templates, search, filterSource, currentStage]);
 
   const handleAdd = () => {
     setEditing(null);
@@ -272,10 +299,17 @@ export default function TaskLibrarySection() {
 
   return (
     <div className="space-y-4">
-      <SettingsSection
-        title="任务库管理"
-        description="预设任务模板，生成周计划时可直接选用。系统模板可修改，也可添加自己的专属任务。"
-      >
+      <SettingsSection title="任务库管理">
+        {currentChild && currentStage && (
+          <div className="flex items-center gap-2 mb-4 px-3 py-2 rounded-lg bg-white/[0.03] border border-white/[0.06] text-xs text-slate-400">
+            <User className="w-3.5 h-3.5 text-primary" />
+            <span>当前孩子：{currentChild.name}</span>
+            <span className="text-white/[0.08]">|</span>
+            <span>匹配学段：{currentStage}</span>
+            <span className="ml-auto text-[10px] text-slate-500">已按孩子年级自动过滤任务</span>
+          </div>
+        )}
+
         <div className="flex flex-col sm:flex-row gap-3 mb-4">
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-500" />
@@ -320,6 +354,14 @@ export default function TaskLibrarySection() {
               <option value="archived">已归档</option>
               <option value="all">全部</option>
             </select>
+
+            <button
+              onClick={handleAdd}
+              className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-gradient-to-r from-primary to-primary-glow text-white text-xs font-semibold hover:shadow-glow-primary transition-all"
+            >
+              <Plus className="w-3.5 h-3.5" />
+              添加任务
+            </button>
           </div>
         </div>
 
@@ -332,7 +374,9 @@ export default function TaskLibrarySection() {
           <div className="py-8 text-center text-error text-sm">{error}</div>
         ) : filteredTemplates.length === 0 ? (
           <div className="py-8 text-center text-slate-500 text-sm">
-            未找到匹配的任务模板
+            {currentStage
+              ? `未找到匹配「${currentStage}」学段的模板，可切换学段或添加新任务`
+              : '未找到匹配的任务模板'}
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3">
@@ -341,6 +385,7 @@ export default function TaskLibrarySection() {
               const difficultyInfo = difficultyOptions.find((d) => d.value === (tpl.difficulty || 'medium'));
               const semesterInfo = semesterOptions.find((s) => s.value === tpl.semesterTag);
               const isArchived = !!tpl.archivedAt;
+              const stage = getTemplateStage(tpl);
               return (
                 <motion.div
                   key={tpl.id}
@@ -414,6 +459,16 @@ export default function TaskLibrarySection() {
                         {tpl.milestoneTag && (
                           <span className="px-1.5 py-0.5 rounded bg-warning/10 text-warning border border-warning/20">
                             {tpl.milestoneTag}
+                          </span>
+                        )}
+                        {stage !== 'general' && (
+                          <span className="px-1.5 py-0.5 rounded bg-primary/10 text-primary border border-primary/20">
+                            {stage}
+                          </span>
+                        )}
+                        {stage === 'general' && (
+                          <span className="px-1.5 py-0.5 rounded bg-white/5 text-slate-400 border border-white/[0.06]">
+                            全学段
                           </span>
                         )}
                       </div>
@@ -493,13 +548,6 @@ export default function TaskLibrarySection() {
           </div>
         )}
 
-        <button
-          onClick={handleAdd}
-          className="w-full mt-4 py-2.5 rounded-xl border border-dashed border-white/[0.12] text-slate-400 hover:text-slate-200 hover:border-white/20 hover:bg-white/[0.03] transition-all flex items-center justify-center gap-2 text-sm"
-        >
-          <Plus className="w-4 h-4" />
-          添加自定义任务
-        </button>
       </SettingsSection>
 
       <AnimatePresence>
@@ -550,6 +598,28 @@ function TaskTemplateModal({ initial, capabilities, onClose, onSave, saving }: T
         }
       : { ...emptyTemplate }
   );
+
+  const [customMilestone, setCustomMilestone] = useState(
+    initial?.milestoneTag &&
+      !milestoneOptions.some((o) => o.value && o.value === initial.milestoneTag)
+      ? initial.milestoneTag
+      : ''
+  );
+
+  const milestoneSelectValue = useMemo(() => {
+    if (!form.milestoneTag) return '';
+    const matched = milestoneOptions.find((o) => o.value === form.milestoneTag);
+    return matched ? matched.value : '__custom__';
+  }, [form.milestoneTag]);
+
+  const handleMilestoneChange = (value: string) => {
+    if (value === '__custom__') {
+      updateField('milestoneTag', customMilestone);
+    } else {
+      updateField('milestoneTag', value);
+      if (value) setCustomMilestone('');
+    }
+  };
 
   const updateField = <K extends keyof typeof form>(
     field: K,
@@ -640,9 +710,9 @@ function TaskTemplateModal({ initial, capabilities, onClose, onSave, saving }: T
         role="dialog"
         aria-modal="true"
         aria-labelledby="task-template-title"
-        className="w-full max-w-2xl max-h-[85vh] overflow-y-auto rounded-3xl glass border border-white/10 p-6 sm:p-8"
+        className="w-full max-w-2xl max-h-[85vh] flex flex-col rounded-3xl glass border border-white/10 overflow-hidden"
       >
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center justify-between p-6 sm:p-8 pb-0">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-secondary to-secondary-glow flex items-center justify-center">
               {initial ? <Pencil className="w-5 h-5 text-white" /> : <Plus className="w-5 h-5 text-white" />}
@@ -665,7 +735,11 @@ function TaskTemplateModal({ initial, capabilities, onClose, onSave, saving }: T
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form
+          id="task-template-form"
+          onSubmit={handleSubmit}
+          className="flex-1 overflow-y-auto p-6 sm:p-8 pt-6 space-y-4"
+        >
           <div>
             <label className="block text-xs text-slate-400 mb-1.5">
               任务名称 <span className="text-primary">*</span>
@@ -751,13 +825,29 @@ function TaskTemplateModal({ initial, capabilities, onClose, onSave, saving }: T
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-xs text-slate-400 mb-1.5">关联里程碑标签</label>
-              <input
-                type="text"
-                value={form.milestoneTag ?? ''}
-                onChange={(e) => updateField('milestoneTag', e.target.value)}
-                placeholder="例如：AMC8 / 古诗文大会"
-                className="w-full text-sm bg-white/5 border border-white/[0.08] rounded-lg px-3 py-2 text-slate-200 placeholder:text-slate-600 focus:outline-none focus:border-primary/50"
-              />
+              <select
+                value={milestoneSelectValue}
+                onChange={(e) => handleMilestoneChange(e.target.value)}
+                className="w-full text-sm bg-white/5 border border-white/[0.08] rounded-lg px-3 py-2 text-slate-200 focus:outline-none focus:border-primary/50"
+              >
+                {milestoneOptions.map((o) => (
+                  <option key={o.value} value={o.value}>
+                    {o.label}
+                  </option>
+                ))}
+              </select>
+              {milestoneSelectValue === '__custom__' && (
+                <input
+                  type="text"
+                  value={customMilestone}
+                  onChange={(e) => {
+                    setCustomMilestone(e.target.value);
+                    updateField('milestoneTag', e.target.value);
+                  }}
+                  placeholder="输入自定义里程碑名称"
+                  className="w-full mt-2 text-sm bg-white/5 border border-white/[0.08] rounded-lg px-3 py-2 text-slate-200 placeholder:text-slate-600 focus:outline-none focus:border-primary/50"
+                />
+              )}
             </div>
             <div>
               <label className="block text-xs text-slate-400 mb-1.5">适用学期场景</label>
@@ -777,7 +867,15 @@ function TaskTemplateModal({ initial, capabilities, onClose, onSave, saving }: T
           </div>
 
           <div>
-            <label className="block text-xs text-slate-400 mb-1.5">自由标签（用逗号分隔）</label>
+            <div className="flex items-center gap-1.5 mb-1.5">
+              <label className="block text-xs text-slate-400">自由标签（用逗号分隔）</label>
+              <span
+                className="text-slate-500 cursor-help"
+                title="标签用于快速筛选和识别任务，例如：晨读、睡前、周末补漏"
+              >
+                <Info className="w-3 h-3" />
+              </span>
+            </div>
             <input
               type="text"
               value={form.tags.join('，')}
@@ -790,10 +888,21 @@ function TaskTemplateModal({ initial, capabilities, onClose, onSave, saving }: T
               placeholder="例如：晨读，睡前，周末补漏"
               className="w-full text-sm bg-white/5 border border-white/[0.08] rounded-lg px-3 py-2 text-slate-200 placeholder:text-slate-600 focus:outline-none focus:border-primary/50"
             />
+            <p className="mt-1.5 text-[10px] text-slate-500">
+              标签用于快速筛选和识别任务场景，不影响路线匹配。
+            </p>
           </div>
 
           <div>
-            <label className="block text-xs text-slate-400 mb-2">适用路线（不选则所有路线通用）</label>
+            <div className="flex items-center gap-1.5 mb-2">
+              <label className="block text-xs text-slate-400">适用路线（不选则所有路线通用）</label>
+              <span
+                className="text-slate-500 cursor-help"
+                title="选择任务对应的升学路线，不选则该任务对所有路线都可见"
+              >
+                <Info className="w-3 h-3" />
+              </span>
+            </div>
             <div className="flex flex-wrap gap-2">
               {routeOptions.map((route) => {
                 const selected = form.routeTags.includes(route.value);
@@ -1015,24 +1124,26 @@ function TaskTemplateModal({ initial, capabilities, onClose, onSave, saving }: T
             )}
           </div>
 
-          <div className="flex items-center justify-end gap-3 pt-4 border-t border-white/[0.06]">
-            <button
-              type="button"
-              onClick={onClose}
-              className="px-4 py-2 rounded-xl text-slate-400 hover:text-slate-200 transition-colors"
-            >
-              取消
-            </button>
-            <button
-              type="submit"
-              disabled={saving || !form.title.trim()}
-              className="flex items-center gap-2 px-6 py-2 rounded-xl bg-gradient-to-r from-secondary to-secondary-glow text-white font-semibold hover:shadow-[0_0_30px_rgba(139,92,246,0.4)] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
-              保存
-            </button>
-          </div>
         </form>
+
+        <div className="flex items-center justify-end gap-3 p-6 sm:p-8 pt-4 border-t border-white/[0.06]">
+          <button
+            type="button"
+            onClick={onClose}
+            className="px-4 py-2 rounded-xl text-slate-400 hover:text-slate-200 transition-colors"
+          >
+            取消
+          </button>
+          <button
+            type="submit"
+            form="task-template-form"
+            disabled={saving || !form.title.trim()}
+            className="flex items-center gap-2 px-6 py-2 rounded-xl bg-gradient-to-r from-secondary to-secondary-glow text-white font-semibold hover:shadow-[0_0_30px_rgba(139,92,246,0.4)] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
+            保存
+          </button>
+        </div>
       </motion.div>
     </motion.div>
   );

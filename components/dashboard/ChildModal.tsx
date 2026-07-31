@@ -21,10 +21,12 @@ import {
 import { useChildren } from '@/components/dashboard/ChildrenContext';
 import {
   Child,
+  EducationSystem,
   AVATAR_COLORS,
   AVATAR_PRESETS,
   gradeLabel,
   gradeToStage,
+  educationSystemLabel,
 } from '@/lib/children';
 import { getRoutesByStage, RoutePlan } from '@/lib/plans';
 
@@ -53,6 +55,7 @@ export default function ChildModal({ isOpen, onClose, child }: ChildModalProps) 
 
   const [name, setName] = useState('');
   const [grade, setGrade] = useState(1);
+  const [educationSystem, setEducationSystem] = useState<EducationSystem>('six-three');
   const [avatarColor, setAvatarColor] = useState(AVATAR_COLORS[0]);
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
   const [targetSchool, setTargetSchool] = useState('');
@@ -69,7 +72,7 @@ export default function ChildModal({ isOpen, onClose, child }: ChildModalProps) 
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const stage = gradeToStage(grade);
+  const stage = gradeToStage(grade, educationSystem);
   const availableRoutes = getRoutesByStage(stage);
 
   useEffect(() => {
@@ -81,6 +84,7 @@ export default function ChildModal({ isOpen, onClose, child }: ChildModalProps) 
       if (child) {
         setName(child.name);
         setGrade(child.grade);
+        setEducationSystem(child.educationSystem ?? 'six-three');
         setAvatarColor(child.avatarColor);
         setAvatarUrl(child.avatarUrl ?? null);
         setTargetSchool(child.targetSchool ?? '');
@@ -91,6 +95,7 @@ export default function ChildModal({ isOpen, onClose, child }: ChildModalProps) 
       } else {
         setName('');
         setGrade(1);
+        setEducationSystem('six-three');
         setAvatarColor(AVATAR_COLORS[0]);
         setAvatarUrl(null);
         setTargetSchool('');
@@ -170,6 +175,7 @@ export default function ChildModal({ isOpen, onClose, child }: ChildModalProps) 
     const payload: Omit<Child, 'id'> = {
       name: name.trim(),
       grade,
+      educationSystem,
       avatarColor,
       avatarUrl,
       targetSchool: targetSchool.trim() || null,
@@ -404,7 +410,7 @@ export default function ChildModal({ isOpen, onClose, child }: ChildModalProps) 
 
                 <p className="text-sm text-slate-400">
                   {name
-                    ? `${name} · ${gradeLabel(grade)} · ${stage}`
+                    ? `${name} · ${gradeLabel(grade, educationSystem)} · ${stage} · ${educationSystemLabel(educationSystem)}`
                     : '预览将在此显示'}
                 </p>
               </div>
@@ -430,6 +436,25 @@ export default function ChildModal({ isOpen, onClose, child }: ChildModalProps) 
 
                 <div>
                   <label className="block text-xs text-slate-400 mb-1.5">
+                    学制 <span className="text-primary">*</span>
+                  </label>
+                  <select
+                    value={educationSystem}
+                    onChange={(e) => setEducationSystem(e.target.value as EducationSystem)}
+                    className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-sm text-slate-200 focus:outline-none focus:border-primary transition-all appearance-none"
+                    style={{
+                      backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E")`,
+                      backgroundRepeat: 'no-repeat',
+                      backgroundPosition: 'right 12px center',
+                    }}
+                  >
+                    <option value="six-three">六三制（小学 6 年）</option>
+                    <option value="five-four">五四制（小学 5 年）</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-xs text-slate-400 mb-1.5">
                     当前年级 <span className="text-primary">*</span>
                   </label>
                   <select
@@ -444,7 +469,7 @@ export default function ChildModal({ isOpen, onClose, child }: ChildModalProps) 
                   >
                     {GRADES.map((g) => (
                       <option key={g} value={g}>
-                        {gradeLabel(g)} · {gradeToStage(g)}
+                        {gradeLabel(g, educationSystem)} · {gradeToStage(g, educationSystem)}
                       </option>
                     ))}
                   </select>

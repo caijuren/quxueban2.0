@@ -1,9 +1,12 @@
+export type EducationSystem = 'six-three' | 'five-four';
+
 export interface Child {
   id: string;
   name: string;
   avatarColor: string;
   avatarUrl?: string | null;
   grade: number;
+  educationSystem: EducationSystem;
   targetSchool?: string | null;
   currentSchool?: string | null;
   birthday?: string | null;
@@ -39,16 +42,28 @@ export const AVATAR_PRESETS = [
   { id: 'trophy', emoji: '🏆', bg: '#f97316' },
 ];
 
-export function gradeToStage(grade: number): '小升初' | '中考' | '高考' {
-  if (grade >= 1 && grade <= 5) return '小升初';
-  if (grade >= 6 && grade <= 9) return '中考';
+export function gradeToStage(
+  grade: number,
+  educationSystem: EducationSystem = 'six-three'
+): '小升初' | '中考' | '高考' {
+  const primaryEnd = educationSystem === 'five-four' ? 5 : 6;
+  if (grade >= 1 && grade <= primaryEnd) return '小升初';
+  if (grade >= primaryEnd + 1 && grade <= primaryEnd + 3) return '中考';
   return '高考';
 }
 
-export function gradeLabel(grade: number): string {
-  if (grade <= 6) return `小学${grade}年级`;
-  if (grade <= 9) return `初中${grade - 6}年级`;
-  return `高中${grade - 9}年级`;
+export function gradeLabel(
+  grade: number,
+  educationSystem: EducationSystem = 'six-three'
+): string {
+  const primaryEnd = educationSystem === 'five-four' ? 5 : 6;
+  if (grade <= primaryEnd) return `小学${grade}年级`;
+  if (grade <= primaryEnd + 3) return `初中${grade}年级`;
+  return `高中${grade}年级`;
+}
+
+export function educationSystemLabel(system: EducationSystem): string {
+  return system === 'five-four' ? '五四制' : '六三制';
 }
 
 export function getInitials(name: string): string {
@@ -66,12 +81,14 @@ export function getDefaultChildren(): Child[] {
       name: '大宝',
       avatarColor: '#f43f5e',
       grade: 6,
+      educationSystem: 'five-four',
     },
     {
       id: 'child_xiaobao',
       name: '小宝',
       avatarColor: '#06b6d4',
       grade: 1,
+      educationSystem: 'six-three',
     },
   ];
 }

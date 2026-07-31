@@ -59,7 +59,7 @@ export default function MathSubjectPage() {
             <div>
               <h1 className="text-3xl font-bold font-display">数学学科路径</h1>
               <p className="text-sm text-slate-400">
-                {currentChild ? `${currentChild.name} · ${gradeLabel(grade)} · 从当前到三公录取的数学能力规划地图` : '从当前到三公录取的数学能力规划地图'}
+                {currentChild ? `${currentChild.name} · ${gradeLabel(grade, currentChild.educationSystem)} · 从当前到三公录取的数学能力规划地图` : '从当前到三公录取的数学能力规划地图'}
               </p>
             </div>
           </div>

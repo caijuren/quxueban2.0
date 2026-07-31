@@ -111,7 +111,7 @@ function IdentityCard({ child }: { child: Child }) {
               {child.name}
             </h2>
             <DataBadge variant="primary" size="sm">
-              {gradeToStage(child.grade)}
+              {gradeToStage(child.grade, child.educationSystem)}
             </DataBadge>
             <DataBadge variant={routeSummary.type === 'primary' ? 'success' : 'secondary'} size="sm">
               {routeSummary.type === 'primary' ? '主路线' : '备选路线'}
@@ -119,7 +119,7 @@ function IdentityCard({ child }: { child: Child }) {
           </div>
 
           <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-text-secondary">
-            <span>{gradeLabel(child.grade)}</span>
+            <span>{gradeLabel(child.grade, child.educationSystem)}</span>
             <span className="text-border-strong">·</span>
             <span className="truncate">{routeSummary.name}</span>
             {child.targetSchool && (
@@ -390,11 +390,11 @@ function OverviewChildCard({
               {child.name}
             </h3>
             <DataBadge variant="primary" size="sm">
-              {gradeToStage(child.grade)}
+              {gradeToStage(child.grade, child.educationSystem)}
             </DataBadge>
           </div>
           <p className="text-sm text-text-tertiary truncate">
-            {gradeLabel(child.grade)}
+            {gradeLabel(child.grade, child.educationSystem)}
             {child.targetSchool ? ` · 目标 ${child.targetSchool}` : ''}
           </p>
         </div>

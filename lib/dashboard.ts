@@ -28,7 +28,7 @@ function getChildRoute(child: Child): RoutePlan | undefined {
   if (child.routeId) {
     return getRouteById(child.routeId);
   }
-  const routes = getRoutesByStage(gradeToStage(child.grade));
+  const routes = getRoutesByStage(gradeToStage(child.grade, child.educationSystem));
   return routes[0];
 }
 
@@ -71,7 +71,7 @@ function inferTimelineStatus(milestoneGrade: number | null, childGrade: number):
 }
 
 export function getStrategicTimeline(child: Child): TimelineItem[] {
-  const stage = gradeToStage(child.grade);
+  const stage = gradeToStage(child.grade, child.educationSystem);
   const route = getChildRoute(child);
 
   if (stage === '小升初') {
@@ -141,14 +141,14 @@ export function generateStrategicAdvice(
   weeklyStats?: PlanStats | null
 ): string {
   const route = getChildRoute(child);
-  const stage = gradeToStage(child.grade);
+  const stage = gradeToStage(child.grade, child.educationSystem);
   const upcoming = getUpcomingMilestones(child, 2);
   const current = getCurrentMilestone(child);
 
   const parts: string[] = [];
 
   // Opening
-  parts.push(`${child.name} 目前${gradeLabel(child.grade)}，处于${stage}阶段。`);
+  parts.push(`${child.name} 目前${gradeLabel(child.grade, child.educationSystem)}，处于${stage}阶段。`);
 
   // Route
   if (route) {
@@ -201,7 +201,7 @@ export function getRouteSummary(child: Child): {
     };
   }
 
-  const stage = gradeToStage(child.grade);
+  const stage = gradeToStage(child.grade, child.educationSystem);
   const defaults: Record<string, { name: string; description: string }> = {
     小升初: {
       name: '三公 / 民办摇号 / 公办对口',

@@ -66,7 +66,7 @@ export default function AIPage() {
           </h1>
           <p className="text-slate-400">
             {currentChild
-              ? `当前阶段：${gradeLabel(currentChild.grade)} · 基于当前进度和目标生成诊断建议`
+              ? `当前阶段：${gradeLabel(currentChild.grade, currentChild.educationSystem)} · 基于当前进度和目标生成诊断建议`
               : '基于当前进度和目标，智能生成诊断与调整建议'}
           </p>
         </div>

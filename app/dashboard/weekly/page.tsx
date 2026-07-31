@@ -1316,7 +1316,7 @@ function WeeklyTasksContent() {
             <div>
               <h1 className="text-3xl font-bold font-display">周计划</h1>
               <p className="text-sm text-slate-400">
-                {currentChild.name} · {gradeLabel(currentChild.grade)} · {formatWeekLabel(weekId)}
+                {currentChild.name} · {gradeLabel(currentChild.grade, currentChild.educationSystem)} · {formatWeekLabel(weekId)}
               </p>
             </div>
           </div>

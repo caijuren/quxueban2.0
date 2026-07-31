@@ -67,7 +67,7 @@ function PlanPageContent() {
     if (stageFromUrl && stages.some((s) => s.id === stageFromUrl && s.status === 'active')) {
       setActiveStageState(stageFromUrl);
     } else if (currentChild) {
-      const childStage = gradeToStage(currentChild.grade);
+      const childStage = gradeToStage(currentChild.grade, currentChild.educationSystem);
       setActiveStageState(childStage);
       const params = new URLSearchParams(searchParams.toString());
       params.set('stage', childStage);

@@ -5,7 +5,7 @@ import { Plus, Pencil, Trash2, Star, School, Route } from 'lucide-react';
 import { useChildren } from '@/components/dashboard/ChildrenContext';
 import ChildAvatar from '@/components/dashboard/ChildAvatar';
 import ChildModal from '@/components/dashboard/ChildModal';
-import { Child, gradeLabel, gradeToStage } from '@/lib/children';
+import { Child, gradeLabel, gradeToStage, educationSystemLabel } from '@/lib/children';
 import { getRouteById } from '@/lib/plans';
 import SettingsSection from './SettingsSection';
 
@@ -50,7 +50,7 @@ export default function ChildrenSection() {
                     {child.name}
                   </h3>
                   <p className="text-xs text-slate-500">
-                    {gradeLabel(child.grade)} · {gradeToStage(child.grade)}
+                    {gradeLabel(child.grade, child.educationSystem)} · {gradeToStage(child.grade, child.educationSystem)} · {educationSystemLabel(child.educationSystem)}
                   </p>
                 </div>
               </div>

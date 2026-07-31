@@ -7,7 +7,7 @@ import {
   AssessmentTaskInput,
   AssessmentContext,
 } from '@/lib/ai/taskAssessment';
-import { Child } from '@/lib/children';
+import { Child, type EducationSystem } from '@/lib/children';
 import { WeeklyTaskItem } from '@/lib/storage.types';
 
 export async function POST(req: Request) {
@@ -39,6 +39,7 @@ export async function POST(req: Request) {
     id: child.id,
     name: child.name,
     grade: child.grade,
+    educationSystem: child.educationSystem as EducationSystem,
     avatarColor: child.avatarColor,
     avatarUrl: child.avatarUrl,
     targetSchool: child.targetSchool,

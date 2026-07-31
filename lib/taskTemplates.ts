@@ -6,6 +6,7 @@ import {
   TaskFrequency,
   AssessmentCriterion,
 } from './storage.types';
+import { ROUTE_STAGE_MAP } from './plans';
 
 export interface SystemTaskCapabilityLink {
   capabilityName: string;
@@ -79,7 +80,7 @@ export const SYSTEM_TASK_TEMPLATES: SystemTaskTemplate[] = [
     duration: '60分钟',
     materials: ['AMC8 真题', '计时器', '错题本'],
     description: '完整完成 1 套 AMC8 真题，记录正确率和超时题，目标 20+ 分',
-    routeTags: ['sanchu_gongban', 'sanchu_minban', 'sanchu_guoji'],
+    routeTags: ['sg'],
     milestoneTag: 'AMC8',
     source: 'system',
     isActive: true,
@@ -103,7 +104,7 @@ export const SYSTEM_TASK_TEMPLATES: SystemTaskTemplate[] = [
     duration: '30分钟',
     materials: ['奥数题库', '草稿纸'],
     description: '每天完成 5 道典型奥数思维题，重点培养数论、组合、几何直觉',
-    routeTags: ['sanchu_gongban', 'sanchu_minban', 'sanchu_guoji'],
+    routeTags: ['sg'],
     milestoneTag: 'AMC8',
     source: 'system',
     isActive: true,
@@ -146,7 +147,7 @@ export const SYSTEM_TASK_TEMPLATES: SystemTaskTemplate[] = [
     duration: '30分钟',
     materials: ['PET 真题', '词汇本'],
     description: '完成 1-2 篇 PET 难度阅读，精读长难句并积累核心词',
-    routeTags: ['sanchu_gongban', 'sanchu_minban', 'sanchu_guoji'],
+    routeTags: ['sg'],
     milestoneTag: 'PET',
     source: 'system',
     isActive: true,
@@ -167,7 +168,7 @@ export const SYSTEM_TASK_TEMPLATES: SystemTaskTemplate[] = [
     duration: '30分钟',
     materials: ['三公/民办校阅读真题', '错题本'],
     description: '完成 1 篇三公/民办校风格的阅读理解，训练信息提取和主旨概括',
-    routeTags: ['sanchu_gongban', 'sanchu_minban', 'sanchu_guoji'],
+    routeTags: ['sg'],
     source: 'system',
     isActive: true,
     difficulty: 'medium',
@@ -187,7 +188,7 @@ export const SYSTEM_TASK_TEMPLATES: SystemTaskTemplate[] = [
     duration: '20分钟',
     materials: ['古诗文读本', '背诵打卡表'],
     description: '背诵 1-2 首古诗或古文段落，理解大意和常见意象',
-    routeTags: ['sanchu_gongban', 'sanchu_minban', 'sanchu_guoji'],
+    routeTags: ['sg'],
     milestoneTag: '古诗文大会',
     source: 'system',
     isActive: true,
@@ -205,7 +206,7 @@ export const SYSTEM_TASK_TEMPLATES: SystemTaskTemplate[] = [
     duration: '30分钟',
     materials: ['自我介绍稿', '时事素材'],
     description: '练习 1 分钟自我介绍，模拟常见面谈问答',
-    routeTags: ['sanchu_gongban', 'sanchu_minban', 'sanchu_guoji'],
+    routeTags: ['sg'],
     source: 'system',
     isActive: true,
     difficulty: 'medium',
@@ -227,7 +228,7 @@ export const SYSTEM_TASK_TEMPLATES: SystemTaskTemplate[] = [
     duration: '40分钟',
     materials: ['中考分类汇编', '错题本'],
     description: '按代数/几何/函数专题完成基础题，确保概念清晰、计算准确',
-    routeTags: ['zhongkao_putong', 'zhongkao_tese'],
+    routeTags: ['sizhong', 'shizhong', 'quzhong'],
     source: 'system',
     isActive: true,
     difficulty: 'medium',
@@ -247,7 +248,7 @@ export const SYSTEM_TASK_TEMPLATES: SystemTaskTemplate[] = [
     duration: '45分钟',
     materials: ['压轴题专项', '草稿纸'],
     description: '完成 1-2 道中考压轴题，总结解题模型和易错点',
-    routeTags: ['zhongkao_putong', 'zhongkao_tese'],
+    routeTags: ['sizhong', 'shizhong', 'quzhong'],
     source: 'system',
     isActive: true,
     difficulty: 'hard',
@@ -267,7 +268,7 @@ export const SYSTEM_TASK_TEMPLATES: SystemTaskTemplate[] = [
     duration: '25分钟',
     materials: ['中考文言文手册', '词汇卡片'],
     description: '每天记忆 5-8 个文言实词/虚词，结合例句理解用法',
-    routeTags: ['zhongkao_putong', 'zhongkao_tese'],
+    routeTags: ['sizhong', 'shizhong', 'quzhong'],
     source: 'system',
     isActive: true,
     difficulty: 'medium',
@@ -287,7 +288,7 @@ export const SYSTEM_TASK_TEMPLATES: SystemTaskTemplate[] = [
     duration: '20分钟',
     materials: ['考纲词汇书', '单词卡片'],
     description: '按考纲词表背诵并复习核心词汇，重点标记一词多义和搭配',
-    routeTags: ['zhongkao_putong', 'zhongkao_tese'],
+    routeTags: ['sizhong', 'shizhong', 'quzhong'],
     source: 'system',
     isActive: true,
     difficulty: 'medium',
@@ -304,7 +305,7 @@ export const SYSTEM_TASK_TEMPLATES: SystemTaskTemplate[] = [
     duration: '45分钟',
     materials: ['运动器材'],
     description: '针对已选中考体育项目进行技术动作和体能训练',
-    routeTags: ['zhongkao_putong', 'zhongkao_tese'],
+    routeTags: ['sizhong', 'shizhong', 'quzhong'],
     source: 'system',
     isActive: true,
     difficulty: 'medium',
@@ -323,7 +324,7 @@ export const SYSTEM_TASK_TEMPLATES: SystemTaskTemplate[] = [
     duration: '30分钟',
     materials: ['课本', '练习册'],
     description: '提前预习下周校内重点课程，标记疑难点',
-    routeTags: ['gongban_duikou'],
+    routeTags: ['gongban', 'yaohao'],
     source: 'system',
     isActive: true,
     difficulty: 'easy',
@@ -386,4 +387,16 @@ export function getSystemTaskTemplatesByRoute(routeId?: string): SystemTaskTempl
   return SYSTEM_TASK_TEMPLATES.filter(
     (t) => t.routeTags.length === 0 || t.routeTags.includes(routeId)
   );
+}
+
+export function getTemplateStage(
+  template: Pick<SystemTaskTemplate, 'routeTags'>
+): '小升初' | '中考' | '高考' | 'general' {
+  if (!template.routeTags || template.routeTags.length === 0) return 'general';
+  const stages = new Set(
+    template.routeTags.map((tag) => ROUTE_STAGE_MAP[tag]).filter(Boolean)
+  );
+  if (stages.size === 1) return stages.values().next().value as '小升初' | '中考';
+  if (stages.size > 1) return 'general';
+  return 'general';
 }

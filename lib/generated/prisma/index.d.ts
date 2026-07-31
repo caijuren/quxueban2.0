@@ -4031,6 +4031,7 @@ export namespace Prisma {
     userId: string | null
     name: string | null
     grade: number | null
+    educationSystem: string | null
     avatarColor: string | null
     avatarUrl: string | null
     targetSchool: string | null
@@ -4047,6 +4048,7 @@ export namespace Prisma {
     userId: string | null
     name: string | null
     grade: number | null
+    educationSystem: string | null
     avatarColor: string | null
     avatarUrl: string | null
     targetSchool: string | null
@@ -4063,6 +4065,7 @@ export namespace Prisma {
     userId: number
     name: number
     grade: number
+    educationSystem: number
     avatarColor: number
     avatarUrl: number
     targetSchool: number
@@ -4089,6 +4092,7 @@ export namespace Prisma {
     userId?: true
     name?: true
     grade?: true
+    educationSystem?: true
     avatarColor?: true
     avatarUrl?: true
     targetSchool?: true
@@ -4105,6 +4109,7 @@ export namespace Prisma {
     userId?: true
     name?: true
     grade?: true
+    educationSystem?: true
     avatarColor?: true
     avatarUrl?: true
     targetSchool?: true
@@ -4121,6 +4126,7 @@ export namespace Prisma {
     userId?: true
     name?: true
     grade?: true
+    educationSystem?: true
     avatarColor?: true
     avatarUrl?: true
     targetSchool?: true
@@ -4224,6 +4230,7 @@ export namespace Prisma {
     userId: string
     name: string
     grade: number
+    educationSystem: string
     avatarColor: string
     avatarUrl: string | null
     targetSchool: string | null
@@ -4259,6 +4266,7 @@ export namespace Prisma {
     userId?: boolean
     name?: boolean
     grade?: boolean
+    educationSystem?: boolean
     avatarColor?: boolean
     avatarUrl?: boolean
     targetSchool?: boolean
@@ -4279,6 +4287,7 @@ export namespace Prisma {
     userId?: boolean
     name?: boolean
     grade?: boolean
+    educationSystem?: boolean
     avatarColor?: boolean
     avatarUrl?: boolean
     targetSchool?: boolean
@@ -4296,6 +4305,7 @@ export namespace Prisma {
     userId?: boolean
     name?: boolean
     grade?: boolean
+    educationSystem?: boolean
     avatarColor?: boolean
     avatarUrl?: boolean
     targetSchool?: boolean
@@ -4329,6 +4339,7 @@ export namespace Prisma {
       userId: string
       name: string
       grade: number
+      educationSystem: string
       avatarColor: string
       avatarUrl: string | null
       targetSchool: string | null
@@ -4738,6 +4749,7 @@ export namespace Prisma {
     readonly userId: FieldRef<"Child", 'String'>
     readonly name: FieldRef<"Child", 'String'>
     readonly grade: FieldRef<"Child", 'Int'>
+    readonly educationSystem: FieldRef<"Child", 'String'>
     readonly avatarColor: FieldRef<"Child", 'String'>
     readonly avatarUrl: FieldRef<"Child", 'String'>
     readonly targetSchool: FieldRef<"Child", 'String'>
@@ -11361,6 +11373,7 @@ export namespace Prisma {
     userId: 'userId',
     name: 'name',
     grade: 'grade',
+    educationSystem: 'educationSystem',
     avatarColor: 'avatarColor',
     avatarUrl: 'avatarUrl',
     targetSchool: 'targetSchool',
@@ -11903,6 +11916,7 @@ export namespace Prisma {
     userId?: StringFilter<"Child"> | string
     name?: StringFilter<"Child"> | string
     grade?: IntFilter<"Child"> | number
+    educationSystem?: StringFilter<"Child"> | string
     avatarColor?: StringFilter<"Child"> | string
     avatarUrl?: StringNullableFilter<"Child"> | string | null
     targetSchool?: StringNullableFilter<"Child"> | string | null
@@ -11922,6 +11936,7 @@ export namespace Prisma {
     userId?: SortOrder
     name?: SortOrder
     grade?: SortOrder
+    educationSystem?: SortOrder
     avatarColor?: SortOrder
     avatarUrl?: SortOrderInput | SortOrder
     targetSchool?: SortOrderInput | SortOrder
@@ -11944,6 +11959,7 @@ export namespace Prisma {
     userId?: StringFilter<"Child"> | string
     name?: StringFilter<"Child"> | string
     grade?: IntFilter<"Child"> | number
+    educationSystem?: StringFilter<"Child"> | string
     avatarColor?: StringFilter<"Child"> | string
     avatarUrl?: StringNullableFilter<"Child"> | string | null
     targetSchool?: StringNullableFilter<"Child"> | string | null
@@ -11963,6 +11979,7 @@ export namespace Prisma {
     userId?: SortOrder
     name?: SortOrder
     grade?: SortOrder
+    educationSystem?: SortOrder
     avatarColor?: SortOrder
     avatarUrl?: SortOrderInput | SortOrder
     targetSchool?: SortOrderInput | SortOrder
@@ -11987,6 +12004,7 @@ export namespace Prisma {
     userId?: StringWithAggregatesFilter<"Child"> | string
     name?: StringWithAggregatesFilter<"Child"> | string
     grade?: IntWithAggregatesFilter<"Child"> | number
+    educationSystem?: StringWithAggregatesFilter<"Child"> | string
     avatarColor?: StringWithAggregatesFilter<"Child"> | string
     avatarUrl?: StringNullableWithAggregatesFilter<"Child"> | string | null
     targetSchool?: StringNullableWithAggregatesFilter<"Child"> | string | null
@@ -12786,6 +12804,7 @@ export namespace Prisma {
     id?: string
     name: string
     grade: number
+    educationSystem?: string
     avatarColor?: string
     avatarUrl?: string | null
     targetSchool?: string | null
@@ -12805,6 +12824,7 @@ export namespace Prisma {
     userId: string
     name: string
     grade: number
+    educationSystem?: string
     avatarColor?: string
     avatarUrl?: string | null
     targetSchool?: string | null
@@ -12822,6 +12842,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     grade?: IntFieldUpdateOperationsInput | number
+    educationSystem?: StringFieldUpdateOperationsInput | string
     avatarColor?: StringFieldUpdateOperationsInput | string
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     targetSchool?: NullableStringFieldUpdateOperationsInput | string | null
@@ -12841,6 +12862,7 @@ export namespace Prisma {
     userId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     grade?: IntFieldUpdateOperationsInput | number
+    educationSystem?: StringFieldUpdateOperationsInput | string
     avatarColor?: StringFieldUpdateOperationsInput | string
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     targetSchool?: NullableStringFieldUpdateOperationsInput | string | null
@@ -12859,6 +12881,7 @@ export namespace Prisma {
     userId: string
     name: string
     grade: number
+    educationSystem?: string
     avatarColor?: string
     avatarUrl?: string | null
     targetSchool?: string | null
@@ -12874,6 +12897,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     grade?: IntFieldUpdateOperationsInput | number
+    educationSystem?: StringFieldUpdateOperationsInput | string
     avatarColor?: StringFieldUpdateOperationsInput | string
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     targetSchool?: NullableStringFieldUpdateOperationsInput | string | null
@@ -12890,6 +12914,7 @@ export namespace Prisma {
     userId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     grade?: IntFieldUpdateOperationsInput | number
+    educationSystem?: StringFieldUpdateOperationsInput | string
     avatarColor?: StringFieldUpdateOperationsInput | string
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     targetSchool?: NullableStringFieldUpdateOperationsInput | string | null
@@ -13852,6 +13877,7 @@ export namespace Prisma {
     userId?: SortOrder
     name?: SortOrder
     grade?: SortOrder
+    educationSystem?: SortOrder
     avatarColor?: SortOrder
     avatarUrl?: SortOrder
     targetSchool?: SortOrder
@@ -13872,6 +13898,7 @@ export namespace Prisma {
     userId?: SortOrder
     name?: SortOrder
     grade?: SortOrder
+    educationSystem?: SortOrder
     avatarColor?: SortOrder
     avatarUrl?: SortOrder
     targetSchool?: SortOrder
@@ -13888,6 +13915,7 @@ export namespace Prisma {
     userId?: SortOrder
     name?: SortOrder
     grade?: SortOrder
+    educationSystem?: SortOrder
     avatarColor?: SortOrder
     avatarUrl?: SortOrder
     targetSchool?: SortOrder
@@ -15435,6 +15463,7 @@ export namespace Prisma {
     id?: string
     name: string
     grade: number
+    educationSystem?: string
     avatarColor?: string
     avatarUrl?: string | null
     targetSchool?: string | null
@@ -15452,6 +15481,7 @@ export namespace Prisma {
     id?: string
     name: string
     grade: number
+    educationSystem?: string
     avatarColor?: string
     avatarUrl?: string | null
     targetSchool?: string | null
@@ -15734,6 +15764,7 @@ export namespace Prisma {
     userId?: StringFilter<"Child"> | string
     name?: StringFilter<"Child"> | string
     grade?: IntFilter<"Child"> | number
+    educationSystem?: StringFilter<"Child"> | string
     avatarColor?: StringFilter<"Child"> | string
     avatarUrl?: StringNullableFilter<"Child"> | string | null
     targetSchool?: StringNullableFilter<"Child"> | string | null
@@ -16310,6 +16341,7 @@ export namespace Prisma {
     id?: string
     name: string
     grade: number
+    educationSystem?: string
     avatarColor?: string
     avatarUrl?: string | null
     targetSchool?: string | null
@@ -16328,6 +16360,7 @@ export namespace Prisma {
     userId: string
     name: string
     grade: number
+    educationSystem?: string
     avatarColor?: string
     avatarUrl?: string | null
     targetSchool?: string | null
@@ -16411,6 +16444,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     grade?: IntFieldUpdateOperationsInput | number
+    educationSystem?: StringFieldUpdateOperationsInput | string
     avatarColor?: StringFieldUpdateOperationsInput | string
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     targetSchool?: NullableStringFieldUpdateOperationsInput | string | null
@@ -16429,6 +16463,7 @@ export namespace Prisma {
     userId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     grade?: IntFieldUpdateOperationsInput | number
+    educationSystem?: StringFieldUpdateOperationsInput | string
     avatarColor?: StringFieldUpdateOperationsInput | string
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     targetSchool?: NullableStringFieldUpdateOperationsInput | string | null
@@ -16953,6 +16988,7 @@ export namespace Prisma {
     id?: string
     name: string
     grade: number
+    educationSystem?: string
     avatarColor?: string
     avatarUrl?: string | null
     targetSchool?: string | null
@@ -16971,6 +17007,7 @@ export namespace Prisma {
     userId: string
     name: string
     grade: number
+    educationSystem?: string
     avatarColor?: string
     avatarUrl?: string | null
     targetSchool?: string | null
@@ -17054,6 +17091,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     grade?: IntFieldUpdateOperationsInput | number
+    educationSystem?: StringFieldUpdateOperationsInput | string
     avatarColor?: StringFieldUpdateOperationsInput | string
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     targetSchool?: NullableStringFieldUpdateOperationsInput | string | null
@@ -17072,6 +17110,7 @@ export namespace Prisma {
     userId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     grade?: IntFieldUpdateOperationsInput | number
+    educationSystem?: StringFieldUpdateOperationsInput | string
     avatarColor?: StringFieldUpdateOperationsInput | string
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     targetSchool?: NullableStringFieldUpdateOperationsInput | string | null
@@ -17184,6 +17223,7 @@ export namespace Prisma {
     id?: string
     name: string
     grade: number
+    educationSystem?: string
     avatarColor?: string
     avatarUrl?: string | null
     targetSchool?: string | null
@@ -17270,6 +17310,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     grade?: IntFieldUpdateOperationsInput | number
+    educationSystem?: StringFieldUpdateOperationsInput | string
     avatarColor?: StringFieldUpdateOperationsInput | string
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     targetSchool?: NullableStringFieldUpdateOperationsInput | string | null
@@ -17287,6 +17328,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     grade?: IntFieldUpdateOperationsInput | number
+    educationSystem?: StringFieldUpdateOperationsInput | string
     avatarColor?: StringFieldUpdateOperationsInput | string
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     targetSchool?: NullableStringFieldUpdateOperationsInput | string | null
@@ -17304,6 +17346,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     grade?: IntFieldUpdateOperationsInput | number
+    educationSystem?: StringFieldUpdateOperationsInput | string
     avatarColor?: StringFieldUpdateOperationsInput | string
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     targetSchool?: NullableStringFieldUpdateOperationsInput | string | null

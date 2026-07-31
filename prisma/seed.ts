@@ -7,6 +7,7 @@ import {
 } from '../lib/weeklyTasks';
 import { seedSystemTaskTemplatesForUser } from '../lib/seedTaskTemplates';
 import { seedSystemCapabilities } from '../lib/seedCapabilities';
+import { type EducationSystem } from '../lib/children';
 
 const prisma = new PrismaClient();
 
@@ -135,6 +136,7 @@ async function main() {
         id: dabao.id,
         name: dabao.name,
         grade: dabao.grade,
+        educationSystem: dabao.educationSystem as EducationSystem,
         avatarColor: dabao.avatarColor,
       },
       weekId
