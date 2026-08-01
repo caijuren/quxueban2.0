@@ -1,10 +1,10 @@
-# 趣学伴本地/测试环境一键编排
+# 趣学伴生产环境 Docker Compose 编排
 # 用法：
 #   1. 复制 .env.example 为 .env.production 并修改密钥
 #   2. docker compose up -d db
 #   3. docker compose run --rm seed        # 首次初始化数据
 #   4. docker compose up -d app
-#   5. 访问 http://localhost:3000
+#   5. 通过 Nginx 反向代理访问（应用只监听 127.0.0.1:3000）
 
 services:
   db:
@@ -20,13 +20,15 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
-    ports:
-      - "5433:5432"
+    # 数据库不暴露到公网，只在 Docker 内部网络访问
+    expose:
+      - "5432"
 
   app:
     build: .
     ports:
-      - "3000:3000"
+      # 只绑定本地，由 Nginx 统一反向代理，避免直接暴露在公网
+      - "127.0.0.1:3000:3000"
     env_file:
       - .env.production
     environment:
@@ -34,6 +36,13 @@ services:
     depends_on:
       db:
         condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/api/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    restart: unless-stopped
     # Dockerfile 的 CMD 已包含迁移与启动命令
 
   seed:

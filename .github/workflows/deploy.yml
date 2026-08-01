@@ -3,9 +3,39 @@ name: Deploy to Tencent Cloud
 on:
   push:
     branches: [main]
+  pull_request:
+    branches: [main]
 
 jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Generate Prisma Client
+        run: pnpm db:generate
+
+      - name: Lint
+        run: pnpm lint
+
+      - name: Type check
+        run: pnpm type-check
+
   deploy:
+    needs: ci
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     runs-on: ubuntu-latest
     steps:
       - name: Deploy to server
@@ -18,9 +48,22 @@ jobs:
           script: |
             cd /srv/apps/quxueban2.0
             git pull origin main
+
+            # 清理旧容器，避免 seed 等容器卡在 Created/Exited 状态
             docker compose down
-            docker compose up -d db
-            sleep 10
+            docker compose rm -f
+
+            # 重新构建并启动数据库
+            docker compose up -d --build db
+
+            # 执行数据库迁移与种子数据
             docker compose run --rm --build seed
-            docker compose up -d --build app
+
+            # 构建并启动应用，等待 healthcheck 通过
+            docker compose up -d --build --wait app
+
+            # 可选：限制应用容器内存，避免异常时拖垮整机
+            docker update --memory=1g --memory-swap=1g quxueban20-app-1 || true
+
+            docker compose ps
             docker image prune -f
