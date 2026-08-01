@@ -123,6 +123,60 @@ export const capabilityCreateSchema = z.object({
 
 export const capabilityUpdateSchema = capabilityCreateSchema.partial();
 
+export const taskStatusSchema = z.enum([
+  'pending',
+  'in_progress',
+  'partially_done',
+  'done',
+  'skipped',
+  'rescheduled',
+]);
+
+export const taskCompletionQualitySchema = z.enum([
+  'excellent',
+  'good',
+  'average',
+  'needs_work',
+]);
+
+export const taskCapabilityProgressSchema = z.object({
+  capabilityId: z.string().min(1),
+  name: z.string().min(1),
+  progressDelta: z.number().min(-100).max(100),
+});
+
+export const taskCompletionRecordSchema = z.object({
+  id: z.string().min(1),
+  date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, '日期格式不正确'),
+  status: taskStatusSchema,
+  progress: z.number().int().min(0).max(100).default(0),
+  actualDurationMinutes: z.number().int().min(0).default(0),
+  quality: taskCompletionQualitySchema.nullable().default(null),
+  note: z.string().max(1000).default(''),
+  imageUrls: z.array(z.string().url()).default([]),
+  capabilityProgress: z.array(taskCapabilityProgressSchema).default([]),
+  dingtalkPushedAt: z.string().datetime().optional(),
+  createdAt: z.string().datetime(),
+  updatedAt: z.string().datetime(),
+});
+
+export const taskCompletionInputSchema = z.object({
+  date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, '日期格式不正确'),
+  status: taskStatusSchema,
+  progress: z.number().int().min(0).max(100).default(0),
+  actualDurationMinutes: z.number().int().min(0).default(0),
+  quality: taskCompletionQualitySchema.nullable().optional(),
+  note: z.string().max(1000).default(''),
+  imageUrls: z.array(z.string().url()).default([]),
+  capabilityProgress: z.array(taskCapabilityProgressSchema).default([]),
+});
+
+export const dingTalkPushSchema = z.object({
+  childId: z.string().min(1, '孩子 ID 不能为空'),
+  date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, '日期格式不正确'),
+  taskIds: z.array(z.string()).optional(),
+});
+
 export const weeklyTaskItemSchema = z.object({
   id: z.string().min(1),
   category: taskCategorySchema.default('other'),
@@ -136,9 +190,10 @@ export const weeklyTaskItemSchema = z.object({
   focus: z.string().min(1, '任务内容不能为空').max(200),
   duration: z.string().max(50).default('30分钟'),
   materials: z.array(z.string().max(100)).default([]),
-  status: z.enum(['pending', 'done', 'skipped']).default('pending'),
+  status: taskStatusSchema.default('pending'),
   completedAt: z.string().datetime().optional(),
   note: z.string().max(500).optional(),
+  completionRecords: z.array(taskCompletionRecordSchema).optional(),
 });
 
 export const weeklyPlanCreateSchema = z.object({
@@ -242,6 +297,8 @@ export type UserRegisterInput = z.infer<typeof userRegisterSchema>;
 export type PasswordChangeInput = z.infer<typeof passwordChangeSchema>;
 export type AccountDeleteInput = z.infer<typeof accountDeleteSchema>;
 export type UserSettingsUpdateInput = z.infer<typeof userSettingsUpdateSchema>;
+export type TaskCompletionInput = z.infer<typeof taskCompletionInputSchema>;
+export type DingTalkPushInput = z.infer<typeof dingTalkPushSchema>;
 export type AiTaskAssessmentInput = z.infer<typeof aiTaskAssessmentSchema>;
 
 export interface ValidationError {
