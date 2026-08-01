@@ -4,6 +4,8 @@ import {
   TaskTemplate,
   TaskType,
   TaskFrequency,
+  TaskWeeklySchedule,
+  DayOfWeek,
   AssessmentCriterion,
 } from './storage.types';
 import { ROUTE_STAGE_MAP } from './plans';
@@ -25,12 +27,16 @@ export type SystemTaskTemplate = Omit<
   | 'lastUsedAt'
   | 'taskType'
   | 'frequency'
+  | 'weeklySchedule'
+  | 'customScheduleDays'
   | 'assessmentCriteria'
   | 'capabilityLinks'
 > & {
   id: string;
   taskType?: TaskType;
   frequency?: TaskFrequency;
+  weeklySchedule?: TaskWeeklySchedule;
+  customScheduleDays?: DayOfWeek[];
   assessmentCriteria?: AssessmentCriterion[];
   capabilityLinks?: SystemTaskCapabilityLink[];
 };

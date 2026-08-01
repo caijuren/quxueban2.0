@@ -3,6 +3,7 @@ import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 import bcrypt from 'bcryptjs';
+import { accountDeleteSchema, validateBody } from '@/lib/validation';
 
 export async function DELETE(req: Request) {
   const session = await getServerSession(authOptions);
@@ -10,15 +11,12 @@ export async function DELETE(req: Request) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
-  const body = await req.json().catch(() => ({}));
-  const { password } = body;
-
-  if (!password) {
-    return NextResponse.json(
-      { error: '请输入密码以确认注销账号' },
-      { status: 400 }
-    );
+  const validation = await validateBody(req, accountDeleteSchema);
+  if (!validation.success) {
+    return validation.response;
   }
+
+  const { password } = validation.data;
 
   const user = await prisma.user.findUnique({
     where: { id: session.user.id },

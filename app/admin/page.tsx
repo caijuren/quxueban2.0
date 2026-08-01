@@ -1,6 +1,5 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import {
@@ -11,26 +10,7 @@ import {
   ArrowRight,
   Loader2,
 } from 'lucide-react';
-
-interface Stats {
-  userCount: number;
-  childCount: number;
-  planCount: number;
-  weeklyPlanCount: number;
-}
-
-interface AdminUser {
-  id: string;
-  username: string;
-  name: string | null;
-  role: 'ADMIN' | 'PARENT';
-  createdAt: string;
-  _count: {
-    children: number;
-    plans: number;
-    weeklyPlans: number;
-  };
-}
+import { useAdminStats, useAdminUsers } from '@/lib/hooks/useAdmin';
 
 const statCards = [
   { key: 'userCount', label: '注册用户', icon: Users, color: 'from-blue-500 to-cyan-500' },
@@ -40,40 +20,20 @@ const statCards = [
 ] as const;
 
 export default function AdminPage() {
-  const [stats, setStats] = useState<Stats | null>(null);
-  const [users, setUsers] = useState<AdminUser[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  const {
+    data: stats,
+    isLoading: statsLoading,
+    error: statsError,
+  } = useAdminStats();
+  const {
+    data: users = [],
+    isLoading: usersLoading,
+    error: usersError,
+  } = useAdminUsers();
 
-  useEffect(() => {
-    let cancelled = false;
-
-    async function load() {
-      try {
-        const [statsRes, usersRes] = await Promise.all([
-          fetch('/api/admin/stats'),
-          fetch('/api/admin/users'),
-        ]);
-        if (!statsRes.ok || !usersRes.ok) throw new Error('加载失败');
-        const [statsData, usersData] = await Promise.all([
-          statsRes.json(),
-          usersRes.json(),
-        ]);
-        if (cancelled) return;
-        setStats(statsData);
-        setUsers(usersData.slice(0, 10));
-      } catch (err) {
-        setError(err instanceof Error ? err.message : '加载失败');
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    load();
-    return () => {
-      cancelled = true;
-    };
-  }, []);
+  const loading = statsLoading || usersLoading;
+  const error = statsError || usersError;
+  const recentUsers = users.slice(0, 10);
 
   if (loading) {
     return (
@@ -86,7 +46,7 @@ export default function AdminPage() {
   if (error) {
     return (
       <div className="rounded-2xl border border-error/20 bg-error/10 p-6 text-error">
-        {error}
+        {error instanceof Error ? error.message : '加载失败'}
       </div>
     );
   }
@@ -144,7 +104,7 @@ export default function AdminPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-white/5">
-              {users.map((user) => (
+              {recentUsers.map((user) => (
                 <tr key={user.id} className="text-slate-300">
                   <td className="py-3 font-medium text-slate-100">
                     {user.name || user.username}

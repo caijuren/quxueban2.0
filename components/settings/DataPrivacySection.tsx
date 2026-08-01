@@ -2,20 +2,18 @@
 
 import { useState } from 'react';
 import { Download, Trash2, FileJson, Loader2, AlertTriangle } from 'lucide-react';
+import { useExportUserData, useDeleteAccount } from '@/lib/hooks/useUser';
 import SettingsSection from './SettingsSection';
 
 export default function DataPrivacySection() {
-  const [exporting, setExporting] = useState(false);
+  const exportData = useExportUserData();
+  const deleteAccount = useDeleteAccount();
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [deletePassword, setDeletePassword] = useState('');
-  const [deleting, setDeleting] = useState(false);
 
   const handleExport = async () => {
-    setExporting(true);
     try {
-      const res = await fetch('/api/user/export');
-      if (!res.ok) throw new Error('导出失败');
-      const data = await res.json();
+      const data = await exportData.mutateAsync();
       const blob = new Blob([JSON.stringify(data, null, 2)], {
         type: 'application/json',
       });
@@ -27,25 +25,15 @@ export default function DataPrivacySection() {
       URL.revokeObjectURL(url);
     } catch (err) {
       alert(err instanceof Error ? err.message : '导出失败');
-    } finally {
-      setExporting(false);
     }
   };
 
   const handleDelete = async () => {
     if (!deletePassword) return;
-    setDeleting(true);
     try {
-      const res = await fetch('/api/user/account', {
-        method: 'DELETE',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ password: deletePassword }),
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || '注销失败');
+      await deleteAccount.mutateAsync({ password: deletePassword });
       window.location.href = '/';
     } catch (err) {
-      setDeleting(false);
       alert(err instanceof Error ? err.message : '注销失败');
     }
   };
@@ -65,10 +53,10 @@ export default function DataPrivacySection() {
           </div>
           <button
             onClick={handleExport}
-            disabled={exporting}
+            disabled={exportData.isPending}
             className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-white/5 text-slate-300 text-sm hover:bg-white/10 transition-colors disabled:opacity-70"
           >
-            {exporting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Download className="w-4 h-4" />}
+            {exportData.isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Download className="w-4 h-4" />}
             导出 JSON
           </button>
         </div>
@@ -99,7 +87,7 @@ export default function DataPrivacySection() {
         <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4">
           <div
             className="absolute inset-0 bg-black/80 backdrop-blur-md"
-            onClick={() => !deleting && setShowDeleteConfirm(false)}
+            onClick={() => !deleteAccount.isPending && setShowDeleteConfirm(false)}
           />
           <div className="relative w-full max-w-md rounded-2xl bg-[#0f172a] border border-white/10 p-6 shadow-2xl">
             <div className="flex items-center gap-3 mb-4">
@@ -124,17 +112,17 @@ export default function DataPrivacySection() {
             <div className="flex justify-end gap-3">
               <button
                 onClick={() => setShowDeleteConfirm(false)}
-                disabled={deleting}
+                disabled={deleteAccount.isPending}
                 className="px-4 py-2 rounded-lg bg-white/5 text-slate-400 text-sm hover:bg-white/10 transition-colors disabled:opacity-50"
               >
                 取消
               </button>
               <button
                 onClick={handleDelete}
-                disabled={deleting || !deletePassword}
+                disabled={deleteAccount.isPending || !deletePassword}
                 className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-danger text-white text-sm font-medium hover:bg-danger/90 transition-colors disabled:opacity-70"
               >
-                {deleting && <Loader2 className="w-4 h-4 animate-spin" />}
+                {deleteAccount.isPending && <Loader2 className="w-4 h-4 animate-spin" />}
                 确认注销
               </button>
             </div>

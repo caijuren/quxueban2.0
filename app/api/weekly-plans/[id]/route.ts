@@ -3,7 +3,8 @@ import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 import { normalizeWeeklyTask, alignTaskFromTemplate } from '@/lib/taskAlignment';
-import { WeeklyTaskItem } from '@/lib/storage.types';
+import { weeklyPlanUpdateSchema, validateBody } from '@/lib/validation';
+import type { WeeklyTaskItem } from '@/lib/storage.types';
 
 type Params = { params: { id: string } };
 
@@ -18,6 +19,11 @@ export async function PATCH(req: Request, { params }: Params) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
+  const validation = await validateBody(req, weeklyPlanUpdateSchema);
+  if (!validation.success) {
+    return validation.response;
+  }
+
   const existing = await prisma.weeklyPlan.findFirst({
     where: { id: params.id, userId },
     include: { child: true },
@@ -26,12 +32,12 @@ export async function PATCH(req: Request, { params }: Params) {
     return NextResponse.json({ error: 'Not found' }, { status: 404 });
   }
 
-  const body = await req.json();
+  const body = validation.data;
   const data: Record<string, unknown> = {};
 
   if (body.tasks !== undefined) {
-    const normalizedTasks = (body.tasks as Partial<WeeklyTaskItem>[]).map((task) => {
-      const normalized = normalizeWeeklyTask(task as any);
+    const normalizedTasks = body.tasks.map((task) => {
+      const normalized = normalizeWeeklyTask(task as WeeklyTaskItem);
       return alignTaskFromTemplate(normalized, {
         grade: existing.child.grade,
         routeId: existing.child.routeId,

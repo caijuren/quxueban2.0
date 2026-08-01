@@ -132,6 +132,8 @@ model TaskTemplate {
   taskType            TaskType      @default(DAILY)
   frequency           TaskFrequency @default(ONCE)
   customFrequency     Json?
+  weeklySchedule      TaskWeeklySchedule @default(AUTO)
+  customScheduleDays  String[]      @default([])
   assessmentCriteria  Json          @default("[]")
 
   capabilityLinks     TaskCapabilityLink[]
@@ -146,6 +148,7 @@ model TaskTemplate {
   @@index([isActive])
   @@index([taskType])
   @@index([frequency])
+  @@index([weeklySchedule])
 }
 
 model Capability {
@@ -229,6 +232,14 @@ enum TaskFrequency {
   ONCE
   DAILY
   WEEKLY
+  CUSTOM
+}
+
+enum TaskWeeklySchedule {
+  AUTO
+  DAILY
+  WEEKDAYS
+  WEEKENDS
   CUSTOM
 }
 

@@ -2,8 +2,13 @@ import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
+import {
+  capabilityCreateSchema,
+  validateBody,
+} from '@/lib/validation';
+import type { Capability, CapabilityCategory } from '@/lib/generated/prisma';
 
-function normalizeCapability(cap: any) {
+function normalizeCapability(cap: Capability) {
   return {
     ...cap,
     category: cap.category.toLowerCase(),
@@ -18,10 +23,7 @@ export async function GET() {
 
   const capabilities = await prisma.capability.findMany({
     where: {
-      OR: [
-        { isSystem: true },
-        { userId: session.user.id },
-      ],
+      OR: [{ isSystem: true }, { userId: session.user.id }],
     },
     orderBy: [{ category: 'asc' }, { name: 'asc' }],
   });
@@ -35,19 +37,20 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
-  const body = await req.json();
-  const { name, category, description } = body;
-
-  if (!name || !category) {
-    return NextResponse.json({ error: 'Name and category are required' }, { status: 400 });
+  const validation = await validateBody(req, capabilityCreateSchema);
+  if (!validation.success) {
+    return validation.response;
   }
+
+  const body = validation.data;
+  const category = body.category.toUpperCase() as CapabilityCategory;
 
   const capability = await prisma.capability.create({
     data: {
       userId: session.user.id,
-      name,
-      category: (category as string).toUpperCase() as any,
-      description,
+      name: body.name,
+      category,
+      description: body.description,
     },
   });
 

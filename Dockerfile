@@ -57,7 +57,7 @@ RUN rm -f /etc/apt/sources.list.d/debian.sources && \
     echo "deb http://mirrors.tencent.com/debian-security/ bullseye-security main" >> /etc/apt/sources.list && \
     echo "deb http://mirrors.tencent.com/debian/ bullseye-updates main non-free contrib" >> /etc/apt/sources.list && \
     apt-get update && \
-    apt-get install -y openssl ca-certificates && \
+    apt-get install -y openssl ca-certificates curl && \
     rm -rf /var/lib/apt/lists/*
 
 ENV NODE_ENV=production

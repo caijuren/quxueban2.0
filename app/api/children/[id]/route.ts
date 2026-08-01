@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
+import { childUpdateSchema, validateBody } from '@/lib/validation';
 
 type Params = { params: { id: string } };
 
@@ -16,6 +17,11 @@ export async function PATCH(req: Request, { params }: Params) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
+  const validation = await validateBody(req, childUpdateSchema);
+  if (!validation.success) {
+    return validation.response;
+  }
+
   try {
     const existing = await prisma.child.findFirst({
       where: { id: params.id, userId },
@@ -24,9 +30,7 @@ export async function PATCH(req: Request, { params }: Params) {
       return NextResponse.json({ error: 'Not found' }, { status: 404 });
     }
 
-    const body = await req.json();
-    console.log('[PATCH /api/children/[id]] body:', body, 'params.id:', params.id);
-
+    const body = validation.data;
     const data: Record<string, unknown> = {};
     const setIfDefined = (key: string, value: unknown) => {
       if (value !== undefined) data[key] = value;
@@ -34,7 +38,9 @@ export async function PATCH(req: Request, { params }: Params) {
 
     setIfDefined('name', body.name);
     setIfDefined('grade', body.grade);
-    setIfDefined('educationSystem', body.educationSystem === 'five-four' ? 'five-four' : 'six-three');
+    if (body.educationSystem !== undefined) {
+      data.educationSystem = body.educationSystem;
+    }
     setIfDefined('avatarColor', body.avatarColor);
     setIfDefined('avatarUrl', body.avatarUrl ?? null);
     setIfDefined('targetSchool', body.targetSchool ?? null);
@@ -43,12 +49,10 @@ export async function PATCH(req: Request, { params }: Params) {
     setIfDefined('notes', body.notes ?? null);
     setIfDefined('routeId', body.routeId ?? null);
 
-    console.log('[PATCH /api/children/[id]] data to update:', data);
     const updated = await prisma.child.update({
       where: { id: params.id },
       data,
     });
-    console.log('[PATCH /api/children/[id]] updated result:', updated);
 
     return NextResponse.json(updated);
   } catch (error) {

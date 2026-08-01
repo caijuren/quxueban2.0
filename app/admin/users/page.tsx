@@ -1,50 +1,13 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Users, Loader2, Search } from 'lucide-react';
-
-interface AdminUser {
-  id: string;
-  username: string;
-  name: string | null;
-  role: 'ADMIN' | 'PARENT';
-  createdAt: string;
-  _count: {
-    children: number;
-    plans: number;
-    weeklyPlans: number;
-  };
-}
+import { useAdminUsers } from '@/lib/hooks/useAdmin';
 
 export default function AdminUsersPage() {
-  const [users, setUsers] = useState<AdminUser[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  const { data: users = [], isLoading: loading, error: queryError } = useAdminUsers();
   const [query, setQuery] = useState('');
-
-  useEffect(() => {
-    let cancelled = false;
-
-    async function load() {
-      try {
-        const res = await fetch('/api/admin/users');
-        if (!res.ok) throw new Error('加载失败');
-        const data = await res.json();
-        if (cancelled) return;
-        setUsers(data);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : '加载失败');
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    load();
-    return () => {
-      cancelled = true;
-    };
-  }, []);
 
   const filtered = users.filter(
     (u) =>
@@ -60,10 +23,10 @@ export default function AdminUsersPage() {
     );
   }
 
-  if (error) {
+  if (queryError) {
     return (
       <div className="rounded-2xl border border-error/20 bg-error/10 p-6 text-error">
-        {error}
+        {queryError instanceof Error ? queryError.message : '加载失败'}
       </div>
     );
   }

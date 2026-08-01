@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import {
   Plus,
@@ -30,6 +30,8 @@ import {
   AssessmentCriterion,
   TaskType,
   TaskFrequency,
+  TaskWeeklySchedule,
+  DayOfWeek,
 } from '@/lib/storage.types';
 import {
   TASK_CATEGORY_LABELS,
@@ -39,6 +41,17 @@ import { getCategoryColorClass } from '@/lib/taskAlignment';
 import { useChildren } from '@/components/dashboard/ChildrenContext';
 import { gradeToStage } from '@/lib/children';
 import { getStageByRouteId } from '@/lib/plans';
+import {
+  useTaskTemplates,
+  useCreateTaskTemplate,
+  useUpdateTaskTemplate,
+  useDeleteTaskTemplate,
+} from '@/lib/hooks/useTaskTemplates';
+import { useCapabilities } from '@/lib/hooks/useCapabilities';
+import {
+  TaskTemplateCreateInput,
+  TaskTemplateUpdateInput,
+} from '@/lib/validation';
 
 const categoryIcons: Record<TaskCategory, typeof BookOpen> = {
   school: Backpack,
@@ -111,6 +124,28 @@ const frequencyOptions = [
   { value: 'custom', label: '自定义' },
 ] as const;
 
+const weeklyScheduleOptions: {
+  value: TaskWeeklySchedule;
+  label: string;
+  description: string;
+}[] = [
+  { value: 'auto', label: '自动分配', description: '每周出现一次，发布时可调整日期' },
+  { value: 'daily', label: '每天', description: '周一到周日每天都出现' },
+  { value: 'weekdays', label: '仅工作日', description: '周一到周五出现' },
+  { value: 'weekends', label: '仅周末', description: '周六和周日出现' },
+  { value: 'custom', label: '指定星期', description: '只在选中的星期出现' },
+];
+
+const dayOptions: { value: DayOfWeek; label: string }[] = [
+  { value: '周一', label: '周一' },
+  { value: '周二', label: '周二' },
+  { value: '周三', label: '周三' },
+  { value: '周四', label: '周四' },
+  { value: '周五', label: '周五' },
+  { value: '周六', label: '周六' },
+  { value: '周日', label: '周日' },
+];
+
 const capabilityCategoryLabels: Record<string, string> = {
   chinese: '语文',
   math: '数学',
@@ -136,6 +171,8 @@ const emptyTemplate: Omit<TaskTemplate, 'id' | 'userId' | 'createdAt' | 'updated
   taskType: 'daily',
   frequency: 'once',
   customFrequency: null,
+  weeklySchedule: 'auto',
+  customScheduleDays: [],
   assessmentCriteria: [],
   capabilityLinks: [],
 };
@@ -145,56 +182,29 @@ export default function TaskLibrarySection() {
   const currentStage = currentChild ? gradeToStage(currentChild.grade, currentChild.educationSystem) : null;
 
   const shouldReduceMotion = useReducedMotion();
-  const [templates, setTemplates] = useState<TaskTemplate[]>([]);
-  const [capabilities, setCapabilities] = useState<Capability[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
   const [search, setSearch] = useState('');
   const [filterCategory, setFilterCategory] = useState<TaskCategory | 'all'>('all');
   const [filterSource, setFilterSource] = useState<'all' | 'system' | 'user'>('all');
   const [filterStatus, setFilterStatus] = useState<'active' | 'archived' | 'all'>('active');
   const [modalOpen, setModalOpen] = useState(false);
   const [editing, setEditing] = useState<TaskTemplate | null>(null);
-  const [saving, setSaving] = useState(false);
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [archivingId, setArchivingId] = useState<string | null>(null);
 
-  const fetchTemplates = useCallback(async () => {
-    try {
-      setLoading(true);
-      const params = new URLSearchParams();
-      if (filterCategory !== 'all') params.set('category', filterCategory);
-      params.set('status', filterStatus);
-      const res = await fetch(`/api/task-templates?${params.toString()}`);
-      if (!res.ok) {
-        const errBody = await res.json().catch(() => ({}));
-        throw new Error(errBody.error || errBody.message || `加载失败 (${res.status})`);
-      }
-      const data = await res.json();
-      setTemplates(data);
-      setError('');
-    } catch (err) {
-      setError(err instanceof Error ? err.message : '加载失败');
-    } finally {
-      setLoading(false);
-    }
-  }, [filterCategory, filterStatus]);
+  const {
+    data: templates = [],
+    isLoading: loading,
+    error: queryError,
+  } = useTaskTemplates({
+    category: filterCategory === 'all' ? undefined : filterCategory,
+    status: filterStatus,
+  });
+  const { data: capabilities = [] } = useCapabilities();
+  const createTemplate = useCreateTaskTemplate();
+  const updateTemplate = useUpdateTaskTemplate();
+  const deleteTemplate = useDeleteTaskTemplate();
 
-  const fetchCapabilities = useCallback(async () => {
-    try {
-      const res = await fetch('/api/capabilities');
-      if (!res.ok) throw new Error('加载能力失败');
-      const data = await res.json();
-      setCapabilities(data);
-    } catch {
-      // 能力加载失败不阻塞任务库
-    }
-  }, []);
-
-  useEffect(() => {
-    fetchTemplates();
-    fetchCapabilities();
-  }, [fetchTemplates, fetchCapabilities]);
+  const error = queryError instanceof Error ? queryError.message : '';
 
   // Lock body scroll while modal is open
   useEffect(() => {
@@ -230,13 +240,13 @@ export default function TaskLibrarySection() {
     setModalOpen(true);
   };
 
+  const isSaving = createTemplate.isPending || updateTemplate.isPending;
+
   const handleDelete = async (id: string) => {
     if (!confirm('确定要删除这个任务模板吗？删除后无法恢复。')) return;
     try {
       setDeletingId(id);
-      const res = await fetch(`/api/task-templates/${id}`, { method: 'DELETE' });
-      if (!res.ok) throw new Error('删除失败');
-      setTemplates((prev) => prev.filter((t) => t.id !== id));
+      await deleteTemplate.mutateAsync(id);
     } catch (err) {
       alert(err instanceof Error ? err.message : '删除失败');
     } finally {
@@ -247,18 +257,7 @@ export default function TaskLibrarySection() {
   const handleArchive = async (id: string, archive: boolean) => {
     try {
       setArchivingId(id);
-      const res = await fetch(`/api/task-templates/${id}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ archive }),
-      });
-      if (!res.ok) throw new Error(archive ? '归档失败' : '恢复失败');
-      const updated = await res.json();
-      setTemplates((prev) =>
-        filterStatus === 'active' && archive
-          ? prev.filter((t) => t.id !== id)
-          : prev.map((t) => (t.id === id ? updated : t))
-      );
+      await updateTemplate.mutateAsync({ id, data: { archive } });
     } catch (err) {
       alert(err instanceof Error ? err.message : archive ? '归档失败' : '恢复失败');
     } finally {
@@ -266,42 +265,40 @@ export default function TaskLibrarySection() {
     }
   };
 
-  const handleSave = async (data: typeof emptyTemplate) => {
-    try {
-      setSaving(true);
-      const payload = {
-        ...data,
-        materials: data.materials.filter(Boolean),
-        routeTags: data.routeTags.filter(Boolean),
-        tags: data.tags.filter(Boolean),
-      };
+  const normalizeTemplatePayload = (
+    data: typeof emptyTemplate
+  ): TaskTemplateCreateInput | TaskTemplateUpdateInput => {
+    const {
+      source: _source,
+      isActive: _isActive,
+      ...rest
+    } = data;
+    return {
+      ...rest,
+      title: rest.title.trim(),
+      description: rest.description?.trim() || null,
+      milestoneTag: rest.milestoneTag?.trim() || null,
+      semesterTag: rest.semesterTag?.trim() || null,
+      materials: rest.materials.filter(Boolean),
+      routeTags: rest.routeTags.filter(Boolean),
+      tags: rest.tags.filter(Boolean),
+      customScheduleDays:
+        rest.weeklySchedule === 'custom' ? rest.customScheduleDays : [],
+    };
+  };
 
+  const handleSave = async (data: typeof emptyTemplate) => {
+    const payload = normalizeTemplatePayload(data);
+
+    try {
       if (editing) {
-        const res = await fetch(`/api/task-templates/${editing.id}`, {
-          method: 'PATCH',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload),
-        });
-        if (!res.ok) throw new Error('保存失败');
-        const updated = await res.json();
-        setTemplates((prev) =>
-          prev.map((t) => (t.id === updated.id ? updated : t))
-        );
+        await updateTemplate.mutateAsync({ id: editing.id, data: payload });
       } else {
-        const res = await fetch('/api/task-templates', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload),
-        });
-        if (!res.ok) throw new Error('创建失败');
-        const created = await res.json();
-        setTemplates((prev) => [created, ...prev]);
+        await createTemplate.mutateAsync(payload as TaskTemplateCreateInput);
       }
       setModalOpen(false);
     } catch (err) {
       alert(err instanceof Error ? err.message : '保存失败');
-    } finally {
-      setSaving(false);
     }
   };
 
@@ -435,6 +432,11 @@ export default function TaskLibrarySection() {
                             {tpl.capabilityLinks.length} 项能力
                           </span>
                         )}
+                        {tpl.weeklySchedule && tpl.weeklySchedule !== 'auto' && (
+                          <span className="text-[10px] px-1.5 py-0.5 rounded bg-info/10 text-info border border-info/20 shrink-0">
+                            {weeklyScheduleOptions.find((o) => o.value === tpl.weeklySchedule)?.label || tpl.weeklySchedule}
+                          </span>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -545,7 +547,7 @@ export default function TaskLibrarySection() {
             capabilities={capabilities}
             onClose={() => setModalOpen(false)}
             onSave={handleSave}
-            saving={saving}
+            saving={isSaving}
           />
         )}
       </AnimatePresence>
@@ -581,6 +583,8 @@ function TaskTemplateModal({ initial, capabilities, onClose, onSave, saving }: T
           taskType: initial.taskType ?? 'daily',
           frequency: initial.frequency ?? 'once',
           customFrequency: initial.customFrequency ?? null,
+          weeklySchedule: initial.weeklySchedule ?? 'auto',
+          customScheduleDays: initial.customScheduleDays ?? [],
           assessmentCriteria: initial.assessmentCriteria ?? [],
           capabilityLinks: initial.capabilityLinks ?? [],
         }
@@ -963,6 +967,82 @@ function TaskTemplateModal({ initial, capabilities, onClose, onSave, saving }: T
               </div>
             </div>
           )}
+
+          <div>
+            <div className="flex items-center gap-1.5 mb-2">
+              <label className="block text-xs text-slate-400">周计划时间属性</label>
+              <span
+                className="text-slate-500 cursor-help"
+                title="设置任务在周计划中的默认出现规则"
+              >
+                <Info className="w-3 h-3" />
+              </span>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {weeklyScheduleOptions.map((option) => {
+                const selected = form.weeklySchedule === option.value;
+                return (
+                  <button
+                    key={option.value}
+                    type="button"
+                    onClick={() => {
+                      updateField('weeklySchedule', option.value);
+                      if (option.value !== 'custom') {
+                        updateField('customScheduleDays', []);
+                      }
+                    }}
+                    className={`text-left rounded-xl border p-3 transition-all ${
+                      selected
+                        ? 'bg-secondary/10 border-secondary/30'
+                        : 'bg-white/5 border-white/[0.06] hover:bg-white/[0.07]'
+                    }`}
+                  >
+                    <div className="flex items-center gap-2">
+                      <div
+                        className={`w-4 h-4 rounded-full border flex items-center justify-center ${
+                          selected ? 'border-secondary bg-secondary' : 'border-white/20'
+                        }`}
+                      >
+                        {selected && <div className="w-1.5 h-1.5 rounded-full bg-white" />}
+                      </div>
+                      <span className="text-sm font-medium text-slate-200">{option.label}</span>
+                    </div>
+                    <p className="text-[10px] text-slate-500 mt-1 ml-6">{option.description}</p>
+                  </button>
+                );
+              })}
+            </div>
+
+            {form.weeklySchedule === 'custom' && (
+              <div className="mt-3 p-3 rounded-xl bg-white/5 border border-white/[0.06]">
+                <p className="text-xs text-slate-400 mb-2">选择出现的星期：</p>
+                <div className="flex flex-wrap gap-2">
+                  {dayOptions.map((day) => {
+                    const selected = form.customScheduleDays.includes(day.value);
+                    return (
+                      <button
+                        key={day.value}
+                        type="button"
+                        onClick={() => {
+                          const next = new Set(form.customScheduleDays);
+                          if (next.has(day.value)) next.delete(day.value);
+                          else next.add(day.value);
+                          updateField('customScheduleDays', Array.from(next));
+                        }}
+                        className={`px-3 py-1.5 rounded-lg text-xs transition-all ${
+                          selected
+                            ? 'bg-secondary/15 text-secondary border border-secondary/30'
+                            : 'bg-white/5 text-slate-400 border border-white/[0.06] hover:bg-white/[0.08]'
+                        }`}
+                      >
+                        {day.label}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+          </div>
 
           <div>
             <div className="flex items-center justify-between mb-2">

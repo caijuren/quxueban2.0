@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
+import { childCreateSchema, validateBody } from '@/lib/validation';
 
 export async function GET() {
   const session = await getServerSession(authOptions);
@@ -23,38 +24,27 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
+  const validation = await validateBody(req, childCreateSchema);
+  if (!validation.success) {
+    return validation.response;
+  }
+
+  const body = validation.data;
+
   try {
-    const body = await req.json();
-    const {
-      name,
-      grade,
-      educationSystem,
-      avatarColor,
-      avatarUrl,
-      targetSchool,
-      currentSchool,
-      birthday,
-      notes,
-      routeId,
-    } = body;
-
-    if (!name || typeof grade !== 'number') {
-      return NextResponse.json({ error: 'Invalid data' }, { status: 400 });
-    }
-
     const child = await prisma.child.create({
       data: {
         userId: session.user.id,
-        name,
-        grade,
-        educationSystem: educationSystem === 'five-four' ? 'five-four' : 'six-three',
-        avatarColor: avatarColor || '#f43f5e',
-        avatarUrl: avatarUrl || null,
-        targetSchool: targetSchool || null,
-        currentSchool: currentSchool || null,
-        birthday: birthday ? new Date(birthday) : null,
-        notes: notes || null,
-        routeId: routeId || null,
+        name: body.name,
+        grade: body.grade,
+        educationSystem: body.educationSystem,
+        avatarColor: body.avatarColor || '#f43f5e',
+        avatarUrl: body.avatarUrl ?? null,
+        targetSchool: body.targetSchool ?? null,
+        currentSchool: body.currentSchool ?? null,
+        birthday: body.birthday ? new Date(body.birthday) : null,
+        notes: body.notes ?? null,
+        routeId: body.routeId ?? null,
       },
     });
 

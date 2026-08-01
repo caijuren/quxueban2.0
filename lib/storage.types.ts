@@ -48,6 +48,13 @@ export type TaskType = 'daily' | 'milestone' | 'remedial' | 'sprint' | 'diagnost
 
 export type TaskFrequency = 'once' | 'daily' | 'weekly' | 'custom';
 
+export type TaskWeeklySchedule =
+  | 'auto'
+  | 'daily'
+  | 'weekdays'
+  | 'weekends'
+  | 'custom';
+
 export interface TaskCapabilityLink {
   id: string;
   taskTemplateId: string;
@@ -95,6 +102,8 @@ export interface TaskTemplate {
   taskType: TaskType;
   frequency: TaskFrequency;
   customFrequency?: { times: number; period: 'day' | 'week' | 'month' } | null;
+  weeklySchedule: TaskWeeklySchedule;
+  customScheduleDays: DayOfWeek[];
   assessmentCriteria: AssessmentCriterion[];
   capabilityLinks: TaskCapabilityLink[];
   createdAt: string;

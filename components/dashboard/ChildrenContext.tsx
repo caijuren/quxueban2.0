@@ -4,6 +4,7 @@ import {
   createContext,
   useContext,
   useEffect,
+  useRef,
   useState,
   ReactNode,
 } from 'react';
@@ -14,6 +15,17 @@ import {
 } from '@/lib/children';
 import { type WeeklyPlan, type TaskStatus } from '@/lib/storage.types';
 import { generateWeeklyPlan, getCurrentWeekId } from '@/lib/weeklyTasks';
+import {
+  useChildren as useChildrenQuery,
+  useCreateChild,
+  useUpdateChild,
+  useDeleteChild,
+} from '@/lib/hooks/useChildren';
+import {
+  useWeeklyPlans,
+  useSaveWeeklyPlan,
+  useDeleteWeeklyPlan,
+} from '@/lib/hooks/useWeeklyPlans';
 
 interface ChildrenContextValue {
   children: Child[];
@@ -21,9 +33,9 @@ interface ChildrenContextValue {
   currentChildId: string | null;
   weeklyPlans: WeeklyPlan[];
   setCurrentChildId: (id: string) => void;
-  addChild: (child: Omit<Child, 'id'>) => void;
-  updateChild: (id: string, updates: Partial<Omit<Child, 'id'>>) => void;
-  removeChild: (id: string) => void;
+  addChild: (child: Omit<Child, 'id'>) => Promise<void>;
+  updateChild: (id: string, updates: Partial<Omit<Child, 'id'>>) => Promise<void>;
+  removeChild: (id: string) => Promise<void>;
   getWeeklyPlan: (weekId: string, childId: string) => WeeklyPlan | undefined;
   generateWeeklyPlanDraft: (child: Child, weekId?: string) => WeeklyPlan;
   publishWeeklyPlan: (plan: WeeklyPlan) => Promise<void>;
@@ -42,38 +54,17 @@ const ChildrenContext = createContext<ChildrenContextValue | undefined>(undefine
 
 const CURRENT_CHILD_ID_KEY = 'quxueban_current_child_id';
 
-async function fetchJson<T>(input: RequestInfo, init?: RequestInit): Promise<T> {
-  const res = await fetch(input, {
-    ...init,
-    headers: {
-      'Content-Type': 'application/json',
-      ...(init?.headers || {}),
-    },
-  });
-  if (!res.ok) {
-    const text = await res.text().catch(() => 'Unknown error');
-    throw new Error(`Request failed (${res.status}): ${text}`);
-  }
-  return res.json() as Promise<T>;
-}
-
-function formatWeeklyPlan(plan: WeeklyPlan & { id?: string; parentComment?: string | null }): WeeklyPlan {
-  return {
-    id: plan.id,
-    weekId: plan.weekId,
-    childId: plan.childId,
-    tasks: plan.tasks,
-    publishedAt: plan.publishedAt,
-    reviewedAt: plan.reviewedAt,
-    reviewComment: plan.reviewComment ?? plan.parentComment ?? undefined,
-  };
-}
-
 export function ChildrenProvider({ children: childNodes }: { children: ReactNode }) {
-  const [children, setChildren] = useState<Child[]>([]);
-  const [weeklyPlans, setWeeklyPlans] = useState<WeeklyPlan[]>([]);
+  const { data: children = [], isLoading } = useChildrenQuery();
+  const { data: weeklyPlansData = [] } = useWeeklyPlans();
+  const createChild = useCreateChild();
+  const updateChildMutation = useUpdateChild();
+  const deleteChildMutation = useDeleteChild();
+  const savePlan = useSaveWeeklyPlan();
+  const deletePlan = useDeleteWeeklyPlan();
+
   const [currentChildId, setCurrentChildIdState] = useState<string | null>(null);
-  const [loaded, setLoaded] = useState(false);
+  const seedAttempted = useRef(false);
 
   // Load currentChildId from localStorage (UI preference)
   useEffect(() => {
@@ -88,59 +79,36 @@ export function ChildrenProvider({ children: childNodes }: { children: ReactNode
     localStorage.setItem(CURRENT_CHILD_ID_KEY, currentChildId);
   }, [currentChildId]);
 
-  // Initial load from API
+  // Seed default children for brand-new users
   useEffect(() => {
-    let cancelled = false;
+    if (isLoading || children.length > 0 || seedAttempted.current) return;
+    seedAttempted.current = true;
 
-    async function load() {
-      try {
-        const [fetchedChildren, fetchedPlans] = await Promise.all([
-          fetchJson<Child[]>('/api/children'),
-          fetchJson<(WeeklyPlan & { id: string })[]>('/api/weekly-plans'),
-        ]);
-        if (cancelled) return;
-
-        if (fetchedChildren.length > 0) {
-          setChildren(fetchedChildren);
-        } else {
-          // No children in DB yet; seed defaults so users can edit them right away.
-          const defaults = getDefaultChildren();
-          try {
-            const created = await Promise.all(
-              defaults.map((c) =>
-                fetchJson<Child>('/api/children', {
-                  method: 'POST',
-                  body: JSON.stringify(c),
-                })
-              )
-            );
-            if (!cancelled) setChildren(created);
-          } catch (seedError) {
-            if (process.env.NODE_ENV === 'development') {
-              console.warn('[ChildrenContext] Failed to seed default children:', seedError);
-            }
-            if (!cancelled) setChildren(defaults);
+    const defaults = getDefaultChildren();
+    (async () => {
+      for (const child of defaults) {
+        try {
+          await createChild.mutateAsync(child);
+        } catch (err) {
+          if (process.env.NODE_ENV === 'development') {
+            console.warn('[ChildrenProvider] Failed to seed default child:', err);
           }
         }
-        setWeeklyPlans(fetchedPlans.map(formatWeeklyPlan));
-      } catch (error) {
-        // Transient network/auth failures should not crash the UI;
-        // fall back to default children so the dashboard remains usable.
-        if (process.env.NODE_ENV === 'development') {
-          console.warn('[ChildrenContext] Failed to load data, using defaults:', error);
-        }
-        setChildren(getDefaultChildren());
-        setWeeklyPlans([]);
-      } finally {
-        if (!cancelled) setLoaded(true);
       }
-    }
+    })();
+  }, [isLoading, children.length, createChild]);
 
-    load();
-    return () => {
-      cancelled = true;
-    };
-  }, []);
+  // Ensure currentChildId points to an existing child after data loads
+  useEffect(() => {
+    if (isLoading) return;
+    if (children.length === 0) {
+      setCurrentChildIdState(null);
+      return;
+    }
+    if (!children.some((c) => c.id === currentChildId)) {
+      setCurrentChildIdState(children[0].id);
+    }
+  }, [isLoading, children, currentChildId]);
 
   const setCurrentChildId = (id: string) => {
     if (!children.some((c) => c.id === id)) return;
@@ -148,35 +116,23 @@ export function ChildrenProvider({ children: childNodes }: { children: ReactNode
   };
 
   const addChild = async (child: Omit<Child, 'id'>) => {
-    const newChild = await fetchJson<Child>('/api/children', {
-      method: 'POST',
-      body: JSON.stringify(child),
-    });
-    setChildren((prev) => {
-      const next = [...prev.filter((c) => !c.id.startsWith('child_')), newChild];
-      return next.length > 0 ? next : [newChild];
-    });
+    const newChild = await createChild.mutateAsync(child);
     setCurrentChildIdState(newChild.id);
   };
 
   const updateChild = async (id: string, updates: Partial<Omit<Child, 'id'>>) => {
-    const updated = await fetchJson<Child>(`/api/children/${id}`, {
-      method: 'PATCH',
-      body: JSON.stringify(updates),
-    });
-    setChildren((prev) => prev.map((child) => (child.id === id ? updated : child)));
+    await updateChildMutation.mutateAsync({ id, data: updates });
   };
 
   const removeChild = async (id: string) => {
-    await fetchJson(`/api/children/${id}`, { method: 'DELETE' });
-    setChildren((prev) => {
-      const filtered = prev.filter((child) => child.id !== id);
-      if (currentChildId === id) {
-        setCurrentChildIdState(filtered[0]?.id ?? null);
-      }
-      return filtered;
-    });
+    await deleteChildMutation.mutateAsync(id);
+    if (currentChildId === id) {
+      const remaining = children.filter((c) => c.id !== id);
+      setCurrentChildIdState(remaining[0]?.id ?? null);
+    }
   };
+
+  const weeklyPlans = weeklyPlansData;
 
   const getWeeklyPlan = (weekId: string, childId: string) =>
     weeklyPlans.find((p) => p.weekId === weekId && p.childId === childId);
@@ -185,28 +141,13 @@ export function ChildrenProvider({ children: childNodes }: { children: ReactNode
     generateWeeklyPlan(child, weekId ?? getCurrentWeekId());
 
   const publishWeeklyPlan = async (plan: WeeklyPlan) => {
-    const saved = await fetchJson<WeeklyPlan & { id: string }>('/api/weekly-plans', {
-      method: 'POST',
-      body: JSON.stringify({
-        childId: plan.childId,
-        weekId: plan.weekId,
-        tasks: plan.tasks,
-        publishedAt: plan.publishedAt ?? new Date().toISOString(),
-        reviewedAt: plan.reviewedAt,
-        parentComment: plan.reviewComment,
-      }),
-    });
-
-    setWeeklyPlans((prev) => {
-      const exists = prev.some(
-        (p) => p.weekId === saved.weekId && p.childId === saved.childId
-      );
-      if (exists) {
-        return prev.map((p) =>
-          p.weekId === saved.weekId && p.childId === saved.childId ? formatWeeklyPlan(saved) : p
-        );
-      }
-      return [...prev, formatWeeklyPlan(saved)];
+    await savePlan.mutateAsync({
+      childId: plan.childId,
+      weekId: plan.weekId,
+      tasks: plan.tasks,
+      publishedAt: plan.publishedAt ?? new Date().toISOString(),
+      reviewedAt: plan.reviewedAt,
+      parentComment: plan.reviewComment,
     });
   };
 
@@ -219,7 +160,6 @@ export function ChildrenProvider({ children: childNodes }: { children: ReactNode
   ) => {
     const plan = weeklyPlans.find((p) => p.weekId === weekId && p.childId === childId);
     if (!plan) throw new Error('Weekly plan not found');
-    if (!plan.id) throw new Error('Weekly plan has no server id');
 
     const updatedTasks = plan.tasks.map((t) => {
       if (t.id !== taskId) return t;
@@ -231,62 +171,38 @@ export function ChildrenProvider({ children: childNodes }: { children: ReactNode
       };
     });
 
-    const saved = await fetchJson<WeeklyPlan & { id: string }>(`/api/weekly-plans/${plan.id}`, {
-      method: 'PATCH',
-      body: JSON.stringify({ tasks: updatedTasks }),
+    await savePlan.mutateAsync({
+      childId,
+      weekId,
+      tasks: updatedTasks,
+      publishedAt: plan.publishedAt,
+      reviewedAt: plan.reviewedAt,
+      parentComment: plan.reviewComment,
     });
-
-    setWeeklyPlans((prev) =>
-      prev.map((p) =>
-        p.weekId === saved.weekId && p.childId === saved.childId ? formatWeeklyPlan(saved) : p
-      )
-    );
   };
 
   const reviewWeeklyPlan = async (childId: string, weekId: string, comment: string) => {
     const plan = weeklyPlans.find((p) => p.weekId === weekId && p.childId === childId);
     if (!plan) throw new Error('Weekly plan not found');
-    if (!plan.id) throw new Error('Weekly plan has no server id');
 
-    const saved = await fetchJson<WeeklyPlan & { id: string }>(`/api/weekly-plans/${plan.id}`, {
-      method: 'PATCH',
-      body: JSON.stringify({
-        reviewedAt: new Date().toISOString(),
-        parentComment: comment,
-      }),
+    await savePlan.mutateAsync({
+      childId,
+      weekId,
+      tasks: plan.tasks,
+      publishedAt: plan.publishedAt,
+      reviewedAt: new Date().toISOString(),
+      parentComment: comment,
     });
-
-    setWeeklyPlans((prev) =>
-      prev.map((p) =>
-        p.weekId === saved.weekId && p.childId === saved.childId ? formatWeeklyPlan(saved) : p
-      )
-    );
   };
 
   const deleteWeeklyPlan = async (childId: string, weekId: string) => {
     const plan = weeklyPlans.find((p) => p.weekId === weekId && p.childId === childId);
     if (!plan?.id) return;
-
-    await fetchJson(`/api/weekly-plans/${plan.id}`, { method: 'DELETE' });
-    setWeeklyPlans((prev) =>
-      prev.filter((p) => !(p.weekId === weekId && p.childId === childId))
-    );
+    await deletePlan.mutateAsync(plan.id);
   };
 
   const currentChild =
     children.find((c) => c.id === currentChildId) ?? children[0] ?? null;
-
-  // Ensure currentChildId points to an existing child after data loads
-  useEffect(() => {
-    if (!loaded) return;
-    if (children.length === 0) {
-      setCurrentChildIdState(null);
-      return;
-    }
-    if (!children.some((c) => c.id === currentChildId)) {
-      setCurrentChildIdState(children[0].id);
-    }
-  }, [loaded, children, currentChildId]);
 
   return (
     <ChildrenContext.Provider

@@ -1,30 +1,17 @@
 'use client';
 
 import { useEffect } from 'react';
-import { applySettingsToDocument, UserWithSettings } from '@/lib/settings';
+import { applySettingsToDocument } from '@/lib/settings';
+import { useUser } from '@/lib/hooks/useUser';
 
 export function SettingsApplier() {
+  const { data: user } = useUser();
+
   useEffect(() => {
-    let cancelled = false;
-
-    async function load() {
-      try {
-        const res = await fetch('/api/user/me');
-        if (!res.ok) return;
-        const user: UserWithSettings = await res.json();
-        if (!cancelled) {
-          applySettingsToDocument(user.settings);
-        }
-      } catch {
-        // Ignore transient failures; defaults are already in CSS.
-      }
+    if (user?.settings) {
+      applySettingsToDocument(user.settings);
     }
-
-    load();
-    return () => {
-      cancelled = true;
-    };
-  }, []);
+  }, [user?.settings]);
 
   return null;
 }

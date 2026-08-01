@@ -7,6 +7,8 @@ import { signIn } from 'next-auth/react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { Suspense } from 'react';
+import { apiGet } from '@/lib/apiClient';
+import { UserWithSettings } from '@/lib/settings';
 
 const REMEMBER_USERNAME_KEY = 'quxueban_remember_username';
 
@@ -61,8 +63,7 @@ function LoginForm() {
       // Apply user's default landing page only when no specific callback is requested
       if (callbackUrl === '/dashboard' || callbackUrl === '/dashboard/') {
         try {
-          const res = await fetch('/api/user/me');
-          const user = await res.json();
+          const user = await apiGet<UserWithSettings>('/api/user/me');
           const landing = user?.settings?.defaultLandingPage;
           const target =
             landing === 'weekly'

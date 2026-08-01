@@ -1,9 +1,15 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
+import { useState } from 'react';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { Plus, Pencil, Trash2, X, Save, Loader2, Sparkles } from 'lucide-react';
 import { Capability } from '@/lib/storage.types';
+import {
+  useCapabilities,
+  useCreateCapability,
+  useUpdateCapability,
+  useDeleteCapability,
+} from '@/lib/hooks/useCapabilities';
 import SettingsSection from './SettingsSection';
 
 const categoryLabels: Record<string, string> = {
@@ -32,33 +38,15 @@ const emptyCapability: Partial<Capability> = {
 
 export default function CapabilitySection() {
   const shouldReduceMotion = useReducedMotion();
-  const [capabilities, setCapabilities] = useState<Capability[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  const { data: capabilities = [], isLoading, error: queryError } = useCapabilities();
+  const createCapability = useCreateCapability();
+  const updateCapability = useUpdateCapability();
+  const deleteCapability = useDeleteCapability();
+
   const [modalOpen, setModalOpen] = useState(false);
   const [editing, setEditing] = useState<Capability | null>(null);
   const [form, setForm] = useState<Partial<Capability>>({ ...emptyCapability });
-  const [saving, setSaving] = useState(false);
   const [deletingId, setDeletingId] = useState<string | null>(null);
-
-  const fetchCapabilities = useCallback(async () => {
-    try {
-      setLoading(true);
-      const res = await fetch('/api/capabilities');
-      if (!res.ok) throw new Error('加载失败');
-      const data = await res.json();
-      setCapabilities(data);
-      setError('');
-    } catch (err) {
-      setError(err instanceof Error ? err.message : '加载失败');
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    fetchCapabilities();
-  }, [fetchCapabilities]);
 
   const grouped = capabilities.reduce((acc, cap) => {
     const key = cap.category;
@@ -79,43 +67,27 @@ export default function CapabilitySection() {
     setModalOpen(true);
   };
 
+  const isSaving = createCapability.isPending || updateCapability.isPending;
+
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!form.name?.trim() || !form.category) return;
 
-    try {
-      setSaving(true);
-      const payload = {
-        name: form.name.trim(),
-        category: form.category,
-        description: form.description?.trim() || null,
-      };
+    const payload = {
+      name: form.name.trim(),
+      category: form.category,
+      description: form.description?.trim() || null,
+    };
 
-      let updated: Capability;
+    try {
       if (editing) {
-        const res = await fetch(`/api/capabilities/${editing.id}`, {
-          method: 'PATCH',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload),
-        });
-        if (!res.ok) throw new Error('保存失败');
-        updated = await res.json();
-        setCapabilities((prev) => prev.map((c) => (c.id === updated.id ? updated : c)));
+        await updateCapability.mutateAsync({ id: editing.id, data: payload });
       } else {
-        const res = await fetch('/api/capabilities', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload),
-        });
-        if (!res.ok) throw new Error('创建失败');
-        updated = await res.json();
-        setCapabilities((prev) => [...prev, updated]);
+        await createCapability.mutateAsync(payload);
       }
       setModalOpen(false);
     } catch (err) {
       alert(err instanceof Error ? err.message : '保存失败');
-    } finally {
-      setSaving(false);
     }
   };
 
@@ -123,9 +95,7 @@ export default function CapabilitySection() {
     if (!confirm('确定要删除这个能力吗？已关联任务的能力删除后不会影响历史数据。')) return;
     try {
       setDeletingId(id);
-      const res = await fetch(`/api/capabilities/${id}`, { method: 'DELETE' });
-      if (!res.ok) throw new Error('删除失败');
-      setCapabilities((prev) => prev.filter((c) => c.id !== id));
+      await deleteCapability.mutateAsync(id);
     } catch (err) {
       alert(err instanceof Error ? err.message : '删除失败');
     } finally {
@@ -138,13 +108,15 @@ export default function CapabilitySection() {
       title="能力模型"
       description="定义孩子需要培养的能力维度，任务库中的任务可以关联到具体能力，供 AI 分析成长轨迹。"
     >
-      {loading ? (
+      {isLoading ? (
         <div className="py-12 text-center text-slate-500 text-sm">
           <Loader2 className="w-5 h-5 animate-spin mx-auto mb-2" />
           加载能力模型...
         </div>
-      ) : error ? (
-        <div className="py-8 text-center text-error text-sm">{error}</div>
+      ) : queryError ? (
+        <div className="py-8 text-center text-error text-sm">
+          {queryError instanceof Error ? queryError.message : '加载失败'}
+        </div>
       ) : (
         <div className="space-y-6">
           {Object.entries(grouped).map(([category, caps]) => (
@@ -300,10 +272,10 @@ export default function CapabilitySection() {
                   </button>
                   <button
                     type="submit"
-                    disabled={saving || !form.name?.trim()}
+                    disabled={isSaving || !form.name?.trim()}
                     className="flex items-center gap-2 px-6 py-2 rounded-xl bg-gradient-to-r from-secondary to-secondary-glow text-white font-semibold hover:shadow-[0_0_30px_rgba(139,92,246,0.4)] transition-all disabled:opacity-50"
                   >
-                    {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
+                    {isSaving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
                     保存
                   </button>
                 </div>

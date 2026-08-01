@@ -112,6 +112,17 @@ export const TaskFrequency: {
 export type TaskFrequency = (typeof TaskFrequency)[keyof typeof TaskFrequency]
 
 
+export const TaskWeeklySchedule: {
+  AUTO: 'AUTO',
+  DAILY: 'DAILY',
+  WEEKDAYS: 'WEEKDAYS',
+  WEEKENDS: 'WEEKENDS',
+  CUSTOM: 'CUSTOM'
+};
+
+export type TaskWeeklySchedule = (typeof TaskWeeklySchedule)[keyof typeof TaskWeeklySchedule]
+
+
 export const CapabilityCategory: {
   CHINESE: 'CHINESE',
   MATH: 'MATH',
@@ -144,6 +155,10 @@ export const TaskType: typeof $Enums.TaskType
 export type TaskFrequency = $Enums.TaskFrequency
 
 export const TaskFrequency: typeof $Enums.TaskFrequency
+
+export type TaskWeeklySchedule = $Enums.TaskWeeklySchedule
+
+export const TaskWeeklySchedule: typeof $Enums.TaskWeeklySchedule
 
 export type CapabilityCategory = $Enums.CapabilityCategory
 
@@ -6237,6 +6252,7 @@ export namespace Prisma {
     lastUsedAt: Date | null
     taskType: $Enums.TaskType | null
     frequency: $Enums.TaskFrequency | null
+    weeklySchedule: $Enums.TaskWeeklySchedule | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -6258,6 +6274,7 @@ export namespace Prisma {
     lastUsedAt: Date | null
     taskType: $Enums.TaskType | null
     frequency: $Enums.TaskFrequency | null
+    weeklySchedule: $Enums.TaskWeeklySchedule | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -6283,6 +6300,8 @@ export namespace Prisma {
     taskType: number
     frequency: number
     customFrequency: number
+    weeklySchedule: number
+    customScheduleDays: number
     assessmentCriteria: number
     createdAt: number
     updatedAt: number
@@ -6315,6 +6334,7 @@ export namespace Prisma {
     lastUsedAt?: true
     taskType?: true
     frequency?: true
+    weeklySchedule?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -6336,6 +6356,7 @@ export namespace Prisma {
     lastUsedAt?: true
     taskType?: true
     frequency?: true
+    weeklySchedule?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -6361,6 +6382,8 @@ export namespace Prisma {
     taskType?: true
     frequency?: true
     customFrequency?: true
+    weeklySchedule?: true
+    customScheduleDays?: true
     assessmentCriteria?: true
     createdAt?: true
     updatedAt?: true
@@ -6474,6 +6497,8 @@ export namespace Prisma {
     taskType: $Enums.TaskType
     frequency: $Enums.TaskFrequency
     customFrequency: JsonValue | null
+    weeklySchedule: $Enums.TaskWeeklySchedule
+    customScheduleDays: string[]
     assessmentCriteria: JsonValue
     createdAt: Date
     updatedAt: Date
@@ -6519,6 +6544,8 @@ export namespace Prisma {
     taskType?: boolean
     frequency?: boolean
     customFrequency?: boolean
+    weeklySchedule?: boolean
+    customScheduleDays?: boolean
     assessmentCriteria?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -6548,6 +6575,8 @@ export namespace Prisma {
     taskType?: boolean
     frequency?: boolean
     customFrequency?: boolean
+    weeklySchedule?: boolean
+    customScheduleDays?: boolean
     assessmentCriteria?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -6575,6 +6604,8 @@ export namespace Prisma {
     taskType?: boolean
     frequency?: boolean
     customFrequency?: boolean
+    weeklySchedule?: boolean
+    customScheduleDays?: boolean
     assessmentCriteria?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -6616,6 +6647,8 @@ export namespace Prisma {
       taskType: $Enums.TaskType
       frequency: $Enums.TaskFrequency
       customFrequency: Prisma.JsonValue | null
+      weeklySchedule: $Enums.TaskWeeklySchedule
+      customScheduleDays: string[]
       assessmentCriteria: Prisma.JsonValue
       createdAt: Date
       updatedAt: Date
@@ -7034,6 +7067,8 @@ export namespace Prisma {
     readonly taskType: FieldRef<"TaskTemplate", 'TaskType'>
     readonly frequency: FieldRef<"TaskTemplate", 'TaskFrequency'>
     readonly customFrequency: FieldRef<"TaskTemplate", 'Json'>
+    readonly weeklySchedule: FieldRef<"TaskTemplate", 'TaskWeeklySchedule'>
+    readonly customScheduleDays: FieldRef<"TaskTemplate", 'String[]'>
     readonly assessmentCriteria: FieldRef<"TaskTemplate", 'Json'>
     readonly createdAt: FieldRef<"TaskTemplate", 'DateTime'>
     readonly updatedAt: FieldRef<"TaskTemplate", 'DateTime'>
@@ -11429,6 +11464,8 @@ export namespace Prisma {
     taskType: 'taskType',
     frequency: 'frequency',
     customFrequency: 'customFrequency',
+    weeklySchedule: 'weeklySchedule',
+    customScheduleDays: 'customScheduleDays',
     assessmentCriteria: 'assessmentCriteria',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
@@ -11666,6 +11703,20 @@ export namespace Prisma {
    * Reference to a field of type 'TaskFrequency[]'
    */
   export type ListEnumTaskFrequencyFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TaskFrequency[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'TaskWeeklySchedule'
+   */
+  export type EnumTaskWeeklyScheduleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TaskWeeklySchedule'>
+    
+
+
+  /**
+   * Reference to a field of type 'TaskWeeklySchedule[]'
+   */
+  export type ListEnumTaskWeeklyScheduleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TaskWeeklySchedule[]'>
     
 
 
@@ -12145,6 +12196,8 @@ export namespace Prisma {
     taskType?: EnumTaskTypeFilter<"TaskTemplate"> | $Enums.TaskType
     frequency?: EnumTaskFrequencyFilter<"TaskTemplate"> | $Enums.TaskFrequency
     customFrequency?: JsonNullableFilter<"TaskTemplate">
+    weeklySchedule?: EnumTaskWeeklyScheduleFilter<"TaskTemplate"> | $Enums.TaskWeeklySchedule
+    customScheduleDays?: StringNullableListFilter<"TaskTemplate">
     assessmentCriteria?: JsonFilter<"TaskTemplate">
     createdAt?: DateTimeFilter<"TaskTemplate"> | Date | string
     updatedAt?: DateTimeFilter<"TaskTemplate"> | Date | string
@@ -12173,6 +12226,8 @@ export namespace Prisma {
     taskType?: SortOrder
     frequency?: SortOrder
     customFrequency?: SortOrderInput | SortOrder
+    weeklySchedule?: SortOrder
+    customScheduleDays?: SortOrder
     assessmentCriteria?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -12204,6 +12259,8 @@ export namespace Prisma {
     taskType?: EnumTaskTypeFilter<"TaskTemplate"> | $Enums.TaskType
     frequency?: EnumTaskFrequencyFilter<"TaskTemplate"> | $Enums.TaskFrequency
     customFrequency?: JsonNullableFilter<"TaskTemplate">
+    weeklySchedule?: EnumTaskWeeklyScheduleFilter<"TaskTemplate"> | $Enums.TaskWeeklySchedule
+    customScheduleDays?: StringNullableListFilter<"TaskTemplate">
     assessmentCriteria?: JsonFilter<"TaskTemplate">
     createdAt?: DateTimeFilter<"TaskTemplate"> | Date | string
     updatedAt?: DateTimeFilter<"TaskTemplate"> | Date | string
@@ -12232,6 +12289,8 @@ export namespace Prisma {
     taskType?: SortOrder
     frequency?: SortOrder
     customFrequency?: SortOrderInput | SortOrder
+    weeklySchedule?: SortOrder
+    customScheduleDays?: SortOrder
     assessmentCriteria?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -12266,6 +12325,8 @@ export namespace Prisma {
     taskType?: EnumTaskTypeWithAggregatesFilter<"TaskTemplate"> | $Enums.TaskType
     frequency?: EnumTaskFrequencyWithAggregatesFilter<"TaskTemplate"> | $Enums.TaskFrequency
     customFrequency?: JsonNullableWithAggregatesFilter<"TaskTemplate">
+    weeklySchedule?: EnumTaskWeeklyScheduleWithAggregatesFilter<"TaskTemplate"> | $Enums.TaskWeeklySchedule
+    customScheduleDays?: StringNullableListFilter<"TaskTemplate">
     assessmentCriteria?: JsonWithAggregatesFilter<"TaskTemplate">
     createdAt?: DateTimeWithAggregatesFilter<"TaskTemplate"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"TaskTemplate"> | Date | string
@@ -13063,6 +13124,8 @@ export namespace Prisma {
     taskType?: $Enums.TaskType
     frequency?: $Enums.TaskFrequency
     customFrequency?: NullableJsonNullValueInput | InputJsonValue
+    weeklySchedule?: $Enums.TaskWeeklySchedule
+    customScheduleDays?: TaskTemplateCreatecustomScheduleDaysInput | string[]
     assessmentCriteria?: JsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -13091,6 +13154,8 @@ export namespace Prisma {
     taskType?: $Enums.TaskType
     frequency?: $Enums.TaskFrequency
     customFrequency?: NullableJsonNullValueInput | InputJsonValue
+    weeklySchedule?: $Enums.TaskWeeklySchedule
+    customScheduleDays?: TaskTemplateCreatecustomScheduleDaysInput | string[]
     assessmentCriteria?: JsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -13117,6 +13182,8 @@ export namespace Prisma {
     taskType?: EnumTaskTypeFieldUpdateOperationsInput | $Enums.TaskType
     frequency?: EnumTaskFrequencyFieldUpdateOperationsInput | $Enums.TaskFrequency
     customFrequency?: NullableJsonNullValueInput | InputJsonValue
+    weeklySchedule?: EnumTaskWeeklyScheduleFieldUpdateOperationsInput | $Enums.TaskWeeklySchedule
+    customScheduleDays?: TaskTemplateUpdatecustomScheduleDaysInput | string[]
     assessmentCriteria?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -13145,6 +13212,8 @@ export namespace Prisma {
     taskType?: EnumTaskTypeFieldUpdateOperationsInput | $Enums.TaskType
     frequency?: EnumTaskFrequencyFieldUpdateOperationsInput | $Enums.TaskFrequency
     customFrequency?: NullableJsonNullValueInput | InputJsonValue
+    weeklySchedule?: EnumTaskWeeklyScheduleFieldUpdateOperationsInput | $Enums.TaskWeeklySchedule
+    customScheduleDays?: TaskTemplateUpdatecustomScheduleDaysInput | string[]
     assessmentCriteria?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -13172,6 +13241,8 @@ export namespace Prisma {
     taskType?: $Enums.TaskType
     frequency?: $Enums.TaskFrequency
     customFrequency?: NullableJsonNullValueInput | InputJsonValue
+    weeklySchedule?: $Enums.TaskWeeklySchedule
+    customScheduleDays?: TaskTemplateCreatecustomScheduleDaysInput | string[]
     assessmentCriteria?: JsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -13197,6 +13268,8 @@ export namespace Prisma {
     taskType?: EnumTaskTypeFieldUpdateOperationsInput | $Enums.TaskType
     frequency?: EnumTaskFrequencyFieldUpdateOperationsInput | $Enums.TaskFrequency
     customFrequency?: NullableJsonNullValueInput | InputJsonValue
+    weeklySchedule?: EnumTaskWeeklyScheduleFieldUpdateOperationsInput | $Enums.TaskWeeklySchedule
+    customScheduleDays?: TaskTemplateUpdatecustomScheduleDaysInput | string[]
     assessmentCriteria?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -13223,6 +13296,8 @@ export namespace Prisma {
     taskType?: EnumTaskTypeFieldUpdateOperationsInput | $Enums.TaskType
     frequency?: EnumTaskFrequencyFieldUpdateOperationsInput | $Enums.TaskFrequency
     customFrequency?: NullableJsonNullValueInput | InputJsonValue
+    weeklySchedule?: EnumTaskWeeklyScheduleFieldUpdateOperationsInput | $Enums.TaskWeeklySchedule
+    customScheduleDays?: TaskTemplateUpdatecustomScheduleDaysInput | string[]
     assessmentCriteria?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -14102,6 +14177,13 @@ export namespace Prisma {
     not?: NestedEnumTaskFrequencyFilter<$PrismaModel> | $Enums.TaskFrequency
   }
 
+  export type EnumTaskWeeklyScheduleFilter<$PrismaModel = never> = {
+    equals?: $Enums.TaskWeeklySchedule | EnumTaskWeeklyScheduleFieldRefInput<$PrismaModel>
+    in?: $Enums.TaskWeeklySchedule[] | ListEnumTaskWeeklyScheduleFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TaskWeeklySchedule[] | ListEnumTaskWeeklyScheduleFieldRefInput<$PrismaModel>
+    not?: NestedEnumTaskWeeklyScheduleFilter<$PrismaModel> | $Enums.TaskWeeklySchedule
+  }
+
   export type TaskCapabilityLinkListRelationFilter = {
     every?: TaskCapabilityLinkWhereInput
     some?: TaskCapabilityLinkWhereInput
@@ -14133,6 +14215,8 @@ export namespace Prisma {
     taskType?: SortOrder
     frequency?: SortOrder
     customFrequency?: SortOrder
+    weeklySchedule?: SortOrder
+    customScheduleDays?: SortOrder
     assessmentCriteria?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -14159,6 +14243,7 @@ export namespace Prisma {
     lastUsedAt?: SortOrder
     taskType?: SortOrder
     frequency?: SortOrder
+    weeklySchedule?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -14180,6 +14265,7 @@ export namespace Prisma {
     lastUsedAt?: SortOrder
     taskType?: SortOrder
     frequency?: SortOrder
+    weeklySchedule?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -14226,6 +14312,16 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumTaskFrequencyFilter<$PrismaModel>
     _max?: NestedEnumTaskFrequencyFilter<$PrismaModel>
+  }
+
+  export type EnumTaskWeeklyScheduleWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.TaskWeeklySchedule | EnumTaskWeeklyScheduleFieldRefInput<$PrismaModel>
+    in?: $Enums.TaskWeeklySchedule[] | ListEnumTaskWeeklyScheduleFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TaskWeeklySchedule[] | ListEnumTaskWeeklyScheduleFieldRefInput<$PrismaModel>
+    not?: NestedEnumTaskWeeklyScheduleWithAggregatesFilter<$PrismaModel> | $Enums.TaskWeeklySchedule
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumTaskWeeklyScheduleFilter<$PrismaModel>
+    _max?: NestedEnumTaskWeeklyScheduleFilter<$PrismaModel>
   }
 
   export type EnumCapabilityCategoryFilter<$PrismaModel = never> = {
@@ -14896,6 +14992,10 @@ export namespace Prisma {
     set: string[]
   }
 
+  export type TaskTemplateCreatecustomScheduleDaysInput = {
+    set: string[]
+  }
+
   export type UserCreateNestedOneWithoutTaskTemplatesInput = {
     create?: XOR<UserCreateWithoutTaskTemplatesInput, UserUncheckedCreateWithoutTaskTemplatesInput>
     connectOrCreate?: UserCreateOrConnectWithoutTaskTemplatesInput
@@ -14945,6 +15045,15 @@ export namespace Prisma {
 
   export type EnumTaskFrequencyFieldUpdateOperationsInput = {
     set?: $Enums.TaskFrequency
+  }
+
+  export type EnumTaskWeeklyScheduleFieldUpdateOperationsInput = {
+    set?: $Enums.TaskWeeklySchedule
+  }
+
+  export type TaskTemplateUpdatecustomScheduleDaysInput = {
+    set?: string[]
+    push?: string | string[]
   }
 
   export type UserUpdateOneRequiredWithoutTaskTemplatesNestedInput = {
@@ -15386,6 +15495,13 @@ export namespace Prisma {
     not?: NestedEnumTaskFrequencyFilter<$PrismaModel> | $Enums.TaskFrequency
   }
 
+  export type NestedEnumTaskWeeklyScheduleFilter<$PrismaModel = never> = {
+    equals?: $Enums.TaskWeeklySchedule | EnumTaskWeeklyScheduleFieldRefInput<$PrismaModel>
+    in?: $Enums.TaskWeeklySchedule[] | ListEnumTaskWeeklyScheduleFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TaskWeeklySchedule[] | ListEnumTaskWeeklyScheduleFieldRefInput<$PrismaModel>
+    not?: NestedEnumTaskWeeklyScheduleFilter<$PrismaModel> | $Enums.TaskWeeklySchedule
+  }
+
   export type NestedEnumTaskCategoryWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.TaskCategory | EnumTaskCategoryFieldRefInput<$PrismaModel>
     in?: $Enums.TaskCategory[] | ListEnumTaskCategoryFieldRefInput<$PrismaModel>
@@ -15424,6 +15540,16 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumTaskFrequencyFilter<$PrismaModel>
     _max?: NestedEnumTaskFrequencyFilter<$PrismaModel>
+  }
+
+  export type NestedEnumTaskWeeklyScheduleWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.TaskWeeklySchedule | EnumTaskWeeklyScheduleFieldRefInput<$PrismaModel>
+    in?: $Enums.TaskWeeklySchedule[] | ListEnumTaskWeeklyScheduleFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TaskWeeklySchedule[] | ListEnumTaskWeeklyScheduleFieldRefInput<$PrismaModel>
+    not?: NestedEnumTaskWeeklyScheduleWithAggregatesFilter<$PrismaModel> | $Enums.TaskWeeklySchedule
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumTaskWeeklyScheduleFilter<$PrismaModel>
+    _max?: NestedEnumTaskWeeklyScheduleFilter<$PrismaModel>
   }
 
   export type NestedEnumCapabilityCategoryFilter<$PrismaModel = never> = {
@@ -15666,6 +15792,8 @@ export namespace Prisma {
     taskType?: $Enums.TaskType
     frequency?: $Enums.TaskFrequency
     customFrequency?: NullableJsonNullValueInput | InputJsonValue
+    weeklySchedule?: $Enums.TaskWeeklySchedule
+    customScheduleDays?: TaskTemplateCreatecustomScheduleDaysInput | string[]
     assessmentCriteria?: JsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -15692,6 +15820,8 @@ export namespace Prisma {
     taskType?: $Enums.TaskType
     frequency?: $Enums.TaskFrequency
     customFrequency?: NullableJsonNullValueInput | InputJsonValue
+    weeklySchedule?: $Enums.TaskWeeklySchedule
+    customScheduleDays?: TaskTemplateCreatecustomScheduleDaysInput | string[]
     assessmentCriteria?: JsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -15957,6 +16087,8 @@ export namespace Prisma {
     taskType?: EnumTaskTypeFilter<"TaskTemplate"> | $Enums.TaskType
     frequency?: EnumTaskFrequencyFilter<"TaskTemplate"> | $Enums.TaskFrequency
     customFrequency?: JsonNullableFilter<"TaskTemplate">
+    weeklySchedule?: EnumTaskWeeklyScheduleFilter<"TaskTemplate"> | $Enums.TaskWeeklySchedule
+    customScheduleDays?: StringNullableListFilter<"TaskTemplate">
     assessmentCriteria?: JsonFilter<"TaskTemplate">
     createdAt?: DateTimeFilter<"TaskTemplate"> | Date | string
     updatedAt?: DateTimeFilter<"TaskTemplate"> | Date | string
@@ -16779,6 +16911,8 @@ export namespace Prisma {
     taskType?: $Enums.TaskType
     frequency?: $Enums.TaskFrequency
     customFrequency?: NullableJsonNullValueInput | InputJsonValue
+    weeklySchedule?: $Enums.TaskWeeklySchedule
+    customScheduleDays?: TaskTemplateCreatecustomScheduleDaysInput | string[]
     assessmentCriteria?: JsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -16806,6 +16940,8 @@ export namespace Prisma {
     taskType?: $Enums.TaskType
     frequency?: $Enums.TaskFrequency
     customFrequency?: NullableJsonNullValueInput | InputJsonValue
+    weeklySchedule?: $Enums.TaskWeeklySchedule
+    customScheduleDays?: TaskTemplateCreatecustomScheduleDaysInput | string[]
     assessmentCriteria?: JsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -16874,6 +17010,8 @@ export namespace Prisma {
     taskType?: EnumTaskTypeFieldUpdateOperationsInput | $Enums.TaskType
     frequency?: EnumTaskFrequencyFieldUpdateOperationsInput | $Enums.TaskFrequency
     customFrequency?: NullableJsonNullValueInput | InputJsonValue
+    weeklySchedule?: EnumTaskWeeklyScheduleFieldUpdateOperationsInput | $Enums.TaskWeeklySchedule
+    customScheduleDays?: TaskTemplateUpdatecustomScheduleDaysInput | string[]
     assessmentCriteria?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -16901,6 +17039,8 @@ export namespace Prisma {
     taskType?: EnumTaskTypeFieldUpdateOperationsInput | $Enums.TaskType
     frequency?: EnumTaskFrequencyFieldUpdateOperationsInput | $Enums.TaskFrequency
     customFrequency?: NullableJsonNullValueInput | InputJsonValue
+    weeklySchedule?: EnumTaskWeeklyScheduleFieldUpdateOperationsInput | $Enums.TaskWeeklySchedule
+    customScheduleDays?: TaskTemplateUpdatecustomScheduleDaysInput | string[]
     assessmentCriteria?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -17291,6 +17431,8 @@ export namespace Prisma {
     taskType?: $Enums.TaskType
     frequency?: $Enums.TaskFrequency
     customFrequency?: NullableJsonNullValueInput | InputJsonValue
+    weeklySchedule?: $Enums.TaskWeeklySchedule
+    customScheduleDays?: TaskTemplateCreatecustomScheduleDaysInput | string[]
     assessmentCriteria?: JsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -17486,6 +17628,8 @@ export namespace Prisma {
     taskType?: EnumTaskTypeFieldUpdateOperationsInput | $Enums.TaskType
     frequency?: EnumTaskFrequencyFieldUpdateOperationsInput | $Enums.TaskFrequency
     customFrequency?: NullableJsonNullValueInput | InputJsonValue
+    weeklySchedule?: EnumTaskWeeklyScheduleFieldUpdateOperationsInput | $Enums.TaskWeeklySchedule
+    customScheduleDays?: TaskTemplateUpdatecustomScheduleDaysInput | string[]
     assessmentCriteria?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -17512,6 +17656,8 @@ export namespace Prisma {
     taskType?: EnumTaskTypeFieldUpdateOperationsInput | $Enums.TaskType
     frequency?: EnumTaskFrequencyFieldUpdateOperationsInput | $Enums.TaskFrequency
     customFrequency?: NullableJsonNullValueInput | InputJsonValue
+    weeklySchedule?: EnumTaskWeeklyScheduleFieldUpdateOperationsInput | $Enums.TaskWeeklySchedule
+    customScheduleDays?: TaskTemplateUpdatecustomScheduleDaysInput | string[]
     assessmentCriteria?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -17538,6 +17684,8 @@ export namespace Prisma {
     taskType?: EnumTaskTypeFieldUpdateOperationsInput | $Enums.TaskType
     frequency?: EnumTaskFrequencyFieldUpdateOperationsInput | $Enums.TaskFrequency
     customFrequency?: NullableJsonNullValueInput | InputJsonValue
+    weeklySchedule?: EnumTaskWeeklyScheduleFieldUpdateOperationsInput | $Enums.TaskWeeklySchedule
+    customScheduleDays?: TaskTemplateUpdatecustomScheduleDaysInput | string[]
     assessmentCriteria?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string

@@ -14,6 +14,7 @@ import {
   Loader2,
 } from 'lucide-react';
 import { UserWithSettings, applySettingsToDocument } from '@/lib/settings';
+import { useUser, useUpdateUser } from '@/lib/hooks/useUser';
 import AccountSection from '@/components/settings/AccountSection';
 import NotificationSection from '@/components/settings/NotificationSection';
 import AppearanceSection from '@/components/settings/AppearanceSection';
@@ -33,18 +34,11 @@ const CATEGORIES = [
   { id: 'help', label: '帮助与关于', icon: HelpCircle },
 ];
 
-async function fetchUser() {
-  const res = await fetch('/api/user/me');
-  if (!res.ok) throw new Error('加载失败');
-  return res.json() as Promise<UserWithSettings>;
-}
-
 function SettingsPageInner() {
   const shouldReduceMotion = useReducedMotion();
   const searchParams = useSearchParams();
-  const [user, setUser] = useState<UserWithSettings | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  const { data: user, isLoading: loading, error: queryError } = useUser();
+  const updateUser = useUpdateUser();
   const [activeCategory, setActiveCategory] = useState(() => {
     const tab = searchParams.get('tab');
     return CATEGORIES.some((c) => c.id === tab) ? tab! : 'account';
@@ -53,24 +47,10 @@ function SettingsPageInner() {
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    let cancelled = false;
-    setLoading(true);
-    fetchUser()
-      .then((data) => {
-        if (cancelled) return;
-        setUser(data);
-        applySettingsToDocument(data.settings);
-      })
-      .catch((err) => {
-        if (!cancelled) setError(err instanceof Error ? err.message : '加载失败');
-      })
-      .finally(() => {
-        if (!cancelled) setLoading(false);
-      });
-    return () => {
-      cancelled = true;
-    };
-  }, []);
+    if (user?.settings) {
+      applySettingsToDocument(user.settings);
+    }
+  }, [user?.settings]);
 
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
@@ -88,16 +68,8 @@ function SettingsPageInner() {
   }, [dropdownOpen]);
 
   const handleUpdate = async (updates: Partial<UserWithSettings>) => {
-    const res = await fetch('/api/user/me', {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(updates),
-    });
-    const data = await res.json();
-    if (!res.ok) throw new Error(data.error || '保存失败');
-    setUser(data);
+    const data = await updateUser.mutateAsync(updates);
     applySettingsToDocument(data.settings);
-    return data;
   };
 
   const handleSettingsUpdate = async (
@@ -117,10 +89,10 @@ function SettingsPageInner() {
     );
   }
 
-  if (error || !user) {
+  if (queryError || !user) {
     return (
       <div className="rounded-2xl border border-error/20 bg-error/10 p-6 text-error">
-        {error || '加载失败'}
+        {queryError instanceof Error ? queryError.message : '加载失败'}
       </div>
     );
   }

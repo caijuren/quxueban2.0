@@ -40,6 +40,8 @@ import ChildEmptyState from '@/components/dashboard/ChildEmptyState';
 import CommandCard from '@/components/ui/CommandCard';
 import MetricRing from '@/components/ui/MetricRing';
 import WeeklyReportExport from '@/components/weekly/WeeklyReportExport';
+import GeneratePlanModal from '@/components/weekly/GeneratePlanModal';
+import WeeklyMatrix from '@/components/weekly/WeeklyMatrix';
 import { gradeLabel } from '@/lib/children';
 import {
   type WeeklyPlan,
@@ -80,6 +82,8 @@ import {
   TaskRationalityAssessment,
   AssessmentTaskInput,
 } from '@/lib/ai/taskAssessment';
+import { useTaskTemplates } from '@/lib/hooks/useTaskTemplates';
+import { useAssessTasks } from '@/lib/hooks/useTaskAssessment';
 
 const categoryIcons: Record<TaskCategory, typeof BookOpen> = {
   school: Backpack,
@@ -297,8 +301,7 @@ function EditPlanModal({ plan, onClose, onSave }: EditPlanModalProps) {
   }, [tasks]);
 
   const dayStats = useMemo(() => {
-    const stats: Record<DayOfWeek, { count: number; minutes: number }> =
-      {} as any;
+    const stats = {} as Record<DayOfWeek, { count: number; minutes: number }>;
     dayOrder.forEach((day) => {
       const list = tasksByDay[day];
       stats[day] = {
@@ -769,24 +772,13 @@ function TaskLibraryModal({
   onClose,
   onAdd,
 }: TaskLibraryModalProps) {
-  const [templates, setTemplates] = useState<TaskTemplate[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { data: templates = [], isLoading: loading } = useTaskTemplates({ status: 'active' });
   const [selectedCategory, setSelectedCategory] = useState<TaskCategory | 'all'>('all');
   const [selectedTemplateIds, setSelectedTemplateIds] = useState<Set<string>>(new Set());
   const [selectedDay, setSelectedDay] = useState<DayOfWeek>('周一');
   const [assessments, setAssessments] = useState<TaskRationalityAssessment[] | null>(null);
-  const [assessing, setAssessing] = useState(false);
+  const assess = useAssessTasks();
   const shouldReduceMotion = useReducedMotion();
-
-  useEffect(() => {
-    fetch('/api/task-templates')
-      .then((res) => res.json())
-      .then((data) => {
-        setTemplates(data);
-        setLoading(false);
-      })
-      .catch(() => setLoading(false));
-  }, []);
 
   useEffect(() => {
     setAssessments(null);
@@ -825,42 +817,31 @@ function TaskLibraryModal({
 
   const runAssessment = async () => {
     if (selectedTemplates.length === 0) return;
-    try {
-      setAssessing(true);
-      const inputs: AssessmentTaskInput[] = selectedTemplates.map((tpl) => ({
-        title: tpl.title,
-        category: tpl.category,
-        difficulty: tpl.difficulty,
-        duration: tpl.duration,
-        taskType: tpl.taskType,
-        frequency: tpl.frequency,
-        routeTags: tpl.routeTags,
-        milestoneTag: tpl.milestoneTag,
-        capabilityLinks: tpl.capabilityLinks?.map((l) => ({
-          capabilityName: l.capability?.name ?? l.capabilityId,
-          weight: l.weight,
-        })),
-      }));
+    const inputs: AssessmentTaskInput[] = selectedTemplates.map((tpl) => ({
+      title: tpl.title,
+      category: tpl.category,
+      difficulty: tpl.difficulty,
+      duration: tpl.duration,
+      taskType: tpl.taskType,
+      frequency: tpl.frequency,
+      routeTags: tpl.routeTags,
+      milestoneTag: tpl.milestoneTag,
+      capabilityLinks: tpl.capabilityLinks?.map((l) => ({
+        capabilityName: l.capability?.name ?? l.capabilityId,
+        weight: l.weight,
+      })),
+    }));
 
-      const results = await Promise.all(
-        inputs.map((task) =>
-          fetch('/api/ai/task-assessment', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              childId,
-              task,
-              context: { existingTasks, selectedDay },
-            }),
-          }).then((res) => res.json())
-        )
-      );
+    try {
+      const results = await assess.mutateAsync({
+        childId,
+        tasks: inputs,
+        context: { existingTasks, selectedDay },
+      });
       setAssessments(results);
     } catch {
       // 评估失败不阻塞添加
       setAssessments(null);
-    } finally {
-      setAssessing(false);
     }
   };
 
@@ -1087,10 +1068,10 @@ function TaskLibraryModal({
             </button>
             <button
               onClick={handleAdd}
-              disabled={selectedTemplateIds.size === 0 || assessing}
+              disabled={selectedTemplateIds.size === 0 || assess.isPending}
               className="flex items-center gap-2 px-6 py-2 rounded-xl bg-gradient-to-r from-secondary to-secondary-glow text-white font-semibold disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-[0_0_30px_rgba(139,92,246,0.4)] transition-all"
             >
-              {assessing ? (
+              {assess.isPending ? (
                 <>
                   <Loader2 className="w-4 h-4 animate-spin" />
                   评估中...
@@ -1122,7 +1103,6 @@ function WeeklyTasksContent() {
   const {
     currentChild,
     getWeeklyPlan,
-    generateWeeklyPlanDraft,
     publishWeeklyPlan,
     updateTaskStatus,
     reviewWeeklyPlan,
@@ -1133,13 +1113,13 @@ function WeeklyTasksContent() {
     viewFromUrl === 'matrix' ? 'matrix' : 'day'
   );
   const [selectedDay, setSelectedDay] = useState<DayOfWeek>(getTodayName());
-  const [matrixDay, setMatrixDay] = useState<DayOfWeek>(getTodayName());
   const [draftPlan, setDraftPlan] = useState<WeeklyPlan | null>(null);
   const [reviewOpen, setReviewOpen] = useState(false);
   const [reviewComment, setReviewComment] = useState('');
   const [editOpen, setEditOpen] = useState(false);
   const [libraryOpen, setLibraryOpen] = useState(false);
   const [reportOpen, setReportOpen] = useState(false);
+  const [generateOpen, setGenerateOpen] = useState(false);
 
   const today = getTodayName();
 
@@ -1153,7 +1133,6 @@ function WeeklyTasksContent() {
   useEffect(() => {
     setDraftPlan(null);
     setSelectedDay(today);
-    setMatrixDay(today);
   }, [weekId, today]);
 
   const plan = useMemo(() => {
@@ -1175,8 +1154,13 @@ function WeeklyTasksContent() {
   }, [weekId]);
 
   const handleGenerate = () => {
-    if (!currentChild) return;
-    setDraftPlan(generateWeeklyPlanDraft(currentChild, weekId));
+    setGenerateOpen(true);
+  };
+
+  const handlePublishDraft = async (plan: WeeklyPlan) => {
+    await publishWeeklyPlan(plan);
+    setGenerateOpen(false);
+    setWeekId(plan.weekId);
   };
 
   const handlePublish = async () => {
@@ -1250,6 +1234,23 @@ function WeeklyTasksContent() {
       setDraftPlan({ ...displayPlan, tasks: updatedTasks });
     } else {
       publishWeeklyPlan({ ...displayPlan, tasks: updatedTasks });
+    }
+  };
+
+  const handleMoveTask = async (
+    taskId: string,
+    targetDay: DayOfWeek,
+    targetCategory: TaskCategory
+  ) => {
+    if (!displayPlan || !currentChild) return;
+    const updatedTasks = displayPlan.tasks.map((t) =>
+      t.id === taskId ? { ...t, day: targetDay, category: targetCategory } : t
+    );
+    const updatedPlan = { ...displayPlan, tasks: updatedTasks };
+    if (isDraft) {
+      setDraftPlan(updatedPlan);
+    } else {
+      await publishWeeklyPlan(updatedPlan);
     }
   };
 
@@ -1564,7 +1565,7 @@ function WeeklyTasksContent() {
             </div>
             <h3 className="text-xl font-bold font-display mb-2">本周计划尚未发布</h3>
             <p className="text-sm text-slate-400 mb-6 max-w-md mx-auto">
-              系统会根据 {currentChild.name} 的年级，从语数英三科模板自动生成本周计划。发布后即可每日打卡。
+              从任务库中选择任务，按周发布时间属性自动生成矩阵。发布后即可每日打卡。
             </p>
             <button
               onClick={handleGenerate}
@@ -1702,210 +1703,14 @@ function WeeklyTasksContent() {
             </div>
           </motion.div>
         ) : (
-          <motion.div
-            key="matrix"
-            initial={shouldReduceMotion ? false : { opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: -20 }}
-            className="rounded-2xl glass p-5"
-          >
-            {/* Desktop matrix */}
-            <div className="hidden lg:block overflow-x-auto">
-              <div className="min-w-[800px]">
-                <div className="grid grid-cols-8 gap-2 mb-2">
-                  <div className="text-xs text-slate-500 font-medium px-3 py-2">分类</div>
-                  {dayOrder.map((day) => {
-                    const isToday = day === today && weekId === getCurrentWeekId();
-                    const ds = stats?.byDay[day];
-                    return (
-                      <div
-                        key={day}
-                        className={`text-center text-xs font-medium px-2 py-2 rounded-lg ${
-                          isToday ? 'bg-primary/10 text-primary' : 'text-slate-400'
-                        }`}
-                      >
-                        {day}
-                        {ds && ds.total > 0 && (
-                          <span className="block text-[10px] text-slate-500 mt-0.5">
-                            {ds.done}/{ds.total}
-                          </span>
-                        )}
-                      </div>
-                    );
-                  })}
-                </div>
-
-                {allCategories
-                  .filter((cat) => displayPlan.tasks.some((t) => (t.category || 'other') === cat))
-                  .map((category) => {
-                    const CategoryIcon = categoryIcons[category];
-                    return (
-                      <div key={category} className="grid grid-cols-8 gap-2 mb-2">
-                        <div className="flex items-center gap-2 px-3 py-3 rounded-xl bg-white/5">
-                          <div
-                            className={`w-7 h-7 rounded-lg flex items-center justify-center ${getCategoryColorClass(category)}`}
-                          >
-                            <CategoryIcon className="w-3.5 h-3.5" />
-                          </div>
-                          <span className="text-sm font-medium text-slate-300">{TASK_CATEGORY_LABELS[category]}</span>
-                        </div>
-                        {dayOrder.map((day) => {
-                          const task = tasksByDay?.[day].find((t) => (t.category || 'other') === category);
-                          const taskDone = task?.status === 'done';
-                          return (
-                            <button
-                              key={day}
-                              type="button"
-                              disabled={!task}
-                              onClick={() => task && handleToggleTask(task)}
-                              aria-label={
-                                task
-                                  ? `${TASK_CATEGORY_LABELS[category]} ${day}：${task.focus}，${task.duration}，点击${taskDone ? '取消完成' : '标记完成'}`
-                                  : `${TASK_CATEGORY_LABELS[category]} ${day}：无任务`
-                              }
-                              className={`relative group px-2 py-3 rounded-xl border transition-all min-h-[80px] text-left disabled:cursor-default ${
-                                task
-                                  ? taskDone
-                                    ? 'bg-success/10 border-success/20 hover:bg-success/[0.12]'
-                                    : 'bg-white/5 border-white/5 hover:bg-white/[0.07]'
-                                  : 'bg-transparent border-transparent'
-                              }`}
-                            >
-                              {task && (
-                                <>
-                                  <div className="flex items-center justify-between mb-1">
-                                    <span className="text-[10px] text-slate-500">{task.duration}</span>
-                                    {task.status === 'done' && (
-                                      <CheckCircle2 className="w-3 h-3 text-success" />
-                                    )}
-                                  </div>
-                                  <p className="text-xs font-medium text-slate-200 line-clamp-2">
-                                    {task.focus}
-                                  </p>
-
-                                  <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 w-48 p-3 rounded-xl bg-surface border border-white/10 shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-20">
-                                    <p className="text-xs font-bold text-slate-200 mb-1">
-                                      {task.focus}
-                                    </p>
-                                    <p className="text-[10px] text-slate-500 mb-2">
-                                      {TASK_CATEGORY_LABELS[category]} · {task.duration}
-                                    </p>
-                                    <div className="flex flex-wrap gap-1 mb-2">
-                                      {task.materials.map((m) => (
-                                        <span
-                                          key={m}
-                                          className="text-[10px] px-1.5 py-0.5 rounded bg-white/5 text-slate-400"
-                                        >
-                                          {m}
-                                        </span>
-                                      ))}
-                                    </div>
-                                    <p className="text-[10px] text-slate-500">
-                                      点击{task.status === 'done' ? '取消完成' : '标记完成'}
-                                    </p>
-                                  </div>
-                                </>
-                              )}
-                            </button>
-                          );
-                        })}
-                      </div>
-                    );
-                  })}
-              </div>
-            </div>
-
-            {/* Mobile matrix */}
-            <div className="lg:hidden space-y-4">
-              <div className="flex gap-1.5 overflow-x-auto pb-2">
-                {dayOrder.map((day) => {
-                  const isToday = day === today && weekId === getCurrentWeekId();
-                  const isSelected = day === matrixDay;
-                  const ds = stats?.byDay[day];
-                  return (
-                    <button
-                      key={day}
-                      onClick={() => setMatrixDay(day)}
-                      aria-pressed={isSelected}
-                      className={`flex-shrink-0 relative px-3 py-2 rounded-lg text-left min-w-[68px] transition-all border focus-ring ${
-                        isSelected
-                          ? 'bg-white/[0.08] border-primary/30'
-                          : 'bg-white/[0.03] border-white/[0.06] hover:bg-white/[0.05]'
-                      }`}
-                    >
-                      {isToday && (
-                        <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-primary shadow-glow-primary" />
-                      )}
-                      <p className={`text-xs font-bold ${isSelected ? 'text-white' : 'text-slate-300'}`}>
-                        {day}
-                      </p>
-                      <p className="text-[10px] text-slate-500 mt-0.5 tabular-nums">
-                        {ds && ds.total > 0 ? `${ds.done}/${ds.total}` : '无任务'}
-                      </p>
-                    </button>
-                  );
-                })}
-              </div>
-
-              <div className="space-y-2">
-                {allCategories
-                  .filter((cat) => displayPlan.tasks.some((t) => (t.category || 'other') === cat))
-                  .map((category) => {
-                    const CategoryIcon = categoryIcons[category];
-                    const task = tasksByDay?.[matrixDay].find((t) => (t.category || 'other') === category);
-                    const taskDone = task?.status === 'done';
-                    return (
-                      <button
-                        key={category}
-                        type="button"
-                        disabled={!task}
-                        onClick={() => task && handleToggleTask(task)}
-                        aria-label={
-                          task
-                            ? `${TASK_CATEGORY_LABELS[category]} ${matrixDay}：${task.focus}，${task.duration}，点击${taskDone ? '取消完成' : '标记完成'}`
-                            : `${TASK_CATEGORY_LABELS[category]} ${matrixDay}：无任务`
-                        }
-                        className={`w-full flex items-center gap-3 px-3 py-3 rounded-xl border transition-all text-left disabled:cursor-default ${
-                          task
-                            ? taskDone
-                              ? 'bg-success/10 border-success/20 active:scale-[0.99]'
-                              : 'bg-white/5 border-white/5 active:scale-[0.99]'
-                            : 'bg-transparent border-transparent opacity-50'
-                        }`}
-                      >
-                        <div
-                          className={`w-10 h-10 rounded-lg flex items-center justify-center ${getCategoryColorClass(
-                            category
-                          )}`}
-                        >
-                          <CategoryIcon className="w-4 h-4" />
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center justify-between mb-0.5">
-                            <span className="text-sm font-medium text-slate-300">
-                              {TASK_CATEGORY_LABELS[category]}
-                            </span>
-                            {task && (
-                              <span className="text-[10px] px-1.5 py-0.5 rounded bg-white/[0.05] text-slate-300">
-                                {task.duration}
-                              </span>
-                            )}
-                          </div>
-                          <p
-                            className={`text-xs font-medium ${
-                              taskDone ? 'text-slate-500 line-through' : 'text-slate-200'
-                            }`}
-                          >
-                            {task ? task.focus : '当天无安排'}
-                          </p>
-                        </div>
-                        {taskDone && <CheckCircle2 className="w-5 h-5 text-success shrink-0" />}
-                      </button>
-                    );
-                  })}
-              </div>
-            </div>
-          </motion.div>
+          <WeeklyMatrix
+            tasks={displayPlan.tasks}
+            weekId={weekId}
+            today={today}
+            stats={stats}
+            onToggleTask={handleToggleTask}
+            onMoveTask={handleMoveTask}
+          />
         )}
       </AnimatePresence>
 
@@ -2029,6 +1834,14 @@ function WeeklyTasksContent() {
           plan={displayPlan}
           childName={currentChild.name}
           onClose={() => setReportOpen(false)}
+        />
+      )}
+
+      {generateOpen && currentChild && (
+        <GeneratePlanModal
+          initialWeekId={weekId}
+          onClose={() => setGenerateOpen(false)}
+          onPublish={handlePublishDraft}
         />
       )}
     </div>

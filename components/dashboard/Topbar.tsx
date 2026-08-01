@@ -8,14 +8,11 @@ import { signOut } from 'next-auth/react';
 import { useChildren } from '@/components/dashboard/ChildrenContext';
 import ChildAvatar from '@/components/dashboard/ChildAvatar';
 import { gradeLabel, gradeToStage } from '@/lib/children';
-
-interface Notification {
-  id: string;
-  title: string;
-  content: string;
-  readAt: string | null;
-  createdAt: string;
-}
+import {
+  useNotifications,
+  useMarkNotificationRead,
+  useMarkAllNotificationsRead,
+} from '@/lib/hooks/useNotifications';
 
 interface TopbarProps {
   onMenuClick?: () => void;
@@ -24,11 +21,12 @@ interface TopbarProps {
 export default function Topbar({ onMenuClick }: TopbarProps) {
   const router = useRouter();
   const { children, currentChild, currentChildId, setCurrentChildId } = useChildren();
+  const { data: notifications = [], isLoading: loadingNotifications } = useNotifications();
+  const markRead = useMarkNotificationRead();
+  const markAllRead = useMarkAllNotificationsRead();
   const [search, setSearch] = useState('');
   const [childDropdownOpen, setChildDropdownOpen] = useState(false);
-  const [notifications, setNotifications] = useState<Notification[]>([]);
   const [notificationOpen, setNotificationOpen] = useState(false);
-  const [loadingNotifications, setLoadingNotifications] = useState(false);
   const childDropdownRef = useRef<HTMLDivElement>(null);
   const childListboxRef = useRef<HTMLDivElement>(null);
   const notificationRef = useRef<HTMLDivElement>(null);
@@ -97,27 +95,6 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
     };
   }, [childDropdownOpen, children, currentChildId]);
 
-  useEffect(() => {
-    let cancelled = false;
-
-    async function load() {
-      setLoadingNotifications(true);
-      try {
-        const res = await fetch('/api/notifications');
-        if (!res.ok) return;
-        const data = await res.json();
-        if (!cancelled) setNotifications(data);
-      } finally {
-        if (!cancelled) setLoadingNotifications(false);
-      }
-    }
-
-    load();
-    return () => {
-      cancelled = true;
-    };
-  }, []);
-
   const handleSearch = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       const trimmed = search.trim();
@@ -129,20 +106,12 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
     }
   };
 
-  const handleMarkRead = async (id: string) => {
-    const res = await fetch(`/api/notifications/${id}`, { method: 'PATCH' });
-    if (!res.ok) return;
-    setNotifications((prev) =>
-      prev.map((n) => (n.id === id ? { ...n, readAt: new Date().toISOString() } : n))
-    );
+  const handleMarkRead = (id: string) => {
+    markRead.mutate(id);
   };
 
-  const handleMarkAllRead = async () => {
-    const res = await fetch('/api/notifications/read-all', { method: 'PATCH' });
-    if (!res.ok) return;
-    setNotifications((prev) =>
-      prev.map((n) => ({ ...n, readAt: n.readAt ?? new Date().toISOString() }))
-    );
+  const handleMarkAllRead = () => {
+    markAllRead.mutate();
   };
 
   const handleLogout = async () => {
@@ -203,9 +172,10 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
                 {unreadCount > 0 && (
                   <button
                     onClick={handleMarkAllRead}
-                    className="text-xs text-primary hover:text-primary-glow transition-colors"
+                    disabled={markAllRead.isPending}
+                    className="text-xs text-primary hover:text-primary-glow transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    全部已读
+                    {markAllRead.isPending ? '标记中...' : '全部已读'}
                   </button>
                 )}
               </div>
@@ -219,11 +189,14 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
                     暂无通知
                   </div>
                 ) : (
-                  notifications.map((n) => (
+                  notifications.map((n) => {
+                    const marking = markRead.isPending && markRead.variables === n.id;
+                    return (
                     <button
                       key={n.id}
                       onClick={() => handleMarkRead(n.id)}
-                      className={`w-full text-left border-b border-border-subtle px-4 py-3 transition-colors hover:bg-surface-light ${
+                      disabled={marking}
+                      className={`w-full text-left border-b border-border-subtle px-4 py-3 transition-colors hover:bg-surface-light disabled:opacity-50 ${
                         n.readAt ? 'opacity-55' : ''
                       }`}
                     >
@@ -242,7 +215,8 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
                         {new Date(n.createdAt).toLocaleString('zh-CN')}
                       </p>
                     </button>
-                  ))
+                  );
+                })
                 )}
               </div>
             </div>

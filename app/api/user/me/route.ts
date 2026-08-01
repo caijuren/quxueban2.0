@@ -2,12 +2,7 @@ import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
-
-const VALID_THEMES = ['dark-tech', 'rose-pink'];
-const VALID_FONT_SIZES = ['normal', 'large', 'xlarge'];
-const VALID_DENSITIES = ['comfortable', 'compact'];
-const VALID_LANDING_PAGES = ['dashboard', 'alerts', 'weekly'];
-const VALID_CHILD_MODES = ['last', 'ask'];
+import { userSettingsUpdateSchema, validateBody } from '@/lib/validation';
 
 export async function GET() {
   const session = await getServerSession(authOptions);
@@ -46,22 +41,20 @@ export async function GET() {
     phone: user.phone,
     email: user.email,
     wechatOpenId: user.wechatOpenId,
-    settings: user.settings
-      ? {
-          theme: user.settings.theme,
-          fontSize: user.settings.fontSize,
-          density: user.settings.density,
-          reducedMotion: user.settings.reducedMotion,
-          defaultLandingPage: user.settings.defaultLandingPage,
-          defaultChildMode: user.settings.defaultChildMode,
-          notificationPrefs:
-            (user.settings.notificationPrefs as Record<string, boolean>) || {},
-          reminderTime: user.settings.reminderTime,
-          doNotDisturb: user.settings.doNotDisturb,
-          doNotDisturbStart: user.settings.doNotDisturbStart,
-          doNotDisturbEnd: user.settings.doNotDisturbEnd,
-        }
-      : null,
+    settings: {
+      theme: user.settings.theme,
+      fontSize: user.settings.fontSize,
+      density: user.settings.density,
+      reducedMotion: user.settings.reducedMotion,
+      defaultLandingPage: user.settings.defaultLandingPage,
+      defaultChildMode: user.settings.defaultChildMode,
+      notificationPrefs:
+        (user.settings.notificationPrefs as Record<string, boolean>) || {},
+      reminderTime: user.settings.reminderTime,
+      doNotDisturb: user.settings.doNotDisturb,
+      doNotDisturbStart: user.settings.doNotDisturbStart,
+      doNotDisturbEnd: user.settings.doNotDisturbEnd,
+    },
   });
 }
 
@@ -71,62 +64,36 @@ export async function PATCH(req: Request) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
-  const body = await req.json();
+  const validation = await validateBody(req, userSettingsUpdateSchema);
+  if (!validation.success) {
+    return validation.response;
+  }
+
+  const body = validation.data;
 
   const userData: Record<string, unknown> = {};
-  if (body.name !== undefined) userData.name = body.name?.trim() || null;
-  if (body.avatarUrl !== undefined) userData.avatarUrl = body.avatarUrl || null;
-  if (body.phone !== undefined) userData.phone = body.phone?.trim() || null;
-  if (body.email !== undefined) userData.email = body.email?.trim() || null;
+  if (body.name !== undefined) userData.name = body.name;
+  if (body.avatarUrl !== undefined) userData.avatarUrl = body.avatarUrl;
+  if (body.phone !== undefined) userData.phone = body.phone;
+  if (body.email !== undefined) userData.email = body.email;
 
   const settingData: Record<string, unknown> = {};
-  if (body.theme !== undefined) {
-    settingData.theme = VALID_THEMES.includes(body.theme)
-      ? body.theme
-      : 'dark-tech';
-  }
-  if (body.fontSize !== undefined) {
-    settingData.fontSize = VALID_FONT_SIZES.includes(body.fontSize)
-      ? body.fontSize
-      : 'normal';
-  }
-  if (body.density !== undefined) {
-    settingData.density = VALID_DENSITIES.includes(body.density)
-      ? body.density
-      : 'comfortable';
-  }
-  if (body.reducedMotion !== undefined) {
-    settingData.reducedMotion = Boolean(body.reducedMotion);
-  }
-  if (body.defaultLandingPage !== undefined) {
-    settingData.defaultLandingPage = VALID_LANDING_PAGES.includes(
-      body.defaultLandingPage
-    )
-      ? body.defaultLandingPage
-      : 'dashboard';
-  }
-  if (body.defaultChildMode !== undefined) {
-    settingData.defaultChildMode = VALID_CHILD_MODES.includes(
-      body.defaultChildMode
-    )
-      ? body.defaultChildMode
-      : 'last';
-  }
-  if (body.reminderTime !== undefined) {
-    settingData.reminderTime = body.reminderTime || '08:00';
-  }
-  if (body.doNotDisturb !== undefined) {
-    settingData.doNotDisturb = Boolean(body.doNotDisturb);
-  }
-  if (body.doNotDisturbStart !== undefined) {
-    settingData.doNotDisturbStart = body.doNotDisturbStart || null;
-  }
-  if (body.doNotDisturbEnd !== undefined) {
-    settingData.doNotDisturbEnd = body.doNotDisturbEnd || null;
-  }
-  if (body.notificationPrefs !== undefined && typeof body.notificationPrefs === 'object') {
+  if (body.theme !== undefined) settingData.theme = body.theme;
+  if (body.fontSize !== undefined) settingData.fontSize = body.fontSize;
+  if (body.density !== undefined) settingData.density = body.density;
+  if (body.reducedMotion !== undefined) settingData.reducedMotion = body.reducedMotion;
+  if (body.defaultLandingPage !== undefined)
+    settingData.defaultLandingPage = body.defaultLandingPage;
+  if (body.defaultChildMode !== undefined)
+    settingData.defaultChildMode = body.defaultChildMode;
+  if (body.reminderTime !== undefined) settingData.reminderTime = body.reminderTime;
+  if (body.doNotDisturb !== undefined) settingData.doNotDisturb = body.doNotDisturb;
+  if (body.doNotDisturbStart !== undefined)
+    settingData.doNotDisturbStart = body.doNotDisturbStart;
+  if (body.doNotDisturbEnd !== undefined)
+    settingData.doNotDisturbEnd = body.doNotDisturbEnd;
+  if (body.notificationPrefs !== undefined)
     settingData.notificationPrefs = body.notificationPrefs;
-  }
 
   const updated = await prisma.user.update({
     where: { id: session.user.id },
@@ -142,8 +109,7 @@ export async function PATCH(req: Request) {
             defaultLandingPage:
               (settingData.defaultLandingPage as string) ?? 'alerts',
             defaultChildMode: (settingData.defaultChildMode as string) ?? 'last',
-            notificationPrefs:
-              (settingData.notificationPrefs as object) ?? {},
+            notificationPrefs: (settingData.notificationPrefs as object) ?? {},
             reminderTime: (settingData.reminderTime as string) ?? '08:00',
             doNotDisturb: (settingData.doNotDisturb as boolean) ?? false,
             doNotDisturbStart:

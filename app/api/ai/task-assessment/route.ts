@@ -8,7 +8,8 @@ import {
   AssessmentContext,
 } from '@/lib/ai/taskAssessment';
 import { Child, type EducationSystem } from '@/lib/children';
-import { WeeklyTaskItem } from '@/lib/storage.types';
+import { WeeklyTaskItem, TaskTemplate, Capability } from '@/lib/storage.types';
+import { aiTaskAssessmentSchema, validateBody } from '@/lib/validation';
 
 export async function POST(req: Request) {
   const session = await getServerSession(authOptions);
@@ -16,17 +17,13 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
-  const userId = session.user.id;
-  const body = await req.json();
-  const { childId, task, context = {} } = body as {
-    childId?: string;
-    task?: AssessmentTaskInput;
-    context?: AssessmentContext;
-  };
-
-  if (!childId || !task) {
-    return NextResponse.json({ error: 'childId and task are required' }, { status: 400 });
+  const validation = await validateBody(req, aiTaskAssessmentSchema);
+  if (!validation.success) {
+    return validation.response;
   }
+
+  const { childId, task, context = {} } = validation.data;
+  const userId = session.user.id;
 
   const child = await prisma.child.findFirst({
     where: { id: childId, userId },
@@ -51,7 +48,8 @@ export async function POST(req: Request) {
 
   // 若前端未传上下文，从数据库补齐当前周计划与任务模板
   let existingTasks: WeeklyTaskItem[] = context.existingTasks ?? [];
-  let existingTemplates = context.existingTemplates ?? [];
+  let existingTemplates: TaskTemplate[] =
+    (context.existingTemplates as TaskTemplate[] | undefined) ?? [];
 
   if (existingTasks.length === 0) {
     const currentWeekPlan = await prisma.weeklyPlan.findFirst({
@@ -76,14 +74,21 @@ export async function POST(req: Request) {
         },
       },
     });
-    existingTemplates = rawTemplates as any;
+    existingTemplates = rawTemplates as unknown as TaskTemplate[];
   }
 
-  const assessment = assessTaskRationality(childData, task, {
-    ...context,
+  const assessmentContext: AssessmentContext = {
     existingTasks,
-    existingTemplates: existingTemplates as any,
-  });
+    existingTemplates,
+    capabilities: (context.capabilities as Capability[] | undefined) ?? undefined,
+    selectedDay: context.selectedDay,
+  };
+
+  const assessment = assessTaskRationality(
+    childData,
+    task as AssessmentTaskInput,
+    assessmentContext
+  );
 
   return NextResponse.json(assessment);
 }

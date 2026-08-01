@@ -17,6 +17,7 @@ import {
   ChevronUp,
 } from 'lucide-react';
 import { UserWithSettings } from '@/lib/settings';
+import { useChangePassword, useDeleteAccount } from '@/lib/hooks/useUser';
 import SettingsSection from './SettingsSection';
 import WechatBindModal from './WechatBindModal';
 import { useRouter } from 'next/navigation';
@@ -31,6 +32,8 @@ interface AccountSectionProps {
 
 export default function AccountSection({ user, onUpdate }: AccountSectionProps) {
   const router = useRouter();
+  const changePassword = useChangePassword();
+  const deleteAccount = useDeleteAccount();
   const [name, setName] = useState(user.name || '');
   const [phone, setPhone] = useState(user.phone || '');
   const [email, setEmail] = useState(user.email || '');
@@ -42,13 +45,11 @@ export default function AccountSection({ user, onUpdate }: AccountSectionProps) 
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [changingPassword, setChangingPassword] = useState(false);
   const [passwordMessage, setPasswordMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
   const [showWechatModal, setShowWechatModal] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [deletePassword, setDeletePassword] = useState('');
-  const [deleting, setDeleting] = useState(false);
 
   const [expandedSecurity, setExpandedSecurity] = useState<string | null>(null);
 
@@ -115,15 +116,8 @@ export default function AccountSection({ user, onUpdate }: AccountSectionProps) 
       setPasswordMessage({ type: 'error', text: '两次输入的新密码不一致' });
       return;
     }
-    setChangingPassword(true);
     try {
-      const res = await fetch('/api/user/password', {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ currentPassword, newPassword }),
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || '修改失败');
+      await changePassword.mutateAsync({ currentPassword, newPassword });
       setPasswordMessage({ type: 'success', text: '密码修改成功' });
       setCurrentPassword('');
       setNewPassword('');
@@ -133,26 +127,16 @@ export default function AccountSection({ user, onUpdate }: AccountSectionProps) 
         type: 'error',
         text: err instanceof Error ? err.message : '修改失败',
       });
-    } finally {
-      setChangingPassword(false);
     }
   };
 
   const handleDeleteAccount = async () => {
     if (!deletePassword) return;
-    setDeleting(true);
     try {
-      const res = await fetch('/api/user/account', {
-        method: 'DELETE',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ password: deletePassword }),
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || '注销失败');
+      await deleteAccount.mutateAsync({ password: deletePassword });
       await signOut({ redirect: false });
       router.push('/');
     } catch (err) {
-      setDeleting(false);
       alert(err instanceof Error ? err.message : '注销失败');
     }
   };
@@ -407,10 +391,10 @@ export default function AccountSection({ user, onUpdate }: AccountSectionProps) 
               <div className="flex justify-end">
                 <button
                   onClick={handleChangePassword}
-                  disabled={changingPassword}
+                  disabled={changePassword.isPending}
                   className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-slate-200 text-xs font-medium hover:bg-white/[0.08] transition-all disabled:opacity-70"
                 >
-                  {changingPassword ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Lock className="w-3.5 h-3.5" />}
+                  {changePassword.isPending ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Lock className="w-3.5 h-3.5" />}
                   修改密码
                 </button>
               </div>
@@ -484,17 +468,17 @@ export default function AccountSection({ user, onUpdate }: AccountSectionProps) 
             <div className="flex justify-end gap-2">
               <button
                 onClick={() => setShowDeleteConfirm(false)}
-                disabled={deleting}
+                disabled={deleteAccount.isPending}
                 className="px-3 py-1.5 rounded-lg bg-white/5 text-slate-400 text-xs hover:bg-white/10 transition-colors disabled:opacity-50"
               >
                 取消
               </button>
               <button
                 onClick={handleDeleteAccount}
-                disabled={deleting || !deletePassword}
+                disabled={deleteAccount.isPending || !deletePassword}
                 className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-danger text-white text-xs font-medium hover:bg-danger/90 transition-colors disabled:opacity-70"
               >
-                {deleting && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
+                {deleteAccount.isPending && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
                 确认注销
               </button>
             </div>

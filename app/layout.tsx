@@ -3,6 +3,7 @@ import { Syne, Manrope, JetBrains_Mono } from 'next/font/google';
 import './globals.css';
 import { AuthProvider } from '@/components/providers/AuthProvider';
 import { MotionProvider } from '@/components/providers/MotionProvider';
+import { QueryProvider } from '@/components/providers/QueryProvider';
 import { SettingsApplier } from '@/components/providers/SettingsApplier';
 
 const syne = Syne({
@@ -51,8 +52,10 @@ export default function RootLayout({
       >
         <MotionProvider>
           <AuthProvider>
-            <SettingsApplier />
-            {children}
+            <QueryProvider>
+              <SettingsApplier />
+              {children}
+            </QueryProvider>
           </AuthProvider>
         </MotionProvider>
       </body>

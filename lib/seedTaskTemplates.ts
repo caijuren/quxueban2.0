@@ -29,6 +29,8 @@ export async function seedSystemTaskTemplatesForUser(
       taskType: (tpl.taskType ?? 'daily').toUpperCase() as any,
       frequency: (tpl.frequency ?? 'once').toUpperCase() as any,
       customFrequency: tpl.customFrequency ?? undefined,
+      weeklySchedule: (tpl.weeklySchedule ?? 'auto').toUpperCase() as any,
+      customScheduleDays: tpl.customScheduleDays ?? [],
       assessmentCriteria: tpl.assessmentCriteria ?? [],
     }));
 
@@ -45,6 +47,9 @@ export async function seedSystemTaskTemplatesForUser(
 
   // 同步更新已存在系统模板的路线标签（修正路线 ID 与最新定义保持一致）
   await syncSystemTemplateRouteTags(prisma, userId);
+
+  // 同步更新已存在系统模板的时间属性
+  await syncSystemTemplateWeeklySchedule(prisma, userId);
 
   return createdCount;
 }
@@ -72,6 +77,41 @@ async function syncSystemTemplateRouteTags(
       await prisma.taskTemplate.update({
         where: { id: dbTpl.id },
         data: { routeTags: latestTags },
+      });
+    }
+  }
+}
+
+async function syncSystemTemplateWeeklySchedule(
+  prisma: PrismaClient,
+  userId: string
+): Promise<void> {
+  const systemTemplates = await prisma.taskTemplate.findMany({
+    where: { userId, source: 'SYSTEM' },
+  });
+
+  for (const dbTpl of systemTemplates) {
+    const latest = SYSTEM_TASK_TEMPLATES.find((t) => t.title === dbTpl.title);
+    if (!latest) continue;
+
+    const latestSchedule = (latest.weeklySchedule ?? 'auto').toUpperCase();
+    const latestDays = latest.customScheduleDays ?? [];
+    const currentSchedule = dbTpl.weeklySchedule ?? 'AUTO';
+    const currentDays = dbTpl.customScheduleDays ?? [];
+
+    const latestDayStrings = latestDays as string[];
+    const daysChanged =
+      latestDayStrings.length !== currentDays.length ||
+      latestDayStrings.some((d) => !currentDays.includes(d)) ||
+      currentDays.some((d) => !latestDayStrings.includes(d));
+
+    if (latestSchedule !== currentSchedule || daysChanged) {
+      await prisma.taskTemplate.update({
+        where: { id: dbTpl.id },
+        data: {
+          weeklySchedule: latestSchedule as any,
+          customScheduleDays: latestDays,
+        },
       });
     }
   }

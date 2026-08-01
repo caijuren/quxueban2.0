@@ -2,22 +2,35 @@ import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
+import {
+  taskTemplateUpdateSchema,
+  validateBody,
+} from '@/lib/validation';
+import type {
+  TaskTemplate,
+  TaskCapabilityLink,
+  Capability,
+} from '@/lib/generated/prisma';
 
 type Params = { params: { id: string } };
+
+type TaskTemplateWithLinks = TaskTemplate & {
+  capabilityLinks: (TaskCapabilityLink & { capability: Capability | null })[];
+};
 
 async function authenticate() {
   const session = await getServerSession(authOptions);
   return session?.user?.id ?? null;
 }
 
-function normalizeTemplate(tpl: any) {
+function normalizeTemplate(tpl: TaskTemplateWithLinks) {
   return {
     ...tpl,
     category: tpl.category.toLowerCase(),
     source: tpl.source.toLowerCase(),
     taskType: tpl.taskType.toLowerCase(),
     frequency: tpl.frequency.toLowerCase(),
-    capabilityLinks: tpl.capabilityLinks?.map((link: any) => ({
+    capabilityLinks: tpl.capabilityLinks.map((link) => ({
       ...link,
       weight: Number(link.weight),
       expectedProgress: Number(link.expectedProgress),
@@ -31,10 +44,52 @@ function normalizeTemplate(tpl: any) {
   };
 }
 
+function toPrismaUpdateData(body: ReturnType<typeof taskTemplateUpdateSchema.parse>) {
+  const data: Record<string, unknown> = {};
+
+  const stringFields = [
+    'title',
+    'duration',
+    'description',
+    'milestoneTag',
+    'semesterTag',
+    'difficulty',
+  ] as const;
+  stringFields.forEach((field) => {
+    if (body[field] !== undefined) data[field] = body[field];
+  });
+
+  if (body.category !== undefined) {
+    data.category = body.category.toUpperCase();
+  }
+  if (body.materials !== undefined) data.materials = body.materials;
+  if (body.routeTags !== undefined) data.routeTags = body.routeTags;
+  if (body.tags !== undefined) data.tags = body.tags;
+  if (body.taskType !== undefined) data.taskType = body.taskType.toUpperCase();
+  if (body.frequency !== undefined) data.frequency = body.frequency.toUpperCase();
+  if (body.customFrequency !== undefined) data.customFrequency = body.customFrequency;
+  if (body.assessmentCriteria !== undefined) data.assessmentCriteria = body.assessmentCriteria;
+  if (body.weeklySchedule !== undefined) data.weeklySchedule = body.weeklySchedule.toUpperCase();
+  if (body.customScheduleDays !== undefined) data.customScheduleDays = body.customScheduleDays;
+
+  if (body.archive === true) {
+    data.archivedAt = new Date();
+  } else if (body.archive === false) {
+    data.archivedAt = null;
+  }
+
+  return data;
+}
+
 export async function PATCH(req: Request, { params }: Params) {
   const userId = await authenticate();
   if (!userId) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
+  const validation = await validateBody(req, taskTemplateUpdateSchema);
+  if (!validation.success) {
+    return validation.response;
   }
 
   const existing = await prisma.taskTemplate.findFirst({
@@ -44,34 +99,8 @@ export async function PATCH(req: Request, { params }: Params) {
     return NextResponse.json({ error: 'Not found' }, { status: 404 });
   }
 
-  const body = await req.json();
-  const data: Record<string, unknown> = {};
-
-  const stringFields = ['title', 'duration', 'description', 'milestoneTag', 'semesterTag', 'difficulty'] as const;
-  stringFields.forEach((field) => {
-    if (body[field] !== undefined) data[field] = body[field];
-  });
-
-  if (body.category !== undefined) {
-    data.category = (body.category as string).toUpperCase() as any;
-  }
-  if (body.materials !== undefined) data.materials = body.materials;
-  if (body.routeTags !== undefined) data.routeTags = body.routeTags;
-  if (body.tags !== undefined) data.tags = body.tags;
-  if (body.isActive !== undefined) data.isActive = body.isActive;
-  if (body.taskType !== undefined) data.taskType = (body.taskType as string).toUpperCase();
-  if (body.frequency !== undefined) data.frequency = (body.frequency as string).toUpperCase();
-  if (body.customFrequency !== undefined) data.customFrequency = body.customFrequency;
-  if (body.assessmentCriteria !== undefined) data.assessmentCriteria = body.assessmentCriteria;
-
-  // archivedAt 支持两种写法：显式传 null 恢复，或 body.archive=true/false 切换
-  if (body.archivedAt !== undefined) {
-    data.archivedAt = body.archivedAt;
-  } else if (body.archive === true) {
-    data.archivedAt = new Date();
-  } else if (body.archive === false) {
-    data.archivedAt = null;
-  }
+  const body = validation.data;
+  const data = toPrismaUpdateData(body);
 
   const updated = await prisma.$transaction(async (tx) => {
     if (body.capabilityLinks !== undefined) {
@@ -79,13 +108,13 @@ export async function PATCH(req: Request, { params }: Params) {
         where: { taskTemplateId: params.id },
       });
       await tx.taskCapabilityLink.createMany({
-        data: (body.capabilityLinks as any[])
+        data: body.capabilityLinks
           .filter((link) => link.capabilityId)
           .map((link) => ({
             taskTemplateId: params.id,
             capabilityId: link.capabilityId,
-            weight: Number(link.weight ?? 1),
-            expectedProgress: Number(link.expectedProgress ?? 0),
+            weight: link.weight,
+            expectedProgress: link.expectedProgress,
           })),
       });
     }

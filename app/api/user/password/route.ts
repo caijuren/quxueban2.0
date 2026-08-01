@@ -3,6 +3,7 @@ import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 import bcrypt from 'bcryptjs';
+import { passwordChangeSchema, validateBody } from '@/lib/validation';
 
 export async function PATCH(req: Request) {
   const session = await getServerSession(authOptions);
@@ -10,22 +11,12 @@ export async function PATCH(req: Request) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
-  const body = await req.json();
-  const { currentPassword, newPassword } = body;
-
-  if (!currentPassword || !newPassword) {
-    return NextResponse.json(
-      { error: '请填写当前密码和新密码' },
-      { status: 400 }
-    );
+  const validation = await validateBody(req, passwordChangeSchema);
+  if (!validation.success) {
+    return validation.response;
   }
 
-  if (newPassword.length < 6) {
-    return NextResponse.json(
-      { error: '新密码长度不能少于 6 位' },
-      { status: 400 }
-    );
-  }
+  const { currentPassword, newPassword } = validation.data;
 
   const user = await prisma.user.findUnique({
     where: { id: session.user.id },

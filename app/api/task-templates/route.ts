@@ -4,16 +4,29 @@ import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 import { seedSystemTaskTemplatesForUser } from '@/lib/seedTaskTemplates';
 import { seedSystemCapabilities } from '@/lib/seedCapabilities';
-import { TaskCategory } from '@/lib/storage.types';
+import {
+  taskCategorySchema,
+  taskTemplateCreateSchema,
+  validateBody,
+} from '@/lib/validation';
+import type {
+  TaskTemplate,
+  TaskCapabilityLink,
+  Capability,
+} from '@/lib/generated/prisma';
 
-function normalizeTemplate(tpl: any) {
+type TaskTemplateWithLinks = TaskTemplate & {
+  capabilityLinks: (TaskCapabilityLink & { capability: Capability | null })[];
+};
+
+function normalizeTemplate(tpl: TaskTemplateWithLinks) {
   return {
     ...tpl,
     category: tpl.category.toLowerCase(),
     source: tpl.source.toLowerCase(),
     taskType: tpl.taskType.toLowerCase(),
     frequency: tpl.frequency.toLowerCase(),
-    capabilityLinks: tpl.capabilityLinks?.map((link: any) => ({
+    capabilityLinks: tpl.capabilityLinks.map((link) => ({
       ...link,
       weight: Number(link.weight),
       expectedProgress: Number(link.expectedProgress),
@@ -35,7 +48,7 @@ export async function GET(req: Request) {
     }
 
     const { searchParams } = new URL(req.url);
-    const category = searchParams.get('category') as TaskCategory | null;
+    const category = searchParams.get('category');
     const status = searchParams.get('status') as 'active' | 'archived' | 'all' | null;
 
     // Auto-seed system presets for existing users on first load
@@ -55,7 +68,14 @@ export async function GET(req: Request) {
     // status === 'all' 不附加过滤条件
 
     if (category) {
-      where.category = category.toUpperCase();
+      const parsed = taskCategorySchema.safeParse(category);
+      if (!parsed.success) {
+        return NextResponse.json(
+          { error: 'Invalid category' },
+          { status: 400 }
+        );
+      }
+      where.category = parsed.data.toUpperCase();
     }
 
     const templates = await prisma.taskTemplate.findMany({
@@ -71,12 +91,10 @@ export async function GET(req: Request) {
     });
 
     return NextResponse.json(templates.map(normalizeTemplate));
-  } catch (err: any) {
+  } catch (err: unknown) {
     console.error('[task-templates GET]', err);
-    return NextResponse.json(
-      { error: err?.message || '加载任务库失败' },
-      { status: 500 }
-    );
+    const message = err instanceof Error ? err.message : '加载任务库失败';
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }
 
@@ -86,55 +104,39 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
-  const body = await req.json();
-  const {
-    title,
-    category,
-    duration,
-    difficulty,
-    materials,
-    description,
-    routeTags,
-    milestoneTag,
-    semesterTag,
-    tags,
-    taskType,
-    frequency,
-    customFrequency,
-    assessmentCriteria,
-    capabilityLinks,
-  } = body;
-
-  if (!title || !category) {
-    return NextResponse.json({ error: 'Title and category are required' }, { status: 400 });
+  const validation = await validateBody(req, taskTemplateCreateSchema);
+  if (!validation.success) {
+    return validation.response;
   }
+
+  const body = validation.data;
 
   const template = await prisma.taskTemplate.create({
     data: {
       userId: session.user.id,
-      title,
-      category: (category as string).toUpperCase() as any,
-      duration: duration ?? '30分钟',
-      difficulty: difficulty ?? 'medium',
-      materials: materials ?? [],
-      description,
-      routeTags: routeTags ?? [],
-      milestoneTag,
-      semesterTag,
-      tags: tags ?? [],
+      title: body.title,
+      category: body.category.toUpperCase() as TaskTemplateWithLinks['category'],
+      duration: body.duration,
+      difficulty: body.difficulty,
+      materials: body.materials,
+      description: body.description,
+      routeTags: body.routeTags,
+      milestoneTag: body.milestoneTag,
+      semesterTag: body.semesterTag,
+      tags: body.tags,
       source: 'USER',
       isActive: true,
-      taskType: ((taskType as string)?.toUpperCase() ?? 'DAILY') as any,
-      frequency: ((frequency as string)?.toUpperCase() ?? 'ONCE') as any,
-      customFrequency: customFrequency ?? null,
-      assessmentCriteria: assessmentCriteria ?? [],
+      taskType: body.taskType.toUpperCase() as TaskTemplateWithLinks['taskType'],
+      frequency: body.frequency.toUpperCase() as TaskTemplateWithLinks['frequency'],
+      customFrequency: body.customFrequency ?? undefined,
+      assessmentCriteria: body.assessmentCriteria,
       capabilityLinks: {
-        create: (capabilityLinks ?? [])
-          .filter((link: any) => link.capabilityId)
-          .map((link: any) => ({
+        create: body.capabilityLinks
+          .filter((link) => link.capabilityId)
+          .map((link) => ({
             capabilityId: link.capabilityId,
-            weight: Number(link.weight ?? 1),
-            expectedProgress: Number(link.expectedProgress ?? 0),
+            weight: link.weight,
+            expectedProgress: link.expectedProgress,
           })),
       },
     },

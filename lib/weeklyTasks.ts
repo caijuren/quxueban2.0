@@ -9,6 +9,8 @@ import {
   type DayOfWeek,
   type TaskStatus,
   type TaskCategory,
+  type TaskTemplate,
+  type TaskWeeklySchedule,
 } from './storage.types';
 import { computeTaskAlignment } from './taskAlignment';
 import { SYSTEM_TASK_TEMPLATES, TASK_CATEGORY_LABELS } from './taskTemplates';
@@ -173,6 +175,81 @@ export function generateWeeklyPlanFromLibrary(
       materials: tpl.materials,
       status: 'pending',
     });
+  });
+
+  return {
+    weekId,
+    childId: child.id,
+    tasks,
+  };
+}
+
+const scheduleDayMap: Record<Exclude<TaskWeeklySchedule, 'auto' | 'custom'>, DayOfWeek[]> = {
+  daily: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
+  weekdays: ['周一', '周二', '周三', '周四', '周五'],
+  weekends: ['周六', '周日'],
+};
+
+export function getScheduledDays(
+  weeklySchedule: TaskWeeklySchedule,
+  customScheduleDays: DayOfWeek[] = []
+): DayOfWeek[] {
+  if (weeklySchedule === 'auto') return [];
+  if (weeklySchedule === 'custom') {
+    return dayOrder.filter((d) => customScheduleDays.includes(d));
+  }
+  return scheduleDayMap[weeklySchedule];
+}
+
+export function expandTemplateToWeeklyTasks(
+  template: TaskTemplate,
+  options: {
+    childRouteId?: string | null;
+    baseIndex?: number;
+    defaultDay?: DayOfWeek;
+  } = {}
+): WeeklyTaskItem[] {
+  const { childRouteId, baseIndex = 0, defaultDay = '周一' } = options;
+  const alignment = computeTaskAlignment({
+    child: { routeId: childRouteId },
+    template,
+  });
+
+  const scheduledDays = getScheduledDays(
+    template.weeklySchedule,
+    template.customScheduleDays
+  );
+
+  const targetDays = scheduledDays.length > 0 ? scheduledDays : [defaultDay];
+
+  return targetDays.map((day, idx) => ({
+    id: `library-${template.id}-${baseIndex}-${idx}-${Math.random().toString(36).slice(2, 7)}`,
+    category: template.category,
+    source: 'library',
+    templateId: template.id,
+    alignment,
+    day,
+    focus: template.title,
+    duration: template.duration,
+    materials: template.materials,
+    status: 'pending',
+  }));
+}
+
+export function generateWeeklyPlanFromSelectedTemplates(
+  child: Child,
+  weekId: string,
+  templates: TaskTemplate[]
+): WeeklyPlan {
+  const tasks: WeeklyTaskItem[] = [];
+
+  templates.forEach((tpl, index) => {
+    const expanded = expandTemplateToWeeklyTasks(tpl, {
+      childRouteId: child.routeId,
+      baseIndex: index,
+      defaultDay: dayOrder[index % dayOrder.length],
+    });
+    tasks.push(...expanded);
   });
 
   return {

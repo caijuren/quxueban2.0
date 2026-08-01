@@ -3,7 +3,8 @@ import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 import { normalizeWeeklyTask, alignTaskFromTemplate } from '@/lib/taskAlignment';
-import { WeeklyTaskItem } from '@/lib/storage.types';
+import { weeklyPlanCreateSchema, validateBody } from '@/lib/validation';
+import type { WeeklyTaskItem } from '@/lib/storage.types';
 
 export async function GET(req: Request) {
   const session = await getServerSession(authOptions);
@@ -24,7 +25,9 @@ export async function GET(req: Request) {
 
   const normalizedPlans = plans.map((plan) => {
     const rawTasks = (plan.tasks as unknown as Partial<WeeklyTaskItem>[]) || [];
-    const normalizedTasks = rawTasks.map((task) => normalizeWeeklyTask(task as any));
+    const normalizedTasks = rawTasks.map((task) =>
+      normalizeWeeklyTask(task as WeeklyTaskItem)
+    );
     return {
       ...plan,
       tasks: normalizedTasks,
@@ -40,22 +43,22 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
-  const body = await req.json();
-  const { childId, weekId, tasks, publishedAt, reviewedAt, parentComment } = body;
-
-  if (!childId || !weekId || !Array.isArray(tasks)) {
-    return NextResponse.json({ error: 'Invalid data' }, { status: 400 });
+  const validation = await validateBody(req, weeklyPlanCreateSchema);
+  if (!validation.success) {
+    return validation.response;
   }
 
+  const body = validation.data;
+
   const child = await prisma.child.findFirst({
-    where: { id: childId, userId: session.user.id },
+    where: { id: body.childId, userId: session.user.id },
   });
   if (!child) {
     return NextResponse.json({ error: 'Child not found' }, { status: 404 });
   }
 
-  const normalizedTasks = (tasks as Partial<WeeklyTaskItem>[]).map((task) => {
-    const normalized = normalizeWeeklyTask(task as any);
+  const normalizedTasks = body.tasks.map((task) => {
+    const normalized = normalizeWeeklyTask(task as WeeklyTaskItem);
     return alignTaskFromTemplate(normalized, {
       grade: child.grade,
       routeId: child.routeId,
@@ -65,24 +68,24 @@ export async function POST(req: Request) {
   const plan = await prisma.weeklyPlan.upsert({
     where: {
       childId_weekId: {
-        childId,
-        weekId,
+        childId: body.childId,
+        weekId: body.weekId,
       },
     },
     update: {
-      tasks: normalizedTasks as any,
-      publishedAt: publishedAt ? new Date(publishedAt) : null,
-      reviewedAt: reviewedAt ? new Date(reviewedAt) : null,
-      parentComment,
+      tasks: normalizedTasks as unknown as object[],
+      publishedAt: body.publishedAt ? new Date(body.publishedAt) : null,
+      reviewedAt: body.reviewedAt ? new Date(body.reviewedAt) : null,
+      parentComment: body.parentComment,
     },
     create: {
       userId: session.user.id,
-      childId,
-      weekId,
-      tasks: normalizedTasks as any,
-      publishedAt: publishedAt ? new Date(publishedAt) : null,
-      reviewedAt: reviewedAt ? new Date(reviewedAt) : null,
-      parentComment,
+      childId: body.childId,
+      weekId: body.weekId,
+      tasks: normalizedTasks as unknown as object[],
+      publishedAt: body.publishedAt ? new Date(body.publishedAt) : null,
+      reviewedAt: body.reviewedAt ? new Date(body.reviewedAt) : null,
+      parentComment: body.parentComment,
     },
   });
 
