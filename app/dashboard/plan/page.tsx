@@ -167,7 +167,7 @@ function PlanPageContent() {
           <h1 className="text-2xl sm:text-3xl font-bold font-display mb-1">
             {currentChild ? `${currentChild.name}的路线方案` : '路线方案'}
           </h1>
-          <p className="text-sm text-slate-500">
+          <p className="text-sm text-text-muted">
             {currentChild
               ? `当前阶段：${activeStage}${currentChild.routeId ? ` · 已绑定「${getRouteById(currentChild.routeId)?.name ?? currentChild.routeId}」路线` : ` · 根据${currentChild.name}的年级自动匹配`}`
               : '管理小升初、中考、高考各阶段的主路线与备选路线'}
@@ -177,20 +177,20 @@ function PlanPageContent() {
           <div ref={stageDropdownRef} className="relative">
             <button
               onClick={() => setStageDropdownOpen((prev) => !prev)}
-              className="flex items-center gap-2 px-3 py-2 rounded-lg glass border border-white/[0.08] text-sm font-medium text-slate-200 hover:bg-white/[0.04] transition-colors focus-ring"
+              className="flex items-center gap-2 px-3 py-2 rounded-lg glass border border-border-default text-sm font-medium text-text-secondary hover:bg-surface-elevated transition-colors focus-ring"
               aria-haspopup="listbox"
               aria-expanded={stageDropdownOpen}
             >
-              <span className="text-slate-500">阶段</span>
+              <span className="text-text-muted">阶段</span>
               <span className="gradient-text font-semibold">{activeStage}</span>
               <ChevronDown
-                className={`w-3.5 h-3.5 text-slate-400 transition-transform duration-200 ${
+                className={`w-3.5 h-3.5 text-text-tertiary transition-transform duration-200 ${
                   stageDropdownOpen ? 'rotate-180' : ''
                 }`}
               />
             </button>
             {stageDropdownOpen && (
-              <div className="absolute right-0 top-full mt-2 w-40 rounded-xl glass border border-white/[0.08] overflow-hidden z-50 shadow-2xl">
+              <div className="absolute right-0 top-full mt-2 w-40 rounded-xl glass border border-border-default overflow-hidden z-50 shadow-2xl">
                 {stages.map((stage) => {
                   const isActive = activeStage === stage.id;
                   const disabled = stage.status === 'coming';
@@ -205,15 +205,15 @@ function PlanPageContent() {
                       }}
                       className={`w-full text-left px-3 py-2 text-sm transition-colors flex items-center justify-between ${
                         disabled
-                          ? 'text-slate-600 cursor-not-allowed'
+                          ? 'text-text-muted cursor-not-allowed'
                           : isActive
-                          ? 'bg-primary/10 text-primary font-medium'
-                          : 'text-slate-300 hover:bg-white/5'
+                          ? 'bg-primary/[0.08] text-primary font-medium'
+                          : 'text-text-secondary hover:bg-surface-elevated'
                       }`}
                     >
                       {stage.label}
                       {disabled && (
-                        <span className="text-[10px] text-slate-600">即将上线</span>
+                        <span className="text-2xs text-text-muted">即将上线</span>
                       )}
                     </button>
                   );
@@ -223,7 +223,7 @@ function PlanPageContent() {
           </div>
           <button
             onClick={() => setShowNewPlanModal(true)}
-            className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-gradient-to-r from-primary to-secondary text-white text-sm font-semibold hover:shadow-glow-primary transition-all duration-200 focus-ring"
+            className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-primary text-white text-sm font-semibold hover:opacity-90 transition-all duration-200 focus-ring"
           >
             <Plus className="w-4 h-4" />
             新建方案
@@ -281,16 +281,16 @@ function PlanPageContent() {
                         <div className="flex items-center gap-2 flex-wrap">
                           <h2 className="text-base font-bold font-display">{plan.name}</h2>
                           <span
-                            className={`px-2 py-0.5 rounded-md text-[10px] font-medium ${type.bg} ${type.color} border ${type.border}`}
+                            className={`px-2 py-0.5 rounded-md text-2xs font-medium ${type.bg} ${type.color} border ${type.border}`}
                           >
                             {type.label}
                           </span>
-                          <span className={`flex items-center gap-1 text-[10px] font-medium ${status.color}`}>
+                          <span className={`flex items-center gap-1 text-2xs font-medium ${status.color}`}>
                             <status.icon className="w-3 h-3" />
                             {status.label}
                           </span>
                         </div>
-                        <p className="text-xs text-slate-500 mt-1 max-w-xl line-clamp-1">
+                        <p className="text-xs text-text-muted mt-1 max-w-xl line-clamp-1">
                           {plan.description}
                         </p>
                       </div>
@@ -298,14 +298,14 @@ function PlanPageContent() {
 
                     <div className="flex items-center gap-3 shrink-0">
                       <div className="text-right">
-                        <p className="text-[10px] text-slate-500 mb-0.5">匹配度</p>
+                        <p className="text-2xs text-text-muted mb-0.5">匹配度</p>
                         <p
                           className={`text-base font-bold font-display tabular-nums ${
                             plan.probability >= 80
                               ? 'text-success'
                               : plan.probability >= 60
                               ? 'text-warning'
-                              : 'text-slate-300'
+                              : 'text-text-secondary'
                           }`}
                         >
                           {plan.probability}%
@@ -317,13 +317,13 @@ function PlanPageContent() {
                             e.stopPropagation();
                             setShowMatchModal(true);
                           }}
-                          className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center text-slate-400 hover:text-primary hover:bg-primary/10 transition-colors focus-ring"
+                          className="w-8 h-8 rounded-lg bg-surface-elevated flex items-center justify-center text-text-tertiary hover:text-primary hover:bg-primary/10 transition-colors focus-ring"
                           aria-label="编辑匹配度"
                         >
                           <Edit3 className="w-3.5 h-3.5" />
                         </button>
                       )}
-                      <div className="text-slate-500">
+                      <div className="text-text-muted">
                         {isExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
                       </div>
                     </div>
@@ -339,11 +339,11 @@ function PlanPageContent() {
                     transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
                     className="overflow-hidden"
                   >
-                    <div className="px-4 pb-4 pt-0 border-t border-white/[0.06]">
+                    <div className="px-4 pb-4 pt-0 border-t border-border-subtle">
                       <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 pt-4">
                         {/* Requirements */}
                         <div>
-                          <h3 className="text-xs font-semibold text-slate-400 mb-2.5 flex items-center gap-1.5">
+                          <h3 className="text-xs font-semibold text-text-tertiary mb-2.5 flex items-center gap-1.5">
                             <AlertTriangle className="w-3.5 h-3.5 text-warning" />
                             关键要求
                           </h3>
@@ -351,7 +351,7 @@ function PlanPageContent() {
                             {plan.requirements.map((req) => (
                               <span
                                 key={req}
-                                className="px-2 py-1 rounded-md bg-white/[0.04] text-xs text-slate-300 border border-white/[0.06]"
+                                className="px-2 py-1 rounded-md bg-surface-elevated text-xs text-text-secondary border border-border-subtle"
                               >
                                 {req}
                               </span>
@@ -361,7 +361,7 @@ function PlanPageContent() {
 
                         {/* Milestones */}
                         <div>
-                          <h3 className="text-xs font-semibold text-slate-400 mb-2.5 flex items-center gap-1.5">
+                          <h3 className="text-xs font-semibold text-text-tertiary mb-2.5 flex items-center gap-1.5">
                             <Route className="w-3.5 h-3.5 text-secondary" />
                             关键里程碑
                           </h3>
@@ -381,7 +381,7 @@ function PlanPageContent() {
 
                       {/* Targets */}
                       <div className="mt-5">
-                        <h3 className="text-xs font-semibold text-slate-400 mb-2.5 flex items-center gap-1.5">
+                        <h3 className="text-xs font-semibold text-text-tertiary mb-2.5 flex items-center gap-1.5">
                           {activeStage === '中考' ? (
                             <>
                               <GraduationCap className="w-3.5 h-3.5 text-primary" />
@@ -409,7 +409,7 @@ function PlanPageContent() {
                             <button
                               key={school.slug}
                               onClick={() => router.push(`/dashboard/schools/${school.slug}`)}
-                              className="text-left rounded-xl bg-white/[0.03] border border-white/[0.06] p-3 hover:border-white/[0.12] hover:bg-white/[0.05] transition-all focus-ring group"
+                              className="text-left rounded-xl bg-surface-elevated border border-border-subtle p-3 hover:border-border-default hover:bg-surface-elevated transition-all focus-ring group"
                             >
                               <div className="flex items-center gap-2.5">
                                 <div
@@ -418,10 +418,10 @@ function PlanPageContent() {
                                   <school.icon className="w-4 h-4 text-white" />
                                 </div>
                                 <div className="min-w-0">
-                                  <h4 className="text-sm font-semibold text-slate-200 truncate group-hover:text-white transition-colors">
+                                  <h4 className="text-sm font-semibold text-text-secondary truncate group-hover:text-white transition-colors">
                                     {school.name}
                                   </h4>
-                                  <p className="text-[10px] text-slate-500">{school.tag}</p>
+                                  <p className="text-2xs text-text-muted">{school.tag}</p>
                                 </div>
                               </div>
                             </button>
@@ -430,8 +430,8 @@ function PlanPageContent() {
                       </div>
 
                       {/* Footer */}
-                      <div className="mt-4 pt-3 border-t border-white/[0.06] flex items-center justify-between">
-                        <div className="flex items-center gap-1.5 text-xs text-slate-500">
+                      <div className="mt-4 pt-3 border-t border-border-subtle flex items-center justify-between">
+                        <div className="flex items-center gap-1.5 text-xs text-text-muted">
                           <Clock className="w-3.5 h-3.5" />
                           最近更新：2 天前
                         </div>
@@ -497,7 +497,7 @@ function PlanPageContent() {
 
 export default function PlanPage() {
   return (
-    <Suspense fallback={<div className="p-8 text-center text-slate-500">加载中...</div>}>
+    <Suspense fallback={<div className="p-8 text-center text-text-muted">加载中...</div>}>
       <PlanPageContent />
     </Suspense>
   );

@@ -13,57 +13,57 @@ export default function ChinesePhaseCard({ grade }: { grade: number }) {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.2 }}
-      className="rounded-2xl glass p-6 border border-white/5"
+      className="rounded-2xl glass p-6 border border-border-subtle"
     >
       <div className="flex items-center gap-3 mb-6">
-        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center">
+        <div className="w-10 h-10 rounded-xl bg-surface-elevated border border-border-default flex items-center justify-center">
           <Target className="w-5 h-5 text-white" />
         </div>
         <div>
           <h2 className="text-xl font-bold font-display">当前阶段：{plan.grade}</h2>
-          <p className="text-sm text-slate-400">{plan.period}</p>
+          <p className="text-sm text-text-tertiary">{plan.period}</p>
         </div>
       </div>
 
       {/* Status overview */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-        <div className="rounded-xl bg-white/5 p-4 border border-white/5">
-          <p className="text-xs text-slate-500 mb-1">当前主题</p>
-          <p className="text-lg font-bold text-slate-200">{status.currentTopic}</p>
+        <div className="rounded-xl bg-surface-elevated p-4 border border-border-subtle">
+          <p className="text-xs text-text-muted mb-1">当前主题</p>
+          <p className="text-lg font-bold text-text-secondary">{status.currentTopic}</p>
         </div>
 
-        <div className="rounded-xl bg-white/5 p-4 border border-white/5">
-          <p className="text-xs text-slate-500 mb-1">每日语文</p>
-          <p className="text-2xl font-bold text-slate-200">{status.dailyChineseTime}</p>
-          <p className="text-xs text-slate-500 mt-1">含读写背</p>
+        <div className="rounded-xl bg-surface-elevated p-4 border border-border-subtle">
+          <p className="text-xs text-text-muted mb-1">每日语文</p>
+          <p className="text-2xl font-bold text-text-secondary">{status.dailyChineseTime}</p>
+          <p className="text-xs text-text-muted mt-1">含读写背</p>
         </div>
 
-        <div className="rounded-xl bg-white/5 p-4 border border-white/5">
-          <p className="text-xs text-slate-500 mb-1">弱项</p>
+        <div className="rounded-xl bg-surface-elevated p-4 border border-border-subtle">
+          <p className="text-xs text-text-muted mb-1">弱项</p>
           <p className="text-lg font-bold text-warning">{status.weakSkills.slice(0, 2).join('、')}</p>
-          <p className="text-xs text-slate-500 mt-1">重点补强</p>
+          <p className="text-xs text-text-muted mt-1">重点补强</p>
         </div>
 
-        <div className="rounded-xl bg-white/5 p-4 border border-white/5">
-          <p className="text-xs text-slate-500 mb-1">下一节点</p>
-          <p className="text-lg font-bold text-slate-200">{status.nextEvent}</p>
-          <p className="text-xs text-slate-500 mt-1">{status.nextEventDate}</p>
+        <div className="rounded-xl bg-surface-elevated p-4 border border-border-subtle">
+          <p className="text-xs text-text-muted mb-1">下一节点</p>
+          <p className="text-lg font-bold text-text-secondary">{status.nextEvent}</p>
+          <p className="text-xs text-text-muted mt-1">{status.nextEventDate}</p>
         </div>
       </div>
 
       {/* Targets */}
-      <div className="rounded-xl bg-white/[0.03] border border-white/5 p-4 mb-6">
-        <h3 className="font-bold text-slate-200 mb-4 flex items-center gap-2">
+      <div className="rounded-xl bg-surface-elevated border border-border-subtle p-4 mb-6">
+        <h3 className="font-bold text-text-secondary mb-4 flex items-center gap-2">
           <TrendingUp className="w-4 h-4 text-secondary" />
           阶段目标
         </h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {plan.targets.map((target) => (
-            <div key={target.label} className="flex items-center justify-between py-2 border-b border-white/5 last:border-0">
-              <span className="text-sm text-slate-400">{target.label}</span>
+            <div key={target.label} className="flex items-center justify-between py-2 border-b border-border-subtle last:border-0">
+              <span className="text-sm text-text-tertiary">{target.label}</span>
               <div className="text-right">
-                <span className="text-xs text-slate-500 line-through">{target.current}</span>
-                <span className="text-sm text-slate-200 ml-2">{target.target}</span>
+                <span className="text-xs text-text-muted line-through">{target.current}</span>
+                <span className="text-sm text-text-secondary ml-2">{target.target}</span>
               </div>
             </div>
           ))}
@@ -71,8 +71,8 @@ export default function ChinesePhaseCard({ grade }: { grade: number }) {
       </div>
 
       {/* Weekly template */}
-      <div className="rounded-xl bg-white/[0.03] border border-white/5 p-4">
-        <h3 className="font-bold text-slate-200 mb-4 flex items-center gap-2">
+      <div className="rounded-xl bg-surface-elevated border border-border-subtle p-4">
+        <h3 className="font-bold text-text-secondary mb-4 flex items-center gap-2">
           <Clock className="w-4 h-4 text-accent" />
           每周计划模板
         </h3>
@@ -80,14 +80,14 @@ export default function ChinesePhaseCard({ grade }: { grade: number }) {
           {plan.weeklyTemplate.map((task) => (
             <div
               key={task.day}
-              className="rounded-lg bg-white/5 border border-white/5 p-3 hover:bg-white/[0.07] transition-colors"
+              className="rounded-lg bg-surface-elevated border border-border-subtle p-3 hover:bg-surface-highlight transition-colors"
             >
               <p className="text-xs text-primary font-medium mb-1">{task.day}</p>
-              <p className="text-sm font-medium text-slate-200 mb-2">{task.focus}</p>
-              <p className="text-xs text-slate-500 mb-2">{task.duration}</p>
+              <p className="text-sm font-medium text-text-secondary mb-2">{task.focus}</p>
+              <p className="text-xs text-text-muted mb-2">{task.duration}</p>
               <div className="space-y-1">
                 {task.materials.map((material) => (
-                  <p key={material} className="text-[10px] text-slate-400">
+                  <p key={material} className="text-2xs text-text-tertiary">
                     {material}
                   </p>
                 ))}
@@ -102,8 +102,8 @@ export default function ChinesePhaseCard({ grade }: { grade: number }) {
         <div className="flex items-start gap-3 rounded-xl bg-primary/5 border border-primary/20 p-4">
           <CalendarDays className="w-5 h-5 text-primary shrink-0 mt-0.5" />
           <div>
-            <p className="font-medium text-slate-200 mb-1">下一节点：{status.nextEvent}</p>
-            <p className="text-sm text-slate-400">目标时间：{status.nextEventDate}</p>
+            <p className="font-medium text-text-secondary mb-1">下一节点：{status.nextEvent}</p>
+            <p className="text-sm text-text-tertiary">目标时间：{status.nextEventDate}</p>
           </div>
         </div>
 
@@ -111,8 +111,8 @@ export default function ChinesePhaseCard({ grade }: { grade: number }) {
           <div className="flex items-start gap-3 rounded-xl bg-warning/10 border border-warning/20 p-4">
             <AlertCircle className="w-5 h-5 text-warning shrink-0 mt-0.5" />
             <div>
-              <p className="font-medium text-slate-200 mb-1">{status.weakSkills.slice(0, 2).join('、')}是当前弱项</p>
-              <p className="text-sm text-slate-400">
+              <p className="font-medium text-text-secondary mb-1">{status.weakSkills.slice(0, 2).join('、')}是当前弱项</p>
+              <p className="text-sm text-text-tertiary">
                 通过专项练习和错题复盘逐步补强，语文素养需要长期积累。
               </p>
             </div>

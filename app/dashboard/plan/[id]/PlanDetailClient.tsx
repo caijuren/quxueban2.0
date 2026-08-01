@@ -311,10 +311,10 @@ export default function PlanDetailClient({ id }: { id: string }) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] text-center">
         <h1 className="text-2xl font-bold font-display mb-2">方案未找到</h1>
-        <p className="text-slate-400 mb-6">该路线方案不存在或已被删除</p>
+        <p className="text-text-tertiary mb-6">该路线方案不存在或已被删除</p>
         <Link
           href="/dashboard/plan"
-          className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-primary to-secondary text-white font-semibold hover:shadow-[0_0_30px_rgba(244,63,94,0.5)] transition-all"
+          className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary text-white font-semibold  transition-all"
         >
           返回路线方案
         </Link>
@@ -339,7 +339,7 @@ export default function PlanDetailClient({ id }: { id: string }) {
         <div>
           <Link
             href="/dashboard/plan"
-            className="inline-flex items-center gap-1 text-sm text-slate-400 hover:text-primary transition-colors mb-2"
+            className="inline-flex items-center gap-1 text-sm text-text-tertiary hover:text-primary transition-colors mb-2"
           >
             <ChevronLeft className="w-4 h-4" />
             返回路线方案
@@ -362,7 +362,7 @@ export default function PlanDetailClient({ id }: { id: string }) {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.1 }}
-        className={`rounded-2xl glass p-6 border ${plan.type === 'primary' ? 'border-primary/30' : 'border-white/5'} relative overflow-hidden`}
+        className={`rounded-2xl glass p-6 border ${plan.type === 'primary' ? 'border-primary/30' : 'border-border-subtle'} relative overflow-hidden`}
       >
         {plan.type === 'primary' && (
           <div className="absolute top-0 right-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
@@ -370,12 +370,12 @@ export default function PlanDetailClient({ id }: { id: string }) {
         <div className="relative z-10 grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2">
             <h2 className="text-xl font-bold font-display mb-3">路线概述</h2>
-            <p className="text-slate-300 leading-relaxed mb-4">{plan.description}</p>
+            <p className="text-text-secondary leading-relaxed mb-4">{plan.description}</p>
             <div className="flex flex-wrap gap-2">
               {plan.requirements.map((req) => (
                 <span
                   key={req}
-                  className="px-3 py-1.5 rounded-lg bg-white/5 text-sm text-slate-300 border border-white/10"
+                  className="px-3 py-1.5 rounded-lg bg-surface-elevated text-sm text-text-secondary border border-border-default"
                 >
                   {req}
                 </span>
@@ -383,15 +383,15 @@ export default function PlanDetailClient({ id }: { id: string }) {
             </div>
           </div>
           <div className="flex flex-col justify-center items-center lg:items-end">
-            <p className="text-sm text-slate-400 mb-1">路线匹配度</p>
+            <p className="text-sm text-text-tertiary mb-1">路线匹配度</p>
             <p
               className={`text-5xl font-bold font-display ${
-                plan.probability >= 80 ? 'text-success' : plan.probability >= 60 ? 'text-warning' : 'text-slate-300'
+                plan.probability >= 80 ? 'text-success' : plan.probability >= 60 ? 'text-warning' : 'text-text-secondary'
               }`}
             >
               {plan.probability}%
             </p>
-            <p className="text-xs text-slate-500 mt-2">
+            <p className="text-xs text-text-muted mt-2">
               {plan.probability >= 80 ? '匹配度较高' : plan.probability >= 60 ? '有提升空间' : '需要重点突破'}
             </p>
           </div>
@@ -413,7 +413,7 @@ export default function PlanDetailClient({ id }: { id: string }) {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.4 }}
-        className="rounded-2xl glass p-6 border border-white/5"
+        className="rounded-2xl glass p-6 border border-border-subtle"
       >
         <h2 className="text-xl font-bold font-display mb-6">
           {['sizhong', 'shizhong', 'quzhong'].includes(plan.id)
@@ -432,7 +432,7 @@ export default function PlanDetailClient({ id }: { id: string }) {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.5 + index * 0.1 }}
                 whileHover={{ y: -4 }}
-                className={`group rounded-xl glass p-5 border border-white/5 cursor-pointer transition-all duration-300 ${school.shadow}`}
+                className={`group rounded-xl glass p-5 border border-border-subtle cursor-pointer transition-all duration-300 ${school.shadow}`}
               >
                 <div className="flex items-center gap-3 mb-3">
                   <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${school.color} flex items-center justify-center shrink-0`}>
@@ -442,7 +442,7 @@ export default function PlanDetailClient({ id }: { id: string }) {
                     <h4 className="font-bold font-display group-hover:text-white transition-colors">
                       {school.name}
                     </h4>
-                    <p className="text-xs text-slate-400">{school.tag}</p>
+                    <p className="text-xs text-text-tertiary">{school.tag}</p>
                   </div>
                 </div>
                 <p className="text-sm text-primary group-hover:text-primary-glow transition-colors flex items-center gap-1">
@@ -459,7 +459,7 @@ export default function PlanDetailClient({ id }: { id: string }) {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.5 }}
-        className="rounded-2xl glass p-6 border border-white/5"
+        className="rounded-2xl glass p-6 border border-border-subtle"
       >
         <h2 className="text-xl font-bold font-display mb-6 flex items-center gap-2">
           <BookOpen className="w-5 h-5 text-accent" />
@@ -472,13 +472,13 @@ export default function PlanDetailClient({ id }: { id: string }) {
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.6 + index * 0.1 }}
-              className="rounded-xl bg-white/5 p-4 border border-white/5 hover:border-primary/30 hover:bg-white/[0.07] transition-all cursor-pointer group"
+              className="rounded-xl bg-surface-elevated p-4 border border-border-subtle hover:border-primary/30 hover:bg-surface-highlight transition-all cursor-pointer group"
             >
               <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center mb-3 group-hover:bg-primary/20 transition-colors">
                 <resource.icon className="w-5 h-5 text-primary" />
               </div>
-              <h4 className="font-medium text-slate-200 mb-1">{resource.title}</h4>
-              <p className="text-xs text-slate-500">{resource.desc}</p>
+              <h4 className="font-medium text-text-secondary mb-1">{resource.title}</h4>
+              <p className="text-xs text-text-muted">{resource.desc}</p>
             </motion.div>
           ))}
         </div>
@@ -489,13 +489,13 @@ export default function PlanDetailClient({ id }: { id: string }) {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.6 }}
-        className="flex items-center justify-between rounded-2xl glass p-6 border border-white/5"
+        className="flex items-center justify-between rounded-2xl glass p-6 border border-border-subtle"
       >
-        <div className="flex items-center gap-2 text-sm text-slate-500">
+        <div className="flex items-center gap-2 text-sm text-text-muted">
           <Clock className="w-4 h-4" />
           最近更新：2 天前
         </div>
-        <button className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-primary to-secondary text-white font-semibold hover:shadow-[0_0_30px_rgba(244,63,94,0.5)] transition-all">
+        <button className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary text-white font-semibold  transition-all">
           制定提升计划
           <ArrowRight className="w-4 h-4" />
         </button>

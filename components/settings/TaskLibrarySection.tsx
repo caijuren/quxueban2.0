@@ -306,22 +306,22 @@ export default function TaskLibrarySection() {
     <div className="space-y-4">
       <div className="flex flex-col sm:flex-row gap-3">
           <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-500" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-text-muted" />
             <input
               type="text"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="搜索任务名称或描述"
-              className="w-full pl-9 pr-3 py-2 text-xs bg-white/5 border border-white/[0.08] rounded-lg text-slate-200 placeholder:text-slate-600 focus:outline-none focus:border-primary/50"
+              className="w-full pl-9 pr-3 py-2 text-xs bg-surface-elevated border border-border-default rounded-lg text-text-secondary placeholder:text-text-muted focus:outline-none focus:border-primary/50"
             />
           </div>
 
           <div className="flex items-center gap-2 flex-wrap">
-            <Filter className="w-3.5 h-3.5 text-slate-500" />
+            <Filter className="w-3.5 h-3.5 text-text-muted" />
             <select
               value={filterCategory}
               onChange={(e) => setFilterCategory(e.target.value as TaskCategory | 'all')}
-              className="text-xs bg-white/5 border border-white/[0.08] rounded-lg px-2 py-2 text-slate-200 focus:outline-none focus:border-primary/50"
+              className="text-xs bg-surface-elevated border border-border-default rounded-lg px-2 py-2 text-text-secondary focus:outline-none focus:border-primary/50"
             >
               <option value="all">全部分类</option>
               {allCategories.map((c) => (
@@ -333,7 +333,7 @@ export default function TaskLibrarySection() {
             <select
               value={filterSource}
               onChange={(e) => setFilterSource(e.target.value as typeof filterSource)}
-              className="text-xs bg-white/5 border border-white/[0.08] rounded-lg px-2 py-2 text-slate-200 focus:outline-none focus:border-primary/50"
+              className="text-xs bg-surface-elevated border border-border-default rounded-lg px-2 py-2 text-text-secondary focus:outline-none focus:border-primary/50"
             >
               <option value="all">全部来源</option>
               <option value="system">系统预设</option>
@@ -342,7 +342,7 @@ export default function TaskLibrarySection() {
             <select
               value={filterStatus}
               onChange={(e) => setFilterStatus(e.target.value as typeof filterStatus)}
-              className="text-xs bg-white/5 border border-white/[0.08] rounded-lg px-2 py-2 text-slate-200 focus:outline-none focus:border-primary/50"
+              className="text-xs bg-surface-elevated border border-border-default rounded-lg px-2 py-2 text-text-secondary focus:outline-none focus:border-primary/50"
             >
               <option value="active">使用中</option>
               <option value="archived">已归档</option>
@@ -351,7 +351,7 @@ export default function TaskLibrarySection() {
 
             <button
               onClick={handleAdd}
-              className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-gradient-to-r from-primary to-primary-glow text-white text-xs font-semibold hover:shadow-glow-primary transition-all"
+              className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-primary text-white text-xs font-semibold hover:opacity-90 transition-all"
             >
               <Plus className="w-3.5 h-3.5" />
               添加任务
@@ -360,14 +360,14 @@ export default function TaskLibrarySection() {
         </div>
 
         {loading ? (
-          <div className="py-12 text-center text-slate-500 text-sm">
+          <div className="py-12 text-center text-text-muted text-sm">
             <Loader2 className="w-5 h-5 animate-spin mx-auto mb-2" />
             加载任务库...
           </div>
         ) : error ? (
           <div className="py-8 text-center text-error text-sm">{error}</div>
         ) : filteredTemplates.length === 0 ? (
-          <div className="py-8 text-center text-slate-500 text-sm">
+          <div className="py-8 text-center text-text-muted text-sm">
             {currentStage
               ? `未找到匹配「${currentStage}」学段的模板，可切换学段或添加新任务`
               : '未找到匹配的任务模板'}
@@ -388,7 +388,7 @@ export default function TaskLibrarySection() {
                   className={`group rounded-xl border transition-all p-3 flex flex-col h-full ${
                     isArchived
                       ? 'bg-white/[0.015] border-white/[0.04] opacity-70'
-                      : 'bg-white/[0.03] border-white/[0.06] hover:border-white/[0.12]'
+                      : 'bg-surface-elevated border-border-subtle hover:border-border-default'
                   }`}
                 >
                   <div className="flex items-start gap-2.5">
@@ -401,39 +401,39 @@ export default function TaskLibrarySection() {
                     </div>
                     <div className="flex-1 min-w-0">
                       <h3
-                        className="text-sm font-bold text-slate-200 truncate"
+                        className="text-sm font-bold text-text-secondary truncate"
                         title={tpl.title}
                       >
                         {tpl.title}
                       </h3>
                       <div className="flex flex-wrap items-center gap-1.5 mt-1.5">
                         {tpl.source === 'system' && (
-                          <span className="text-[10px] px-1.5 py-0.5 rounded bg-secondary/10 text-secondary border border-secondary/20 shrink-0">
+                          <span className="text-2xs px-1.5 py-0.5 rounded bg-secondary/10 text-secondary border border-secondary/20 shrink-0">
                             系统预设
                           </span>
                         )}
                         {tpl.source === 'user' && (
-                          <span className="text-[10px] px-1.5 py-0.5 rounded bg-primary/10 text-primary border border-primary/20 shrink-0">
+                          <span className="text-2xs px-1.5 py-0.5 rounded bg-primary/[0.08] text-primary border border-primary/20 shrink-0">
                             自定义
                           </span>
                         )}
                         {isArchived && (
-                          <span className="text-[10px] px-1.5 py-0.5 rounded bg-slate-500/10 text-slate-400 border border-slate-500/20 shrink-0">
+                          <span className="text-2xs px-1.5 py-0.5 rounded bg-slate-500/10 text-text-tertiary border border-slate-500/20 shrink-0">
                             已归档
                           </span>
                         )}
                         {tpl.taskType && (
-                          <span className="text-[10px] px-1.5 py-0.5 rounded bg-accent/10 text-accent border border-accent/20 shrink-0">
+                          <span className="text-2xs px-1.5 py-0.5 rounded bg-accent/10 text-accent border border-accent/20 shrink-0">
                             {taskTypeOptions.find((t) => t.value === tpl.taskType)?.label || tpl.taskType}
                           </span>
                         )}
                         {tpl.capabilityLinks.length > 0 && (
-                          <span className="text-[10px] px-1.5 py-0.5 rounded bg-secondary/10 text-secondary border border-secondary/20 shrink-0">
+                          <span className="text-2xs px-1.5 py-0.5 rounded bg-secondary/10 text-secondary border border-secondary/20 shrink-0">
                             {tpl.capabilityLinks.length} 项能力
                           </span>
                         )}
                         {tpl.weeklySchedule && tpl.weeklySchedule !== 'auto' && (
-                          <span className="text-[10px] px-1.5 py-0.5 rounded bg-info/10 text-info border border-info/20 shrink-0">
+                          <span className="text-2xs px-1.5 py-0.5 rounded bg-info/10 text-info border border-info/20 shrink-0">
                             {weeklyScheduleOptions.find((o) => o.value === tpl.weeklySchedule)?.label || tpl.weeklySchedule}
                           </span>
                         )}
@@ -441,15 +441,15 @@ export default function TaskLibrarySection() {
                     </div>
                   </div>
 
-                  <p className="text-[11px] text-slate-500 mt-2 line-clamp-1">
+                  <p className="text-xs text-text-muted mt-2 line-clamp-1">
                     {tpl.description || '暂无描述'}
                   </p>
 
-                  <div className="flex flex-wrap items-center gap-2 mt-2 text-[10px] text-slate-400">
-                    <span className="px-1.5 py-0.5 rounded bg-white/5">
+                  <div className="flex flex-wrap items-center gap-2 mt-2 text-2xs text-text-tertiary">
+                    <span className="px-1.5 py-0.5 rounded bg-surface-elevated">
                       {TASK_CATEGORY_LABELS[tpl.category]}
                     </span>
-                    <span className="px-1.5 py-0.5 rounded bg-white/5">
+                    <span className="px-1.5 py-0.5 rounded bg-surface-elevated">
                       {tpl.duration}
                     </span>
                     {difficultyInfo && (
@@ -468,12 +468,12 @@ export default function TaskLibrarySection() {
                       </span>
                     )}
                     {stage !== 'general' && (
-                      <span className="px-1.5 py-0.5 rounded bg-primary/10 text-primary border border-primary/20">
+                      <span className="px-1.5 py-0.5 rounded bg-primary/[0.08] text-primary border border-primary/20">
                         {stage}
                       </span>
                     )}
                     {stage === 'general' && (
-                      <span className="px-1.5 py-0.5 rounded bg-white/5 text-slate-400 border border-white/[0.06]">
+                      <span className="px-1.5 py-0.5 rounded bg-surface-elevated text-text-tertiary border border-border-subtle">
                         全学段
                       </span>
                     )}
@@ -486,7 +486,7 @@ export default function TaskLibrarySection() {
                         return (
                           <span
                             key={tag}
-                            className="text-[9px] px-1.5 py-0.5 rounded bg-white/5 text-slate-500"
+                            className="text-2xs px-1.5 py-0.5 rounded bg-surface-elevated text-text-muted"
                           >
                             {routeLabel}
                           </span>
@@ -495,10 +495,10 @@ export default function TaskLibrarySection() {
                     </div>
                   )}
 
-                  <div className="mt-auto pt-3 border-t border-white/[0.06] flex items-center justify-end gap-2">
+                  <div className="mt-auto pt-3 border-t border-border-subtle flex items-center justify-end gap-2">
                     <button
                       onClick={() => handleEdit(tpl)}
-                      className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-white/5 text-slate-300 text-xs hover:bg-white/10 transition-colors"
+                      className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-surface-elevated text-text-secondary text-xs hover:bg-surface-highlight transition-colors"
                     >
                       <Pencil className="w-3 h-3" />
                       编辑
@@ -509,7 +509,7 @@ export default function TaskLibrarySection() {
                       className={`flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs transition-colors disabled:opacity-50 ${
                         isArchived
                           ? 'bg-success/10 text-success hover:bg-success/15'
-                          : 'bg-slate-500/10 text-slate-400 hover:bg-slate-500/15'
+                          : 'bg-slate-500/10 text-text-tertiary hover:bg-slate-500/15'
                       }`}
                     >
                       {archivingId === tpl.id ? (
@@ -710,25 +710,25 @@ function TaskTemplateModal({ initial, capabilities, onClose, onSave, saving }: T
         role="dialog"
         aria-modal="true"
         aria-labelledby="task-template-title"
-        className="w-full max-w-2xl max-h-[85vh] flex flex-col rounded-3xl glass border border-white/10 overflow-hidden"
+        className="w-full max-w-2xl max-h-[85vh] flex flex-col rounded-3xl glass border border-border-default overflow-hidden"
       >
         <div className="flex items-center justify-between p-6 sm:p-8 pb-0">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-secondary to-secondary-glow flex items-center justify-center">
+            <div className="w-10 h-10 rounded-xl bg-secondary flex items-center justify-center">
               {initial ? <Pencil className="w-5 h-5 text-white" /> : <Plus className="w-5 h-5 text-white" />}
             </div>
             <div>
               <h2 id="task-template-title" className="text-xl font-bold font-display">
                 {initial ? '编辑任务模板' : '新增任务模板'}
               </h2>
-              <p className="text-xs text-slate-400">
+              <p className="text-xs text-text-tertiary">
                 {initial ? '修改后所有未来周计划引用都会更新' : '创建后可在周计划中一键选用'}
               </p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="p-2 rounded-lg hover:bg-white/5 text-slate-400 focus-ring"
+            className="p-2 rounded-lg hover:bg-surface-elevated text-text-tertiary focus-ring"
             aria-label="关闭"
           >
             <X className="w-5 h-5" />
@@ -741,7 +741,7 @@ function TaskTemplateModal({ initial, capabilities, onClose, onSave, saving }: T
           className="flex-1 overflow-y-auto p-6 sm:p-8 pt-6 space-y-4"
         >
           <div>
-            <label className="block text-xs text-slate-400 mb-1.5">
+            <label className="block text-xs text-text-tertiary mb-1.5">
               任务名称 <span className="text-primary">*</span>
             </label>
             <input
@@ -749,18 +749,18 @@ function TaskTemplateModal({ initial, capabilities, onClose, onSave, saving }: T
               value={form.title}
               onChange={(e) => updateField('title', e.target.value)}
               placeholder="例如：完成学校作业"
-              className="w-full text-sm bg-white/5 border border-white/[0.08] rounded-lg px-3 py-2 text-slate-200 placeholder:text-slate-600 focus:outline-none focus:border-primary/50"
+              className="w-full text-sm bg-surface-elevated border border-border-default rounded-lg px-3 py-2 text-text-secondary placeholder:text-text-muted focus:outline-none focus:border-primary/50"
               required
             />
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div>
-              <label className="block text-xs text-slate-400 mb-1.5">分类</label>
+              <label className="block text-xs text-text-tertiary mb-1.5">分类</label>
               <select
                 value={form.category}
                 onChange={(e) => updateField('category', e.target.value as TaskCategory)}
-                className="w-full text-sm bg-white/5 border border-white/[0.08] rounded-lg px-3 py-2 text-slate-200 focus:outline-none focus:border-primary/50"
+                className="w-full text-sm bg-surface-elevated border border-border-default rounded-lg px-3 py-2 text-text-secondary focus:outline-none focus:border-primary/50"
               >
                 {allCategories.map((c) => (
                   <option key={c} value={c}>
@@ -770,21 +770,21 @@ function TaskTemplateModal({ initial, capabilities, onClose, onSave, saving }: T
               </select>
             </div>
             <div>
-              <label className="block text-xs text-slate-400 mb-1.5">参考时长</label>
+              <label className="block text-xs text-text-tertiary mb-1.5">参考时长</label>
               <input
                 type="text"
                 value={form.duration}
                 onChange={(e) => updateField('duration', e.target.value)}
                 placeholder="30分钟"
-                className="w-full text-sm bg-white/5 border border-white/[0.08] rounded-lg px-3 py-2 text-slate-200 placeholder:text-slate-600 focus:outline-none focus:border-primary/50"
+                className="w-full text-sm bg-surface-elevated border border-border-default rounded-lg px-3 py-2 text-text-secondary placeholder:text-text-muted focus:outline-none focus:border-primary/50"
               />
             </div>
             <div>
-              <label className="block text-xs text-slate-400 mb-1.5">难度</label>
+              <label className="block text-xs text-text-tertiary mb-1.5">难度</label>
               <select
                 value={form.difficulty ?? 'medium'}
                 onChange={(e) => updateField('difficulty', e.target.value as 'easy' | 'medium' | 'hard')}
-                className="w-full text-sm bg-white/5 border border-white/[0.08] rounded-lg px-3 py-2 text-slate-200 focus:outline-none focus:border-primary/50"
+                className="w-full text-sm bg-surface-elevated border border-border-default rounded-lg px-3 py-2 text-text-secondary focus:outline-none focus:border-primary/50"
               >
                 {difficultyOptions.map((d) => (
                   <option key={d.value} value={d.value}>
@@ -796,18 +796,18 @@ function TaskTemplateModal({ initial, capabilities, onClose, onSave, saving }: T
           </div>
 
           <div>
-            <label className="block text-xs text-slate-400 mb-1.5">任务描述</label>
+            <label className="block text-xs text-text-tertiary mb-1.5">任务描述</label>
             <textarea
               value={form.description ?? ''}
               onChange={(e) => updateField('description', e.target.value)}
               placeholder="简要说明任务内容和目标"
               rows={3}
-              className="w-full text-sm bg-white/5 border border-white/[0.08] rounded-lg px-3 py-2 text-slate-200 placeholder:text-slate-600 focus:outline-none focus:border-primary/50 resize-none"
+              className="w-full text-sm bg-surface-elevated border border-border-default rounded-lg px-3 py-2 text-text-secondary placeholder:text-text-muted focus:outline-none focus:border-primary/50 resize-none"
             />
           </div>
 
           <div>
-            <label className="block text-xs text-slate-400 mb-1.5">所需材料（用逗号分隔）</label>
+            <label className="block text-xs text-text-tertiary mb-1.5">所需材料（用逗号分隔）</label>
             <input
               type="text"
               value={form.materials.join('，')}
@@ -818,17 +818,17 @@ function TaskTemplateModal({ initial, capabilities, onClose, onSave, saving }: T
                 )
               }
               placeholder="例如：课本，作业本，铅笔"
-              className="w-full text-sm bg-white/5 border border-white/[0.08] rounded-lg px-3 py-2 text-slate-200 placeholder:text-slate-600 focus:outline-none focus:border-primary/50"
+              className="w-full text-sm bg-surface-elevated border border-border-default rounded-lg px-3 py-2 text-text-secondary placeholder:text-text-muted focus:outline-none focus:border-primary/50"
             />
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs text-slate-400 mb-1.5">关联里程碑标签</label>
+              <label className="block text-xs text-text-tertiary mb-1.5">关联里程碑标签</label>
               <select
                 value={milestoneSelectValue}
                 onChange={(e) => handleMilestoneChange(e.target.value)}
-                className="w-full text-sm bg-white/5 border border-white/[0.08] rounded-lg px-3 py-2 text-slate-200 focus:outline-none focus:border-primary/50"
+                className="w-full text-sm bg-surface-elevated border border-border-default rounded-lg px-3 py-2 text-text-secondary focus:outline-none focus:border-primary/50"
               >
                 {milestoneOptions.map((o) => (
                   <option key={o.value} value={o.value}>
@@ -845,16 +845,16 @@ function TaskTemplateModal({ initial, capabilities, onClose, onSave, saving }: T
                     updateField('milestoneTag', e.target.value);
                   }}
                   placeholder="输入自定义里程碑名称"
-                  className="w-full mt-2 text-sm bg-white/5 border border-white/[0.08] rounded-lg px-3 py-2 text-slate-200 placeholder:text-slate-600 focus:outline-none focus:border-primary/50"
+                  className="w-full mt-2 text-sm bg-surface-elevated border border-border-default rounded-lg px-3 py-2 text-text-secondary placeholder:text-text-muted focus:outline-none focus:border-primary/50"
                 />
               )}
             </div>
             <div>
-              <label className="block text-xs text-slate-400 mb-1.5">适用学期场景</label>
+              <label className="block text-xs text-text-tertiary mb-1.5">适用学期场景</label>
               <select
                 value={form.semesterTag ?? ''}
                 onChange={(e) => updateField('semesterTag', e.target.value)}
-                className="w-full text-sm bg-white/5 border border-white/[0.08] rounded-lg px-3 py-2 text-slate-200 focus:outline-none focus:border-primary/50"
+                className="w-full text-sm bg-surface-elevated border border-border-default rounded-lg px-3 py-2 text-text-secondary focus:outline-none focus:border-primary/50"
               >
                 <option value="">全年通用</option>
                 {semesterOptions.map((s) => (
@@ -868,9 +868,9 @@ function TaskTemplateModal({ initial, capabilities, onClose, onSave, saving }: T
 
           <div>
             <div className="flex items-center gap-1.5 mb-2">
-              <label className="block text-xs text-slate-400">适用路线（不选则所有路线通用）</label>
+              <label className="block text-xs text-text-tertiary">适用路线（不选则所有路线通用）</label>
               <span
-                className="text-slate-500 cursor-help"
+                className="text-text-muted cursor-help"
                 title="选择任务对应的升学路线，不选则该任务对所有路线都可见"
               >
                 <Info className="w-3 h-3" />
@@ -887,7 +887,7 @@ function TaskTemplateModal({ initial, capabilities, onClose, onSave, saving }: T
                     className={`px-2.5 py-1.5 rounded-lg text-xs transition-all ${
                       selected
                         ? 'bg-primary/15 text-primary border border-primary/30'
-                        : 'bg-white/5 text-slate-400 border border-white/[0.06] hover:bg-white/[0.08]'
+                        : 'bg-surface-elevated text-text-tertiary border border-border-subtle hover:bg-surface-highlight'
                     }`}
                   >
                     {selected && <Sparkles className="w-3 h-3 inline-block mr-1" />}
@@ -900,11 +900,11 @@ function TaskTemplateModal({ initial, capabilities, onClose, onSave, saving }: T
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs text-slate-400 mb-1.5">任务类型</label>
+              <label className="block text-xs text-text-tertiary mb-1.5">任务类型</label>
               <select
                 value={form.taskType}
                 onChange={(e) => updateField('taskType', e.target.value as TaskType)}
-                className="w-full text-sm bg-white/5 border border-white/[0.08] rounded-lg px-3 py-2 text-slate-200 focus:outline-none focus:border-primary/50"
+                className="w-full text-sm bg-surface-elevated border border-border-default rounded-lg px-3 py-2 text-text-secondary focus:outline-none focus:border-primary/50"
               >
                 {taskTypeOptions.map((t) => (
                   <option key={t.value} value={t.value}>
@@ -914,11 +914,11 @@ function TaskTemplateModal({ initial, capabilities, onClose, onSave, saving }: T
               </select>
             </div>
             <div>
-              <label className="block text-xs text-slate-400 mb-1.5">执行频率</label>
+              <label className="block text-xs text-text-tertiary mb-1.5">执行频率</label>
               <select
                 value={form.frequency}
                 onChange={(e) => updateField('frequency', e.target.value as TaskFrequency)}
-                className="w-full text-sm bg-white/5 border border-white/[0.08] rounded-lg px-3 py-2 text-slate-200 focus:outline-none focus:border-primary/50"
+                className="w-full text-sm bg-surface-elevated border border-border-default rounded-lg px-3 py-2 text-text-secondary focus:outline-none focus:border-primary/50"
               >
                 {frequencyOptions.map((f) => (
                   <option key={f.value} value={f.value}>
@@ -932,7 +932,7 @@ function TaskTemplateModal({ initial, capabilities, onClose, onSave, saving }: T
           {form.frequency === 'custom' && (
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs text-slate-400 mb-1.5">次数</label>
+                <label className="block text-xs text-text-tertiary mb-1.5">次数</label>
                 <input
                   type="number"
                   min={1}
@@ -944,11 +944,11 @@ function TaskTemplateModal({ initial, capabilities, onClose, onSave, saving }: T
                       period: form.customFrequency?.period ?? 'week',
                     })
                   }
-                  className="w-full text-sm bg-white/5 border border-white/[0.08] rounded-lg px-3 py-2 text-slate-200 focus:outline-none focus:border-primary/50"
+                  className="w-full text-sm bg-surface-elevated border border-border-default rounded-lg px-3 py-2 text-text-secondary focus:outline-none focus:border-primary/50"
                 />
               </div>
               <div>
-                <label className="block text-xs text-slate-400 mb-1.5">周期</label>
+                <label className="block text-xs text-text-tertiary mb-1.5">周期</label>
                 <select
                   value={form.customFrequency?.period ?? 'week'}
                   onChange={(e) =>
@@ -958,7 +958,7 @@ function TaskTemplateModal({ initial, capabilities, onClose, onSave, saving }: T
                       period: e.target.value as 'day' | 'week' | 'month',
                     })
                   }
-                  className="w-full text-sm bg-white/5 border border-white/[0.08] rounded-lg px-3 py-2 text-slate-200 focus:outline-none focus:border-primary/50"
+                  className="w-full text-sm bg-surface-elevated border border-border-default rounded-lg px-3 py-2 text-text-secondary focus:outline-none focus:border-primary/50"
                 >
                   <option value="day">每天</option>
                   <option value="week">每周</option>
@@ -970,9 +970,9 @@ function TaskTemplateModal({ initial, capabilities, onClose, onSave, saving }: T
 
           <div>
             <div className="flex items-center gap-1.5 mb-2">
-              <label className="block text-xs text-slate-400">周计划时间属性</label>
+              <label className="block text-xs text-text-tertiary">周计划时间属性</label>
               <span
-                className="text-slate-500 cursor-help"
+                className="text-text-muted cursor-help"
                 title="设置任务在周计划中的默认出现规则"
               >
                 <Info className="w-3 h-3" />
@@ -994,28 +994,28 @@ function TaskTemplateModal({ initial, capabilities, onClose, onSave, saving }: T
                     className={`text-left rounded-xl border p-3 transition-all ${
                       selected
                         ? 'bg-secondary/10 border-secondary/30'
-                        : 'bg-white/5 border-white/[0.06] hover:bg-white/[0.07]'
+                        : 'bg-surface-elevated border-border-subtle hover:bg-surface-highlight'
                     }`}
                   >
                     <div className="flex items-center gap-2">
                       <div
                         className={`w-4 h-4 rounded-full border flex items-center justify-center ${
-                          selected ? 'border-secondary bg-secondary' : 'border-white/20'
+                          selected ? 'border-secondary bg-secondary' : 'border-border-default'
                         }`}
                       >
                         {selected && <div className="w-1.5 h-1.5 rounded-full bg-white" />}
                       </div>
-                      <span className="text-sm font-medium text-slate-200">{option.label}</span>
+                      <span className="text-sm font-medium text-text-secondary">{option.label}</span>
                     </div>
-                    <p className="text-[10px] text-slate-500 mt-1 ml-6">{option.description}</p>
+                    <p className="text-2xs text-text-muted mt-1 ml-6">{option.description}</p>
                   </button>
                 );
               })}
             </div>
 
             {form.weeklySchedule === 'custom' && (
-              <div className="mt-3 p-3 rounded-xl bg-white/5 border border-white/[0.06]">
-                <p className="text-xs text-slate-400 mb-2">选择出现的星期：</p>
+              <div className="mt-3 p-3 rounded-xl bg-surface-elevated border border-border-subtle">
+                <p className="text-xs text-text-tertiary mb-2">选择出现的星期：</p>
                 <div className="flex flex-wrap gap-2">
                   {dayOptions.map((day) => {
                     const selected = form.customScheduleDays.includes(day.value);
@@ -1032,7 +1032,7 @@ function TaskTemplateModal({ initial, capabilities, onClose, onSave, saving }: T
                         className={`px-3 py-1.5 rounded-lg text-xs transition-all ${
                           selected
                             ? 'bg-secondary/15 text-secondary border border-secondary/30'
-                            : 'bg-white/5 text-slate-400 border border-white/[0.06] hover:bg-white/[0.08]'
+                            : 'bg-surface-elevated text-text-tertiary border border-border-subtle hover:bg-surface-highlight'
                         }`}
                       >
                         {day.label}
@@ -1046,8 +1046,8 @@ function TaskTemplateModal({ initial, capabilities, onClose, onSave, saving }: T
 
           <div>
             <div className="flex items-center justify-between mb-2">
-              <label className="block text-xs text-slate-400">能力关联（用于 AI 分析）</label>
-              <span className="text-[10px] text-slate-500">权重越高，对能力影响越大</span>
+              <label className="block text-xs text-text-tertiary">能力关联（用于 AI 分析）</label>
+              <span className="text-2xs text-text-muted">权重越高，对能力影响越大</span>
             </div>
 
             {form.capabilityLinks.length > 0 && (
@@ -1058,12 +1058,12 @@ function TaskTemplateModal({ initial, capabilities, onClose, onSave, saving }: T
                   return (
                     <div
                       key={link.capabilityId}
-                      className="flex items-center gap-3 p-2.5 rounded-lg bg-white/5 border border-white/[0.06]"
+                      className="flex items-center gap-3 p-2.5 rounded-lg bg-surface-elevated border border-border-subtle"
                     >
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2">
-                          <span className="text-sm font-medium text-slate-200">{capability.name}</span>
-                          <span className="text-[10px] px-1.5 py-0.5 rounded bg-white/5 text-slate-400">
+                          <span className="text-sm font-medium text-text-secondary">{capability.name}</span>
+                          <span className="text-2xs px-1.5 py-0.5 rounded bg-surface-elevated text-text-tertiary">
                             {capabilityCategoryLabels[capability.category] || capability.category}
                           </span>
                         </div>
@@ -1078,13 +1078,13 @@ function TaskTemplateModal({ initial, capabilities, onClose, onSave, saving }: T
                           onChange={(e) =>
                             updateCapabilityLink(link.capabilityId, { weight: parseFloat(e.target.value) || 0 })
                           }
-                          className="w-16 text-sm bg-white/5 border border-white/[0.08] rounded-lg px-2 py-1 text-slate-200 text-center focus:outline-none focus:border-primary/50"
+                          className="w-16 text-sm bg-surface-elevated border border-border-default rounded-lg px-2 py-1 text-text-secondary text-center focus:outline-none focus:border-primary/50"
                           title="权重"
                         />
                         <button
                           type="button"
                           onClick={() => removeCapabilityLink(link.capabilityId)}
-                          className="p-1.5 rounded-lg hover:bg-white/10 text-slate-400"
+                          className="p-1.5 rounded-lg hover:bg-surface-highlight text-text-tertiary"
                         >
                           <X className="w-3.5 h-3.5" />
                         </button>
@@ -1103,7 +1103,7 @@ function TaskTemplateModal({ initial, capabilities, onClose, onSave, saving }: T
                   e.target.value = '';
                 }
               }}
-              className="w-full text-sm bg-white/5 border border-white/[0.08] rounded-lg px-3 py-2 text-slate-200 focus:outline-none focus:border-primary/50"
+              className="w-full text-sm bg-surface-elevated border border-border-default rounded-lg px-3 py-2 text-text-secondary focus:outline-none focus:border-primary/50"
             >
               <option value="">+ 添加关联能力</option>
               {capabilities
@@ -1118,52 +1118,52 @@ function TaskTemplateModal({ initial, capabilities, onClose, onSave, saving }: T
 
           <div>
             <div className="flex items-center justify-between mb-2">
-              <label className="block text-xs text-slate-400">评估标准</label>
+              <label className="block text-xs text-text-tertiary">评估标准</label>
               <button
                 type="button"
                 onClick={addAssessmentCriterion}
-                className="text-[10px] text-primary hover:text-primary-glow transition-colors"
+                className="text-2xs text-primary hover:text-primary-glow transition-colors"
               >
                 + 添加标准
               </button>
             </div>
 
             {form.assessmentCriteria.length === 0 ? (
-              <p className="text-xs text-slate-500">未设置评估标准，AI 将默认以「是否完成」作为评估依据。</p>
+              <p className="text-xs text-text-muted">未设置评估标准，AI 将默认以「是否完成」作为评估依据。</p>
             ) : (
               <div className="space-y-2">
                 {form.assessmentCriteria.map((criterion, index) => (
                   <div
                     key={index}
-                    className="grid grid-cols-[1fr_1fr_auto_auto] gap-2 items-center p-2.5 rounded-lg bg-white/5 border border-white/[0.06]"
+                    className="grid grid-cols-[1fr_1fr_auto_auto] gap-2 items-center p-2.5 rounded-lg bg-surface-elevated border border-border-subtle"
                   >
                     <input
                       type="text"
                       value={criterion.metric}
                       onChange={(e) => updateAssessmentCriterion(index, { metric: e.target.value })}
                       placeholder="指标，例如：正确率"
-                      className="text-sm bg-transparent border-b border-white/[0.08] px-1 py-1 text-slate-200 placeholder:text-slate-600 focus:outline-none focus:border-primary/50"
+                      className="text-sm bg-transparent border-b border-border-default px-1 py-1 text-text-secondary placeholder:text-text-muted focus:outline-none focus:border-primary/50"
                     />
                     <input
                       type="text"
                       value={criterion.target}
                       onChange={(e) => updateAssessmentCriterion(index, { target: e.target.value })}
                       placeholder="目标，例如：>= 80%"
-                      className="text-sm bg-transparent border-b border-white/[0.08] px-1 py-1 text-slate-200 placeholder:text-slate-600 focus:outline-none focus:border-primary/50"
+                      className="text-sm bg-transparent border-b border-border-default px-1 py-1 text-text-secondary placeholder:text-text-muted focus:outline-none focus:border-primary/50"
                     />
-                    <label className="flex items-center gap-1 text-[10px] text-slate-400 whitespace-nowrap cursor-pointer">
+                    <label className="flex items-center gap-1 text-2xs text-text-tertiary whitespace-nowrap cursor-pointer">
                       <input
                         type="checkbox"
                         checked={criterion.selfReport}
                         onChange={(e) => updateAssessmentCriterion(index, { selfReport: e.target.checked })}
-                        className="rounded border-white/[0.08] bg-white/5 text-primary focus:ring-0"
+                        className="rounded border-border-default bg-surface-elevated text-primary focus:ring-0"
                       />
                       自评
                     </label>
                     <button
                       type="button"
                       onClick={() => removeAssessmentCriterion(index)}
-                      className="p-1.5 rounded-lg hover:bg-white/10 text-slate-400"
+                      className="p-1.5 rounded-lg hover:bg-surface-highlight text-text-tertiary"
                     >
                       <X className="w-3.5 h-3.5" />
                     </button>
@@ -1175,11 +1175,11 @@ function TaskTemplateModal({ initial, capabilities, onClose, onSave, saving }: T
 
         </form>
 
-        <div className="flex items-center justify-end gap-3 p-6 sm:p-8 pt-4 border-t border-white/[0.06]">
+        <div className="flex items-center justify-end gap-3 p-6 sm:p-8 pt-4 border-t border-border-subtle">
           <button
             type="button"
             onClick={onClose}
-            className="px-4 py-2 rounded-xl text-slate-400 hover:text-slate-200 transition-colors"
+            className="px-4 py-2 rounded-xl text-text-tertiary hover:text-text-secondary transition-colors"
           >
             取消
           </button>
@@ -1187,7 +1187,7 @@ function TaskTemplateModal({ initial, capabilities, onClose, onSave, saving }: T
             type="submit"
             form="task-template-form"
             disabled={saving || !form.title.trim()}
-            className="flex items-center gap-2 px-6 py-2 rounded-xl bg-gradient-to-r from-secondary to-secondary-glow text-white font-semibold hover:shadow-[0_0_30px_rgba(139,92,246,0.4)] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex items-center gap-2 px-6 py-2 rounded-xl bg-secondary text-white font-semibold hover:shadow-[0_0_30px_rgba(139,92,246,0.4)] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
             保存

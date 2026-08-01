@@ -69,12 +69,12 @@ function ViewToggle({
   onChange: (mode: ViewMode) => void;
 }) {
   return (
-    <div className="flex items-center gap-1 rounded-xl bg-surface border border-border-default p-1">
+    <div className="flex items-center gap-1 rounded-xl bg-surface-elevated border border-border-subtle p-1">
       <button
         onClick={() => onChange('command')}
         className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
           mode === 'command'
-            ? 'bg-primary/10 text-primary border border-primary/20'
+            ? 'bg-primary/[0.10] text-primary'
             : 'text-text-tertiary hover:text-text-secondary'
         }`}
       >
@@ -85,7 +85,7 @@ function ViewToggle({
         onClick={() => onChange('overview')}
         className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
           mode === 'overview'
-            ? 'bg-primary/10 text-primary border border-primary/20'
+            ? 'bg-primary/[0.10] text-primary'
             : 'text-text-tertiary hover:text-text-secondary'
         }`}
       >
@@ -102,7 +102,7 @@ function IdentityCard({ child }: { child: Child }) {
 
   return (
     <CommandCard active corner className="p-5 sm:p-6">
-      <div className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-6">
+      <div className="flex flex-col sm:flex-row sm:items-center gap-5 sm:gap-6">
         <ChildAvatar child={child} size="2xl" shape="rounded" />
 
         <div className="flex-1 min-w-0">
@@ -113,7 +113,7 @@ function IdentityCard({ child }: { child: Child }) {
             <DataBadge variant="primary" size="sm">
               {gradeToStage(child.grade, child.educationSystem)}
             </DataBadge>
-            <DataBadge variant={routeSummary.type === 'primary' ? 'success' : 'secondary'} size="sm">
+            <DataBadge variant={routeSummary.type === 'primary' ? 'default' : 'secondary'} size="sm">
               {routeSummary.type === 'primary' ? '主路线' : '备选路线'}
             </DataBadge>
           </div>
@@ -125,25 +125,23 @@ function IdentityCard({ child }: { child: Child }) {
             {child.targetSchool && (
               <>
                 <span className="text-border-strong hidden sm:inline">·</span>
-                <span className="text-primary truncate">目标：{child.targetSchool}</span>
+                <span className="text-primary truncate">目标 {child.targetSchool}</span>
               </>
             )}
           </div>
 
-          <p className="mt-2 text-sm text-text-tertiary line-clamp-2">
+          <p className="mt-2 text-sm text-text-tertiary leading-relaxed line-clamp-2">
             {routeSummary.description}
           </p>
         </div>
 
-        <div className="flex items-center gap-4 sm:text-right shrink-0">
+        <div className="flex items-center gap-3 sm:text-right shrink-0">
           <div>
-            <p className="text-xs text-text-tertiary mb-1">路线匹配度</p>
-            <p className="text-2xl font-bold font-display tabular-nums text-text-primary">
-              {routeSummary.probability}%
+            <p className="text-2xs text-text-muted mb-0.5 uppercase tracking-wider">路线匹配度</p>
+            <p className="text-3xl font-bold font-display tabular-nums text-text-primary">
+              {routeSummary.probability}
+              <span className="text-lg text-text-tertiary ml-0.5">%</span>
             </p>
-          </div>
-          <div className="w-12 h-12 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center">
-            <Target className="w-6 h-6 text-primary" />
           </div>
         </div>
       </div>
@@ -151,21 +149,21 @@ function IdentityCard({ child }: { child: Child }) {
       <div className="mt-5 pt-5 border-t border-border-subtle flex flex-wrap gap-2">
         <button
           onClick={() => router.push('/dashboard/plan')}
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-light border border-border-default text-xs font-medium text-text-secondary hover:text-text-primary hover:border-border-strong transition-all"
+          className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-surface-elevated text-xs font-medium text-text-secondary hover:text-text-primary hover:bg-surface-highlight transition-all"
         >
           <Route className="w-3.5 h-3.5" />
-          查看路线方案
+          路线方案
         </button>
         <button
           onClick={() => router.push('/dashboard/weekly')}
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-light border border-border-default text-xs font-medium text-text-secondary hover:text-text-primary hover:border-border-strong transition-all"
+          className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-surface-elevated text-xs font-medium text-text-secondary hover:text-text-primary hover:bg-surface-highlight transition-all"
         >
           <CalendarDays className="w-3.5 h-3.5" />
           周计划
         </button>
         <button
           onClick={() => router.push('/dashboard/ai')}
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-light border border-border-default text-xs font-medium text-text-secondary hover:text-text-primary hover:border-border-strong transition-all"
+          className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-surface-elevated text-xs font-medium text-text-secondary hover:text-text-primary hover:bg-surface-highlight transition-all"
         >
           <Sparkles className="w-3.5 h-3.5" />
           AI 诊断
@@ -180,21 +178,18 @@ function TimelineNode({ item, isLast }: { item: TimelineItem; isLast: boolean })
     past: {
       icon: CheckCircle2,
       dotClass: 'bg-text-muted',
-      ringClass: 'ring-text-muted/30',
       textClass: 'text-text-tertiary',
       lineClass: 'bg-border-default',
     },
     current: {
       icon: MapPin,
       dotClass: 'bg-primary',
-      ringClass: 'ring-primary/40 shadow-glow-primary',
       textClass: 'text-text-primary',
-      lineClass: 'bg-primary/30',
+      lineClass: 'bg-primary/25',
     },
     future: {
       icon: Circle,
-      dotClass: 'bg-surface-highlight border border-border-strong',
-      ringClass: 'ring-border-default',
+      dotClass: 'bg-surface-elevated border border-border-strong',
       textClass: 'text-text-secondary',
       lineClass: 'bg-border-default',
     },
@@ -205,34 +200,31 @@ function TimelineNode({ item, isLast }: { item: TimelineItem; isLast: boolean })
 
   return (
     <div className="relative flex gap-4">
-      {/* Line */}
       {!isLast && (
         <div
           className={`absolute left-[11px] top-7 w-px h-[calc(100%-14px)] ${config.lineClass}`}
         />
       )}
 
-      {/* Dot */}
       <div
-        className={`relative z-10 w-6 h-6 rounded-full flex items-center justify-center shrink-0 ring-4 ${config.dotClass} ${config.ringClass}`}
+        className={`relative z-10 w-6 h-6 rounded-full flex items-center justify-center shrink-0 ${config.dotClass}`}
       >
-        <Icon className={`w-3 h-3 ${item.status === 'future' ? 'text-text-tertiary' : 'text-white'}`} />
+        <Icon className={`w-3 h-3 ${item.status === 'current' ? 'text-white' : item.status === 'past' ? 'text-surface' : 'text-text-tertiary'}`} />
       </div>
 
-      {/* Content */}
       <div className="flex-1 pb-6 min-w-0">
         <div className="flex flex-wrap items-center gap-2 mb-1">
-          <span className={`text-xs font-medium px-2 py-0.5 rounded-full bg-surface-light border border-border-default ${config.textClass}`}>
+          <span className={`text-2xs font-medium px-2 py-0.5 rounded-md bg-surface-elevated ${config.textClass}`}>
             {item.time}
           </span>
           {item.status === 'current' && (
-            <span className="text-[10px] font-medium text-primary">当前节点</span>
+            <span className="text-2xs font-medium text-primary">当前节点</span>
           )}
         </div>
         <h3 className={`text-sm font-semibold ${config.textClass}`}>{item.title}</h3>
-        <p className="text-sm text-text-tertiary mt-0.5">{item.description}</p>
+        <p className="text-sm text-text-tertiary mt-0.5 leading-relaxed">{item.description}</p>
         {item.fallback && (
-          <p className="text-xs text-warning mt-2 bg-warning/5 border border-warning/10 rounded-lg p-2">
+          <p className="text-xs text-warning mt-2 bg-warning/[0.06] rounded-lg px-3 py-2">
             {item.fallback}
           </p>
         )}
@@ -299,20 +291,20 @@ function UpcomingMilestonesCard({ child }: { child: Child }) {
           暂无即将到来的关键节点
         </div>
       ) : (
-        <div className="space-y-3">
+        <div className="space-y-2">
           {milestones.map((milestone, index) => (
             <div
               key={milestone.id}
-              className="p-3 rounded-xl bg-surface-light border border-border-default hover:border-border-strong transition-all"
+              className="p-3 rounded-xl bg-surface-elevated hover:bg-surface-highlight transition-colors"
             >
               <div className="flex items-center gap-2 mb-1.5">
-                <span className="text-[10px] font-medium px-1.5 py-0.5 rounded bg-warning/10 text-warning">
+                <span className="text-2xs font-medium px-1.5 py-0.5 rounded bg-warning/[0.10] text-warning">
                   #{index + 1}
                 </span>
                 <span className="text-xs text-text-tertiary">{milestone.time}</span>
               </div>
               <h3 className="text-sm font-semibold text-text-secondary">{milestone.title}</h3>
-              <p className="text-xs text-text-tertiary mt-0.5 line-clamp-2">
+              <p className="text-xs text-text-tertiary mt-0.5 line-clamp-2 leading-relaxed">
                 {milestone.description}
               </p>
             </div>
@@ -330,7 +322,6 @@ function AIStrategyCard({
   child: Child;
   completionRate: number | null;
 }) {
-  // Avoid passing full PlanStats to keep this card lightweight
   const advice = generateStrategicAdvice(
     child,
     completionRate !== null
@@ -339,9 +330,9 @@ function AIStrategyCard({
   );
 
   return (
-    <CommandCard className="p-5 h-full border-secondary/10">
+    <CommandCard className="p-5 h-full">
       <div className="flex items-center gap-2 mb-4">
-        <Sparkles className="w-4 h-4 text-secondary" />
+        <Sparkles className="w-4 h-4 text-primary" />
         <h2 className="text-base font-bold font-display">AI 战略建议</h2>
       </div>
 
@@ -351,11 +342,11 @@ function AIStrategyCard({
         <div className="mt-4 pt-4 border-t border-border-subtle">
           <div className="flex items-center justify-between text-xs mb-2">
             <span className="text-text-tertiary">本周执行节奏</span>
-            <span className="text-text-secondary font-medium">{completionRate}%</span>
+            <span className="text-text-secondary font-medium tabular-nums">{completionRate}%</span>
           </div>
-          <div className="h-1.5 rounded-full bg-white/10 overflow-hidden">
+          <div className="h-1.5 rounded-full bg-surface-elevated overflow-hidden">
             <div
-              className="h-full rounded-full bg-gradient-to-r from-primary to-secondary transition-all duration-500"
+              className="h-full rounded-full bg-primary transition-all duration-500"
               style={{ width: `${completionRate}%` }}
             />
           </div>
@@ -401,8 +392,8 @@ function OverviewChildCard({
         <ChevronRight className="w-5 h-5 text-text-muted shrink-0" />
       </div>
 
-      <div className="space-y-3 mb-4">
-        <div className="flex items-center justify-between p-3 rounded-xl bg-surface-light border border-border-default">
+      <div className="space-y-2 mb-4">
+        <div className="flex items-center justify-between py-2 px-3 rounded-xl bg-surface-elevated">
           <span className="text-xs text-text-tertiary">当前路线</span>
           <span className="text-sm font-medium text-text-secondary truncate max-w-[60%]">
             {routeSummary.name}
@@ -410,7 +401,7 @@ function OverviewChildCard({
         </div>
 
         {upcoming[0] && (
-          <div className="flex items-start gap-2 p-3 rounded-xl bg-warning/5 border border-warning/10">
+          <div className="flex items-start gap-2 py-2 px-3 rounded-xl bg-warning/[0.06]">
             <Clock className="w-4 h-4 text-warning shrink-0 mt-0.5" />
             <div className="min-w-0">
               <p className="text-xs text-warning font-medium">下一个节点：{upcoming[0].time}</p>
@@ -420,7 +411,7 @@ function OverviewChildCard({
         )}
 
         {completionRate !== null && (
-          <div className="flex items-center justify-between p-3 rounded-xl bg-surface-light border border-border-default">
+          <div className="flex items-center justify-between py-2 px-3 rounded-xl bg-surface-elevated">
             <span className="text-xs text-text-tertiary">本周完成率</span>
             <span className="text-sm font-bold text-text-primary tabular-nums">
               {completionRate}%
@@ -429,9 +420,9 @@ function OverviewChildCard({
         )}
       </div>
 
-      <div className="p-3 rounded-xl bg-secondary/5 border border-secondary/10 mb-4">
-        <p className="text-xs text-secondary font-medium mb-1">AI 战略提示</p>
-        <p className="text-xs text-text-tertiary line-clamp-2">{advice}</p>
+      <div className="py-2 px-3 rounded-xl bg-surface-elevated mb-4">
+        <p className="text-xs text-primary font-medium mb-1">AI 战略提示</p>
+        <p className="text-xs text-text-tertiary line-clamp-2 leading-relaxed">{advice}</p>
       </div>
 
       <div className="flex gap-2">
@@ -440,7 +431,7 @@ function OverviewChildCard({
             e.stopPropagation();
             router.push('/dashboard/plan');
           }}
-          className="flex-1 py-2 rounded-lg bg-primary/10 border border-primary/20 text-primary text-xs font-semibold hover:bg-primary/15 transition-all"
+          className="flex-1 py-2 rounded-lg bg-primary/[0.10] text-primary text-xs font-semibold hover:bg-primary/[0.15] transition-all"
         >
           路线
         </button>
@@ -449,7 +440,7 @@ function OverviewChildCard({
             e.stopPropagation();
             router.push('/dashboard/weekly');
           }}
-          className="flex-1 py-2 rounded-lg bg-surface-light border border-border-default text-text-secondary text-xs font-semibold hover:text-text-primary hover:border-border-strong transition-all"
+          className="flex-1 py-2 rounded-lg bg-surface-elevated text-text-secondary text-xs font-semibold hover:text-text-primary hover:bg-surface-highlight transition-all"
         >
           周计划
         </button>

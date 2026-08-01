@@ -114,7 +114,7 @@ export default function SubjectCheckIn({
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.15 }}
-      className="rounded-2xl glass p-6 border border-white/5"
+      className="rounded-2xl glass p-6 border border-border-subtle"
     >
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
@@ -123,25 +123,25 @@ export default function SubjectCheckIn({
           </div>
           <div>
             <h2 className="text-xl font-bold font-display">{title}</h2>
-            <p className="text-sm text-slate-400">{subtitle}</p>
+            <p className="text-sm text-text-tertiary">{subtitle}</p>
           </div>
         </div>
         <div className="flex items-center gap-4">
           <div className="text-right">
-            <p className="text-xs text-slate-500">连续打卡</p>
+            <p className="text-xs text-text-muted">连续打卡</p>
             <p className="text-lg font-bold text-orange-400 flex items-center gap-1 justify-end">
               <Flame className="w-4 h-4" />
               {streak} 天
             </p>
           </div>
           <div className="text-right">
-            <p className="text-xs text-slate-500">今日进度</p>
+            <p className="text-xs text-text-muted">今日进度</p>
             <p className="text-lg font-bold text-emerald-400">{progress}%</p>
           </div>
         </div>
       </div>
 
-      <div className="h-2 rounded-full bg-white/10 overflow-hidden mb-5">
+      <div className="h-2 rounded-full bg-surface-highlight overflow-hidden mb-5">
         <motion.div
           initial={{ width: 0 }}
           animate={{ width: `${progress}%` }}
@@ -162,21 +162,21 @@ export default function SubjectCheckIn({
                 className={`w-full flex items-center justify-between p-4 rounded-xl border transition-all text-left ${
                   isDone
                     ? 'bg-emerald-500/10 border-emerald-500/30'
-                    : 'bg-white/[0.03] border-white/5 hover:bg-white/[0.06]'
+                    : 'bg-surface-elevated border-border-subtle hover:bg-surface-elevated'
                 }`}
               >
                 <div className="flex items-center gap-3">
                   {isDone ? (
                     <CheckCircle2 className="w-5 h-5 text-emerald-400" />
                   ) : (
-                    <Circle className="w-5 h-5 text-slate-500" />
+                    <Circle className="w-5 h-5 text-text-muted" />
                   )}
-                  <span className={`text-sm ${isDone ? 'text-emerald-200 line-through' : 'text-slate-300'}`}>
+                  <span className={`text-sm ${isDone ? 'text-emerald-200 line-through' : 'text-text-secondary'}`}>
                     {task.label}
                   </span>
                 </div>
                 {task.duration && (
-                  <span className="text-xs text-slate-500">{task.duration}</span>
+                  <span className="text-xs text-text-muted">{task.duration}</span>
                 )}
               </motion.button>
             );

@@ -81,7 +81,7 @@ export default function MathTrackMap() {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.1 }}
-      className="rounded-3xl glass p-6 border border-white/5 relative overflow-hidden"
+      className="rounded-3xl glass p-6 border border-border-subtle relative overflow-hidden"
       style={{
         perspective: '1200px',
         transform: `rotateX(${tilt.rotateX}deg) rotateY(${tilt.rotateY}deg)`,
@@ -94,7 +94,7 @@ export default function MathTrackMap() {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
         <div>
           <h2 className="text-xl font-bold font-display">数学三条线规划地图</h2>
-          <p className="text-sm text-slate-400 mt-1">从现在到三公，三条主线并行推进</p>
+          <p className="text-sm text-text-tertiary mt-1">从现在到三公，三条主线并行推进</p>
         </div>
         <div className="flex flex-wrap gap-2">
           {mathTracks.map((track) => {
@@ -102,13 +102,13 @@ export default function MathTrackMap() {
             return (
               <div
                 key={track.id}
-                className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-white/5 border border-white/5"
+                className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-surface-elevated border border-border-subtle"
               >
                 <div
                   className="w-3 h-3 rounded-full"
                   style={{ backgroundColor: cfg.color, boxShadow: `0 0 10px ${cfg.glowColor}` }}
                 />
-                <span className="text-xs text-slate-300">{track.name}</span>
+                <span className="text-xs text-text-secondary">{track.name}</span>
               </div>
             );
           })}
@@ -460,7 +460,7 @@ export default function MathTrackMap() {
         <motion.div
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
-          className="absolute top-24 right-6 w-56 p-4 rounded-xl bg-slate-900/95 border border-white/10 shadow-2xl z-20"
+          className="absolute top-24 right-6 w-56 p-4 rounded-xl bg-slate-900/95 border border-border-default shadow-2xl z-20"
         >
           <div className="flex items-center gap-2 mb-2">
             <div
@@ -470,26 +470,26 @@ export default function MathTrackMap() {
                 boxShadow: `0 0 10px ${trackConfig[hoveredData.track].glowColor}`,
               }}
             />
-            <p className="text-xs text-slate-500">{hoveredData.time}</p>
+            <p className="text-xs text-text-muted">{hoveredData.time}</p>
           </div>
-          <p className="text-sm font-bold text-slate-200 mb-1">{hoveredData.label}</p>
-          <p className="text-xs text-slate-400">{hoveredData.detail}</p>
+          <p className="text-sm font-bold text-text-secondary mb-1">{hoveredData.label}</p>
+          <p className="text-xs text-text-tertiary">{hoveredData.detail}</p>
         </motion.div>
       )}
 
       {/* Bottom summary */}
-      <div className="mt-6 pt-6 border-t border-white/5 grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <div className="mt-6 pt-6 border-t border-border-subtle grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div className="rounded-xl bg-blue-500/5 border border-blue-500/10 p-3">
           <p className="text-xs text-blue-400 mb-1">校内线</p>
-          <p className="text-sm text-slate-300">二年级 → 五年级校内 · 初中衔接</p>
+          <p className="text-sm text-text-secondary">二年级 → 五年级校内 · 初中衔接</p>
         </div>
         <div className="rounded-xl bg-violet-500/5 border border-violet-500/10 p-3">
           <p className="text-xs text-violet-400 mb-1">奥数线</p>
-          <p className="text-sm text-slate-300">启蒙 → 系统 → 模块深入 → AMC8 专题</p>
+          <p className="text-sm text-text-secondary">启蒙 → 系统 → 模块深入 → AMC8 专题</p>
         </div>
         <div className="rounded-xl bg-amber-500/5 border border-amber-500/10 p-3">
           <p className="text-xs text-amber-400 mb-1">竞赛线</p>
-          <p className="text-sm text-slate-300">袋鼠 → 澳洲 AMC → AMC8 20+</p>
+          <p className="text-sm text-text-secondary">袋鼠 → 澳洲 AMC → AMC8 20+</p>
         </div>
       </div>
     </motion.div>

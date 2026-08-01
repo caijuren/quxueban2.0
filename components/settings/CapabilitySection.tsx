@@ -109,7 +109,7 @@ export default function CapabilitySection() {
       description="定义孩子需要培养的能力维度，任务库中的任务可以关联到具体能力，供 AI 分析成长轨迹。"
     >
       {isLoading ? (
-        <div className="py-12 text-center text-slate-500 text-sm">
+        <div className="py-12 text-center text-text-muted text-sm">
           <Loader2 className="w-5 h-5 animate-spin mx-auto mb-2" />
           加载能力模型...
         </div>
@@ -122,11 +122,11 @@ export default function CapabilitySection() {
           {Object.entries(grouped).map(([category, caps]) => (
             <div key={category}>
               <div className="flex items-center gap-2 mb-3">
-                <div className="w-1 h-4 rounded-full bg-gradient-to-b from-primary to-secondary" />
-                <h3 className="text-sm font-bold text-slate-200">
+                <div className="w-1 h-4 rounded-full bg-primary" />
+                <h3 className="text-sm font-bold text-text-secondary">
                   {categoryLabels[category] || category}
                 </h3>
-                <span className="text-[10px] px-1.5 py-0.5 rounded bg-white/5 text-slate-500">
+                <span className="text-2xs px-1.5 py-0.5 rounded bg-surface-elevated text-text-muted">
                   {caps.length}
                 </span>
               </div>
@@ -136,13 +136,13 @@ export default function CapabilitySection() {
                     key={cap.id}
                     initial={shouldReduceMotion ? false : { opacity: 0, y: 8 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="group rounded-xl border border-white/[0.06] bg-white/[0.03] p-4 hover:border-white/[0.12] transition-all"
+                    className="group rounded-xl border border-border-subtle bg-surface-elevated p-4 hover:border-border-default transition-all"
                   >
                     <div className="flex items-start justify-between mb-2">
                       <div className="flex items-center gap-2">
-                        <span className="text-sm font-medium text-slate-200">{cap.name}</span>
+                        <span className="text-sm font-medium text-text-secondary">{cap.name}</span>
                         {cap.isSystem && (
-                          <span className="text-[10px] px-1.5 py-0.5 rounded bg-secondary/10 text-secondary border border-secondary/20">
+                          <span className="text-2xs px-1.5 py-0.5 rounded bg-secondary/10 text-secondary border border-secondary/20">
                             系统
                           </span>
                         )}
@@ -151,14 +151,14 @@ export default function CapabilitySection() {
                         <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                           <button
                             onClick={() => handleEdit(cap)}
-                            className="p-1 rounded-lg hover:bg-white/10 text-slate-400"
+                            className="p-1 rounded-lg hover:bg-surface-highlight text-text-tertiary"
                           >
                             <Pencil className="w-3 h-3" />
                           </button>
                           <button
                             onClick={() => handleDelete(cap.id)}
                             disabled={deletingId === cap.id}
-                            className="p-1 rounded-lg hover:bg-white/10 text-error disabled:opacity-50"
+                            className="p-1 rounded-lg hover:bg-surface-highlight text-error disabled:opacity-50"
                           >
                             {deletingId === cap.id ? (
                               <Loader2 className="w-3 h-3 animate-spin" />
@@ -170,7 +170,7 @@ export default function CapabilitySection() {
                       )}
                     </div>
                     {cap.description && (
-                      <p className="text-xs text-slate-500 line-clamp-2">{cap.description}</p>
+                      <p className="text-xs text-text-muted line-clamp-2">{cap.description}</p>
                     )}
                   </motion.div>
                 ))}
@@ -182,7 +182,7 @@ export default function CapabilitySection() {
 
       <button
         onClick={handleAdd}
-        className="w-full mt-6 py-2.5 rounded-xl border border-dashed border-white/[0.12] text-slate-400 hover:text-slate-200 hover:border-white/20 hover:bg-white/[0.03] transition-all flex items-center justify-center gap-2 text-sm"
+        className="w-full mt-6 py-2.5 rounded-xl border border-dashed border-white/[0.12] text-text-tertiary hover:text-text-secondary hover:border-border-default hover:bg-surface-elevated transition-all flex items-center justify-center gap-2 text-sm"
       >
         <Plus className="w-4 h-4" />
         添加自定义能力
@@ -202,11 +202,11 @@ export default function CapabilitySection() {
               animate={{ scale: 1, opacity: 1 }}
               exit={shouldReduceMotion ? { opacity: 0 } : { scale: 0.95, opacity: 0 }}
               onClick={(e) => e.stopPropagation()}
-              className="w-full max-w-md rounded-3xl glass border border-white/10 p-6 sm:p-8"
+              className="w-full max-w-md rounded-3xl glass border border-border-default p-6 sm:p-8"
             >
               <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-secondary to-secondary-glow flex items-center justify-center">
+                  <div className="w-10 h-10 rounded-xl bg-secondary flex items-center justify-center">
                     {editing ? <Pencil className="w-5 h-5 text-white" /> : <Plus className="w-5 h-5 text-white" />}
                   </div>
                   <h2 className="text-xl font-bold font-display">
@@ -215,7 +215,7 @@ export default function CapabilitySection() {
                 </div>
                 <button
                   onClick={() => setModalOpen(false)}
-                  className="p-2 rounded-lg hover:bg-white/5 text-slate-400"
+                  className="p-2 rounded-lg hover:bg-surface-elevated text-text-tertiary"
                 >
                   <X className="w-5 h-5" />
                 </button>
@@ -223,7 +223,7 @@ export default function CapabilitySection() {
 
               <form onSubmit={handleSave} className="space-y-4">
                 <div>
-                  <label className="block text-xs text-slate-400 mb-1.5">
+                  <label className="block text-xs text-text-tertiary mb-1.5">
                     能力名称 <span className="text-primary">*</span>
                   </label>
                   <input
@@ -231,17 +231,17 @@ export default function CapabilitySection() {
                     value={form.name || ''}
                     onChange={(e) => setForm((prev) => ({ ...prev, name: e.target.value }))}
                     placeholder="例如：审题能力"
-                    className="w-full text-sm bg-white/5 border border-white/[0.08] rounded-lg px-3 py-2 text-slate-200 placeholder:text-slate-600 focus:outline-none focus:border-primary/50"
+                    className="w-full text-sm bg-surface-elevated border border-border-default rounded-lg px-3 py-2 text-text-secondary placeholder:text-text-muted focus:outline-none focus:border-primary/50"
                     required
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs text-slate-400 mb-1.5">所属分类</label>
+                  <label className="block text-xs text-text-tertiary mb-1.5">所属分类</label>
                   <select
                     value={form.category || 'general'}
                     onChange={(e) => setForm((prev) => ({ ...prev, category: e.target.value as Capability['category'] }))}
-                    className="w-full text-sm bg-white/5 border border-white/[0.08] rounded-lg px-3 py-2 text-slate-200 focus:outline-none focus:border-primary/50"
+                    className="w-full text-sm bg-surface-elevated border border-border-default rounded-lg px-3 py-2 text-text-secondary focus:outline-none focus:border-primary/50"
                   >
                     {categoryOptions.map((opt) => (
                       <option key={opt.value} value={opt.value}>
@@ -252,28 +252,28 @@ export default function CapabilitySection() {
                 </div>
 
                 <div>
-                  <label className="block text-xs text-slate-400 mb-1.5">描述</label>
+                  <label className="block text-xs text-text-tertiary mb-1.5">描述</label>
                   <textarea
                     value={form.description || ''}
                     onChange={(e) => setForm((prev) => ({ ...prev, description: e.target.value }))}
                     placeholder="简要说明这个能力的含义和培养目标"
                     rows={3}
-                    className="w-full text-sm bg-white/5 border border-white/[0.08] rounded-lg px-3 py-2 text-slate-200 placeholder:text-slate-600 focus:outline-none focus:border-primary/50 resize-none"
+                    className="w-full text-sm bg-surface-elevated border border-border-default rounded-lg px-3 py-2 text-text-secondary placeholder:text-text-muted focus:outline-none focus:border-primary/50 resize-none"
                   />
                 </div>
 
-                <div className="flex items-center justify-end gap-3 pt-4 border-t border-white/[0.06]">
+                <div className="flex items-center justify-end gap-3 pt-4 border-t border-border-subtle">
                   <button
                     type="button"
                     onClick={() => setModalOpen(false)}
-                    className="px-4 py-2 rounded-xl text-slate-400 hover:text-slate-200 transition-colors"
+                    className="px-4 py-2 rounded-xl text-text-tertiary hover:text-text-secondary transition-colors"
                   >
                     取消
                   </button>
                   <button
                     type="submit"
                     disabled={isSaving || !form.name?.trim()}
-                    className="flex items-center gap-2 px-6 py-2 rounded-xl bg-gradient-to-r from-secondary to-secondary-glow text-white font-semibold hover:shadow-[0_0_30px_rgba(139,92,246,0.4)] transition-all disabled:opacity-50"
+                    className="flex items-center gap-2 px-6 py-2 rounded-xl bg-secondary text-white font-semibold hover:shadow-[0_0_30px_rgba(139,92,246,0.4)] transition-all disabled:opacity-50"
                   >
                     {isSaving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
                     保存
@@ -285,12 +285,12 @@ export default function CapabilitySection() {
         )}
       </AnimatePresence>
 
-      <div className="mt-6 rounded-xl border border-dashed border-border-default bg-white/[0.02] p-4">
+      <div className="mt-6 rounded-xl border border-dashed border-border-default bg-surface-elevated p-4">
         <div className="flex items-start gap-2">
           <Sparkles className="w-4 h-4 text-secondary mt-0.5" />
           <div>
-            <p className="text-sm font-medium text-slate-300 mb-1">AI 分析基础</p>
-            <p className="text-xs text-slate-500 leading-relaxed">
+            <p className="text-sm font-medium text-text-secondary mb-1">AI 分析基础</p>
+            <p className="text-xs text-text-muted leading-relaxed">
               系统预设了 22 项常见能力。你可以添加自定义能力，但建议优先复用系统能力，
               这样 AI 在不同孩子之间才有可比较的成长数据。
             </p>

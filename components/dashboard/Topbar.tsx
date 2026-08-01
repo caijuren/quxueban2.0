@@ -126,12 +126,12 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
       initial={{ y: -16, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-      className="fixed top-0 right-0 left-0 lg:left-64 h-16 glass border-b border-border-default z-30 px-3 sm:px-5 flex items-center justify-between"
+      className="fixed top-0 right-0 left-0 lg:left-64 h-16 glass border-b border-border-subtle z-30 px-3 sm:px-5 flex items-center justify-between"
     >
       <div className="flex items-center gap-3">
         <button
           onClick={onMenuClick}
-          className="lg:hidden w-10 h-10 rounded-xl bg-surface border border-border-default flex items-center justify-center text-text-secondary hover:text-white hover:border-border-strong hover:bg-surface-light transition-all focus-ring"
+          className="lg:hidden w-10 h-10 rounded-xl bg-surface-elevated/60 flex items-center justify-center text-text-secondary hover:text-white hover:bg-surface-highlight transition-all focus-ring"
           aria-label="打开菜单"
         >
           <Menu className="w-5 h-5" />
@@ -145,7 +145,7 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             onKeyDown={handleSearch}
-            className="pl-10 pr-4 py-2.5 w-56 lg:w-72 rounded-xl bg-surface border border-border-default text-sm text-white placeholder:text-text-muted focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/40 transition-all"
+            className="pl-10 pr-4 py-2.5 w-56 lg:w-72 rounded-xl bg-surface-elevated/60 border border-border-subtle text-sm text-white placeholder:text-text-muted focus:outline-none focus:border-primary/40 focus:bg-surface-elevated transition-all"
           />
         </div>
       </div>
@@ -154,12 +154,12 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
         <div className="relative" ref={notificationRef}>
           <button
             onClick={() => setNotificationOpen((prev) => !prev)}
-            className="relative w-10 h-10 rounded-xl bg-surface border border-border-default flex items-center justify-center text-text-secondary hover:text-white hover:border-border-strong hover:bg-surface-light transition-all focus-ring"
+            className="relative w-10 h-10 rounded-xl bg-surface-elevated/60 flex items-center justify-center text-text-secondary hover:text-white hover:bg-surface-highlight transition-all focus-ring"
             aria-label="通知"
           >
             <Bell className="w-5 h-5" />
             {unreadCount > 0 && (
-              <span className="absolute top-2 right-2 min-w-[16px] h-4 px-1 rounded-full bg-primary text-[10px] font-bold text-white flex items-center justify-center tabular-nums shadow-glow-primary">
+              <span className="absolute top-2 right-2 min-w-[16px] h-4 px-1 rounded-full bg-primary text-2xs font-bold text-white flex items-center justify-center tabular-nums">
                 {unreadCount > 9 ? '9+' : unreadCount}
               </span>
             )}
@@ -196,7 +196,7 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
                       key={n.id}
                       onClick={() => handleMarkRead(n.id)}
                       disabled={marking}
-                      className={`w-full text-left border-b border-border-subtle px-4 py-3 transition-colors hover:bg-surface-light disabled:opacity-50 ${
+                      className={`w-full text-left border-b border-border-subtle px-4 py-3 transition-colors hover:bg-surface-elevated disabled:opacity-50 ${
                         n.readAt ? 'opacity-55' : ''
                       }`}
                     >
@@ -205,13 +205,13 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
                           {n.title}
                         </p>
                         {!n.readAt && (
-                          <span className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-primary shadow-glow-primary" />
+                          <span className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-primary" />
                         )}
                       </div>
                       <p className="line-clamp-2 text-xs text-text-tertiary">
                         {n.content}
                       </p>
-                      <p className="mt-1 text-[11px] text-text-muted tabular-nums">
+                      <p className="mt-1 text-2xs text-text-muted tabular-nums">
                         {new Date(n.createdAt).toLocaleString('zh-CN')}
                       </p>
                     </button>
@@ -225,7 +225,7 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
 
         <button
           onClick={handleLogout}
-          className="hidden sm:flex w-10 h-10 rounded-xl bg-surface border border-border-default items-center justify-center text-text-secondary hover:text-danger hover:border-danger/30 hover:bg-danger/10 transition-all focus-ring"
+          className="hidden sm:flex w-10 h-10 rounded-xl bg-surface-elevated/60 items-center justify-center text-text-secondary hover:text-danger hover:bg-danger/[0.08] transition-all focus-ring"
           aria-label="退出登录"
         >
           <LogOut className="w-5 h-5" />
@@ -234,7 +234,7 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
         <div className="relative" ref={childDropdownRef}>
           <button
             onClick={() => setChildDropdownOpen((prev) => !prev)}
-            className="flex items-center gap-2.5 pl-1 pr-2 py-1 rounded-xl bg-surface border border-border-default hover:border-border-strong hover:bg-surface-light text-left focus-ring transition-all"
+            className="flex items-center gap-2.5 pl-1 pr-2 py-1 rounded-xl bg-surface-elevated/60 border border-border-subtle hover:border-border-default hover:bg-surface-elevated text-left focus-ring transition-all"
             aria-label="切换孩子"
             aria-haspopup="listbox"
             aria-expanded={childDropdownOpen}
@@ -245,7 +245,7 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
               <p className="text-sm font-semibold text-white leading-tight">
                 {currentChild ? currentChild.name : '未选择孩子'}
               </p>
-              <p className="text-[11px] text-text-tertiary">
+              <p className="text-2xs text-text-tertiary">
                 {currentChild && currentStage
                   ? `${gradeLabel(currentChild.grade, currentChild.educationSystem)} · ${currentStage}`
                   : '请选择孩子'}
@@ -290,7 +290,7 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
                         setChildDropdownOpen(false);
                       }}
                       className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-all ${
-                        isActive ? 'bg-primary-dim border border-primary/20' : 'hover:bg-surface-light'
+                        isActive ? 'bg-primary/[0.08]' : 'hover:bg-surface-elevated'
                       }`}
                     >
                       <ChildAvatar child={child} size="sm" shape="rounded" />

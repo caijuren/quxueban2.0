@@ -52,21 +52,21 @@ export default function HelpSection() {
             return (
               <div
                 key={index}
-                className="rounded-xl bg-white/[0.03] border border-white/[0.06] overflow-hidden"
+                className="rounded-xl bg-surface-elevated border border-border-subtle overflow-hidden"
               >
                 <button
                   onClick={() => setOpenIndex(isOpen ? null : index)}
-                  className="w-full flex items-center justify-between p-4 text-left hover:bg-white/[0.02] transition-colors"
+                  className="w-full flex items-center justify-between p-4 text-left hover:bg-surface-elevated transition-colors"
                 >
-                  <span className="text-sm font-medium text-slate-200">{item.q}</span>
+                  <span className="text-sm font-medium text-text-secondary">{item.q}</span>
                   {isOpen ? (
-                    <ChevronUp className="w-4 h-4 text-slate-500" />
+                    <ChevronUp className="w-4 h-4 text-text-muted" />
                   ) : (
-                    <ChevronDown className="w-4 h-4 text-slate-500" />
+                    <ChevronDown className="w-4 h-4 text-text-muted" />
                   )}
                 </button>
                 {isOpen && (
-                  <div className="px-4 pb-4 text-sm text-slate-400 leading-relaxed">
+                  <div className="px-4 pb-4 text-sm text-text-tertiary leading-relaxed">
                     {item.a}
                   </div>
                 )}
@@ -83,14 +83,14 @@ export default function HelpSection() {
             onChange={(e) => setFeedback(e.target.value)}
             placeholder="请描述你遇到的问题或建议..."
             rows={4}
-            className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:border-primary transition-all resize-none"
+            className="w-full px-4 py-3 rounded-xl bg-surface-elevated border border-border-default text-sm text-text-secondary placeholder-slate-500 focus:outline-none focus:border-primary transition-all resize-none"
           />
           <input
             type="text"
             value={contact}
             onChange={(e) => setContact(e.target.value)}
             placeholder="联系方式（选填）"
-            className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:border-primary transition-all"
+            className="w-full px-4 py-2.5 rounded-xl bg-surface-elevated border border-border-default text-sm text-text-secondary placeholder-slate-500 focus:outline-none focus:border-primary transition-all"
           />
           {submitted && (
             <div className="text-sm px-4 py-2 rounded-lg bg-success/10 text-success border border-success/20">
@@ -101,7 +101,7 @@ export default function HelpSection() {
             <button
               onClick={handleSubmitFeedback}
               disabled={submitting || !feedback.trim()}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-gradient-to-r from-primary to-secondary text-white text-sm font-medium hover:shadow-glow-primary transition-all disabled:opacity-70"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-primary text-white text-sm font-medium hover:opacity-90 transition-all disabled:opacity-70"
             >
               {submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
               提交反馈
@@ -115,21 +115,21 @@ export default function HelpSection() {
           <a
             href="/terms"
             target="_blank"
-            className="flex items-center gap-3 p-4 rounded-xl bg-white/[0.03] border border-white/[0.06] hover:bg-white/[0.05] transition-colors"
+            className="flex items-center gap-3 p-4 rounded-xl bg-surface-elevated border border-border-subtle hover:bg-surface-elevated transition-colors"
           >
             <FileText className="w-5 h-5 text-primary" />
-            <span className="text-sm text-slate-200">用户协议</span>
+            <span className="text-sm text-text-secondary">用户协议</span>
           </a>
           <a
             href="/privacy"
             target="_blank"
-            className="flex items-center gap-3 p-4 rounded-xl bg-white/[0.03] border border-white/[0.06] hover:bg-white/[0.05] transition-colors"
+            className="flex items-center gap-3 p-4 rounded-xl bg-surface-elevated border border-border-subtle hover:bg-surface-elevated transition-colors"
           >
             <FileText className="w-5 h-5 text-secondary" />
-            <span className="text-sm text-slate-200">隐私政策</span>
+            <span className="text-sm text-text-secondary">隐私政策</span>
           </a>
         </div>
-        <p className="mt-4 text-xs text-slate-500 text-center">
+        <p className="mt-4 text-xs text-text-muted text-center">
           趣学伴 v{packageInfo.version} · 升学规划中心
         </p>
       </SettingsSection>

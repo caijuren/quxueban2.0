@@ -10,18 +10,18 @@ interface DataBadgeProps {
 }
 
 const variantMap = {
-  primary: 'bg-primary/10 text-primary border-primary/20',
-  secondary: 'bg-secondary/10 text-secondary border-secondary/20',
-  accent: 'bg-accent/10 text-accent border-accent/20',
-  success: 'bg-success/10 text-success border-success/20',
-  warning: 'bg-warning/10 text-warning border-warning/20',
-  danger: 'bg-danger/10 text-danger border-danger/20',
-  default: 'bg-white/5 text-slate-400 border-white/10',
+  primary: 'bg-primary/[0.08] text-primary border-primary/15',
+  secondary: 'bg-secondary/[0.08] text-secondary border-secondary/15',
+  accent: 'bg-accent/[0.08] text-accent border-accent/15',
+  success: 'bg-success/[0.08] text-success border-success/15',
+  warning: 'bg-warning/[0.08] text-warning border-warning/15',
+  danger: 'bg-danger/[0.08] text-danger border-danger/15',
+  default: 'bg-surface-elevated text-text-tertiary border-border-default',
 };
 
 const sizeMap = {
-  sm: 'px-2 py-0.5 text-[10px]',
-  md: 'px-2.5 py-1 text-xs',
+  sm: 'px-1.5 py-0.5 text-2xs rounded',
+  md: 'px-2 py-0.5 text-xs rounded-md',
 };
 
 export default function DataBadge({
@@ -33,7 +33,7 @@ export default function DataBadge({
   return (
     <span
       className={cn(
-        'inline-flex items-center gap-1 rounded-md border font-medium tabular-nums',
+        'inline-flex items-center gap-1 font-medium tabular-nums tracking-tight',
         variantMap[variant],
         sizeMap[size],
         className

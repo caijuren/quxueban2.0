@@ -40,10 +40,10 @@ export default function CommandCard({
       className={cn(
         'rounded-2xl border transition-all duration-200 overflow-hidden',
         active
-          ? 'bg-surface-light border-primary/25 shadow-glow-primary'
-          : 'bg-surface border-border-default',
-        hover && !active && 'hover:border-border-strong hover:bg-surface-light',
-        isInteractive && 'cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background',
+          ? 'command-panel-active'
+          : 'command-panel',
+        hover && !active && 'hover:border-border-strong hover:bg-surface-elevated',
+        isInteractive && 'cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-2 focus-visible:ring-offset-background',
         corner && 'corner-accent',
         className
       )}

@@ -152,13 +152,13 @@ function ProgressRing({ rate, size = 96 }: { rate: number; size?: number }) {
         <defs>
           <linearGradient id="progressGradient" x1="0%" y1="0%" x2="100%" y2="0%">
             <stop offset="0%" stopColor="#ff2d6a" />
-            <stop offset="100%" stopColor="#8b5cf6" />
+            <stop offset="100%" stopColor="#ff5c8a" />
           </linearGradient>
         </defs>
       </svg>
       <div className="absolute inset-0 flex flex-col items-center justify-center">
         <span className="text-2xl font-bold font-display">{rate}%</span>
-        <span className="text-[10px] text-slate-500">完成率</span>
+        <span className="text-2xs text-text-muted">完成率</span>
       </div>
     </div>
   );
@@ -333,23 +333,23 @@ function EditPlanModal({ plan, onClose, onSave }: EditPlanModalProps) {
         role="dialog"
         aria-modal="true"
         aria-labelledby="edit-plan-title"
-        className="w-full h-full sm:h-auto sm:max-w-3xl sm:max-h-[85vh] overflow-y-auto rounded-none sm:rounded-3xl glass sm:border border-white/10 p-5 sm:p-8 modal-scroll"
+        className="w-full h-full sm:h-auto sm:max-w-3xl sm:max-h-[85vh] overflow-y-auto rounded-none sm:rounded-3xl glass sm:border border-border-default p-5 sm:p-8 modal-scroll"
       >
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-accent to-accent-glow flex items-center justify-center">
+            <div className="w-10 h-10 rounded-xl bg-accent flex items-center justify-center">
               <Pencil className="w-5 h-5 text-white" />
             </div>
             <div>
               <h2 id="edit-plan-title" className="text-xl font-bold font-display">编辑周计划</h2>
-              <p className="text-xs text-slate-400">
+              <p className="text-xs text-text-tertiary">
                 按星期分组管理，支持复制到多天
               </p>
             </div>
           </div>
           <button
             onClick={handleClose}
-            className="p-2 rounded-lg hover:bg-white/5 text-slate-400 focus-ring"
+            className="p-2 rounded-lg hover:bg-surface-elevated text-text-tertiary focus-ring"
             aria-label="关闭"
           >
             <X className="w-5 h-5" />
@@ -364,19 +364,19 @@ function EditPlanModal({ plan, onClose, onSave }: EditPlanModalProps) {
             return (
               <div
                 key={day}
-                className="rounded-2xl bg-white/[0.03] border border-white/[0.06] overflow-hidden"
+                className="rounded-2xl bg-surface-elevated border border-border-subtle overflow-hidden"
               >
                 <button
                   onClick={() => toggleDay(day)}
-                  className="w-full flex items-center justify-between px-4 py-3 hover:bg-white/[0.03] transition-colors"
+                  className="w-full flex items-center justify-between px-4 py-3 hover:bg-surface-elevated transition-colors"
                 >
                   <div className="flex items-center gap-3">
-                    <span className="text-sm font-bold text-slate-200">{day}</span>
-                    <span className="text-[11px] px-2 py-0.5 rounded-full bg-white/5 text-slate-400">
+                    <span className="text-sm font-bold text-text-secondary">{day}</span>
+                    <span className="text-xs px-2 py-0.5 rounded-full bg-surface-elevated text-text-tertiary">
                       {count} 项
                     </span>
                     {minutes > 0 && (
-                      <span className="text-[11px] px-2 py-0.5 rounded-full bg-white/5 text-slate-400">
+                      <span className="text-xs px-2 py-0.5 rounded-full bg-surface-elevated text-text-tertiary">
                         约 {minutes} 分钟
                       </span>
                     )}
@@ -387,13 +387,13 @@ function EditPlanModal({ plan, onClose, onSave }: EditPlanModalProps) {
                         e.stopPropagation();
                         addTask(day);
                       }}
-                      className="p-1.5 rounded-lg hover:bg-white/10 text-slate-400 hover:text-slate-200 transition-colors"
+                      className="p-1.5 rounded-lg hover:bg-surface-highlight text-text-tertiary hover:text-text-secondary transition-colors"
                       aria-label={`${day}添加任务`}
                     >
                       <Plus className="w-4 h-4" />
                     </button>
                     <ChevronDown
-                      className={`w-4 h-4 text-slate-500 transition-transform ${
+                      className={`w-4 h-4 text-text-muted transition-transform ${
                         isCollapsed ? '-rotate-90' : ''
                       }`}
                     />
@@ -410,7 +410,7 @@ function EditPlanModal({ plan, onClose, onSave }: EditPlanModalProps) {
                     >
                       <div className="p-3 space-y-3">
                         {dayTasks.length === 0 && (
-                          <div className="text-center py-4 text-xs text-slate-500">
+                          <div className="text-center py-4 text-xs text-text-muted">
                             暂无任务，点击上方 + 添加
                           </div>
                         )}
@@ -444,13 +444,13 @@ function EditPlanModal({ plan, onClose, onSave }: EditPlanModalProps) {
         <div className="flex items-center justify-end gap-3">
           <button
             onClick={handleClose}
-            className="px-4 py-2 rounded-xl text-slate-400 hover:text-slate-200 transition-colors focus-ring"
+            className="px-4 py-2 rounded-xl text-text-tertiary hover:text-text-secondary transition-colors focus-ring"
           >
             取消
           </button>
           <button
             onClick={handleSave}
-            className="flex items-center gap-2 px-6 py-2 rounded-xl bg-gradient-to-r from-accent to-accent-glow text-white font-semibold hover:shadow-[0_0_30px_rgba(6,182,212,0.4)] transition-all focus-ring"
+            className="flex items-center gap-2 px-6 py-2 rounded-xl bg-accent text-white font-semibold transition-all focus-ring"
           >
             <Send className="w-4 h-4" />
             保存
@@ -512,12 +512,12 @@ function TaskEditRow({
   };
 
   return (
-    <div className="rounded-xl bg-white/5 border border-white/5 p-3">
+    <div className="rounded-xl bg-surface-elevated border border-border-subtle p-3">
       <div className="grid grid-cols-12 gap-2 items-start">
         <div className="col-span-6 sm:col-span-2">
-          <label className="block text-[10px] text-slate-500 mb-1">分类</label>
+          <label className="block text-2xs text-text-muted mb-1">分类</label>
           <div className="relative">
-            <CategoryIcon className="absolute left-2 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400 pointer-events-none" />
+            <CategoryIcon className="absolute left-2 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-text-tertiary pointer-events-none" />
             <select
               value={task.category}
               onChange={(e) =>
@@ -525,7 +525,7 @@ function TaskEditRow({
                   category: e.target.value as TaskCategory,
                 })
               }
-              className="w-full pl-7 pr-2 text-xs bg-white/5 border border-white/10 rounded-lg py-1.5 text-slate-200 focus:outline-none focus:border-accent/50"
+              className="w-full pl-7 pr-2 text-xs bg-surface-elevated border border-border-default rounded-lg py-1.5 text-text-secondary focus:outline-none focus:border-accent/50"
             >
               {allCategories.map((c) => (
                 <option key={c} value={c}>
@@ -537,24 +537,24 @@ function TaskEditRow({
         </div>
 
         <div className="col-span-6 sm:col-span-5">
-          <label className="block text-[10px] text-slate-500 mb-1">任务内容</label>
+          <label className="block text-2xs text-text-muted mb-1">任务内容</label>
           <input
             type="text"
             value={task.focus}
             onChange={(e) => onUpdate(task.id, { focus: e.target.value })}
             placeholder="例如：古诗新学"
-            className="w-full text-xs bg-white/5 border border-white/10 rounded-lg px-2 py-1.5 text-slate-200 placeholder:text-slate-600 focus:outline-none focus:border-accent/50"
+            className="w-full text-xs bg-surface-elevated border border-border-default rounded-lg px-2 py-1.5 text-text-secondary placeholder:text-text-muted focus:outline-none focus:border-accent/50"
           />
         </div>
 
         <div className="col-span-6 sm:col-span-2">
-          <label className="block text-[10px] text-slate-500 mb-1">时长</label>
+          <label className="block text-2xs text-text-muted mb-1">时长</label>
           <input
             type="text"
             value={task.duration}
             onChange={(e) => onUpdate(task.id, { duration: e.target.value })}
             placeholder="30分钟"
-            className="w-full text-xs bg-white/5 border border-white/10 rounded-lg px-2 py-1.5 text-slate-200 placeholder:text-slate-600 focus:outline-none focus:border-accent/50"
+            className="w-full text-xs bg-surface-elevated border border-border-default rounded-lg px-2 py-1.5 text-text-secondary placeholder:text-text-muted focus:outline-none focus:border-accent/50"
           />
           <div className="flex flex-wrap gap-1 mt-1.5">
             {durationPresets.map((preset) => (
@@ -565,7 +565,7 @@ function TaskEditRow({
                 className={`text-[9px] px-1.5 py-0.5 rounded transition-colors ${
                   task.duration === preset
                     ? 'bg-accent/20 text-accent border border-accent/30'
-                    : 'bg-white/5 text-slate-500 hover:bg-white/10'
+                    : 'bg-surface-elevated text-text-muted hover:bg-surface-highlight'
                 }`}
               >
                 {preset.replace('分钟', '')}
@@ -579,8 +579,8 @@ function TaskEditRow({
             onClick={onToggleCopy}
             className={`p-1.5 rounded-lg transition-colors focus-ring ${
               isCopying
-                ? 'bg-secondary/15 text-secondary'
-                : 'hover:bg-white/10 text-slate-500 hover:text-slate-300'
+                ? 'bg-primary/[0.08] text-primary'
+                : 'hover:bg-surface-highlight text-text-muted hover:text-text-secondary'
             }`}
             aria-label="复制到其它日期"
             title="复制到其它日期"
@@ -589,7 +589,7 @@ function TaskEditRow({
           </button>
           <button
             onClick={() => onDelete(task.id)}
-            className="p-1.5 rounded-lg hover:bg-error/10 text-slate-500 hover:text-error transition-colors focus-ring"
+            className="p-1.5 rounded-lg hover:bg-error/10 text-text-muted hover:text-error transition-colors focus-ring"
             aria-label="删除任务"
           >
             <Trash2 className="w-4 h-4" />
@@ -598,12 +598,12 @@ function TaskEditRow({
       </div>
 
       <div className="mt-2">
-        <label className="block text-[10px] text-slate-500 mb-1">材料/关键词</label>
+        <label className="block text-2xs text-text-muted mb-1">材料/关键词</label>
         <div className="flex flex-wrap items-center gap-1.5">
           {task.materials.map((m, idx) => (
             <span
               key={`${m}-${idx}`}
-              className="text-[10px] px-2 py-0.5 rounded-full bg-white/10 text-slate-300 flex items-center gap-1"
+              className="text-2xs px-2 py-0.5 rounded-full bg-surface-highlight text-text-secondary flex items-center gap-1"
             >
               {m}
               <button
@@ -651,7 +651,7 @@ function TaskEditRow({
               }
             }}
             placeholder={task.materials.length === 0 ? '输入后回车或逗号分隔' : ''}
-            className="min-w-[120px] text-xs bg-transparent border-none px-1 py-0.5 text-slate-200 placeholder:text-slate-600 focus:outline-none focus:ring-0"
+            className="min-w-[120px] text-xs bg-transparent border-none px-1 py-0.5 text-text-secondary placeholder:text-text-muted focus:outline-none focus:ring-0"
           />
         </div>
       </div>
@@ -664,8 +664,8 @@ function TaskEditRow({
             exit={{ height: 0, opacity: 0 }}
             className="overflow-hidden"
           >
-            <div className="mt-3 pt-3 border-t border-white/[0.06]">
-              <p className="text-[10px] text-slate-400 mb-2">复制到以下日期：</p>
+            <div className="mt-3 pt-3 border-t border-border-subtle">
+              <p className="text-2xs text-text-tertiary mb-2">复制到以下日期：</p>
               <div className="flex flex-wrap gap-2 mb-3">
                 {dayOrder.map((day) => {
                   const selected = selectedDays.has(day);
@@ -676,8 +676,8 @@ function TaskEditRow({
                       onClick={() => toggleDay(day)}
                       className={`px-2.5 py-1 rounded-lg text-xs transition-all ${
                         selected
-                          ? 'bg-secondary/15 text-secondary border border-secondary/30'
-                          : 'bg-white/5 text-slate-400 border border-white/[0.06] hover:bg-white/[0.08]'
+                          ? 'bg-primary/[0.08] text-primary border border-primary/25'
+                          : 'bg-surface-elevated text-text-tertiary border border-border-subtle hover:bg-surface-elevated'
                       }`}
                     >
                       {day}
@@ -690,14 +690,14 @@ function TaskEditRow({
                   type="button"
                   onClick={handleCopy}
                   disabled={selectedDays.size === 0}
-                  className="px-3 py-1.5 rounded-lg bg-secondary/15 text-secondary text-xs hover:bg-secondary/20 transition-colors disabled:opacity-50"
+                  className="px-3 py-1.5 rounded-lg bg-primary/[0.08] text-primary text-xs hover:bg-primary/[0.12] transition-colors disabled:opacity-50"
                 >
                   确认复制
                 </button>
                 <button
                   type="button"
                   onClick={onToggleCopy}
-                  className="px-3 py-1.5 rounded-lg bg-white/5 text-slate-400 text-xs hover:bg-white/10 transition-colors"
+                  className="px-3 py-1.5 rounded-lg bg-surface-elevated text-text-tertiary text-xs hover:bg-surface-highlight transition-colors"
                 >
                   取消
                 </button>
@@ -729,17 +729,17 @@ function UnsavedPrompt({ onCancel, onConfirm }: UnsavedPromptProps) {
         animate={{ scale: 1, opacity: 1 }}
         exit={{ scale: 0.95, opacity: 0 }}
         onClick={(e) => e.stopPropagation()}
-        className="w-full max-w-sm rounded-2xl glass border border-white/10 p-6 text-center mx-4"
+        className="w-full max-w-sm rounded-2xl glass border border-border-default p-6 text-center mx-4"
       >
         <AlertTriangle className="w-10 h-10 text-warning mx-auto mb-3" />
-        <h3 className="text-lg font-bold text-slate-200 mb-2">有未保存的更改</h3>
-        <p className="text-xs text-slate-400 mb-6">
+        <h3 className="text-lg font-bold text-text-secondary mb-2">有未保存的更改</h3>
+        <p className="text-xs text-text-tertiary mb-6">
           关闭后将丢失本次编辑内容，确定要取消吗？
         </p>
         <div className="flex items-center justify-center gap-3">
           <button
             onClick={onCancel}
-            className="px-4 py-2 rounded-xl text-slate-300 hover:text-white transition-colors"
+            className="px-4 py-2 rounded-xl text-text-secondary hover:text-white transition-colors"
           >
             继续编辑
           </button>
@@ -907,25 +907,25 @@ function TaskLibraryModal({
         role="dialog"
         aria-modal="true"
         aria-labelledby="library-title"
-        className="w-full h-full sm:h-auto sm:max-w-4xl sm:max-h-[85vh] overflow-y-auto rounded-none sm:rounded-3xl glass sm:border border-white/10 p-5 sm:p-8 modal-scroll"
+        className="w-full h-full sm:h-auto sm:max-w-4xl sm:max-h-[85vh] overflow-y-auto rounded-none sm:rounded-3xl glass sm:border border-border-default p-5 sm:p-8 modal-scroll"
       >
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-secondary to-secondary-glow flex items-center justify-center">
-              <Library className="w-5 h-5 text-white" />
+            <div className="w-10 h-10 rounded-xl bg-surface-elevated border border-border-default flex items-center justify-center">
+              <Library className="w-5 h-5 text-primary" />
             </div>
             <div>
               <div className="flex items-center gap-2">
                 <h2 id="library-title" className="text-xl font-bold font-display">从任务库选择</h2>
               </div>
-              <p className="text-xs text-slate-400">
+              <p className="text-xs text-text-tertiary">
                 勾选常用任务一键添加到{selectedDay}
               </p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="p-2 rounded-lg hover:bg-white/5 text-slate-400 focus-ring"
+            className="p-2 rounded-lg hover:bg-surface-elevated text-text-tertiary focus-ring"
             aria-label="关闭"
           >
             <X className="w-5 h-5" />
@@ -938,8 +938,8 @@ function TaskLibraryModal({
               onClick={() => setSelectedCategory('all')}
               className={`px-3 py-1.5 rounded-lg text-xs transition-colors ${
                 selectedCategory === 'all'
-                  ? 'bg-white/10 text-white'
-                  : 'bg-white/5 text-slate-400 hover:text-slate-200'
+                  ? 'bg-surface-highlight text-white'
+                  : 'bg-surface-elevated text-text-tertiary hover:text-text-secondary'
               }`}
             >
               全部
@@ -950,8 +950,8 @@ function TaskLibraryModal({
                 onClick={() => setSelectedCategory(cat)}
                 className={`px-3 py-1.5 rounded-lg text-xs transition-colors ${
                   selectedCategory === cat
-                    ? 'bg-white/10 text-white'
-                    : 'bg-white/5 text-slate-400 hover:text-slate-200'
+                    ? 'bg-surface-highlight text-white'
+                    : 'bg-surface-elevated text-text-tertiary hover:text-text-secondary'
                 }`}
               >
                 {TASK_CATEGORY_LABELS[cat]}
@@ -962,22 +962,22 @@ function TaskLibraryModal({
             <button
               onClick={toggleAllFiltered}
               disabled={filteredTemplates.length === 0}
-              className="flex items-center gap-1.5 text-xs text-slate-300 hover:text-white disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+              className="flex items-center gap-1.5 text-xs text-text-secondary hover:text-white disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
             >
               <div
                 className={`w-4 h-4 rounded border flex items-center justify-center ${
-                  allFilteredSelected ? 'bg-secondary border-secondary' : 'border-white/20'
+                  allFilteredSelected ? 'bg-primary border-primary' : 'border-border-default'
                 }`}
               >
                 {allFilteredSelected && <CheckCircle2 className="w-3 h-3 text-white" />}
               </div>
               全选
             </button>
-            <span className="text-xs text-slate-500">添加到</span>
+            <span className="text-xs text-text-muted">添加到</span>
             <select
               value={selectedDay}
               onChange={(e) => setSelectedDay(e.target.value as DayOfWeek)}
-              className="text-xs bg-white/5 border border-white/10 rounded-lg px-2 py-1.5 text-slate-200"
+              className="text-xs bg-surface-elevated border border-border-default rounded-lg px-2 py-1.5 text-text-secondary"
             >
               {dayOrder.map((d) => (
                 <option key={d} value={d}>
@@ -989,9 +989,9 @@ function TaskLibraryModal({
         </div>
 
         {loading ? (
-          <div className="py-12 text-center text-slate-500 text-sm">加载中...</div>
+          <div className="py-12 text-center text-text-muted text-sm">加载中...</div>
         ) : filteredTemplates.length === 0 ? (
-          <div className="py-12 text-center text-slate-500 text-sm">
+          <div className="py-12 text-center text-text-muted text-sm">
             暂无任务模板
           </div>
         ) : (
@@ -1007,53 +1007,53 @@ function TaskLibraryModal({
                   onClick={() => toggleTemplate(tpl.id)}
                   className={`text-left rounded-xl border p-3 transition-all ${
                     selected
-                      ? 'bg-secondary/10 border-secondary/30'
-                      : 'bg-white/5 border-white/5 hover:bg-white/[0.07]'
+                      ? 'bg-primary/[0.08] border-primary/25'
+                      : 'bg-surface-elevated border-border-subtle hover:bg-surface-highlight'
                   }`}
                 >
                   <div className="flex items-start gap-3">
-                    <div className={`mt-0.5 w-5 h-5 rounded border flex items-center justify-center ${selected ? 'bg-secondary border-secondary' : 'border-white/20'}`}>
+                    <div className={`mt-0.5 w-5 h-5 rounded border flex items-center justify-center ${selected ? 'bg-primary border-primary' : 'border-border-default'}`}>
                       {selected && <CheckCircle2 className="w-3.5 h-3.5 text-white" />}
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex flex-wrap items-center gap-1.5 mb-1">
-                        <CategoryIcon className="w-3.5 h-3.5 text-slate-400" />
-                        <span className="text-[10px] text-slate-400">{TASK_CATEGORY_LABELS[tpl.category]}</span>
+                        <CategoryIcon className="w-3.5 h-3.5 text-text-tertiary" />
+                        <span className="text-2xs text-text-tertiary">{TASK_CATEGORY_LABELS[tpl.category]}</span>
                         {tpl.difficulty && DIFFICULTY_LABELS[tpl.difficulty] && (
-                          <span className={`text-[10px] px-1.5 py-0.5 rounded border ${difficultyColor}`}>
+                          <span className={`text-2xs px-1.5 py-0.5 rounded border ${difficultyColor}`}>
                             {DIFFICULTY_LABELS[tpl.difficulty]}
                           </span>
                         )}
                         {tpl.semesterTag && SEMESTER_LABELS[tpl.semesterTag] && (
-                          <span className="text-[10px] px-1.5 py-0.5 rounded bg-info/10 text-info border border-info/20">
+                          <span className="text-2xs px-1.5 py-0.5 rounded bg-accent/[0.08] text-accent border border-accent/15">
                             {SEMESTER_LABELS[tpl.semesterTag]}
                           </span>
                         )}
                         {alignment && alignment !== 'unrelated' && (
-                          <span className={`text-[10px] px-1.5 py-0.5 rounded border ${getAlignmentColorClass(alignment)}`}>
+                          <span className={`text-2xs px-1.5 py-0.5 rounded border ${getAlignmentColorClass(alignment)}`}>
                             {TASK_ALIGNMENT_LABELS[alignment]}
                           </span>
                         )}
                         {alignment === 'unrelated' && (
-                          <span className="text-[10px] px-1.5 py-0.5 rounded bg-zinc-500/20 text-zinc-400 border border-zinc-500/30">
+                          <span className="text-2xs px-1.5 py-0.5 rounded bg-surface-highlight text-text-tertiary border border-border-default">
                             不相关
                           </span>
                         )}
-                        <span className="text-[10px] px-1.5 py-0.5 rounded bg-white/5 text-slate-300 ml-auto">{tpl.duration}</span>
+                        <span className="text-2xs px-1.5 py-0.5 rounded bg-surface-elevated text-text-secondary ml-auto">{tpl.duration}</span>
                       </div>
-                      <p className="text-sm font-semibold text-slate-200 mb-1 truncate">{tpl.title}</p>
+                      <p className="text-sm font-semibold text-text-secondary mb-1 truncate">{tpl.title}</p>
                       {tpl.description && (
-                        <p className="text-[10px] text-slate-500 line-clamp-2 mb-1">{tpl.description}</p>
+                        <p className="text-2xs text-text-muted line-clamp-2 mb-1">{tpl.description}</p>
                       )}
                       {tpl.tags.length > 0 && (
                         <div className="flex flex-wrap gap-1 mb-1">
                           {tpl.tags.slice(0, 3).map((tag) => (
-                            <span key={tag} className="text-[9px] px-1 py-0.5 rounded bg-white/5 text-slate-500">
+                            <span key={tag} className="text-[9px] px-1 py-0.5 rounded bg-surface-elevated text-text-muted">
                               {tag}
                             </span>
                           ))}
                           {tpl.tags.length > 3 && (
-                            <span className="text-[9px] px-1 py-0.5 rounded bg-white/5 text-slate-500">
+                            <span className="text-[9px] px-1 py-0.5 rounded bg-surface-elevated text-text-muted">
                               +{tpl.tags.length - 3}
                             </span>
                           )}
@@ -1062,7 +1062,7 @@ function TaskLibraryModal({
                       {tpl.routeTags.length > 0 && (
                         <div className="flex flex-wrap gap-1">
                           {tpl.routeTags.map((tag) => (
-                            <span key={tag} className="text-[9px] px-1 py-0.5 rounded bg-white/5 text-slate-500">
+                            <span key={tag} className="text-[9px] px-1 py-0.5 rounded bg-surface-elevated text-text-muted">
                               {tag}
                             </span>
                           ))}
@@ -1087,20 +1087,20 @@ function TaskLibraryModal({
         )}
 
         <div className="flex items-center justify-between">
-          <p className="text-xs text-slate-500">
+          <p className="text-xs text-text-muted">
             已选 {selectedTemplateIds.size} 项
           </p>
           <div className="flex items-center gap-3">
             <button
               onClick={onClose}
-              className="px-4 py-2 rounded-xl text-slate-400 hover:text-slate-200 transition-colors"
+              className="px-4 py-2 rounded-xl text-text-tertiary hover:text-text-secondary transition-colors"
             >
               取消
             </button>
             <button
               onClick={handleAdd}
               disabled={selectedTemplateIds.size === 0 || assess.isPending}
-              className="flex items-center gap-2 px-6 py-2 rounded-xl bg-gradient-to-r from-secondary to-secondary-glow text-white font-semibold disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-[0_0_30px_rgba(139,92,246,0.4)] transition-all"
+              className="flex items-center gap-2 px-6 py-2 rounded-xl bg-primary text-white font-semibold disabled:opacity-50 disabled:cursor-not-allowed transition-all"
             >
               {assess.isPending ? (
                 <>
@@ -1342,12 +1342,12 @@ function WeeklyTasksContent() {
       >
         <div>
           <div className="flex items-center gap-3 mb-2">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center">
+            <div className="w-10 h-10 rounded-xl bg-surface-elevated border border-border-default flex items-center justify-center">
               <Calendar className="w-5 h-5 text-white" />
             </div>
             <div>
               <h1 className="text-3xl font-bold font-display">周计划</h1>
-              <p className="text-sm text-slate-400">
+              <p className="text-sm text-text-tertiary">
                 {currentChild.name} · {gradeLabel(currentChild.grade, currentChild.educationSystem)} · {formatWeekLabel(weekId)}
               </p>
             </div>
@@ -1357,17 +1357,17 @@ function WeeklyTasksContent() {
         <div className="flex items-center gap-2">
           <button
             onClick={() => setWeekId((w) => shiftWeekId(w, -1))}
-            className="w-8 h-8 flex items-center justify-center rounded-lg bg-white/5 hover:bg-white/10 text-slate-300 transition-colors focus-ring"
+            className="w-8 h-8 flex items-center justify-center rounded-lg bg-surface-elevated hover:bg-surface-highlight text-text-secondary transition-colors focus-ring"
             aria-label="上一周"
           >
             <ChevronLeft className="w-4 h-4" />
           </button>
-          <div className="px-3 py-1.5 rounded-lg glass border border-white/[0.08] text-sm font-medium min-w-[120px] text-center tabular-nums">
+          <div className="px-3 py-1.5 rounded-lg glass border border-border-default text-sm font-medium min-w-[120px] text-center tabular-nums">
             {year}年第{week}周
           </div>
           <button
             onClick={() => setWeekId((w) => shiftWeekId(w, 1))}
-            className="w-8 h-8 flex items-center justify-center rounded-lg bg-white/5 hover:bg-white/10 text-slate-300 transition-colors focus-ring"
+            className="w-8 h-8 flex items-center justify-center rounded-lg bg-surface-elevated hover:bg-surface-highlight text-text-secondary transition-colors focus-ring"
             aria-label="下一周"
           >
             <ChevronRight className="w-4 h-4" />
@@ -1385,7 +1385,7 @@ function WeeklyTasksContent() {
           {!displayPlan && (
             <button
               onClick={handleGenerate}
-              className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-gradient-to-r from-primary to-primary-glow text-white text-sm font-semibold hover:shadow-glow-primary transition-all duration-200 focus-ring"
+              className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-primary text-white text-sm font-semibold transition-all duration-200 focus-ring"
             >
               <Target className="w-3.5 h-3.5" />
               生成本周计划
@@ -1395,14 +1395,14 @@ function WeeklyTasksContent() {
             <>
               <button
                 onClick={handlePublish}
-                className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-gradient-to-r from-primary to-primary-glow text-white text-sm font-semibold hover:shadow-glow-primary transition-all duration-200 focus-ring"
+                className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-primary text-white text-sm font-semibold transition-all duration-200 focus-ring"
               >
                 <Send className="w-3.5 h-3.5" />
                 发布
               </button>
               <button
                 onClick={handleCancelDraft}
-                className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-white/5 hover:bg-white/10 text-slate-300 text-sm transition-colors focus-ring"
+                className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-surface-elevated hover:bg-surface-highlight text-text-secondary text-sm transition-colors focus-ring"
               >
                 <X className="w-3.5 h-3.5" />
                 取消
@@ -1412,7 +1412,7 @@ function WeeklyTasksContent() {
           {isPublished && !isDraft && (
             <button
               onClick={handleOpenReview}
-              className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-gradient-to-r from-secondary to-secondary-glow text-white text-sm font-semibold hover:shadow-glow-secondary transition-all duration-200 focus-ring"
+              className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-accent text-white text-sm font-semibold transition-all duration-200 focus-ring"
             >
               <Sparkles className="w-3.5 h-3.5" />
               {plan?.reviewedAt ? '查看复盘' : '本周复盘'}
@@ -1421,7 +1421,7 @@ function WeeklyTasksContent() {
           {isPublished && !isDraft && stats && (
             <button
               onClick={() => setReportOpen(true)}
-              className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-white/5 hover:bg-white/10 text-slate-300 text-sm transition-colors focus-ring"
+              className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-surface-elevated hover:bg-surface-highlight text-text-secondary text-sm transition-colors focus-ring"
             >
               <Share2 className="w-3.5 h-3.5" />
               导出周报
@@ -1431,21 +1431,21 @@ function WeeklyTasksContent() {
             <>
               <button
                 onClick={() => setEditOpen(true)}
-                className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-white/5 hover:bg-white/10 text-slate-300 text-sm transition-colors focus-ring"
+                className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-surface-elevated hover:bg-surface-highlight text-text-secondary text-sm transition-colors focus-ring"
               >
                 <Plus className="w-3.5 h-3.5" />
                 手动添加任务
               </button>
               <button
                 onClick={() => setLibraryOpen(true)}
-                className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-white/5 hover:bg-white/10 text-slate-300 text-sm transition-colors focus-ring"
+                className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-surface-elevated hover:bg-surface-highlight text-text-secondary text-sm transition-colors focus-ring"
               >
                 <Library className="w-3.5 h-3.5" />
                 从任务库选择
               </button>
               <button
                 onClick={() => setEditOpen(true)}
-                className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-white/5 hover:bg-white/10 text-slate-300 text-sm transition-colors focus-ring"
+                className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-surface-elevated hover:bg-surface-highlight text-text-secondary text-sm transition-colors focus-ring"
               >
                 <Pencil className="w-3.5 h-3.5" />
                 {isDraft ? '编辑任务' : '调整任务'}
@@ -1453,18 +1453,18 @@ function WeeklyTasksContent() {
             </>
           )}
           {isDraft && (
-            <span className="text-xs text-slate-500">预览模式：发布后才会保存</span>
+            <span className="text-xs text-text-muted">预览模式：发布后才会保存</span>
           )}
         </div>
 
-        <div className="flex items-center gap-1 bg-white/5 rounded-lg p-1">
+        <div className="flex items-center gap-1 bg-surface-elevated rounded-lg p-1">
           <button
             onClick={() => setViewMode('day')}
             aria-pressed={viewMode === 'day'}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs transition-all focus-ring ${
               viewMode === 'day'
-                ? 'bg-white/10 text-white'
-                : 'text-slate-400 hover:text-slate-200'
+                ? 'bg-surface-highlight text-white'
+                : 'text-text-tertiary hover:text-text-secondary'
             }`}
           >
             <List className="w-3.5 h-3.5" />
@@ -1475,8 +1475,8 @@ function WeeklyTasksContent() {
             aria-pressed={viewMode === 'matrix'}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs transition-all focus-ring ${
               viewMode === 'matrix'
-                ? 'bg-white/10 text-white'
-                : 'text-slate-400 hover:text-slate-200'
+                ? 'bg-surface-highlight text-white'
+                : 'text-text-tertiary hover:text-text-secondary'
             }`}
           >
             <LayoutGrid className="w-3.5 h-3.5" />
@@ -1496,10 +1496,10 @@ function WeeklyTasksContent() {
             <div className="flex items-start gap-3">
               <AlertTriangle className="w-5 h-5 text-warning shrink-0 mt-0.5" />
               <div>
-                <p className="text-sm font-semibold text-slate-200">
+                <p className="text-sm font-semibold text-text-secondary">
                   上周有 {lastWeekUncompleted.length} 项任务未补完
                 </p>
-                <p className="text-xs text-slate-400 mt-0.5">
+                <p className="text-xs text-text-tertiary mt-0.5">
                   可以一键添加到本周，避免学习任务中断
                 </p>
               </div>
@@ -1524,11 +1524,11 @@ function WeeklyTasksContent() {
           <CommandCard className="p-4 flex items-center gap-4">
             <MetricRing rate={stats.completionRate} size={64} strokeWidth={6} />
             <div>
-              <p className="text-xs text-slate-500">本周完成率</p>
-              <p className="text-lg font-bold font-display tabular-nums text-slate-100">
+              <p className="text-xs text-text-muted">本周完成率</p>
+              <p className="text-lg font-bold font-display tabular-nums text-text-primary">
                 {stats.done}/{stats.total}
               </p>
-              <p className="text-[10px] text-slate-500">
+              <p className="text-2xs text-text-muted">
                 {stats.pending > 0 ? `还剩 ${stats.pending} 项` : '全部完成'}
               </p>
             </div>
@@ -1537,18 +1537,18 @@ function WeeklyTasksContent() {
           <CommandCard className="p-4">
             <div className="flex items-center gap-1.5 mb-2">
               <Clock className="w-3.5 h-3.5 text-accent" />
-              <p className="text-xs text-slate-500">计划总时长</p>
+              <p className="text-xs text-text-muted">计划总时长</p>
             </div>
-            <p className="text-lg font-bold font-display tabular-nums text-slate-100">
+            <p className="text-lg font-bold font-display tabular-nums text-text-primary">
               {Math.round((stats.estimatedMinutes / 60) * 10) / 10}h
             </p>
-            <p className="text-[10px] text-slate-500">约 {stats.estimatedMinutes} 分钟</p>
+            <p className="text-2xs text-text-muted">约 {stats.estimatedMinutes} 分钟</p>
           </CommandCard>
 
           <CommandCard className="p-4">
             <div className="flex items-center gap-1.5 mb-2">
-              <TrendingUp className="w-3.5 h-3.5 text-secondary" />
-              <p className="text-xs text-slate-500">分类完成</p>
+              <TrendingUp className="w-3.5 h-3.5 text-accent" />
+              <p className="text-xs text-text-muted">分类完成</p>
             </div>
             <div className="space-y-1 max-h-[72px] overflow-y-auto">
               {(['school', 'reading', 'sport', 'interest', 'ability', 'other'] as TaskCategory[])
@@ -1557,8 +1557,8 @@ function WeeklyTasksContent() {
                   const s = stats.byCategory[cat];
                   return (
                     <div key={cat} className="flex items-center justify-between text-xs">
-                      <span className="text-slate-400">{TASK_CATEGORY_LABELS[cat]}</span>
-                      <span className={s.total === s.done ? 'text-success tabular-nums' : 'text-slate-300 tabular-nums'}>
+                      <span className="text-text-tertiary">{TASK_CATEGORY_LABELS[cat]}</span>
+                      <span className={s.total === s.done ? 'text-success tabular-nums' : 'text-text-secondary tabular-nums'}>
                         {s.done}/{s.total}
                       </span>
                     </div>
@@ -1570,12 +1570,12 @@ function WeeklyTasksContent() {
           <CommandCard className="p-4">
             <div className="flex items-center gap-1.5 mb-2">
               <Trophy className="w-3.5 h-3.5 text-warning" />
-              <p className="text-xs text-slate-500">本周状态</p>
+              <p className="text-xs text-text-muted">本周状态</p>
             </div>
-            <p className="text-base font-semibold text-slate-100">
+            <p className="text-base font-semibold text-text-primary">
               {isDraft ? '草稿待发布' : isPublished ? '已发布' : '未生成'}
             </p>
-            <p className="text-[10px] text-slate-500">
+            <p className="text-2xs text-text-muted">
               {plan?.reviewedAt ? '已完成复盘' : plan?.publishedAt ? '待复盘' : '—'}
             </p>
           </CommandCard>
@@ -1591,16 +1591,16 @@ function WeeklyTasksContent() {
             exit={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: -20 }}
             className="rounded-2xl glass p-12 text-center"
           >
-            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center mx-auto mb-4">
+            <div className="w-16 h-16 rounded-2xl bg-surface-elevated border border-border-default flex items-center justify-center mx-auto mb-4">
               <Calendar className="w-8 h-8 text-primary" />
             </div>
             <h3 className="text-xl font-bold font-display mb-2">本周计划尚未发布</h3>
-            <p className="text-sm text-slate-400 mb-6 max-w-md mx-auto">
+            <p className="text-sm text-text-tertiary mb-6 max-w-md mx-auto">
               从任务库中选择任务，按周发布时间属性自动生成矩阵。发布后即可每日打卡。
             </p>
             <button
               onClick={handleGenerate}
-              className="px-6 py-3 rounded-xl bg-gradient-to-r from-primary to-primary-glow text-white font-semibold hover:shadow-[0_0_30px_rgba(255,45,106,0.4)] transition-all focus-ring"
+              className="px-6 py-3 rounded-xl bg-primary text-white font-semibold transition-all focus-ring"
             >
               生成本周计划
             </button>
@@ -1627,17 +1627,17 @@ function WeeklyTasksContent() {
                     aria-pressed={isSelected}
                     className={`flex-shrink-0 relative px-3 py-2 rounded-lg text-left min-w-[68px] transition-all border focus-ring ${
                       isSelected
-                        ? 'bg-white/[0.08] border-primary/30'
-                        : 'bg-white/[0.03] border-white/[0.06] hover:bg-white/[0.05] hover:border-white/[0.1]'
+                        ? 'bg-surface-elevated border-primary/30'
+                        : 'bg-surface-elevated border-border-subtle hover:bg-surface-elevated hover:border-border-default'
                     }`}
                   >
                     {isToday && (
-                      <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-primary shadow-glow-primary" />
+                      <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-primary" />
                     )}
-                    <p className={`text-xs font-bold ${isSelected ? 'text-white' : 'text-slate-300'}`}>
+                    <p className={`text-xs font-bold ${isSelected ? 'text-white' : 'text-text-secondary'}`}>
                       {day}
                     </p>
-                    <p className="text-[10px] text-slate-500 mt-0.5 tabular-nums">
+                    <p className="text-2xs text-text-muted mt-0.5 tabular-nums">
                       {total === 0 ? '无任务' : `${done}/${total}`}
                     </p>
                   </button>
@@ -1647,7 +1647,7 @@ function WeeklyTasksContent() {
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-3">
               {tasksByDay?.[selectedDay]?.length === 0 ? (
-                <div className="lg:col-span-3 rounded-xl glass border border-white/[0.06] p-8 text-center text-slate-500 text-sm">
+                <div className="lg:col-span-3 rounded-xl glass border border-border-subtle p-8 text-center text-text-muted text-sm">
                   {selectedDay} 没有安排任务
                 </div>
               ) : (
@@ -1670,7 +1670,7 @@ function WeeklyTasksContent() {
                         <div className="flex items-start gap-3">
                           <button
                             onClick={() => handleToggleTask(task)}
-                            className="mt-0.5 text-slate-400 hover:text-primary transition-colors focus-ring rounded-full"
+                            className="mt-0.5 text-text-tertiary hover:text-primary transition-colors focus-ring rounded-full"
                             aria-label={isDone ? '标记为未完成' : '标记为完成'}
                           >
                             {isDone ? (
@@ -1686,21 +1686,21 @@ function WeeklyTasksContent() {
                               >
                                 <CategoryIcon className="w-3 h-3" />
                               </div>
-                              <span className="text-[11px] font-medium text-slate-400">
+                              <span className="text-xs font-medium text-text-tertiary">
                                 {TASK_CATEGORY_LABELS[category]}
                               </span>
                               {alignment && (
-                                <span className={`text-[10px] px-1.5 py-0.5 rounded border ${getAlignmentColorClass(alignment)}`}>
+                                <span className={`text-2xs px-1.5 py-0.5 rounded border ${getAlignmentColorClass(alignment)}`}>
                                   {TASK_ALIGNMENT_LABELS[alignment]}
                                 </span>
                               )}
-                              <span className="ml-auto text-[10px] px-1.5 py-0.5 rounded bg-white/[0.05] text-slate-300">
+                              <span className="ml-auto text-2xs px-1.5 py-0.5 rounded bg-surface-elevated text-text-secondary">
                                 {task.duration}
                               </span>
                             </div>
                             <p
                               className={`text-sm font-semibold mb-2 ${
-                                isDone ? 'text-slate-500 line-through' : 'text-slate-200'
+                                isDone ? 'text-text-muted line-through' : 'text-text-secondary'
                               }`}
                             >
                               {task.focus}
@@ -1709,7 +1709,7 @@ function WeeklyTasksContent() {
                               {task.materials.map((m) => (
                                 <span
                                   key={m}
-                                  className="text-[10px] px-1.5 py-0.5 rounded bg-white/[0.05] text-slate-400 border border-white/[0.06]"
+                                  className="text-2xs px-1.5 py-0.5 rounded bg-surface-elevated text-text-tertiary border border-border-subtle"
                                 >
                                   {m}
                                 </span>
@@ -1720,7 +1720,7 @@ function WeeklyTasksContent() {
                                 defaultValue={task.note ?? ''}
                                 onBlur={(e) => handleNoteBlur(task, e.target.value)}
                                 placeholder="完成备注（正确率、感受等）"
-                                className="w-full text-xs bg-white/[0.04] border border-white/[0.08] rounded-lg px-2.5 py-1.5 text-slate-300 placeholder:text-slate-600 focus:outline-none focus:border-primary/50 resize-none"
+                                className="w-full text-xs bg-surface-elevated border border-border-default rounded-lg px-2.5 py-1.5 text-text-secondary placeholder:text-text-muted focus:outline-none focus:border-primary/50 resize-none"
                                 rows={2}
                               />
                             )}
@@ -1762,21 +1762,21 @@ function WeeklyTasksContent() {
               animate={{ scale: 1, opacity: 1 }}
               exit={shouldReduceMotion ? { opacity: 0 } : { scale: 0.95, opacity: 0 }}
               onClick={(e) => e.stopPropagation()}
-              className="w-full h-full sm:h-auto sm:max-w-2xl sm:max-h-[85vh] overflow-y-auto rounded-none sm:rounded-3xl glass sm:border border-white/10 p-5 sm:p-8 modal-scroll"
+              className="w-full h-full sm:h-auto sm:max-w-2xl sm:max-h-[85vh] overflow-y-auto rounded-none sm:rounded-3xl glass sm:border border-border-default p-5 sm:p-8 modal-scroll"
             >
               <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-secondary to-secondary-glow flex items-center justify-center">
+                  <div className="w-10 h-10 rounded-xl bg-accent flex items-center justify-center">
                     <Sparkles className="w-5 h-5 text-white" />
                   </div>
                   <div>
                     <h2 id="review-title" className="text-xl font-bold font-display">本周复盘</h2>
-                    <p className="text-xs text-slate-400">{formatWeekLabel(weekId)}</p>
+                    <p className="text-xs text-text-tertiary">{formatWeekLabel(weekId)}</p>
                   </div>
                 </div>
                 <button
                   onClick={() => setReviewOpen(false)}
-                  className="p-2 rounded-lg hover:bg-white/5 text-slate-400 focus-ring"
+                  className="p-2 rounded-lg hover:bg-surface-elevated text-text-tertiary focus-ring"
                   aria-label="关闭"
                 >
                   <X className="w-5 h-5" />
@@ -1784,39 +1784,39 @@ function WeeklyTasksContent() {
               </div>
 
               <div className="grid grid-cols-3 gap-3 mb-6">
-                <div className="rounded-xl bg-white/5 p-4 text-center">
-                  <p className="text-2xl font-bold text-slate-200">{stats.completionRate}%</p>
-                  <p className="text-xs text-slate-500">完成率</p>
+                <div className="rounded-xl bg-surface-elevated p-4 text-center">
+                  <p className="text-2xl font-bold text-text-secondary">{stats.completionRate}%</p>
+                  <p className="text-xs text-text-muted">完成率</p>
                 </div>
-                <div className="rounded-xl bg-white/5 p-4 text-center">
-                  <p className="text-2xl font-bold text-slate-200">{stats.done}</p>
-                  <p className="text-xs text-slate-500">已完成</p>
+                <div className="rounded-xl bg-surface-elevated p-4 text-center">
+                  <p className="text-2xl font-bold text-text-secondary">{stats.done}</p>
+                  <p className="text-xs text-text-muted">已完成</p>
                 </div>
-                <div className="rounded-xl bg-white/5 p-4 text-center">
-                  <p className="text-2xl font-bold text-slate-200">{stats.pending}</p>
-                  <p className="text-xs text-slate-500">待补</p>
+                <div className="rounded-xl bg-surface-elevated p-4 text-center">
+                  <p className="text-2xl font-bold text-text-secondary">{stats.pending}</p>
+                  <p className="text-xs text-text-muted">待补</p>
                 </div>
               </div>
 
-              <div className="rounded-xl bg-secondary/5 border border-secondary/20 p-4 mb-6">
+              <div className="rounded-xl bg-accent/[0.06] border border-accent/15 p-4 mb-6">
                 <div className="flex items-center gap-2 mb-2">
-                  <Sparkles className="w-4 h-4 text-secondary" />
-                  <p className="text-sm font-semibold text-slate-200">AI 点评</p>
+                  <Sparkles className="w-4 h-4 text-accent" />
+                  <p className="text-sm font-semibold text-text-secondary">AI 点评</p>
                 </div>
-                <p className="text-sm text-slate-400 leading-relaxed">
+                <p className="text-sm text-text-tertiary leading-relaxed">
                   {generateAiReview(displayPlan, currentChild.name)}
                 </p>
               </div>
 
               <div className="mb-6">
-                <label className="block text-sm font-medium text-slate-300 mb-2">
+                <label className="block text-sm font-medium text-text-secondary mb-2">
                   家长评语
                 </label>
                 <textarea
                   value={reviewComment}
                   onChange={(e) => setReviewComment(e.target.value)}
                   placeholder="写下对孩子的鼓励、问题或下周调整..."
-                  className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-slate-200 placeholder:text-slate-600 focus:outline-none focus:border-secondary/50 resize-none"
+                  className="w-full bg-surface-elevated border border-border-default rounded-xl px-4 py-3 text-sm text-text-secondary placeholder:text-text-muted focus:outline-none focus:border-accent/50 resize-none"
                   rows={4}
                 />
               </div>
@@ -1824,13 +1824,13 @@ function WeeklyTasksContent() {
               <div className="flex items-center justify-end gap-3">
                 <button
                   onClick={() => setReviewOpen(false)}
-                  className="px-4 py-2 rounded-xl text-slate-400 hover:text-slate-200 transition-colors focus-ring"
+                  className="px-4 py-2 rounded-xl text-text-tertiary hover:text-text-secondary transition-colors focus-ring"
                 >
                   取消
                 </button>
                 <button
                   onClick={handleSaveReview}
-                  className="flex items-center gap-2 px-6 py-2 rounded-xl bg-gradient-to-r from-secondary to-secondary-glow text-white font-semibold hover:shadow-[0_0_30px_rgba(139,92,246,0.4)] transition-all focus-ring"
+                  className="flex items-center gap-2 px-6 py-2 rounded-xl bg-accent text-white font-semibold transition-all focus-ring"
                 >
                   <RotateCcw className="w-4 h-4" />
                   保存复盘
@@ -1884,21 +1884,21 @@ function WeeklyTasksSkeleton() {
     <div className="space-y-6 animate-pulse">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-white/5" />
+          <div className="w-10 h-10 rounded-xl bg-surface-elevated" />
           <div className="space-y-2">
-            <div className="h-5 w-32 rounded bg-white/5" />
-            <div className="h-3 w-48 rounded bg-white/5" />
+            <div className="h-5 w-32 rounded bg-surface-elevated" />
+            <div className="h-3 w-48 rounded bg-surface-elevated" />
           </div>
         </div>
-        <div className="h-8 w-28 rounded-lg bg-white/5" />
+        <div className="h-8 w-28 rounded-lg bg-surface-elevated" />
       </div>
-      <div className="h-10 rounded-xl bg-white/5" />
+      <div className="h-10 rounded-xl bg-surface-elevated" />
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
         {[...Array(4)].map((_, i) => (
-          <div key={i} className="h-28 rounded-xl bg-white/5" />
+          <div key={i} className="h-28 rounded-xl bg-surface-elevated" />
         ))}
       </div>
-      <div className="h-[420px] rounded-2xl bg-white/5" />
+      <div className="h-[420px] rounded-2xl bg-surface-elevated" />
     </div>
   );
 }

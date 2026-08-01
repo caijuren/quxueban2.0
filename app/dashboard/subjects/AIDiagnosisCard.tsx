@@ -27,7 +27,7 @@ export default function AIDiagnosisCard({ subject, childName = '孩子' }: AIDia
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.4 }}
-      className="rounded-2xl relative overflow-hidden border border-white/5"
+      className="rounded-2xl relative overflow-hidden border border-border-subtle"
       style={{
         background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.15) 0%, rgba(59, 130, 246, 0.08) 100%)',
       }}
@@ -51,7 +51,7 @@ export default function AIDiagnosisCard({ subject, childName = '孩子' }: AIDia
             <h2 className="text-xl font-bold font-display mb-2">
               {subjectLabels[subject]}学科 AI 诊断
             </h2>
-            <p className="text-sm text-slate-400 mb-4">
+            <p className="text-sm text-text-tertiary mb-4">
               基于 {childName} 的当前进度、打卡记录和弱项，AI 将给出个性化的学习调整建议。
             </p>
 
@@ -59,7 +59,7 @@ export default function AIDiagnosisCard({ subject, childName = '孩子' }: AIDia
               {insights[subject].map((item) => (
                 <span
                   key={item}
-                  className="px-3 py-1.5 rounded-lg bg-white/[0.05] border border-white/5 text-xs text-slate-300 flex items-center gap-1.5"
+                  className="px-3 py-1.5 rounded-lg bg-surface-elevated border border-border-subtle text-xs text-text-secondary flex items-center gap-1.5"
                 >
                   <Zap className="w-3 h-3 text-warning" />
                   {item}
@@ -69,7 +69,7 @@ export default function AIDiagnosisCard({ subject, childName = '孩子' }: AIDia
 
             <Link
               href="/dashboard/ai"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-secondary to-violet-500 text-white text-sm font-medium hover:opacity-90 transition-opacity"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-accent text-white text-sm font-medium hover:opacity-90 transition-opacity"
             >
               开始 AI 诊断
               <ChevronRight className="w-4 h-4" />

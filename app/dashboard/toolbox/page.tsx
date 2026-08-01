@@ -177,32 +177,24 @@ const toolGroups: ToolGroup[] = [
 
 const colorConfig = {
   primary: {
-    bg: 'bg-primary/10',
-    border: 'border-primary/20',
+    bg: 'bg-primary/[0.08]',
+    border: 'border-primary/15',
     text: 'text-primary',
-    glow: 'shadow-glow-primary',
-    gradient: 'from-primary to-primary-glow',
   },
   secondary: {
-    bg: 'bg-secondary/10',
-    border: 'border-secondary/20',
+    bg: 'bg-secondary/[0.08]',
+    border: 'border-secondary/15',
     text: 'text-secondary',
-    glow: 'shadow-glow-secondary',
-    gradient: 'from-secondary to-secondary-glow',
   },
   accent: {
-    bg: 'bg-accent/10',
-    border: 'border-accent/20',
+    bg: 'bg-accent/[0.08]',
+    border: 'border-accent/15',
     text: 'text-accent',
-    glow: 'shadow-glow-accent',
-    gradient: 'from-accent to-accent-glow',
   },
   warning: {
-    bg: 'bg-warning/10',
-    border: 'border-warning/20',
+    bg: 'bg-warning/[0.08]',
+    border: 'border-warning/15',
     text: 'text-warning',
-    glow: '',
-    gradient: 'from-warning to-warning',
   },
 };
 
@@ -259,7 +251,7 @@ export default function ToolboxPage() {
         initial={shouldReduceMotion ? false : { opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.1 }}
-        className="rounded-2xl border border-border-default bg-gradient-to-br from-surface to-surface-light p-5 sm:p-6 relative overflow-hidden"
+        className="rounded-2xl border border-border-default bg-surface-elevated p-5 sm:p-6 relative overflow-hidden"
       >
         <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 pointer-events-none" />
         <div className="relative">
@@ -274,7 +266,7 @@ export default function ToolboxPage() {
                 <Link
                   key={tool.id}
                   href={tool.href}
-                  className={`group flex flex-col items-center gap-2 p-4 rounded-xl ${colors.bg} border ${colors.border} hover:${colors.glow} transition-all duration-200`}
+                  className={`group flex flex-col items-center gap-2 p-4 rounded-xl ${colors.bg} border ${colors.border} transition-all duration-200`}
                 >
                   <tool.icon className={`w-6 h-6 ${colors.text}`} />
                   <span className="text-sm font-medium text-text-secondary group-hover:text-white transition-colors">
@@ -297,7 +289,7 @@ export default function ToolboxPage() {
         {toolGroups.map((group) => (
           <motion.section key={group.id} variants={itemVariants}>
             <div className="flex items-center gap-2 mb-4">
-              <div className="w-1 h-4 rounded-full bg-gradient-to-b from-primary to-secondary" />
+              <div className="w-1 h-4 rounded-full bg-primary" />
               <h2 className="text-base font-bold font-display text-text-secondary">{group.title}</h2>
             </div>
 
@@ -327,7 +319,7 @@ export default function ToolboxPage() {
                           <tool.icon className={`w-5 h-5 ${colors.text}`} />
                         </div>
                         {isComing ? (
-                          <span className="text-[10px] px-2 py-1 rounded-full bg-white/5 text-text-muted border border-border-default">
+                          <span className="text-2xs px-2 py-1 rounded-full bg-surface-elevated text-text-muted border border-border-default">
                             即将上线
                           </span>
                         ) : (
@@ -348,7 +340,7 @@ export default function ToolboxPage() {
                         {tool.tags.map((tag) => (
                           <span
                             key={tag}
-                            className="text-[10px] px-1.5 py-0.5 rounded-md bg-white/[0.04] text-text-muted border border-border-subtle"
+                            className="text-2xs px-1.5 py-0.5 rounded-md bg-surface-elevated text-text-muted border border-border-subtle"
                           >
                             {tag}
                           </span>
@@ -368,7 +360,7 @@ export default function ToolboxPage() {
         initial={shouldReduceMotion ? false : { opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5, delay: 0.4 }}
-        className="rounded-xl border border-dashed border-border-default bg-white/[0.02] p-4 text-center"
+        className="rounded-xl border border-dashed border-border-default bg-surface-elevated p-4 text-center"
       >
         <p className="text-sm text-text-muted">
           还需要什么工具？在

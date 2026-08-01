@@ -115,15 +115,15 @@ export default function MatchAnalysisModal({
           <div className="absolute top-0 right-0 w-48 h-48 bg-primary/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
           <div className="absolute bottom-0 left-0 w-32 h-32 bg-secondary/10 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2" />
 
-          <div className="relative z-10 p-6 pb-4 border-b border-white/5">
+          <div className="relative z-10 p-6 pb-4 border-b border-border-subtle">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center">
+                <div className="w-10 h-10 rounded-xl bg-surface-elevated border border-border-default flex items-center justify-center">
                   <Sparkles className="w-5 h-5 text-white" />
                 </div>
                 <div>
                   <h3 className="text-lg font-bold font-display">路线匹配度分析</h3>
-                  <p className="text-xs text-slate-400">{plan.name} · 当前匹配度 {match}%</p>
+                  <p className="text-xs text-text-tertiary">{plan.name} · 当前匹配度 {match}%</p>
                 </div>
               </div>
               <div className="flex items-center gap-2">
@@ -132,7 +132,7 @@ export default function MatchAnalysisModal({
                   className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${
                     isEditing
                       ? 'bg-success/20 text-success hover:bg-success/30'
-                      : 'bg-white/5 text-slate-300 hover:bg-white/10'
+                      : 'bg-surface-elevated text-text-secondary hover:bg-surface-highlight'
                   }`}
                 >
                   {isEditing ? (
@@ -147,7 +147,7 @@ export default function MatchAnalysisModal({
                 </button>
                 <button
                   onClick={onClose}
-                  className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center text-slate-400 hover:text-white hover:bg-white/10 transition-all"
+                  className="w-8 h-8 rounded-lg bg-surface-elevated flex items-center justify-center text-text-tertiary hover:text-white hover:bg-surface-highlight transition-all"
                 >
                   <X className="w-4 h-4" />
                 </button>
@@ -192,16 +192,16 @@ export default function MatchAnalysisModal({
                     </defs>
                   </svg>
                   <div className="absolute inset-0 flex flex-col items-center justify-center">
-                    <span className="text-3xl font-bold font-display text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">
+                    <span className="text-3xl font-bold font-display text-transparent bg-clip-text bg-primary">
                       {match}%
                     </span>
-                    <span className="text-xs text-slate-500">匹配度</span>
+                    <span className="text-xs text-text-muted">匹配度</span>
                   </div>
                 </div>
               </div>
               <p
                 className={`text-center text-sm ${
-                  advice.level === 'good' ? 'text-success' : advice.level === 'medium' ? 'text-warning' : 'text-slate-400'
+                  advice.level === 'good' ? 'text-success' : advice.level === 'medium' ? 'text-warning' : 'text-text-tertiary'
                 }`}
               >
                 {advice.text}
@@ -215,7 +215,7 @@ export default function MatchAnalysisModal({
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.2 + index * 0.1 }}
-                  className="bg-white/5 rounded-xl p-4 border border-white/5"
+                  className="bg-surface-elevated rounded-xl p-4 border border-border-subtle"
                 >
                   <div className="flex items-center justify-between mb-2">
                     <div className="flex items-center gap-3">
@@ -223,8 +223,8 @@ export default function MatchAnalysisModal({
                         <metric.icon className="w-4 h-4" style={{ color: metric.color }} />
                       </div>
                       <div>
-                        <p className="text-sm font-medium text-slate-200">{metric.name}</p>
-                        <p className="text-xs text-slate-500">目标：{metric.target}分</p>
+                        <p className="text-sm font-medium text-text-secondary">{metric.name}</p>
+                        <p className="text-xs text-text-muted">目标：{metric.target}分</p>
                       </div>
                     </div>
                     <div className="flex items-center gap-1">
@@ -233,7 +233,7 @@ export default function MatchAnalysisModal({
                       ) : metric.trend === 'down' ? (
                         <TrendingDown className="w-4 h-4 text-warning" />
                       ) : (
-                        <Minus className="w-4 h-4 text-slate-500" />
+                        <Minus className="w-4 h-4 text-text-muted" />
                       )}
                       {isEditing ? (
                         <input
@@ -242,7 +242,7 @@ export default function MatchAnalysisModal({
                           max={Math.round(metric.target * 1.2)}
                           value={Math.round(metric.score)}
                           onChange={(e) => handleScoreChange(index, Number(e.target.value))}
-                          className="w-16 ml-1 px-2 py-1 rounded-md bg-white/10 text-sm font-bold text-white text-center border border-white/10 focus:border-primary focus:outline-none"
+                          className="w-16 ml-1 px-2 py-1 rounded-md bg-surface-highlight text-sm font-bold text-white text-center border border-border-default focus:border-primary focus:outline-none"
                         />
                       ) : (
                         <span
@@ -251,7 +251,7 @@ export default function MatchAnalysisModal({
                               ? 'text-success'
                               : metric.score >= metric.target * 0.7
                               ? 'text-warning'
-                              : 'text-slate-300'
+                              : 'text-text-secondary'
                           }`}
                         >
                           {Math.round(metric.score)}分
@@ -268,11 +268,11 @@ export default function MatchAnalysisModal({
                       step={1}
                       value={Math.round(metric.score)}
                       onChange={(e) => handleScoreChange(index, Number(e.target.value))}
-                      className="w-full h-2 rounded-full bg-white/10 appearance-none cursor-pointer accent-primary"
+                      className="w-full h-2 rounded-full bg-surface-highlight appearance-none cursor-pointer accent-primary"
                       style={{ accentColor: metric.color } as React.CSSProperties}
                     />
                   ) : (
-                    <div className="h-2 rounded-full bg-white/5 overflow-hidden">
+                    <div className="h-2 rounded-full bg-surface-elevated overflow-hidden">
                       <motion.div
                         initial={{ width: 0 }}
                         animate={{ width: `${Math.min((metric.score / metric.target) * 100, 100)}%` }}
@@ -287,7 +287,7 @@ export default function MatchAnalysisModal({
                   )}
 
                   <div className="flex justify-between mt-1">
-                    <span className="text-xs text-slate-500">
+                    <span className="text-xs text-text-muted">
                       差距：{Math.max(0, metric.target - Math.round(metric.score))}分
                     </span>
                     <span
@@ -306,23 +306,23 @@ export default function MatchAnalysisModal({
               ))}
             </div>
 
-            <div className="mt-6 pt-4 border-t border-white/5">
+            <div className="mt-6 pt-4 border-t border-border-subtle">
               <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                 <div>
-                  <p className="text-xs text-slate-500 mb-1">综合建议</p>
-                  <p className="text-sm text-slate-300">
+                  <p className="text-xs text-text-muted mb-1">综合建议</p>
+                  <p className="text-sm text-text-secondary">
                     当前阶段重点提升{metrics.slice(0, 2).map((m) => m.name).join('和')}，建议四年级前完成 AMC8 和小托福考试
                   </p>
                 </div>
                 <div className="flex items-center gap-2">
                   <button
                     onClick={reset}
-                    className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-white/5 text-slate-400 text-sm hover:bg-white/10 transition-all"
+                    className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-surface-elevated text-text-tertiary text-sm hover:bg-surface-highlight transition-all"
                   >
                     <RotateCcw className="w-3.5 h-3.5" />
                     重置
                   </button>
-                  <button className="px-4 py-2 rounded-lg bg-gradient-to-r from-primary to-secondary text-white text-sm font-medium hover:shadow-[0_0_20px_rgba(244,63,94,0.4)] transition-all">
+                  <button className="px-4 py-2 rounded-lg bg-primary text-white text-sm font-medium  transition-all">
                     制定提升计划
                   </button>
                 </div>

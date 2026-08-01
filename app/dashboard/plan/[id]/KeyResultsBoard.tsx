@@ -28,9 +28,9 @@ const statusConfig = {
   pending: {
     icon: CircleDashed,
     label: '待开始',
-    bg: 'bg-white/5',
-    border: 'border-white/10',
-    text: 'text-slate-400',
+    bg: 'bg-surface-elevated',
+    border: 'border-border-default',
+    text: 'text-text-tertiary',
     dot: 'bg-slate-500',
   },
   'at-risk': {
@@ -49,7 +49,7 @@ export default function KeyResultsBoard({ nodes }: KeyResultsBoardProps) {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.15 }}
-      className="rounded-2xl glass p-6 border border-white/5"
+      className="rounded-2xl glass p-6 border border-border-subtle"
     >
       <h2 className="text-xl font-bold font-display mb-6 flex items-center gap-2">
         <Flag className="w-5 h-5 text-primary" />
@@ -57,7 +57,7 @@ export default function KeyResultsBoard({ nodes }: KeyResultsBoardProps) {
       </h2>
 
       <div className="relative">
-        <div className="absolute left-[19px] top-3 bottom-3 w-0.5 bg-gradient-to-b from-primary via-secondary to-accent opacity-30" />
+        <div className="absolute left-[19px] top-3 bottom-3 w-0.5 bg-primary opacity-30" />
         <div className="space-y-4">
           {nodes.map((node, index) => {
             const status = statusConfig[node.status];
@@ -70,14 +70,14 @@ export default function KeyResultsBoard({ nodes }: KeyResultsBoardProps) {
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.2 + index * 0.08 }}
-                className={`relative flex items-start gap-4 pl-12 rounded-xl p-4 border ${isFinal ? 'bg-primary/5 border-primary/30' : 'bg-white/[0.02] border-white/5'}`}
+                className={`relative flex items-start gap-4 pl-12 rounded-xl p-4 border ${isFinal ? 'bg-primary/5 border-primary/30' : 'bg-surface-elevated border-border-subtle'}`}
               >
                 <div
                   className={`absolute left-3 top-4 w-4 h-4 rounded-full ${status.dot} ring-4 ring-[#0f172a] z-10`}
                 />
                 <div className="flex-1 min-w-0">
                   <div className="flex flex-wrap items-center gap-2 mb-1">
-                    <span className="text-sm text-slate-400 font-medium">{node.time}</span>
+                    <span className="text-sm text-text-tertiary font-medium">{node.time}</span>
                     <span
                       className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium ${status.bg} ${status.text} border ${status.border}`}
                     >
@@ -85,10 +85,10 @@ export default function KeyResultsBoard({ nodes }: KeyResultsBoardProps) {
                       {status.label}
                     </span>
                   </div>
-                  <h3 className="font-bold text-slate-200 mb-1">{node.title}</h3>
-                  <p className="text-sm text-slate-300 mb-2">{node.result}</p>
+                  <h3 className="font-bold text-text-secondary mb-1">{node.title}</h3>
+                  <p className="text-sm text-text-secondary mb-2">{node.result}</p>
                   {node.fallbackSignal && (
-                    <p className="text-xs text-slate-500 flex items-start gap-1">
+                    <p className="text-xs text-text-muted flex items-start gap-1">
                       <AlertTriangle className="w-3 h-3 text-warning shrink-0 mt-0.5" />
                       {node.fallbackSignal}
                     </p>
