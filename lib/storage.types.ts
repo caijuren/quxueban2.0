@@ -1,6 +1,35 @@
 import { Child } from './children';
 
-export type TaskStatus = 'pending' | 'done' | 'skipped';
+export type TaskStatus =
+  | 'pending'
+  | 'in_progress'
+  | 'partially_done'
+  | 'done'
+  | 'skipped'
+  | 'rescheduled';
+
+export type TaskCompletionQuality = 'excellent' | 'good' | 'average' | 'needs_work';
+
+export interface TaskCapabilityProgress {
+  capabilityId: string;
+  name: string;
+  progressDelta: number;
+}
+
+export interface TaskCompletionRecord {
+  id: string;
+  date: string;
+  status: TaskStatus;
+  progress: number;
+  actualDurationMinutes: number;
+  quality: TaskCompletionQuality | null;
+  note: string;
+  imageUrls: string[];
+  capabilityProgress: TaskCapabilityProgress[];
+  dingtalkPushedAt?: string;
+  createdAt: string;
+  updatedAt: string;
+}
 
 export type DayOfWeek = '周一' | '周二' | '周三' | '周四' | '周五' | '周六' | '周日';
 
@@ -32,6 +61,7 @@ export interface WeeklyTaskItem {
   status: TaskStatus;
   completedAt?: string;
   note?: string;
+  completionRecords?: TaskCompletionRecord[];
 }
 
 export interface WeeklyPlan {

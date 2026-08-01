@@ -26,6 +26,7 @@ function normalizeTemplate(tpl: TaskTemplateWithLinks) {
     source: tpl.source.toLowerCase(),
     taskType: tpl.taskType.toLowerCase(),
     frequency: tpl.frequency.toLowerCase(),
+    weeklySchedule: tpl.weeklySchedule.toLowerCase(),
     capabilityLinks: tpl.capabilityLinks.map((link) => ({
       ...link,
       weight: Number(link.weight),
@@ -129,6 +130,8 @@ export async function POST(req: Request) {
       taskType: body.taskType.toUpperCase() as TaskTemplateWithLinks['taskType'],
       frequency: body.frequency.toUpperCase() as TaskTemplateWithLinks['frequency'],
       customFrequency: body.customFrequency ?? undefined,
+      weeklySchedule: body.weeklySchedule.toUpperCase() as TaskTemplateWithLinks['weeklySchedule'],
+      customScheduleDays: body.customScheduleDays,
       assessmentCriteria: body.assessmentCriteria,
       capabilityLinks: {
         create: body.capabilityLinks

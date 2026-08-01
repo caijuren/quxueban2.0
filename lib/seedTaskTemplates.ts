@@ -94,7 +94,9 @@ async function syncSystemTemplateWeeklySchedule(
     const latest = SYSTEM_TASK_TEMPLATES.find((t) => t.title === dbTpl.title);
     if (!latest) continue;
 
-    const latestSchedule = (latest.weeklySchedule ?? 'auto').toUpperCase();
+    const latestScheduleRaw = latest.weeklySchedule;
+    if (!latestScheduleRaw) continue;
+    const latestSchedule = latestScheduleRaw.toUpperCase();
     const latestDays = latest.customScheduleDays ?? [];
     const currentSchedule = dbTpl.weeklySchedule ?? 'AUTO';
     const currentDays = dbTpl.customScheduleDays ?? [];

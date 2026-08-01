@@ -30,6 +30,7 @@ function normalizeTemplate(tpl: TaskTemplateWithLinks) {
     source: tpl.source.toLowerCase(),
     taskType: tpl.taskType.toLowerCase(),
     frequency: tpl.frequency.toLowerCase(),
+    weeklySchedule: tpl.weeklySchedule.toLowerCase(),
     capabilityLinks: tpl.capabilityLinks.map((link) => ({
       ...link,
       weight: Number(link.weight),

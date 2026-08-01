@@ -129,6 +129,11 @@ export default function GeneratePlanModal({
     [templates, selectedTemplateIds]
   );
 
+  const allFilteredSelected = useMemo(
+    () => filteredTemplates.length > 0 && filteredTemplates.every((t) => selectedTemplateIds.has(t.id)),
+    [filteredTemplates, selectedTemplateIds]
+  );
+
   const estimatedMinutes = useMemo(() => {
     return previewTasks.reduce((sum, t) => sum + parseDurationMinutes(t.duration), 0);
   }, [previewTasks]);
@@ -169,6 +174,18 @@ export default function GeneratePlanModal({
       const next = new Set(prev);
       if (next.has(id)) next.delete(id);
       else next.add(id);
+      return next;
+    });
+  };
+
+  const toggleAllFiltered = () => {
+    setSelectedTemplateIds((prev) => {
+      const next = new Set(prev);
+      if (allFilteredSelected) {
+        filteredTemplates.forEach((t) => next.delete(t.id));
+      } else {
+        filteredTemplates.forEach((t) => next.add(t.id));
+      }
       return next;
     });
   };
@@ -282,6 +299,8 @@ export default function GeneratePlanModal({
                 loading={loadingTemplates}
                 selectedIds={selectedTemplateIds}
                 toggleTemplate={toggleTemplate}
+                allFilteredSelected={allFilteredSelected}
+                toggleAllFiltered={toggleAllFiltered}
                 search={search}
                 setSearch={setSearch}
                 filterCategory={filterCategory}
@@ -408,6 +427,8 @@ interface StepTasksProps {
   loading: boolean;
   selectedIds: Set<string>;
   toggleTemplate: (id: string) => void;
+  allFilteredSelected: boolean;
+  toggleAllFiltered: () => void;
   search: string;
   setSearch: (value: string) => void;
   filterCategory: TaskCategory | 'all';
@@ -421,6 +442,8 @@ function StepTasks({
   loading,
   selectedIds,
   toggleTemplate,
+  allFilteredSelected,
+  toggleAllFiltered,
   search,
   setSearch,
   filterCategory,
@@ -475,6 +498,20 @@ function StepTasks({
               </option>
             ))}
           </select>
+          <button
+            onClick={toggleAllFiltered}
+            disabled={templates.length === 0}
+            className="flex items-center gap-1.5 text-xs text-slate-300 hover:text-white disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+          >
+            <div
+              className={`w-4 h-4 rounded border flex items-center justify-center ${
+                allFilteredSelected ? 'bg-secondary border-secondary' : 'border-white/20'
+              }`}
+            >
+              {allFilteredSelected && <CheckCircle2 className="w-3 h-3 text-white" />}
+            </div>
+            全选
+          </button>
         </div>
       </div>
 

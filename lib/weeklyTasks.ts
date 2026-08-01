@@ -191,14 +191,16 @@ const scheduleDayMap: Record<Exclude<TaskWeeklySchedule, 'auto' | 'custom'>, Day
 };
 
 export function getScheduledDays(
-  weeklySchedule: TaskWeeklySchedule | null | undefined,
+  weeklySchedule: TaskWeeklySchedule | string | null | undefined,
   customScheduleDays: DayOfWeek[] = []
 ): DayOfWeek[] {
-  if (!weeklySchedule || weeklySchedule === 'auto') return [];
-  if (weeklySchedule === 'custom') {
+  const schedule =
+    typeof weeklySchedule === 'string' ? weeklySchedule.toLowerCase() : weeklySchedule;
+  if (!schedule || schedule === 'auto') return [];
+  if (schedule === 'custom') {
     return dayOrder.filter((d) => customScheduleDays?.includes(d));
   }
-  return scheduleDayMap[weeklySchedule] ?? [];
+  return scheduleDayMap[schedule as Exclude<TaskWeeklySchedule, 'auto' | 'custom'>] ?? [];
 }
 
 export function expandTemplateToWeeklyTasks(
@@ -243,11 +245,46 @@ export function generateWeeklyPlanFromSelectedTemplates(
 ): WeeklyPlan {
   const tasks: WeeklyTaskItem[] = [];
 
-  templates.forEach((tpl, index) => {
+  // Track daily load (in minutes) to balance auto templates
+  const dayLoad: Record<DayOfWeek, number> = {
+    周一: 0,
+    周二: 0,
+    周三: 0,
+    周四: 0,
+    周五: 0,
+    周六: 0,
+    周日: 0,
+  };
+
+  let taskIndex = 0;
+
+  // 1. Expand templates with explicit schedules first
+  templates.forEach((tpl) => {
+    if (tpl.weeklySchedule && tpl.weeklySchedule !== 'auto') {
+      const expanded = expandTemplateToWeeklyTasks(tpl, {
+        childRouteId: child.routeId,
+        baseIndex: taskIndex++,
+      });
+      expanded.forEach((t) => {
+        dayLoad[t.day] += parseDurationMinutes(t.duration);
+      });
+      tasks.push(...expanded);
+    }
+  });
+
+  // 2. Distribute auto templates round-robin starting from Saturday so weekends also get tasks
+  const autoTemplates = templates.filter(
+    (tpl) => !tpl.weeklySchedule || tpl.weeklySchedule === 'auto'
+  );
+  autoTemplates.forEach((tpl, idx) => {
+    const day = dayOrder[(idx + 5) % dayOrder.length];
     const expanded = expandTemplateToWeeklyTasks(tpl, {
       childRouteId: child.routeId,
-      baseIndex: index,
-      defaultDay: dayOrder[index % dayOrder.length],
+      baseIndex: taskIndex++,
+      defaultDay: day,
+    });
+    expanded.forEach((t) => {
+      dayLoad[t.day] += parseDurationMinutes(t.duration);
     });
     tasks.push(...expanded);
   });

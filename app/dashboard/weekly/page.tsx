@@ -322,7 +322,7 @@ function EditPlanModal({ plan, onClose, onSave }: EditPlanModalProps) {
       initial={shouldReduceMotion ? { opacity: 1 } : { opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="fixed inset-0 z-[110] flex items-center sm:justify-center sm:p-4 bg-black/70 backdrop-blur-sm"
+      className="fixed inset-0 lg:left-64 z-[110] flex items-center sm:justify-center sm:p-4 bg-black/70 backdrop-blur-sm"
       onClick={handleClose}
     >
       <motion.div
@@ -815,6 +815,23 @@ function TaskLibraryModal({
     [templates, selectedTemplateIds]
   );
 
+  const allFilteredSelected = useMemo(
+    () => filteredTemplates.length > 0 && filteredTemplates.every((t) => selectedTemplateIds.has(t.id)),
+    [filteredTemplates, selectedTemplateIds]
+  );
+
+  const toggleAllFiltered = () => {
+    setSelectedTemplateIds((prev) => {
+      const next = new Set(prev);
+      if (allFilteredSelected) {
+        filteredTemplates.forEach((t) => next.delete(t.id));
+      } else {
+        filteredTemplates.forEach((t) => next.add(t.id));
+      }
+      return next;
+    });
+  };
+
   const runAssessment = async () => {
     if (selectedTemplates.length === 0) return;
     const inputs: AssessmentTaskInput[] = selectedTemplates.map((tpl) => ({
@@ -879,7 +896,7 @@ function TaskLibraryModal({
       initial={shouldReduceMotion ? { opacity: 1 } : { opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="fixed inset-0 z-[110] flex items-center sm:justify-center sm:p-4 bg-black/70 backdrop-blur-sm"
+      className="fixed inset-0 lg:left-64 z-[110] flex items-center sm:justify-center sm:p-4 bg-black/70 backdrop-blur-sm"
       onClick={onClose}
     >
       <motion.div
@@ -941,7 +958,21 @@ function TaskLibraryModal({
               </button>
             ))}
           </div>
-          <div className="flex items-center gap-2 ml-auto">
+          <div className="flex items-center gap-3 ml-auto">
+            <button
+              onClick={toggleAllFiltered}
+              disabled={filteredTemplates.length === 0}
+              className="flex items-center gap-1.5 text-xs text-slate-300 hover:text-white disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+            >
+              <div
+                className={`w-4 h-4 rounded border flex items-center justify-center ${
+                  allFilteredSelected ? 'bg-secondary border-secondary' : 'border-white/20'
+                }`}
+              >
+                {allFilteredSelected && <CheckCircle2 className="w-3 h-3 text-white" />}
+              </div>
+              全选
+            </button>
             <span className="text-xs text-slate-500">添加到</span>
             <select
               value={selectedDay}
@@ -1720,7 +1751,7 @@ function WeeklyTasksContent() {
             initial={shouldReduceMotion ? { opacity: 1 } : { opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[110] flex items-center sm:justify-center sm:p-4 bg-black/70 backdrop-blur-sm"
+            className="fixed inset-0 lg:left-64 z-[110] flex items-center sm:justify-center sm:p-4 bg-black/70 backdrop-blur-sm"
             onClick={() => setReviewOpen(false)}
           >
             <motion.div
