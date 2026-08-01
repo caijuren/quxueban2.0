@@ -227,22 +227,23 @@ export default function ToolboxPage() {
       <motion.div
         initial={shouldReduceMotion ? false : { opacity: 0, y: -8 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-        className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3"
+        transition={{ duration: 0.4 }}
+        className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
       >
-        <div>
-          <div className="flex items-center gap-2 mb-1">
-            <Wrench className="w-6 h-6 text-primary" />
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-secondary/10 border border-secondary/20 flex items-center justify-center">
+            <Wrench className="w-5 h-5 text-secondary" />
+          </div>
+          <div>
             <h1 className="text-2xl sm:text-3xl font-bold font-display">规划工具</h1>
           </div>
-          <p className="text-sm text-text-muted">
-            已上线 {activeTools.length} 个工具 · 即将上线 {comingTools.length} 个工具
-          </p>
         </div>
 
-        <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-surface border border-border-default text-xs text-text-tertiary">
-          <Sparkles className="w-3.5 h-3.5 text-secondary" />
-          <span>按升学阶段智能推荐工具</span>
+        <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-surface border border-border-default text-xs text-text-tertiary">
+            <Sparkles className="w-3.5 h-3.5 text-secondary" />
+            <span>按升学阶段智能推荐工具</span>
+          </div>
         </div>
       </motion.div>
 

@@ -1,7 +1,7 @@
 'use client';
 
-import { motion, AnimatePresence } from 'framer-motion';
-import { School, MapPin, Trophy, Plus, Search, X } from 'lucide-react';
+import { motion, useReducedMotion } from 'framer-motion';
+import { School, MapPin, Trophy, Plus, Search } from 'lucide-react';
 import { Suspense, useMemo, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
@@ -10,6 +10,7 @@ import ChildEmptyState from '@/components/dashboard/ChildEmptyState';
 import { useChildren } from '@/components/dashboard/ChildrenContext';
 import { gradeLabel, gradeToStage } from '@/lib/children';
 import { schoolsData } from './[school]/SchoolDetail';
+import Modal from '@/components/ui/Modal';
 
 const levelConfig: Record<string, { color: string; bg: string; border: string; probability: number }> = {
   冲刺: { color: 'text-primary', bg: 'bg-primary/10', border: 'border-primary/30', probability: 35 },
@@ -28,6 +29,7 @@ function SchoolsPageContent() {
   const searchParams = useSearchParams();
   const query = searchParams.get('q')?.toLowerCase() || '';
   const { currentChild } = useChildren();
+  const shouldReduceMotion = useReducedMotion();
   const [showAddModal, setShowAddModal] = useState(false);
 
   const schools = useMemo(
@@ -60,28 +62,30 @@ function SchoolsPageContent() {
   return (
     <div className="space-y-8">
       <motion.div
-        initial={{ opacity: 0, y: -10 }}
+        initial={shouldReduceMotion ? false : { opacity: 0, y: -8 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
+        transition={{ duration: 0.4 }}
         className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
       >
-        <div>
-          <h1 className="text-3xl font-bold font-display mb-2">
-            {currentChild ? `${currentChild.name}的目标学校库` : '目标学校库'}
-          </h1>
-          <p className="text-slate-400">
-            {currentChild
-              ? `当前阶段：${gradeToStage(currentChild.grade, currentChild.educationSystem)}（${gradeLabel(currentChild.grade, currentChild.educationSystem)}） · 管理冲刺、备选、保底目标`
-              : '管理冲刺、备选、保底目标学校及录取概率'}
-          </p>
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-secondary/10 border border-secondary/20 flex items-center justify-center">
+            <School className="w-5 h-5 text-secondary" />
+          </div>
+          <div>
+            <h1 className="text-2xl sm:text-3xl font-bold font-display">
+              {currentChild ? `${currentChild.name}的目标学校库` : '目标学校库'}
+            </h1>
+          </div>
         </div>
-        <button
-          onClick={() => setShowAddModal(true)}
-          className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-primary to-secondary text-white font-semibold hover:shadow-[0_0_30px_rgba(244,63,94,0.5)] transition-all duration-300"
-        >
-          <Plus className="w-4 h-4" />
-          添加学校
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => setShowAddModal(true)}
+            className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-primary to-secondary text-white font-semibold hover:shadow-[0_0_30px_rgba(244,63,94,0.5)] transition-all duration-300"
+          >
+            <Plus className="w-4 h-4" />
+            添加学校
+          </button>
+        </div>
       </motion.div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -165,51 +169,29 @@ function SchoolsPageContent() {
         />
       )}
 
-      <AnimatePresence>
-        {showAddModal && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+      <Modal
+        isOpen={showAddModal}
+        onClose={() => setShowAddModal(false)}
+        title="添加学校"
+        icon={School}
+        iconClassName="bg-secondary"
+        colorScheme="violet"
+        size="sm"
+        zIndex={60}
+        footer={
+          <button
+            type="button"
             onClick={() => setShowAddModal(false)}
+            className="w-full py-2 rounded-lg bg-white/5 text-sm text-slate-300 hover:bg-white/10 transition-colors focus-ring"
           >
-            <motion.div
-              initial={{ opacity: 0, scale: 0.96, y: 12 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.96, y: 12 }}
-              transition={{ duration: 0.2 }}
-              className="relative w-full max-w-sm rounded-xl command-panel corner-accent p-6"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <button
-                type="button"
-                onClick={() => setShowAddModal(false)}
-                className="absolute top-4 right-4 w-7 h-7 rounded-lg bg-white/5 flex items-center justify-center text-slate-400 hover:bg-white/10 hover:text-slate-200 transition-colors focus-ring"
-                aria-label="关闭"
-              >
-                <X className="w-4 h-4" />
-              </button>
-
-              <div className="text-center mb-5">
-                <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mx-auto mb-3 border border-primary/20">
-                  <Plus className="w-6 h-6 text-primary" />
-                </div>
-                <h3 className="text-lg font-bold font-display mb-1">添加目标学校</h3>
-                <p className="text-xs text-slate-500">学校库由平台维护，暂不支持自定义添加。如需补充学校，请联系管理员。</p>
-              </div>
-
-              <button
-                type="button"
-                onClick={() => setShowAddModal(false)}
-                className="w-full py-2 rounded-lg bg-white/5 text-sm text-slate-300 hover:bg-white/10 transition-colors focus-ring"
-              >
-                知道了
-              </button>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+            知道了
+          </button>
+        }
+      >
+        <p className="text-sm text-slate-400 text-center">
+          学校库由平台维护，暂不支持自定义添加。如需补充学校，请联系管理员。
+        </p>
+      </Modal>
     </div>
   );
 }

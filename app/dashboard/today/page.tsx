@@ -7,18 +7,12 @@ import {
   CheckCircle2,
   Circle,
   ChevronRight,
-  Calendar,
+  CalendarCheck,
   Clock,
-  BookOpen,
-  Backpack,
-  Dumbbell,
-  Palette,
-  GraduationCap,
   Target,
   Sparkles,
 } from 'lucide-react';
 import { useChildren } from '@/components/dashboard/ChildrenContext';
-import ChildAvatar from '@/components/dashboard/ChildAvatar';
 import EmptyState from '@/components/ui/EmptyState';
 import ChildEmptyState from '@/components/dashboard/ChildEmptyState';
 import CommandCard from '@/components/ui/CommandCard';
@@ -26,24 +20,8 @@ import { getTodayName, getCurrentWeekId } from '@/lib/weeklyTasks';
 import { TASK_CATEGORY_LABELS } from '@/lib/taskTemplates';
 import { getCategoryColorClass } from '@/lib/taskAlignment';
 import { TaskCategory } from '@/lib/storage.types';
+import { categoryIcons, allCategories } from '@/lib/taskIcons';
 
-const categoryIcons: Record<TaskCategory, typeof BookOpen> = {
-  school: Backpack,
-  reading: BookOpen,
-  sport: Dumbbell,
-  interest: Palette,
-  ability: Target,
-  other: GraduationCap,
-};
-
-const allCategories: TaskCategory[] = [
-  'school',
-  'reading',
-  'sport',
-  'interest',
-  'ability',
-  'other',
-];
 
 function ProgressRing({
   rate,
@@ -223,25 +201,25 @@ export default function TodayPage() {
         initial={shouldReduceMotion ? false : { opacity: 0, y: -8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-        className="flex items-center justify-between gap-4"
+        className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
       >
         <div className="flex items-center gap-3">
-          <ChildAvatar child={currentChild} size="lg" shape="rounded" />
+          <div className="w-10 h-10 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center">
+            <CalendarCheck className="w-5 h-5 text-primary" />
+          </div>
           <div>
-            <p className="text-xs text-text-tertiary mb-1 flex items-center gap-1">
-              <Calendar className="w-3 h-3" />
-              今日任务 · {todayName}
-            </p>
             <h1 className="text-2xl sm:text-3xl font-bold font-display text-text-primary">
               {currentChild ? currentChild.name : '未选择孩子'}
             </h1>
           </div>
         </div>
-        <div className="text-right shrink-0 hidden sm:block">
-          <p className="text-3xl font-bold font-display tabular-nums text-text-primary">
-            {doneCount}<span className="text-text-muted text-lg">/{totalCount}</span>
-          </p>
-          <p className="text-[10px] text-text-tertiary">已完成</p>
+        <div className="flex items-center gap-2">
+          <div className="text-right shrink-0 hidden sm:block">
+            <p className="text-3xl font-bold font-display tabular-nums text-text-primary">
+              {doneCount}<span className="text-text-muted text-lg">/{totalCount}</span>
+            </p>
+            <p className="text-[10px] text-text-tertiary">已完成</p>
+          </div>
         </div>
       </motion.div>
 

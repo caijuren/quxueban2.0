@@ -1,6 +1,6 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import Link from 'next/link';
 import {
   ArrowLeft,
@@ -1125,18 +1125,21 @@ const itemVariants = {
 };
 
 export default function SchoolDetail({ school }: { school: string }) {
+  const shouldReduceMotion = useReducedMotion();
   const data = schoolsData[school];
 
   if (!data) {
     return (
       <div className="min-h-[60vh] flex flex-col items-center justify-center text-center space-y-6">
-        <div className="w-16 h-16 rounded-2xl bg-white/5 flex items-center justify-center">
-          <School className="w-8 h-8 text-slate-400" />
+        <div className="flex items-center justify-center gap-3 mb-2">
+          <div className="w-10 h-10 rounded-xl bg-secondary/10 border border-secondary/20 flex items-center justify-center">
+            <School className="w-5 h-5 text-secondary" />
+          </div>
+          <div>
+            <h1 className="text-2xl sm:text-3xl font-bold font-display">未找到学校</h1>
+          </div>
         </div>
-        <div>
-          <h1 className="text-2xl font-bold font-display mb-2">未找到学校</h1>
-          <p className="text-slate-400">当前链接对应的目标学校不存在。</p>
-        </div>
+        <p className="text-slate-400">当前链接对应的目标学校不存在。</p>
         <Link
           href="/dashboard/plan"
           className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white/5 text-slate-200 hover:bg-white/10 transition-all"
@@ -1195,12 +1198,23 @@ export default function SchoolDetail({ school }: { school: string }) {
                   {data.fees}
                 </span>
               </div>
-              <h1 className="text-3xl sm:text-4xl font-bold font-display mb-3">
-                {data.name}
-              </h1>
-              <p className="text-slate-300 max-w-2xl leading-relaxed">
-                {data.oneLiner}
-              </p>
+              <motion.div
+                initial={shouldReduceMotion ? false : { opacity: 0, y: -8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4 }}
+                className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-secondary/10 border border-secondary/20 flex items-center justify-center">
+                    <School className="w-5 h-5 text-secondary" />
+                  </div>
+                  <div>
+                    <h1 className="text-2xl sm:text-3xl font-bold font-display">
+                      {data.name}
+                    </h1>
+                  </div>
+                </div>
+              </motion.div>
               <div className="flex flex-wrap gap-2 mt-5">
                 {data.tags.map((tag) => (
                   <span
@@ -1211,15 +1225,6 @@ export default function SchoolDetail({ school }: { school: string }) {
                   </span>
                 ))}
               </div>
-            </div>
-            <div
-              className="w-16 h-16 rounded-2xl bg-gradient-to-br flex items-center justify-center shrink-0"
-              style={{
-                backgroundImage: `linear-gradient(to bottom right, ${data.accent}, ${data.accent}88)`,
-                boxShadow: `0 0 30px ${data.glow}`,
-              }}
-            >
-              <School className="w-8 h-8 text-white" />
             </div>
           </div>
         </div>

@@ -11,6 +11,7 @@ import {
   TrendingDown,
   Clock,
   Target,
+  Bell,
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useChildren } from '@/components/dashboard/ChildrenContext';
@@ -135,16 +136,16 @@ export default function AlertsPage() {
       <motion.div
         initial={shouldReduceMotion ? false : { opacity: 0, y: -8 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+        transition={{ duration: 0.4 }}
         className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
       >
-        <div>
-          <h1 className="text-2xl sm:text-3xl font-bold font-display mb-1">提醒中心</h1>
-          <p className="text-sm text-slate-500">
-            {alerts.length > 0
-              ? `共 ${alerts.length} 条提醒，其中 ${urgentCount} 条需立即处理`
-              : '当前没有需要处理的事项，节奏良好'}
-          </p>
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-danger/10 border border-danger/20 flex items-center justify-center">
+            <Bell className="w-5 h-5 text-danger" />
+          </div>
+          <div>
+            <h1 className="text-2xl sm:text-3xl font-bold font-display">提醒中心</h1>
+          </div>
         </div>
         {alerts.length > 0 && (
           <div className="flex items-center gap-2">

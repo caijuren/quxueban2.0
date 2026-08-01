@@ -1,6 +1,6 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import { Sparkles, RefreshCw, AlertTriangle, CheckCircle2, Lightbulb, Calendar } from 'lucide-react';
 import { useChildren } from '@/components/dashboard/ChildrenContext';
 import { gradeLabel } from '@/lib/children';
@@ -51,29 +51,32 @@ const reportSections = [
 
 export default function AIPage() {
   const { currentChild } = useChildren();
+  const shouldReduceMotion = useReducedMotion();
 
   return (
     <div className="space-y-8">
       <motion.div
-        initial={{ opacity: 0, y: -10 }}
+        initial={shouldReduceMotion ? false : { opacity: 0, y: -8 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
+        transition={{ duration: 0.4 }}
         className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
       >
-        <div>
-          <h1 className="text-3xl font-bold font-display mb-2">
-            {currentChild ? `${currentChild.name}的 AI 诊断` : 'AI 诊断'}
-          </h1>
-          <p className="text-slate-400">
-            {currentChild
-              ? `当前阶段：${gradeLabel(currentChild.grade, currentChild.educationSystem)} · 基于当前进度和目标生成诊断建议`
-              : '基于当前进度和目标，智能生成诊断与调整建议'}
-          </p>
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-secondary/10 border border-secondary/20 flex items-center justify-center">
+            <Sparkles className="w-5 h-5 text-secondary" />
+          </div>
+          <div>
+            <h1 className="text-2xl sm:text-3xl font-bold font-display">
+              {currentChild ? `${currentChild.name}的 AI 诊断` : 'AI 诊断'}
+            </h1>
+          </div>
         </div>
-        <button className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-secondary to-secondary-glow text-white font-semibold hover:shadow-[0_0_30px_rgba(139,92,246,0.4)] transition-all duration-300">
-          <RefreshCw className="w-4 h-4" />
-          重新生成
-        </button>
+        <div className="flex items-center gap-2">
+          <button className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-secondary to-secondary-glow text-white font-semibold hover:shadow-[0_0_30px_rgba(139,92,246,0.4)] transition-all duration-300">
+            <RefreshCw className="w-4 h-4" />
+            重新生成
+          </button>
+        </div>
       </motion.div>
 
       {!currentChild && (

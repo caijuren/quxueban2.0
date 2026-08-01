@@ -1,6 +1,6 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import {
   Clock,
   ChevronLeft,
@@ -9,6 +9,7 @@ import {
   Lightbulb,
   FileText,
   Calendar,
+  Route,
 } from 'lucide-react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
@@ -301,6 +302,7 @@ export default function PlanDetailClient({ id }: { id: string }) {
   const params = useParams();
   const planId = (params.id as string) || id;
   const { currentChild } = useChildren();
+  const shouldReduceMotion = useReducedMotion();
   const allPlans = [...plans, ...middleSchoolPlans];
   const plan = allPlans.find((p) => p.id === planId);
   const matrixCurrentGrade = currentChild
@@ -310,7 +312,14 @@ export default function PlanDetailClient({ id }: { id: string }) {
   if (!plan) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] text-center">
-        <h1 className="text-2xl font-bold font-display mb-2">方案未找到</h1>
+        <div className="flex items-center justify-center gap-3 mb-2">
+          <div className="w-10 h-10 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center">
+            <Route className="w-5 h-5 text-primary" />
+          </div>
+          <div>
+            <h1 className="text-2xl sm:text-3xl font-bold font-display">方案未找到</h1>
+          </div>
+        </div>
         <p className="text-text-tertiary mb-6">该路线方案不存在或已被删除</p>
         <Link
           href="/dashboard/plan"
@@ -329,24 +338,30 @@ export default function PlanDetailClient({ id }: { id: string }) {
 
   return (
     <div className="space-y-8">
+      <Link
+        href="/dashboard/plan"
+        className="inline-flex items-center gap-1 text-sm text-text-tertiary hover:text-primary transition-colors mb-2"
+      >
+        <ChevronLeft className="w-4 h-4" />
+        返回路线方案
+      </Link>
+
       {/* Header */}
       <motion.div
-        initial={{ opacity: 0, y: -10 }}
+        initial={shouldReduceMotion ? false : { opacity: 0, y: -8 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
+        transition={{ duration: 0.4 }}
         className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
       >
-        <div>
-          <Link
-            href="/dashboard/plan"
-            className="inline-flex items-center gap-1 text-sm text-text-tertiary hover:text-primary transition-colors mb-2"
-          >
-            <ChevronLeft className="w-4 h-4" />
-            返回路线方案
-          </Link>
-          <h1 className="text-3xl font-bold font-display">{plan.name} · 完整方案</h1>
-        </div>
         <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center">
+            <Route className="w-5 h-5 text-primary" />
+          </div>
+          <div>
+            <h1 className="text-2xl sm:text-3xl font-bold font-display">{plan.name} · 完整方案</h1>
+          </div>
+        </div>
+        <div className="flex items-center gap-2">
           <span className={`px-3 py-1 rounded-full text-sm font-medium ${type.bg} ${type.color} border ${type.border}`}>
             {type.label}
           </span>

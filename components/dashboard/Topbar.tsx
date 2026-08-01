@@ -126,7 +126,7 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
       initial={{ y: -16, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-      className="fixed top-0 right-0 left-0 lg:left-64 h-16 glass border-b border-border-subtle z-30 px-3 sm:px-5 flex items-center justify-between"
+      className="fixed top-0 right-0 left-0 lg:left-56 h-16 glass border-b border-border-subtle z-30 px-3 sm:px-5 flex items-center justify-between"
     >
       <div className="flex items-center gap-3">
         <button
@@ -269,11 +269,8 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
               ref={childListboxRef}
               role="listbox"
               aria-label="切换孩子"
-              className="absolute right-0 top-full mt-2 w-64 rounded-2xl glass border border-border-default overflow-hidden z-50 shadow-panel"
+              className="absolute right-0 top-full mt-2 w-48 rounded-2xl bg-[#0f172a] border border-border-default overflow-hidden z-50 shadow-2xl"
             >
-              <div className="px-4 py-2.5 border-b border-border-subtle">
-                <p className="text-xs text-text-muted">切换孩子档案</p>
-              </div>
               <div className="p-1.5">
                 {children.map((child, index) => {
                   const isActive = currentChild?.id === child.id;

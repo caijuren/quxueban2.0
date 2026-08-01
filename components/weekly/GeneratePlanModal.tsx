@@ -3,7 +3,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import {
-  X,
   Calendar,
   ChevronRight,
   ChevronLeft,
@@ -22,6 +21,7 @@ import {
   AlertTriangle,
 } from 'lucide-react';
 import { useChildren } from '@/components/dashboard/ChildrenContext';
+import Modal from '@/components/ui/Modal';
 import {
   type WeeklyPlan,
   type WeeklyTaskItem,
@@ -88,7 +88,6 @@ export default function GeneratePlanModal({
   onPublish,
 }: GeneratePlanModalProps) {
   const { currentChild } = useChildren();
-  const shouldReduceMotion = useReducedMotion();
 
   const [step, setStep] = useState<Step>('week');
   const [weekId, setWeekId] = useState<string>(initialWeekId ?? getCurrentWeekId());
@@ -239,90 +238,24 @@ export default function GeneratePlanModal({
     (step === 'tasks' && selectedTemplateIds.size > 0) ||
     step === 'preview';
 
+  const subtitle =
+    step === 'week'
+      ? '第 1 步：选择要发布的周'
+      : step === 'tasks'
+      ? '第 2 步：从任务库选择任务'
+      : '第 3 步：预览并发布';
+
   return (
-    <motion.div
-      initial={shouldReduceMotion ? { opacity: 1 } : { opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      className="fixed inset-0 lg:left-64 z-[110] flex items-center sm:justify-center sm:p-4 bg-black/70 backdrop-blur-sm"
-      onClick={onClose}
-    >
-      <motion.div
-        initial={shouldReduceMotion ? false : { scale: 0.95, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        exit={shouldReduceMotion ? { opacity: 0 } : { scale: 0.95, opacity: 0 }}
-        onClick={(e) => e.stopPropagation()}
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="generate-plan-title"
-        className="w-full h-full sm:h-auto sm:max-w-5xl sm:max-h-[90vh] overflow-hidden rounded-none sm:rounded-3xl glass sm:border border-white/10 flex flex-col"
-      >
-        <div className="flex items-center justify-between p-5 sm:p-6 border-b border-white/[0.06]">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-primary-glow flex items-center justify-center">
-              <Calendar className="w-5 h-5 text-white" />
-            </div>
-            <div>
-              <h2 id="generate-plan-title" className="text-xl font-bold font-display">
-                生成本周计划
-              </h2>
-              <p className="text-xs text-slate-400">
-                {step === 'week' && '第 1 步：选择要发布的周'}
-                {step === 'tasks' && '第 2 步：从任务库选择任务'}
-                {step === 'preview' && '第 3 步：预览并发布'}
-              </p>
-            </div>
-          </div>
-          <button
-            onClick={onClose}
-            className="p-2 rounded-lg hover:bg-white/5 text-slate-400 focus-ring"
-            aria-label="关闭"
-          >
-            <X className="w-5 h-5" />
-          </button>
-        </div>
-
-        <div className="flex-1 overflow-y-auto p-5 sm:p-6 modal-scroll">
-          <AnimatePresence mode="wait">
-            {step === 'week' && (
-              <StepWeek
-                key="week"
-                weekId={weekId}
-                setWeekId={setWeekId}
-                options={weekOptions}
-              />
-            )}
-            {step === 'tasks' && (
-              <StepTasks
-                key="tasks"
-                templates={filteredTemplates}
-                loading={loadingTemplates}
-                selectedIds={selectedTemplateIds}
-                toggleTemplate={toggleTemplate}
-                allFilteredSelected={allFilteredSelected}
-                toggleAllFiltered={toggleAllFiltered}
-                search={search}
-                setSearch={setSearch}
-                filterCategory={filterCategory}
-                setFilterCategory={setFilterCategory}
-                filterSchedule={filterSchedule}
-                setFilterSchedule={setFilterSchedule}
-              />
-            )}
-            {step === 'preview' && (
-              <StepPreview
-                key="preview"
-                tasksByDay={tasksByDay}
-                dailyMinutes={dailyMinutes}
-                estimatedMinutes={estimatedMinutes}
-                onMoveTask={moveTaskDay}
-                onRemoveTask={removeTask}
-              />
-            )}
-          </AnimatePresence>
-        </div>
-
-        <div className="flex items-center justify-between p-5 sm:p-6 border-t border-white/[0.06]">
+    <Modal
+      isOpen
+      onClose={onClose}
+      title="生成本周计划"
+      subtitle={subtitle}
+      icon={Calendar}
+      iconClassName="bg-gradient-to-br from-primary to-primary-glow"
+      size="xl"
+      footer={
+        <div className="flex items-center justify-between w-full">
           <div className="text-xs text-slate-500">
             {step === 'tasks' && `已选 ${selectedTemplateIds.size} 项任务`}
             {step === 'preview' && `共 ${previewTasks.length} 个任务，约 ${estimatedMinutes} 分钟`}
@@ -362,8 +295,46 @@ export default function GeneratePlanModal({
             )}
           </div>
         </div>
-      </motion.div>
-    </motion.div>
+      }
+    >
+      <AnimatePresence mode="wait">
+        {step === 'week' && (
+          <StepWeek
+            key="week"
+            weekId={weekId}
+            setWeekId={setWeekId}
+            options={weekOptions}
+          />
+        )}
+        {step === 'tasks' && (
+          <StepTasks
+            key="tasks"
+            templates={filteredTemplates}
+            loading={loadingTemplates}
+            selectedIds={selectedTemplateIds}
+            toggleTemplate={toggleTemplate}
+            allFilteredSelected={allFilteredSelected}
+            toggleAllFiltered={toggleAllFiltered}
+            search={search}
+            setSearch={setSearch}
+            filterCategory={filterCategory}
+            setFilterCategory={setFilterCategory}
+            filterSchedule={filterSchedule}
+            setFilterSchedule={setFilterSchedule}
+          />
+        )}
+        {step === 'preview' && (
+          <StepPreview
+            key="preview"
+            tasksByDay={tasksByDay}
+            dailyMinutes={dailyMinutes}
+            estimatedMinutes={estimatedMinutes}
+            onMoveTask={moveTaskDay}
+            onRemoveTask={removeTask}
+          />
+        )}
+      </AnimatePresence>
+    </Modal>
   );
 }
 

@@ -10,12 +10,6 @@ import {
   X,
   Save,
   Loader2,
-  BookOpen,
-  Backpack,
-  Calculator,
-  Dumbbell,
-  Palette,
-  GraduationCap,
   Sparkles,
   Filter,
   Archive,
@@ -38,6 +32,7 @@ import {
   getTemplateStage,
 } from '@/lib/taskTemplates';
 import { getCategoryColorClass } from '@/lib/taskAlignment';
+import { categoryIcons, allCategories } from '@/lib/taskIcons';
 import { useChildren } from '@/components/dashboard/ChildrenContext';
 import { gradeToStage } from '@/lib/children';
 import { getStageByRouteId } from '@/lib/plans';
@@ -53,23 +48,6 @@ import {
   TaskTemplateUpdateInput,
 } from '@/lib/validation';
 
-const categoryIcons: Record<TaskCategory, typeof BookOpen> = {
-  school: Backpack,
-  reading: BookOpen,
-  sport: Dumbbell,
-  interest: Palette,
-  ability: Calculator,
-  other: GraduationCap,
-};
-
-const allCategories: TaskCategory[] = [
-  'school',
-  'reading',
-  'sport',
-  'interest',
-  'ability',
-  'other',
-];
 
 const difficultyOptions = [
   { value: 'easy', label: '基础', color: 'bg-success/10 text-success border-success/20' },
@@ -397,11 +375,11 @@ export default function TaskLibrarySection() {
                         tpl.category
                       )}`}
                     >
-                      <CategoryIcon className="w-3.5 h-3.5" />
+                      <CategoryIcon className="w-4 h-4" />
                     </div>
-                    <div className="flex-1 min-w-0">
+                    <div className="flex-1 min-w-0 flex flex-col pl-0.5">
                       <h3
-                        className="text-sm font-bold text-text-secondary truncate"
+                        className="text-sm font-bold text-text-secondary truncate pl-1"
                         title={tpl.title}
                       >
                         {tpl.title}
@@ -438,62 +416,58 @@ export default function TaskLibrarySection() {
                           </span>
                         )}
                       </div>
-                    </div>
-                  </div>
 
-                  <p className="text-xs text-text-muted mt-2 line-clamp-1">
-                    {tpl.description || '暂无描述'}
-                  </p>
+                      {tpl.description && (
+                        <p className="text-xs text-text-muted mt-2 line-clamp-1 pl-1">
+                          {tpl.description}
+                        </p>
+                      )}
 
-                  <div className="flex flex-wrap items-center gap-2 mt-2 text-2xs text-text-tertiary">
-                    <span className="px-1.5 py-0.5 rounded bg-surface-elevated">
-                      {TASK_CATEGORY_LABELS[tpl.category]}
-                    </span>
-                    <span className="px-1.5 py-0.5 rounded bg-surface-elevated">
-                      {tpl.duration}
-                    </span>
-                    {difficultyInfo && (
-                      <span className={`px-1.5 py-0.5 rounded border ${difficultyInfo.color}`}>
-                        {difficultyInfo.label}
-                      </span>
-                    )}
-                    {semesterInfo && (
-                      <span className="px-1.5 py-0.5 rounded bg-info/10 text-info border border-info/20">
-                        {semesterInfo.label}
-                      </span>
-                    )}
-                    {tpl.milestoneTag && (
-                      <span className="px-1.5 py-0.5 rounded bg-warning/10 text-warning border border-warning/20">
-                        {tpl.milestoneTag}
-                      </span>
-                    )}
-                    {stage !== 'general' && (
-                      <span className="px-1.5 py-0.5 rounded bg-primary/[0.08] text-primary border border-primary/20">
-                        {stage}
-                      </span>
-                    )}
-                    {stage === 'general' && (
-                      <span className="px-1.5 py-0.5 rounded bg-surface-elevated text-text-tertiary border border-border-subtle">
-                        全学段
-                      </span>
-                    )}
-                  </div>
-
-                  {tpl.routeTags.length > 0 && (
-                    <div className="flex flex-wrap gap-1 mt-2">
-                      {tpl.routeTags.map((tag) => {
-                        const routeLabel = routeOptions.find((r) => r.value === tag)?.label || tag;
-                        return (
-                          <span
-                            key={tag}
-                            className="text-2xs px-1.5 py-0.5 rounded bg-surface-elevated text-text-muted"
-                          >
-                            {routeLabel}
+                      <div className="flex flex-wrap items-center gap-1.5 mt-2.5">
+                        <span className="text-2xs px-1.5 py-0.5 rounded bg-surface-elevated text-text-tertiary border border-border-subtle">
+                          {TASK_CATEGORY_LABELS[tpl.category]}
+                        </span>
+                        <span className="text-2xs px-1.5 py-0.5 rounded bg-surface-elevated text-text-tertiary border border-border-subtle">
+                          {tpl.duration}
+                        </span>
+                        {difficultyInfo && (
+                          <span className={`text-2xs px-1.5 py-0.5 rounded border ${difficultyInfo.color}`}>
+                            {difficultyInfo.label}
                           </span>
-                        );
-                      })}
+                        )}
+                        {semesterInfo && (
+                          <span className="text-2xs px-1.5 py-0.5 rounded bg-surface-elevated text-text-tertiary border border-border-subtle">
+                            {semesterInfo.label}
+                          </span>
+                        )}
+                        {tpl.milestoneTag && (
+                          <span className="text-2xs px-1.5 py-0.5 rounded bg-surface-elevated text-text-tertiary border border-border-subtle">
+                            {tpl.milestoneTag}
+                          </span>
+                        )}
+                        {stage !== 'general' ? (
+                          <span className="text-2xs px-1.5 py-0.5 rounded bg-surface-elevated text-text-tertiary border border-border-subtle">
+                            {stage}
+                          </span>
+                        ) : (
+                          <span className="text-2xs px-1.5 py-0.5 rounded bg-surface-elevated text-text-tertiary border border-border-subtle">
+                            全学段
+                          </span>
+                        )}
+                        {tpl.routeTags.map((tag) => {
+                          const routeLabel = routeOptions.find((r) => r.value === tag)?.label || tag;
+                          return (
+                            <span
+                              key={tag}
+                              className="text-2xs px-1.5 py-0.5 rounded bg-surface-elevated text-text-tertiary border border-border-subtle"
+                            >
+                              {routeLabel}
+                            </span>
+                          );
+                        })}
+                      </div>
                     </div>
-                  )}
+                  </div>
 
                   <div className="mt-auto pt-3 border-t border-border-subtle flex items-center justify-end gap-2">
                     <button
@@ -1060,7 +1034,7 @@ function TaskTemplateModal({ initial, capabilities, onClose, onSave, saving }: T
                       key={link.capabilityId}
                       className="flex items-center gap-3 p-2.5 rounded-lg bg-surface-elevated border border-border-subtle"
                     >
-                      <div className="flex-1 min-w-0">
+                      <div className="flex-1 min-w-0 flex flex-col">
                         <div className="flex items-center gap-2">
                           <span className="text-sm font-medium text-text-secondary">{capability.name}</span>
                           <span className="text-2xs px-1.5 py-0.5 rounded bg-surface-elevated text-text-tertiary">

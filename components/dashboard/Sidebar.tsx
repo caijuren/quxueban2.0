@@ -56,7 +56,7 @@ export default function Sidebar({ mobileMenuOpen, onLinkClick }: SidebarProps) {
 
   return (
     <aside
-      className={`fixed left-0 top-0 h-full w-64 glass border-r border-border-subtle z-50 flex flex-col transition-transform duration-300 ${
+      className={`fixed left-0 top-0 h-full w-56 glass border-r border-border-subtle z-50 flex flex-col transition-transform duration-300 ${
         mobileMenuOpen ? 'translate-x-0 lg:translate-x-0' : '-translate-x-full lg:translate-x-0 lg:flex hidden'
       }`}
     >

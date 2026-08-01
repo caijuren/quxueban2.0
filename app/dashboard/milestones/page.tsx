@@ -1,7 +1,7 @@
 'use client';
 
-import { motion } from 'framer-motion';
-import { CalendarCheck, Clock, CheckCircle2, Circle, AlertCircle } from 'lucide-react';
+import { motion, useReducedMotion } from 'framer-motion';
+import { CalendarCheck, Clock, CheckCircle2, Circle, AlertCircle, Flag } from 'lucide-react';
 import { useChildren } from '@/components/dashboard/ChildrenContext';
 import { gradeLabel } from '@/lib/children';
 import ChildEmptyState from '@/components/dashboard/ChildEmptyState';
@@ -45,22 +45,26 @@ const statusConfig: Record<string, { icon: typeof CheckCircle2; color: string; b
 
 export default function MilestonesPage() {
   const { currentChild } = useChildren();
+  const shouldReduceMotion = useReducedMotion();
 
   return (
     <div className="space-y-8">
       <motion.div
-        initial={{ opacity: 0, y: -10 }}
+        initial={shouldReduceMotion ? false : { opacity: 0, y: -8 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
+        transition={{ duration: 0.4 }}
+        className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
       >
-        <h1 className="text-3xl font-bold font-display mb-2">
-          {currentChild ? `${currentChild.name}的里程碑任务` : '里程碑任务'}
-        </h1>
-        <p className="text-slate-400">
-          {currentChild
-            ? `当前阶段：${gradeLabel(currentChild.grade, currentChild.educationSystem)} · 按年级拆解升学准备任务`
-            : '按年级拆解升学准备任务，追踪每个阶段完成情况'}
-        </p>
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center">
+            <Flag className="w-5 h-5 text-primary" />
+          </div>
+          <div>
+            <h1 className="text-2xl sm:text-3xl font-bold font-display">
+              {currentChild ? `${currentChild.name}的里程碑任务` : '里程碑任务'}
+            </h1>
+          </div>
+        </div>
       </motion.div>
 
       {!currentChild && (

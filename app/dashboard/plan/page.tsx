@@ -163,15 +163,15 @@ function PlanPageContent() {
         transition={{ duration: 0.4 }}
         className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
       >
-        <div>
-          <h1 className="text-2xl sm:text-3xl font-bold font-display mb-1">
-            {currentChild ? `${currentChild.name}的路线方案` : '路线方案'}
-          </h1>
-          <p className="text-sm text-text-muted">
-            {currentChild
-              ? `当前阶段：${activeStage}${currentChild.routeId ? ` · 已绑定「${getRouteById(currentChild.routeId)?.name ?? currentChild.routeId}」路线` : ` · 根据${currentChild.name}的年级自动匹配`}`
-              : '管理小升初、中考、高考各阶段的主路线与备选路线'}
-          </p>
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center">
+            <Route className="w-5 h-5 text-primary" />
+          </div>
+          <div>
+            <h1 className="text-2xl sm:text-3xl font-bold font-display">
+              {currentChild ? `${currentChild.name}的路线方案` : '路线方案'}
+            </h1>
+          </div>
         </div>
         <div className="flex items-center gap-2">
           <div ref={stageDropdownRef} className="relative">

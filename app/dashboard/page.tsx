@@ -478,20 +478,22 @@ export default function DashboardPage() {
       <motion.div
         initial={shouldReduceMotion ? false : { opacity: 0, y: -8 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-        className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3"
+        transition={{ duration: 0.4 }}
+        className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
       >
-        <div>
-          <h1 className="text-2xl sm:text-3xl font-bold font-display mb-1">升学规划中心</h1>
-          <p className="text-sm text-text-tertiary">
-            {viewMode === 'command'
-              ? `查看 ${currentChild?.name || ''} 的升学战略看板`
-              : `监控 ${children.length} 名孩子的整体升学状态`}
-          </p>
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center">
+            <LayoutGrid className="w-5 h-5 text-primary" />
+          </div>
+          <div>
+            <h1 className="text-2xl sm:text-3xl font-bold font-display">升学规划中心</h1>
+          </div>
         </div>
 
         {canOverview && (
-          <ViewToggle mode={viewMode} onChange={setViewMode} />
+          <div className="flex items-center gap-2">
+            <ViewToggle mode={viewMode} onChange={setViewMode} />
+          </div>
         )}
       </motion.div>
 

@@ -12,6 +12,7 @@ import {
   HelpCircle,
   ChevronDown,
   Loader2,
+  Settings,
 } from 'lucide-react';
 import { UserWithSettings, applySettingsToDocument } from '@/lib/settings';
 import { useUser, useUpdateUser } from '@/lib/hooks/useUser';
@@ -105,56 +106,62 @@ function SettingsPageInner() {
         transition={{ duration: 0.4 }}
         className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
       >
-        <div>
-          <h1 className="text-2xl sm:text-3xl font-bold font-display mb-1">
-            系统设置
-          </h1>
-          <p className="text-sm text-slate-500">管理账号、通知和界面偏好</p>
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-accent/10 border border-accent/20 flex items-center justify-center">
+            <Settings className="w-5 h-5 text-accent" />
+          </div>
+          <div>
+            <h1 className="text-2xl sm:text-3xl font-bold font-display">
+              系统设置
+            </h1>
+          </div>
         </div>
 
-        <div ref={dropdownRef} className="relative">
-          <button
-            id="settings-category-dropdown"
-            onClick={() => setDropdownOpen((v) => !v)}
-            className="flex items-center gap-2 px-3 py-2 rounded-lg glass border border-white/[0.08] text-sm font-medium text-slate-200 hover:bg-white/[0.04] transition-colors focus-ring"
-            aria-haspopup="listbox"
-            aria-expanded={dropdownOpen}
-          >
-            <activeCategoryInfo.icon className="w-4 h-4 text-primary" />
-            <span className="gradient-text font-semibold">
-              {activeCategoryInfo.label}
-            </span>
-            <ChevronDown
-              className={`w-3.5 h-3.5 text-slate-400 transition-transform duration-200 ${
-                dropdownOpen ? 'rotate-180' : ''
-              }`}
-            />
-          </button>
+        <div className="flex items-center gap-2">
+          <div ref={dropdownRef} className="relative">
+            <button
+              id="settings-category-dropdown"
+              onClick={() => setDropdownOpen((v) => !v)}
+              className="flex items-center gap-2 px-3 py-2 rounded-lg glass border border-white/[0.08] text-sm font-medium text-slate-200 hover:bg-white/[0.04] transition-colors focus-ring"
+              aria-haspopup="listbox"
+              aria-expanded={dropdownOpen}
+            >
+              <activeCategoryInfo.icon className="w-4 h-4 text-primary" />
+              <span className="gradient-text font-semibold">
+                {activeCategoryInfo.label}
+              </span>
+              <ChevronDown
+                className={`w-3.5 h-3.5 text-slate-400 transition-transform duration-200 ${
+                  dropdownOpen ? 'rotate-180' : ''
+                }`}
+              />
+            </button>
 
-          {dropdownOpen && (
-            <div className="absolute right-0 top-full mt-2 w-48 rounded-xl glass border border-white/[0.08] overflow-hidden z-50 shadow-2xl">
-              {CATEGORIES.map((cat) => {
-                const isActive = activeCategory === cat.id;
-                return (
-                  <button
-                    key={cat.id}
-                    onClick={() => {
-                      setActiveCategory(cat.id);
-                      setDropdownOpen(false);
-                    }}
-                    className={`w-full text-left px-3 py-2.5 text-sm transition-colors flex items-center gap-2 ${
-                      isActive
-                        ? 'bg-primary/10 text-primary font-medium'
-                        : 'text-slate-300 hover:bg-white/5'
-                    }`}
-                  >
-                    <cat.icon className="w-4 h-4" />
-                    {cat.label}
-                  </button>
-                );
-              })}
-            </div>
-          )}
+            {dropdownOpen && (
+              <div className="absolute right-0 top-full mt-2 w-48 rounded-xl glass border border-white/[0.08] overflow-hidden z-50 shadow-2xl">
+                {CATEGORIES.map((cat) => {
+                  const isActive = activeCategory === cat.id;
+                  return (
+                    <button
+                      key={cat.id}
+                      onClick={() => {
+                        setActiveCategory(cat.id);
+                        setDropdownOpen(false);
+                      }}
+                      className={`w-full text-left px-3 py-2.5 text-sm transition-colors flex items-center gap-2 ${
+                        isActive
+                          ? 'bg-primary/10 text-primary font-medium'
+                          : 'text-slate-300 hover:bg-white/5'
+                      }`}
+                    >
+                      <cat.icon className="w-4 h-4" />
+                      {cat.label}
+                    </button>
+                  );
+                })}
+              </div>
+            )}
+          </div>
         </div>
       </motion.div>
 

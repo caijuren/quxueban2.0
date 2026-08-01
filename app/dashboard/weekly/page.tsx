@@ -5,11 +5,8 @@ import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import {
   Calendar,
   CheckCircle2,
-  Circle,
   ChevronLeft,
   ChevronRight,
-  LayoutGrid,
-  List,
   Clock,
   Target,
   Sparkles,
@@ -33,7 +30,7 @@ import {
   Share2,
   Loader2,
 } from 'lucide-react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import Modal from '@/components/ui/Modal';
 import { useChildren } from '@/components/dashboard/ChildrenContext';
 import EmptyState from '@/components/ui/EmptyState';
 import ChildEmptyState from '@/components/dashboard/ChildEmptyState';
@@ -56,8 +53,8 @@ import {
   getCurrentWeekId,
   getISOWeek,
   getWeekRange,
+  parseWeekId,
   formatWeekLabel,
-  getTasksByDay,
   getPlanStats,
   generateAiReview,
   getTodayName,
@@ -112,13 +109,38 @@ const SEMESTER_LABELS: Record<string, string> = {
   exam: '考前冲刺',
 };
 
-type ViewMode = 'day' | 'matrix';
-
 function shiftWeekId(weekId: string, delta: number): string {
   const { start } = getWeekRange(weekId);
   const next = new Date(start);
   next.setDate(start.getDate() + delta * 7);
   return getISOWeek(next).weekId;
+}
+
+function buildWeekOptions(centerWeekId: string) {
+  const currentWeekId = getCurrentWeekId();
+  const currentStart = getWeekRange(currentWeekId).start;
+  const oneWeek = 7 * 24 * 60 * 60 * 1000;
+
+  return Array.from({ length: 9 }, (_, i) => i - 4).map((delta) => {
+    const id = shiftWeekId(centerWeekId, delta);
+    const { year, week } = parseWeekId(id);
+    const start = getWeekRange(id).start;
+    const weeksFromCurrent = Math.round(
+      (start.getTime() - currentStart.getTime()) / oneWeek
+    );
+    const relationLabel =
+      weeksFromCurrent === 0
+        ? '本周'
+        : weeksFromCurrent === 1
+        ? '下周'
+        : weeksFromCurrent === -1
+        ? '上周'
+        : `${year}年第${String(week).padStart(2, '0')}周`;
+    return {
+      value: id,
+      label: `${relationLabel} · ${formatWeekLabel(id)}`,
+    };
+  });
 }
 
 function ProgressRing({ rate, size = 96 }: { rate: number; size?: number }) {
@@ -318,45 +340,34 @@ function EditPlanModal({ plan, onClose, onSave }: EditPlanModalProps) {
   const shouldReduceMotion = useReducedMotion();
 
   return (
-    <motion.div
-      initial={shouldReduceMotion ? { opacity: 1 } : { opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      className="fixed inset-0 lg:left-64 z-[110] flex items-center sm:justify-center sm:p-4 bg-black/70 backdrop-blur-sm"
-      onClick={handleClose}
-    >
-      <motion.div
-        initial={shouldReduceMotion ? false : { scale: 0.95, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        exit={shouldReduceMotion ? { opacity: 0 } : { scale: 0.95, opacity: 0 }}
-        onClick={(e) => e.stopPropagation()}
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="edit-plan-title"
-        className="w-full h-full sm:h-auto sm:max-w-3xl sm:max-h-[85vh] overflow-y-auto rounded-none sm:rounded-3xl glass sm:border border-border-default p-5 sm:p-8 modal-scroll"
-      >
-        <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-accent flex items-center justify-center">
-              <Pencil className="w-5 h-5 text-white" />
-            </div>
-            <div>
-              <h2 id="edit-plan-title" className="text-xl font-bold font-display">编辑周计划</h2>
-              <p className="text-xs text-text-tertiary">
-                按星期分组管理，支持复制到多天
-              </p>
-            </div>
+    <>
+      <Modal
+        isOpen
+        onClose={handleClose}
+        title="编辑周计划"
+        subtitle="按星期分组管理，支持复制到多天"
+        icon={Pencil}
+        iconClassName="bg-accent"
+        size="lg"
+        footer={
+          <div className="flex items-center justify-end gap-3 w-full">
+            <button
+              onClick={handleClose}
+              className="px-4 py-2 rounded-xl text-slate-400 hover:text-white transition-colors"
+            >
+              取消
+            </button>
+            <button
+              onClick={handleSave}
+              className="flex items-center gap-2 px-6 py-2 rounded-xl bg-accent text-white font-semibold transition-all"
+            >
+              <Send className="w-4 h-4" />
+              保存
+            </button>
           </div>
-          <button
-            onClick={handleClose}
-            className="p-2 rounded-lg hover:bg-surface-elevated text-text-tertiary focus-ring"
-            aria-label="关闭"
-          >
-            <X className="w-5 h-5" />
-          </button>
-        </div>
-
-        <div className="space-y-4 mb-6">
+        }
+      >
+        <div className="space-y-4">
           {dayOrder.map((day) => {
             const dayTasks = tasksByDay[day];
             const { count, minutes } = dayStats[day];
@@ -364,19 +375,19 @@ function EditPlanModal({ plan, onClose, onSave }: EditPlanModalProps) {
             return (
               <div
                 key={day}
-                className="rounded-2xl bg-surface-elevated border border-border-subtle overflow-hidden"
+                className="rounded-2xl bg-white/5 border border-white/10 overflow-hidden"
               >
                 <button
                   onClick={() => toggleDay(day)}
-                  className="w-full flex items-center justify-between px-4 py-3 hover:bg-surface-elevated transition-colors"
+                  className="w-full flex items-center justify-between px-4 py-3 hover:bg-white/[0.03] transition-colors"
                 >
                   <div className="flex items-center gap-3">
-                    <span className="text-sm font-bold text-text-secondary">{day}</span>
-                    <span className="text-xs px-2 py-0.5 rounded-full bg-surface-elevated text-text-tertiary">
+                    <span className="text-sm font-bold text-slate-300">{day}</span>
+                    <span className="text-xs px-2 py-0.5 rounded-full bg-white/5 text-slate-400">
                       {count} 项
                     </span>
                     {minutes > 0 && (
-                      <span className="text-xs px-2 py-0.5 rounded-full bg-surface-elevated text-text-tertiary">
+                      <span className="text-xs px-2 py-0.5 rounded-full bg-white/5 text-slate-400">
                         约 {minutes} 分钟
                       </span>
                     )}
@@ -387,13 +398,13 @@ function EditPlanModal({ plan, onClose, onSave }: EditPlanModalProps) {
                         e.stopPropagation();
                         addTask(day);
                       }}
-                      className="p-1.5 rounded-lg hover:bg-surface-highlight text-text-tertiary hover:text-text-secondary transition-colors"
+                      className="p-1.5 rounded-lg hover:bg-white/10 text-slate-400 hover:text-slate-200 transition-colors"
                       aria-label={`${day}添加任务`}
                     >
                       <Plus className="w-4 h-4" />
                     </button>
                     <ChevronDown
-                      className={`w-4 h-4 text-text-muted transition-transform ${
+                      className={`w-4 h-4 text-slate-500 transition-transform ${
                         isCollapsed ? '-rotate-90' : ''
                       }`}
                     />
@@ -410,7 +421,7 @@ function EditPlanModal({ plan, onClose, onSave }: EditPlanModalProps) {
                     >
                       <div className="p-3 space-y-3">
                         {dayTasks.length === 0 && (
-                          <div className="text-center py-4 text-xs text-text-muted">
+                          <div className="text-center py-4 text-xs text-slate-500">
                             暂无任务，点击上方 + 添加
                           </div>
                         )}
@@ -440,23 +451,7 @@ function EditPlanModal({ plan, onClose, onSave }: EditPlanModalProps) {
             );
           })}
         </div>
-
-        <div className="flex items-center justify-end gap-3">
-          <button
-            onClick={handleClose}
-            className="px-4 py-2 rounded-xl text-text-tertiary hover:text-text-secondary transition-colors focus-ring"
-          >
-            取消
-          </button>
-          <button
-            onClick={handleSave}
-            className="flex items-center gap-2 px-6 py-2 rounded-xl bg-accent text-white font-semibold transition-all focus-ring"
-          >
-            <Send className="w-4 h-4" />
-            保存
-          </button>
-        </div>
-      </motion.div>
+      </Modal>
 
       <AnimatePresence>
         {showUnsavedPrompt && (
@@ -469,7 +464,7 @@ function EditPlanModal({ plan, onClose, onSave }: EditPlanModalProps) {
           />
         )}
       </AnimatePresence>
-    </motion.div>
+    </>
   );
 }
 
@@ -717,29 +712,20 @@ interface UnsavedPromptProps {
 
 function UnsavedPrompt({ onCancel, onConfirm }: UnsavedPromptProps) {
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      className="fixed inset-0 z-[120] flex items-center sm:justify-center sm:p-4 bg-black/80 backdrop-blur-sm"
-      onClick={onCancel}
-    >
-      <motion.div
-        initial={{ scale: 0.95, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        exit={{ scale: 0.95, opacity: 0 }}
-        onClick={(e) => e.stopPropagation()}
-        className="w-full max-w-sm rounded-2xl glass border border-border-default p-6 text-center mx-4"
-      >
-        <AlertTriangle className="w-10 h-10 text-warning mx-auto mb-3" />
-        <h3 className="text-lg font-bold text-text-secondary mb-2">有未保存的更改</h3>
-        <p className="text-xs text-text-tertiary mb-6">
-          关闭后将丢失本次编辑内容，确定要取消吗？
-        </p>
-        <div className="flex items-center justify-center gap-3">
+    <Modal
+      isOpen
+      onClose={onCancel}
+      title="有未保存的更改"
+      subtitle="关闭后将丢失本次编辑内容"
+      icon={AlertTriangle}
+      iconClassName="bg-warning"
+      size="sm"
+      showClose={false}
+      footer={
+        <div className="flex items-center justify-center gap-3 w-full">
           <button
             onClick={onCancel}
-            className="px-4 py-2 rounded-xl text-text-secondary hover:text-white transition-colors"
+            className="px-4 py-2 rounded-xl text-slate-400 hover:text-white transition-colors"
           >
             继续编辑
           </button>
@@ -750,8 +736,12 @@ function UnsavedPrompt({ onCancel, onConfirm }: UnsavedPromptProps) {
             放弃更改
           </button>
         </div>
-      </motion.div>
-    </motion.div>
+      }
+    >
+      <p className="text-sm text-slate-400 text-center">
+        当前编辑内容尚未保存，确定要关闭弹窗吗？
+      </p>
+    </Modal>
   );
 }
 
@@ -778,7 +768,6 @@ function TaskLibraryModal({
   const [selectedDay, setSelectedDay] = useState<DayOfWeek>('周一');
   const [assessments, setAssessments] = useState<TaskRationalityAssessment[] | null>(null);
   const assess = useAssessTasks();
-  const shouldReduceMotion = useReducedMotion();
 
   useEffect(() => {
     setAssessments(null);
@@ -892,48 +881,55 @@ function TaskLibraryModal({
   };
 
   return (
-    <motion.div
-      initial={shouldReduceMotion ? { opacity: 1 } : { opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      className="fixed inset-0 lg:left-64 z-[110] flex items-center sm:justify-center sm:p-4 bg-black/70 backdrop-blur-sm"
-      onClick={onClose}
-    >
-      <motion.div
-        initial={shouldReduceMotion ? false : { scale: 0.95, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        exit={shouldReduceMotion ? { opacity: 0 } : { scale: 0.95, opacity: 0 }}
-        onClick={(e) => e.stopPropagation()}
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="library-title"
-        className="w-full h-full sm:h-auto sm:max-w-4xl sm:max-h-[85vh] overflow-y-auto rounded-none sm:rounded-3xl glass sm:border border-border-default p-5 sm:p-8 modal-scroll"
-      >
-        <div className="flex items-center justify-between mb-6">
+    <Modal
+      isOpen
+      onClose={onClose}
+      title="从任务库选择"
+      subtitle={`勾选常用任务一键添加到${selectedDay}`}
+      icon={Library}
+      iconClassName="bg-secondary"
+      size="xl"
+      colorScheme="violet"
+      footer={
+        <div className="flex items-center justify-between w-full">
+          <p className="text-xs text-text-muted">
+            已选 {selectedTemplateIds.size} 项
+          </p>
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-surface-elevated border border-border-default flex items-center justify-center">
-              <Library className="w-5 h-5 text-primary" />
-            </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <h2 id="library-title" className="text-xl font-bold font-display">从任务库选择</h2>
-              </div>
-              <p className="text-xs text-text-tertiary">
-                勾选常用任务一键添加到{selectedDay}
-              </p>
-            </div>
+            <button
+              onClick={onClose}
+              className="px-4 py-2 rounded-xl text-text-tertiary hover:text-text-secondary transition-colors"
+            >
+              取消
+            </button>
+            <button
+              onClick={handleAdd}
+              disabled={selectedTemplateIds.size === 0 || assess.isPending}
+              className="flex items-center gap-2 px-6 py-2 rounded-xl bg-primary text-white font-semibold disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+            >
+              {assess.isPending ? (
+                <>
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                  评估中...
+                </>
+              ) : assessments ? (
+                <>
+                  <CheckCircle2 className="w-4 h-4" />
+                  确认添加
+                </>
+              ) : (
+                <>
+                  <Sparkles className="w-4 h-4" />
+                  AI 评估并添加
+                </>
+              )}
+            </button>
           </div>
-          <button
-            onClick={onClose}
-            className="p-2 rounded-lg hover:bg-surface-elevated text-text-tertiary focus-ring"
-            aria-label="关闭"
-          >
-            <X className="w-5 h-5" />
-          </button>
         </div>
-
-        <div className="flex flex-col sm:flex-row gap-3 mb-4">
-          <div className="flex flex-wrap gap-2">
+      }
+    >
+      <div className="flex flex-col sm:flex-row gap-3 mb-4">
+        <div className="flex flex-wrap gap-2">
             <button
               onClick={() => setSelectedCategory('all')}
               className={`px-3 py-1.5 rounded-lg text-xs transition-colors ${
@@ -1086,51 +1082,12 @@ function TaskLibraryModal({
           </div>
         )}
 
-        <div className="flex items-center justify-between">
-          <p className="text-xs text-text-muted">
-            已选 {selectedTemplateIds.size} 项
-          </p>
-          <div className="flex items-center gap-3">
-            <button
-              onClick={onClose}
-              className="px-4 py-2 rounded-xl text-text-tertiary hover:text-text-secondary transition-colors"
-            >
-              取消
-            </button>
-            <button
-              onClick={handleAdd}
-              disabled={selectedTemplateIds.size === 0 || assess.isPending}
-              className="flex items-center gap-2 px-6 py-2 rounded-xl bg-primary text-white font-semibold disabled:opacity-50 disabled:cursor-not-allowed transition-all"
-            >
-              {assess.isPending ? (
-                <>
-                  <Loader2 className="w-4 h-4 animate-spin" />
-                  评估中...
-                </>
-              ) : assessments ? (
-                <>
-                  <CheckCircle2 className="w-4 h-4" />
-                  确认添加
-                </>
-              ) : (
-                <>
-                  <Sparkles className="w-4 h-4" />
-                  AI 评估并添加
-                </>
-              )}
-            </button>
-          </div>
-        </div>
-      </motion.div>
-    </motion.div>
+    </Modal>
   );
 }
 
 function WeeklyTasksContent() {
-  const router = useRouter();
-  const searchParams = useSearchParams();
   const shouldReduceMotion = useReducedMotion();
-  const viewFromUrl = searchParams.get('view') as ViewMode | null;
   const {
     currentChild,
     getWeeklyPlan,
@@ -1140,10 +1097,6 @@ function WeeklyTasksContent() {
   } = useChildren();
 
   const [weekId, setWeekId] = useState<string>(getCurrentWeekId());
-  const [viewMode, setViewModeState] = useState<ViewMode>(
-    viewFromUrl === 'matrix' ? 'matrix' : 'day'
-  );
-  const [selectedDay, setSelectedDay] = useState<DayOfWeek>(getTodayName());
   const [draftPlan, setDraftPlan] = useState<WeeklyPlan | null>(null);
   const [reviewOpen, setReviewOpen] = useState(false);
   const [reviewComment, setReviewComment] = useState('');
@@ -1154,17 +1107,9 @@ function WeeklyTasksContent() {
 
   const today = getTodayName();
 
-  const setViewMode = (mode: ViewMode) => {
-    setViewModeState(mode);
-    const params = new URLSearchParams(searchParams.toString());
-    params.set('view', mode);
-    router.replace(`/dashboard/weekly?${params.toString()}`, { scroll: false });
-  };
-
   useEffect(() => {
     setDraftPlan(null);
-    setSelectedDay(today);
-  }, [weekId, today]);
+  }, [weekId]);
 
   const plan = useMemo(() => {
     if (!currentChild) return undefined;
@@ -1179,10 +1124,7 @@ function WeeklyTasksContent() {
     [displayPlan]
   );
 
-  const { year, week } = useMemo(() => {
-    const parsed = weekId.split('-W');
-    return { year: parsed[0], week: parsed[1] };
-  }, [weekId]);
+  const weekOptions = useMemo(() => buildWeekOptions(weekId), [weekId]);
 
   const handleGenerate = () => {
     setGenerateOpen(true);
@@ -1300,13 +1242,25 @@ function WeeklyTasksContent() {
   if (!currentChild) {
     return (
       <div className="space-y-8">
-        <h1 className="text-3xl font-bold font-display">周计划</h1>
+        <motion.div
+          initial={shouldReduceMotion ? false : { opacity: 0, y: -8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4 }}
+          className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
+        >
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center">
+              <Calendar className="w-5 h-5 text-primary" />
+            </div>
+            <div>
+              <h1 className="text-2xl sm:text-3xl font-bold font-display">周计划</h1>
+            </div>
+          </div>
+        </motion.div>
         <ChildEmptyState description="添加孩子后，系统会根据年级自动生成每周计划计划" />
       </div>
     );
   }
-
-  const tasksByDay = displayPlan ? getTasksByDay(displayPlan) : null;
 
   const handleCarryOverLastWeek = () => {
     if (!currentChild || lastWeekUncompleted.length === 0) return;
@@ -1335,22 +1289,17 @@ function WeeklyTasksContent() {
   return (
     <div className="space-y-6">
       <motion.div
-        initial={shouldReduceMotion ? false : { opacity: 0, y: -10 }}
+        initial={shouldReduceMotion ? false : { opacity: 0, y: -8 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4"
+        transition={{ duration: 0.4 }}
+        className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
       >
-        <div>
-          <div className="flex items-center gap-3 mb-2">
-            <div className="w-10 h-10 rounded-xl bg-surface-elevated border border-border-default flex items-center justify-center">
-              <Calendar className="w-5 h-5 text-white" />
-            </div>
-            <div>
-              <h1 className="text-3xl font-bold font-display">周计划</h1>
-              <p className="text-sm text-text-tertiary">
-                {currentChild.name} · {gradeLabel(currentChild.grade, currentChild.educationSystem)} · {formatWeekLabel(weekId)}
-              </p>
-            </div>
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center">
+            <Calendar className="w-5 h-5 text-primary" />
+          </div>
+          <div>
+            <h1 className="text-2xl sm:text-3xl font-bold font-display">周计划</h1>
           </div>
         </div>
 
@@ -1362,8 +1311,20 @@ function WeeklyTasksContent() {
           >
             <ChevronLeft className="w-4 h-4" />
           </button>
-          <div className="px-3 py-1.5 rounded-lg glass border border-border-default text-sm font-medium min-w-[120px] text-center tabular-nums">
-            {year}年第{week}周
+          <div className="relative">
+            <select
+              value={weekId}
+              onChange={(e) => setWeekId(e.target.value)}
+              className="appearance-none pl-3 pr-9 py-1.5 rounded-lg bg-surface-elevated border border-border-default text-sm font-medium text-text-secondary min-w-[180px] focus:outline-none focus:border-primary/50 transition-colors cursor-pointer"
+              aria-label="选择周"
+            >
+              {weekOptions.map((opt) => (
+                <option key={opt.value} value={opt.value}>
+                  {opt.label}
+                </option>
+              ))}
+            </select>
+            <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-text-tertiary pointer-events-none" />
           </div>
           <button
             onClick={() => setWeekId((w) => shiftWeekId(w, 1))}
@@ -1424,7 +1385,7 @@ function WeeklyTasksContent() {
               className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-surface-elevated hover:bg-surface-highlight text-text-secondary text-sm transition-colors focus-ring"
             >
               <Share2 className="w-3.5 h-3.5" />
-              导出周报
+              导出周计划
             </button>
           )}
           {displayPlan && (
@@ -1443,45 +1404,11 @@ function WeeklyTasksContent() {
                 <Library className="w-3.5 h-3.5" />
                 从任务库选择
               </button>
-              <button
-                onClick={() => setEditOpen(true)}
-                className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-surface-elevated hover:bg-surface-highlight text-text-secondary text-sm transition-colors focus-ring"
-              >
-                <Pencil className="w-3.5 h-3.5" />
-                {isDraft ? '编辑任务' : '调整任务'}
-              </button>
             </>
           )}
           {isDraft && (
             <span className="text-xs text-text-muted">预览模式：发布后才会保存</span>
           )}
-        </div>
-
-        <div className="flex items-center gap-1 bg-surface-elevated rounded-lg p-1">
-          <button
-            onClick={() => setViewMode('day')}
-            aria-pressed={viewMode === 'day'}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs transition-all focus-ring ${
-              viewMode === 'day'
-                ? 'bg-surface-highlight text-white'
-                : 'text-text-tertiary hover:text-text-secondary'
-            }`}
-          >
-            <List className="w-3.5 h-3.5" />
-            日视图
-          </button>
-          <button
-            onClick={() => setViewMode('matrix')}
-            aria-pressed={viewMode === 'matrix'}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs transition-all focus-ring ${
-              viewMode === 'matrix'
-                ? 'bg-surface-highlight text-white'
-                : 'text-text-tertiary hover:text-text-secondary'
-            }`}
-          >
-            <LayoutGrid className="w-3.5 h-3.5" />
-            周矩阵
-          </button>
         </div>
       </motion.div>
 
@@ -1605,134 +1532,6 @@ function WeeklyTasksContent() {
               生成本周计划
             </button>
           </motion.div>
-        ) : viewMode === 'day' ? (
-          <motion.div
-            key="day"
-            initial={shouldReduceMotion ? false : { opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: -20 }}
-            className="space-y-4"
-          >
-            <div className="flex gap-1.5 overflow-x-auto pb-2">
-              {dayOrder.map((day) => {
-                const dayStats = stats?.byDay[day];
-                const isToday = day === today && weekId === getCurrentWeekId();
-                const isSelected = day === selectedDay;
-                const done = dayStats?.done ?? 0;
-                const total = dayStats?.total ?? 0;
-                return (
-                  <button
-                    key={day}
-                    onClick={() => setSelectedDay(day)}
-                    aria-pressed={isSelected}
-                    className={`flex-shrink-0 relative px-3 py-2 rounded-lg text-left min-w-[68px] transition-all border focus-ring ${
-                      isSelected
-                        ? 'bg-surface-elevated border-primary/30'
-                        : 'bg-surface-elevated border-border-subtle hover:bg-surface-elevated hover:border-border-default'
-                    }`}
-                  >
-                    {isToday && (
-                      <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-primary" />
-                    )}
-                    <p className={`text-xs font-bold ${isSelected ? 'text-white' : 'text-text-secondary'}`}>
-                      {day}
-                    </p>
-                    <p className="text-2xs text-text-muted mt-0.5 tabular-nums">
-                      {total === 0 ? '无任务' : `${done}/${total}`}
-                    </p>
-                  </button>
-                );
-              })}
-            </div>
-
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-3">
-              {tasksByDay?.[selectedDay]?.length === 0 ? (
-                <div className="lg:col-span-3 rounded-xl glass border border-border-subtle p-8 text-center text-text-muted text-sm">
-                  {selectedDay} 没有安排任务
-                </div>
-              ) : (
-                tasksByDay?.[selectedDay].map((task, index) => {
-                  const category = task.category || 'other';
-                  const CategoryIcon = categoryIcons[category];
-                  const isDone = task.status === 'done';
-                  const alignment = task.alignment;
-                  return (
-                    <motion.div
-                      key={task.id}
-                      initial={shouldReduceMotion ? false : { opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: index * 0.05 }}
-                    >
-                      <CommandCard
-                        className={`p-4 ${isDone ? 'border-success/20' : ''}`}
-                        active={isDone}
-                      >
-                        <div className="flex items-start gap-3">
-                          <button
-                            onClick={() => handleToggleTask(task)}
-                            className="mt-0.5 text-text-tertiary hover:text-primary transition-colors focus-ring rounded-full"
-                            aria-label={isDone ? '标记为未完成' : '标记为完成'}
-                          >
-                            {isDone ? (
-                              <CheckCircle2 className="w-5 h-5 text-success" />
-                            ) : (
-                              <Circle className="w-5 h-5" />
-                            )}
-                          </button>
-                          <div className="flex-1 min-w-0">
-                            <div className="flex items-center gap-2 mb-1.5">
-                              <div
-                                className={`w-6 h-6 rounded-md flex items-center justify-center ${getCategoryColorClass(category)}`}
-                              >
-                                <CategoryIcon className="w-3 h-3" />
-                              </div>
-                              <span className="text-xs font-medium text-text-tertiary">
-                                {TASK_CATEGORY_LABELS[category]}
-                              </span>
-                              {alignment && (
-                                <span className={`text-2xs px-1.5 py-0.5 rounded border ${getAlignmentColorClass(alignment)}`}>
-                                  {TASK_ALIGNMENT_LABELS[alignment]}
-                                </span>
-                              )}
-                              <span className="ml-auto text-2xs px-1.5 py-0.5 rounded bg-surface-elevated text-text-secondary">
-                                {task.duration}
-                              </span>
-                            </div>
-                            <p
-                              className={`text-sm font-semibold mb-2 ${
-                                isDone ? 'text-text-muted line-through' : 'text-text-secondary'
-                              }`}
-                            >
-                              {task.focus}
-                            </p>
-                            <div className="flex flex-wrap gap-1 mb-2">
-                              {task.materials.map((m) => (
-                                <span
-                                  key={m}
-                                  className="text-2xs px-1.5 py-0.5 rounded bg-surface-elevated text-text-tertiary border border-border-subtle"
-                                >
-                                  {m}
-                                </span>
-                              ))}
-                            </div>
-                            {!isDraft && (
-                              <textarea
-                                defaultValue={task.note ?? ''}
-                                onBlur={(e) => handleNoteBlur(task, e.target.value)}
-                                placeholder="完成备注（正确率、感受等）"
-                                className="w-full text-xs bg-surface-elevated border border-border-default rounded-lg px-2.5 py-1.5 text-text-secondary placeholder:text-text-muted focus:outline-none focus:border-primary/50 resize-none"
-                                rows={2}
-                              />
-                            )}
-                          </div>
-                        </div>
-                      </CommandCard>
-                    </motion.div>
-                  );
-                })
-              )}
-            </div>
-          </motion.div>
         ) : (
           <WeeklyMatrix
             tasks={displayPlan.tasks}
@@ -1745,101 +1544,72 @@ function WeeklyTasksContent() {
         )}
       </AnimatePresence>
 
-      <AnimatePresence>
-        {reviewOpen && stats && displayPlan && (
-          <motion.div
-            initial={shouldReduceMotion ? { opacity: 1 } : { opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 lg:left-64 z-[110] flex items-center sm:justify-center sm:p-4 bg-black/70 backdrop-blur-sm"
-            onClick={() => setReviewOpen(false)}
-          >
-            <motion.div
-              role="dialog"
-              aria-modal="true"
-              aria-labelledby="review-title"
-              initial={shouldReduceMotion ? false : { scale: 0.95, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={shouldReduceMotion ? { opacity: 0 } : { scale: 0.95, opacity: 0 }}
-              onClick={(e) => e.stopPropagation()}
-              className="w-full h-full sm:h-auto sm:max-w-2xl sm:max-h-[85vh] overflow-y-auto rounded-none sm:rounded-3xl glass sm:border border-border-default p-5 sm:p-8 modal-scroll"
-            >
-              <div className="flex items-center justify-between mb-6">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-accent flex items-center justify-center">
-                    <Sparkles className="w-5 h-5 text-white" />
-                  </div>
-                  <div>
-                    <h2 id="review-title" className="text-xl font-bold font-display">本周复盘</h2>
-                    <p className="text-xs text-text-tertiary">{formatWeekLabel(weekId)}</p>
-                  </div>
-                </div>
-                <button
-                  onClick={() => setReviewOpen(false)}
-                  className="p-2 rounded-lg hover:bg-surface-elevated text-text-tertiary focus-ring"
-                  aria-label="关闭"
-                >
-                  <X className="w-5 h-5" />
-                </button>
-              </div>
+      {reviewOpen && stats && displayPlan && (
+        <Modal
+          isOpen
+          onClose={() => setReviewOpen(false)}
+          title="本周复盘"
+          subtitle={formatWeekLabel(weekId)}
+          icon={Sparkles}
+          iconClassName="bg-accent"
+          size="lg"
+          footer={
+            <div className="flex items-center justify-end gap-3 w-full">
+              <button
+                onClick={() => setReviewOpen(false)}
+                className="px-4 py-2 rounded-xl text-slate-400 hover:text-white transition-colors"
+              >
+                取消
+              </button>
+              <button
+                onClick={handleSaveReview}
+                className="flex items-center gap-2 px-6 py-2 rounded-xl bg-accent text-white font-semibold transition-all"
+              >
+                <RotateCcw className="w-4 h-4" />
+                保存复盘
+              </button>
+            </div>
+          }
+        >
+          <div className="grid grid-cols-3 gap-3 mb-6">
+            <div className="rounded-xl bg-white/5 p-4 text-center">
+              <p className="text-2xl font-bold text-slate-200">{stats.completionRate}%</p>
+              <p className="text-xs text-slate-500">完成率</p>
+            </div>
+            <div className="rounded-xl bg-white/5 p-4 text-center">
+              <p className="text-2xl font-bold text-slate-200">{stats.done}</p>
+              <p className="text-xs text-slate-500">已完成</p>
+            </div>
+            <div className="rounded-xl bg-white/5 p-4 text-center">
+              <p className="text-2xl font-bold text-slate-200">{stats.pending}</p>
+              <p className="text-xs text-slate-500">待补</p>
+            </div>
+          </div>
 
-              <div className="grid grid-cols-3 gap-3 mb-6">
-                <div className="rounded-xl bg-surface-elevated p-4 text-center">
-                  <p className="text-2xl font-bold text-text-secondary">{stats.completionRate}%</p>
-                  <p className="text-xs text-text-muted">完成率</p>
-                </div>
-                <div className="rounded-xl bg-surface-elevated p-4 text-center">
-                  <p className="text-2xl font-bold text-text-secondary">{stats.done}</p>
-                  <p className="text-xs text-text-muted">已完成</p>
-                </div>
-                <div className="rounded-xl bg-surface-elevated p-4 text-center">
-                  <p className="text-2xl font-bold text-text-secondary">{stats.pending}</p>
-                  <p className="text-xs text-text-muted">待补</p>
-                </div>
-              </div>
+          <div className="rounded-xl bg-accent/[0.06] border border-accent/15 p-4 mb-6">
+            <div className="flex items-center gap-2 mb-2">
+              <Sparkles className="w-4 h-4 text-accent" />
+              <p className="text-sm font-semibold text-slate-200">AI 点评</p>
+            </div>
+            <p className="text-sm text-slate-400 leading-relaxed">
+              {generateAiReview(displayPlan, currentChild.name)}
+            </p>
+          </div>
 
-              <div className="rounded-xl bg-accent/[0.06] border border-accent/15 p-4 mb-6">
-                <div className="flex items-center gap-2 mb-2">
-                  <Sparkles className="w-4 h-4 text-accent" />
-                  <p className="text-sm font-semibold text-text-secondary">AI 点评</p>
-                </div>
-                <p className="text-sm text-text-tertiary leading-relaxed">
-                  {generateAiReview(displayPlan, currentChild.name)}
-                </p>
-              </div>
-
-              <div className="mb-6">
-                <label className="block text-sm font-medium text-text-secondary mb-2">
-                  家长评语
-                </label>
-                <textarea
-                  value={reviewComment}
-                  onChange={(e) => setReviewComment(e.target.value)}
-                  placeholder="写下对孩子的鼓励、问题或下周调整..."
-                  className="w-full bg-surface-elevated border border-border-default rounded-xl px-4 py-3 text-sm text-text-secondary placeholder:text-text-muted focus:outline-none focus:border-accent/50 resize-none"
-                  rows={4}
-                />
-              </div>
-
-              <div className="flex items-center justify-end gap-3">
-                <button
-                  onClick={() => setReviewOpen(false)}
-                  className="px-4 py-2 rounded-xl text-text-tertiary hover:text-text-secondary transition-colors focus-ring"
-                >
-                  取消
-                </button>
-                <button
-                  onClick={handleSaveReview}
-                  className="flex items-center gap-2 px-6 py-2 rounded-xl bg-accent text-white font-semibold transition-all focus-ring"
-                >
-                  <RotateCcw className="w-4 h-4" />
-                  保存复盘
-                </button>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+          <div>
+            <label className="block text-sm font-medium text-slate-200 mb-2">
+              家长评语
+            </label>
+            <textarea
+              value={reviewComment}
+              onChange={(e) => setReviewComment(e.target.value)}
+              placeholder="写下对孩子的鼓励、问题或下周调整..."
+              className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-slate-200 placeholder:text-slate-500 focus:outline-none focus:border-accent/50 resize-none"
+              rows={4}
+            />
+          </div>
+        </Modal>
+      )}
 
       {editOpen && displayPlan && (
         <EditPlanModal

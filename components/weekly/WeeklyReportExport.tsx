@@ -1,17 +1,13 @@
 'use client';
 
-import { useRef, useState } from 'react';
-import { motion, useReducedMotion } from 'framer-motion';
-import {
-  Download,
-  Share2,
-  X,
-  Target,
-} from 'lucide-react';
-import { WeeklyPlan, TaskCategory } from '@/lib/storage.types';
-import { getPlanStats, formatWeekLabel } from '@/lib/weeklyTasks';
+import { useRef, useState, useMemo, Fragment } from 'react';
+import { Download, Share2, Target, CheckCircle2 } from 'lucide-react';
+import { WeeklyPlan, TaskCategory, DayOfWeek, WeeklyTaskItem } from '@/lib/storage.types';
+import { getPlanStats, formatWeekLabel, dayOrder, getWeekRange } from '@/lib/weeklyTasks';
 import { TASK_CATEGORY_LABELS } from '@/lib/taskTemplates';
 import { getCategoryColorClass } from '@/lib/taskAlignment';
+import { categoryIcons as taskCategoryIcons } from '@/lib/taskIcons';
+import Modal from '@/components/ui/Modal';
 
 interface WeeklyReportExportProps {
   plan: WeeklyPlan;
@@ -27,12 +23,46 @@ export default function WeeklyReportExport({
   const cardRef = useRef<HTMLDivElement>(null);
   const [exporting, setExporting] = useState(false);
   const [exportedUrl, setExportedUrl] = useState<string | null>(null);
-  const shouldReduceMotion = useReducedMotion();
 
   const stats = getPlanStats(plan);
-  const activeCategories = Object.entries(stats.byCategory)
-    .filter(([, s]) => s.total > 0)
-    .sort((a, b) => b[1].total - a[1].total);
+
+  const dayDates = useMemo(() => {
+    const start = getWeekRange(plan.weekId).start;
+    return dayOrder.map((_, i) => {
+      const d = new Date(start);
+      d.setDate(start.getDate() + i);
+      return `${d.getMonth() + 1}/${d.getDate()}`;
+    });
+  }, [plan.weekId]);
+
+  const tasksByCategoryDay = useMemo(() => {
+    const grouped: Record<TaskCategory, Record<DayOfWeek, WeeklyTaskItem[]>> = {
+      school: { 周一: [], 周二: [], 周三: [], 周四: [], 周五: [], 周六: [], 周日: [] },
+      reading: { 周一: [], 周二: [], 周三: [], 周四: [], 周五: [], 周六: [], 周日: [] },
+      sport: { 周一: [], 周二: [], 周三: [], 周四: [], 周五: [], 周六: [], 周日: [] },
+      interest: { 周一: [], 周二: [], 周三: [], 周四: [], 周五: [], 周六: [], 周日: [] },
+      ability: { 周一: [], 周二: [], 周三: [], 周四: [], 周五: [], 周六: [], 周日: [] },
+      other: { 周一: [], 周二: [], 周三: [], 周四: [], 周五: [], 周六: [], 周日: [] },
+    };
+    plan.tasks.forEach((task) => {
+      const category = task.category || 'other';
+      grouped[category][task.day].push(task);
+    });
+    dayOrder.forEach((day) => {
+      (Object.keys(grouped) as TaskCategory[]).forEach((cat) => {
+        grouped[cat][day].sort((a, b) => a.focus.localeCompare(b.focus));
+      });
+    });
+    return grouped;
+  }, [plan.tasks]);
+
+  const activeCategories = useMemo(
+    () =>
+      (Object.keys(tasksByCategoryDay) as TaskCategory[]).filter((cat) =>
+        plan.tasks.some((t) => (t.category || 'other') === cat)
+      ),
+    [tasksByCategoryDay, plan.tasks]
+  );
 
   const handleExport = async () => {
     if (!cardRef.current) return;
@@ -57,40 +87,25 @@ export default function WeeklyReportExport({
     if (!exportedUrl) return;
     const link = document.createElement('a');
     link.href = exportedUrl;
-    link.download = `${childName}_周报_${plan.weekId}.png`;
+    link.download = `${childName}_周计划_${plan.weekId}.png`;
     link.click();
   };
 
   return (
-    <motion.div
-      initial={shouldReduceMotion ? { opacity: 1 } : { opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      className="fixed inset-0 lg:left-64 z-[110] flex items-center sm:justify-center sm:p-4 bg-black/70 backdrop-blur-sm"
-      onClick={onClose}
+    <Modal
+      isOpen
+      onClose={onClose}
+      title="导出周计划"
+      subtitle={formatWeekLabel(plan.weekId)}
+      icon={Share2}
+      iconClassName="bg-gradient-to-br from-secondary to-secondary-glow"
+      size="md"
     >
-      <motion.div
-        initial={shouldReduceMotion ? false : { scale: 0.95, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        exit={shouldReduceMotion ? { opacity: 0 } : { scale: 0.95, opacity: 0 }}
-        onClick={(e) => e.stopPropagation()}
-        className="w-full h-full sm:h-auto sm:max-w-md sm:max-h-[90vh] overflow-y-auto rounded-none sm:rounded-3xl glass sm:border border-white/10 p-5 sm:p-6 modal-scroll"
-      >
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-bold font-display">导出周报</h2>
-          <button
-            onClick={onClose}
-            className="p-2 rounded-lg hover:bg-white/5 text-slate-400"
-            aria-label="关闭"
-          >
-            <X className="w-5 h-5" />
-          </button>
-        </div>
-
-        {/* Preview card */}
+      {/* Preview card */}
+      <div className="overflow-x-auto rounded-2xl">
         <div
           ref={cardRef}
-          className="rounded-2xl bg-gradient-to-br from-[#1a1a2e] to-[#0f0f1a] p-5 border border-white/[0.08]"
+          className="min-w-[720px] rounded-2xl bg-gradient-to-br from-[#1a1a2e] to-[#0f0f1a] p-5 border border-white/[0.08]"
         >
           <div className="flex items-center justify-between mb-5">
             <div>
@@ -98,10 +113,11 @@ export default function WeeklyReportExport({
                 {formatWeekLabel(plan.weekId)}
               </p>
               <h3 className="text-xl font-bold font-display text-white">
-                {childName} 的每周战报
+                {childName} 的每周计划
               </h3>
             </div>
-            <div className="w-14 h-14 rounded-full flex items-center justify-center text-white font-bold text-sm"
+            <div
+              className="w-14 h-14 rounded-full flex items-center justify-center text-white font-bold text-sm"
               style={{
                 background: `conic-gradient(#ff2d6a ${stats.completionRate * 3.6}deg, rgba(255,255,255,0.08) 0deg)`,
               }}
@@ -110,53 +126,82 @@ export default function WeeklyReportExport({
             </div>
           </div>
 
-          <div className="grid grid-cols-3 gap-2 mb-5">
-            <div className="rounded-xl bg-white/[0.05] p-3 text-center">
-              <p className="text-lg font-bold text-white">{stats.total}</p>
-              <p className="text-[10px] text-slate-400">总任务</p>
+          {/* Matrix */}
+          <div className="grid grid-cols-8 gap-2 mb-5">
+            <div className="flex items-end pb-2">
+              <span className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider">
+                分类
+              </span>
             </div>
-            <div className="rounded-xl bg-success/10 p-3 text-center">
-              <p className="text-lg font-bold text-success">{stats.done}</p>
-              <p className="text-[10px] text-slate-400">已完成</p>
-            </div>
-            <div className="rounded-xl bg-white/[0.05] p-3 text-center">
-              <p className="text-lg font-bold text-white">{stats.estimatedMinutes}</p>
-              <p className="text-[10px] text-slate-400">总分钟</p>
-            </div>
-          </div>
-
-          <div className="space-y-2 mb-5">
-            {activeCategories.slice(0, 5).map(([category, s]) => (
-              <div key={category} className="flex items-center gap-3">
-                <div
-                  className={`w-6 h-6 rounded-md flex items-center justify-center ${getCategoryColorClass(
-                    category as TaskCategory
-                  )}`}
-                >
-                  <span className="text-[10px] font-bold">
-                    {TASK_CATEGORY_LABELS[category as TaskCategory].slice(0, 1)}
-                  </span>
-                </div>
-                <div className="flex-1">
-                  <div className="flex items-center justify-between text-xs mb-1">
-                    <span className="text-slate-300">
-                      {TASK_CATEGORY_LABELS[category as TaskCategory]}
-                    </span>
-                    <span className="text-slate-500">
-                      {s.done}/{s.total}
-                    </span>
-                  </div>
-                  <div className="h-1.5 rounded-full bg-white/[0.08] overflow-hidden">
-                    <div
-                      className="h-full rounded-full bg-primary"
-                      style={{
-                        width: `${s.total === 0 ? 0 : (s.done / s.total) * 100}%`,
-                      }}
-                    />
-                  </div>
-                </div>
+            {dayOrder.map((day, i) => (
+              <div key={day} className="text-center pb-2">
+                <p className="text-xs font-bold text-slate-200">{day}</p>
+                <p className="text-[10px] text-slate-500 tabular-nums">{dayDates[i]}</p>
               </div>
             ))}
+
+            {activeCategories.map((category) => {
+              const CategoryIcon = taskCategoryIcons[category];
+              return (
+                <Fragment key={category}>
+                  <div
+                    key={`${category}-label`}
+                    className="flex items-center gap-2 py-2"
+                  >
+                    <div
+                      className={`w-6 h-6 rounded-md flex items-center justify-center ${getCategoryColorClass(
+                        category
+                      )}`}
+                    >
+                      <CategoryIcon className="w-3.5 h-3.5" />
+                    </div>
+                    <span className="text-xs font-medium text-slate-300">
+                      {TASK_CATEGORY_LABELS[category]}
+                    </span>
+                  </div>
+                  {dayOrder.map((day) => {
+                    const cellTasks = tasksByCategoryDay[category][day];
+                    return (
+                      <div
+                        key={`${category}-${day}`}
+                        className="min-h-[64px] rounded-xl bg-white/[0.04] border border-white/[0.06] p-2"
+                      >
+                        {cellTasks.length === 0 ? (
+                          <span className="text-[10px] text-slate-600">—</span>
+                        ) : (
+                          <div className="space-y-1">
+                            {cellTasks.slice(0, 3).map((task) => (
+                              <div
+                                key={task.id}
+                                className="flex items-start gap-1 text-[10px] leading-tight"
+                              >
+                                {task.status === 'done' && (
+                                  <CheckCircle2 className="w-3 h-3 text-success shrink-0 mt-0.5" />
+                                )}
+                                <span
+                                  className={`truncate ${
+                                    task.status === 'done'
+                                      ? 'text-slate-500 line-through'
+                                      : 'text-slate-300'
+                                  }`}
+                                >
+                                  {task.focus}
+                                </span>
+                              </div>
+                            ))}
+                            {cellTasks.length > 3 && (
+                              <span className="text-[10px] text-slate-500">
+                                +{cellTasks.length - 3} 项
+                              </span>
+                            )}
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </Fragment>
+              );
+            })}
           </div>
 
           <div className="flex items-center gap-2 text-[10px] text-slate-500">
@@ -164,37 +209,37 @@ export default function WeeklyReportExport({
             趣学伴 · 升学规划中心
           </div>
         </div>
+      </div>
 
-        <div className="mt-5 space-y-2">
-          {!exportedUrl ? (
-            <button
-              onClick={handleExport}
-              disabled={exporting}
-              className="w-full py-3 rounded-xl bg-gradient-to-r from-primary to-primary-glow text-white font-semibold hover:shadow-[0_0_30px_rgba(255,45,106,0.3)] transition-all disabled:opacity-60 flex items-center justify-center gap-2"
-            >
-              {exporting ? (
-                <>
-                  <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                  生成中...
-                </>
-              ) : (
-                <>
-                  <Share2 className="w-4 h-4" />
-                  生成分享卡片
-                </>
-              )}
-            </button>
-          ) : (
-            <button
-              onClick={handleDownload}
-              className="w-full py-3 rounded-xl bg-success/10 border border-success/20 text-success font-semibold hover:bg-success/15 transition-all flex items-center justify-center gap-2"
-            >
-              <Download className="w-4 h-4" />
-              下载图片
-            </button>
-          )}
-        </div>
-      </motion.div>
-    </motion.div>
+      <div className="mt-5 space-y-2">
+        {!exportedUrl ? (
+          <button
+            onClick={handleExport}
+            disabled={exporting}
+            className="w-full py-3 rounded-xl bg-gradient-to-r from-primary to-primary-glow text-white font-semibold hover:shadow-[0_0_30px_rgba(255,45,106,0.3)] transition-all disabled:opacity-60 flex items-center justify-center gap-2"
+          >
+            {exporting ? (
+              <>
+                <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                生成中...
+              </>
+            ) : (
+              <>
+                <Share2 className="w-4 h-4" />
+                生成周计划卡片
+              </>
+            )}
+          </button>
+        ) : (
+          <button
+            onClick={handleDownload}
+            className="w-full py-3 rounded-xl bg-success/10 border border-success/20 text-success font-semibold hover:bg-success/15 transition-all flex items-center justify-center gap-2"
+          >
+            <Download className="w-4 h-4" />
+            下载图片
+          </button>
+        )}
+      </div>
+    </Modal>
   );
 }
