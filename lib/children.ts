@@ -12,6 +12,8 @@ export interface Child {
   birthday?: string | null;
   notes?: string | null;
   routeId?: string | null;
+  dingTalkWebhook?: string | null;
+  dingTalkSecret?: string | null;
 }
 
 export interface ChildData {

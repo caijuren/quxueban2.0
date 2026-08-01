@@ -17,6 +17,8 @@ import {
   FileText,
   Loader2,
   Check,
+  Send,
+  Lock,
 } from 'lucide-react';
 import { useChildren } from '@/components/dashboard/ChildrenContext';
 import {
@@ -63,6 +65,8 @@ export default function ChildModal({ isOpen, onClose, child }: ChildModalProps) 
   const [birthday, setBirthday] = useState('');
   const [notes, setNotes] = useState('');
   const [routeId, setRouteId] = useState<string | null>(null);
+  const [dingTalkWebhook, setDingTalkWebhook] = useState('');
+  const [dingTalkSecret, setDingTalkSecret] = useState('');
   const [selectedPreset, setSelectedPreset] = useState<string | null>(null);
 
   const [saving, setSaving] = useState(false);
@@ -92,6 +96,8 @@ export default function ChildModal({ isOpen, onClose, child }: ChildModalProps) 
         setBirthday(formatDateForInput(child.birthday));
         setNotes(child.notes ?? '');
         setRouteId(child.routeId ?? null);
+        setDingTalkWebhook(child.dingTalkWebhook ?? '');
+        setDingTalkSecret(child.dingTalkSecret ?? '');
       } else {
         setName('');
         setGrade(1);
@@ -103,6 +109,8 @@ export default function ChildModal({ isOpen, onClose, child }: ChildModalProps) 
         setBirthday('');
         setNotes('');
         setRouteId(null);
+        setDingTalkWebhook('');
+        setDingTalkSecret('');
       }
     } else {
       document.body.style.overflow = '';
@@ -183,6 +191,8 @@ export default function ChildModal({ isOpen, onClose, child }: ChildModalProps) 
       birthday: birthday || null,
       notes: notes.trim() || null,
       routeId,
+      dingTalkWebhook: dingTalkWebhook.trim() || null,
+      dingTalkSecret: dingTalkSecret.trim() || null,
     };
 
     try {
@@ -564,6 +574,58 @@ export default function ChildModal({ isOpen, onClose, child }: ChildModalProps) 
                     className="w-full pl-9 pr-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:border-primary transition-all resize-none"
                   />
                 </div>
+              </div>
+
+              {/* DingTalk */}
+              <div className="rounded-2xl bg-white/[0.03] border border-white/10 p-4 space-y-4">
+                <div className="flex items-center gap-2 mb-1">
+                  <Send className="w-4 h-4 text-primary" />
+                  <h4 className="text-sm font-semibold text-slate-200">
+                    钉钉日报推送
+                  </h4>
+                </div>
+                <p className="text-xs text-slate-500 -mt-2">
+                  为这个孩子单独配置钉钉机器人，今日任务完成情况将推送到对应群。
+                </p>
+
+                <div>
+                  <label className="block text-xs text-slate-400 mb-1.5">
+                    Webhook 地址
+                  </label>
+                  <div className="relative">
+                    <Send className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+                    <input
+                      type="url"
+                      value={dingTalkWebhook}
+                      onChange={(e) => setDingTalkWebhook(e.target.value)}
+                      placeholder="https://oapi.dingtalk.com/robot/send?access_token=xxx"
+                      className="w-full pl-9 pr-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:border-primary transition-all"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-xs text-slate-400 mb-1.5">
+                    加签密钥（可选）
+                  </label>
+                  <div className="relative">
+                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+                    <input
+                      type="text"
+                      value={dingTalkSecret}
+                      onChange={(e) => setDingTalkSecret(e.target.value)}
+                      placeholder="SECxxx"
+                      className="w-full pl-9 pr-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:border-primary transition-all"
+                    />
+                  </div>
+                </div>
+
+                {dingTalkWebhook && (
+                  <div className="flex items-center gap-2 text-xs text-emerald-400">
+                    <Check className="w-3.5 h-3.5" />
+                    已启用钉钉推送
+                  </div>
+                )}
               </div>
             </div>
 

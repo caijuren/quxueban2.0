@@ -1,6 +1,11 @@
 import { Child } from './children';
 import { SYSTEM_TASK_TEMPLATES, SystemTaskTemplate } from './taskTemplates';
-import { TaskAlignment, TaskCategory, WeeklyTaskItem } from './storage.types';
+import {
+  TaskAlignment,
+  TaskCategory,
+  WeeklyTaskItem,
+  TaskCompletionRecord,
+} from './storage.types';
 
 export interface AlignmentInput {
   child: Pick<Child, 'routeId'>;
@@ -48,7 +53,28 @@ export function getAlignmentColorClass(alignment: TaskAlignment): string {
   return map[alignment] || map.optional;
 }
 
-export function normalizeWeeklyTask(task: Partial<WeeklyTaskItem> & Pick<WeeklyTaskItem, 'id' | 'focus' | 'day'>): WeeklyTaskItem {
+function normalizeCompletionRecord(
+  record: Partial<TaskCompletionRecord> & Pick<TaskCompletionRecord, 'id' | 'date' | 'status'>
+): TaskCompletionRecord {
+  return {
+    id: record.id,
+    date: record.date,
+    status: record.status,
+    progress: record.progress ?? 0,
+    actualDurationMinutes: record.actualDurationMinutes ?? 0,
+    quality: record.quality ?? null,
+    note: record.note ?? '',
+    imageUrls: record.imageUrls ?? [],
+    capabilityProgress: record.capabilityProgress ?? [],
+    dingtalkPushedAt: record.dingtalkPushedAt,
+    createdAt: record.createdAt ?? new Date().toISOString(),
+    updatedAt: record.updatedAt ?? new Date().toISOString(),
+  };
+}
+
+export function normalizeWeeklyTask(
+  task: Partial<WeeklyTaskItem> & Pick<WeeklyTaskItem, 'id' | 'focus' | 'day'>
+): WeeklyTaskItem {
   const subjectId = task.subjectId;
   let category = task.category;
   if (!category && subjectId) {
@@ -57,6 +83,10 @@ export function normalizeWeeklyTask(task: Partial<WeeklyTaskItem> & Pick<WeeklyT
   if (!category) {
     category = 'other';
   }
+
+  const completionRecords = (task.completionRecords || [])
+    .filter((r): r is TaskCompletionRecord => !!r.id && !!r.date && !!r.status)
+    .map((r) => normalizeCompletionRecord(r));
 
   return {
     id: task.id,
@@ -72,6 +102,7 @@ export function normalizeWeeklyTask(task: Partial<WeeklyTaskItem> & Pick<WeeklyT
     status: task.status || 'pending',
     completedAt: task.completedAt,
     note: task.note,
+    completionRecords: completionRecords.length > 0 ? completionRecords : undefined,
   };
 }
 

@@ -74,6 +74,8 @@ model Child {
   birthday        DateTime?
   notes           String?
   routeId         String?
+  dingTalkWebhook String? // 钉钉自定义机器人 webhook
+  dingTalkSecret  String? // 钉钉机器人加签密钥
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @updatedAt
 

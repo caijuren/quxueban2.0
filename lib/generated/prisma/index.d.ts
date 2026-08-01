@@ -4054,6 +4054,8 @@ export namespace Prisma {
     birthday: Date | null
     notes: string | null
     routeId: string | null
+    dingTalkWebhook: string | null
+    dingTalkSecret: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -4071,6 +4073,8 @@ export namespace Prisma {
     birthday: Date | null
     notes: string | null
     routeId: string | null
+    dingTalkWebhook: string | null
+    dingTalkSecret: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -4088,6 +4092,8 @@ export namespace Prisma {
     birthday: number
     notes: number
     routeId: number
+    dingTalkWebhook: number
+    dingTalkSecret: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -4115,6 +4121,8 @@ export namespace Prisma {
     birthday?: true
     notes?: true
     routeId?: true
+    dingTalkWebhook?: true
+    dingTalkSecret?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -4132,6 +4140,8 @@ export namespace Prisma {
     birthday?: true
     notes?: true
     routeId?: true
+    dingTalkWebhook?: true
+    dingTalkSecret?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -4149,6 +4159,8 @@ export namespace Prisma {
     birthday?: true
     notes?: true
     routeId?: true
+    dingTalkWebhook?: true
+    dingTalkSecret?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -4253,6 +4265,8 @@ export namespace Prisma {
     birthday: Date | null
     notes: string | null
     routeId: string | null
+    dingTalkWebhook: string | null
+    dingTalkSecret: string | null
     createdAt: Date
     updatedAt: Date
     _count: ChildCountAggregateOutputType | null
@@ -4289,6 +4303,8 @@ export namespace Prisma {
     birthday?: boolean
     notes?: boolean
     routeId?: boolean
+    dingTalkWebhook?: boolean
+    dingTalkSecret?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -4310,6 +4326,8 @@ export namespace Prisma {
     birthday?: boolean
     notes?: boolean
     routeId?: boolean
+    dingTalkWebhook?: boolean
+    dingTalkSecret?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -4328,6 +4346,8 @@ export namespace Prisma {
     birthday?: boolean
     notes?: boolean
     routeId?: boolean
+    dingTalkWebhook?: boolean
+    dingTalkSecret?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
@@ -4362,6 +4382,8 @@ export namespace Prisma {
       birthday: Date | null
       notes: string | null
       routeId: string | null
+      dingTalkWebhook: string | null
+      dingTalkSecret: string | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["child"]>
@@ -4772,6 +4794,8 @@ export namespace Prisma {
     readonly birthday: FieldRef<"Child", 'DateTime'>
     readonly notes: FieldRef<"Child", 'String'>
     readonly routeId: FieldRef<"Child", 'String'>
+    readonly dingTalkWebhook: FieldRef<"Child", 'String'>
+    readonly dingTalkSecret: FieldRef<"Child", 'String'>
     readonly createdAt: FieldRef<"Child", 'DateTime'>
     readonly updatedAt: FieldRef<"Child", 'DateTime'>
   }
@@ -11416,6 +11440,8 @@ export namespace Prisma {
     birthday: 'birthday',
     notes: 'notes',
     routeId: 'routeId',
+    dingTalkWebhook: 'dingTalkWebhook',
+    dingTalkSecret: 'dingTalkSecret',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -11975,6 +12001,8 @@ export namespace Prisma {
     birthday?: DateTimeNullableFilter<"Child"> | Date | string | null
     notes?: StringNullableFilter<"Child"> | string | null
     routeId?: StringNullableFilter<"Child"> | string | null
+    dingTalkWebhook?: StringNullableFilter<"Child"> | string | null
+    dingTalkSecret?: StringNullableFilter<"Child"> | string | null
     createdAt?: DateTimeFilter<"Child"> | Date | string
     updatedAt?: DateTimeFilter<"Child"> | Date | string
     user?: XOR<UserRelationFilter, UserWhereInput>
@@ -11995,6 +12023,8 @@ export namespace Prisma {
     birthday?: SortOrderInput | SortOrder
     notes?: SortOrderInput | SortOrder
     routeId?: SortOrderInput | SortOrder
+    dingTalkWebhook?: SortOrderInput | SortOrder
+    dingTalkSecret?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     user?: UserOrderByWithRelationInput
@@ -12018,6 +12048,8 @@ export namespace Prisma {
     birthday?: DateTimeNullableFilter<"Child"> | Date | string | null
     notes?: StringNullableFilter<"Child"> | string | null
     routeId?: StringNullableFilter<"Child"> | string | null
+    dingTalkWebhook?: StringNullableFilter<"Child"> | string | null
+    dingTalkSecret?: StringNullableFilter<"Child"> | string | null
     createdAt?: DateTimeFilter<"Child"> | Date | string
     updatedAt?: DateTimeFilter<"Child"> | Date | string
     user?: XOR<UserRelationFilter, UserWhereInput>
@@ -12038,6 +12070,8 @@ export namespace Prisma {
     birthday?: SortOrderInput | SortOrder
     notes?: SortOrderInput | SortOrder
     routeId?: SortOrderInput | SortOrder
+    dingTalkWebhook?: SortOrderInput | SortOrder
+    dingTalkSecret?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: ChildCountOrderByAggregateInput
@@ -12063,6 +12097,8 @@ export namespace Prisma {
     birthday?: DateTimeNullableWithAggregatesFilter<"Child"> | Date | string | null
     notes?: StringNullableWithAggregatesFilter<"Child"> | string | null
     routeId?: StringNullableWithAggregatesFilter<"Child"> | string | null
+    dingTalkWebhook?: StringNullableWithAggregatesFilter<"Child"> | string | null
+    dingTalkSecret?: StringNullableWithAggregatesFilter<"Child"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Child"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Child"> | Date | string
   }
@@ -12873,6 +12909,8 @@ export namespace Prisma {
     birthday?: Date | string | null
     notes?: string | null
     routeId?: string | null
+    dingTalkWebhook?: string | null
+    dingTalkSecret?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     user: UserCreateNestedOneWithoutChildrenInput
@@ -12893,6 +12931,8 @@ export namespace Prisma {
     birthday?: Date | string | null
     notes?: string | null
     routeId?: string | null
+    dingTalkWebhook?: string | null
+    dingTalkSecret?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     plans?: PlanUncheckedCreateNestedManyWithoutChildInput
@@ -12911,6 +12951,8 @@ export namespace Prisma {
     birthday?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     routeId?: NullableStringFieldUpdateOperationsInput | string | null
+    dingTalkWebhook?: NullableStringFieldUpdateOperationsInput | string | null
+    dingTalkSecret?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutChildrenNestedInput
@@ -12931,6 +12973,8 @@ export namespace Prisma {
     birthday?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     routeId?: NullableStringFieldUpdateOperationsInput | string | null
+    dingTalkWebhook?: NullableStringFieldUpdateOperationsInput | string | null
+    dingTalkSecret?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     plans?: PlanUncheckedUpdateManyWithoutChildNestedInput
@@ -12950,6 +12994,8 @@ export namespace Prisma {
     birthday?: Date | string | null
     notes?: string | null
     routeId?: string | null
+    dingTalkWebhook?: string | null
+    dingTalkSecret?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -12966,6 +13012,8 @@ export namespace Prisma {
     birthday?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     routeId?: NullableStringFieldUpdateOperationsInput | string | null
+    dingTalkWebhook?: NullableStringFieldUpdateOperationsInput | string | null
+    dingTalkSecret?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -12983,6 +13031,8 @@ export namespace Prisma {
     birthday?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     routeId?: NullableStringFieldUpdateOperationsInput | string | null
+    dingTalkWebhook?: NullableStringFieldUpdateOperationsInput | string | null
+    dingTalkSecret?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -13960,6 +14010,8 @@ export namespace Prisma {
     birthday?: SortOrder
     notes?: SortOrder
     routeId?: SortOrder
+    dingTalkWebhook?: SortOrder
+    dingTalkSecret?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -13981,6 +14033,8 @@ export namespace Prisma {
     birthday?: SortOrder
     notes?: SortOrder
     routeId?: SortOrder
+    dingTalkWebhook?: SortOrder
+    dingTalkSecret?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -13998,6 +14052,8 @@ export namespace Prisma {
     birthday?: SortOrder
     notes?: SortOrder
     routeId?: SortOrder
+    dingTalkWebhook?: SortOrder
+    dingTalkSecret?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -15597,6 +15653,8 @@ export namespace Prisma {
     birthday?: Date | string | null
     notes?: string | null
     routeId?: string | null
+    dingTalkWebhook?: string | null
+    dingTalkSecret?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     plans?: PlanCreateNestedManyWithoutChildInput
@@ -15615,6 +15673,8 @@ export namespace Prisma {
     birthday?: Date | string | null
     notes?: string | null
     routeId?: string | null
+    dingTalkWebhook?: string | null
+    dingTalkSecret?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     plans?: PlanUncheckedCreateNestedManyWithoutChildInput
@@ -15902,6 +15962,8 @@ export namespace Prisma {
     birthday?: DateTimeNullableFilter<"Child"> | Date | string | null
     notes?: StringNullableFilter<"Child"> | string | null
     routeId?: StringNullableFilter<"Child"> | string | null
+    dingTalkWebhook?: StringNullableFilter<"Child"> | string | null
+    dingTalkSecret?: StringNullableFilter<"Child"> | string | null
     createdAt?: DateTimeFilter<"Child"> | Date | string
     updatedAt?: DateTimeFilter<"Child"> | Date | string
   }
@@ -16481,6 +16543,8 @@ export namespace Prisma {
     birthday?: Date | string | null
     notes?: string | null
     routeId?: string | null
+    dingTalkWebhook?: string | null
+    dingTalkSecret?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     user: UserCreateNestedOneWithoutChildrenInput
@@ -16500,6 +16564,8 @@ export namespace Prisma {
     birthday?: Date | string | null
     notes?: string | null
     routeId?: string | null
+    dingTalkWebhook?: string | null
+    dingTalkSecret?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     weeklyPlans?: WeeklyPlanUncheckedCreateNestedManyWithoutChildInput
@@ -16584,6 +16650,8 @@ export namespace Prisma {
     birthday?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     routeId?: NullableStringFieldUpdateOperationsInput | string | null
+    dingTalkWebhook?: NullableStringFieldUpdateOperationsInput | string | null
+    dingTalkSecret?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutChildrenNestedInput
@@ -16603,6 +16671,8 @@ export namespace Prisma {
     birthday?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     routeId?: NullableStringFieldUpdateOperationsInput | string | null
+    dingTalkWebhook?: NullableStringFieldUpdateOperationsInput | string | null
+    dingTalkSecret?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     weeklyPlans?: WeeklyPlanUncheckedUpdateManyWithoutChildNestedInput
@@ -17136,6 +17206,8 @@ export namespace Prisma {
     birthday?: Date | string | null
     notes?: string | null
     routeId?: string | null
+    dingTalkWebhook?: string | null
+    dingTalkSecret?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     user: UserCreateNestedOneWithoutChildrenInput
@@ -17155,6 +17227,8 @@ export namespace Prisma {
     birthday?: Date | string | null
     notes?: string | null
     routeId?: string | null
+    dingTalkWebhook?: string | null
+    dingTalkSecret?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     plans?: PlanUncheckedCreateNestedManyWithoutChildInput
@@ -17239,6 +17313,8 @@ export namespace Prisma {
     birthday?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     routeId?: NullableStringFieldUpdateOperationsInput | string | null
+    dingTalkWebhook?: NullableStringFieldUpdateOperationsInput | string | null
+    dingTalkSecret?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutChildrenNestedInput
@@ -17258,6 +17334,8 @@ export namespace Prisma {
     birthday?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     routeId?: NullableStringFieldUpdateOperationsInput | string | null
+    dingTalkWebhook?: NullableStringFieldUpdateOperationsInput | string | null
+    dingTalkSecret?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     plans?: PlanUncheckedUpdateManyWithoutChildNestedInput
@@ -17371,6 +17449,8 @@ export namespace Prisma {
     birthday?: Date | string | null
     notes?: string | null
     routeId?: string | null
+    dingTalkWebhook?: string | null
+    dingTalkSecret?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -17460,6 +17540,8 @@ export namespace Prisma {
     birthday?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     routeId?: NullableStringFieldUpdateOperationsInput | string | null
+    dingTalkWebhook?: NullableStringFieldUpdateOperationsInput | string | null
+    dingTalkSecret?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     plans?: PlanUpdateManyWithoutChildNestedInput
@@ -17478,6 +17560,8 @@ export namespace Prisma {
     birthday?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     routeId?: NullableStringFieldUpdateOperationsInput | string | null
+    dingTalkWebhook?: NullableStringFieldUpdateOperationsInput | string | null
+    dingTalkSecret?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     plans?: PlanUncheckedUpdateManyWithoutChildNestedInput
@@ -17496,6 +17580,8 @@ export namespace Prisma {
     birthday?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     routeId?: NullableStringFieldUpdateOperationsInput | string | null
+    dingTalkWebhook?: NullableStringFieldUpdateOperationsInput | string | null
+    dingTalkSecret?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
