@@ -55,7 +55,7 @@ export function getISOWeek(date: Date): { year: number; week: number; weekId: st
   const year = thu.getFullYear();
   const firstThu = getThursday(new Date(year, 0, 4));
   const days = Math.round((thu.getTime() - firstThu.getTime()) / 86400000);
-  const week = 1 + Math.floor((days - 3 + 1) / 7);
+  const week = 1 + Math.floor((days + 3) / 7);
   return {
     year,
     week,
@@ -191,14 +191,14 @@ const scheduleDayMap: Record<Exclude<TaskWeeklySchedule, 'auto' | 'custom'>, Day
 };
 
 export function getScheduledDays(
-  weeklySchedule: TaskWeeklySchedule,
+  weeklySchedule: TaskWeeklySchedule | null | undefined,
   customScheduleDays: DayOfWeek[] = []
 ): DayOfWeek[] {
-  if (weeklySchedule === 'auto') return [];
+  if (!weeklySchedule || weeklySchedule === 'auto') return [];
   if (weeklySchedule === 'custom') {
-    return dayOrder.filter((d) => customScheduleDays.includes(d));
+    return dayOrder.filter((d) => customScheduleDays?.includes(d));
   }
-  return scheduleDayMap[weeklySchedule];
+  return scheduleDayMap[weeklySchedule] ?? [];
 }
 
 export function expandTemplateToWeeklyTasks(
