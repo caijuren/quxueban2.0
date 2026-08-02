@@ -7,6 +7,7 @@ import { normalizeWeeklyTask } from '@/lib/taskAlignment';
 import { dingTalkPushSchema, validateBody } from '@/lib/validation';
 import { getISOWeek } from '@/lib/weeklyTasks';
 import { TASK_CATEGORY_LABELS } from '@/lib/taskTemplates';
+import { generateDailySummary } from '@/lib/ai/dailySummary';
 import type { WeeklyTaskItem } from '@/lib/storage.types';
 
 async function authenticate() {
@@ -16,7 +17,7 @@ async function authenticate() {
 
 function getStatusLabel(status: string): string {
   const map: Record<string, string> = {
-    pending: '未开始',
+    pending: '未完成',
     in_progress: '进行中',
     partially_done: '部分完成',
     done: '已完成',
@@ -105,11 +106,55 @@ export async function POST(req: Request) {
   const partialCount = todayTasks.filter((t) => t.status === 'partially_done').length;
   const pendingCount = todayTasks.filter((t) => t.status === 'pending' || t.status === 'in_progress').length;
   const skippedCount = todayTasks.filter((t) => t.status === 'skipped' || t.status === 'rescheduled').length;
+  const totalActualMinutes = todayTasks.reduce((sum, t) => {
+    const record = t.completionRecords?.find((r) => r.date === date);
+    return sum + (record?.actualDurationMinutes || 0);
+  }, 0);
+
+  const summaryInputTasks = todayTasks.map((task) => {
+    const record = task.completionRecords?.find((r) => r.date === date);
+    const category = TASK_CATEGORY_LABELS[task.category] || '其他';
+    return {
+      focus: task.focus,
+      categoryLabel: category,
+      statusLabel: getStatusLabel(task.status),
+      progress: record?.progress ?? (task.status === 'done' ? 100 : 0),
+      actualDurationMinutes: record?.actualDurationMinutes || 0,
+      duration: task.duration,
+      qualityLabel: record?.quality ? getQualityLabel(record.quality) : undefined,
+      note: record?.note || undefined,
+    };
+  });
+
+  const { summary, source } = await generateDailySummary({
+    child: {
+      id: child.id,
+      name: child.name,
+      grade: child.grade,
+      educationSystem: child.educationSystem as never,
+      avatarColor: child.avatarColor,
+      avatarUrl: child.avatarUrl,
+      targetSchool: child.targetSchool,
+      currentSchool: child.currentSchool,
+      birthday: child.birthday?.toISOString() ?? null,
+      notes: child.notes,
+      routeId: child.routeId,
+    },
+    date,
+    dayName: todayName,
+    tasks: summaryInputTasks,
+    doneCount,
+    partialCount,
+    pendingCount,
+    skippedCount,
+    totalActualMinutes,
+  });
 
   const lines: string[] = [
-    `## 📋 ${child.name} ${date} 学习任务日报`,
+    `## 📋 ${child.name} ${date} ${todayName} 学习任务日报`,
     '',
-    `**完成统计**：已完成 ${doneCount} 项，部分完成 ${partialCount} 项，未开始/进行中 ${pendingCount} 项，跳过/改期 ${skippedCount} 项。`,
+    `**完成统计**：已完成 ${doneCount} 项，部分完成 ${partialCount} 项，未完成/进行中 ${pendingCount} 项，跳过/改期 ${skippedCount} 项。`,
+    `**实际总投入**：约 ${totalActualMinutes} 分钟`,
     '',
     '---',
     '',
@@ -120,24 +165,29 @@ export async function POST(req: Request) {
     const category = TASK_CATEGORY_LABELS[task.category] || '其他';
     lines.push(`### ${category} · ${task.focus}`);
     lines.push(`- **状态**：${getStatusLabel(task.status)}`);
-    if (record) {
-      if (record.progress > 0) {
-        lines.push(`- **进度**：${record.progress}%`);
-      }
-      if (record.actualDurationMinutes > 0) {
-        lines.push(`- **实际耗时**：${record.actualDurationMinutes} 分钟`);
-      }
-      if (record.quality) {
-        lines.push(`- **质量**：${getQualityLabel(record.quality)}`);
-      }
-      if (record.note) {
-        lines.push(`- **备注**：${record.note}`);
-      }
+    if (record?.actualDurationMinutes && record.actualDurationMinutes > 0) {
+      lines.push(`- **实际耗时**：${record.actualDurationMinutes} 分钟`);
+    } else {
+      lines.push(`- **预计时长**：${task.duration}`);
+    }
+    if (record?.progress && record.progress > 0) {
+      lines.push(`- **进度**：${record.progress}%`);
+    }
+    if (record?.quality) {
+      lines.push(`- **质量**：${getQualityLabel(record.quality)}`);
+    }
+    if (record?.note) {
+      lines.push(`- **备注**：${record.note}`);
     }
     lines.push('');
   });
 
   lines.push('---');
+  lines.push('');
+  lines.push('### 🤖 AI 总结');
+  lines.push(summary);
+  lines.push('');
+  lines.push(`<sub>总结来源：${source === 'llm' ? 'AI 生成' : '规则生成'}</sub>`);
   lines.push('');
   lines.push('来自 趣学伴 学习任务管理系统');
 
@@ -159,11 +209,30 @@ export async function POST(req: Request) {
       return task;
     }
     const records = task.completionRecords || [];
+    const existingRecord = records.find((r) => r.date === date);
+    if (existingRecord) {
+      return {
+        ...task,
+        completionRecords: records.map((r) =>
+          r.date === date ? { ...r, dingtalkPushedAt: pushedAt } : r
+        ),
+      };
+    }
     return {
       ...task,
-      completionRecords: records.map((r) =>
-        r.date === date ? { ...r, dingtalkPushedAt: pushedAt } : r
-      ),
+      completionRecords: [
+        ...records,
+        {
+          date,
+          status: task.status,
+          progress: 0,
+          actualDurationMinutes: 0,
+          quality: null,
+          note: '',
+          imageUrls: [],
+          dingtalkPushedAt: pushedAt,
+        },
+      ],
     };
   });
 
@@ -172,5 +241,5 @@ export async function POST(req: Request) {
     data: { tasks: updatedTasks as unknown as object[] },
   });
 
-  return NextResponse.json({ success: true, message: result.message });
+  return NextResponse.json({ success: true, message: result.message, summarySource: source });
 }
