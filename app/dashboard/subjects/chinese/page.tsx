@@ -1,22 +1,25 @@
 'use client';
 
 import { motion, useReducedMotion } from 'framer-motion';
-import { ScrollText, ArrowLeft, AlertCircle, BookOpen } from 'lucide-react';
+import { BookOpen, ArrowLeft, AlertCircle, Settings } from 'lucide-react';
 import Link from 'next/link';
 import { useChildren } from '@/components/dashboard/ChildrenContext';
 import ChildEmptyState from '@/components/dashboard/ChildEmptyState';
 import { gradeLabel } from '@/lib/children';
-import { getChineseStatusByGrade, getChinesePlanByGrade } from '@/lib/subjects/chinese';
+import { useSubjectPlan } from '@/lib/hooks/useSubjectPlan';
+import { Loader2 } from 'lucide-react';
 import ChineseTrackMap from './ChineseTrackMap';
-import SubjectCheckIn from '../SubjectCheckIn';
-import AIDiagnosisCard from '../AIDiagnosisCard';
-import ChinesePhaseCard from './ChinesePhaseCard';
-import ChineseTodayTasks from './ChineseTodayTasks';
+import ChineseYearlyMatrix from './ChineseYearlyMatrix';
 import ChineseExamTimeline from './ChineseExamTimeline';
 
 export default function ChineseSubjectPage() {
   const { currentChild } = useChildren();
   const shouldReduceMotion = useReducedMotion();
+  const {
+    data: config,
+    isLoading,
+    error: queryError,
+  } = useSubjectPlan('chinese');
 
   if (!currentChild) {
     return (
@@ -36,18 +39,10 @@ export default function ChineseSubjectPage() {
             </div>
           </div>
         </motion.div>
-        <ChildEmptyState description="添加孩子后，系统会根据年级生成语文学科路径与打卡任务" />
+        <ChildEmptyState description="添加孩子后，系统会根据年级生成语文学科路径" />
       </div>
     );
   }
-
-  const grade = currentChild.grade;
-  const chinesePlan = getChinesePlanByGrade(grade);
-  const checkInTasks = chinesePlan.weeklyTemplate.map((t) => ({
-    id: t.day,
-    label: `${t.day} · ${t.focus}`,
-    duration: t.duration,
-  }));
 
   return (
     <div className="space-y-8">
@@ -72,58 +67,64 @@ export default function ChineseSubjectPage() {
           </div>
           <div>
             <h1 className="text-2xl sm:text-3xl font-bold font-display">语文学科路径</h1>
+            <p className="text-sm text-text-tertiary mt-0.5">
+              {currentChild.name} · {gradeLabel(currentChild.grade)}
+            </p>
           </div>
         </div>
+
+        <Link
+          href="/dashboard/subjects/chinese/config"
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-xl glass border border-white/[0.08] text-sm font-medium text-text-secondary hover:text-text-primary hover:bg-white/[0.04] transition-colors"
+        >
+          <Settings className="w-4 h-4" />
+          编辑规划
+        </Link>
       </motion.div>
 
-      {/* Check-in + AI diagnosis */}
-      {currentChild && (
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="lg:col-span-2">
-            <SubjectCheckIn
-              childId={currentChild.id}
-              subject="chinese"
-              tasks={checkInTasks}
-              title="语文今日打卡"
-              subtitle="完成每日任务，积淀人文素养"
-            />
-          </div>
-          <div className="lg:col-span-1">
-            <AIDiagnosisCard subject="chinese" childName={currentChild.name} />
-          </div>
+      {isLoading && (
+        <div className="flex h-[40vh] items-center justify-center">
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
         </div>
       )}
 
-      {/* Today tasks */}
-      <ChineseTodayTasks grade={grade} />
-
-      {/* Track map */}
-      <ChineseTrackMap />
-
-      {/* Current phase */}
-      <ChinesePhaseCard grade={grade} />
-
-      {/* Exam timeline */}
-      <ChineseExamTimeline />
-
-      {/* Link to overall plan */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.5 }}
-        className="flex items-start gap-3 rounded-xl bg-primary/5 border border-primary/20 p-4"
-      >
-        <AlertCircle className="w-5 h-5 text-primary shrink-0 mt-0.5" />
-        <div>
-          <p className="font-medium text-text-secondary mb-1">本路径服务于三公冲刺路线的语文素养与综合荣誉</p>
-          <p className="text-sm text-text-tertiary">
-            语文学科路径是小升初方案中「三公冲刺型」路线的人文素养与面谈表达支撑。核心目标：古诗文积累 120 首+、汉字小达人/古诗文大会荣誉、流畅自信的面谈表达。
-            <Link href="/dashboard/plan" className="text-primary hover:underline ml-1">
-              查看完整小升初方案 →
-            </Link>
-          </p>
+      {queryError && (
+        <div className="rounded-2xl border border-error/20 bg-error/10 p-6 text-error">
+          {queryError instanceof Error ? queryError.message : '加载失败'}
         </div>
-      </motion.div>
+      )}
+
+      {config && (
+        <div className="space-y-8">
+          {/* Track map */}
+          <ChineseTrackMap config={config} currentGrade={currentChild.grade} />
+
+          {/* Yearly target matrix */}
+          <ChineseYearlyMatrix config={config} currentGrade={currentChild.grade} />
+
+          {/* Exam timeline */}
+          <ChineseExamTimeline config={config} />
+
+          {/* Link to overall plan */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.5 }}
+            className="flex items-start gap-3 rounded-xl bg-primary/5 border border-primary/20 p-4"
+          >
+            <AlertCircle className="w-5 h-5 text-primary shrink-0 mt-0.5" />
+            <div>
+              <p className="font-medium text-text-secondary mb-1">本路径服务于三公冲刺路线的语文素养与综合荣誉</p>
+              <p className="text-sm text-text-tertiary">
+                语文学科路径是小升初方案中「三公冲刺型」路线的人文素养与面谈表达支撑。核心目标：古诗文积累 120 首+、汉字小达人/古诗文大会荣誉、流畅自信的面谈表达。
+                <Link href="/dashboard/plan" className="text-primary hover:underline ml-1">
+                  查看完整小升初方案 →
+                </Link>
+              </p>
+            </div>
+          </motion.div>
+        </div>
+      )}
     </div>
   );
 }

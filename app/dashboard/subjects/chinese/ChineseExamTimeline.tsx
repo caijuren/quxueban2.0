@@ -2,9 +2,15 @@
 
 import { motion } from 'framer-motion';
 import { Award, Calendar, AlertTriangle } from 'lucide-react';
-import { chineseExamTimeline } from '@/lib/subjects/chinese';
+import { SubjectPlanConfig } from '@/lib/subjects/subjectPlan';
 
-export default function ChineseExamTimeline() {
+interface ChineseExamTimelineProps {
+  config: SubjectPlanConfig;
+}
+
+export default function ChineseExamTimeline({ config }: ChineseExamTimelineProps) {
+  const events = config.examTimeline;
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -27,7 +33,7 @@ export default function ChineseExamTimeline() {
         <div className="absolute left-5 top-4 bottom-4 w-px bg-gradient-to-b from-amber-500/50 via-orange-500/30 to-transparent" />
 
         <div className="space-y-4">
-          {chineseExamTimeline.map((exam, index) => (
+          {events.map((exam, index) => (
             <motion.div
               key={exam.id}
               initial={{ opacity: 0, x: -20 }}
@@ -57,7 +63,9 @@ export default function ChineseExamTimeline() {
                         目标 {exam.target}
                       </span>
                     </h3>
-                    <p className="text-sm text-text-tertiary mt-0.5">{exam.month} · {exam.date}</p>
+                    <p className="text-sm text-text-tertiary mt-0.5">
+                      {exam.month} · {exam.date}
+                    </p>
                   </div>
                   <div className="flex items-center gap-1.5 text-xs text-text-muted">
                     <Calendar className="w-3.5 h-3.5" />

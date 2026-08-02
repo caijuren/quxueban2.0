@@ -33,3 +33,62 @@ export interface NotificationItem {
   readAt: string | null;
   createdAt: string;
 }
+
+export interface Publisher {
+  id: string;
+  name: string;
+  shortName: string | null;
+  logoUrl: string | null;
+  website: string | null;
+  strongSubjects: string | null;
+  series: string | null;
+}
+
+export interface ContentType {
+  id: string;
+  name: string;
+  description: string | null;
+}
+
+export interface Book {
+  id: string;
+  bookId: string;
+  title: string;
+  isbn: string | null;
+  author: string | null;
+  editionDate: string | null;
+  editionNumber: string | null;
+  price: number | null;
+  subject: string;
+  grade: string;
+  textbookVersion: string | null;
+  isNewTextbook: string;
+  difficulty: number;
+  targetAudience: string | null;
+  sellingPoints: string | null;
+  structureDesc: string | null;
+  companionSuggestion: string | null;
+  coverImageUrl: string | null;
+  jdUrl: string | null;
+  dangdangUrl: string | null;
+  officialUrl: string | null;
+  status: string;
+  publisher: Publisher;
+  contentType: ContentType;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface BookFilters {
+  grades: string[];
+  subjects: string[];
+  publishers: Publisher[];
+  contentTypes: ContentType[];
+  difficulties: number[];
+  isNewTextbookOptions: string[];
+}
+
+export interface BooksResponse {
+  books: Book[];
+  total: number;
+}

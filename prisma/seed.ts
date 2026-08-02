@@ -7,6 +7,7 @@ import {
 } from '../lib/weeklyTasks';
 import { seedSystemTaskTemplatesForUser } from '../lib/seedTaskTemplates';
 import { seedSystemCapabilities } from '../lib/seedCapabilities';
+import { seedSystemSubjectPlans } from '../lib/seedSubjectPlans';
 import { type EducationSystem } from '../lib/children';
 
 const prisma = new PrismaClient();
@@ -16,6 +17,12 @@ async function main() {
   const seededCapabilities = await seedSystemCapabilities(prisma);
   if (seededCapabilities > 0) {
     console.log(`Seeded ${seededCapabilities} system capabilities`);
+  }
+
+  // Seed system subject plan configs
+  const seededSubjectPlans = await seedSystemSubjectPlans(prisma);
+  if (seededSubjectPlans > 0) {
+    console.log(`Seeded ${seededSubjectPlans} system subject plan configs`);
   }
 
   const adminUsername = process.env.ADMIN_USERNAME || 'admin';

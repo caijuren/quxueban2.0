@@ -285,6 +285,57 @@ export const aiTaskAssessmentSchema = z.object({
     .optional(),
 });
 
+export const subjectIdSchema = z.enum(['chinese', 'math', 'english']);
+
+export const subjectPlanTrackSchema = z.object({
+  id: z.string().min(1, '线路 ID 不能为空').max(50),
+  name: z.string().min(1, '线路名称不能为空').max(50),
+  color: z.string().regex(hexColorRegex, '颜色必须是有效 HEX 色值'),
+  description: z.string().max(500).nullable().optional(),
+});
+
+export const subjectPlanTimeAxisItemSchema = z.object({
+  label: z.string().min(1).max(50),
+  position: z.number().min(0).max(100),
+});
+
+export const subjectPlanNodeSchema = z.object({
+  id: z.string().min(1).max(50),
+  trackId: z.string().min(1, '所属线路 ID 不能为空'),
+  label: z.string().min(1, '节点名称不能为空').max(50),
+  position: z.number().min(0).max(100),
+  time: z.string().max(50),
+  detail: z.string().max(1000).nullable().optional(),
+});
+
+export const subjectPlanYearlyTargetSchema = z.object({
+  grade: z.string().min(1).max(50),
+  period: z.string().max(100).nullable().optional(),
+  keyword: z.string().min(1).max(100),
+  detail: z.string().max(2000).nullable().optional(),
+  milestones: z.array(z.string().max(100)).optional(),
+});
+
+export const subjectPlanExamEventSchema = z.object({
+  id: z.string().min(1).max(50),
+  name: z.string().min(1).max(100),
+  target: z.string().max(100).nullable().optional(),
+  date: z.string().max(50).nullable().optional(),
+  month: z.string().max(100).nullable().optional(),
+  registerBefore: z.string().max(200).nullable().optional(),
+  notes: z.string().max(2000).nullable().optional(),
+});
+
+export const subjectPlanConfigDataSchema = z.object({
+  tracks: z.array(subjectPlanTrackSchema).min(1, '至少配置一条线路'),
+  timeAxis: z.array(subjectPlanTimeAxisItemSchema).min(1, '时间轴不能为空'),
+  nodes: z.array(subjectPlanNodeSchema),
+  yearlyTargets: z.record(z.string(), z.array(subjectPlanYearlyTargetSchema)),
+  examTimeline: z.array(subjectPlanExamEventSchema),
+});
+
+export const subjectPlanUpdateSchema = subjectPlanConfigDataSchema;
+
 export type ChildCreateInput = z.infer<typeof childCreateSchema>;
 export type ChildUpdateInput = z.infer<typeof childUpdateSchema>;
 export type TaskTemplateCreateInput = z.infer<typeof taskTemplateCreateSchema>;
@@ -300,6 +351,7 @@ export type UserSettingsUpdateInput = z.infer<typeof userSettingsUpdateSchema>;
 export type TaskCompletionInput = z.infer<typeof taskCompletionInputSchema>;
 export type DingTalkPushInput = z.infer<typeof dingTalkPushSchema>;
 export type AiTaskAssessmentInput = z.infer<typeof aiTaskAssessmentSchema>;
+export type SubjectPlanUpdateInput = z.infer<typeof subjectPlanUpdateSchema>;
 
 export interface ValidationError {
   error: string;

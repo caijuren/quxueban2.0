@@ -1,0 +1,164 @@
+[
+  {
+    "name": "华东师范大学出版社",
+    "shortName": "华师大社",
+    "website": "https://www.ecnupress.com.cn",
+    "strongSubjects": "数学/英语/语文/全学科",
+    "series": "一课一练（普通版/增强版）、期终冲刺百分百、上海名校名卷、SSP英语阅读进阶、从课本到奥数、同步字帖、三招过关",
+    "contactEmail": null,
+    "note": "上海小学教辅第一品牌，覆盖率最高"
+  },
+  {
+    "name": "上海教育出版社",
+    "shortName": "上教社",
+    "website": "https://www.seph.com.cn",
+    "strongSubjects": "数学/英语/语文",
+    "series": "精练与拓展（语/数/英）、英语（牛津上海版）配套练习",
+    "contactEmail": null,
+    "note": "上海本地老牌教育社，教材配套权威"
+  },
+  {
+    "name": "上海外语教育出版社",
+    "shortName": "上外社",
+    "website": "https://www.sflep.com",
+    "strongSubjects": "英语",
+    "series": "英语（新世纪版）配套教辅、朗文分级听力、英语分级阅读",
+    "contactEmail": null,
+    "note": "新世纪版英语的官方配套社"
+  },
+  {
+    "name": "上海科技教育出版社",
+    "shortName": "上海科教社",
+    "website": "http://www.sstp.cn",
+    "strongSubjects": "数学试卷/自然",
+    "series": "金试卷、自然（沪科教版）配套教辅",
+    "contactEmail": null,
+    "note": "试卷类性价比高"
+  },
+  {
+    "name": "上海交通大学出版社",
+    "shortName": "上海交大社",
+    "website": "https://www.jiaodapress.com.cn",
+    "strongSubjects": "英语/语文",
+    "series": "交大之星系列、星级训练系列（英语听力/阅读/语法）、尖子生夺冠",
+    "contactEmail": null,
+    "note": "星级训练系列在上海口碑好"
+  },
+  {
+    "name": "复旦大学出版社",
+    "shortName": "复旦社",
+    "website": "http://www.fudanpress.com",
+    "strongSubjects": "英语",
+    "series": "中学英语语法、英语专项",
+    "contactEmail": null,
+    "note": "语法类较强"
+  },
+  {
+    "name": "中西书局",
+    "shortName": "中西书局",
+    "website": "http://www.zxpress.com.cn",
+    "strongSubjects": "英语",
+    "series": "及时雨词汇手册、英语词汇专项",
+    "contactEmail": null,
+    "note": "词汇手册类有特色"
+  },
+  {
+    "name": "华东理工大学出版社",
+    "shortName": "华东理工社",
+    "website": "https://www.ecustpress.cn",
+    "strongSubjects": "英语",
+    "series": "英语听力周计划、英语语法周计划",
+    "contactEmail": null,
+    "note": "周计划系列适合日常积累"
+  },
+  {
+    "name": "浙江教育出版社",
+    "shortName": "浙江教育社",
+    "website": "http://www.zjeph.com",
+    "strongSubjects": "数学思维",
+    "series": "小学奥数举一反三",
+    "contactEmail": null,
+    "note": "虽非上海本地，但上海使用极广"
+  },
+  {
+    "name": "光明日报出版社",
+    "shortName": "光明日报社",
+    "website": null,
+    "strongSubjects": "语文",
+    "series": "文言文系列",
+    "contactEmail": null,
+    "note": "长尾补充"
+  },
+  {
+    "name": "上海书画出版社",
+    "shortName": null,
+    "website": null,
+    "strongSubjects": null,
+    "series": null,
+    "contactEmail": null,
+    "note": "从书目主表自动补齐"
+  },
+  {
+    "name": "上海远东出版社",
+    "shortName": null,
+    "website": null,
+    "strongSubjects": null,
+    "series": null,
+    "contactEmail": null,
+    "note": "从书目主表自动补齐"
+  },
+  {
+    "name": "上海音乐出版社",
+    "shortName": null,
+    "website": null,
+    "strongSubjects": null,
+    "series": null,
+    "contactEmail": null,
+    "note": "从书目主表自动补齐"
+  },
+  {
+    "name": "人民教育出版社",
+    "shortName": null,
+    "website": null,
+    "strongSubjects": null,
+    "series": null,
+    "contactEmail": null,
+    "note": "从书目主表自动补齐"
+  },
+  {
+    "name": "吉林教育出版社",
+    "shortName": null,
+    "website": null,
+    "strongSubjects": null,
+    "series": null,
+    "contactEmail": null,
+    "note": "从书目主表自动补齐"
+  },
+  {
+    "name": "同济大学出版社",
+    "shortName": null,
+    "website": null,
+    "strongSubjects": null,
+    "series": null,
+    "contactEmail": null,
+    "note": "从书目主表自动补齐"
+  },
+  {
+    "name": "商务印书馆",
+    "shortName": null,
+    "website": null,
+    "strongSubjects": null,
+    "series": null,
+    "contactEmail": null,
+    "note": "从书目主表自动补齐"
+  },
+  {
+    "name": "湖南教育出版社",
+    "shortName": null,
+    "website": null,
+    "strongSubjects": null,
+    "series": null,
+    "contactEmail": null,
+    "note": "从书目主表自动补齐"
+  }
+]

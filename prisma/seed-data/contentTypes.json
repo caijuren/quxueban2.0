@@ -1,0 +1,58 @@
+[
+  {
+    "name": "同步课练",
+    "description": "每天跟着课本进度练习，一课一练",
+    "typicalExamples": "一课一练普通版、精练与拓展、上海作业",
+    "usageScenario": "日常课后巩固",
+    "difficultyRange": "⭐-⭐⭐⭐"
+  },
+  {
+    "name": "周练单元练",
+    "description": "每周或每单元一套，阶段性检测",
+    "typicalExamples": "一课一练增强版（周周练）、单元双测",
+    "usageScenario": "周末/单元结束检测",
+    "difficultyRange": "⭐⭐-⭐⭐⭐⭐"
+  },
+  {
+    "name": "专项突破",
+    "description": "针对单一能力集中训练",
+    "typicalExamples": "三招过关（计算）、全新英语听力、小学英语语法专练、语文阅读训练80篇、SSP阅读进阶、同步字帖",
+    "usageScenario": "薄弱环节针对性强化",
+    "difficultyRange": "⭐⭐-⭐⭐⭐⭐"
+  },
+  {
+    "name": "试卷真题",
+    "description": "以卷子形式呈现，考前冲刺",
+    "typicalExamples": "期终冲刺百分百、一卷搞定、金试卷、上海名校名卷、名校名卷",
+    "usageScenario": "考前刷题、熟悉题型",
+    "difficultyRange": "⭐⭐-⭐⭐⭐⭐⭐"
+  },
+  {
+    "name": "思维奥数",
+    "description": "超出课内难度，拓展思维",
+    "typicalExamples": "从课本到奥数、小学奥数举一反三、高思导引、学而思秘籍",
+    "usageScenario": "培优/竞赛/分班考",
+    "difficultyRange": "⭐⭐⭐-⭐⭐⭐⭐⭐"
+  },
+  {
+    "name": "寒暑假作业",
+    "description": "假期专用综合练习",
+    "typicalExamples": "各社配套暑假生活、寒假作业、暑假衔接教材",
+    "usageScenario": "假期保持手感",
+    "difficultyRange": "⭐⭐-⭐⭐⭐"
+  },
+  {
+    "name": "工具书手册",
+    "description": "查阅型，非刷题型",
+    "typicalExamples": "新华字典、小学生多功能词典、及时雨词汇手册、古诗词口袋书",
+    "usageScenario": "日常查阅",
+    "difficultyRange": "不适用"
+  },
+  {
+    "name": "其他综合",
+    "description": "家长指导书、亲子共读等",
+    "typicalExamples": "家长指导用书、亲子阅读指导",
+    "usageScenario": "家长使用",
+    "difficultyRange": "不适用"
+  }
+]
