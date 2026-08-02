@@ -4,8 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import {
-  CheckCircle2,
-  Circle,
+  Check,
   ChevronRight,
   CalendarCheck,
   Clock,
@@ -31,7 +30,7 @@ import { TaskCompletionInput } from '@/lib/validation';
 
 function ProgressRing({
   rate,
-  size = 64,
+  size = 56,
   stroke = 5,
 }: {
   rate: number;
@@ -73,7 +72,7 @@ function ProgressRing({
         </defs>
       </svg>
       <div className="absolute inset-0 flex items-center justify-center">
-        <span className="text-sm font-bold font-display text-text-primary tabular-nums">
+        <span className="text-xs font-bold font-display text-text-primary tabular-nums">
           {rate}%
         </span>
       </div>
@@ -104,6 +103,18 @@ function isDayFullyDone(tasks: WeeklyTaskItem[]) {
 function parseDurationMinutes(duration: string): number {
   const match = duration.match(/(\d+)/);
   return match ? parseInt(match[1], 10) : 0;
+}
+
+function getCategoryTimeSlot(category: TaskCategory): string {
+  const map: Record<TaskCategory, string> = {
+    school: '上午',
+    reading: '下午',
+    sport: '下午',
+    interest: '傍晚',
+    ability: '晚上',
+    other: '灵活',
+  };
+  return map[category] || '灵活';
 }
 
 export default function TodayPage() {
@@ -257,7 +268,7 @@ export default function TodayPage() {
   }
 
   return (
-    <div className="space-y-8 min-h-[calc(100vh-8rem)]">
+    <div className="space-y-6 min-h-[calc(100vh-8rem)]">
       {/* Header */}
       <motion.div
         initial={shouldReduceMotion ? false : { opacity: 0, y: -8 }}
@@ -275,70 +286,71 @@ export default function TodayPage() {
             </h1>
           </div>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-3">
           {isFullyDone && (
             <button
               onClick={() => setVictoryOpen(true)}
-              className="hidden sm:inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-success/10 border border-success/20 text-success text-xs font-medium hover:bg-success/20 transition-colors"
+              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-success/10 border border-success/20 text-success text-xs font-medium hover:bg-success/20 transition-colors"
             >
               <Trophy className="w-3.5 h-3.5" />
-              查看今日胜利
+              今日胜利
             </button>
           )}
-          <div className="text-right shrink-0 hidden sm:block">
-            <p className="text-3xl font-bold font-display tabular-nums text-text-primary">
+          <div className="text-right shrink-0">
+            <p className="text-2xl sm:text-3xl font-bold font-display tabular-nums text-text-primary">
               {doneCount}
-              <span className="text-text-muted text-lg">/{totalCount}</span>
+              <span className="text-text-muted text-base sm:text-lg">/{totalCount}</span>
             </p>
             <p className="text-[10px] text-text-tertiary">已完成</p>
           </div>
         </div>
       </motion.div>
 
-      {/* Progress card */}
+      {/* Sticky progress summary */}
       {currentChild && (
-        <motion.div
-          initial={shouldReduceMotion ? false : { opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, delay: 0.05 }}
-        >
-          <CommandCard active className="p-4 sm:p-5">
-            <div className="flex items-center gap-4 sm:gap-5">
-              <ProgressRing rate={completionRate} />
-              <div className="flex-1 min-w-0">
-                <p className="text-base sm:text-lg font-semibold font-display text-text-primary">
-                  {progressText}
-                </p>
-                <p className="text-xs sm:text-sm text-text-tertiary mt-1">
-                  {totalCount > 0 ? (
-                    <>
-                      预计剩余{' '}
-                      <span className="text-text-secondary font-medium">
-                        {remainingMinutes}
-                      </span>{' '}
-                      分钟
-                      <span className="mx-1.5 text-border-strong">·</span>
-                      今日总计{' '}
-                      <span className="text-text-secondary font-medium">
-                        {totalMinutes}
-                      </span>{' '}
-                      分钟
-                    </>
-                  ) : (
-                    '当前孩子今天没有安排任务'
-                  )}
-                </p>
+        <div className="sticky top-4 z-30">
+          <motion.div
+            initial={shouldReduceMotion ? false : { opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, delay: 0.05 }}
+          >
+            <CommandCard active className="p-3 sm:p-4">
+              <div className="flex items-center gap-3 sm:gap-4">
+                <ProgressRing rate={completionRate} />
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm sm:text-base font-semibold font-display text-text-primary">
+                    {progressText}
+                  </p>
+                  <p className="text-xs text-text-tertiary mt-0.5">
+                    {totalCount > 0 ? (
+                      <>
+                        剩余{' '}
+                        <span className="text-text-secondary font-medium">
+                          {remainingMinutes}
+                        </span>{' '}
+                        分钟 · 今日总计{' '}
+                        <span className="text-text-secondary font-medium">
+                          {totalMinutes}
+                        </span>{' '}
+                        分钟
+                      </>
+                    ) : (
+                      '当前孩子今天没有安排任务'
+                    )}
+                  </p>
+                </div>
+                <button
+                  onClick={() => setVictoryOpen(true)}
+                  disabled={!isFullyDone}
+                  className="hidden sm:inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border border-border-default text-xs font-medium text-text-secondary hover:bg-surface-light transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  <Send className="w-3.5 h-3.5" />
+                  推送
+                </button>
               </div>
-              <div className="text-right shrink-0 sm:hidden">
-                <p className="text-2xl font-bold font-display tabular-nums text-text-primary">
-                  {doneCount}
-                  <span className="text-text-muted text-sm">/{totalCount}</span>
-                </p>
-                <p className="text-[10px] text-text-tertiary">已完成</p>
-              </div>
-            </div>
-          </CommandCard>
-        </motion.div>
+            </CommandCard>
+          </motion.div>
+        </div>
       )}
 
       {/* Empty state */}
@@ -360,13 +372,12 @@ export default function TodayPage() {
         </motion.div>
       ) : (
         /* Task grid */
-        <div className="space-y-6">
+        <div className="space-y-5">
           {allCategories.map((category, catIndex) => {
             const tasks = groupedTasks.get(category) ?? [];
             if (tasks.length === 0) return null;
-            const CategoryIcon = categoryIcons[category];
             const categoryDone = tasks.filter((t) => t.status === 'done').length;
-            const allDone = tasks.every((t) => t.status === 'done');
+            const categoryRate = Math.round((categoryDone / tasks.length) * 100);
             const categoryColorClass = getCategoryColorClass(category);
 
             return (
@@ -376,52 +387,63 @@ export default function TodayPage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.4, delay: 0.1 + catIndex * 0.05 }}
               >
-                <div className="flex items-center justify-between gap-2 mb-3">
-                  <div className="flex items-center gap-2">
-                    <div
-                      className={`w-7 h-7 rounded-lg flex items-center justify-center ${categoryColorClass}`}
-                    >
-                      <CategoryIcon className="w-4 h-4" />
-                    </div>
-                    <span className="text-sm font-semibold text-text-secondary">
+                {/* Category header with progress bar */}
+                <div className="mb-2.5 space-y-1.5">
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="text-sm font-bold text-text-secondary tracking-wide">
                       {TASK_CATEGORY_LABELS[category]}
                     </span>
-                    {allDone && (
-                      <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-success/10 text-success border border-success/10">
-                        已完成
-                      </span>
-                    )}
+                    <span className="text-xs font-medium text-text-tertiary tabular-nums">
+                      {categoryDone}/{tasks.length}
+                    </span>
                   </div>
-                  <span className="text-xs text-text-tertiary tabular-nums">
-                    {categoryDone}/{tasks.length}
-                  </span>
+                  <div className="h-1 w-full bg-surface rounded-full overflow-hidden">
+                    <div
+                      className={`h-full rounded-full transition-all duration-500 ${categoryColorClass.replace('text-', 'bg-').replace('/10', '').replace('/20', '')}`}
+                      style={{ width: `${categoryRate}%` }}
+                    />
+                  </div>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                   {tasks.map((task) => {
                     const isDone = task.status === 'done';
                     const record = getTodayRecord(task, todayDate);
                     const quality = record?.quality;
+                    const CategoryIcon = categoryIcons[category];
+                    const materialsText = task.materials.join('、');
 
                     return (
                       <button
                         key={task.id}
                         onClick={() => handleOpenCompletion(task)}
-                        className={`group text-left p-3 rounded-xl border transition-all duration-200 flex flex-col gap-2 ${
+                        className={`group relative text-left p-2.5 rounded-xl border transition-all duration-200 min-h-[84px] flex items-start gap-3 overflow-hidden ${
                           isDone
-                            ? 'bg-success/5 border-success/10 opacity-90'
+                            ? 'bg-surface border-success/20 opacity-80'
                             : 'bg-surface-light border-border-default hover:border-border-strong hover:bg-surface-highlight'
                         }`}
                       >
-                        <div className="flex items-start gap-2.5">
-                          <div
-                            className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${categoryColorClass}`}
-                          >
-                            <CategoryIcon className="w-4 h-4" />
-                          </div>
-                          <div className="flex-1 min-w-0">
+                        {/* Left completion checkbox */}
+                        <div
+                          className={`shrink-0 w-5 h-5 mt-0.5 rounded-md border-2 flex items-center justify-center transition-all ${
+                            isDone
+                              ? 'bg-success border-success'
+                              : 'border-text-muted group-hover:border-text-tertiary'
+                          }`}
+                        >
+                          {isDone && <Check className="w-3 h-3 text-white" />}
+                        </div>
+
+                        {/* Done indicator line */}
+                        {isDone && (
+                          <div className="absolute left-0 top-2 bottom-2 w-0.5 rounded-full bg-success/60" />
+                        )}
+
+                        {/* Content */}
+                        <div className="flex-1 min-w-0 py-0.5">
+                          <div className="flex items-start gap-2">
                             <p
-                              className={`text-sm font-semibold leading-tight transition-colors ${
+                              className={`text-sm font-semibold leading-snug flex-1 transition-colors ${
                                 isDone
                                   ? 'text-text-tertiary line-through'
                                   : 'text-text-primary'
@@ -429,47 +451,49 @@ export default function TodayPage() {
                             >
                               {task.focus}
                             </p>
+                            <div className={`shrink-0 w-6 h-6 rounded-md flex items-center justify-center ${categoryColorClass}`}>
+                              <CategoryIcon className="w-3.5 h-3.5" />
+                            </div>
                           </div>
-                          <div className="shrink-0 mt-0.5 transition-transform group-active:scale-95">
-                            {isDone ? (
-                              <CheckCircle2 className="w-5 h-5 text-success" />
-                            ) : (
-                              <Circle className="w-5 h-5 text-text-muted group-hover:text-text-tertiary" />
+
+                          <div className="flex flex-wrap items-center gap-1.5 mt-2">
+                            <span className="inline-flex items-center gap-1 text-[10px] px-1.5 py-0.5 rounded-full bg-surface-elevated border border-border-subtle text-text-tertiary">
+                              <Clock className="w-3 h-3" />
+                              {task.duration}
+                            </span>
+                            <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-surface-elevated border border-border-subtle text-text-tertiary">
+                              {getCategoryTimeSlot(category)}
+                            </span>
+                            {materialsText && (
+                              <span
+                                title={materialsText}
+                                className="text-[10px] px-1.5 py-0.5 rounded-full bg-surface-elevated border border-border-subtle text-text-tertiary truncate max-w-[120px]"
+                              >
+                                {materialsText}
+                              </span>
+                            )}
+                            {quality && (
+                              <span
+                                className={`text-[10px] px-1.5 py-0.5 rounded-full border ${
+                                  quality === 'excellent'
+                                    ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30'
+                                    : quality === 'good'
+                                    ? 'bg-blue-500/10 text-blue-400 border-blue-500/30'
+                                    : quality === 'average'
+                                    ? 'bg-amber-500/10 text-amber-400 border-amber-500/30'
+                                    : 'bg-rose-500/10 text-rose-400 border-rose-500/30'
+                                }`}
+                              >
+                                {quality === 'excellent'
+                                  ? '优秀'
+                                  : quality === 'good'
+                                  ? '良好'
+                                  : quality === 'average'
+                                  ? '一般'
+                                  : '需努力'}
+                              </span>
                             )}
                           </div>
-                        </div>
-
-                        <div className="flex flex-wrap items-center gap-2 pl-[2.625rem]">
-                          <span className="inline-flex items-center gap-1 text-[10px] px-2 py-0.5 rounded-full bg-surface-elevated border border-border-subtle text-text-tertiary">
-                            <Clock className="w-3 h-3" />
-                            {task.duration}
-                          </span>
-                          {task.materials.length > 0 && (
-                            <span className="text-[10px] px-2 py-0.5 rounded-full bg-surface-elevated border border-border-subtle text-text-tertiary truncate max-w-[120px]">
-                              {task.materials.join('、')}
-                            </span>
-                          )}
-                          {quality && (
-                            <span
-                              className={`text-[10px] px-2 py-0.5 rounded-full border ${
-                                quality === 'excellent'
-                                  ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30'
-                                  : quality === 'good'
-                                  ? 'bg-blue-500/10 text-blue-400 border-blue-500/30'
-                                  : quality === 'average'
-                                  ? 'bg-amber-500/10 text-amber-400 border-amber-500/30'
-                                  : 'bg-rose-500/10 text-rose-400 border-rose-500/30'
-                              }`}
-                            >
-                              {quality === 'excellent'
-                                ? '优秀'
-                                : quality === 'good'
-                                ? '良好'
-                                : quality === 'average'
-                                ? '一般'
-                                : '需努力'}
-                            </span>
-                          )}
                         </div>
                       </button>
                     );
@@ -481,7 +505,7 @@ export default function TodayPage() {
         </div>
       )}
 
-      {/* Action bar */}
+      {/* Bottom action bar */}
       {totalCount > 0 && (
         <motion.div
           initial={shouldReduceMotion ? false : { opacity: 0, y: 12 }}

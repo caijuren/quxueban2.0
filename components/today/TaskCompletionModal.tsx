@@ -29,7 +29,7 @@ const statusConfig: Record<
   { label: string; icon: typeof Circle; color: string; bg: string }
 > = {
   pending: {
-    label: '未开始',
+    label: '未完成',
     icon: Circle,
     color: 'text-text-muted',
     bg: 'bg-surface-light border-border-default',
@@ -200,7 +200,7 @@ export default function TaskCompletionModal({
             完成状态
           </label>
           <div className="grid grid-cols-3 gap-2">
-            {(Object.keys(statusConfig) as TaskStatus[]).map((s) => {
+            {(["done", "partially_done", "pending"] as TaskStatus[]).map((s) => {
               const config = statusConfig[s];
               const Icon = config.icon;
               const active = status === s;
@@ -223,7 +223,7 @@ export default function TaskCompletionModal({
         </div>
 
         {/* Progress */}
-        {status === 'partially_done' || status === 'in_progress' ? (
+        {status === 'partially_done' ? (
           <div className="space-y-3">
             <div className="flex items-center justify-between">
               <label className="text-xs font-medium text-text-secondary">
@@ -357,7 +357,7 @@ export default function TaskCompletionModal({
             >
               {statusConfig[status].label}
             </span>
-            {(status === 'partially_done' || status === 'in_progress') && (
+            {status === 'partially_done' && (
               <span className="px-2 py-1 rounded-lg bg-surface border border-border-default text-text-secondary">
                 进度 {progress}%
               </span>
