@@ -2,64 +2,92 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
-import { ArrowLeft, BookOpen, Save, RotateCcw, AlertCircle, Check, Loader2, FileJson } from 'lucide-react';
+import {
+  ArrowLeft,
+  BookOpen,
+  Save,
+  RotateCcw,
+  AlertCircle,
+  Check,
+  Loader2,
+  Plus,
+  Trash2,
+  GripVertical,
+  Route,
+  Clock,
+  MapPin,
+  Target,
+  Award,
+  X,
+} from 'lucide-react';
 import Link from 'next/link';
 import { useSubjectPlan, useUpdateSubjectPlan } from '@/lib/hooks/useSubjectPlan';
-import { SubjectPlanConfigData } from '@/lib/subjects/subjectPlan';
+import {
+  SubjectPlanConfigData,
+  SubjectPlanTrack,
+  SubjectPlanTimeAxisItem,
+  SubjectPlanNode,
+  SubjectPlanKeyAchievement,
+  SubjectPlanExamEvent,
+} from '@/lib/subjects/subjectPlan';
 import { subjectPlanConfigDataSchema } from '@/lib/validation';
 import { ZodError } from 'zod';
+
+const TABS = [
+  { id: 'tracks', label: '线路管理', icon: Route },
+  { id: 'timeAxis', label: '时间轴', icon: Clock },
+  { id: 'nodes', label: '地图节点', icon: MapPin },
+  { id: 'keyAchievements', label: '阶段目标矩阵', icon: Target },
+  { id: 'examTimeline', label: '赛事时间轴', icon: Award },
+] as const;
+
+type TabId = (typeof TABS)[number]['id'];
+
+function generateId(prefix: string) {
+  return `${prefix}-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
+}
 
 export default function ChinesePlanConfigPage() {
   const shouldReduceMotion = useReducedMotion();
   const { data: config, isLoading, error: queryError } = useSubjectPlan('chinese');
   const updateConfig = useUpdateSubjectPlan('chinese');
 
-  const initialJson = useMemo(() => {
-    if (!config) return '';
-    const { id, createdAt, updatedAt, isSystem, ...data } = config;
-    return JSON.stringify(data, null, 2);
-  }, [config]);
-
-  const [jsonText, setJsonText] = useState(initialJson);
+  const [activeTab, setActiveTab] = useState<TabId>('tracks');
+  const [draft, setDraft] = useState<SubjectPlanConfigData | null>(null);
   const [parseError, setParseError] = useState<string | null>(null);
   const [saveSuccess, setSaveSuccess] = useState(false);
 
   useEffect(() => {
-    setJsonText(initialJson);
-    setParseError(null);
-    setSaveSuccess(false);
-  }, [initialJson]);
-
-  const handleFormat = () => {
-    try {
-      const parsed = JSON.parse(jsonText);
-      setJsonText(JSON.stringify(parsed, null, 2));
+    if (config) {
+      const { id, createdAt, updatedAt, isSystem, ...data } = config;
+      setDraft(data);
       setParseError(null);
-    } catch (err) {
-      setParseError(err instanceof Error ? err.message : 'JSON 格式错误');
+      setSaveSuccess(false);
     }
-  };
+  }, [config]);
+
+  const hasChanges = useMemo(() => {
+    if (!config || !draft) return false;
+    const { id, createdAt, updatedAt, isSystem, ...original } = config;
+    return JSON.stringify(original) !== JSON.stringify(draft);
+  }, [config, draft]);
 
   const handleReset = () => {
     if (!confirm('确定要恢复为默认配置吗？当前未保存的修改会丢失。')) return;
-    setJsonText(initialJson);
-    setParseError(null);
-    setSaveSuccess(false);
+    if (config) {
+      const { id, createdAt, updatedAt, isSystem, ...data } = config;
+      setDraft(data);
+      setParseError(null);
+      setSaveSuccess(false);
+    }
   };
 
   const handleSave = async () => {
+    if (!draft) return;
     setParseError(null);
     setSaveSuccess(false);
 
-    let parsed: unknown;
-    try {
-      parsed = JSON.parse(jsonText);
-    } catch (err) {
-      setParseError(err instanceof Error ? err.message : 'JSON 格式错误');
-      return;
-    }
-
-    const validation = subjectPlanConfigDataSchema.safeParse(parsed);
+    const validation = subjectPlanConfigDataSchema.safeParse(draft);
     if (!validation.success) {
       const issues = (validation.error as ZodError).issues
         .map((issue) => `${issue.path.join('.')}：${issue.message}`)
@@ -76,6 +104,230 @@ export default function ChinesePlanConfigPage() {
     } catch (err) {
       setParseError(err instanceof Error ? err.message : '保存失败');
     }
+  };
+
+  const updateDraft = (updater: (prev: SubjectPlanConfigData) => SubjectPlanConfigData) => {
+    setDraft((prev) => (prev ? updater(prev) : prev));
+  };
+
+  // ---------- Tracks ----------
+  const addTrack = () => {
+    updateDraft((prev) => ({
+      ...prev,
+      tracks: [
+        ...prev.tracks,
+        {
+          id: generateId('track'),
+          name: '新线路',
+          color: '#3b82f6',
+          description: '',
+        },
+      ],
+    }));
+  };
+
+  const updateTrack = (index: number, updates: Partial<SubjectPlanTrack>) => {
+    updateDraft((prev) => {
+      const tracks = [...prev.tracks];
+      tracks[index] = { ...tracks[index], ...updates };
+      return { ...prev, tracks };
+    });
+  };
+
+  const removeTrack = (index: number) => {
+    if (!confirm('删除线路会同时移除该线路下的节点和矩阵成果，确定继续？')) return;
+    updateDraft((prev) => {
+      const trackId = prev.tracks[index].id;
+      const tracks = prev.tracks.filter((_, i) => i !== index);
+      const nodes = prev.nodes.filter((n) => n.trackId !== trackId);
+      const keyAchievements = { ...prev.keyAchievements };
+      delete keyAchievements[trackId];
+      return { ...prev, tracks, nodes, keyAchievements };
+    });
+  };
+
+  // ---------- Time Axis ----------
+  const addTimeAxisItem = () => {
+    updateDraft((prev) => {
+      const lastPosition = prev.timeAxis[prev.timeAxis.length - 1]?.position ?? -10;
+      return {
+        ...prev,
+        timeAxis: [
+          ...prev.timeAxis,
+          {
+            label: '新节点',
+            position: Math.min(100, lastPosition + 10),
+          },
+        ],
+      };
+    });
+  };
+
+  const updateTimeAxisItem = (index: number, updates: Partial<SubjectPlanTimeAxisItem>) => {
+    updateDraft((prev) => {
+      const timeAxis = [...prev.timeAxis];
+      timeAxis[index] = { ...timeAxis[index], ...updates };
+      return { ...prev, timeAxis };
+    });
+  };
+
+  const removeTimeAxisItem = (index: number) => {
+    updateDraft((prev) => ({
+      ...prev,
+      timeAxis: prev.timeAxis.filter((_, i) => i !== index),
+    }));
+  };
+
+  // ---------- Nodes ----------
+  const addNode = () => {
+    updateDraft((prev) => {
+      const firstTrackId = prev.tracks[0]?.id ?? '';
+      return {
+        ...prev,
+        nodes: [
+          ...prev.nodes,
+          {
+            id: generateId('node'),
+            trackId: firstTrackId,
+            label: '新节点',
+            position: 50,
+            time: '',
+            detail: '',
+          },
+        ],
+      };
+    });
+  };
+
+  const updateNode = (index: number, updates: Partial<SubjectPlanNode>) => {
+    updateDraft((prev) => {
+      const nodes = [...prev.nodes];
+      nodes[index] = { ...nodes[index], ...updates };
+      return { ...prev, nodes };
+    });
+  };
+
+  const removeNode = (index: number) => {
+    updateDraft((prev) => ({
+      ...prev,
+      nodes: prev.nodes.filter((_, i) => i !== index),
+    }));
+  };
+
+  // ---------- Key Achievements ----------
+  const getAchievements = (trackId: string): SubjectPlanKeyAchievement[] => {
+    return draft?.keyAchievements[trackId] ?? [];
+  };
+
+  const addAchievement = (trackId: string) => {
+    updateDraft((prev) => {
+      const items = [...(prev.keyAchievements[trackId] ?? [])];
+      items.push({ time: '一上期末', keyword: '新成果', detail: '', milestones: [] });
+      return {
+        ...prev,
+        keyAchievements: { ...prev.keyAchievements, [trackId]: items },
+      };
+    });
+  };
+
+  const updateAchievement = (
+    trackId: string,
+    index: number,
+    updates: Partial<SubjectPlanKeyAchievement>
+  ) => {
+    updateDraft((prev) => {
+      const items = [...(prev.keyAchievements[trackId] ?? [])];
+      items[index] = { ...items[index], ...updates };
+      return {
+        ...prev,
+        keyAchievements: { ...prev.keyAchievements, [trackId]: items },
+      };
+    });
+  };
+
+  const removeAchievement = (trackId: string, index: number) => {
+    updateDraft((prev) => {
+      const items = (prev.keyAchievements[trackId] ?? []).filter((_, i) => i !== index);
+      const keyAchievements = { ...prev.keyAchievements, [trackId]: items };
+      if (items.length === 0) delete keyAchievements[trackId];
+      return { ...prev, keyAchievements };
+    });
+  };
+
+  const addMilestone = (trackId: string, index: number) => {
+    updateDraft((prev) => {
+      const items = [...(prev.keyAchievements[trackId] ?? [])];
+      const milestones = [...(items[index].milestones ?? []), '新里程碑'];
+      items[index] = { ...items[index], milestones };
+      return {
+        ...prev,
+        keyAchievements: { ...prev.keyAchievements, [trackId]: items },
+      };
+    });
+  };
+
+  const updateMilestone = (
+    trackId: string,
+    index: number,
+    milestoneIndex: number,
+    value: string
+  ) => {
+    updateDraft((prev) => {
+      const items = [...(prev.keyAchievements[trackId] ?? [])];
+      const milestones = [...(items[index].milestones ?? [])];
+      milestones[milestoneIndex] = value;
+      items[index] = { ...items[index], milestones };
+      return {
+        ...prev,
+        keyAchievements: { ...prev.keyAchievements, [trackId]: items },
+      };
+    });
+  };
+
+  const removeMilestone = (trackId: string, index: number, milestoneIndex: number) => {
+    updateDraft((prev) => {
+      const items = [...(prev.keyAchievements[trackId] ?? [])];
+      const milestones = (items[index].milestones ?? []).filter((_, i) => i !== milestoneIndex);
+      items[index] = { ...items[index], milestones };
+      return {
+        ...prev,
+        keyAchievements: { ...prev.keyAchievements, [trackId]: items },
+      };
+    });
+  };
+
+  // ---------- Exam Timeline ----------
+  const addExamEvent = () => {
+    updateDraft((prev) => ({
+      ...prev,
+      examTimeline: [
+        ...prev.examTimeline,
+        {
+          id: generateId('exam'),
+          name: '新赛事',
+          target: '',
+          date: '',
+          month: '',
+          registerBefore: '',
+          notes: '',
+        },
+      ],
+    }));
+  };
+
+  const updateExamEvent = (index: number, updates: Partial<SubjectPlanExamEvent>) => {
+    updateDraft((prev) => {
+      const examTimeline = [...prev.examTimeline];
+      examTimeline[index] = { ...examTimeline[index], ...updates };
+      return { ...prev, examTimeline };
+    });
+  };
+
+  const removeExamEvent = (index: number) => {
+    updateDraft((prev) => ({
+      ...prev,
+      examTimeline: prev.examTimeline.filter((_, i) => i !== index),
+    }));
   };
 
   return (
@@ -100,22 +352,14 @@ export default function ChinesePlanConfigPage() {
           </div>
           <div>
             <h1 className="text-2xl sm:text-3xl font-bold font-display">语文规划配置</h1>
-            <p className="text-sm text-text-tertiary mt-0.5">编辑 JSON 以调整 6 条线、节点、年级目标和赛事</p>
+            <p className="text-sm text-text-tertiary mt-0.5">通过表单调整 6 条线、节点、阶段目标和赛事</p>
           </div>
         </div>
 
         <div className="flex items-center gap-2">
           <button
-            onClick={handleFormat}
-            disabled={isLoading}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl glass border border-white/[0.08] text-sm font-medium text-text-secondary hover:text-text-primary hover:bg-white/[0.04] transition-colors disabled:opacity-50"
-          >
-            <FileJson className="w-4 h-4" />
-            格式化
-          </button>
-          <button
             onClick={handleReset}
-            disabled={isLoading}
+            disabled={isLoading || !draft}
             className="inline-flex items-center gap-2 px-4 py-2 rounded-xl glass border border-white/[0.08] text-sm font-medium text-text-secondary hover:text-text-primary hover:bg-white/[0.04] transition-colors disabled:opacity-50"
           >
             <RotateCcw className="w-4 h-4" />
@@ -123,7 +367,7 @@ export default function ChinesePlanConfigPage() {
           </button>
           <button
             onClick={handleSave}
-            disabled={isLoading || updateConfig.isPending}
+            disabled={isLoading || updateConfig.isPending || !draft || !hasChanges}
             className="inline-flex items-center gap-2 px-5 py-2 rounded-xl bg-primary text-white text-sm font-semibold hover:bg-primary/90 transition-colors disabled:opacity-50"
           >
             {updateConfig.isPending ? (
@@ -150,7 +394,7 @@ export default function ChinesePlanConfigPage() {
         </div>
       )}
 
-      {!isLoading && !queryError && (
+      {!isLoading && !queryError && draft && (
         <motion.div
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
@@ -174,48 +418,496 @@ export default function ChinesePlanConfigPage() {
             </div>
           )}
 
-          <div className="rounded-2xl glass border border-border-subtle overflow-hidden">
-            <div className="p-4 border-b border-border-subtle flex items-center justify-between">
-              <div>
-                <h2 className="font-bold text-text-secondary">JSON 配置</h2>
-                <p className="text-xs text-text-tertiary mt-0.5">
-                  修改后会自动校验格式，保存后立即生效
-                </p>
-              </div>
-              {config?.isSystem && (
-                <span className="text-2xs px-2 py-1 rounded bg-secondary/10 text-secondary border border-secondary/20">
-                  当前使用系统默认
-                </span>
-              )}
+          {config?.isSystem && (
+            <div className="rounded-xl border border-secondary/20 bg-secondary/10 p-4 text-secondary text-sm flex items-center gap-2">
+              <AlertCircle className="w-4 h-4" />
+              <span className="font-medium">当前使用系统默认配置</span>
+              <span className="text-text-tertiary">保存后会复制为个人配置</span>
             </div>
-            <textarea
-              value={jsonText}
-              onChange={(e) => setJsonText(e.target.value)}
-              spellCheck={false}
-              className="w-full h-[60vh] bg-surface-elevated p-4 font-mono text-sm text-text-secondary focus:outline-none resize-none"
-              placeholder="加载中..."
-            />
+          )}
+
+          {/* Tabs */}
+          <div className="flex flex-wrap gap-2">
+            {TABS.map((tab) => {
+              const Icon = tab.icon;
+              const isActive = activeTab === tab.id;
+              return (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id)}
+                  className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-medium transition-colors ${
+                    isActive
+                      ? 'bg-primary text-white'
+                      : 'glass border border-white/[0.08] text-text-secondary hover:text-text-primary hover:bg-white/[0.04]'
+                  }`}
+                >
+                  <Icon className="w-4 h-4" />
+                  {tab.label}
+                </button>
+              );
+            })}
           </div>
 
-          <div className="rounded-xl border border-dashed border-border-default bg-surface-elevated p-4">
-            <div className="flex items-start gap-2">
-              <AlertCircle className="w-4 h-4 text-text-tertiary mt-0.5" />
-              <div className="text-xs text-text-muted leading-relaxed space-y-1">
-                <p>
-                  <strong className="text-text-secondary">配置说明：</strong>
-                </p>
-                <ul className="list-disc list-inside space-y-0.5">
-                  <li>tracks：6 条线路的名称、颜色和描述</li>
-                  <li>timeAxis：时间轴标签和位置（0-100）</li>
-                  <li>nodes：地图上的节点，trackId 需对应 tracks 中的 id</li>
-                  <li>yearlyTargets：每个年级在每条线上的目标</li>
-                  <li>examTimeline：荣誉赛事时间轴</li>
-                </ul>
+          {/* Tracks Tab */}
+          {activeTab === 'tracks' && (
+            <ConfigSection title="线路管理" subtitle="配置 6 条学科线路的名称、颜色和说明">
+              <div className="space-y-3">
+                {draft.tracks.map((track, index) => (
+                  <div
+                    key={track.id}
+                    className="rounded-xl border border-border-subtle bg-surface-elevated p-4"
+                  >
+                    <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-start">
+                      <div className="md:col-span-3">
+                        <label className="block text-xs text-text-tertiary mb-1.5">线路 ID</label>
+                        <input
+                          type="text"
+                          value={track.id}
+                          readOnly
+                          className="w-full rounded-lg bg-surface-highlight border border-border-subtle px-3 py-2 text-sm text-text-muted focus:outline-none"
+                        />
+                      </div>
+                      <div className="md:col-span-3">
+                        <label className="block text-xs text-text-tertiary mb-1.5">名称</label>
+                        <input
+                          type="text"
+                          value={track.name}
+                          onChange={(e) => updateTrack(index, { name: e.target.value })}
+                          className="w-full rounded-lg bg-surface border border-border-subtle px-3 py-2 text-sm text-text-secondary focus:outline-none focus:border-primary"
+                        />
+                      </div>
+                      <div className="md:col-span-2">
+                        <label className="block text-xs text-text-tertiary mb-1.5">颜色</label>
+                        <div className="flex items-center gap-2">
+                          <input
+                            type="color"
+                            value={track.color}
+                            onChange={(e) => updateTrack(index, { color: e.target.value })}
+                            className="w-10 h-9 rounded-lg border border-border-subtle bg-transparent cursor-pointer"
+                          />
+                          <input
+                            type="text"
+                            value={track.color}
+                            onChange={(e) => updateTrack(index, { color: e.target.value })}
+                            className="flex-1 rounded-lg bg-surface border border-border-subtle px-3 py-2 text-sm text-text-secondary font-mono focus:outline-none focus:border-primary"
+                          />
+                        </div>
+                      </div>
+                      <div className="md:col-span-3">
+                        <label className="block text-xs text-text-tertiary mb-1.5">说明</label>
+                        <input
+                          type="text"
+                          value={track.description ?? ''}
+                          onChange={(e) => updateTrack(index, { description: e.target.value })}
+                          className="w-full rounded-lg bg-surface border border-border-subtle px-3 py-2 text-sm text-text-secondary focus:outline-none focus:border-primary"
+                        />
+                      </div>
+                      <div className="md:col-span-1 flex md:justify-end">
+                        <button
+                          onClick={() => removeTrack(index)}
+                          className="p-2 rounded-lg text-text-tertiary hover:text-error hover:bg-error/10 transition-colors"
+                          title="删除"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+                <button
+                  onClick={addTrack}
+                  className="w-full flex items-center justify-center gap-2 py-3 rounded-xl border border-dashed border-border-default text-sm text-text-tertiary hover:text-primary hover:border-primary/40 hover:bg-primary/5 transition-colors"
+                >
+                  <Plus className="w-4 h-4" />
+                  添加线路
+                </button>
               </div>
-            </div>
-          </div>
+            </ConfigSection>
+          )}
+
+          {/* Time Axis Tab */}
+          {activeTab === 'timeAxis' && (
+            <ConfigSection title="时间轴" subtitle="配置地图底部时间轴的节点标签和位置（0-100）">
+              <div className="space-y-3">
+                {draft.timeAxis.map((item, index) => (
+                  <div
+                    key={`${item.label}-${index}`}
+                    className="flex items-center gap-4 rounded-xl border border-border-subtle bg-surface-elevated p-4"
+                  >
+                    <GripVertical className="w-4 h-4 text-text-muted" />
+                    <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-xs text-text-tertiary mb-1.5">标签</label>
+                        <input
+                          type="text"
+                          value={item.label}
+                          onChange={(e) => updateTimeAxisItem(index, { label: e.target.value })}
+                          className="w-full rounded-lg bg-surface border border-border-subtle px-3 py-2 text-sm text-text-secondary focus:outline-none focus:border-primary"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-xs text-text-tertiary mb-1.5">位置（0-100）</label>
+                        <input
+                          type="number"
+                          min={0}
+                          max={100}
+                          value={item.position}
+                          onChange={(e) =>
+                            updateTimeAxisItem(index, { position: Number(e.target.value) })
+                          }
+                          className="w-full rounded-lg bg-surface border border-border-subtle px-3 py-2 text-sm text-text-secondary focus:outline-none focus:border-primary"
+                        />
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => removeTimeAxisItem(index)}
+                      className="p-2 rounded-lg text-text-tertiary hover:text-error hover:bg-error/10 transition-colors"
+                      title="删除"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
+                ))}
+                <button
+                  onClick={addTimeAxisItem}
+                  className="w-full flex items-center justify-center gap-2 py-3 rounded-xl border border-dashed border-border-default text-sm text-text-tertiary hover:text-primary hover:border-primary/40 hover:bg-primary/5 transition-colors"
+                >
+                  <Plus className="w-4 h-4" />
+                  添加时间轴节点
+                </button>
+              </div>
+            </ConfigSection>
+          )}
+
+          {/* Nodes Tab */}
+          {activeTab === 'nodes' && (
+            <ConfigSection title="地图节点" subtitle="配置每条线路上的关键节点">
+              <div className="space-y-3">
+                {draft.nodes.map((node, index) => (
+                  <div
+                    key={node.id}
+                    className="rounded-xl border border-border-subtle bg-surface-elevated p-4"
+                  >
+                    <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-start">
+                      <div className="md:col-span-2">
+                        <label className="block text-xs text-text-tertiary mb-1.5">所属线路</label>
+                        <select
+                          value={node.trackId}
+                          onChange={(e) => updateNode(index, { trackId: e.target.value })}
+                          className="w-full rounded-lg bg-surface border border-border-subtle px-3 py-2 text-sm text-text-secondary focus:outline-none focus:border-primary"
+                        >
+                          {draft.tracks.map((track) => (
+                            <option key={track.id} value={track.id}>
+                              {track.name}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                      <div className="md:col-span-2">
+                        <label className="block text-xs text-text-tertiary mb-1.5">标签</label>
+                        <input
+                          type="text"
+                          value={node.label}
+                          onChange={(e) => updateNode(index, { label: e.target.value })}
+                          className="w-full rounded-lg bg-surface border border-border-subtle px-3 py-2 text-sm text-text-secondary focus:outline-none focus:border-primary"
+                        />
+                      </div>
+                      <div className="md:col-span-2">
+                        <label className="block text-xs text-text-tertiary mb-1.5">位置（0-100）</label>
+                        <input
+                          type="number"
+                          min={0}
+                          max={100}
+                          value={node.position}
+                          onChange={(e) => updateNode(index, { position: Number(e.target.value) })}
+                          className="w-full rounded-lg bg-surface border border-border-subtle px-3 py-2 text-sm text-text-secondary focus:outline-none focus:border-primary"
+                        />
+                      </div>
+                      <div className="md:col-span-2">
+                        <label className="block text-xs text-text-tertiary mb-1.5">时间</label>
+                        <input
+                          type="text"
+                          value={node.time}
+                          onChange={(e) => updateNode(index, { time: e.target.value })}
+                          placeholder="如 2025.09"
+                          className="w-full rounded-lg bg-surface border border-border-subtle px-3 py-2 text-sm text-text-secondary focus:outline-none focus:border-primary"
+                        />
+                      </div>
+                      <div className="md:col-span-3">
+                        <label className="block text-xs text-text-tertiary mb-1.5">详细说明</label>
+                        <input
+                          type="text"
+                          value={node.detail ?? ''}
+                          onChange={(e) => updateNode(index, { detail: e.target.value })}
+                          className="w-full rounded-lg bg-surface border border-border-subtle px-3 py-2 text-sm text-text-secondary focus:outline-none focus:border-primary"
+                        />
+                      </div>
+                      <div className="md:col-span-1 flex md:justify-end">
+                        <button
+                          onClick={() => removeNode(index)}
+                          className="p-2 rounded-lg text-text-tertiary hover:text-error hover:bg-error/10 transition-colors"
+                          title="删除"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+                <button
+                  onClick={addNode}
+                  className="w-full flex items-center justify-center gap-2 py-3 rounded-xl border border-dashed border-border-default text-sm text-text-tertiary hover:text-primary hover:border-primary/40 hover:bg-primary/5 transition-colors"
+                >
+                  <Plus className="w-4 h-4" />
+                  添加节点
+                </button>
+              </div>
+            </ConfigSection>
+          )}
+
+          {/* Key Achievements Tab */}
+          {activeTab === 'keyAchievements' && (
+            <ConfigSection
+              title="阶段目标矩阵"
+              subtitle="按线路配置每个关键时间点的成果目标、说明和里程碑"
+            >
+              <div className="space-y-6">
+                {draft.tracks.map((track) => {
+                  const achievements = getAchievements(track.id);
+                  return (
+                    <div
+                      key={track.id}
+                      className="rounded-2xl border border-border-subtle bg-surface-elevated p-5"
+                    >
+                      <div className="flex items-center gap-2 mb-4">
+                        <div
+                          className="w-3 h-3 rounded-full"
+                          style={{ backgroundColor: track.color }}
+                        />
+                        <h3 className="font-bold text-text-secondary">{track.name}</h3>
+                        <span className="text-xs text-text-muted">({achievements.length} 个目标)</span>
+                      </div>
+
+                      <div className="space-y-3">
+                        {achievements.map((achievement, index) => (
+                          <div
+                            key={`${achievement.time}-${index}`}
+                            className="rounded-xl border border-border-subtle bg-surface p-4"
+                          >
+                            <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-start mb-3">
+                              <div className="md:col-span-2">
+                                <label className="block text-xs text-text-tertiary mb-1.5">时间点</label>
+                                <input
+                                  type="text"
+                                  value={achievement.time}
+                                  onChange={(e) =>
+                                    updateAchievement(track.id, index, { time: e.target.value })
+                                  }
+                                  placeholder="如 一上期末"
+                                  className="w-full rounded-lg bg-surface-highlight border border-border-subtle px-3 py-2 text-sm text-text-secondary focus:outline-none focus:border-primary"
+                                />
+                              </div>
+                              <div className="md:col-span-3">
+                                <label className="block text-xs text-text-tertiary mb-1.5">成果关键词</label>
+                                <input
+                                  type="text"
+                                  value={achievement.keyword}
+                                  onChange={(e) =>
+                                    updateAchievement(track.id, index, { keyword: e.target.value })
+                                  }
+                                  className="w-full rounded-lg bg-surface-highlight border border-border-subtle px-3 py-2 text-sm text-text-secondary focus:outline-none focus:border-primary"
+                                />
+                              </div>
+                              <div className="md:col-span-6">
+                                <label className="block text-xs text-text-tertiary mb-1.5">详细说明</label>
+                                <input
+                                  type="text"
+                                  value={achievement.detail ?? ''}
+                                  onChange={(e) =>
+                                    updateAchievement(track.id, index, { detail: e.target.value })
+                                  }
+                                  className="w-full rounded-lg bg-surface-highlight border border-border-subtle px-3 py-2 text-sm text-text-secondary focus:outline-none focus:border-primary"
+                                />
+                              </div>
+                              <div className="md:col-span-1 flex md:justify-end">
+                                <button
+                                  onClick={() => removeAchievement(track.id, index)}
+                                  className="p-2 rounded-lg text-text-tertiary hover:text-error hover:bg-error/10 transition-colors"
+                                  title="删除"
+                                >
+                                  <Trash2 className="w-4 h-4" />
+                                </button>
+                              </div>
+                            </div>
+
+                            <div>
+                              <div className="flex items-center gap-2 mb-2">
+                                <span className="text-xs text-text-tertiary">里程碑</span>
+                                <button
+                                  onClick={() => addMilestone(track.id, index)}
+                                  className="inline-flex items-center gap-1 text-xs text-primary hover:text-primary/80"
+                                >
+                                  <Plus className="w-3 h-3" />
+                                  添加
+                                </button>
+                              </div>
+                              <div className="flex flex-wrap gap-2">
+                                {(achievement.milestones ?? []).map((milestone, mi) => (
+                                  <div
+                                    key={mi}
+                                    className="flex items-center gap-1 rounded-lg bg-secondary/10 border border-secondary/20 px-2 py-1"
+                                  >
+                                    <input
+                                      type="text"
+                                      value={milestone}
+                                      onChange={(e) =>
+                                        updateMilestone(track.id, index, mi, e.target.value)
+                                      }
+                                      className="bg-transparent text-xs text-secondary focus:outline-none w-24"
+                                    />
+                                    <button
+                                      onClick={() => removeMilestone(track.id, index, mi)}
+                                      className="text-secondary/70 hover:text-secondary"
+                                    >
+                                      <X className="w-3 h-3" />
+                                    </button>
+                                  </div>
+                                ))}
+                                {(achievement.milestones ?? []).length === 0 && (
+                                  <span className="text-xs text-text-muted">暂无里程碑</span>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+
+                      <button
+                        onClick={() => addAchievement(track.id)}
+                        className="mt-3 w-full flex items-center justify-center gap-2 py-2.5 rounded-xl border border-dashed border-border-default text-sm text-text-tertiary hover:text-primary hover:border-primary/40 hover:bg-primary/5 transition-colors"
+                      >
+                        <Plus className="w-4 h-4" />
+                        添加 {track.name} 目标
+                      </button>
+                    </div>
+                  );
+                })}
+              </div>
+            </ConfigSection>
+          )}
+
+          {/* Exam Timeline Tab */}
+          {activeTab === 'examTimeline' && (
+            <ConfigSection title="赛事时间轴" subtitle="配置语文荣誉赛事与关键提醒">
+              <div className="space-y-3">
+                {draft.examTimeline.map((exam, index) => (
+                  <div
+                    key={exam.id}
+                    className="rounded-xl border border-border-subtle bg-surface-elevated p-4"
+                  >
+                    <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-start mb-3">
+                      <div className="md:col-span-2">
+                        <label className="block text-xs text-text-tertiary mb-1.5">赛事名称</label>
+                        <input
+                          type="text"
+                          value={exam.name}
+                          onChange={(e) => updateExamEvent(index, { name: e.target.value })}
+                          className="w-full rounded-lg bg-surface border border-border-subtle px-3 py-2 text-sm text-text-secondary focus:outline-none focus:border-primary"
+                        />
+                      </div>
+                      <div className="md:col-span-2">
+                        <label className="block text-xs text-text-tertiary mb-1.5">目标</label>
+                        <input
+                          type="text"
+                          value={exam.target ?? ''}
+                          onChange={(e) => updateExamEvent(index, { target: e.target.value })}
+                          className="w-full rounded-lg bg-surface border border-border-subtle px-3 py-2 text-sm text-text-secondary focus:outline-none focus:border-primary"
+                        />
+                      </div>
+                      <div className="md:col-span-2">
+                        <label className="block text-xs text-text-tertiary mb-1.5">日期</label>
+                        <input
+                          type="text"
+                          value={exam.date ?? ''}
+                          onChange={(e) => updateExamEvent(index, { date: e.target.value })}
+                          placeholder="如 2027.04"
+                          className="w-full rounded-lg bg-surface border border-border-subtle px-3 py-2 text-sm text-text-secondary focus:outline-none focus:border-primary"
+                        />
+                      </div>
+                      <div className="md:col-span-2">
+                        <label className="block text-xs text-text-tertiary mb-1.5">月份/学期</label>
+                        <input
+                          type="text"
+                          value={exam.month ?? ''}
+                          onChange={(e) => updateExamEvent(index, { month: e.target.value })}
+                          placeholder="如 三年级春季"
+                          className="w-full rounded-lg bg-surface border border-border-subtle px-3 py-2 text-sm text-text-secondary focus:outline-none focus:border-primary"
+                        />
+                      </div>
+                      <div className="md:col-span-2">
+                        <label className="block text-xs text-text-tertiary mb-1.5">报名/准备时间</label>
+                        <input
+                          type="text"
+                          value={exam.registerBefore ?? ''}
+                          onChange={(e) =>
+                            updateExamEvent(index, { registerBefore: e.target.value })
+                          }
+                          className="w-full rounded-lg bg-surface border border-border-subtle px-3 py-2 text-sm text-text-secondary focus:outline-none focus:border-primary"
+                        />
+                      </div>
+                      <div className="md:col-span-1 flex md:justify-end">
+                        <button
+                          onClick={() => removeExamEvent(index)}
+                          className="p-2 rounded-lg text-text-tertiary hover:text-error hover:bg-error/10 transition-colors"
+                          title="删除"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </div>
+                    <div>
+                      <label className="block text-xs text-text-tertiary mb-1.5">备注提醒</label>
+                      <textarea
+                        value={exam.notes ?? ''}
+                        onChange={(e) => updateExamEvent(index, { notes: e.target.value })}
+                        rows={2}
+                        className="w-full rounded-lg bg-surface border border-border-subtle px-3 py-2 text-sm text-text-secondary focus:outline-none focus:border-primary resize-none"
+                      />
+                    </div>
+                  </div>
+                ))}
+                <button
+                  onClick={addExamEvent}
+                  className="w-full flex items-center justify-center gap-2 py-3 rounded-xl border border-dashed border-border-default text-sm text-text-tertiary hover:text-primary hover:border-primary/40 hover:bg-primary/5 transition-colors"
+                >
+                  <Plus className="w-4 h-4" />
+                  添加赛事节点
+                </button>
+              </div>
+            </ConfigSection>
+          )}
         </motion.div>
       )}
+    </div>
+  );
+}
+
+function ConfigSection({
+  title,
+  subtitle,
+  children,
+}: {
+  title: string;
+  subtitle: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="rounded-2xl glass border border-border-subtle p-6">
+      <div className="mb-5">
+        <h2 className="text-lg font-bold text-text-secondary">{title}</h2>
+        <p className="text-xs text-text-tertiary mt-0.5">{subtitle}</p>
+      </div>
+      {children}
     </div>
   );
 }

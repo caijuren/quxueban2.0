@@ -6,7 +6,7 @@ CREATE TABLE "SubjectPlanConfig" (
     "tracks" JSONB NOT NULL,
     "timeAxis" JSONB NOT NULL,
     "nodes" JSONB NOT NULL,
-    "yearlyTargets" JSONB NOT NULL,
+    "keyAchievements" JSONB NOT NULL,
     "examTimeline" JSONB NOT NULL,
     "isSystem" BOOLEAN NOT NULL DEFAULT false,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,

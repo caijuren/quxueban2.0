@@ -26,7 +26,30 @@ function positionToX(position: number) {
   return VIEWBOX.startX + (position / 100) * (VIEWBOX.endX - VIEWBOX.startX);
 }
 
-function gradeToPosition(grade?: number) {
+function getCurrentTimeLabel(grade?: number): string | null {
+  if (!grade || grade < 1) return null;
+  if (grade >= 5) return '三公';
+
+  const month = new Date().getMonth() + 1;
+  // 9-1 月：上学期；2-6 月：下学期；7-8 月：暑假，按刚结束的下学期算
+  const semester = month >= 9 || month <= 1 ? '上' : '下';
+  const gradeNames = ['零', '一', '二', '三', '四', '五'];
+  return `${gradeNames[grade]}${semester}`;
+}
+
+function getCurrentPosition(
+  grade?: number,
+  timeAxis?: { label: string; position: number }[]
+) {
+  if (!timeAxis || timeAxis.length === 0) return VIEWBOX.startX;
+
+  const label = getCurrentTimeLabel(grade);
+  if (!label) return VIEWBOX.startX;
+
+  const match = timeAxis.find((t) => t.label.includes(label));
+  if (match) return positionToX(match.position);
+
+  // 兜底：按年级粗略估算
   if (!grade || grade < 1) return VIEWBOX.startX;
   if (grade >= 5) return positionToX(100);
   return positionToX(10 + (grade - 1) * 20);
@@ -90,7 +113,10 @@ export default function ChineseTrackMap({ config, currentGrade }: ChineseTrackMa
     }, {} as Record<string, SubjectPlanNode[]>);
   }, [config.nodes]);
 
-  const currentX = useMemo(() => gradeToPosition(currentGrade), [currentGrade]);
+  const currentX = useMemo(
+    () => getCurrentPosition(currentGrade, config.timeAxis),
+    [currentGrade, config.timeAxis]
+  );
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     const rect = e.currentTarget.getBoundingClientRect();
@@ -127,9 +153,6 @@ export default function ChineseTrackMap({ config, currentGrade }: ChineseTrackMa
       <div className="flex flex-col gap-4 mb-4">
         <div>
           <h2 className="text-xl font-bold font-display">语文六线规划地图</h2>
-          <p className="text-sm text-text-tertiary mt-1">
-            从现在到三公，六条主线并行推进
-          </p>
         </div>
         {/* Bottom legend */}
         <div className="flex flex-wrap gap-3">
@@ -453,30 +476,6 @@ export default function ChineseTrackMap({ config, currentGrade }: ChineseTrackMa
         </motion.div>
       )}
 
-      {/* Bottom summary */}
-      <div className="mt-6 pt-6 border-t border-border-subtle grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {config.tracks.slice(0, 6).map((track) => {
-          const nodes = (nodesByTrack[track.id] || [])
-            .sort((a, b) => a.position - b.position)
-            .map((n) => n.label);
-          const summary = nodes.slice(0, 3).join(' → ') + (nodes.length > 3 ? ' → ...' : '');
-          return (
-            <div
-              key={track.id}
-              className="rounded-xl p-3 border"
-              style={{
-                backgroundColor: hexToRgba(track.color, 0.05),
-                borderColor: hexToRgba(track.color, 0.15),
-              }}
-            >
-              <p className="text-xs mb-1" style={{ color: track.color }}>
-                {track.name}
-              </p>
-              <p className="text-sm text-text-secondary">{summary || '暂无节点'}</p>
-            </div>
-          );
-        })}
-      </div>
     </motion.div>
   );
 }

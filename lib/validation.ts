@@ -308,9 +308,8 @@ export const subjectPlanNodeSchema = z.object({
   detail: z.string().max(1000).nullable().optional(),
 });
 
-export const subjectPlanYearlyTargetSchema = z.object({
-  grade: z.string().min(1).max(50),
-  period: z.string().max(100).nullable().optional(),
+export const subjectPlanKeyAchievementSchema = z.object({
+  time: z.string().min(1).max(50),
   keyword: z.string().min(1).max(100),
   detail: z.string().max(2000).nullable().optional(),
   milestones: z.array(z.string().max(100)).optional(),
@@ -330,7 +329,7 @@ export const subjectPlanConfigDataSchema = z.object({
   tracks: z.array(subjectPlanTrackSchema).min(1, '至少配置一条线路'),
   timeAxis: z.array(subjectPlanTimeAxisItemSchema).min(1, '时间轴不能为空'),
   nodes: z.array(subjectPlanNodeSchema),
-  yearlyTargets: z.record(z.string(), z.array(subjectPlanYearlyTargetSchema)),
+  keyAchievements: z.record(z.string(), z.array(subjectPlanKeyAchievementSchema)),
   examTimeline: z.array(subjectPlanExamEventSchema),
 });
 

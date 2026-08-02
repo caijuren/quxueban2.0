@@ -21,9 +21,8 @@ export interface SubjectPlanNode {
   detail?: string | null;
 }
 
-export interface SubjectPlanYearlyTarget {
-  grade: string;
-  period?: string | null;
+export interface SubjectPlanKeyAchievement {
+  time: string;
   keyword: string;
   detail?: string | null;
   milestones?: string[];
@@ -43,7 +42,7 @@ export interface SubjectPlanConfigData {
   tracks: SubjectPlanTrack[];
   timeAxis: SubjectPlanTimeAxisItem[];
   nodes: SubjectPlanNode[];
-  yearlyTargets: Record<string, SubjectPlanYearlyTarget[]>;
+  keyAchievements: Record<string, SubjectPlanKeyAchievement[]>;
   examTimeline: SubjectPlanExamEvent[];
 }
 
@@ -53,7 +52,7 @@ export interface SubjectPlanConfig {
   tracks: SubjectPlanTrack[];
   timeAxis: SubjectPlanTimeAxisItem[];
   nodes: SubjectPlanNode[];
-  yearlyTargets: Record<string, SubjectPlanYearlyTarget[]>;
+  keyAchievements: Record<string, SubjectPlanKeyAchievement[]>;
   examTimeline: SubjectPlanExamEvent[];
   isSystem: boolean;
   createdAt: string;

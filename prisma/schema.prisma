@@ -273,11 +273,11 @@ model SubjectPlanConfig {
   id            String   @id @default(uuid())
   userId        String?
   subject       String
-  tracks        Json
-  timeAxis      Json
-  nodes         Json
-  yearlyTargets Json
-  examTimeline  Json
+  tracks          Json
+  timeAxis        Json
+  nodes           Json
+  keyAchievements Json
+  examTimeline    Json
   isSystem      Boolean  @default(false)
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt

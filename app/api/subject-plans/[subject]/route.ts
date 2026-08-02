@@ -13,7 +13,7 @@ function normalizeConfig(config: {
   tracks: any;
   timeAxis: any;
   nodes: any;
-  yearlyTargets: any;
+  keyAchievements: any;
   examTimeline: any;
   isSystem: boolean;
   createdAt: Date;
@@ -25,7 +25,7 @@ function normalizeConfig(config: {
     tracks: config.tracks as SubjectPlanConfig['tracks'],
     timeAxis: config.timeAxis as SubjectPlanConfig['timeAxis'],
     nodes: config.nodes as SubjectPlanConfig['nodes'],
-    yearlyTargets: config.yearlyTargets as SubjectPlanConfig['yearlyTargets'],
+    keyAchievements: config.keyAchievements as SubjectPlanConfig['keyAchievements'],
     examTimeline: config.examTimeline as SubjectPlanConfig['examTimeline'],
     isSystem: config.isSystem,
     createdAt: config.createdAt.toISOString(),
@@ -107,7 +107,7 @@ export async function PATCH(req: Request, { params }: Params) {
         tracks: data.tracks as any,
         timeAxis: data.timeAxis as any,
         nodes: data.nodes as any,
-        yearlyTargets: data.yearlyTargets as any,
+        keyAchievements: data.keyAchievements as any,
         examTimeline: data.examTimeline as any,
       },
     });
@@ -119,7 +119,7 @@ export async function PATCH(req: Request, { params }: Params) {
         tracks: data.tracks as any,
         timeAxis: data.timeAxis as any,
         nodes: data.nodes as any,
-        yearlyTargets: data.yearlyTargets as any,
+        keyAchievements: data.keyAchievements as any,
         examTimeline: data.examTimeline as any,
         isSystem: false,
       },

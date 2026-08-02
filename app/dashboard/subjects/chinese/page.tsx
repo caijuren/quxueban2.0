@@ -96,20 +96,11 @@ export default function ChineseSubjectPage() {
 
       {config && (
         <div className="space-y-8">
-          {/* Track map */}
-          <ChineseTrackMap config={config} currentGrade={currentChild.grade} />
-
-          {/* Yearly target matrix */}
-          <ChineseYearlyMatrix config={config} currentGrade={currentChild.grade} />
-
-          {/* Exam timeline */}
-          <ChineseExamTimeline config={config} />
-
           {/* Link to overall plan */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.5 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
             className="flex items-start gap-3 rounded-xl bg-primary/5 border border-primary/20 p-4"
           >
             <AlertCircle className="w-5 h-5 text-primary shrink-0 mt-0.5" />
@@ -123,6 +114,15 @@ export default function ChineseSubjectPage() {
               </p>
             </div>
           </motion.div>
+
+          {/* Track map */}
+          <ChineseTrackMap config={config} currentGrade={currentChild.grade} />
+
+          {/* Key achievement matrix */}
+          <ChineseYearlyMatrix config={config} currentGrade={currentChild.grade} />
+
+          {/* Exam timeline */}
+          <ChineseExamTimeline config={config} />
         </div>
       )}
     </div>
