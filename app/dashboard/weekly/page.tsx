@@ -1738,8 +1738,8 @@ function WeeklyTasksContent() {
                 onClick={() => setEditOpen(true)}
                 className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-surface-elevated hover:bg-surface-highlight text-text-secondary text-sm transition-colors focus-ring"
               >
-                <Plus className="w-3.5 h-3.5" />
-                手动添加任务
+                <Pencil className="w-3.5 h-3.5" />
+                编辑周计划
               </button>
               <button
                 onClick={() => setLibraryOpen(true)}
@@ -1887,6 +1887,7 @@ function WeeklyTasksContent() {
           goals={displayPlan.goals ?? []}
           tasks={displayPlan.tasks}
           onChange={handleGoalsChange}
+          onConfigure={() => setEditOpen(true)}
         />
       )}
 

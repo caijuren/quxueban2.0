@@ -8,6 +8,7 @@ import {
   Target,
   TrendingUp,
   ListChecks,
+  Settings2,
 } from 'lucide-react';
 import {
   type WeeklyGoal,
@@ -22,12 +23,14 @@ interface WeeklyGoalsPanelProps {
   goals: WeeklyGoal[];
   tasks: WeeklyTaskItem[];
   onChange: (goals: WeeklyGoal[]) => void;
+  onConfigure?: () => void;
 }
 
 export default function WeeklyGoalsPanel({
   goals,
   tasks,
   onChange,
+  onConfigure,
 }: WeeklyGoalsPanelProps) {
   const tasksByGoal = useMemo(() => {
     const map: Record<string, WeeklyTaskItem[]> = {};
@@ -55,7 +58,37 @@ export default function WeeklyGoalsPanel({
   };
 
   if (goals.length === 0) {
-    return null;
+    return (
+      <motion.div
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="rounded-2xl bg-surface-elevated border border-border-subtle p-5"
+      >
+        <div className="flex items-start justify-between gap-4">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
+              <Target className="w-5 h-5 text-primary" />
+            </div>
+            <div>
+              <h2 className="text-base font-bold text-text-secondary">本周目标</h2>
+              <p className="text-xs text-text-muted mt-0.5">
+                把具体任务描述填在这里，例如读哪几本书、做多少题
+              </p>
+            </div>
+          </div>
+          {onConfigure && (
+            <button
+              type="button"
+              onClick={onConfigure}
+              className="shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-primary text-white text-xs font-medium"
+            >
+              <Settings2 className="w-3.5 h-3.5" />
+              去配置
+            </button>
+          )}
+        </div>
+      </motion.div>
+    );
   }
 
   return (
