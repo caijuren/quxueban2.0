@@ -3,7 +3,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { apiDelete, apiGet, apiPost } from '@/lib/apiClient';
 import { WeeklyPlan } from '@/lib/storage.types';
-import { WeeklyPlanCreateInput } from '@/lib/validation';
+import { WeeklyPlanCreateInput, TaskCompletionInput } from '@/lib/validation';
 
 function buildKey(childId?: string) {
   return ['weekly-plans', childId ?? 'all'];
@@ -53,5 +53,21 @@ export function useDeleteWeeklyPlan() {
       apiDelete<{ success: boolean }>(`/api/weekly-plans/${id}`),
     onSuccess: () =>
       queryClient.invalidateQueries({ queryKey: ['weekly-plans'] }),
+  });
+}
+
+
+export function useCompleteTask() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (data: {
+      planId: string;
+      taskId: string;
+      input: TaskCompletionInput;
+    }) =>
+      apiPost<WeeklyPlan>("/api/weekly-plans/" + data.planId + "/tasks/" + data.taskId + "/complete", data.input),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["weekly-plans"] });
+    },
   });
 }
