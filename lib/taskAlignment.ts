@@ -98,6 +98,8 @@ export function normalizeWeeklyTask(
     templateId: task.templateId,
     alignment: task.alignment,
     day: task.day,
+    timeSlot: task.timeSlot,
+    goalId: task.goalId,
     focus: task.focus,
     duration: task.duration || '30分钟',
     materials: task.materials || [],

@@ -65,31 +65,40 @@ export async function POST(req: Request) {
     });
   });
 
-  const plan = await prisma.weeklyPlan.upsert({
-    where: {
-      childId_weekId: {
+  try {
+    const plan = await prisma.weeklyPlan.upsert({
+      where: {
+        childId_weekId: {
+          childId: body.childId,
+          weekId: body.weekId,
+        },
+      },
+      update: {
+        tasks: normalizedTasks as unknown as object[],
+        goals: body.goals as unknown as object[],
+        publishedAt: body.publishedAt ? new Date(body.publishedAt) : null,
+        reviewedAt: body.reviewedAt ? new Date(body.reviewedAt) : null,
+        parentComment: body.parentComment,
+      },
+      create: {
+        userId: session.user.id,
         childId: body.childId,
         weekId: body.weekId,
+        tasks: normalizedTasks as unknown as object[],
+        goals: body.goals as unknown as object[],
+        publishedAt: body.publishedAt ? new Date(body.publishedAt) : null,
+        reviewedAt: body.reviewedAt ? new Date(body.reviewedAt) : null,
+        parentComment: body.parentComment,
       },
-    },
-    update: {
-      tasks: normalizedTasks as unknown as object[],
-      goals: body.goals as unknown as object[],
-      publishedAt: body.publishedAt ? new Date(body.publishedAt) : null,
-      reviewedAt: body.reviewedAt ? new Date(body.reviewedAt) : null,
-      parentComment: body.parentComment,
-    },
-    create: {
-      userId: session.user.id,
-      childId: body.childId,
-      weekId: body.weekId,
-      tasks: normalizedTasks as unknown as object[],
-      goals: body.goals as unknown as object[],
-      publishedAt: body.publishedAt ? new Date(body.publishedAt) : null,
-      reviewedAt: body.reviewedAt ? new Date(body.reviewedAt) : null,
-      parentComment: body.parentComment,
-    },
-  });
+    });
 
-  return NextResponse.json(plan, { status: 201 });
+    return NextResponse.json(plan, { status: 201 });
+  } catch (err) {
+    console.error('[weekly-plans POST] error:', err);
+    const message = err instanceof Error ? err.message : 'Unknown server error';
+    return NextResponse.json(
+      { error: `保存周计划失败: ${message}`, details: message },
+      { status: 500 }
+    );
+  }
 }

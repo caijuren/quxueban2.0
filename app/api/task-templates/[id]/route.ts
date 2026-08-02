@@ -63,15 +63,15 @@ function toPrismaUpdateData(body: ReturnType<typeof taskTemplateUpdateSchema.par
   if (body.category !== undefined) {
     data.category = body.category.toUpperCase();
   }
-  if (body.materials !== undefined) data.materials = body.materials;
-  if (body.routeTags !== undefined) data.routeTags = body.routeTags;
-  if (body.tags !== undefined) data.tags = body.tags;
+  if (body.materials !== undefined) data.materials = { set: body.materials };
+  if (body.routeTags !== undefined) data.routeTags = { set: body.routeTags };
+  if (body.tags !== undefined) data.tags = { set: body.tags };
   if (body.taskType !== undefined) data.taskType = body.taskType.toUpperCase();
   if (body.frequency !== undefined) data.frequency = body.frequency.toUpperCase();
   if (body.customFrequency !== undefined) data.customFrequency = body.customFrequency;
   if (body.assessmentCriteria !== undefined) data.assessmentCriteria = body.assessmentCriteria;
   if (body.weeklySchedule !== undefined) data.weeklySchedule = body.weeklySchedule.toUpperCase();
-  if (body.customScheduleDays !== undefined) data.customScheduleDays = body.customScheduleDays;
+  if (body.customScheduleDays !== undefined) data.customScheduleDays = { set: body.customScheduleDays };
 
   if (body.archive === true) {
     data.archivedAt = new Date();

@@ -386,12 +386,12 @@ function MatrixTaskCard({
         <CategoryIcon className="w-3 h-3" />
       </div>
       <div className="flex-1 min-w-0">
-        <div className="flex items-center justify-between gap-1 mb-0.5">
-          <div className="flex items-center gap-1">
-            <span className={`text-[9px] px-1 py-0.5 rounded ${done ? 'bg-surface-elevated text-text-muted' : 'bg-primary/10 text-primary'} tabular-nums`}>
+        <div className="flex items-center justify-between gap-1 mb-1">
+          <div className="flex items-center gap-1 min-w-0">
+            <span className={`shrink-0 text-[9px] px-1.5 py-0.5 rounded whitespace-nowrap ${done ? 'bg-surface-elevated text-text-muted' : 'bg-primary/10 text-primary'} tabular-nums`}>
               {timeSlotLabel}
             </span>
-            <span className={`text-2xs ${done ? 'text-text-muted' : 'text-text-tertiary'}`}>
+            <span className={`shrink-0 text-2xs ${done ? 'text-text-muted' : 'text-text-tertiary'}`}>
               {task.duration}
             </span>
           </div>
@@ -401,9 +401,28 @@ function MatrixTaskCard({
           className={`text-xs font-medium truncate ${
             done ? 'text-text-muted line-through' : 'text-text-secondary'
           }`}
+          title={task.focus}
         >
           {task.focus}
         </p>
+        {task.materials.length > 0 && (
+          <div className="flex flex-wrap gap-1 mt-1.5">
+            {task.materials.slice(0, 3).map((m) => (
+              <span
+                key={m}
+                className="text-[9px] px-1.5 py-0.5 rounded bg-surface-elevated text-text-muted truncate max-w-[80px]"
+                title={m}
+              >
+                {m}
+              </span>
+            ))}
+            {task.materials.length > 3 && (
+              <span className="text-[9px] px-1.5 py-0.5 rounded bg-surface-elevated text-text-muted">
+                +{task.materials.length - 3}
+              </span>
+            )}
+          </div>
+        )}
       </div>
       <GripVertical className="w-3 h-3 text-text-tertiary/40 mt-0.5 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity" />
     </div>
@@ -431,19 +450,20 @@ function MobileTaskRow({ task, onToggle }: MobileTaskRowProps) {
       } active:scale-[0.99]`}
     >
       <div className="flex-1 min-w-0">
-        <div className="flex items-center justify-between mb-0.5">
+        <div className="flex items-center justify-between mb-1">
           <p
-            className={`text-xs font-medium ${
+            className={`text-xs font-medium truncate ${
               done ? 'text-text-muted line-through' : 'text-text-secondary'
             }`}
+            title={task.focus}
           >
             {task.focus}
           </p>
           <div className="flex items-center gap-1 shrink-0 ml-2">
-            <span className={`text-[9px] px-1 py-0.5 rounded ${done ? 'bg-surface-elevated text-text-muted' : 'bg-primary/10 text-primary'} tabular-nums`}>
+            <span className={`text-[9px] px-1.5 py-0.5 rounded whitespace-nowrap ${done ? 'bg-surface-elevated text-text-muted' : 'bg-primary/10 text-primary'} tabular-nums`}>
               {timeSlotLabel}
             </span>
-            <span className="text-2xs px-1.5 py-0.5 rounded bg-surface-elevated text-text-tertiary">
+            <span className="text-2xs px-1.5 py-0.5 rounded bg-surface-elevated text-text-tertiary whitespace-nowrap">
               {task.duration}
             </span>
           </div>

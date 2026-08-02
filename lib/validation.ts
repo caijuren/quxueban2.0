@@ -232,6 +232,7 @@ export const weeklyTaskItemSchema = z.object({
   status: taskStatusSchema.default('pending'),
   completedAt: z.string().datetime().optional(),
   note: z.string().max(500).optional(),
+  goalId: z.string().optional(),
   completionRecords: z.array(taskCompletionRecordSchema).optional(),
 });
 

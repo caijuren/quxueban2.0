@@ -13,7 +13,7 @@ import {
   getDefaultChildren,
   AVATAR_COLORS,
 } from '@/lib/children';
-import { type WeeklyPlan, type TaskStatus } from '@/lib/storage.types';
+import { type WeeklyPlan, type TaskStatus, type WeeklyGoal } from '@/lib/storage.types';
 import { generateWeeklyPlan, getCurrentWeekId } from '@/lib/weeklyTasks';
 import {
   useChildren as useChildrenQuery,
@@ -162,6 +162,10 @@ export function ChildrenProvider({ children: childNodes }: { children: ReactNode
     const plan = weeklyPlans.find((p) => p.weekId === weekId && p.childId === childId);
     if (!plan) throw new Error('Weekly plan not found');
 
+    const task = plan.tasks.find((t) => t.id === taskId);
+    const wasDone = task?.status === 'done';
+    const isDone = status === 'done';
+
     const updatedTasks = plan.tasks.map((t) => {
       if (t.id !== taskId) return t;
       return {
@@ -172,11 +176,20 @@ export function ChildrenProvider({ children: childNodes }: { children: ReactNode
       };
     });
 
+    let updatedGoals = plan.goals ?? [];
+    if (task?.goalId && wasDone !== isDone) {
+      updatedGoals = updatedGoals.map((g: WeeklyGoal) => {
+        if (g.id !== task.goalId) return g;
+        const current = g.quantityDone ?? 0;
+        return { ...g, quantityDone: isDone ? current + 1 : Math.max(0, current - 1) };
+      });
+    }
+
     await savePlan.mutateAsync({
       childId,
       weekId,
       tasks: updatedTasks,
-      goals: plan.goals ?? [],
+      goals: updatedGoals,
       publishedAt: plan.publishedAt,
       reviewedAt: plan.reviewedAt,
       parentComment: plan.reviewComment,

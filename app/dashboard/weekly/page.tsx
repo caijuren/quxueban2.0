@@ -40,15 +40,18 @@ import MetricRing from '@/components/ui/MetricRing';
 import WeeklyReportExport from '@/components/weekly/WeeklyReportExport';
 import GeneratePlanModal from '@/components/weekly/GeneratePlanModal';
 import WeeklyMatrix from '@/components/weekly/WeeklyMatrix';
+import WeeklyGoalsPanel from '@/components/weekly/WeeklyGoalsPanel';
 import { gradeLabel } from '@/lib/children';
 import {
   type WeeklyPlan,
   type WeeklyTaskItem,
+  type WeeklyGoal,
   type TaskStatus,
   type DayOfWeek,
   type TaskCategory,
   type TaskTemplate,
   type TaskAlignment,
+  type TimeSlot,
 } from '@/lib/storage.types';
 import {
   getCurrentWeekId,
@@ -64,7 +67,6 @@ import {
   subjectMeta,
   parseDurationMinutes,
   getTimeSlotLabel,
-  getCategoryDefaultTimeSlot,
   timeSlotOrder,
 } from '@/lib/weeklyTasks';
 import {
@@ -193,7 +195,7 @@ function ProgressRing({ rate, size = 96 }: { rate: number; size?: number }) {
 interface EditPlanModalProps {
   plan: WeeklyPlan;
   onClose: () => void;
-  onSave: (tasks: WeeklyTaskItem[]) => void;
+  onSave: (tasks: WeeklyTaskItem[], goals: WeeklyGoal[]) => void;
 }
 
 const allCategories: TaskCategory[] = [
@@ -215,8 +217,11 @@ function EditPlanModal({ plan, onClose, onSave }: EditPlanModalProps) {
       }),
     [plan.tasks]
   );
+  const initialGoals = useMemo(() => plan.goals ?? [], [plan.goals]);
 
   const [tasks, setTasks] = useState<WeeklyTaskItem[]>(initialTasks);
+  const [goals, setGoals] = useState<WeeklyGoal[]>(initialGoals);
+  const [activeTab, setActiveTab] = useState<'tasks' | 'goals'>('tasks');
   const [collapsedDays, setCollapsedDays] = useState<Record<DayOfWeek, boolean>>(
     () => {
       const init = {} as Record<DayOfWeek, boolean>;
@@ -228,8 +233,11 @@ function EditPlanModal({ plan, onClose, onSave }: EditPlanModalProps) {
   const [showUnsavedPrompt, setShowUnsavedPrompt] = useState(false);
 
   const hasChanges = useMemo(() => {
-    return JSON.stringify(initialTasks) !== JSON.stringify(tasks);
-  }, [initialTasks, tasks]);
+    return (
+      JSON.stringify(initialTasks) !== JSON.stringify(tasks) ||
+      JSON.stringify(initialGoals) !== JSON.stringify(goals)
+    );
+  }, [initialTasks, tasks, initialGoals, goals]);
 
   useEffect(() => {
     if (!hasChanges) return;
@@ -296,9 +304,94 @@ function EditPlanModal({ plan, onClose, onSave }: EditPlanModalProps) {
     setCollapsedDays((prev) => ({ ...prev, [day]: !prev[day] }));
   };
 
+  // Goal management
+  const addGoal = () => {
+    setGoals((prev) => [
+      ...prev,
+      {
+        id: `goal-${Date.now()}-${Math.random().toString(36).slice(2, 5)}`,
+        title: '新目标',
+        category: 'reading',
+        quantityTarget: 0,
+        quantityDone: 0,
+        quantityUnit: '',
+        checklist: [],
+      },
+    ]);
+  };
+
+  const updateGoal = (id: string, updates: Partial<Omit<WeeklyGoal, 'id'>>) => {
+    setGoals((prev) =>
+      prev.map((g) => (g.id === id ? { ...g, ...updates } : g))
+    );
+  };
+
+  const deleteGoal = (id: string) => {
+    setGoals((prev) => prev.filter((g) => g.id !== id));
+    setTasks((prev) =>
+      prev.map((t) => (t.goalId === id ? { ...t, goalId: undefined } : t))
+    );
+  };
+
+  const addGoalChecklistItem = (goalId: string) => {
+    setGoals((prev) =>
+      prev.map((g) => {
+        if (g.id !== goalId) return g;
+        return {
+          ...g,
+          checklist: [
+            ...(g.checklist || []),
+            {
+              id: `check-${Date.now()}-${Math.random().toString(36).slice(2, 5)}`,
+              title: '',
+              text: '',
+              done: false,
+            },
+          ],
+        };
+      })
+    );
+  };
+
+  const updateGoalChecklistItem = (
+    goalId: string,
+    itemId: string,
+    text: string
+  ) => {
+    setGoals((prev) =>
+      prev.map((g) => {
+        if (g.id !== goalId) return g;
+        return {
+          ...g,
+          checklist: (g.checklist || []).map((item) =>
+            item.id === itemId ? { ...item, text, title: text } : item
+          ),
+        };
+      })
+    );
+  };
+
+  const deleteGoalChecklistItem = (goalId: string, itemId: string) => {
+    setGoals((prev) =>
+      prev.map((g) => {
+        if (g.id !== goalId) return g;
+        return {
+          ...g,
+          checklist: (g.checklist || []).filter((item) => item.id !== itemId),
+        };
+      })
+    );
+  };
+
   const handleSave = () => {
     const validTasks = tasks.filter((t) => t.focus.trim() !== '');
-    onSave(validTasks);
+    const validGoals = goals
+      .filter((g) => g.title.trim() !== '')
+      .map((g) => ({
+        ...g,
+        checklist: (g.checklist || []).filter((item) => item.text.trim() !== ''),
+      }));
+    onSave(validTasks, validGoals);
     onClose();
   };
 
@@ -350,7 +443,7 @@ function EditPlanModal({ plan, onClose, onSave }: EditPlanModalProps) {
         isOpen
         onClose={handleClose}
         title="编辑周计划"
-        subtitle="按星期分组管理，支持复制到多天"
+        subtitle="管理任务安排与本周目标"
         icon={Pencil}
         iconClassName="bg-accent"
         size="lg"
@@ -373,88 +466,256 @@ function EditPlanModal({ plan, onClose, onSave }: EditPlanModalProps) {
         }
       >
         <div className="space-y-4">
-          {dayOrder.map((day) => {
-            const dayTasks = tasksByDay[day];
-            const { count, minutes } = dayStats[day];
-            const isCollapsed = collapsedDays[day];
-            return (
-              <div
-                key={day}
-                className="rounded-2xl bg-white/5 border border-white/10 overflow-hidden"
-              >
-                <button
-                  onClick={() => toggleDay(day)}
-                  className="w-full flex items-center justify-between px-4 py-3 hover:bg-white/[0.03] transition-colors"
-                >
-                  <div className="flex items-center gap-3">
-                    <span className="text-sm font-bold text-slate-300">{day}</span>
-                    <span className="text-xs px-2 py-0.5 rounded-full bg-white/5 text-slate-400">
-                      {count} 项
-                    </span>
-                    {minutes > 0 && (
-                      <span className="text-xs px-2 py-0.5 rounded-full bg-white/5 text-slate-400">
-                        约 {minutes} 分钟
-                      </span>
-                    )}
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        addTask(day);
-                      }}
-                      className="p-1.5 rounded-lg hover:bg-white/10 text-slate-400 hover:text-slate-200 transition-colors"
-                      aria-label={`${day}添加任务`}
-                    >
-                      <Plus className="w-4 h-4" />
-                    </button>
-                    <ChevronDown
-                      className={`w-4 h-4 text-slate-500 transition-transform ${
-                        isCollapsed ? '-rotate-90' : ''
-                      }`}
-                    />
-                  </div>
-                </button>
+          <div className="flex items-center gap-2 p-1 rounded-xl bg-surface-elevated border border-border-subtle">
+            <button
+              type="button"
+              onClick={() => setActiveTab('tasks')}
+              className={`flex-1 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
+                activeTab === 'tasks'
+                  ? 'bg-primary text-white'
+                  : 'text-text-tertiary hover:text-text-secondary'
+              }`}
+            >
+              任务安排
+            </button>
+            <button
+              type="button"
+              onClick={() => setActiveTab('goals')}
+              className={`flex-1 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
+                activeTab === 'goals'
+                  ? 'bg-primary text-white'
+                  : 'text-text-tertiary hover:text-text-secondary'
+              }`}
+            >
+              本周目标
+            </button>
+          </div>
 
-                <AnimatePresence initial={false}>
-                  {!isCollapsed && (
-                    <motion.div
-                      initial={shouldReduceMotion ? false : { height: 0, opacity: 0 }}
-                      animate={{ height: 'auto', opacity: 1 }}
-                      exit={shouldReduceMotion ? { opacity: 0 } : { height: 0, opacity: 0 }}
-                      className="overflow-hidden"
+          {activeTab === 'tasks' && (
+            <div className="space-y-3">
+              {dayOrder.map((day) => {
+                const dayTasks = tasksByDay[day];
+                const { count, minutes } = dayStats[day];
+                const isCollapsed = collapsedDays[day];
+                return (
+                  <div
+                    key={day}
+                    className="rounded-2xl bg-white/5 border border-white/10 overflow-hidden"
+                  >
+                    <button
+                      onClick={() => toggleDay(day)}
+                      className="w-full flex items-center justify-between px-4 py-3 hover:bg-white/[0.03] transition-colors"
                     >
-                      <div className="p-3 space-y-3">
-                        {dayTasks.length === 0 && (
-                          <div className="text-center py-4 text-xs text-slate-500">
-                            暂无任务，点击上方 + 添加
-                          </div>
+                      <div className="flex items-center gap-3">
+                        <span className="text-sm font-bold text-slate-300">{day}</span>
+                        <span className="text-xs px-2 py-0.5 rounded-full bg-white/5 text-slate-400">
+                          {count} 项
+                        </span>
+                        {minutes > 0 && (
+                          <span className="text-xs px-2 py-0.5 rounded-full bg-white/5 text-slate-400">
+                            约 {minutes} 分钟
+                          </span>
                         )}
-                        {dayTasks.map((task) => (
-                          <TaskEditRow
-                            key={task.id}
-                            task={task}
-                            isCopying={copyingTaskId === task.id}
-                            onUpdate={updateTask}
-                            onDelete={deleteTask}
-                            onToggleCopy={() =>
-                              setCopyingTaskId(
-                                copyingTaskId === task.id ? null : task.id
-                              )
-                            }
-                            onCopy={(days) => {
-                              duplicateTask(task, days);
-                              setCopyingTaskId(null);
-                            }}
-                          />
-                        ))}
                       </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            addTask(day);
+                          }}
+                          className="p-1.5 rounded-lg hover:bg-white/10 text-slate-400 hover:text-slate-200 transition-colors"
+                          aria-label={`${day}添加任务`}
+                        >
+                          <Plus className="w-4 h-4" />
+                        </button>
+                        <ChevronDown
+                          className={`w-4 h-4 text-slate-500 transition-transform ${
+                            isCollapsed ? '-rotate-90' : ''
+                          }`}
+                        />
+                      </div>
+                    </button>
+
+                    <AnimatePresence initial={false}>
+                      {!isCollapsed && (
+                        <motion.div
+                          initial={shouldReduceMotion ? false : { height: 0, opacity: 0 }}
+                          animate={{ height: 'auto', opacity: 1 }}
+                          exit={shouldReduceMotion ? { opacity: 0 } : { height: 0, opacity: 0 }}
+                          className="overflow-hidden"
+                        >
+                          <div className="p-3 space-y-3">
+                            {dayTasks.length === 0 && (
+                              <div className="text-center py-4 text-xs text-slate-500">
+                                暂无任务，点击上方 + 添加
+                              </div>
+                            )}
+                            {dayTasks.map((task) => (
+                              <TaskEditRow
+                                key={task.id}
+                                task={task}
+                                goals={goals}
+                                isCopying={copyingTaskId === task.id}
+                                onUpdate={updateTask}
+                                onDelete={deleteTask}
+                                onToggleCopy={() =>
+                                  setCopyingTaskId(
+                                    copyingTaskId === task.id ? null : task.id
+                                  )
+                                }
+                                onCopy={(days) => {
+                                  duplicateTask(task, days);
+                                  setCopyingTaskId(null);
+                                }}
+                              />
+                            ))}
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+
+          {activeTab === 'goals' && (
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <p className="text-xs text-text-muted">
+                  目标用于汇总进度，任务可绑定到目标自动累计完成量
+                </p>
+                <button
+                  type="button"
+                  onClick={addGoal}
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-primary text-white text-xs font-medium"
+                >
+                  <Plus className="w-3.5 h-3.5" />
+                  新建目标
+                </button>
               </div>
-            );
-          })}
+
+              {goals.length === 0 && (
+                <div className="text-center py-10 rounded-2xl bg-white/5 border border-white/10">
+                  <Target className="w-8 h-8 text-text-muted mx-auto mb-2" />
+                  <p className="text-sm text-text-muted">还没有目标，点击上方添加</p>
+                </div>
+              )}
+
+              <div className="grid grid-cols-1 gap-4">
+                {goals.map((goal) => (
+                  <div
+                    key={goal.id}
+                    className="rounded-2xl bg-white/5 border border-white/10 p-4 space-y-3"
+                  >
+                    <div className="grid grid-cols-12 gap-3 items-start">
+                      <div className="col-span-5">
+                        <label className="block text-2xs text-text-muted mb-1">目标名称</label>
+                        <input
+                          type="text"
+                          value={goal.title}
+                          onChange={(e) => updateGoal(goal.id, { title: e.target.value })}
+                          placeholder="例如：阅读精读"
+                          className="w-full text-xs bg-surface-elevated border border-border-default rounded-lg px-2 py-1.5 text-text-secondary placeholder:text-text-muted focus:outline-none focus:border-accent/50"
+                        />
+                      </div>
+                      <div className="col-span-3">
+                        <label className="block text-2xs text-text-muted mb-1">类别</label>
+                        <select
+                          value={goal.category}
+                          onChange={(e) =>
+                            updateGoal(goal.id, { category: e.target.value as TaskCategory })
+                          }
+                          className="w-full text-xs bg-surface-elevated border border-border-default rounded-lg px-2 py-1.5 text-text-secondary focus:outline-none focus:border-accent/50"
+                        >
+                          {allCategories.map((c) => (
+                            <option key={c} value={c}>
+                              {TASK_CATEGORY_LABELS[c]}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                      <div className="col-span-2">
+                        <label className="block text-2xs text-text-muted mb-1">目标量</label>
+                        <input
+                          type="number"
+                          min={0}
+                          value={goal.quantityTarget ?? 0}
+                          onChange={(e) =>
+                            updateGoal(goal.id, {
+                              quantityTarget: parseInt(e.target.value || '0', 10),
+                            })
+                          }
+                          className="w-full text-xs bg-surface-elevated border border-border-default rounded-lg px-2 py-1.5 text-text-secondary focus:outline-none focus:border-accent/50"
+                        />
+                      </div>
+                      <div className="col-span-2">
+                        <label className="block text-2xs text-text-muted mb-1">单位</label>
+                        <input
+                          type="text"
+                          value={goal.quantityUnit ?? ''}
+                          onChange={(e) =>
+                            updateGoal(goal.id, { quantityUnit: e.target.value })
+                          }
+                          placeholder="篇/首"
+                          className="w-full text-xs bg-surface-elevated border border-border-default rounded-lg px-2 py-1.5 text-text-secondary placeholder:text-text-muted focus:outline-none focus:border-accent/50"
+                        />
+                      </div>
+                    </div>
+
+                    <div>
+                      <div className="flex items-center justify-between mb-2">
+                        <label className="block text-2xs text-text-muted">明细清单</label>
+                        <button
+                          type="button"
+                          onClick={() => addGoalChecklistItem(goal.id)}
+                          className="text-2xs text-primary hover:text-primary-glow"
+                        >
+                          + 添加明细
+                        </button>
+                      </div>
+                      <div className="space-y-2">
+                        {(goal.checklist || []).map((item) => (
+                          <div key={item.id} className="flex items-center gap-2">
+                            <input
+                              type="text"
+                              value={item.text}
+                              onChange={(e) =>
+                                updateGoalChecklistItem(goal.id, item.id, e.target.value)
+                              }
+                              placeholder="例如：《朝花夕拾》精读第二章"
+                              className="flex-1 text-xs bg-surface-elevated border border-border-default rounded-lg px-2 py-1.5 text-text-secondary placeholder:text-text-muted focus:outline-none focus:border-accent/50"
+                            />
+                            <button
+                              type="button"
+                              onClick={() => deleteGoalChecklistItem(goal.id, item.id)}
+                              className="p-1.5 rounded-lg hover:bg-error/10 text-text-muted hover:text-error transition-colors"
+                            >
+                              <Trash2 className="w-3.5 h-3.5" />
+                            </button>
+                          </div>
+                        ))}
+                        {(goal.checklist || []).length === 0 && (
+                          <p className="text-xs text-text-muted">暂无明细</p>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="flex justify-end">
+                      <button
+                        type="button"
+                        onClick={() => deleteGoal(goal.id)}
+                        className="text-xs text-error hover:text-error/80 flex items-center gap-1"
+                      >
+                        <Trash2 className="w-3 h-3" />
+                        删除目标
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </Modal>
 
@@ -477,6 +738,7 @@ const durationPresets = ['15分钟', '20分钟', '30分钟', '45分钟', '60分�
 
 interface TaskEditRowProps {
   task: WeeklyTaskItem;
+  goals: WeeklyGoal[];
   isCopying: boolean;
   onUpdate: (id: string, updates: Partial<Omit<WeeklyTaskItem, 'id'>>) => void;
   onDelete: (id: string) => void;
@@ -486,6 +748,7 @@ interface TaskEditRowProps {
 
 function TaskEditRow({
   task,
+  goals,
   isCopying,
   onUpdate,
   onDelete,
@@ -523,7 +786,6 @@ function TaskEditRow({
               onChange={(e) =>
                 onUpdate(task.id, {
                   category: e.target.value as TaskCategory,
-                  timeSlot: getCategoryDefaultTimeSlot(e.target.value as TaskCategory),
                 })
               }
               className="w-full pl-7 pr-2 text-xs bg-surface-elevated border border-border-default rounded-lg py-1.5 text-text-secondary focus:outline-none focus:border-accent/50"
@@ -551,7 +813,7 @@ function TaskEditRow({
         <div className="col-span-4 sm:col-span-2">
           <label className="block text-2xs text-text-muted mb-1">时段</label>
           <select
-            value={task.timeSlot || getCategoryDefaultTimeSlot(task.category)}
+            value={task.timeSlot || 'flexible'}
             onChange={(e) => onUpdate(task.id, { timeSlot: e.target.value as TimeSlot })}
             className="w-full text-xs bg-surface-elevated border border-border-default rounded-lg px-2 py-1.5 text-text-secondary focus:outline-none focus:border-accent/50"
           >
@@ -611,6 +873,26 @@ function TaskEditRow({
             <Trash2 className="w-4 h-4" />
           </button>
         </div>
+      </div>
+
+      <div className="mt-2">
+        <label className="block text-2xs text-text-muted mb-1">绑定目标</label>
+        <select
+          value={task.goalId || ''}
+          onChange={(e) =>
+            onUpdate(task.id, {
+              goalId: e.target.value || undefined,
+            })
+          }
+          className="w-full text-xs bg-surface-elevated border border-border-default rounded-lg px-2 py-1.5 text-text-secondary focus:outline-none focus:border-accent/50"
+        >
+          <option value="">不绑定目标</option>
+          {goals.map((g) => (
+            <option key={g.id} value={g.id}>
+              {g.title}
+            </option>
+          ))}
+        </select>
       </div>
 
       <div className="mt-2">
@@ -1180,8 +1462,26 @@ function WeeklyTasksContent() {
     setDraftPlan(null);
   };
 
+  const adjustGoalProgress = (
+    goals: WeeklyGoal[] | undefined,
+    task: WeeklyTaskItem,
+    newStatus: TaskStatus
+  ): WeeklyGoal[] => {
+    if (!goals || !task.goalId) return goals ?? [];
+    const wasDone = task.status === 'done';
+    const isDone = newStatus === 'done';
+    if (wasDone === isDone) return goals;
+    return goals.map((g) => {
+      if (g.id !== task.goalId) return g;
+      const current = g.quantityDone ?? 0;
+      const next = isDone ? current + 1 : Math.max(0, current - 1);
+      return { ...g, quantityDone: next };
+    });
+  };
+
   const handleToggleTask = async (task: WeeklyTaskItem) => {
     if (!currentChild || !displayPlan) return;
+    const newStatus = toggleTaskStatus(task.status);
     if (isDraft) {
       setDraftPlan((prev) => {
         if (!prev) return prev;
@@ -1191,12 +1491,13 @@ function WeeklyTasksContent() {
             t.id === task.id
               ? {
                   ...t,
-                  status: toggleTaskStatus(t.status),
+                  status: newStatus,
                   completedAt:
-                    t.status !== 'done' ? new Date().toISOString() : undefined,
+                    newStatus === 'done' ? new Date().toISOString() : undefined,
                 }
               : t
           ),
+          goals: adjustGoalProgress(prev.goals, task, newStatus),
         };
       });
       return;
@@ -1205,7 +1506,7 @@ function WeeklyTasksContent() {
       currentChild.id,
       weekId,
       task.id,
-      toggleTaskStatus(task.status)
+      newStatus
     );
   };
 
@@ -1225,12 +1526,12 @@ function WeeklyTasksContent() {
     setReviewOpen(false);
   };
 
-  const handleSaveTasks = async (tasks: WeeklyTaskItem[]) => {
+  const handleSaveTasks = async (tasks: WeeklyTaskItem[], goals: WeeklyGoal[]) => {
     if (!displayPlan || !currentChild) return;
     if (isDraft) {
-      setDraftPlan({ ...displayPlan, tasks });
+      setDraftPlan({ ...displayPlan, tasks, goals });
     } else {
-      await publishWeeklyPlan({ ...displayPlan, tasks });
+      await publishWeeklyPlan({ ...displayPlan, tasks, goals });
     }
   };
 
@@ -1241,6 +1542,15 @@ function WeeklyTasksContent() {
       setDraftPlan({ ...displayPlan, tasks: updatedTasks });
     } else {
       publishWeeklyPlan({ ...displayPlan, tasks: updatedTasks });
+    }
+  };
+
+  const handleGoalsChange = async (goals: WeeklyGoal[]) => {
+    if (!displayPlan || !currentChild) return;
+    if (isDraft) {
+      setDraftPlan({ ...displayPlan, goals });
+    } else {
+      await publishWeeklyPlan({ ...displayPlan, goals });
     }
   };
 
@@ -1570,6 +1880,14 @@ function WeeklyTasksContent() {
             </div>
           </CommandCard>
         </motion.div>
+      )}
+
+      {displayPlan && (
+        <WeeklyGoalsPanel
+          goals={displayPlan.goals ?? []}
+          tasks={displayPlan.tasks}
+          onChange={handleGoalsChange}
+        />
       )}
 
       <AnimatePresence mode="wait">

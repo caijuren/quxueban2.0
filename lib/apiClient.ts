@@ -17,7 +17,9 @@ async function handleResponse<T>(res: Response): Promise<T> {
   }
 
   if (!res.ok) {
-    throw new ApiError(res.status, data as ApiError['info']);
+    const info = data as ApiError['info'];
+    console.error('[apiClient] request failed:', res.status, info);
+    throw new ApiError(res.status, info);
   }
 
   return data as T;
