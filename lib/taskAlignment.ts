@@ -66,6 +66,8 @@ function normalizeCompletionRecord(
     note: record.note ?? '',
     imageUrls: record.imageUrls ?? [],
     capabilityProgress: record.capabilityProgress ?? [],
+    quantityIncrement: record.quantityIncrement ?? 0,
+    checklistProgress: record.checklistProgress ?? [],
     dingtalkPushedAt: record.dingtalkPushedAt,
     createdAt: record.createdAt ?? new Date().toISOString(),
     updatedAt: record.updatedAt ?? new Date().toISOString(),

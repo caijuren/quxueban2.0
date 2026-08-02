@@ -1,6 +1,6 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
-import { Shield, LayoutDashboard, Users } from 'lucide-react';
+import { Shield, LayoutDashboard, Users, Sparkles } from 'lucide-react';
 
 export const metadata: Metadata = {
   title: '管理后台 - 趣学伴',
@@ -10,6 +10,7 @@ export const metadata: Metadata = {
 const navItems = [
   { href: '/admin', icon: LayoutDashboard, label: '概览' },
   { href: '/admin/users', icon: Users, label: '用户' },
+  { href: '/admin/ai-config', icon: Sparkles, label: 'AI 配置' },
 ];
 
 export default function AdminLayout({

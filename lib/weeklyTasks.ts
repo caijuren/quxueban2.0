@@ -11,6 +11,7 @@ import {
   type TaskCategory,
   type TaskTemplate,
   type TaskWeeklySchedule,
+  type TimeSlot,
 } from './storage.types';
 import { computeTaskAlignment } from './taskAlignment';
 import { SYSTEM_TASK_TEMPLATES, TASK_CATEGORY_LABELS } from './taskTemplates';
@@ -24,6 +25,39 @@ export const dayOrder: DayOfWeek[] = [
   '周六',
   '周日',
 ];
+
+export const timeSlotOrder: TimeSlot[] = [
+  'morning',
+  'afternoon',
+  'evening',
+  'flexible',
+];
+
+export function getCategoryDefaultTimeSlot(category: TaskCategory): TimeSlot {
+  const map: Record<TaskCategory, TimeSlot> = {
+    school: 'morning',
+    reading: 'afternoon',
+    sport: 'afternoon',
+    interest: 'evening',
+    ability: 'evening',
+    other: 'flexible',
+  };
+  return map[category] || 'flexible';
+}
+
+export function getTimeSlotLabel(timeSlot: TimeSlot): string {
+  const map: Record<TimeSlot, string> = {
+    morning: '上午',
+    beforeNoon: '上午',
+    noon: '中午',
+    afternoon: '下午',
+    afterSchool: '放学后',
+    evening: '晚上',
+    night: '夜间',
+    flexible: '灵活',
+  };
+  return map[timeSlot] || '灵活';
+}
 
 export const subjectMeta: Record<
   SubjectId,
@@ -330,6 +364,9 @@ export interface PlanStats {
   pending: number;
   completionRate: number;
   estimatedMinutes: number;
+  quantityTarget: number;
+  quantityDone: number;
+  quantityRate: number;
   byCategory: Record<
     TaskCategory,
     { total: number; done: number; skipped: number; pending: number }
@@ -356,6 +393,18 @@ export function getPlanStats(plan: WeeklyPlan): PlanStats {
     (sum, t) => sum + parseDurationMinutes(t.duration),
     0
   );
+
+  const goals = plan.goals || [];
+  const quantityTarget = goals.reduce(
+    (sum, g) => sum + (g.quantityTarget ?? 0),
+    0
+  );
+  const quantityDone = Math.min(
+    quantityTarget,
+    goals.reduce((sum, g) => sum + (g.quantityDone ?? 0), 0)
+  );
+  const quantityRate =
+    quantityTarget === 0 ? 0 : Math.round((quantityDone / quantityTarget) * 100);
 
   const byCategory = {} as Record<
     TaskCategory,
@@ -396,6 +445,9 @@ export function getPlanStats(plan: WeeklyPlan): PlanStats {
     pending,
     completionRate,
     estimatedMinutes,
+    quantityTarget,
+    quantityDone,
+    quantityRate,
     byCategory,
     byDay,
   };
@@ -410,6 +462,12 @@ export function generateAiReview(plan: WeeklyPlan, childName: string): string {
   const lines: string[] = [
     `${childName}本周共 ${stats.total} 项任务，已完成 ${stats.done} 项，整体完成率 ${stats.completionRate}%。`,
   ];
+
+  if (stats.quantityTarget > 0) {
+    lines.push(
+      `定量目标完成 ${stats.quantityDone}/${stats.quantityTarget}，完成率 ${stats.quantityRate}%。`
+    );
+  }
 
   const activeCategories = defaultCategories.filter((cat) => stats.byCategory[cat].total > 0);
   activeCategories.forEach((category) => {

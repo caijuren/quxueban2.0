@@ -16,21 +16,6 @@ export interface TaskCapabilityProgress {
   progressDelta: number;
 }
 
-export interface TaskCompletionRecord {
-  id: string;
-  date: string;
-  status: TaskStatus;
-  progress: number;
-  actualDurationMinutes: number;
-  quality: TaskCompletionQuality | null;
-  note: string;
-  imageUrls: string[];
-  capabilityProgress: TaskCapabilityProgress[];
-  dingtalkPushedAt?: string;
-  createdAt: string;
-  updatedAt: string;
-}
-
 export type DayOfWeek = '周一' | '周二' | '周三' | '周四' | '周五' | '周六' | '周日';
 
 export type SubjectId = 'chinese' | 'math' | 'english';
@@ -47,6 +32,50 @@ export type TaskSource = 'auto' | 'library' | 'manual';
 
 export type TaskAlignment = 'ahead' | 'ontrack' | 'behind' | 'optional' | 'unrelated';
 
+export interface TaskCompletionRecord {
+  id: string;
+  date: string;
+  status: TaskStatus;
+  progress: number;
+  actualDurationMinutes: number;
+  quality: TaskCompletionQuality | null;
+  note: string;
+  imageUrls: string[];
+  capabilityProgress: TaskCapabilityProgress[];
+  quantityIncrement: number;
+  checklistProgress: string[];
+  dingtalkPushedAt?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export type TimeSlot =
+  | 'morning'
+  | 'beforeNoon'
+  | 'noon'
+  | 'afternoon'
+  | 'afterSchool'
+  | 'evening'
+  | 'night'
+  | 'flexible';
+
+export interface WeeklyGoalChecklistItem {
+  id: string;
+  title: string;
+  text: string;
+  done: boolean;
+}
+
+export interface WeeklyGoal {
+  id: string;
+  title: string;
+  category: TaskCategory;
+  quantityTarget?: number;
+  quantityDone?: number;
+  quantityUnit?: string;
+  checklist?: WeeklyGoalChecklistItem[];
+}
+
 export interface WeeklyTaskItem {
   id: string;
   category: TaskCategory;
@@ -55,12 +84,14 @@ export interface WeeklyTaskItem {
   templateId?: string;
   alignment?: TaskAlignment;
   day: DayOfWeek;
+  timeSlot?: TimeSlot;
   focus: string;
   duration: string;
   materials: string[];
   status: TaskStatus;
   completedAt?: string;
   note?: string;
+  goalId?: string;
   completionRecords?: TaskCompletionRecord[];
 }
 
@@ -72,6 +103,7 @@ export interface WeeklyPlan {
   reviewedAt?: string;
   reviewComment?: string;
   tasks: WeeklyTaskItem[];
+  goals?: WeeklyGoal[];
 }
 
 export type TaskType = 'daily' | 'milestone' | 'remedial' | 'sprint' | 'diagnostic';

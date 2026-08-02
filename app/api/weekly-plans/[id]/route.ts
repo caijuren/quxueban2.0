@@ -45,6 +45,9 @@ export async function PATCH(req: Request, { params }: Params) {
     });
     data.tasks = normalizedTasks;
   }
+  if (body.goals !== undefined) {
+    data.goals = body.goals as unknown as object[];
+  }
   if (body.publishedAt !== undefined) {
     data.publishedAt = body.publishedAt ? new Date(body.publishedAt) : null;
   }

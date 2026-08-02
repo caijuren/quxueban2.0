@@ -8,6 +8,7 @@ import {
 import { seedSystemTaskTemplatesForUser } from '../lib/seedTaskTemplates';
 import { seedSystemCapabilities } from '../lib/seedCapabilities';
 import { seedSystemSubjectPlans } from '../lib/seedSubjectPlans';
+import { seedBooks } from '../lib/seedBooks';
 import { type EducationSystem } from '../lib/children';
 
 const prisma = new PrismaClient();
@@ -161,6 +162,12 @@ async function main() {
     console.log(`Created weekly plan for ${dabao.name}: ${weekId}`);
   } else {
     console.log(`Weekly plan already exists for ${dabao.name}: ${weekId}`);
+  }
+
+  // 5. Seed teaching-aid books
+  const bookStats = await seedBooks(prisma);
+  if (bookStats.created + bookStats.updated > 0) {
+    console.log(`Seeded teaching-aid books: ${bookStats.created} created, ${bookStats.updated} updated`);
   }
 }
 

@@ -195,6 +195,7 @@ model WeeklyPlan {
   childId        String
   weekId         String
   tasks          Json      @default("[]")
+  goals          Json?     @default("[]")
   publishedAt    DateTime?
   reviewedAt     DateTime?
   parentComment  String?
@@ -365,4 +366,17 @@ model Book {
   @@index([publisherId])
   @@index([contentTypeId])
   @@index([isNewTextbook])
+}
+
+model AiConfig {
+  id        String   @id @default(uuid())
+  provider  String   @default("deepseek")
+  apiKey    String
+  apiUrl    String   @default("https://api.deepseek.com/v1/chat/completions")
+  model     String   @default("deepseek-chat")
+  isEnabled Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([provider])
 }

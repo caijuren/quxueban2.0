@@ -45,6 +45,17 @@ export const dayOfWeekSchema = z.enum([
   '周日',
 ]);
 
+export const timeSlotSchema = z.enum([
+  'morning',
+  'beforeNoon',
+  'noon',
+  'afternoon',
+  'afterSchool',
+  'evening',
+  'night',
+  'flexible',
+]);
+
 export const capabilityCategorySchema = z.enum([
   'chinese',
   'math',
@@ -155,6 +166,8 @@ export const taskCompletionRecordSchema = z.object({
   note: z.string().max(1000).default(''),
   imageUrls: z.array(z.string().url()).default([]),
   capabilityProgress: z.array(taskCapabilityProgressSchema).default([]),
+  quantityIncrement: z.number().int().min(0).default(0),
+  checklistProgress: z.array(z.string().min(1)).default([]),
   dingtalkPushedAt: z.string().datetime().optional(),
   createdAt: z.string().datetime(),
   updatedAt: z.string().datetime(),
@@ -169,12 +182,37 @@ export const taskCompletionInputSchema = z.object({
   note: z.string().max(1000).default(''),
   imageUrls: z.array(z.string().url()).default([]),
   capabilityProgress: z.array(taskCapabilityProgressSchema).default([]),
+  quantityIncrement: z.number().int().min(0).default(0),
+  checklistProgress: z.array(z.string()).default([]),
 });
 
 export const dingTalkPushSchema = z.object({
   childId: z.string().min(1, '孩子 ID 不能为空'),
   date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, '日期格式不正确'),
   taskIds: z.array(z.string()).optional(),
+});
+
+export const dailySummarySchema = z.object({
+  childId: z.string().min(1, '孩子 ID 不能为空'),
+  date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, '日期格式不正确').optional(),
+  taskIds: z.array(z.string()).optional(),
+});
+
+export const weeklyGoalChecklistItemSchema = z.object({
+  id: z.string().min(1),
+  title: z.string().min(1),
+  text: z.string().min(1),
+  done: z.boolean().default(false),
+});
+
+export const weeklyGoalSchema = z.object({
+  id: z.string().min(1),
+  title: z.string().min(1, '目标标题不能为空'),
+  category: taskCategorySchema,
+  quantityTarget: z.number().int().min(0).optional(),
+  quantityDone: z.number().int().min(0).optional(),
+  quantityUnit: z.string().max(20).optional(),
+  checklist: z.array(weeklyGoalChecklistItemSchema).optional(),
 });
 
 export const weeklyTaskItemSchema = z.object({
@@ -187,6 +225,7 @@ export const weeklyTaskItemSchema = z.object({
     .enum(['ahead', 'ontrack', 'behind', 'optional', 'unrelated'])
     .optional(),
   day: dayOfWeekSchema,
+  timeSlot: timeSlotSchema.optional(),
   focus: z.string().min(1, '任务内容不能为空').max(200),
   duration: z.string().max(50).default('30分钟'),
   materials: z.array(z.string().max(100)).default([]),
@@ -200,6 +239,7 @@ export const weeklyPlanCreateSchema = z.object({
   childId: z.string().min(1, '孩子 ID 不能为空'),
   weekId: z.string().min(1, '周 ID 不能为空'),
   tasks: z.array(weeklyTaskItemSchema).min(1, '任务列表不能为空'),
+  goals: z.array(weeklyGoalSchema).default([]),
   publishedAt: z.string().datetime().nullable().optional(),
   reviewedAt: z.string().datetime().nullable().optional(),
   parentComment: z.string().max(1000).nullable().optional(),
@@ -207,6 +247,7 @@ export const weeklyPlanCreateSchema = z.object({
 
 export const weeklyPlanUpdateSchema = z.object({
   tasks: z.array(weeklyTaskItemSchema).optional(),
+  goals: z.array(weeklyGoalSchema).optional(),
   publishedAt: z.string().datetime().nullable().optional(),
   reviewedAt: z.string().datetime().nullable().optional(),
   parentComment: z.string().max(1000).nullable().optional(),
@@ -349,6 +390,7 @@ export type AccountDeleteInput = z.infer<typeof accountDeleteSchema>;
 export type UserSettingsUpdateInput = z.infer<typeof userSettingsUpdateSchema>;
 export type TaskCompletionInput = z.infer<typeof taskCompletionInputSchema>;
 export type DingTalkPushInput = z.infer<typeof dingTalkPushSchema>;
+export type DailySummaryInput = z.infer<typeof dailySummarySchema>;
 export type AiTaskAssessmentInput = z.infer<typeof aiTaskAssessmentSchema>;
 export type SubjectPlanUpdateInput = z.infer<typeof subjectPlanUpdateSchema>;
 

@@ -1,22 +1,28 @@
 'use client';
 
 import { motion, useReducedMotion } from 'framer-motion';
-import { Calculator, ArrowLeft, AlertCircle } from 'lucide-react';
+import { Calculator, ArrowLeft, AlertCircle, Settings, Loader2 } from 'lucide-react';
 import Link from 'next/link';
 import { useChildren } from '@/components/dashboard/ChildrenContext';
 import ChildEmptyState from '@/components/dashboard/ChildEmptyState';
 import { gradeLabel } from '@/lib/children';
+import { useSubjectPlan } from '@/lib/hooks/useSubjectPlan';
 import { getMathStatusByGrade, getMathPlanByGrade } from '@/lib/subjects/math';
-import MathTrackMap from './MathTrackMap';
+import SubjectTrackMap from '@/components/subjects/SubjectTrackMap';
+import SubjectExamTimeline from '@/components/subjects/SubjectExamTimeline';
 import SubjectCheckIn from '../SubjectCheckIn';
 import AIDiagnosisCard from '../AIDiagnosisCard';
 import MathPhaseCard from './MathPhaseCard';
 import MathTodayTasks from './MathTodayTasks';
-import MathExamTimeline from './MathExamTimeline';
 
 export default function MathSubjectPage() {
   const { currentChild } = useChildren();
   const shouldReduceMotion = useReducedMotion();
+  const {
+    data: config,
+    isLoading,
+    error: queryError,
+  } = useSubjectPlan('math');
 
   if (!currentChild) {
     return (
@@ -73,8 +79,19 @@ export default function MathSubjectPage() {
           </div>
           <div>
             <h1 className="text-2xl sm:text-3xl font-bold font-display">数学学科路径</h1>
+            <p className="text-sm text-text-tertiary mt-0.5">
+              {currentChild.name} · {gradeLabel(currentChild.grade)}
+            </p>
           </div>
         </div>
+
+        <Link
+          href="/dashboard/subjects/math/config"
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-xl glass border border-white/[0.08] text-sm font-medium text-text-secondary hover:text-text-primary hover:bg-white/[0.04] transition-colors"
+        >
+          <Settings className="w-4 h-4" />
+          编辑规划
+        </Link>
       </motion.div>
 
       {/* Check-in + AI diagnosis */}
@@ -90,7 +107,11 @@ export default function MathSubjectPage() {
             />
           </div>
           <div className="lg:col-span-1">
-            <AIDiagnosisCard subject="math" childName={currentChild.name} />
+            <AIDiagnosisCard
+              subject="math"
+              childId={currentChild.id}
+              childName={currentChild.name}
+            />
           </div>
         </div>
       )}
@@ -98,14 +119,39 @@ export default function MathSubjectPage() {
       {/* Today tasks */}
       <MathTodayTasks grade={grade} />
 
-      {/* Track map */}
-      <MathTrackMap />
+      {isLoading && (
+        <div className="flex h-[40vh] items-center justify-center">
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        </div>
+      )}
 
-      {/* Current phase */}
-      <MathPhaseCard grade={grade} />
+      {queryError && (
+        <div className="rounded-2xl border border-error/20 bg-error/10 p-6 text-error">
+          {queryError instanceof Error ? queryError.message : '加载失败'}
+        </div>
+      )}
 
-      {/* Exam timeline */}
-      <MathExamTimeline />
+      {config && (
+        <>
+          {/* Track map */}
+          <SubjectTrackMap
+            config={config}
+            title="数学三条线规划地图"
+            subtitle="从现在到三公，三条主线并行推进"
+            currentGrade={grade}
+          />
+
+          {/* Current phase */}
+          <MathPhaseCard grade={grade} />
+
+          {/* Exam timeline */}
+          <SubjectExamTimeline
+            config={config}
+            title="竞赛证书考试时间轴"
+            subtitle="袋鼠 → 澳洲 AMC → AMC8，关键节点与报名提醒"
+          />
+        </>
+      )}
 
       {/* Link to overall plan */}
       <motion.div

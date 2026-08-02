@@ -13,6 +13,8 @@ import {
   ChevronDown,
   Loader2,
   Settings,
+  Target,
+  Sparkles,
 } from 'lucide-react';
 import { UserWithSettings, applySettingsToDocument } from '@/lib/settings';
 import { useUser, useUpdateUser } from '@/lib/hooks/useUser';
@@ -23,7 +25,7 @@ import ChildrenSection from '@/components/settings/ChildrenSection';
 import DataPrivacySection from '@/components/settings/DataPrivacySection';
 import HelpSection from '@/components/settings/HelpSection';
 import CapabilitySection from '@/components/settings/CapabilitySection';
-import { Target } from 'lucide-react';
+import AiConfigSection from '@/components/settings/AiConfigSection';
 
 const CATEGORIES = [
   { id: 'account', label: '账号与安全', icon: Shield },
@@ -31,6 +33,7 @@ const CATEGORIES = [
   { id: 'appearance', label: '界面偏好', icon: Palette },
   { id: 'children', label: '孩子管理', icon: Users },
   { id: 'capabilities', label: '能力模型', icon: Target },
+  { id: 'ai', label: 'AI 配置', icon: Sparkles },
   { id: 'data', label: '数据与隐私', icon: User },
   { id: 'help', label: '帮助与关于', icon: HelpCircle },
 ];
@@ -177,6 +180,7 @@ function SettingsPageInner() {
         )}
         {activeCategory === 'children' && <ChildrenSection />}
         {activeCategory === 'capabilities' && <CapabilitySection />}
+        {activeCategory === 'ai' && <AiConfigSection />}
         {activeCategory === 'data' && <DataPrivacySection />}
         {activeCategory === 'help' && <HelpSection />}
       </div>

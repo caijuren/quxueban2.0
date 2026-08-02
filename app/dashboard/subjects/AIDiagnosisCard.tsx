@@ -1,11 +1,17 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Brain, Sparkles, ChevronRight, Zap } from 'lucide-react';
-import Link from 'next/link';
+import { Brain, Sparkles, Zap, Loader2, AlertCircle } from 'lucide-react';
+import { useEffect, useMemo } from 'react';
+import { useWeeklyPlans } from '@/lib/hooks/useWeeklyPlans';
+import { useAssessTasks } from '@/lib/hooks/useTaskAssessment';
+import TaskRationalityPanel from '@/components/ai/TaskRationalityPanel';
+import { AssessmentTaskInput } from '@/lib/ai/taskAssessment';
+import { WeeklyTaskItem } from '@/lib/storage.types';
 
 interface AIDiagnosisCardProps {
   subject: 'english' | 'math' | 'chinese';
+  childId?: string;
   childName?: string;
 }
 
@@ -21,7 +27,31 @@ const insights: Record<string, string[]> = {
   chinese: ['古诗文积累进度评估', '输出能力训练重点', '竞赛荣誉规划建议'],
 };
 
-export default function AIDiagnosisCard({ subject, childName = '孩子' }: AIDiagnosisCardProps) {
+function toAssessmentInput(task: WeeklyTaskItem): AssessmentTaskInput {
+  return {
+    title: task.focus,
+    category: task.category,
+    difficulty: null,
+    duration: task.duration,
+  };
+}
+
+export default function AIDiagnosisCard({ subject, childId, childName = '孩子' }: AIDiagnosisCardProps) {
+  const { data: plans, isLoading: plansLoading } = useWeeklyPlans(childId);
+  const { mutate: assess, data: assessments, isPending, error } = useAssessTasks();
+
+  const subjectTasks = useMemo(() => {
+    if (!plans || plans.length === 0) return [];
+    const latest = plans.reduce((a, b) => (a.weekId > b.weekId ? a : b));
+    return latest.tasks.filter((t) => t.subjectId === subject);
+  }, [plans, subject]);
+
+  useEffect(() => {
+    if (!childId || subjectTasks.length === 0) return;
+    const tasks = subjectTasks.map(toAssessmentInput);
+    assess({ childId, tasks, context: {} });
+  }, [childId, subjectTasks, assess]);
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -38,7 +68,7 @@ export default function AIDiagnosisCard({ subject, childName = '孩子' }: AIDia
 
       <div className="relative p-6">
         <div className="flex items-start justify-between gap-4">
-          <div>
+          <div className="w-full">
             <div className="flex items-center gap-2 mb-3">
               <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-secondary to-violet-400 flex items-center justify-center">
                 <Brain className="w-5 h-5 text-white" />
@@ -55,25 +85,41 @@ export default function AIDiagnosisCard({ subject, childName = '孩子' }: AIDia
               基于 {childName} 的当前进度、打卡记录和弱项，AI 将给出个性化的学习调整建议。
             </p>
 
-            <div className="flex flex-wrap gap-2 mb-5">
-              {insights[subject].map((item) => (
-                <span
-                  key={item}
-                  className="px-3 py-1.5 rounded-lg bg-surface-elevated border border-border-subtle text-xs text-text-secondary flex items-center gap-1.5"
-                >
-                  <Zap className="w-3 h-3 text-warning" />
-                  {item}
-                </span>
-              ))}
-            </div>
-
-            <Link
-              href="/dashboard/ai"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-accent text-white text-sm font-medium hover:opacity-90 transition-opacity"
-            >
-              开始 AI 诊断
-              <ChevronRight className="w-4 h-4" />
-            </Link>
+            {!childId || plansLoading || isPending ? (
+              <div className="flex items-center gap-2 text-sm text-text-tertiary py-4">
+                <Loader2 className="w-4 h-4 animate-spin" />
+                正在分析 {subjectLabels[subject]} 任务合理性…
+              </div>
+            ) : error ? (
+              <div className="flex items-start gap-2 text-sm text-error py-2">
+                <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
+                <span>诊断失败：{error.message}</span>
+              </div>
+            ) : subjectTasks.length === 0 ? (
+              <div className="text-sm text-text-tertiary py-2">
+                当前周计划暂无{subjectLabels[subject]}任务，发布计划后将自动生成诊断。
+              </div>
+            ) : assessments && assessments.length > 0 ? (
+              <div className="mt-2">
+                <TaskRationalityPanel
+                  assessments={assessments}
+                  taskTitles={subjectTasks.map((t) => t.focus)}
+                  compact
+                />
+              </div>
+            ) : (
+              <div className="flex flex-wrap gap-2 mb-5">
+                {insights[subject].map((item) => (
+                  <span
+                    key={item}
+                    className="px-3 py-1.5 rounded-lg bg-surface-elevated border border-border-subtle text-xs text-text-secondary flex items-center gap-1.5"
+                  >
+                    <Zap className="w-3 h-3 text-warning" />
+                    {item}
+                  </span>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       </div>

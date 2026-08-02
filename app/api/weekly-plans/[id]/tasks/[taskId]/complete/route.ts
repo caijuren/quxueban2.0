@@ -61,6 +61,8 @@ export async function POST(req: Request, { params }: Params) {
     note: body.note,
     imageUrls: body.imageUrls,
     capabilityProgress: body.capabilityProgress,
+    quantityIncrement: body.quantityIncrement,
+    checklistProgress: body.checklistProgress,
     createdAt: now,
     updatedAt: now,
   };
@@ -90,7 +92,9 @@ export async function POST(req: Request, { params }: Params) {
 
   const updated = await prisma.weeklyPlan.update({
     where: { id: params.id },
-    data: { tasks: tasks as unknown as object[] },
+    data: {
+      tasks: tasks as unknown as object[],
+    },
   });
 
   const normalizedTasks = ((updated.tasks as unknown as Partial<WeeklyTaskItem>[]) || []).map(

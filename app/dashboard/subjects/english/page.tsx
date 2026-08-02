@@ -1,13 +1,15 @@
 'use client';
 
 import { motion, useReducedMotion } from 'framer-motion';
-import { Languages, ArrowLeft, AlertCircle, BookOpen } from 'lucide-react';
+import { Languages, ArrowLeft, AlertCircle, BookOpen, Settings, Loader2 } from 'lucide-react';
 import Link from 'next/link';
 import { useChildren } from '@/components/dashboard/ChildrenContext';
 import ChildEmptyState from '@/components/dashboard/ChildEmptyState';
 import { gradeLabel } from '@/lib/children';
+import { useSubjectPlan } from '@/lib/hooks/useSubjectPlan';
 import { getEnglishStatusByGrade, getEnglishPlanByGrade } from '@/lib/subjects/english';
-import EnglishTrackMap from './EnglishTrackMap';
+import SubjectTrackMap from '@/components/subjects/SubjectTrackMap';
+import SubjectExamTimeline from '@/components/subjects/SubjectExamTimeline';
 import SubjectCheckIn from '../SubjectCheckIn';
 import AIDiagnosisCard from '../AIDiagnosisCard';
 import CurrentPhaseCard from './CurrentPhaseCard';
@@ -15,12 +17,16 @@ import TodayTasks from './TodayTasks';
 import OD1Schedule from './OD1Schedule';
 import ResourceList from './ResourceList';
 import SpeakWritePlan from './SpeakWritePlan';
-import ExamTimeline from './ExamTimeline';
 import LexileReference from './LexileReference';
 
 export default function EnglishSubjectPage() {
   const { currentChild } = useChildren();
   const shouldReduceMotion = useReducedMotion();
+  const {
+    data: config,
+    isLoading,
+    error: queryError,
+  } = useSubjectPlan('english');
 
   if (!currentChild) {
     return (
@@ -77,8 +83,19 @@ export default function EnglishSubjectPage() {
           </div>
           <div>
             <h1 className="text-2xl sm:text-3xl font-bold font-display">英语学科路径</h1>
+            <p className="text-sm text-text-tertiary mt-0.5">
+              {currentChild.name} · {gradeLabel(currentChild.grade)}
+            </p>
           </div>
         </div>
+
+        <Link
+          href="/dashboard/subjects/english/config"
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-xl glass border border-white/[0.08] text-sm font-medium text-text-secondary hover:text-text-primary hover:bg-white/[0.04] transition-colors"
+        >
+          <Settings className="w-4 h-4" />
+          编辑规划
+        </Link>
       </motion.div>
 
       {/* Check-in + AI diagnosis */}
@@ -94,7 +111,11 @@ export default function EnglishSubjectPage() {
             />
           </div>
           <div className="lg:col-span-1">
-            <AIDiagnosisCard subject="english" childName={currentChild.name} />
+            <AIDiagnosisCard
+              subject="english"
+              childId={currentChild.id}
+              childName={currentChild.name}
+            />
           </div>
         </div>
       )}
@@ -102,23 +123,48 @@ export default function EnglishSubjectPage() {
       {/* Today tasks */}
       <TodayTasks grade={grade} />
 
-      {/* Track map */}
-      <EnglishTrackMap />
+      {isLoading && (
+        <div className="flex h-[40vh] items-center justify-center">
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        </div>
+      )}
 
-      {/* Current phase */}
-      <CurrentPhaseCard grade={grade} />
+      {queryError && (
+        <div className="rounded-2xl border border-error/20 bg-error/10 p-6 text-error">
+          {queryError instanceof Error ? queryError.message : '加载失败'}
+        </div>
+      )}
 
-      {/* Speak & write weak skills plan */}
-      <SpeakWritePlan grade={grade} />
+      {config && (
+        <>
+          {/* Track map */}
+          <SubjectTrackMap
+            config={config}
+            title="英语三条线规划地图"
+            subtitle="从现在到三公，三条主线并行推进"
+            currentGrade={grade}
+          />
 
-      {/* OD1 schedule - only for grade 2 */}
-      {grade === 2 && <OD1Schedule currentUnit={status.odUnit} />}
+          {/* Current phase */}
+          <CurrentPhaseCard grade={grade} />
 
-      {/* Exam timeline + Lexile reference */}
-      <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
-        <ExamTimeline />
-        <LexileReference />
-      </div>
+          {/* Speak & write weak skills plan */}
+          <SpeakWritePlan grade={grade} />
+
+          {/* OD1 schedule - only for grade 2 */}
+          {grade === 2 && <OD1Schedule currentUnit={status.odUnit} />}
+
+          {/* Exam timeline + Lexile reference */}
+          <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
+            <SubjectExamTimeline
+              config={config}
+              title="证书考试时间轴"
+              subtitle="KET → PET → 小托福，关键节点与报名提醒"
+            />
+            <LexileReference />
+          </div>
+        </>
+      )}
 
       {/* Resources & checkpoints */}
       <ResourceList />

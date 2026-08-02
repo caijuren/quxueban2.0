@@ -396,27 +396,287 @@ export const DEFAULT_CHINESE_PLAN: SubjectPlanConfigData = {
   ],
 };
 
-export async function seedSystemSubjectPlans(prisma: PrismaClient): Promise<number> {
-  const existingCount = await prisma.subjectPlanConfig.count({
-    where: { isSystem: true, subject: 'chinese' },
-  });
+export const DEFAULT_MATH_PLAN: SubjectPlanConfigData = {
+  tracks: [
+    {
+      id: 'school',
+      name: '校内数学',
+      color: '#3b82f6',
+      description: '保证校内成绩，建立计算和基础能力',
+    },
+    {
+      id: 'olympiad',
+      name: '奥数体系',
+      color: '#8b5cf6',
+      description: '系统学习奥数七大模块，为 AMC8 打基础',
+    },
+    {
+      id: 'exam',
+      name: '竞赛证书',
+      color: '#f59e0b',
+      description: '袋鼠、澳洲 AMC、AMC8 等三公硬通货',
+    },
+  ],
+  timeAxis: [
+    { label: '2025 暑假', position: 0 },
+    { label: '二上', position: 12 },
+    { label: '二下', position: 24 },
+    { label: '三上', position: 36 },
+    { label: '三下', position: 48 },
+    { label: '四上', position: 60 },
+    { label: '四下', position: 72 },
+    { label: '五上', position: 84 },
+    { label: '三公', position: 100 },
+  ],
+  nodes: [
+    { id: 'm-school-1', trackId: 'school', label: '二年级校内', position: 0, time: '2025.09', detail: '校内计算、应用题稳定 95+' },
+    { id: 'm-school-2', trackId: 'school', label: '三年级校内', position: 25, time: '2026.09', detail: '四则运算、几何基础扎实' },
+    { id: 'm-school-3', trackId: 'school', label: '四年级校内', position: 50, time: '2027.09', detail: '分数小数、简单方程' },
+    { id: 'm-school-4', trackId: 'school', label: '五年级校内', position: 75, time: '2028.09', detail: '小升初复习，校内成绩保持前列' },
+    { id: 'm-school-5', trackId: 'school', label: '初中衔接', position: 100, time: '2029.09', detail: '初中数学预习' },
+    { id: 'm-olympiad-1', trackId: 'olympiad', label: '奥数启蒙', position: 0, time: '2025.09', detail: '计算、图形、逻辑趣味题' },
+    { id: 'm-olympiad-2', trackId: 'olympiad', label: '系统奥数', position: 25, time: '2026.09', detail: '七大模块入门：计算、几何、数论、组合' },
+    { id: 'm-olympiad-3', trackId: 'olympiad', label: '模块深入', position: 50, time: '2027.09', detail: '数论、组合、几何进阶' },
+    { id: 'm-olympiad-4', trackId: 'olympiad', label: 'AMC8 专题', position: 75, time: '2028.09', detail: 'AMC8 高频考点、真题训练' },
+    { id: 'm-olympiad-5', trackId: 'olympiad', label: '奥数收尾', position: 100, time: '2029.05', detail: '三公前保持手感' },
+    { id: 'm-exam-1', trackId: 'exam', label: '袋鼠 L1/L2', position: 8, time: '2026.04', detail: '低年级竞赛，培养兴趣和节奏' },
+    { id: 'm-exam-2', trackId: 'exam', label: '袋鼠银奖', position: 28, time: '2027.04', detail: '三年级袋鼠 L2 银奖' },
+    { id: 'm-exam-3', trackId: 'exam', label: '澳洲 AMC B', position: 42, time: '2027.09', detail: '四年级澳洲 AMC，目标 Distinction' },
+    { id: 'm-exam-4', trackId: 'exam', label: 'AMC8 首考', position: 58, time: '2028.01', detail: '四年级寒假首考 AMC8，摸底水平' },
+    { id: 'm-exam-5', trackId: 'exam', label: 'AMC8 二考', position: 72, time: '2028.11', detail: '五年级冲 20+' },
+    { id: 'm-exam-6', trackId: 'exam', label: 'AMC8 20+', position: 85, time: '2029.01', detail: '三公简历核心硬通货' },
+  ],
+  keyAchievements: {
+    school: [
+      { time: '二上期末', keyword: '计算稳定', detail: '校内计算、应用题稳定 95+' },
+      { time: '三上期末', keyword: '四则运算', detail: '四则运算、几何基础扎实' },
+      { time: '四上期末', keyword: '分数小数', detail: '分数小数、简单方程掌握' },
+      { time: '五上期末', keyword: '校内前列', detail: '小升初复习，校内成绩保持前列' },
+      { time: '三公前', keyword: '初中衔接', detail: '初中数学预习完成' },
+    ],
+    olympiad: [
+      { time: '二上期末', keyword: '奥数启蒙', detail: '计算、图形、逻辑趣味题入门' },
+      { time: '三上期末', keyword: '七大模块', detail: '七大模块入门：计算、几何、数论、组合' },
+      { time: '四上期末', keyword: '模块深入', detail: '数论、组合、几何进阶' },
+      { time: '五上期末', keyword: 'AMC8 专题', detail: 'AMC8 高频考点、真题训练' },
+      { time: '三公前', keyword: '保持手感', detail: '三公前保持奥数解题手感' },
+    ],
+    exam: [
+      { time: '二年级春季', keyword: '袋鼠 L1', detail: '低年级竞赛，培养兴趣和节奏' },
+      { time: '三年级春季', keyword: '袋鼠银奖', detail: '三年级袋鼠 L2 银奖' },
+      { time: '四年级上', keyword: '澳洲 AMC', detail: '四年级澳洲 AMC，目标 Distinction' },
+      { time: '四年级寒假', keyword: 'AMC8 首考', detail: '四年级寒假首考 AMC8，摸底水平' },
+      { time: '五年级上', keyword: 'AMC8 20+', detail: '五年级冲 20+' },
+    ],
+  },
+  examTimeline: [
+    {
+      id: 'kangaroo-l1',
+      name: '袋鼠数学 L1',
+      target: '体验参赛',
+      date: '2026.04',
+      month: '二年级春季',
+      registerBefore: '2026.03 前报名',
+      notes: '一年级/二年级可参加 L1，重在培养竞赛节奏和兴趣',
+    },
+    {
+      id: 'kangaroo-l2',
+      name: '袋鼠数学 L2',
+      target: '银奖',
+      date: '2027.04',
+      month: '三年级春季',
+      registerBefore: '2027.03 前报名',
+      notes: '三年级参加 L2，目标银奖以上，为简历积累竞赛经历',
+    },
+    {
+      id: 'amc-b',
+      name: '澳洲 AMC B',
+      target: 'Distinction',
+      date: '2027.09',
+      month: '四年级上',
+      registerBefore: '2027.08 前报名',
+      notes: '澳洲 AMC 是 AMC8 前很好的过渡竞赛',
+    },
+    {
+      id: 'amc8-first',
+      name: 'AMC8 首考',
+      target: '15+ 摸底',
+      date: '2028.01',
+      month: '四年级寒假',
+      registerBefore: '2027.11 前报名',
+      notes: 'AMC8 一年一次，首考摸底真实水平',
+    },
+    {
+      id: 'amc8-second',
+      name: 'AMC8 二考',
+      target: '20+',
+      date: '2028.11',
+      month: '五年级上',
+      registerBefore: '2028.10 前报名',
+      notes: '五年级上学期是冲 20+ 的关键考期',
+    },
+    {
+      id: 'amc8-final',
+      name: 'AMC8 最终考',
+      target: '20+',
+      date: '2029.01',
+      month: '五年级寒假',
+      registerBefore: '2028.11 前报名',
+      notes: '三公前最后一次 AMC8，必须拿到 20+',
+    },
+  ],
+};
 
-  if (existingCount > 0) {
-    return 0;
+export const DEFAULT_ENGLISH_PLAN: SubjectPlanConfigData = {
+  tracks: [
+    {
+      id: 'raz',
+      name: 'RAZ 阅读线',
+      color: '#10b981',
+      description: '分级阅读建立阅读量和阅读速度',
+    },
+    {
+      id: 'od',
+      name: 'OD 体系线',
+      color: '#8b5cf6',
+      description: '系统语法、写作和综合输入输出',
+    },
+    {
+      id: 'exam',
+      name: '考证线',
+      color: '#f59e0b',
+      description: 'KET → PET → 小托福，三公硬通货',
+    },
+  ],
+  timeAxis: [
+    { label: '2025 暑假', position: 0 },
+    { label: '2026 寒', position: 13 },
+    { label: '2026 暑', position: 28 },
+    { label: '2027 寒', position: 41 },
+    { label: '2027 暑', position: 54 },
+    { label: '2028 寒', position: 67 },
+    { label: '2028 暑', position: 80 },
+    { label: '2028 冬', position: 91 },
+    { label: '三公', position: 100 },
+  ],
+  nodes: [
+    { id: 'raz-e', trackId: 'raz', position: 0, label: 'RAZ E', detail: '当前级别，quiz 正确率偏低需强化', time: '2025.07' },
+    { id: 'raz-g', trackId: 'raz', position: 13, label: 'RAZ G', detail: 'OD1 收尾时达到', time: '2026.01' },
+    { id: 'raz-ij-1', trackId: 'raz', position: 28, label: 'RAZ I/J', detail: 'OD2 学完时达到', time: '2026.08' },
+    { id: 'raz-ij-2', trackId: 'raz', position: 41, label: 'RAZ I/J', detail: 'KET 备考阶段维持', time: '2027.02' },
+    { id: 'raz-kl-1', trackId: 'raz', position: 54, label: 'RAZ K/L', detail: 'PET 备考阶段达到', time: '2027.08' },
+    { id: 'raz-kl-2', trackId: 'raz', position: 67, label: 'RAZ K/L', detail: 'PET/小托福衔接阶段', time: '2028.02' },
+    { id: 'raz-kl-3', trackId: 'raz', position: 80, label: 'RAZ K/L', detail: '小托福首考阶段', time: '2028.08' },
+    { id: 'raz-kl-4', trackId: 'raz', position: 91, label: 'RAZ K/L', detail: '小托福 850+ 维持', time: '2028.12' },
+    { id: 'od1-u7', trackId: 'od', position: 0, label: 'OD1 U7', detail: '当前进度，四季变化单元', time: '2025.07' },
+    { id: 'od1-u18', trackId: 'od', position: 13, label: 'OD1 U18', detail: 'OD1 全册学完', time: '2026.01' },
+    { id: 'od2-u18', trackId: 'od', position: 28, label: 'OD2 U18', detail: 'OD2 全册学完，蓝思 350-400', time: '2026.08' },
+    { id: 'od2-review', trackId: 'od', position: 41, label: 'OD2 复习', detail: 'KET 备考阶段复习 OD2', time: '2027.02' },
+    { id: 'od3-u9', trackId: 'od', position: 54, label: 'OD3 U9', detail: 'OD3 前半完成', time: '2027.08' },
+    { id: 'od3-u18', trackId: 'od', position: 67, label: 'OD3 U18', detail: 'OD3 全册学完', time: '2028.02' },
+    { id: 'od3-end', trackId: 'od', position: 80, label: 'OD3 收尾', detail: '小托福题型适应期', time: '2028.08' },
+    { id: 'od-maintain', trackId: 'od', position: 91, label: '维持', detail: '保持英语水平', time: '2028.12' },
+    { id: 'exam-start', trackId: 'exam', position: 0, label: '起步', detail: 'RAZ/OD 基础阶段', time: '2025.07' },
+    { id: 'exam-base', trackId: 'exam', position: 13, label: '基础', detail: '继续积累', time: '2026.01' },
+    { id: 'exam-ket-prep', trackId: 'exam', position: 28, label: 'KET 备考', detail: '三年级上学期开始专项', time: '2026.09' },
+    { id: 'exam-ket', trackId: 'exam', position: 41, label: 'KET 卓越', detail: '目标 140+', time: '2027.02' },
+    { id: 'exam-pet-prep', trackId: 'exam', position: 54, label: 'PET 备考', detail: '三年级暑假开始', time: '2027.08' },
+    { id: 'exam-pet', trackId: 'exam', position: 67, label: 'PET 卓越', detail: '目标 160+', time: '2028.02' },
+    { id: 'exam-toefl-1', trackId: 'exam', position: 80, label: '小托福 800+', detail: '四年级春季首考', time: '2028.08' },
+    { id: 'exam-toefl-2', trackId: 'exam', position: 91, label: '小托福 850+', detail: '五年级上 12 月前', time: '2028.12' },
+  ],
+  keyAchievements: {
+    raz: [
+      { time: '2026.01', keyword: 'RAZ G', detail: 'OD1 收尾时达到 RAZ G' },
+      { time: '2026.08', keyword: 'RAZ I/J', detail: 'OD2 学完时达到 RAZ I/J' },
+      { time: '2027.08', keyword: 'RAZ K/L', detail: 'PET 备考阶段达到 RAZ K/L' },
+      { time: '2028.12', keyword: '维持 K/L', detail: '小托福 850+ 维持阅读能力' },
+    ],
+    od: [
+      { time: '2026.01', keyword: 'OD1 完成', detail: 'OD1 全册学完' },
+      { time: '2026.08', keyword: 'OD2 完成', detail: 'OD2 全册学完，蓝思 350-400' },
+      { time: '2028.02', keyword: 'OD3 完成', detail: 'OD3 全册学完' },
+      { time: '2028.12', keyword: 'OD 维持', detail: '小托福题型适应，保持英语水平' },
+    ],
+    exam: [
+      { time: '2027.02', keyword: 'KET 卓越', detail: '目标 KET 卓越 140+' },
+      { time: '2028.02', keyword: 'PET 卓越', detail: '目标 PET 卓越 160+' },
+      { time: '2028.08', keyword: '小托福首考', detail: '小托福首考目标 800+' },
+      { time: '2028.12', keyword: '小托福 850+', detail: '五年级上 12 月前小托福 850+' },
+    ],
+  },
+  examTimeline: [
+    {
+      id: 'ket',
+      name: 'KET',
+      target: '卓越 140+',
+      date: '2028.01-02',
+      month: '三年级寒假',
+      registerBefore: '2027.11 前联系机构代报',
+      notes: 'KET 一年多次，建议三年级上学期先摸底再确定考期',
+    },
+    {
+      id: 'pet',
+      name: 'PET',
+      target: '卓越 160+',
+      date: '2029.01-02',
+      month: '四年级寒假',
+      registerBefore: '2028.11 前联系机构代报',
+      notes: 'PET 卓越后，1-2 个月熟悉小托福题型即可首考',
+    },
+    {
+      id: 'toefl-1',
+      name: '小托福首考',
+      target: '800+',
+      date: '2029.04-05',
+      month: '四年级春季',
+      registerBefore: '2029.03 前报名',
+      notes: '利用 PET 卓越的能力峰值，重点适应学术听力和语言形式',
+    },
+    {
+      id: 'toefl-2',
+      name: '小托福二考',
+      target: '850+',
+      date: '2029.10-12',
+      month: '五年级上',
+      registerBefore: '2029.09 前报名',
+      notes: '五年级 12 月前必须拿到 850+，为三公鸡尾酒简历做准备',
+    },
+  ],
+};
+
+export async function seedSystemSubjectPlans(prisma: PrismaClient): Promise<number> {
+  const subjects: Array<{ subject: 'chinese' | 'math' | 'english'; data: SubjectPlanConfigData }> = [
+    { subject: 'chinese', data: DEFAULT_CHINESE_PLAN },
+    { subject: 'math', data: DEFAULT_MATH_PLAN },
+    { subject: 'english', data: DEFAULT_ENGLISH_PLAN },
+  ];
+
+  let seeded = 0;
+  for (const { subject, data } of subjects) {
+    const existingCount = await prisma.subjectPlanConfig.count({
+      where: { isSystem: true, subject },
+    });
+
+    if (existingCount > 0) {
+      continue;
+    }
+
+    await prisma.subjectPlanConfig.create({
+      data: {
+        subject,
+        tracks: data.tracks as any,
+        timeAxis: data.timeAxis as any,
+        nodes: data.nodes as any,
+        keyAchievements: data.keyAchievements as any,
+        examTimeline: data.examTimeline as any,
+        isSystem: true,
+        userId: null,
+      },
+    });
+
+    seeded += 1;
   }
 
-  await prisma.subjectPlanConfig.create({
-    data: {
-      subject: 'chinese',
-      tracks: DEFAULT_CHINESE_PLAN.tracks as any,
-      timeAxis: DEFAULT_CHINESE_PLAN.timeAxis as any,
-      nodes: DEFAULT_CHINESE_PLAN.nodes as any,
-      keyAchievements: DEFAULT_CHINESE_PLAN.keyAchievements as any,
-      examTimeline: DEFAULT_CHINESE_PLAN.examTimeline as any,
-      isSystem: true,
-      userId: null,
-    },
-  });
-
-  return 1;
+  return seeded;
 }

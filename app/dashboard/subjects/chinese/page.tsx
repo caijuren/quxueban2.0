@@ -11,6 +11,7 @@ import { Loader2 } from 'lucide-react';
 import ChineseTrackMap from './ChineseTrackMap';
 import ChineseYearlyMatrix from './ChineseYearlyMatrix';
 import ChineseExamTimeline from './ChineseExamTimeline';
+import AIDiagnosisCard from '../AIDiagnosisCard';
 
 export default function ChineseSubjectPage() {
   const { currentChild } = useChildren();
@@ -81,6 +82,18 @@ export default function ChineseSubjectPage() {
           编辑规划
         </Link>
       </motion.div>
+
+      {currentChild && (
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="lg:col-span-3">
+            <AIDiagnosisCard
+              subject="chinese"
+              childId={currentChild.id}
+              childName={currentChild.name}
+            />
+          </div>
+        </div>
+      )}
 
       {isLoading && (
         <div className="flex h-[40vh] items-center justify-center">

@@ -74,6 +74,7 @@ export async function POST(req: Request) {
     },
     update: {
       tasks: normalizedTasks as unknown as object[],
+      goals: body.goals as unknown as object[],
       publishedAt: body.publishedAt ? new Date(body.publishedAt) : null,
       reviewedAt: body.reviewedAt ? new Date(body.reviewedAt) : null,
       parentComment: body.parentComment,
@@ -83,6 +84,7 @@ export async function POST(req: Request) {
       childId: body.childId,
       weekId: body.weekId,
       tasks: normalizedTasks as unknown as object[],
+      goals: body.goals as unknown as object[],
       publishedAt: body.publishedAt ? new Date(body.publishedAt) : null,
       reviewedAt: body.reviewedAt ? new Date(body.reviewedAt) : null,
       parentComment: body.parentComment,

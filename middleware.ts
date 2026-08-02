@@ -7,6 +7,13 @@ const LOGIN_WINDOW_MS = 15 * 60 * 1000;
 
 const loginAttempts = new Map<string, { count: number; resetAt: number }>();
 
+// 不需要登录即可访问的公开路由
+const PUBLIC_API_PREFIXES = ['/api/auth/', '/api/health', '/api/register'];
+
+function isPublicApiPath(pathname: string): boolean {
+  return PUBLIC_API_PREFIXES.some((prefix) => pathname.startsWith(prefix));
+}
+
 function getClientIp(req: NextRequest): string {
   const forwarded = req.headers.get('x-forwarded-for');
   if (forwarded) {
@@ -56,7 +63,9 @@ const authMiddleware = withAuth(
 );
 
 export default function middleware(req: NextRequest, event: NextFetchEvent) {
-  if (req.nextUrl.pathname === LOGIN_CALLBACK_PATH) {
+  const { pathname } = req.nextUrl;
+
+  if (pathname === LOGIN_CALLBACK_PATH) {
     const ip = getClientIp(req);
     const result = checkLoginRateLimit(ip);
     if (!result.allowed) {
@@ -67,6 +76,11 @@ export default function middleware(req: NextRequest, event: NextFetchEvent) {
     }
   }
 
+  // 公开 API 直接放行，避免 NextAuth 登录循环或健康检查失败
+  if (isPublicApiPath(pathname)) {
+    return NextResponse.next();
+  }
+
   return authMiddleware(
     req as unknown as Parameters<typeof authMiddleware>[0],
     event
@@ -74,5 +88,5 @@ export default function middleware(req: NextRequest, event: NextFetchEvent) {
 }
 
 export const config = {
-  matcher: ['/dashboard/:path*', '/admin/:path*', '/api/admin/:path*', '/api/auth/callback/credentials'],
+  matcher: ['/dashboard/:path*', '/admin/:path*', '/api/:path*'],
 };

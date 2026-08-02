@@ -1,7 +1,7 @@
-# 趣学伴 1.0 发版规范
+# 趣学伴发版规范
 
 > 趣学伴已从纯静态前端升级为 Next.js 全栈应用（React + PostgreSQL + Prisma + NextAuth）。
-> 本规范描述 1.0 版本的版本号规则、构建方式、Docker 部署流程和回滚方案。
+> 本规范描述版本号规则、构建方式、Docker 部署流程和回滚方案，适用于 1.x 及 2.0 版本。
 
 ## 1. 版本号规则（SemVer）
 
@@ -94,7 +94,7 @@ docker compose up -d app
 # 切换到发布标签
 cd /srv/apps/quxueban2.0
 git fetch origin
-git checkout v1.7.0
+git checkout v2.0.0
 
 # 重启部署
 docker compose down
@@ -140,10 +140,10 @@ npx prisma migrate dev --name 变更说明
 
 ```bash
 # 回滚到上一个 tag
-git checkout v1.0.0
+git checkout v1.9.6
 
 # 或基于旧 tag 创建 hotfix 分支
-git checkout -b hotfix/xxx v1.0.0
+git checkout -b hotfix/xxx v1.9.6
 ```
 
 ### 7.2 数据库回滚
@@ -168,17 +168,17 @@ git checkout main
 git pull origin main
 
 # 从 main 切出发布分支
-git checkout -b release/v1.7.0
+git checkout -b release/v2.0.0
 
-# 手动更新 package.json 版本号为 1.7.0
+# 手动更新 package.json 版本号为 2.0.0
 # 提交后打标签
 git add package.json
-git commit -m "chore(release): v1.7.0"
-git tag -a v1.7.0 -m "Release v1.7.0"
+git commit -m "chore(release): v2.0.0"
+git tag -a v2.0.0 -m "Release v2.0.0"
 
 # 推送分支和标签
-git push origin release/v1.7.0
-git push origin v1.7.0
+git push origin release/v2.0.0
+git push origin v2.0.0
 ```
 
 ### 8.2 自动部署（GitHub Actions）
@@ -210,6 +210,42 @@ docker image prune -f
 ---
 
 # 发版记录
+
+## v2.0.0（2026-08-02）
+
+**主题：2.0 正式版 —— 规划工具稳定 + 学科路径扩展 + AI 复盘**
+
+- 规划工具稳定性提升
+  - 修复 `.next` 构建缓存导致的 `type-check` 失败
+  - 认证中间件统一保护 `/api/*`，仅放行 `/api/auth/*`、`/api/health`、`/api/register`
+  - 学科路径配置数据增加服务端 Zod 校验
+  - 新增 `SubjectPlanConfig` 表及迁移，支持用户级与系统级配置隔离
+- 学科路径扩展
+  - 语文路径配置页上线，数据接入 `SubjectPlanConfig`
+  - 新增数学学科路径页面（`/dashboard/subjects/math`）与配置页（`/dashboard/subjects/math/config`）
+  - 新增英语学科路径页面（`/dashboard/subjects/english`）与配置页（`/dashboard/subjects/english/config`）
+  - 新增可复用的 `SubjectTrackMap`、`SubjectExamTimeline`、`SubjectPlanConfigEditor` 组件
+  - 系统种子数据新增数学、英语默认学科规划
+- 任务执行与 AI 复盘
+  - 今日任务完成记录支持状态、进度、质量、备注、图片
+  - 完成状态精简为 3 项：已完成 / 部分完成 / 未完成
+  - 完成 100% 任务时触发「今日胜利」弹窗
+  - 钉钉 AI 日报支持手动触发与 0:00 自动 fallback
+  - 新增 `/api/ai/daily-summary` 与 `useDailySummary`，今日任务页内展示 AI 复盘卡片
+  - 学科页 AI 诊断真实调用 `useAssessTasks`，基于当前周计划生成任务合理性分析
+- 工程化
+  - 新增 `README.md`
+  - 更新 `.env.example`，补充 AI 日报环境变量说明
+  - 更新部署文档到 2.0
+
+## v1.9.x（2026-08）
+
+**主题：今日任务完成记录与钉钉 AI 推送**
+
+- 今日任务支持完成记录弹窗（状态、进度、时长、质量、备注、图片）
+- 完成 100% 任务时触发「今日胜利」弹窗
+- 钉钉支持手动推送日报与每日 0:00 自动 fallback
+- AI 日报后端接入 LLM + 规则降级
 
 ## v1.6.0（2026-07-29）
 
