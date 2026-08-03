@@ -40,6 +40,7 @@ import MetricRing from '@/components/ui/MetricRing';
 import WeeklyReportExport from '@/components/weekly/WeeklyReportExport';
 import GeneratePlanModal from '@/components/weekly/GeneratePlanModal';
 import WeeklyMatrix from '@/components/weekly/WeeklyMatrix';
+import WeeklyTaskChecklistMatrix from '@/components/weekly/WeeklyTaskChecklistMatrix';
 import WeeklyGoalsPanel from '@/components/weekly/WeeklyGoalsPanel';
 import { gradeLabel } from '@/lib/children';
 import {
@@ -1420,6 +1421,7 @@ function WeeklyTasksContent() {
   const [libraryOpen, setLibraryOpen] = useState(false);
   const [reportOpen, setReportOpen] = useState(false);
   const [generateOpen, setGenerateOpen] = useState(false);
+  const [matrixView, setMatrixView] = useState<'calendar' | 'checklist'>('calendar');
 
   const today = getTodayName();
 
@@ -1915,14 +1917,49 @@ function WeeklyTasksContent() {
             </button>
           </motion.div>
         ) : (
-          <WeeklyMatrix
-            tasks={displayPlan.tasks}
-            weekId={weekId}
-            today={today}
-            stats={stats}
-            onToggleTask={handleToggleTask}
-            onMoveTask={handleMoveTask}
-          />
+          <div className="space-y-4">
+            <div className="flex items-center justify-end gap-2">
+              <div className="inline-flex items-center rounded-xl bg-surface-elevated border border-border-subtle p-1">
+                <button
+                  type="button"
+                  onClick={() => setMatrixView('calendar')}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
+                    matrixView === 'calendar'
+                      ? 'bg-primary text-white'
+                      : 'text-text-secondary hover:text-text-primary'
+                  }`}
+                >
+                  日历矩阵
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setMatrixView('checklist')}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
+                    matrixView === 'checklist'
+                      ? 'bg-primary text-white'
+                      : 'text-text-secondary hover:text-text-primary'
+                  }`}
+                >
+                  任务清单
+                </button>
+              </div>
+            </div>
+            {matrixView === 'calendar' ? (
+              <WeeklyMatrix
+                tasks={displayPlan.tasks}
+                weekId={weekId}
+                today={today}
+                stats={stats}
+                onToggleTask={handleToggleTask}
+                onMoveTask={handleMoveTask}
+              />
+            ) : (
+              <WeeklyTaskChecklistMatrix
+                tasks={displayPlan.tasks}
+                onCellClick={() => setEditOpen(true)}
+              />
+            )}
+          </div>
         )}
       </AnimatePresence>
 
