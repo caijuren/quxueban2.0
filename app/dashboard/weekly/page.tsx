@@ -1756,30 +1756,30 @@ function WeeklyTasksContent() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
         >
-          <CommandCard className="p-4 sm:p-5">
-            <div className="flex flex-col lg:flex-row lg:items-center gap-5">
+          <CommandCard className="p-5">
+            <div className="flex flex-col lg:flex-row lg:items-center gap-6">
               {/* Left: progress ring */}
               <div className="shrink-0">
-                <div className="relative w-[88px] h-[88px]">
+                <div className="relative w-[96px] h-[96px]">
                   <svg className="w-full h-full -rotate-90">
                     <circle
-                      cx="44"
-                      cy="44"
-                      r="36"
+                      cx="48"
+                      cy="48"
+                      r="40"
                       stroke="rgba(255,255,255,0.08)"
                       strokeWidth="8"
                       fill="none"
                     />
                     <circle
-                      cx="44"
-                      cy="44"
-                      r="36"
+                      cx="48"
+                      cy="48"
+                      r="40"
                       stroke="url(#weeklyProgressGradient)"
                       strokeWidth="8"
                       fill="none"
                       strokeLinecap="round"
-                      strokeDasharray={2 * Math.PI * 36}
-                      strokeDashoffset={2 * Math.PI * 36 * (1 - stats.completionRate / 100)}
+                      strokeDasharray={2 * Math.PI * 40}
+                      strokeDashoffset={2 * Math.PI * 40 * (1 - stats.completionRate / 100)}
                       className="transition-all duration-700 ease-out"
                     />
                     <defs>
@@ -1789,73 +1789,75 @@ function WeeklyTasksContent() {
                       </linearGradient>
                     </defs>
                   </svg>
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <span className="text-lg font-bold font-display text-text-primary">{stats.completionRate}%</span>
+                  <div className="absolute inset-0 flex flex-col items-center justify-center">
+                    <span className="text-xl font-bold font-display text-text-primary">{stats.completionRate}%</span>
+                    <span className="text-[10px] text-text-muted">完成率</span>
                   </div>
                 </div>
               </div>
 
               {/* Center: title + summary */}
               <div className="flex-1 min-w-0">
-                <p className="text-lg font-semibold font-display text-text-primary">本周整体进度</p>
-                <p className="text-sm text-text-tertiary mt-1">
+                <p className="text-xl font-semibold font-display text-text-primary">本周整体进度</p>
+                <p className="text-sm text-text-tertiary mt-1.5">
                   已完成 <span className="text-text-secondary font-medium">{stats.done} 项</span>
                   <span className="mx-1.5 text-text-muted">·</span>
                   剩余 <span className="text-text-secondary font-medium">{stats.pending} 项</span>
                 </p>
-                <button className="inline-flex items-center gap-1 mt-2 text-xs text-primary hover:text-primary-glow transition-colors">
+                <button className="inline-flex items-center gap-1 mt-2.5 text-xs text-primary hover:text-primary-glow transition-colors">
                   查看详情
                   <ChevronRight className="w-3.5 h-3.5" />
                 </button>
               </div>
 
-              {/* Right: stats */}
-              <div className="flex items-center gap-4 lg:gap-6 shrink-0">
-                <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-full bg-success/10 border border-success/20 flex items-center justify-center">
-                    <CheckCircle2 className="w-4 h-4 text-success" />
+              {/* Right: stats + action */}
+              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 lg:gap-5 shrink-0">
+                <div className="flex items-center gap-3 lg:gap-4">
+                  <div className="flex items-center gap-2">
+                    <div className="w-8 h-8 rounded-full bg-success/10 border border-success/20 flex items-center justify-center">
+                      <CheckCircle2 className="w-4 h-4 text-success" />
+                    </div>
+                    <div>
+                      <p className="text-xs font-bold text-text-primary tabular-nums leading-tight">
+                        {stats.done} <span className="text-[10px] font-normal text-text-muted">项</span>
+                      </p>
+                      <p className="text-[10px] text-text-muted leading-tight">已完成</p>
+                    </div>
                   </div>
-                  <div>
-                    <p className="text-2xs text-text-muted">已完成</p>
-                    <p className="text-sm font-bold text-text-primary tabular-nums">
-                      {stats.done} <span className="text-xs font-normal text-text-muted">项</span>
-                    </p>
+                  <div className="flex items-center gap-2">
+                    <div className="w-8 h-8 rounded-full bg-secondary/10 border border-secondary/20 flex items-center justify-center">
+                      <Clock className="w-4 h-4 text-secondary" />
+                    </div>
+                    <div>
+                      <p className="text-xs font-bold text-text-primary tabular-nums leading-tight">
+                        {displayPlan.tasks.filter((t) => t.status === 'in_progress' || t.status === 'partially_done').length}{' '}
+                        <span className="text-[10px] font-normal text-text-muted">项</span>
+                      </p>
+                      <p className="text-[10px] text-text-muted leading-tight">进行中</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="w-8 h-8 rounded-full bg-warning/10 border border-warning/20 flex items-center justify-center">
+                      <Pause className="w-4 h-4 text-warning" />
+                    </div>
+                    <div>
+                      <p className="text-xs font-bold text-text-primary tabular-nums leading-tight">
+                        {displayPlan.tasks.filter((t) => t.status === 'pending').length}{' '}
+                        <span className="text-[10px] font-normal text-text-muted">项</span>
+                      </p>
+                      <p className="text-[10px] text-text-muted leading-tight">未开始</p>
+                    </div>
                   </div>
                 </div>
-                <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-full bg-secondary/10 border border-secondary/20 flex items-center justify-center">
-                    <Clock className="w-4 h-4 text-secondary" />
-                  </div>
-                  <div>
-                    <p className="text-2xs text-text-muted">进行中</p>
-                    <p className="text-sm font-bold text-text-primary tabular-nums">
-                      {displayPlan.tasks.filter((t) => t.status === 'in_progress' || t.status === 'partially_done').length}{' '}
-                      <span className="text-xs font-normal text-text-muted">项</span>
-                    </p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-full bg-warning/10 border border-warning/20 flex items-center justify-center">
-                    <Pause className="w-4 h-4 text-warning" />
-                  </div>
-                  <div>
-                    <p className="text-2xs text-text-muted">未开始</p>
-                    <p className="text-sm font-bold text-text-primary tabular-nums">
-                      {displayPlan.tasks.filter((t) => t.status === 'pending').length}{' '}
-                      <span className="text-xs font-normal text-text-muted">项</span>
-                    </p>
-                  </div>
-                </div>
-              </div>
 
-              {/* Far right: action */}
-              <button
-                onClick={handleCarryOverLastWeek}
-                disabled={lastWeekUncompleted.length === 0 || weekId !== getCurrentWeekId()}
-                className="shrink-0 inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-[14px] border border-primary text-primary text-sm font-medium hover:bg-primary/10 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                一键添加到本周
-              </button>
+                <button
+                  onClick={handleCarryOverLastWeek}
+                  disabled={lastWeekUncompleted.length === 0 || weekId !== getCurrentWeekId()}
+                  className="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-[14px] border border-primary text-primary text-sm font-medium hover:bg-primary/10 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  一键添加到本周
+                </button>
+              </div>
             </div>
           </CommandCard>
         </motion.div>
@@ -1945,6 +1947,7 @@ function WeeklyTasksContent() {
             {matrixView === 'checklist' && (
               <WeeklyTaskChecklistMatrix
                 tasks={displayPlan.tasks}
+                weekId={weekId}
                 onCellClick={() => setEditOpen(true)}
               />
             )}

@@ -2,16 +2,16 @@
 
 import { useMemo } from 'react';
 import { motion } from 'framer-motion';
-import { CheckCircle2, Circle, CircleDot, CircleEqual } from 'lucide-react';
+import { CheckCircle2, CircleDot, Pause } from 'lucide-react';
 import {
   type WeeklyTaskItem,
   type TaskCategory,
   type DayOfWeek,
-  type TaskStatus,
 } from '@/lib/storage.types';
 import { TASK_CATEGORY_LABELS } from '@/lib/taskTemplates';
 import { categoryIcons } from '@/lib/taskIcons';
 import { getCategoryColorClass } from '@/lib/taskAlignment';
+import { getWeekRange, parseDurationMinutes } from '@/lib/weeklyTasks';
 
 const DAYS: DayOfWeek[] = ['周一', '周二', '周三', '周四', '周五', '周六', '周日'];
 
@@ -24,49 +24,81 @@ interface TaskRow {
 
 interface WeeklyTaskChecklistMatrixProps {
   tasks: WeeklyTaskItem[];
+  weekId: string;
   onCellClick?: (task: WeeklyTaskItem) => void;
 }
 
-function StatusIcon({ status }: { status: TaskStatus }) {
-  const className = 'w-5 h-5';
-  switch (status) {
-    case 'done':
-      return <CheckCircle2 className={`${className} text-success`} />;
-    case 'partially_done':
-      return <CircleDot className={`${className} text-warning`} />;
-    case 'in_progress':
-      return <CircleEqual className={`${className} text-accent`} />;
-    case 'skipped':
-    case 'rescheduled':
-      return <Circle className={`${className} text-text-muted/40`} />;
-    case 'pending':
-    default:
-      return <Circle className={`${className} text-text-muted`} />;
-  }
-}
+function StatusCell({ task, onClick }: { task: WeeklyTaskItem; onClick?: () => void }) {
+  const status = task.status;
+  const minutes = parseDurationMinutes(task.duration);
+  const durationText = minutes > 0 ? `${minutes}分钟` : task.duration;
 
-function StatusLabel(status: TaskStatus) {
-  switch (status) {
-    case 'done':
-      return '已完成';
-    case 'partially_done':
-      return '部分完成';
-    case 'in_progress':
-      return '进行中';
-    case 'skipped':
-      return '已跳过';
-    case 'rescheduled':
-      return '已改期';
-    case 'pending':
-    default:
-      return '待完成';
+  if (status === 'done') {
+    return (
+      <button
+        type="button"
+        onClick={onClick}
+        className="inline-flex flex-col items-center justify-center gap-1 w-full py-2.5 rounded-[14px] hover:bg-surface-hover transition-colors"
+      >
+        <CheckCircle2 className="w-5 h-5 text-success" />
+        <span className="text-[10px] text-text-tertiary">{durationText}</span>
+      </button>
+    );
   }
+
+  if (status === 'in_progress' || status === 'partially_done') {
+    return (
+      <button
+        type="button"
+        onClick={onClick}
+        className="inline-flex flex-col items-center justify-center gap-1 w-full py-2.5 rounded-[14px] hover:bg-surface-hover transition-colors"
+      >
+        <CircleDot className="w-5 h-5 text-secondary" />
+        <span className="text-[10px] text-text-tertiary">{durationText}</span>
+      </button>
+    );
+  }
+
+  if (status === 'pending') {
+    return (
+      <button
+        type="button"
+        onClick={onClick}
+        className="inline-flex flex-col items-center justify-center gap-1 w-full py-2.5 rounded-[14px] hover:bg-surface-hover transition-colors"
+      >
+        <Pause className="w-4 h-4 text-warning" />
+        <span className="text-[10px] text-text-tertiary">待开始</span>
+      </button>
+    );
+  }
+
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className="inline-flex items-center justify-center w-full py-4 text-text-muted/30 hover:bg-surface-hover rounded-[14px] transition-colors"
+    >
+      —
+    </button>
+  );
 }
 
 export default function WeeklyTaskChecklistMatrix({
   tasks,
+  weekId,
   onCellClick,
 }: WeeklyTaskChecklistMatrixProps) {
+  const weekDates = useMemo(() => {
+    const { start } = getWeekRange(weekId);
+    const dates: string[] = [];
+    for (let i = 0; i < 7; i++) {
+      const d = new Date(start);
+      d.setDate(start.getDate() + i);
+      dates.push(`${d.getMonth() + 1}/${d.getDate()}`);
+    }
+    return dates;
+  }, [weekId]);
+
   const rows = useMemo<TaskRow[]>(() => {
     const groups = new Map<string, TaskRow>();
 
@@ -105,27 +137,30 @@ export default function WeeklyTaskChecklistMatrix({
 
   if (rows.length === 0) {
     return (
-      <div className="rounded-2xl bg-surface-elevated border border-border-subtle p-8 text-center text-sm text-text-muted">
+      <div className="rounded-[20px] bg-surface border border-border-default p-8 text-center text-sm text-text-muted">
         本周暂无任务，点击「编辑周计划」添加
       </div>
     );
   }
 
   return (
-    <div className="rounded-2xl bg-surface-elevated border border-border-subtle overflow-hidden">
+    <div className="rounded-[20px] bg-surface border border-border-default overflow-hidden shadow-card">
       <div className="overflow-x-auto">
-        <table className="w-full min-w-[800px] border-collapse">
+        <table className="w-full min-w-[900px] border-collapse">
           <thead>
-            <tr className="border-b border-border-subtle bg-surface-highlight/50">
-              <th className="sticky left-0 z-10 bg-surface-highlight/95 backdrop-blur-sm text-left py-3 px-4 text-xs font-medium text-text-muted w-[240px] min-w-[240px]">
+            <tr className="border-b border-border-default">
+              <th className="sticky left-0 z-10 bg-surface/95 backdrop-blur-sm text-left py-3.5 px-5 text-xs font-medium text-text-muted w-[220px] min-w-[220px]">
                 任务
               </th>
-              {DAYS.map((day) => (
+              {DAYS.map((day, idx) => (
                 <th
                   key={day}
-                  className="py-3 px-2 text-center text-xs font-medium text-text-muted w-[1/7]"
+                  className="py-3.5 px-2 text-center text-xs font-medium text-text-muted w-[1/7]"
                 >
-                  {day}
+                  <div className="flex flex-col items-center gap-0.5">
+                    <span>{day}</span>
+                    <span className="text-[10px] text-text-tertiary">{weekDates[idx]}</span>
+                  </div>
                 </th>
               ))}
             </tr>
@@ -142,17 +177,17 @@ export default function WeeklyTaskChecklistMatrix({
                   initial={{ opacity: 0, y: 8 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: rowIndex * 0.03 }}
-                  className="border-b border-border-subtle last:border-b-0 hover:bg-surface-highlight/30 transition-colors"
+                  className="border-b border-border-default last:border-b-0 hover:bg-surface-hover/40 transition-colors"
                 >
-                  <td className="sticky left-0 z-10 bg-surface-elevated/95 backdrop-blur-sm py-3 px-4 align-top">
+                  <td className="sticky left-0 z-10 bg-surface/95 backdrop-blur-sm py-3.5 px-5 align-top">
                     <div className="flex items-start gap-3">
                       <div
-                        className={`mt-0.5 w-7 h-7 rounded-lg flex items-center justify-center ${colorClass}`}
+                        className={`mt-0.5 w-9 h-9 rounded-[14px] flex items-center justify-center ${colorClass}`}
                       >
                         <CategoryIcon className="w-4 h-4" />
                       </div>
                       <div className="min-w-0">
-                        <p className="text-sm font-medium text-text-primary leading-snug break-words">
+                        <p className="text-sm font-semibold text-text-primary leading-snug break-words">
                           {row.focus}
                         </p>
                         <p className="text-[11px] text-text-muted mt-0.5">
@@ -167,9 +202,9 @@ export default function WeeklyTaskChecklistMatrix({
                       return (
                         <td
                           key={day}
-                          className="py-3 px-2 text-center align-middle"
+                          className="py-2 px-1 text-center align-middle"
                         >
-                          <span className="inline-block w-5 h-5 text-text-muted/20">
+                          <span className="inline-flex items-center justify-center w-full py-4 text-text-muted/30">
                             —
                           </span>
                         </td>
@@ -179,16 +214,9 @@ export default function WeeklyTaskChecklistMatrix({
                     return (
                       <td
                         key={day}
-                        className="py-3 px-2 text-center align-middle"
+                        className="py-2 px-1 text-center align-middle"
                       >
-                        <button
-                          type="button"
-                          onClick={() => onCellClick?.(task)}
-                          title={`${day} · ${StatusLabel(task.status)}`}
-                          className="inline-flex items-center justify-center w-9 h-9 rounded-lg hover:bg-surface-hover transition-colors focus-ring"
-                        >
-                          <StatusIcon status={task.status} />
-                        </button>
+                        <StatusCell task={task} onClick={() => onCellClick?.(task)} />
                       </td>
                     );
                   })}
@@ -197,6 +225,27 @@ export default function WeeklyTaskChecklistMatrix({
             })}
           </tbody>
         </table>
+      </div>
+      <div className="flex flex-wrap items-center justify-between gap-3 px-5 py-3.5 border-t border-border-default bg-surface">
+        <div className="flex flex-wrap items-center gap-4">
+          <div className="flex items-center gap-1.5 text-xs text-text-tertiary">
+            <CheckCircle2 className="w-3.5 h-3.5 text-success" />
+            <span>已完成</span>
+          </div>
+          <div className="flex items-center gap-1.5 text-xs text-text-tertiary">
+            <CircleDot className="w-3.5 h-3.5 text-secondary" />
+            <span>进行中</span>
+          </div>
+          <div className="flex items-center gap-1.5 text-xs text-text-tertiary">
+            <Pause className="w-3 h-3 text-warning" />
+            <span>未开始</span>
+          </div>
+          <div className="flex items-center gap-1.5 text-xs text-text-tertiary">
+            <span className="w-3.5 text-center text-text-muted/30">—</span>
+            <span>无安排</span>
+          </div>
+        </div>
+        <p className="text-xs text-text-muted">提示：拖拽任务可快速调整安排</p>
       </div>
     </div>
   );
