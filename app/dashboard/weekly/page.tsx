@@ -28,6 +28,7 @@ import {
   ChevronDown,
   Copy,
   AlertTriangle,
+  Pause,
   Share2,
   Loader2,
 } from 'lucide-react';
@@ -1639,247 +1640,222 @@ function WeeklyTasksContent() {
         initial={shouldReduceMotion ? false : { opacity: 0, y: -8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4 }}
-        className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
+        className="flex flex-col lg:flex-row lg:items-center justify-between gap-4"
       >
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center">
+          <div className="w-10 h-10 rounded-[14px] bg-primary/10 border border-primary/20 flex items-center justify-center">
             <Calendar className="w-5 h-5 text-primary" />
           </div>
-          <div>
-            <h1 className="text-2xl sm:text-3xl font-bold font-display">周计划</h1>
+          <h1 className="text-2xl sm:text-3xl font-bold font-display text-text-primary">周计划</h1>
+        </div>
+
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+          <div className="flex flex-wrap items-center gap-2">
+            {isPublished && !isDraft && (
+              <button
+                onClick={handleOpenReview}
+                className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-[14px] bg-primary text-white text-sm font-medium hover:bg-primary/90 transition-all shadow-[0_0_16px_rgba(244,63,122,0.25)]"
+              >
+                <Sparkles className="w-3.5 h-3.5" />
+                {plan?.reviewedAt ? '查看复盘' : '本周复盘'}
+              </button>
+            )}
+            {isPublished && !isDraft && stats && (
+              <button
+                onClick={() => setReportOpen(true)}
+                className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-[14px] bg-surface border border-border-default text-sm font-medium text-text-secondary hover:bg-surface-hover hover:text-text-primary transition-colors"
+              >
+                <Share2 className="w-3.5 h-3.5" />
+                导出周计划
+              </button>
+            )}
+            {displayPlan && (
+              <>
+                <button
+                  onClick={() => setEditOpen(true)}
+                  className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-[14px] bg-surface border border-border-default text-sm font-medium text-text-secondary hover:bg-surface-hover hover:text-text-primary transition-colors"
+                >
+                  <Pencil className="w-3.5 h-3.5" />
+                  编辑周计划
+                </button>
+                <button
+                  onClick={() => setLibraryOpen(true)}
+                  className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-[14px] bg-surface border border-border-default text-sm font-medium text-text-secondary hover:bg-surface-hover hover:text-text-primary transition-colors"
+                >
+                  <Library className="w-3.5 h-3.5" />
+                  从任务库选择
+                </button>
+              </>
+            )}
+            {!displayPlan && (
+              <button
+                onClick={handleGenerate}
+                className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-[14px] bg-primary text-white text-sm font-medium hover:bg-primary/90 transition-all shadow-[0_0_16px_rgba(244,63,122,0.25)]"
+              >
+                <Target className="w-3.5 h-3.5" />
+                生成本周计划
+              </button>
+            )}
+            {isDraft && (
+              <>
+                <button
+                  onClick={handlePublish}
+                  className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-[14px] bg-primary text-white text-sm font-medium hover:bg-primary/90 transition-all"
+                >
+                  <Send className="w-3.5 h-3.5" />
+                  发布
+                </button>
+                <button
+                  onClick={handleCancelDraft}
+                  className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-[14px] bg-surface border border-border-default text-sm font-medium text-text-secondary hover:bg-surface-hover transition-colors"
+                >
+                  <X className="w-3.5 h-3.5" />
+                  取消
+                </button>
+              </>
+            )}
           </div>
-        </div>
 
-        <div className="flex items-center gap-2">
-          <button
-            onClick={() => setWeekId((w) => shiftWeekId(w, -1))}
-            className="w-8 h-8 flex items-center justify-center rounded-lg bg-surface-elevated hover:bg-surface-highlight text-text-secondary transition-colors focus-ring"
-            aria-label="上一周"
-          >
-            <ChevronLeft className="w-4 h-4" />
-          </button>
-          <div className="relative">
-            <select
-              value={weekId}
-              onChange={(e) => setWeekId(e.target.value)}
-              className="appearance-none pl-3 pr-9 py-1.5 rounded-lg border border-border-default bg-surface text-sm font-medium text-text-primary min-w-[180px] focus:outline-none focus:border-primary transition-colors cursor-pointer"
-              aria-label="选择周"
-            >
-              {weekOptions.map((opt) => (
-                <option key={opt.value} value={opt.value}>
-                  {opt.label}
-                </option>
-              ))}
-            </select>
-            <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-text-tertiary pointer-events-none" />
-          </div>
-          <button
-            onClick={() => setWeekId((w) => shiftWeekId(w, 1))}
-            className="w-8 h-8 flex items-center justify-center rounded-lg bg-surface-elevated hover:bg-surface-highlight text-text-secondary transition-colors focus-ring"
-            aria-label="下一周"
-          >
-            <ChevronRight className="w-4 h-4" />
-          </button>
-        </div>
-      </motion.div>
-
-      <motion.div
-        initial={shouldReduceMotion ? false : { opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.1 }}
-        className="flex flex-col sm:flex-row sm:items-center justify-between gap-3"
-      >
-        <div className="flex flex-wrap items-center gap-2">
-          {!displayPlan && (
+          <div className="flex items-center gap-2">
             <button
-              onClick={handleGenerate}
-              className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-primary text-text-primary text-sm font-semibold transition-all duration-200 focus-ring"
+              onClick={() => setWeekId((w) => shiftWeekId(w, -1))}
+              className="w-8 h-8 flex items-center justify-center rounded-[14px] bg-surface border border-border-default text-text-secondary hover:bg-surface-hover transition-colors"
+              aria-label="上一周"
             >
-              <Target className="w-3.5 h-3.5" />
-              生成本周计划
+              <ChevronLeft className="w-4 h-4" />
             </button>
-          )}
-          {isDraft && (
-            <>
-              <button
-                onClick={handlePublish}
-                className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-primary text-text-primary text-sm font-semibold transition-all duration-200 focus-ring"
+            <div className="relative">
+              <select
+                value={weekId}
+                onChange={(e) => setWeekId(e.target.value)}
+                className="appearance-none pl-3 pr-9 py-1.5 rounded-[14px] border border-border-default bg-surface text-sm font-medium text-text-primary min-w-[180px] focus:outline-none focus:border-primary/50 focus:ring-2 focus:ring-primary/10 transition-colors cursor-pointer"
+                aria-label="选择周"
               >
-                <Send className="w-3.5 h-3.5" />
-                发布
-              </button>
-              <button
-                onClick={handleCancelDraft}
-                className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-surface-elevated hover:bg-surface-highlight text-text-secondary text-sm transition-colors focus-ring"
-              >
-                <X className="w-3.5 h-3.5" />
-                取消
-              </button>
-            </>
-          )}
-          {isPublished && !isDraft && (
-            <button
-              onClick={handleOpenReview}
-              className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-accent text-text-primary text-sm font-semibold transition-all duration-200 focus-ring"
-            >
-              <Sparkles className="w-3.5 h-3.5" />
-              {plan?.reviewedAt ? '查看复盘' : '本周复盘'}
-            </button>
-          )}
-          {isPublished && !isDraft && stats && (
-            <button
-              onClick={() => setReportOpen(true)}
-              className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-surface-elevated hover:bg-surface-highlight text-text-secondary text-sm transition-colors focus-ring"
-            >
-              <Share2 className="w-3.5 h-3.5" />
-              导出周计划
-            </button>
-          )}
-          {displayPlan && (
-            <>
-              <button
-                onClick={() => setEditOpen(true)}
-                className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-surface-elevated hover:bg-surface-highlight text-text-secondary text-sm transition-colors focus-ring"
-              >
-                <Pencil className="w-3.5 h-3.5" />
-                编辑周计划
-              </button>
-              <button
-                onClick={() => setLibraryOpen(true)}
-                className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-surface-elevated hover:bg-surface-highlight text-text-secondary text-sm transition-colors focus-ring"
-              >
-                <Library className="w-3.5 h-3.5" />
-                从任务库选择
-              </button>
-            </>
-          )}
-          {isDraft && (
-            <span className="text-xs text-text-muted">预览模式：发布后才会保存</span>
-          )}
-        </div>
-      </motion.div>
-
-      {lastWeekUncompleted.length > 0 && weekId === getCurrentWeekId() && (
-        <motion.div
-          initial={shouldReduceMotion ? false : { opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, delay: 0.15 }}
-          className="rounded-xl border border-warning/20 bg-warning/5 p-4"
-        >
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-            <div className="flex items-start gap-3">
-              <AlertTriangle className="w-5 h-5 text-warning shrink-0 mt-0.5" />
-              <div>
-                <p className="text-sm font-semibold text-text-secondary">
-                  上周有 {lastWeekUncompleted.length} 项任务未补完
-                </p>
-                <p className="text-xs text-text-tertiary mt-0.5">
-                  可以一键添加到本周，避免学习任务中断
-                </p>
-              </div>
+                {weekOptions.map((opt) => (
+                  <option key={opt.value} value={opt.value}>
+                    {opt.label}
+                  </option>
+                ))}
+              </select>
+              <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-text-tertiary pointer-events-none" />
             </div>
             <button
-              onClick={handleCarryOverLastWeek}
-              className="shrink-0 px-4 py-2 rounded-lg bg-warning/10 border border-warning/20 text-warning text-sm font-medium hover:bg-warning/15 transition-colors focus-ring"
+              onClick={() => setWeekId((w) => shiftWeekId(w, 1))}
+              className="w-8 h-8 flex items-center justify-center rounded-[14px] bg-surface border border-border-default text-text-secondary hover:bg-surface-hover transition-colors"
+              aria-label="下一周"
             >
-              一键添加到本周
+              <ChevronRight className="w-4 h-4" />
             </button>
           </div>
-        </motion.div>
-      )}
+        </div>
+      </motion.div>
 
-      {stats && (
+      {stats && displayPlan && (
         <motion.div
           initial={shouldReduceMotion ? false : { opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
-          className="grid grid-cols-2 lg:grid-cols-4 gap-4"
         >
-          <CommandCard className="p-5 min-h-[132px] flex flex-col justify-between relative overflow-hidden">
-            <div className="flex items-start justify-between">
-              <div className="w-10 h-10 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center">
-                <CheckCircle2 className="w-5 h-5 text-primary" />
+          <CommandCard className="p-4 sm:p-5">
+            <div className="flex flex-col lg:flex-row lg:items-center gap-5">
+              {/* Left: progress ring */}
+              <div className="shrink-0">
+                <div className="relative w-[88px] h-[88px]">
+                  <svg className="w-full h-full -rotate-90">
+                    <circle
+                      cx="44"
+                      cy="44"
+                      r="36"
+                      stroke="rgba(255,255,255,0.08)"
+                      strokeWidth="8"
+                      fill="none"
+                    />
+                    <circle
+                      cx="44"
+                      cy="44"
+                      r="36"
+                      stroke="url(#weeklyProgressGradient)"
+                      strokeWidth="8"
+                      fill="none"
+                      strokeLinecap="round"
+                      strokeDasharray={2 * Math.PI * 36}
+                      strokeDashoffset={2 * Math.PI * 36 * (1 - stats.completionRate / 100)}
+                      className="transition-all duration-700 ease-out"
+                    />
+                    <defs>
+                      <linearGradient id="weeklyProgressGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stopColor="#FB7185" />
+                        <stop offset="100%" stopColor="#F43F7A" />
+                      </linearGradient>
+                    </defs>
+                  </svg>
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <span className="text-lg font-bold font-display text-text-primary">{stats.completionRate}%</span>
+                  </div>
+                </div>
               </div>
-              <span className="text-2xs font-medium text-text-muted px-2 py-0.5 rounded-full bg-surface-elevated border border-border-default">
-                {stats.done}/{stats.total}
-              </span>
-            </div>
-            <div className="mt-3">
-              <div className="flex items-baseline gap-1">
-                <span className="text-3xl font-bold font-display text-text-primary tabular-nums">
-                  {stats.completionRate}
-                </span>
-                <span className="text-sm text-text-muted">%</span>
-              </div>
-              <p className="text-sm font-medium text-text-secondary">完成率</p>
-              <div className="mt-3 h-2 w-full bg-surface rounded-full overflow-hidden">
-                <div
-                  className="h-full rounded-full bg-gradient-to-r from-primary to-primary-glow transition-all duration-500"
-                  style={{ width: `${stats.completionRate}%` }}
-                />
-              </div>
-              <p className="text-2xs text-text-muted mt-2">
-                {stats.pending > 0 ? `还剩 ${stats.pending} 项待完成` : '本周全部完成'}
-              </p>
-            </div>
-          </CommandCard>
 
-          <CommandCard className="p-5 min-h-[132px] flex flex-col justify-between relative overflow-hidden">
-            <div className="flex items-start justify-between">
-              <div className="w-10 h-10 rounded-xl bg-accent/10 border border-accent/20 flex items-center justify-center">
-                <Clock className="w-5 h-5 text-accent" />
+              {/* Center: title + summary */}
+              <div className="flex-1 min-w-0">
+                <p className="text-lg font-semibold font-display text-text-primary">本周整体进度</p>
+                <p className="text-sm text-text-tertiary mt-1">
+                  已完成 <span className="text-text-secondary font-medium">{stats.done} 项</span>
+                  <span className="mx-1.5 text-text-muted">·</span>
+                  剩余 <span className="text-text-secondary font-medium">{stats.pending} 项</span>
+                </p>
+                <button className="inline-flex items-center gap-1 mt-2 text-xs text-primary hover:text-primary-glow transition-colors">
+                  查看详情
+                  <ChevronRight className="w-3.5 h-3.5" />
+                </button>
               </div>
-            </div>
-            <div className="mt-3">
-              <div className="flex items-baseline gap-1">
-                <span className="text-3xl font-bold font-display text-text-primary tabular-nums">
-                  {Math.round((stats.estimatedMinutes / 60) * 10) / 10}
-                </span>
-                <span className="text-sm text-text-muted">h</span>
-              </div>
-              <p className="text-sm font-medium text-text-secondary">计划总时长</p>
-              <p className="text-2xs text-text-muted mt-2">约 {stats.estimatedMinutes} 分钟</p>
-            </div>
-          </CommandCard>
 
-          <CommandCard className="p-5 min-h-[132px] flex flex-col justify-between relative overflow-hidden">
-            <div className="flex items-start justify-between">
-              <div className="w-10 h-10 rounded-xl bg-secondary/10 border border-secondary/20 flex items-center justify-center">
-                <Target className="w-5 h-5 text-secondary" />
+              {/* Right: stats */}
+              <div className="flex items-center gap-4 lg:gap-6 shrink-0">
+                <div className="flex items-center gap-3">
+                  <div className="w-9 h-9 rounded-full bg-success/10 border border-success/20 flex items-center justify-center">
+                    <CheckCircle2 className="w-4 h-4 text-success" />
+                  </div>
+                  <div>
+                    <p className="text-2xs text-text-muted">已完成</p>
+                    <p className="text-sm font-bold text-text-primary tabular-nums">
+                      {stats.done} <span className="text-xs font-normal text-text-muted">项</span>
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="w-9 h-9 rounded-full bg-secondary/10 border border-secondary/20 flex items-center justify-center">
+                    <Clock className="w-4 h-4 text-secondary" />
+                  </div>
+                  <div>
+                    <p className="text-2xs text-text-muted">进行中</p>
+                    <p className="text-sm font-bold text-text-primary tabular-nums">
+                      {displayPlan.tasks.filter((t) => t.status === 'in_progress' || t.status === 'partially_done').length}{' '}
+                      <span className="text-xs font-normal text-text-muted">项</span>
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="w-9 h-9 rounded-full bg-warning/10 border border-warning/20 flex items-center justify-center">
+                    <Pause className="w-4 h-4 text-warning" />
+                  </div>
+                  <div>
+                    <p className="text-2xs text-text-muted">未开始</p>
+                    <p className="text-sm font-bold text-text-primary tabular-nums">
+                      {displayPlan.tasks.filter((t) => t.status === 'pending').length}{' '}
+                      <span className="text-xs font-normal text-text-muted">项</span>
+                    </p>
+                  </div>
+                </div>
               </div>
-            </div>
-            <div className="mt-3">
-              <div className="flex items-baseline gap-1">
-                <span className="text-3xl font-bold font-display text-text-primary tabular-nums">
-                  {Math.round((stats.estimatedMinutes / 7) * 10) / 10}
-                </span>
-                <span className="text-sm text-text-muted">m/天</span>
-              </div>
-              <p className="text-sm font-medium text-text-secondary">日均时长</p>
-              <div className="mt-3 h-2 w-full bg-surface rounded-full overflow-hidden">
-                <div
-                  className="h-full rounded-full bg-secondary transition-all duration-500"
-                  style={{ width: `${Math.min(100, Math.round((stats.estimatedMinutes / 420) * 100))}%` }}
-                />
-              </div>
-              <p className="text-2xs text-text-muted mt-2">建议日均不超过 60 分钟</p>
-            </div>
-          </CommandCard>
 
-          <CommandCard className="p-5 min-h-[132px] flex flex-col justify-between relative overflow-hidden">
-            <div className="flex items-start justify-between">
-              <div className="w-10 h-10 rounded-xl bg-warning/10 border border-warning/20 flex items-center justify-center">
-                <Trophy className="w-5 h-5 text-warning" />
-              </div>
-            </div>
-            <div className="mt-3">
-              <p className="text-xl font-bold font-display text-text-primary">
-                {isDraft ? '草稿' : isPublished ? '已发布' : '未生成'}
-              </p>
-              <p className="text-sm font-medium text-text-secondary">本周状态</p>
-              <p className="text-2xs text-text-muted mt-2">
-                {plan?.reviewedAt ? '已完成复盘' : plan?.publishedAt ? '待复盘' : '—'}
-              </p>
+              {/* Far right: action */}
+              <button
+                onClick={handleCarryOverLastWeek}
+                disabled={lastWeekUncompleted.length === 0 || weekId !== getCurrentWeekId()}
+                className="shrink-0 inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-[14px] border border-primary text-primary text-sm font-medium hover:bg-primary/10 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                一键添加到本周
+              </button>
             </div>
           </CommandCard>
         </motion.div>
