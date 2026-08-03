@@ -1,13 +1,9 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Brain, Sparkles, Zap, Loader2, AlertCircle } from 'lucide-react';
-import { useEffect, useMemo } from 'react';
-import { useWeeklyPlans } from '@/lib/hooks/useWeeklyPlans';
-import { useAssessTasks } from '@/lib/hooks/useTaskAssessment';
-import TaskRationalityPanel from '@/components/ai/TaskRationalityPanel';
-import { AssessmentTaskInput } from '@/lib/ai/taskAssessment';
-import { WeeklyTaskItem } from '@/lib/storage.types';
+import { Brain, Sparkles, Loader2, AlertCircle, TrendingUp } from 'lucide-react';
+import { useAiDiagnosis } from '@/lib/hooks/useAiDiagnosis';
+import { cn } from '@/lib/utils';
 
 interface AIDiagnosisCardProps {
   subject: 'english' | 'math' | 'chinese';
@@ -21,36 +17,28 @@ const subjectLabels: Record<string, string> = {
   chinese: '语文',
 };
 
-const insights: Record<string, string[]> = {
-  english: ['RAZ 当前级别与目标差距', 'KET/PET/小托福备考节奏', '口语/书写弱项提升建议'],
-  math: ['奥数进度与 AMC8 目标匹配度', '计算速度与准确率分析', '竞赛时间规划建议'],
-  chinese: ['古诗文积累进度评估', '输出能力训练重点', '竞赛荣誉规划建议'],
-};
-
-function toAssessmentInput(task: WeeklyTaskItem): AssessmentTaskInput {
-  return {
-    title: task.focus,
-    category: task.category,
-    difficulty: null,
-    duration: task.duration,
-  };
+function scoreColor(score: number): string {
+  if (score >= 80) return 'text-emerald-400';
+  if (score >= 60) return 'text-amber-400';
+  return 'text-rose-400';
 }
 
-export default function AIDiagnosisCard({ subject, childId, childName = '孩子' }: AIDiagnosisCardProps) {
-  const { data: plans, isLoading: plansLoading } = useWeeklyPlans(childId);
-  const { mutate: assess, data: assessments, isPending, error } = useAssessTasks();
+function scoreBg(score: number): string {
+  if (score >= 80) return 'bg-emerald-500';
+  if (score >= 60) return 'bg-amber-500';
+  return 'bg-rose-500';
+}
 
-  const subjectTasks = useMemo(() => {
-    if (!plans || plans.length === 0) return [];
-    const latest = plans.reduce((a, b) => (a.weekId > b.weekId ? a : b));
-    return latest.tasks.filter((t) => t.subjectId === subject);
-  }, [plans, subject]);
+export default function AIDiagnosisCard({
+  subject,
+  childId,
+  childName = '孩子',
+}: AIDiagnosisCardProps) {
+  const { data: diagnosis, isLoading, error } = useAiDiagnosis(childId);
 
-  useEffect(() => {
-    if (!childId || subjectTasks.length === 0) return;
-    const tasks = subjectTasks.map(toAssessmentInput);
-    assess({ childId, tasks, context: {} });
-  }, [childId, subjectTasks, assess]);
+  const subjectHealth = diagnosis?.subjectHealth.find(
+    (s) => s.subject === subjectLabels[subject]
+  );
 
   return (
     <motion.div
@@ -59,10 +47,10 @@ export default function AIDiagnosisCard({ subject, childId, childName = '孩子'
       transition={{ duration: 0.5, delay: 0.4 }}
       className="rounded-2xl relative overflow-hidden border border-border-subtle"
       style={{
-        background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.15) 0%, rgba(59, 130, 246, 0.08) 100%)',
+        background:
+          'linear-gradient(135deg, rgba(139, 92, 246, 0.15) 0%, rgba(59, 130, 246, 0.08) 100%)',
       }}
     >
-      {/* Background glow */}
       <div className="absolute -top-20 -right-20 w-40 h-40 rounded-full bg-secondary/20 blur-3xl" />
       <div className="absolute -bottom-20 -left-20 w-40 h-40 rounded-full bg-primary/10 blur-3xl" />
 
@@ -82,42 +70,137 @@ export default function AIDiagnosisCard({ subject, childId, childName = '孩子'
               {subjectLabels[subject]}学科 AI 诊断
             </h2>
             <p className="text-sm text-text-tertiary mb-4">
-              基于 {childName} 的当前进度、打卡记录和弱项，AI 将给出个性化的学习调整建议。
+              基于 {childName} 的整体升学进度、路线匹配度和学科节奏，AI
+              给出该学科的长期学习调整建议。
             </p>
 
-            {!childId || plansLoading || isPending ? (
+            {!childId || isLoading ? (
               <div className="flex items-center gap-2 text-sm text-text-tertiary py-4">
                 <Loader2 className="w-4 h-4 animate-spin" />
-                正在分析 {subjectLabels[subject]} 任务合理性…
+                正在分析 {subjectLabels[subject]} 学科整体进度…
               </div>
             ) : error ? (
               <div className="flex items-start gap-2 text-sm text-error py-2">
                 <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
                 <span>诊断失败：{error.message}</span>
               </div>
-            ) : subjectTasks.length === 0 ? (
-              <div className="text-sm text-text-tertiary py-2">
-                当前周计划暂无{subjectLabels[subject]}任务，发布计划后将自动生成诊断。
-              </div>
-            ) : assessments && assessments.length > 0 ? (
-              <div className="mt-2">
-                <TaskRationalityPanel
-                  assessments={assessments}
-                  taskTitles={subjectTasks.map((t) => t.focus)}
-                  compact
-                />
-              </div>
-            ) : (
-              <div className="flex flex-wrap gap-2 mb-5">
-                {insights[subject].map((item) => (
-                  <span
-                    key={item}
-                    className="px-3 py-1.5 rounded-lg bg-surface-elevated border border-border-subtle text-xs text-text-secondary flex items-center gap-1.5"
-                  >
-                    <Zap className="w-3 h-3 text-warning" />
-                    {item}
-                  </span>
-                ))}
+            ) : !diagnosis ? null : (
+              <div className="space-y-4">
+                {diagnosis.overallScore > 0 && (
+                  <div className="flex items-center gap-4 rounded-xl bg-surface-elevated/60 border border-border-subtle p-4">
+                    <div className="text-center min-w-[72px]">
+                      <div
+                        className={cn(
+                          'text-3xl font-bold font-display',
+                          scoreColor(diagnosis.overallScore)
+                        )}
+                      >
+                        {diagnosis.overallScore}
+                      </div>
+                      <div className="text-[11px] text-text-muted mt-0.5">
+                        综合评分
+                      </div>
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm text-text-secondary leading-relaxed">
+                        {diagnosis.summary}
+                      </p>
+                    </div>
+                  </div>
+                )}
+
+                {subjectHealth && (
+                  <div className="rounded-xl bg-surface-elevated/60 border border-border-subtle p-4">
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-sm font-medium text-text-secondary">
+                        {subjectHealth.subject}健康度
+                      </span>
+                      <span
+                        className={cn(
+                          'text-lg font-bold font-display',
+                          scoreColor(subjectHealth.score)
+                        )}
+                      >
+                        {subjectHealth.score}
+                      </span>
+                    </div>
+                    <div className="h-1.5 w-full rounded-full bg-surface-highlight overflow-hidden mb-2">
+                      <div
+                        className={cn('h-full rounded-full', scoreBg(subjectHealth.score))}
+                        style={{ width: `${subjectHealth.score}%` }}
+                      />
+                    </div>
+                    <p className="text-sm text-text-tertiary">
+                      {subjectHealth.comment}
+                    </p>
+                  </div>
+                )}
+
+                {diagnosis.risks && diagnosis.risks.length > 0 && (
+                  <div className="space-y-2">
+                    <h3 className="text-xs font-medium text-text-muted flex items-center gap-1.5">
+                      <TrendingUp className="w-3.5 h-3.5" />
+                      重点关注
+                    </h3>
+                    <div className="flex flex-wrap gap-2">
+                      {diagnosis.risks.slice(0, 3).map((risk) => (
+                        <span
+                          key={risk.title}
+                          className={cn(
+                            'px-3 py-1.5 rounded-lg border text-xs font-medium',
+                            risk.level === 'high'
+                              ? 'bg-rose-500/10 border-rose-500/20 text-rose-400'
+                              : risk.level === 'medium'
+                                ? 'bg-amber-500/10 border-amber-500/20 text-amber-400'
+                                : 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400'
+                          )}
+                        >
+                          {risk.title}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {diagnosis.suggestions && diagnosis.suggestions.length > 0 && (
+                  <div className="space-y-2">
+                    <h3 className="text-xs font-medium text-text-muted">AI 建议</h3>
+                    <ul className="space-y-2">
+                      {diagnosis.suggestions
+                        .filter(
+                          (s) =>
+                            s.title.includes(subjectLabels[subject]) ||
+                            s.description.includes(subjectLabels[subject]) ||
+                            s.priority === 'must'
+                        )
+                        .slice(0, 3)
+                        .map((s) => (
+                          <li
+                            key={s.title}
+                            className="flex items-start gap-2 text-sm text-text-secondary"
+                          >
+                            <span
+                              className={cn(
+                                'mt-1 w-1.5 h-1.5 rounded-full shrink-0',
+                                s.priority === 'must'
+                                  ? 'bg-rose-400'
+                                  : s.priority === 'should'
+                                    ? 'bg-amber-400'
+                                    : 'bg-emerald-400'
+                              )}
+                            />
+                            <span>
+                              <span className="font-medium">{s.title}</span>
+                              <span className="text-text-tertiary">
+                                {' '}
+                                · {s.description}
+                              </span>
+                            </span>
+                          </li>
+                        ))}
+                    </ul>
+                  </div>
+                )}
               </div>
             )}
           </div>

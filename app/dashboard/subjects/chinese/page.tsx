@@ -119,12 +119,15 @@ export default function ChineseSubjectPage() {
             <AlertCircle className="w-5 h-5 text-primary shrink-0 mt-0.5" />
             <div>
               <p className="font-medium text-text-secondary mb-1">本路径服务于三公冲刺路线的语文素养与综合荣誉</p>
-              <p className="text-sm text-text-tertiary">
-                语文学科路径是小升初方案中「三公冲刺型」路线的人文素养与面谈表达支撑。核心目标：古诗文积累 120 首+、汉字小达人/古诗文大会荣誉、流畅自信的面谈表达。
-                <Link href="/dashboard/plan" className="text-primary hover:underline ml-1">
-                  查看完整小升初方案 →
-                </Link>
-              </p>
+              <p className="text-sm text-text-tertiary leading-relaxed">
+              语文学科路径是小升初方案中「三公冲刺型」路线的人文素养与面谈表达支撑。核心目标：古诗文积累 120 首+、汉字小达人/古诗文大会荣誉、流畅自信的面谈表达。
+            </p>
+            <Link
+              href="/dashboard/plan"
+              className="inline-flex items-center gap-1 text-sm text-primary hover:underline mt-2"
+            >
+              查看完整小升初方案 →
+            </Link>
             </div>
           </motion.div>
 
