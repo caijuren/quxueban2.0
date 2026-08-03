@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Bell, Search, Menu, Check, LogOut, Settings, User } from 'lucide-react';
+import { Bell, Search, Menu, Check, LogOut, Settings, User, ChevronDown } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { signOut, useSession } from 'next-auth/react';
@@ -97,7 +97,6 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
     };
 
     document.addEventListener('keydown', handleKeyDown);
-    // Focus the current child when opening
     const activeIndex = children.findIndex((c) => c.id === currentChildId);
     setTimeout(() => childButtonRefs.current[activeIndex]?.focus(), 0);
 
@@ -161,7 +160,7 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             onKeyDown={handleSearch}
-            className="pl-10 pr-4 py-2.5 w-56 lg:w-72 rounded-xl bg-surface-elevated/60 border border-border-subtle text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-primary/40 focus:bg-surface-elevated transition-all"
+            className="pl-10 pr-4 py-2.5 w-56 lg:w-72 rounded-[14px] bg-surface-header border border-border-default text-sm text-text-secondary placeholder:text-text-muted focus:outline-none focus:border-primary/50 focus:ring-2 focus:ring-primary/10 transition-all"
           />
         </div>
       </div>
@@ -205,34 +204,32 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
                     暂无通知
                   </div>
                 ) : (
-                  notifications.map((n) => {
-                    const marking = markRead.isPending && markRead.variables === n.id;
-                    return (
-                    <button
-                      key={n.id}
-                      onClick={() => handleMarkRead(n.id)}
-                      disabled={marking}
-                      className={`w-full text-left border-b border-border-subtle px-4 py-3 transition-colors hover:bg-surface-elevated disabled:opacity-50 ${
-                        n.readAt ? 'opacity-55' : ''
-                      }`}
-                    >
-                      <div className="mb-1 flex items-start justify-between gap-2">
-                        <p className="text-sm font-medium text-text-secondary">
-                          {n.title}
-                        </p>
-                        {!n.readAt && (
-                          <span className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-primary" />
-                        )}
-                      </div>
-                      <p className="line-clamp-2 text-xs text-text-tertiary">
-                        {n.content}
-                      </p>
-                      <p className="mt-1 text-2xs text-text-muted tabular-nums">
-                        {new Date(n.createdAt).toLocaleString('zh-CN')}
-                      </p>
-                    </button>
-                  );
-                })
+                  <div>
+                    {notifications.map((n) => {
+                      const marking = markRead.isPending && markRead.variables === n.id;
+                      return (
+                        <button
+                          key={n.id}
+                          onClick={() => handleMarkRead(n.id)}
+                          disabled={marking}
+                          className={`w-full text-left border-b border-border-subtle px-4 py-3 transition-colors hover:bg-surface-elevated disabled:opacity-50 ${
+                            n.readAt ? 'opacity-55' : ''
+                          }`}
+                        >
+                          <div className="mb-1 flex items-start justify-between gap-2">
+                            <p className="text-sm font-medium text-text-secondary">{n.title}</p>
+                            {!n.readAt && (
+                              <span className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-primary" />
+                            )}
+                          </div>
+                          <p className="line-clamp-2 text-xs text-text-tertiary">{n.content}</p>
+                          <p className="mt-1 text-2xs text-text-muted tabular-nums">
+                            {new Date(n.createdAt).toLocaleString('zh-CN')}
+                          </p>
+                        </button>
+                      );
+                    })}
+                  </div>
                 )}
               </div>
             </div>
@@ -300,7 +297,7 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
         <div className="relative" ref={childDropdownRef}>
           <button
             onClick={() => setChildDropdownOpen((prev) => !prev)}
-            className="flex items-center gap-2.5 pl-1 pr-2 py-1 rounded-xl bg-surface-elevated/60 border border-border-subtle hover:border-border-default hover:bg-surface-elevated text-left focus-ring transition-all"
+            className="flex items-center gap-2 pl-1 pr-2 py-1 rounded-xl bg-surface-elevated/60 border border-border-subtle hover:border-border-default hover:bg-surface-elevated text-left focus-ring transition-all"
             aria-label="切换孩子"
             aria-haspopup="listbox"
             aria-expanded={childDropdownOpen}
@@ -317,16 +314,11 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
                   : '请选择孩子'}
               </p>
             </div>
-            <svg
+            <ChevronDown
               className={`w-4 h-4 text-text-muted hidden sm:block transition-transform duration-200 ${
                 childDropdownOpen ? 'rotate-180' : ''
               }`}
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-            </svg>
+            />
           </button>
 
           {childDropdownOpen && (

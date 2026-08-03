@@ -7,15 +7,40 @@
   --font-body: 'Manrope', 'PingFang SC', 'Microsoft YaHei', sans-serif;
   --font-mono: 'JetBrains Mono', 'SF Mono', monospace;
 
-  /* Command center theme v2 */
-  --color-primary: #ff2d6a;
-  --color-primary-glow: #ff5c8a;
-  --color-primary-dim: rgba(255, 45, 106, 0.12);
-  --color-secondary: #8b5cf6;
-  --color-secondary-glow: #a78bfa;
+  /* Dark Premium Education Tech theme v2.1 */
+  --bg-primary: #090B12;
+  --bg-header: #0D1018;
+  --bg-card: #111522;
+  --bg-card-hover: #171C2B;
+  --bg-elevated: #1C2233;
+
+  --color-primary: #F43F7A;
+  --color-primary-glow: #FB7185;
+  --color-primary-dim: rgba(244, 63, 122, 0.12);
+  --color-secondary: #8B5CF6;
+  --color-secondary-glow: #6366F1;
   --color-secondary-dim: rgba(139, 92, 246, 0.12);
-  --shadow-primary: rgba(255, 45, 106, 0.22);
+
+  --ai-primary: #8B5CF6;
+  --ai-glow: #6366F1;
+
+  --success: #10B981;
+  --warning: #F59E0B;
+  --danger: #EF4444;
+
+  --text-primary: #F8FAFC;
+  --text-secondary: #CBD5E1;
+  --text-tertiary: #94A3B8;
+  --text-muted: #64748B;
+  --text-disabled: #334155;
+
+  --border-default: rgba(255, 255, 255, 0.08);
+  --border-primary: rgba(244, 63, 122, 0.45);
+  --border-ai: rgba(139, 92, 246, 0.45);
+
+  --shadow-primary: rgba(244, 63, 122, 0.22);
   --shadow-secondary: rgba(139, 92, 246, 0.22);
+  --shadow-card: 0 8px 30px rgba(0, 0, 0, 0.25);
 }
 
 html {
@@ -23,8 +48,8 @@ html {
 }
 
 body {
-  background-color: #050508;
-  color: #ffffff;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
   font-family: var(--font-body);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -96,8 +121,8 @@ body {
   background:
     radial-gradient(ellipse at 75% 0%, color-mix(in srgb, var(--color-primary) 5%, transparent) 0%, transparent 40%),
     radial-gradient(ellipse at 25% 100%, color-mix(in srgb, var(--color-secondary) 4%, transparent) 0%, transparent 40%),
-    radial-gradient(ellipse at 50% 50%, rgba(10, 10, 18, 0.92) 0%, transparent 70%),
-    #050508;
+    radial-gradient(ellipse at 50% 50%, rgba(17, 21, 34, 0.92) 0%, transparent 70%),
+    var(--bg-primary);
 }
 
 /* Grid pattern overlay - finer, more technical */
@@ -138,17 +163,18 @@ body {
 
 /* Command panel - refined card */
 .command-panel {
-  @apply rounded-2xl bg-surface border border-border-default transition-all duration-200;
+  @apply rounded-[20px] bg-surface border border-border-default transition-all duration-200;
+  box-shadow: var(--shadow-card);
 }
 
 .command-panel:hover {
-  border-color: rgba(255, 255, 255, 0.09);
-  background-color: #0c0c12;
+  border-color: rgba(255, 255, 255, 0.11);
+  background-color: var(--bg-card-hover);
 }
 
 .command-panel-active {
-  @apply rounded-2xl bg-surface-elevated relative;
-  border: 1px solid color-mix(in srgb, var(--color-primary) 22%, transparent);
+  @apply rounded-[20px] bg-surface relative;
+  border: 1px solid var(--border-primary);
 }
 
 .command-panel-active::before {
@@ -160,7 +186,7 @@ body {
   width: 3px;
   border-radius: 0 3px 3px 0;
   background: var(--color-primary);
-  box-shadow: 0 0 14px var(--shadow-primary);
+  box-shadow: 0 0 16px var(--shadow-primary);
 }
 
 /* Text balance */

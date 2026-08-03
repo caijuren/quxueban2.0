@@ -42,7 +42,7 @@ export default function CommandCard({
         active
           ? 'command-panel-active'
           : 'command-panel',
-        hover && !active && 'hover:border-border-strong hover:bg-surface-elevated',
+        hover && !active && 'hover:border-border-strong hover:bg-surface-hover',
         isInteractive && 'cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-2 focus-visible:ring-offset-background',
         className
       )}
