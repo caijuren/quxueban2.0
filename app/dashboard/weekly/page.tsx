@@ -41,6 +41,7 @@ import WeeklyReportExport from '@/components/weekly/WeeklyReportExport';
 import GeneratePlanModal from '@/components/weekly/GeneratePlanModal';
 import WeeklyMatrix from '@/components/weekly/WeeklyMatrix';
 import WeeklyTaskChecklistMatrix from '@/components/weekly/WeeklyTaskChecklistMatrix';
+import WeeklyGoalTable from '@/components/weekly/WeeklyGoalTable';
 import WeeklyGoalsPanel from '@/components/weekly/WeeklyGoalsPanel';
 import { gradeLabel } from '@/lib/children';
 import {
@@ -1421,7 +1422,7 @@ function WeeklyTasksContent() {
   const [libraryOpen, setLibraryOpen] = useState(false);
   const [reportOpen, setReportOpen] = useState(false);
   const [generateOpen, setGenerateOpen] = useState(false);
-  const [matrixView, setMatrixView] = useState<'calendar' | 'checklist'>('calendar');
+  const [matrixView, setMatrixView] = useState<'calendar' | 'checklist' | 'goaltable'>('calendar');
 
   const today = getTodayName();
 
@@ -1942,9 +1943,20 @@ function WeeklyTasksContent() {
                 >
                   任务清单
                 </button>
+                <button
+                  type="button"
+                  onClick={() => setMatrixView('goaltable')}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
+                    matrixView === 'goaltable'
+                      ? 'bg-primary text-white'
+                      : 'text-text-secondary hover:text-text-primary'
+                  }`}
+                >
+                  目标表
+                </button>
               </div>
             </div>
-            {matrixView === 'calendar' ? (
+            {matrixView === 'calendar' && (
               <WeeklyMatrix
                 tasks={displayPlan.tasks}
                 weekId={weekId}
@@ -1953,10 +1965,18 @@ function WeeklyTasksContent() {
                 onToggleTask={handleToggleTask}
                 onMoveTask={handleMoveTask}
               />
-            ) : (
+            )}
+            {matrixView === 'checklist' && (
               <WeeklyTaskChecklistMatrix
                 tasks={displayPlan.tasks}
                 onCellClick={() => setEditOpen(true)}
+              />
+            )}
+            {matrixView === 'goaltable' && (
+              <WeeklyGoalTable
+                goals={displayPlan.goals ?? []}
+                tasks={displayPlan.tasks}
+                onChange={handleGoalsChange}
               />
             )}
           </div>

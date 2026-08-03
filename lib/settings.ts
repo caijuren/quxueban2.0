@@ -6,6 +6,7 @@ export interface UserProfile {
   phone: string | null;
   email: string | null;
   wechatOpenId: string | null;
+  role: 'ADMIN' | 'PARENT';
 }
 
 export interface UserSettings {

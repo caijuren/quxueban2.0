@@ -5,6 +5,7 @@ declare module 'next-auth' {
     id: string;
     username: string;
     name?: string | null;
+    avatarUrl?: string | null;
     role: 'ADMIN' | 'PARENT';
   }
 
@@ -18,6 +19,7 @@ declare module 'next-auth/jwt' {
     id: string;
     username: string;
     name?: string | null;
+    avatarUrl?: string | null;
     role: 'ADMIN' | 'PARENT';
   }
 }

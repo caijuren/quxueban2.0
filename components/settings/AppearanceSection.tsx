@@ -86,9 +86,9 @@ export default function AppearanceSection({
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-3">
       <SettingsSection title="界面偏好" description="主题、显示与默认行为">
-        <div className="space-y-4">
+        <div className="space-y-3">
           <div>
             <div className="flex items-center gap-2 mb-2">
               <Palette className="w-3.5 h-3.5 text-primary" />
@@ -215,7 +215,7 @@ export default function AppearanceSection({
           <div>
             <div className="flex items-center gap-2 mb-2">
               <Users className="w-3.5 h-3.5 text-secondary" />
-              <p className="text-sm font-medium text-text-secondary">默认孩子选择</p>
+              <p className="text-xs font-medium text-text-secondary">默认孩子选择</p>
             </div>
             <div className="flex gap-1.5">
               {CHILD_MODES.map((mode) => (

@@ -41,6 +41,7 @@ export async function GET() {
     phone: user.phone,
     email: user.email,
     wechatOpenId: user.wechatOpenId,
+    role: user.role,
     settings: {
       theme: user.settings.theme,
       fontSize: user.settings.fontSize,
@@ -132,6 +133,7 @@ export async function PATCH(req: Request) {
     phone: updated.phone,
     email: updated.email,
     wechatOpenId: updated.wechatOpenId,
+    role: updated.role,
     settings: updated.settings
       ? {
           theme: updated.settings.theme,

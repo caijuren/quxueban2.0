@@ -1,10 +1,10 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Bell, Search, Menu, Check, LogOut } from 'lucide-react';
+import { Bell, Search, Menu, Check, LogOut, Settings, User } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { signOut } from 'next-auth/react';
+import { signOut, useSession } from 'next-auth/react';
 import { useChildren } from '@/components/dashboard/ChildrenContext';
 import ChildAvatar from '@/components/dashboard/ChildAvatar';
 import { gradeLabel, gradeToStage } from '@/lib/children';
@@ -20,6 +20,7 @@ interface TopbarProps {
 
 export default function Topbar({ onMenuClick }: TopbarProps) {
   const router = useRouter();
+  const { data: session } = useSession();
   const { children, currentChild, currentChildId, setCurrentChildId } = useChildren();
   const { data: notifications = [], isLoading: loadingNotifications } = useNotifications();
   const markRead = useMarkNotificationRead();
@@ -27,12 +28,16 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
   const [search, setSearch] = useState('');
   const [childDropdownOpen, setChildDropdownOpen] = useState(false);
   const [notificationOpen, setNotificationOpen] = useState(false);
+  const [userMenuOpen, setUserMenuOpen] = useState(false);
   const childDropdownRef = useRef<HTMLDivElement>(null);
   const childListboxRef = useRef<HTMLDivElement>(null);
   const notificationRef = useRef<HTMLDivElement>(null);
+  const userMenuRef = useRef<HTMLDivElement>(null);
   const childButtonRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
   const unreadCount = notifications.filter((n) => !n.readAt).length;
+  const currentUser = session?.user;
+  const userAvatarUrl = currentUser?.avatarUrl;
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -48,14 +53,20 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
       ) {
         setNotificationOpen(false);
       }
+      if (
+        userMenuRef.current &&
+        !userMenuRef.current.contains(e.target as Node)
+      ) {
+        setUserMenuOpen(false);
+      }
     };
-    if (childDropdownOpen || notificationOpen) {
+    if (childDropdownOpen || notificationOpen || userMenuOpen) {
       document.addEventListener('mousedown', handleClickOutside);
     }
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [childDropdownOpen, notificationOpen]);
+  }, [childDropdownOpen, notificationOpen, userMenuOpen]);
 
   useEffect(() => {
     if (!childDropdownOpen) return;
@@ -117,6 +128,11 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
   const handleLogout = async () => {
     await signOut({ redirect: false });
     router.push('/');
+  };
+
+  const handleGoToSettings = () => {
+    setUserMenuOpen(false);
+    router.push('/dashboard/settings');
   };
 
   const currentStage = currentChild ? gradeToStage(currentChild.grade, currentChild.educationSystem) : null;
@@ -223,13 +239,63 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
           )}
         </div>
 
-        <button
-          onClick={handleLogout}
-          className="hidden sm:flex w-10 h-10 rounded-xl bg-surface-elevated/60 items-center justify-center text-text-secondary hover:text-danger hover:bg-danger/[0.08] transition-all focus-ring"
-          aria-label="退出登录"
-        >
-          <LogOut className="w-5 h-5" />
-        </button>
+        <div className="relative" ref={userMenuRef}>
+          <button
+            onClick={() => setUserMenuOpen((prev) => !prev)}
+            className="flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-surface-elevated/60 border border-border-subtle hover:border-border-default hover:bg-surface-elevated text-left focus-ring transition-all overflow-hidden"
+            aria-label="用户菜单"
+            aria-haspopup="menu"
+            aria-expanded={userMenuOpen}
+          >
+            {userAvatarUrl ? (
+              <img
+                src={userAvatarUrl}
+                alt={currentUser?.name || '用户头像'}
+                className="w-full h-full object-cover"
+              />
+            ) : currentUser?.name ? (
+              <span className="text-sm font-bold text-white">
+                {currentUser.name.slice(0, 1).toUpperCase()}
+              </span>
+            ) : (
+              <User className="w-5 h-5 text-text-secondary" />
+            )}
+          </button>
+
+          {userMenuOpen && (
+            <div
+              role="menu"
+              className="absolute right-0 top-full mt-2 w-44 rounded-2xl bg-[#0f172a] border border-border-default overflow-hidden z-50 shadow-2xl"
+            >
+              <div className="p-1.5">
+                <div className="px-3 py-2 border-b border-border-subtle mb-1">
+                  <p className="text-sm font-semibold text-white truncate">
+                    {currentUser?.name || currentUser?.username || '用户'}
+                  </p>
+                  <p className="text-xs text-text-tertiary truncate">
+                    {currentUser?.username || ''}
+                  </p>
+                </div>
+                <button
+                  role="menuitem"
+                  onClick={handleGoToSettings}
+                  className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-left text-sm text-text-secondary hover:bg-surface-elevated transition-colors"
+                >
+                  <Settings className="w-4 h-4" />
+                  系统设置
+                </button>
+                <button
+                  role="menuitem"
+                  onClick={handleLogout}
+                  className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-left text-sm text-danger hover:bg-danger/[0.08] transition-colors"
+                >
+                  <LogOut className="w-4 h-4" />
+                  退出登录
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
 
         <div className="relative" ref={childDropdownRef}>
           <button

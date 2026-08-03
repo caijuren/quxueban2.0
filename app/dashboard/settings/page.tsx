@@ -1,6 +1,6 @@
 'use client';
 
-import { Suspense, useEffect, useRef, useState } from 'react';
+import { Suspense, useEffect, useMemo, useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { useSearchParams } from 'next/navigation';
 import {
@@ -10,7 +10,6 @@ import {
   Users,
   Shield,
   HelpCircle,
-  ChevronDown,
   Loader2,
   Settings,
   Target,
@@ -27,15 +26,15 @@ import HelpSection from '@/components/settings/HelpSection';
 import CapabilitySection from '@/components/settings/CapabilitySection';
 import AiConfigSection from '@/components/settings/AiConfigSection';
 
-const CATEGORIES = [
-  { id: 'account', label: '账号与安全', icon: Shield },
-  { id: 'notifications', label: '消息通知', icon: Bell },
-  { id: 'appearance', label: '界面偏好', icon: Palette },
-  { id: 'children', label: '孩子管理', icon: Users },
-  { id: 'capabilities', label: '能力模型', icon: Target },
-  { id: 'ai', label: 'AI 配置', icon: Sparkles },
-  { id: 'data', label: '数据与隐私', icon: User },
-  { id: 'help', label: '帮助与关于', icon: HelpCircle },
+const ALL_CATEGORIES = [
+  { id: 'account', label: '账号与安全', icon: Shield, adminOnly: false },
+  { id: 'notifications', label: '消息通知', icon: Bell, adminOnly: false },
+  { id: 'appearance', label: '界面偏好', icon: Palette, adminOnly: false },
+  { id: 'children', label: '孩子管理', icon: Users, adminOnly: false },
+  { id: 'capabilities', label: '能力模型', icon: Target, adminOnly: false },
+  { id: 'ai', label: 'AI 配置', icon: Sparkles, adminOnly: true },
+  { id: 'data', label: '数据与隐私', icon: User, adminOnly: false },
+  { id: 'help', label: '帮助与关于', icon: HelpCircle, adminOnly: false },
 ];
 
 function SettingsPageInner() {
@@ -45,10 +44,14 @@ function SettingsPageInner() {
   const updateUser = useUpdateUser();
   const [activeCategory, setActiveCategory] = useState(() => {
     const tab = searchParams.get('tab');
-    return CATEGORIES.some((c) => c.id === tab) ? tab! : 'account';
+    return ALL_CATEGORIES.some((c) => c.id === tab) ? tab! : 'account';
   });
-  const [dropdownOpen, setDropdownOpen] = useState(false);
-  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  const categories = useMemo(() => {
+    if (!user) return ALL_CATEGORIES;
+    const isAdmin = user.role === 'ADMIN';
+    return ALL_CATEGORIES.filter((c) => !c.adminOnly || isAdmin);
+  }, [user]);
 
   useEffect(() => {
     if (user?.settings) {
@@ -57,19 +60,12 @@ function SettingsPageInner() {
   }, [user?.settings]);
 
   useEffect(() => {
-    function handleClickOutside(e: MouseEvent) {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(e.target as Node)
-      ) {
-        setDropdownOpen(false);
-      }
+    if (!user) return;
+    const visibleIds = new Set(categories.map((c) => c.id));
+    if (!visibleIds.has(activeCategory)) {
+      setActiveCategory('account');
     }
-    if (dropdownOpen) {
-      document.addEventListener('mousedown', handleClickOutside);
-    }
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [dropdownOpen]);
+  }, [categories, activeCategory, user]);
 
   const handleUpdate = async (updates: Partial<UserWithSettings>) => {
     const data = await updateUser.mutateAsync(updates);
@@ -81,9 +77,6 @@ function SettingsPageInner() {
   ) => {
     return handleUpdate(settingUpdates as Partial<UserWithSettings>);
   };
-
-  const activeCategoryInfo =
-    CATEGORIES.find((c) => c.id === activeCategory) || CATEGORIES[0];
 
   if (loading) {
     return (
@@ -101,74 +94,48 @@ function SettingsPageInner() {
     );
   }
 
+  const isAdmin = user.role === 'ADMIN';
+
   return (
-    <div className="space-y-6">
-      <motion.div
-        initial={shouldReduceMotion ? false : { opacity: 0, y: -8 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4 }}
-        className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
+    <div className="flex flex-col lg:flex-row gap-4 h-[calc(100vh-7rem)] lg:h-[calc(100vh-5rem)]">
+      <motion.aside
+        initial={shouldReduceMotion ? false : { opacity: 0, x: -12 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.35 }}
+        className="shrink-0 lg:w-52 xl:w-60"
       >
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-accent/10 border border-accent/20 flex items-center justify-center">
-            <Settings className="w-5 h-5 text-accent" />
-          </div>
-          <div>
-            <h1 className="text-2xl sm:text-3xl font-bold font-display">
-              系统设置
-            </h1>
-          </div>
+        <div className="flex items-center gap-2 mb-3 px-1">
+          <Settings className="w-4 h-4 text-accent" />
+          <h1 className="text-lg font-bold font-display">系统设置</h1>
         </div>
-
-        <div className="flex items-center gap-2">
-          <div ref={dropdownRef} className="relative">
-            <button
-              id="settings-category-dropdown"
-              onClick={() => setDropdownOpen((v) => !v)}
-              className="flex items-center gap-2 px-3 py-2 rounded-lg glass border border-white/[0.08] text-sm font-medium text-slate-200 hover:bg-white/[0.04] transition-colors focus-ring"
-              aria-haspopup="listbox"
-              aria-expanded={dropdownOpen}
-            >
-              <activeCategoryInfo.icon className="w-4 h-4 text-primary" />
-              <span className="gradient-text font-semibold">
-                {activeCategoryInfo.label}
-              </span>
-              <ChevronDown
-                className={`w-3.5 h-3.5 text-slate-400 transition-transform duration-200 ${
-                  dropdownOpen ? 'rotate-180' : ''
+        <nav className="flex lg:flex-col gap-1 overflow-x-auto lg:overflow-visible pb-2 lg:pb-0">
+          {categories.map((cat) => {
+            const isActive = activeCategory === cat.id;
+            return (
+              <button
+                key={cat.id}
+                onClick={() => setActiveCategory(cat.id)}
+                className={`flex items-center gap-2 px-3 py-2 rounded-lg text-left transition-colors whitespace-nowrap ${
+                  isActive
+                    ? 'bg-primary/10 text-primary font-medium'
+                    : 'text-text-tertiary hover:bg-surface-elevated hover:text-text-secondary'
                 }`}
-              />
-            </button>
+              >
+                <cat.icon className="w-4 h-4" />
+                <span className="text-xs">{cat.label}</span>
+              </button>
+            );
+          })}
+        </nav>
+      </motion.aside>
 
-            {dropdownOpen && (
-              <div className="absolute right-0 top-full mt-2 w-48 rounded-xl glass border border-white/[0.08] overflow-hidden z-50 shadow-2xl">
-                {CATEGORIES.map((cat) => {
-                  const isActive = activeCategory === cat.id;
-                  return (
-                    <button
-                      key={cat.id}
-                      onClick={() => {
-                        setActiveCategory(cat.id);
-                        setDropdownOpen(false);
-                      }}
-                      className={`w-full text-left px-3 py-2.5 text-sm transition-colors flex items-center gap-2 ${
-                        isActive
-                          ? 'bg-primary/10 text-primary font-medium'
-                          : 'text-slate-300 hover:bg-white/5'
-                      }`}
-                    >
-                      <cat.icon className="w-4 h-4" />
-                      {cat.label}
-                    </button>
-                  );
-                })}
-              </div>
-            )}
-          </div>
-        </div>
-      </motion.div>
-
-      <div key={activeCategory} className="space-y-4">
+      <motion.main
+        key={activeCategory}
+        initial={shouldReduceMotion ? false : { opacity: 0, y: 8 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.25 }}
+        className="flex-1 min-w-0 overflow-y-auto pr-1 pb-8"
+      >
         {activeCategory === 'account' && (
           <AccountSection user={user} onUpdate={handleUpdate} />
         )}
@@ -180,10 +147,10 @@ function SettingsPageInner() {
         )}
         {activeCategory === 'children' && <ChildrenSection />}
         {activeCategory === 'capabilities' && <CapabilitySection />}
-        {activeCategory === 'ai' && <AiConfigSection />}
+        {activeCategory === 'ai' && isAdmin && <AiConfigSection />}
         {activeCategory === 'data' && <DataPrivacySection />}
         {activeCategory === 'help' && <HelpSection />}
-      </div>
+      </motion.main>
     </div>
   );
 }

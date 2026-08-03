@@ -13,16 +13,16 @@ export default function SettingsSection({
   title,
   description,
   children,
-  compact = false,
+  compact = true,
 }: SettingsSectionProps) {
   return (
     <CommandCard className={compact ? 'p-3 sm:p-4' : 'p-4 sm:p-5'}>
-      <div className={compact ? 'mb-2.5' : 'mb-3'}>
-        <h2 className="text-base font-bold font-display text-text-primary">
+      <div className={compact ? 'mb-2' : 'mb-3'}>
+        <h2 className="text-sm font-bold font-display text-text-primary">
           {title}
         </h2>
         {description && (
-          <p className="text-xs text-text-muted mt-0.5">{description}</p>
+          <p className="text-[11px] text-text-muted mt-0.5 leading-tight">{description}</p>
         )}
       </div>
       {children}
