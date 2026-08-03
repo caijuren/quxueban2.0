@@ -323,7 +323,7 @@ export default function PlanDetailClient({ id }: { id: string }) {
         <p className="text-text-tertiary mb-6">该路线方案不存在或已被删除</p>
         <Link
           href="/dashboard/plan"
-          className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary text-white font-semibold  transition-all"
+          className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary text-text-primary font-semibold  transition-all"
         >
           返回路线方案
         </Link>
@@ -377,7 +377,7 @@ export default function PlanDetailClient({ id }: { id: string }) {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.1 }}
-        className={`rounded-2xl glass p-6 border ${plan.type === 'primary' ? 'border-primary/30' : 'border-border-subtle'} relative overflow-hidden`}
+        className={`rounded-2xl bg-surface-elevated p-6 border ${plan.type === 'primary' ? 'border-primary/30' : 'border-border-subtle'} relative overflow-hidden`}
       >
         {plan.type === 'primary' && (
           <div className="absolute top-0 right-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
@@ -428,7 +428,7 @@ export default function PlanDetailClient({ id }: { id: string }) {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.4 }}
-        className="rounded-2xl glass p-6 border border-border-subtle"
+        className="rounded-2xl bg-surface-elevated p-6 border border-border-subtle"
       >
         <h2 className="text-xl font-bold font-display mb-6">
           {['sizhong', 'shizhong', 'quzhong'].includes(plan.id)
@@ -447,14 +447,14 @@ export default function PlanDetailClient({ id }: { id: string }) {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.5 + index * 0.1 }}
                 whileHover={{ y: -4 }}
-                className={`group rounded-xl glass p-5 border border-border-subtle cursor-pointer transition-all duration-300 ${school.shadow}`}
+                className={`group rounded-xl bg-surface-elevated p-5 border border-border-subtle cursor-pointer transition-all duration-300 ${school.shadow}`}
               >
                 <div className="flex items-center gap-3 mb-3">
                   <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${school.color} flex items-center justify-center shrink-0`}>
-                    <school.icon className="w-6 h-6 text-white" />
+                    <school.icon className="w-6 h-6 text-text-primary" />
                   </div>
                   <div>
-                    <h4 className="font-bold font-display group-hover:text-white transition-colors">
+                    <h4 className="font-bold font-display group-hover:text-text-primary transition-colors">
                       {school.name}
                     </h4>
                     <p className="text-xs text-text-tertiary">{school.tag}</p>
@@ -474,7 +474,7 @@ export default function PlanDetailClient({ id }: { id: string }) {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.5 }}
-        className="rounded-2xl glass p-6 border border-border-subtle"
+        className="rounded-2xl bg-surface-elevated p-6 border border-border-subtle"
       >
         <h2 className="text-xl font-bold font-display mb-6 flex items-center gap-2">
           <BookOpen className="w-5 h-5 text-accent" />
@@ -504,13 +504,13 @@ export default function PlanDetailClient({ id }: { id: string }) {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.6 }}
-        className="flex items-center justify-between rounded-2xl glass p-6 border border-border-subtle"
+        className="flex items-center justify-between rounded-2xl bg-surface-elevated p-6 border border-border-subtle"
       >
         <div className="flex items-center gap-2 text-sm text-text-muted">
           <Clock className="w-4 h-4" />
           最近更新：2 天前
         </div>
-        <button className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary text-white font-semibold  transition-all">
+        <button className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary text-text-primary font-semibold  transition-all">
           制定提升计划
           <ArrowRight className="w-4 h-4" />
         </button>

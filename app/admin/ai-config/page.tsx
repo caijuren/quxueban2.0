@@ -13,12 +13,12 @@ export default function AdminAiConfigPage() {
         transition={{ duration: 0.4 }}
       >
         <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-secondary to-accent">
-            <Sparkles className="h-5 w-5 text-white" />
+          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-secondary to-accent">
+            <Sparkles className="h-5 w-5 text-text-primary" />
           </div>
           <div>
             <h1 className="text-2xl font-bold font-display">AI 配置</h1>
-            <p className="text-sm text-slate-400">
+            <p className="text-sm text-text-tertiary">
               管理 AI 检视功能调用的模型、API Key 与启用状态
             </p>
           </div>

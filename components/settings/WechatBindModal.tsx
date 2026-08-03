@@ -19,7 +19,7 @@ export default function WechatBindModal({
       title="微信绑定"
       subtitle="绑定后支持微信提醒与一键登录"
       icon={MessageCircle}
-      iconClassName="bg-[#07C160]/20 text-[#07C160]"
+      iconClassName="bg-wechat/20 text-wechat"
       size="sm"
       colorScheme="green"
     >
@@ -35,7 +35,7 @@ export default function WechatBindModal({
         </p>
         <button
           onClick={onClose}
-          className="w-full py-2.5 rounded-xl bg-[#07C160] text-white text-sm font-semibold transition-all"
+          className="w-full py-2.5 rounded-lg bg-wechat text-text-primary text-sm font-semibold transition-all"
         >
           知道了
         </button>

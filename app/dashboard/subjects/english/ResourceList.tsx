@@ -11,7 +11,7 @@ export default function ResourceList() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.4 }}
-        className="rounded-2xl glass p-6 border border-border-subtle"
+        className="rounded-2xl bg-surface-elevated p-6 border border-border-subtle"
       >
         <h2 className="text-xl font-bold font-display mb-6 flex items-center gap-2">
           <BookOpen className="w-5 h-5 text-accent" />
@@ -42,7 +42,7 @@ export default function ResourceList() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.5 }}
-        className="rounded-2xl glass p-6 border border-border-subtle"
+        className="rounded-2xl bg-surface-elevated p-6 border border-border-subtle"
       >
         <h2 className="text-xl font-bold font-display mb-6 flex items-center gap-2">
           <CheckCircle2 className="w-5 h-5 text-success" />

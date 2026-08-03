@@ -76,9 +76,9 @@ export default function StrategyMap() {
           <h2 className="text-3xl sm:text-4xl font-bold font-display leading-tight mb-4">
             覆盖上海升学
             <br />
-            <span className="text-slate-500">全阶段路线</span>
+            <span className="text-text-muted">全阶段路线</span>
           </h2>
-          <p className="text-slate-400 text-base max-w-xl">
+          <p className="text-text-secondary text-base max-w-xl">
             从小学入学到高考，每个关键节点的路线选择都帮你梳理清楚。
           </p>
         </MotionSection>
@@ -99,8 +99,8 @@ export default function StrategyMap() {
                     </div>
                     <div>
                       <h3 className="text-lg font-bold font-display">{stage.title}</h3>
-                      <p className="text-xs text-slate-500 mt-0.5">{stage.subtitle}</p>
-                      <span className="inline-block mt-1.5 text-[10px] font-mono text-slate-600">
+                      <p className="text-xs text-text-muted mt-0.5">{stage.subtitle}</p>
+                      <span className="inline-block mt-1.5 text-[10px] font-mono text-text-muted">
                         {stage.timeRange}
                       </span>
                     </div>
@@ -118,7 +118,7 @@ export default function StrategyMap() {
                     })}
                   </div>
 
-                  <div className="hidden lg:flex items-center text-slate-600 group-hover:text-primary transition-colors">
+                  <div className="hidden lg:flex items-center text-text-muted group-hover:text-primary transition-colors">
                     <ChevronRight className="w-4 h-4" aria-hidden="true" />
                   </div>
                 </div>

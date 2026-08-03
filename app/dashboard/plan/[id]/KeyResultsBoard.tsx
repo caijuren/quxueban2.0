@@ -31,7 +31,7 @@ const statusConfig = {
     bg: 'bg-surface-elevated',
     border: 'border-border-default',
     text: 'text-text-tertiary',
-    dot: 'bg-slate-500',
+    dot: 'bg-text-muted',
   },
   'at-risk': {
     icon: AlertTriangle,
@@ -49,7 +49,7 @@ export default function KeyResultsBoard({ nodes }: KeyResultsBoardProps) {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.15 }}
-      className="rounded-2xl glass p-6 border border-border-subtle"
+      className="rounded-2xl bg-surface-elevated p-6 border border-border-subtle"
     >
       <h2 className="text-xl font-bold font-display mb-6 flex items-center gap-2">
         <Flag className="w-5 h-5 text-primary" />
@@ -73,7 +73,7 @@ export default function KeyResultsBoard({ nodes }: KeyResultsBoardProps) {
                 className={`relative flex items-start gap-4 pl-12 rounded-xl p-4 border ${isFinal ? 'bg-primary/5 border-primary/30' : 'bg-surface-elevated border-border-subtle'}`}
               >
                 <div
-                  className={`absolute left-3 top-4 w-4 h-4 rounded-full ${status.dot} ring-4 ring-[#0f172a] z-10`}
+                  className={`absolute left-3 top-4 w-4 h-4 rounded-full ${status.dot} ring-4 ring-surface z-10`}
                 />
                 <div className="flex-1 min-w-0">
                   <div className="flex flex-wrap items-center gap-2 mb-1">

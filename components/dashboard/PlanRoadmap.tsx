@@ -231,7 +231,7 @@ export default function PlanRoadmap({
           animate={{ backgroundPosition: ['200% 0', '-200% 0'] }}
           transition={{ duration: 3, repeat: Infinity, ease: 'linear' }}
         />
-        <div className="absolute inset-[1px] rounded-2xl bg-slate-950/80 pointer-events-none" />
+        <div className="absolute inset-[1px] rounded-2xl bg-background/80 pointer-events-none" />
 
         <div className="relative flex items-start gap-4 z-10">
           <div
@@ -244,7 +244,7 @@ export default function PlanRoadmap({
             <Zap className="w-6 h-6 text-warning" style={{ filter: 'drop-shadow(0 0 8px rgba(244,63,94,0.8))' }} />
           </div>
           <div>
-            <p className="text-sm text-slate-400 mb-1">
+            <p className="text-sm text-text-tertiary mb-1">
               距离下一个熔断点（{nextCheckpoint?.grade} · {nextCheckpoint?.name}）
             </p>
             <p className="text-2xl font-bold font-display">
@@ -267,7 +267,7 @@ export default function PlanRoadmap({
         </div>
         <button
           onClick={onShowDiagnosis}
-          className="relative z-10 px-5 py-2.5 rounded-xl font-medium transition-all bg-primary/10 text-primary border border-primary/30 hover:bg-primary/20 hover:border-primary/50 hover:shadow-[0_0_30px_rgba(244,63,94,0.3)]"
+          className="relative z-10 px-5 py-2.5 rounded-lg font-medium transition-all bg-primary/10 text-primary border border-primary/30 hover:bg-primary/20 hover:border-primary/50 hover:shadow-[0_0_30px_rgba(244,63,94,0.3)]"
         >
           查看诊断
         </button>
@@ -279,7 +279,7 @@ export default function PlanRoadmap({
           initial={{ opacity: 0, scale: 0.98 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.6, delay: 0.1 }}
-          className="rounded-3xl glass p-6 border border-white/5 relative overflow-hidden"
+          className="rounded-3xl bg-surface-elevated p-6 border border-border-subtle relative overflow-hidden"
           style={{
             transform: `rotateX(${tilt.rotateX}deg) rotateY(${tilt.rotateY}deg)`,
             transformStyle: 'preserve-3d',
@@ -289,9 +289,9 @@ export default function PlanRoadmap({
           <div className="flex items-center justify-between mb-6">
             <div>
               <h2 className="text-xl font-bold font-display">小学全景看板</h2>
-              <p className="text-sm text-slate-400">2025-2030 · 三条路线的熔断点与关键节点</p>
+              <p className="text-sm text-text-tertiary">2025-2030 · 三条路线的熔断点与关键节点</p>
               <div className="mt-2 flex items-center gap-2">
-                <span className="text-xs text-slate-500">当前执行路线：</span>
+                <span className="text-xs text-text-muted">当前执行路线：</span>
                 {(() => {
                   const route = routes.find((r) => r.id === activeRoute);
                   if (!route) return null;
@@ -320,7 +320,7 @@ export default function PlanRoadmap({
                     onMouseLeave={() => setHoveredRoute(null)}
                     onClick={() => setActiveRoute(route.id)}
                     className={`flex items-center gap-2 px-2 py-1 rounded-lg transition-colors ${
-                      isActive ? 'text-white bg-white/10' : 'text-slate-400 hover:text-white hover:bg-white/5'
+                      isActive ? 'text-text-primary bg-surface-hover' : 'text-text-tertiary hover:text-text-primary hover:bg-surface-hover'
                     }`}
                     aria-pressed={isActive}
                   >
@@ -587,7 +587,7 @@ export default function PlanRoadmap({
                           {outcome.label}
                         </span>
                         <div className="flex flex-col leading-none">
-                          <span className="text-[10px] text-slate-400">{outcome.name}</span>
+                          <span className="text-[10px] text-text-tertiary">{outcome.name}</span>
                           <span className="text-xs font-bold" style={{ color: route.color }}>
                             {outcome.prob}%
                           </span>
@@ -867,7 +867,7 @@ export default function PlanRoadmap({
             <motion.div
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: 'auto' }}
-              className="mt-6 p-5 rounded-2xl bg-surface border border-white/10"
+              className="mt-6 p-5 rounded-2xl bg-surface border border-border-subtle"
             >
               <div className="flex items-start justify-between">
                 <div>
@@ -889,11 +889,11 @@ export default function PlanRoadmap({
                       );
                     })()}
                   </div>
-                  <p className="text-sm text-slate-400 mb-2">
+                  <p className="text-sm text-text-tertiary mb-2">
                     {selectedCheckpoint.grade}
                     {selectedCheckpoint.requirement && ` · ${selectedCheckpoint.requirement}`}
                   </p>
-                  <p className="text-sm text-slate-300">
+                  <p className="text-sm text-text-secondary">
                     {selectedCheckpoint.type === 'hard'
                       ? '硬熔断点：未达标建议切换主路线到备选方案，系统会提醒家长评估。'
                       : selectedCheckpoint.type === 'soft'
@@ -913,7 +913,7 @@ export default function PlanRoadmap({
                   </button>
                   <button
                     onClick={() => setSelectedCheckpoint(null)}
-                    className="px-4 py-2 rounded-lg text-slate-500 hover:text-white text-sm"
+                    className="px-4 py-2 rounded-lg text-text-muted hover:text-text-primary text-sm"
                   >
                     关闭
                   </button>
@@ -934,7 +934,7 @@ export default function PlanRoadmap({
         {volunteers.map((volunteer) => (
           <div
             key={volunteer.id}
-            className="rounded-xl glass p-4 border border-white/5 hover:border-white/10 transition-all group"
+            className="rounded-xl bg-surface-elevated p-4 border border-border-subtle hover:border-border-subtle transition-all group"
           >
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-center gap-2">
@@ -944,7 +944,7 @@ export default function PlanRoadmap({
                 >
                   {volunteer.type.split('（')[1]?.replace('）', '') || volunteer.type}
                 </span>
-                <h4 className="font-bold font-display text-slate-200">{volunteer.name}</h4>
+                <h4 className="font-bold font-display text-text-primary">{volunteer.name}</h4>
               </div>
               <span className="text-lg font-bold font-display" style={{ color: volunteer.color }}>
                 {volunteer.probability}%
@@ -954,7 +954,7 @@ export default function PlanRoadmap({
               {volunteer.requirements.map((req) => (
                 <span
                   key={req}
-                  className="px-2 py-1 rounded-md bg-white/5 text-[11px] text-slate-400 border border-white/5"
+                  className="px-2 py-1 rounded-lg bg-surface-hover text-[11px] text-text-tertiary border border-border-subtle"
                 >
                   {req}
                 </span>
@@ -969,20 +969,20 @@ export default function PlanRoadmap({
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.5 }}
-        className="flex items-center justify-between p-4 rounded-2xl glass border border-white/5"
+        className="flex items-center justify-between p-4 rounded-2xl bg-surface-elevated border border-border-subtle"
       >
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center">
-            <Plus className="w-5 h-5 text-slate-400" />
+          <div className="w-10 h-10 rounded-xl bg-surface-hover flex items-center justify-center">
+            <Plus className="w-5 h-5 text-text-tertiary" />
           </div>
           <div>
-            <p className="text-sm font-medium text-slate-200">自定义熔断点</p>
-            <p className="text-xs text-slate-500">系统已内置默认节点，你也可以添加、修改或删除自己的检查点</p>
+            <p className="text-sm font-medium text-text-primary">自定义熔断点</p>
+            <p className="text-xs text-text-muted">系统已内置默认节点，你也可以添加、修改或删除自己的检查点</p>
           </div>
         </div>
         <button
           onClick={onManageNodes}
-          className="px-4 py-2 rounded-lg bg-white/5 text-slate-300 text-sm hover:bg-white/10 transition-all"
+          className="px-4 py-2 rounded-lg bg-surface-hover text-text-secondary text-sm hover:bg-surface-hover transition-all"
         >
           管理节点
         </button>

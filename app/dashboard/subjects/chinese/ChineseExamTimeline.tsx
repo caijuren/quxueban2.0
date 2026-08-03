@@ -16,11 +16,11 @@ export default function ChineseExamTimeline({ config }: ChineseExamTimelineProps
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.3 }}
-      className="rounded-2xl glass p-6 border border-border-subtle"
+      className="rounded-2xl bg-surface-elevated p-6 border border-border-subtle"
     >
       <div className="flex items-center gap-3 mb-6">
         <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-400 to-orange-400 flex items-center justify-center">
-          <Award className="w-5 h-5 text-white" />
+          <Award className="w-5 h-5 text-text-primary" />
         </div>
         <div>
           <h2 className="text-xl font-bold font-display">语文荣誉与赛事时间轴</h2>
@@ -43,14 +43,9 @@ export default function ChineseExamTimeline({ config }: ChineseExamTimelineProps
             >
               {/* Node */}
               <div
-                className="absolute left-0 top-1 w-10 h-10 rounded-full border-2 flex items-center justify-center"
-                style={{
-                  borderColor: '#f59e0b',
-                  backgroundColor: 'rgba(245, 158, 11, 0.1)',
-                  boxShadow: '0 0 15px rgba(245, 158, 11, 0.3)',
-                }}
+                className="absolute left-0 top-1 w-10 h-10 rounded-full border-2 border-warning bg-warning/10 flex items-center justify-center"
               >
-                <span className="text-xs font-bold text-amber-400">{index + 1}</span>
+                <span className="text-xs font-bold text-warning">{index + 1}</span>
               </div>
 
               {/* Card */}

@@ -177,12 +177,12 @@ function PlanPageContent() {
           <div ref={stageDropdownRef} className="relative">
             <button
               onClick={() => setStageDropdownOpen((prev) => !prev)}
-              className="flex items-center gap-2 px-3 py-2 rounded-lg glass border border-border-default text-sm font-medium text-text-secondary hover:bg-surface-elevated transition-colors focus-ring"
+              className="flex items-center gap-2 px-3 py-2 rounded-lg bg-surface-elevated border border-border-default text-sm font-medium text-text-secondary hover:bg-surface-elevated transition-colors focus-ring"
               aria-haspopup="listbox"
               aria-expanded={stageDropdownOpen}
             >
               <span className="text-text-muted">阶段</span>
-              <span className="gradient-text font-semibold">{activeStage}</span>
+              <span className="text-primary font-semibold">{activeStage}</span>
               <ChevronDown
                 className={`w-3.5 h-3.5 text-text-tertiary transition-transform duration-200 ${
                   stageDropdownOpen ? 'rotate-180' : ''
@@ -190,7 +190,7 @@ function PlanPageContent() {
               />
             </button>
             {stageDropdownOpen && (
-              <div className="absolute right-0 top-full mt-2 w-40 rounded-xl glass border border-border-default overflow-hidden z-50 shadow-2xl">
+              <div className="absolute right-0 top-full mt-2 w-40 rounded-xl bg-surface-elevated border border-border-default overflow-hidden z-50 shadow-2xl">
                 {stages.map((stage) => {
                   const isActive = activeStage === stage.id;
                   const disabled = stage.status === 'coming';
@@ -223,7 +223,7 @@ function PlanPageContent() {
           </div>
           <button
             onClick={() => setShowNewPlanModal(true)}
-            className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-primary text-white text-sm font-semibold hover:opacity-90 transition-all duration-200 focus-ring"
+            className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-primary text-white text-sm font-semibold hover:bg-primary/90 transition-all duration-200 focus-ring"
           >
             <Plus className="w-4 h-4" />
             新建方案
@@ -415,10 +415,10 @@ function PlanPageContent() {
                                 <div
                                   className={`w-8 h-8 rounded-lg bg-gradient-to-br ${school.color} flex items-center justify-center shrink-0`}
                                 >
-                                  <school.icon className="w-4 h-4 text-white" />
+                                  <school.icon className="w-4 h-4 text-text-primary" />
                                 </div>
                                 <div className="min-w-0">
-                                  <h4 className="text-sm font-semibold text-text-secondary truncate group-hover:text-white transition-colors">
+                                  <h4 className="text-sm font-semibold text-text-secondary truncate group-hover:text-text-primary transition-colors">
                                     {school.name}
                                   </h4>
                                   <p className="text-2xs text-text-muted">{school.tag}</p>

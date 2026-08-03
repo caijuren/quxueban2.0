@@ -28,11 +28,18 @@ interface Metric {
 }
 
 const defaultMetrics: Metric[] = [
-  { name: '奥数基础', score: 35, target: 80, color: '#f43f5e', icon: Target, trend: 'up', weight: 1 },
-  { name: '英语水平', score: 40, target: 85, color: '#8b5cf6', icon: Globe, trend: 'up', weight: 1 },
-  { name: '竞赛经历', score: 15, target: 70, color: '#f59e0b', icon: Trophy, trend: 'up', weight: 1 },
-  { name: '综合素质', score: 25, target: 60, color: '#06b6d4', icon: Sparkles, trend: 'stable', weight: 1 },
+  { name: '奥数基础', score: 35, target: 80, color: 'primary', icon: Target, trend: 'up', weight: 1 },
+  { name: '英语水平', score: 40, target: 85, color: 'secondary', icon: Globe, trend: 'up', weight: 1 },
+  { name: '竞赛经历', score: 15, target: 70, color: 'warning', icon: Trophy, trend: 'up', weight: 1 },
+  { name: '综合素质', score: 25, target: 60, color: 'accent', icon: Sparkles, trend: 'stable', weight: 1 },
 ];
+
+const metricColorClasses: Record<string, { text: string; bg: string; accent: string; glow: string }> = {
+  primary: { text: 'text-primary', bg: 'bg-primary/20', accent: 'accent-primary', glow: 'shadow-primary/40' },
+  secondary: { text: 'text-secondary', bg: 'bg-secondary/20', accent: 'accent-secondary', glow: 'shadow-secondary/40' },
+  warning: { text: 'text-warning', bg: 'bg-warning/20', accent: 'accent-warning', glow: 'shadow-warning/40' },
+  accent: { text: 'text-accent', bg: 'bg-accent/20', accent: 'accent-accent', glow: 'shadow-accent/40' },
+};
 
 function calcMatch(metrics: Metric[]) {
   const totalWeight = metrics.reduce((sum, m) => sum + m.weight, 0);
@@ -114,7 +121,7 @@ export default function MatchAnalysisModal({
             </button>
             <button
               type="button"
-              className="px-4 py-2 rounded-lg bg-primary text-white text-sm font-medium transition-all"
+              className="px-4 py-2 rounded-lg bg-primary text-white text-sm font-medium hover:bg-primary/90 transition-all"
             >
               制定提升计划
             </button>
@@ -148,18 +155,18 @@ export default function MatchAnalysisModal({
                   animate={{ pathLength: match / 100 }}
                   transition={{ duration: 1, ease: 'easeOut' }}
                   style={{
-                    filter: 'drop-shadow(0 0 12px rgba(244,63,94,0.6))',
+                    filter: 'drop-shadow(0 0 12px var(--shadow-primary))',
                   }}
                 />
                 <defs>
                   <linearGradient id="matchGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop offset="0%" stopColor="#f43f5e" />
-                    <stop offset="100%" stopColor="#8b5cf6" />
+                    <stop offset="0%" stopColor="var(--color-primary)" />
+                    <stop offset="100%" stopColor="var(--color-secondary)" />
                   </linearGradient>
                 </defs>
               </svg>
               <div className="absolute inset-0 flex flex-col items-center justify-center">
-                <span className="text-3xl font-bold font-display text-transparent bg-clip-text bg-primary">
+                <span className="text-3xl font-bold font-display text-primary">
                   {match}%
                 </span>
                 <span className="text-xs text-text-muted">匹配度</span>
@@ -176,7 +183,9 @@ export default function MatchAnalysisModal({
         </div>
 
         <div className="space-y-4">
-          {metrics.map((metric, index) => (
+          {metrics.map((metric, index) => {
+            const metricStyle = metricColorClasses[metric.color];
+            return (
             <motion.div
               key={metric.name}
               initial={{ opacity: 0, x: -20 }}
@@ -186,8 +195,8 @@ export default function MatchAnalysisModal({
             >
               <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ backgroundColor: `${metric.color}20` }}>
-                    <metric.icon className="w-4 h-4" style={{ color: metric.color }} />
+                  <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${metricStyle.bg}`}>
+                    <metric.icon className={`w-4 h-4 ${metricStyle.text}`} />
                   </div>
                   <div>
                     <p className="text-sm font-medium text-text-secondary">{metric.name}</p>
@@ -209,7 +218,7 @@ export default function MatchAnalysisModal({
                       max={Math.round(metric.target * 1.2)}
                       value={Math.round(metric.score)}
                       onChange={(e) => handleScoreChange(index, Number(e.target.value))}
-                      className="w-16 ml-1 px-2 py-1 rounded-md bg-surface-highlight text-sm font-bold text-white text-center border border-border-default focus:border-primary focus:outline-none"
+                      className="w-16 ml-1 px-2 py-1 rounded-md bg-surface-highlight text-sm font-bold text-text-primary text-center border border-border-default focus:border-primary focus:outline-none"
                     />
                   ) : (
                     <span
@@ -235,8 +244,7 @@ export default function MatchAnalysisModal({
                   step={1}
                   value={Math.round(metric.score)}
                   onChange={(e) => handleScoreChange(index, Number(e.target.value))}
-                  className="w-full h-2 rounded-full bg-surface-highlight appearance-none cursor-pointer accent-primary"
-                  style={{ accentColor: metric.color } as React.CSSProperties}
+                  className={`w-full h-2 rounded-full bg-surface-highlight appearance-none cursor-pointer ${metricStyle.accent}`}
                 />
               ) : (
                 <div className="h-2 rounded-full bg-surface-elevated overflow-hidden">
@@ -244,11 +252,7 @@ export default function MatchAnalysisModal({
                     initial={{ width: 0 }}
                     animate={{ width: `${Math.min((metric.score / metric.target) * 100, 100)}%` }}
                     transition={{ duration: 0.8, delay: 0.3 + index * 0.1, ease: 'easeOut' }}
-                    className="h-full rounded-full"
-                    style={{
-                      backgroundColor: metric.color,
-                      boxShadow: `0 0 10px ${metric.color}60`,
-                    }}
+                    className={`h-full rounded-full ${metricStyle.text.replace('text-', 'bg-')}`}
                   />
                 </div>
               )}
@@ -270,7 +274,8 @@ export default function MatchAnalysisModal({
                 </span>
               </div>
             </motion.div>
-          ))}
+          );
+          })}
         </div>
 
         <div className="mt-6 pt-4 border-t border-border-subtle">

@@ -44,7 +44,6 @@ export default function CommandCard({
           : 'command-panel',
         hover && !active && 'hover:border-border-strong hover:bg-surface-elevated',
         isInteractive && 'cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-2 focus-visible:ring-offset-background',
-        corner && 'corner-accent',
         className
       )}
       onClick={onClick}

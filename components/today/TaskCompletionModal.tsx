@@ -60,8 +60,8 @@ const statusConfig: Record<
   skipped: {
     label: '跳过',
     icon: AlertCircle,
-    color: 'text-slate-400',
-    bg: 'bg-slate-500/10 border-slate-500/30',
+    color: 'text-text-tertiary',
+    bg: 'bg-surface/10 border-border-default/30',
   },
   rescheduled: {
     label: '改期',
@@ -190,7 +190,7 @@ export default function TaskCompletionModal({
           <button
             onClick={handleSubmit}
             disabled={submitting}
-            className="flex-1 py-3 rounded-xl bg-primary text-white text-sm font-medium hover:bg-primary/90 disabled:opacity-60 disabled:cursor-not-allowed transition-colors"
+            className="flex-1 py-3 rounded-xl bg-primary text-text-primary text-sm font-medium hover:bg-primary/90 disabled:opacity-60 disabled:cursor-not-allowed transition-colors"
           >
             {submitting ? '保存中...' : '保存记录'}
           </button>

@@ -58,7 +58,7 @@ export default function ProgressMarketingPage() {
                 <span className="text-3xl font-mono text-slate-700 font-bold block mb-3 group-hover:text-primary transition-colors">
                   0{index + 1}
                 </span>
-                <h3 className="text-base font-bold font-display mb-2 text-white group-hover:text-primary transition-colors">
+                <h3 className="text-base font-bold font-display mb-2 text-text-primary group-hover:text-primary transition-colors">
                   {item.title}
                 </h3>
                 <p className="text-sm text-slate-400 leading-relaxed">{item.description}</p>

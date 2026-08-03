@@ -37,7 +37,7 @@ export function getCategoryColorClass(category: TaskCategory): string {
     sport: 'bg-orange-500/20 text-orange-300 border-orange-500/30',
     interest: 'bg-pink-500/20 text-pink-300 border-pink-500/30',
     ability: 'bg-indigo-500/20 text-indigo-300 border-indigo-500/30',
-    other: 'bg-slate-500/20 text-slate-300 border-slate-500/30',
+    other: 'bg-surface-hover text-text-tertiary border-border-default/30',
   };
   return map[category] || map.other;
 }
@@ -47,7 +47,7 @@ export function getAlignmentColorClass(alignment: TaskAlignment): string {
     ahead: 'bg-indigo-500/20 text-indigo-300 border-indigo-500/30',
     ontrack: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30',
     behind: 'bg-rose-500/20 text-rose-300 border-rose-500/30',
-    optional: 'bg-slate-500/20 text-slate-300 border-slate-500/30',
+    optional: 'bg-surface-hover text-text-tertiary border-border-default/30',
     unrelated: 'bg-zinc-500/20 text-zinc-400 border-zinc-500/30',
   };
   return map[alignment] || map.optional;

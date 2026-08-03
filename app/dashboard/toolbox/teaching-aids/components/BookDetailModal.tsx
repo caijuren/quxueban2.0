@@ -72,7 +72,7 @@ function PurchaseLink({
           <Package className="w-4 h-4 text-primary" />
         </div>
         <div>
-          <p className="text-sm font-medium text-text-secondary group-hover:text-white transition-colors">
+          <p className="text-sm font-medium text-text-secondary group-hover:text-text-primary transition-colors">
             {label}
           </p>
           <p className="text-2xs text-text-muted">{platform}</p>

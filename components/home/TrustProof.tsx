@@ -32,7 +32,7 @@ export default function TrustProof() {
           <h2 className="text-3xl sm:text-4xl font-bold font-display leading-tight">
             已有家长把焦虑
             <br />
-            <span className="text-slate-500">变成行动力</span>
+            <span className="text-text-muted">变成行动力</span>
           </h2>
         </MotionSection>
 
@@ -44,10 +44,10 @@ export default function TrustProof() {
               delay={index * 0.08}
             >
               <CommandCard className="p-5 h-full">
-                <div className="text-3xl sm:text-4xl font-bold font-display text-white mb-1 tabular-nums">
+                <div className="text-3xl sm:text-4xl font-bold font-display text-text-primary mb-1 tabular-nums">
                   {stat.value}
                 </div>
-                <div className="text-xs text-slate-500">{stat.label}</div>
+                <div className="text-xs text-text-muted">{stat.label}</div>
               </CommandCard>
             </MotionSection>
           ))}
@@ -62,10 +62,10 @@ export default function TrustProof() {
             >
               <CommandCard className="p-5 h-full relative">
                 <Quote className="absolute top-5 right-5 w-5 h-5 text-primary/20" aria-hidden="true" />
-                <p className="text-sm text-slate-300 leading-relaxed mb-4 pr-6">
+                <p className="text-sm text-text-secondary leading-relaxed mb-4 pr-6">
                   &ldquo;{item.content}&rdquo;
                 </p>
-                <p className="text-[11px] text-slate-500 font-mono">{item.author}</p>
+                <p className="text-[11px] text-text-muted font-mono">{item.author}</p>
               </CommandCard>
             </MotionSection>
           ))}

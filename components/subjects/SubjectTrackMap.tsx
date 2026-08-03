@@ -145,7 +145,7 @@ export default function SubjectTrackMap({
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.1 }}
-      className="rounded-3xl glass p-6 border border-border-subtle relative overflow-hidden"
+      className="rounded-3xl bg-surface-elevated p-6 border border-border-subtle relative overflow-hidden"
       style={{
         perspective: '1200px',
         transform: `rotateX(${tilt.rotateX}deg) rotateY(${tilt.rotateY}deg)`,
@@ -446,7 +446,7 @@ export default function SubjectTrackMap({
         <motion.div
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
-          className="absolute top-36 right-6 w-56 p-4 rounded-xl bg-slate-900/95 border border-border-default shadow-2xl z-20"
+          className="absolute top-36 right-6 w-56 p-4 rounded-xl bg-surface/95 border border-border-default shadow-2xl z-20"
         >
           <div className="flex items-center gap-2 mb-2">
             <div

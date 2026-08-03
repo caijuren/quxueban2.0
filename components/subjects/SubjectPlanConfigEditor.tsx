@@ -378,7 +378,7 @@ export default function SubjectPlanConfigEditor({
           <button
             onClick={handleReset}
             disabled={isLoading || !draft}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl glass border border-white/[0.08] text-sm font-medium text-text-secondary hover:text-text-primary hover:bg-white/[0.04] transition-colors disabled:opacity-50"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-surface-elevated border border-border-subtle text-sm font-medium text-text-secondary hover:text-text-primary hover:bg-surface-hover transition-colors disabled:opacity-50"
           >
             <RotateCcw className="w-4 h-4" />
             重置
@@ -386,7 +386,7 @@ export default function SubjectPlanConfigEditor({
           <button
             onClick={handleSave}
             disabled={isLoading || updateConfig.isPending || !draft || !hasChanges}
-            className="inline-flex items-center gap-2 px-5 py-2 rounded-xl bg-primary text-white text-sm font-semibold hover:bg-primary/90 transition-colors disabled:opacity-50"
+            className="inline-flex items-center gap-2 px-5 py-2 rounded-lg bg-primary text-text-primary text-sm font-semibold hover:bg-primary/90 transition-colors disabled:opacity-50"
           >
             {updateConfig.isPending ? (
               <Loader2 className="w-4 h-4 animate-spin" />
@@ -465,10 +465,10 @@ export default function SubjectPlanConfigEditor({
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-medium transition-colors ${
+                  className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                     isActive
-                      ? 'bg-primary text-white'
-                      : 'glass border border-white/[0.08] text-text-secondary hover:text-text-primary hover:bg-white/[0.04]'
+                      ? 'bg-primary text-text-primary'
+                      : 'bg-surface-elevated border border-border-subtle text-text-secondary hover:text-text-primary hover:bg-surface-hover'
                   }`}
                 >
                   <Icon className="w-4 h-4" />
@@ -546,7 +546,7 @@ export default function SubjectPlanConfigEditor({
                 ))}
                 <button
                   onClick={addTrack}
-                  className="w-full flex items-center justify-center gap-2 py-3 rounded-xl border border-dashed border-border-default text-sm text-text-tertiary hover:text-primary hover:border-primary/40 hover:bg-primary/5 transition-colors"
+                  className="w-full flex items-center justify-center gap-2 py-3 rounded-lg border border-dashed border-border-default text-sm text-text-tertiary hover:text-primary hover:border-primary/40 hover:bg-primary/5 transition-colors"
                 >
                   <Plus className="w-4 h-4" />
                   添加线路
@@ -600,7 +600,7 @@ export default function SubjectPlanConfigEditor({
                 ))}
                 <button
                   onClick={addTimeAxisItem}
-                  className="w-full flex items-center justify-center gap-2 py-3 rounded-xl border border-dashed border-border-default text-sm text-text-tertiary hover:text-primary hover:border-primary/40 hover:bg-primary/5 transition-colors"
+                  className="w-full flex items-center justify-center gap-2 py-3 rounded-lg border border-dashed border-border-default text-sm text-text-tertiary hover:text-primary hover:border-primary/40 hover:bg-primary/5 transition-colors"
                 >
                   <Plus className="w-4 h-4" />
                   添加时间轴节点
@@ -686,7 +686,7 @@ export default function SubjectPlanConfigEditor({
                 ))}
                 <button
                   onClick={addNode}
-                  className="w-full flex items-center justify-center gap-2 py-3 rounded-xl border border-dashed border-border-default text-sm text-text-tertiary hover:text-primary hover:border-primary/40 hover:bg-primary/5 transition-colors"
+                  className="w-full flex items-center justify-center gap-2 py-3 rounded-lg border border-dashed border-border-default text-sm text-text-tertiary hover:text-primary hover:border-primary/40 hover:bg-primary/5 transition-colors"
                 >
                   <Plus className="w-4 h-4" />
                   添加节点
@@ -814,7 +814,7 @@ export default function SubjectPlanConfigEditor({
 
                       <button
                         onClick={() => addAchievement(track.id)}
-                        className="mt-3 w-full flex items-center justify-center gap-2 py-2.5 rounded-xl border border-dashed border-border-default text-sm text-text-tertiary hover:text-primary hover:border-primary/40 hover:bg-primary/5 transition-colors"
+                        className="mt-3 w-full flex items-center justify-center gap-2 py-2.5 rounded-lg border border-dashed border-border-default text-sm text-text-tertiary hover:text-primary hover:border-primary/40 hover:bg-primary/5 transition-colors"
                       >
                         <Plus className="w-4 h-4" />
                         添加 {track.name} 目标
@@ -908,7 +908,7 @@ export default function SubjectPlanConfigEditor({
                 ))}
                 <button
                   onClick={addExamEvent}
-                  className="w-full flex items-center justify-center gap-2 py-3 rounded-xl border border-dashed border-border-default text-sm text-text-tertiary hover:text-primary hover:border-primary/40 hover:bg-primary/5 transition-colors"
+                  className="w-full flex items-center justify-center gap-2 py-3 rounded-lg border border-dashed border-border-default text-sm text-text-tertiary hover:text-primary hover:border-primary/40 hover:bg-primary/5 transition-colors"
                 >
                   <Plus className="w-4 h-4" />
                   添加赛事节点
@@ -932,7 +932,7 @@ function ConfigSection({
   children: React.ReactNode;
 }) {
   return (
-    <div className="rounded-2xl glass border border-border-subtle p-6">
+    <div className="rounded-2xl bg-surface-elevated border border-border-subtle p-6">
       <div className="mb-5">
         <h2 className="text-lg font-bold text-text-secondary">{title}</h2>
         <p className="text-xs text-text-tertiary mt-0.5">{subtitle}</p>

@@ -140,7 +140,7 @@ export default function WeeklyGoalTable({
         <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mx-auto mb-3">
           <Target className="w-6 h-6 text-primary" />
         </div>
-        <h3 className="text-base font-bold text-text-secondary mb-1">暂无本周目标</h3>
+        <h3 className="text-base font-bold text-text-primary mb-1">暂无本周目标</h3>
         <p className="text-sm text-text-muted">
           在编辑周计划时添加目标与明细清单，即可在此查看任务目标表
         </p>
@@ -200,8 +200,8 @@ export default function WeeklyGoalTable({
                   </td>
                   <td className="px-4 py-3 align-top">
                     <div className="flex items-center gap-2">
-                      <div className="w-6 h-6 rounded-md bg-surface-highlight flex items-center justify-center shrink-0">
-                        <CategoryIcon className="w-3.5 h-3.5 text-text-tertiary" />
+                      <div className="w-6 h-6 rounded-lg bg-surface-highlight flex items-center justify-center shrink-0">
+                        <CategoryIcon className="w-4 h-4 text-text-tertiary" />
                       </div>
                       <span className="text-sm text-text-secondary">{row.moduleName}</span>
                     </div>

@@ -329,7 +329,7 @@ export default function TaskLibrarySection() {
 
             <button
               onClick={handleAdd}
-              className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-primary text-white text-xs font-semibold hover:opacity-90 transition-all"
+              className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-primary text-text-primary text-xs font-semibold hover:opacity-90 transition-all"
             >
               <Plus className="w-3.5 h-3.5" />
               添加任务
@@ -396,7 +396,7 @@ export default function TaskLibrarySection() {
                           </span>
                         )}
                         {isArchived && (
-                          <span className="text-2xs px-1.5 py-0.5 rounded bg-slate-500/10 text-text-tertiary border border-slate-500/20 shrink-0">
+                          <span className="text-2xs px-1.5 py-0.5 rounded bg-surface/10 text-text-tertiary border border-border-default/20 shrink-0">
                             已归档
                           </span>
                         )}
@@ -483,7 +483,7 @@ export default function TaskLibrarySection() {
                       className={`flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs transition-colors disabled:opacity-50 ${
                         isArchived
                           ? 'bg-success/10 text-success hover:bg-success/15'
-                          : 'bg-slate-500/10 text-text-tertiary hover:bg-slate-500/15'
+                          : 'bg-surface/10 text-text-tertiary hover:bg-surface/15'
                       }`}
                     >
                       {archivingId === tpl.id ? (
@@ -684,12 +684,12 @@ function TaskTemplateModal({ initial, capabilities, onClose, onSave, saving }: T
         role="dialog"
         aria-modal="true"
         aria-labelledby="task-template-title"
-        className="w-full max-w-2xl max-h-[85vh] flex flex-col rounded-3xl glass border border-border-default overflow-hidden"
+        className="w-full max-w-2xl max-h-[85vh] flex flex-col rounded-3xl bg-surface-elevated border border-border-default overflow-hidden"
       >
         <div className="flex items-center justify-between p-6 sm:p-8 pb-0">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-secondary flex items-center justify-center">
-              {initial ? <Pencil className="w-5 h-5 text-white" /> : <Plus className="w-5 h-5 text-white" />}
+              {initial ? <Pencil className="w-5 h-5 text-text-primary" /> : <Plus className="w-5 h-5 text-text-primary" />}
             </div>
             <div>
               <h2 id="task-template-title" className="text-xl font-bold font-display">
@@ -1161,7 +1161,7 @@ function TaskTemplateModal({ initial, capabilities, onClose, onSave, saving }: T
             type="submit"
             form="task-template-form"
             disabled={saving || !form.title.trim()}
-            className="flex items-center gap-2 px-6 py-2 rounded-xl bg-secondary text-white font-semibold hover:shadow-[0_0_30px_rgba(139,92,246,0.4)] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex items-center gap-2 px-6 py-2 rounded-xl bg-secondary text-text-primary font-semibold hover:shadow-[0_0_30px_rgba(139,92,246,0.4)] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
             保存

@@ -1139,10 +1139,10 @@ export default function SchoolDetail({ school }: { school: string }) {
             <h1 className="text-2xl sm:text-3xl font-bold font-display">未找到学校</h1>
           </div>
         </div>
-        <p className="text-slate-400">当前链接对应的目标学校不存在。</p>
+        <p className="text-text-tertiary">当前链接对应的目标学校不存在。</p>
         <Link
           href="/dashboard/plan"
-          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white/5 text-slate-200 hover:bg-white/10 transition-all"
+          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-surface-hover text-text-primary hover:bg-surface-hover transition-all"
         >
           <ArrowLeft className="w-4 h-4" />
           返回路线方案
@@ -1162,13 +1162,13 @@ export default function SchoolDetail({ school }: { school: string }) {
       <motion.div variants={itemVariants} className="space-y-6">
         <Link
           href="/dashboard/plan"
-          className="inline-flex items-center gap-2 text-sm text-slate-400 hover:text-white transition-colors"
+          className="inline-flex items-center gap-2 text-sm text-text-tertiary hover:text-text-primary transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
           返回路线方案
         </Link>
 
-        <div className="relative rounded-3xl glass p-8 border border-white/5 overflow-hidden">
+        <div className="relative rounded-3xl bg-surface-elevated p-8 border border-border-subtle overflow-hidden">
           <div
             className="absolute top-0 right-0 w-96 h-96 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 pointer-events-none"
             style={{ backgroundColor: data.glow.replace('0.35', '0.12') }}
@@ -1177,23 +1177,23 @@ export default function SchoolDetail({ school }: { school: string }) {
             <div>
               <div className="flex flex-wrap items-center gap-3 mb-4">
                 <span
-                  className={`px-3 py-1 rounded-full text-xs font-bold bg-gradient-to-r ${data.gradient} text-white`}
+                  className={`px-3 py-1 rounded-full text-xs font-bold bg-gradient-to-r ${data.gradient} text-text-primary`}
                 >
                   {data.title}
                 </span>
-                <span className="flex items-center gap-1.5 text-xs text-slate-400">
+                <span className="flex items-center gap-1.5 text-xs text-text-tertiary">
                   <MapPin className="w-3.5 h-3.5" />
                   {data.location}
                 </span>
-                <span className="flex items-center gap-1.5 text-xs text-slate-400">
+                <span className="flex items-center gap-1.5 text-xs text-text-tertiary">
                   <GraduationCap className="w-3.5 h-3.5" />
                   {data.nature}
                 </span>
-                <span className="flex items-center gap-1.5 text-xs text-slate-400">
+                <span className="flex items-center gap-1.5 text-xs text-text-tertiary">
                   <Trophy className="w-3.5 h-3.5" />
                   {data.ranking}
                 </span>
-                <span className="flex items-center gap-1.5 text-xs text-slate-400">
+                <span className="flex items-center gap-1.5 text-xs text-text-tertiary">
                   <Banknote className="w-3.5 h-3.5" />
                   {data.fees}
                 </span>
@@ -1219,7 +1219,7 @@ export default function SchoolDetail({ school }: { school: string }) {
                 {data.tags.map((tag) => (
                   <span
                     key={tag}
-                    className="px-3 py-1 rounded-lg bg-white/5 text-sm text-slate-300 border border-white/10"
+                    className="px-3 py-1 rounded-lg bg-surface-hover text-sm text-text-secondary border border-border-subtle"
                   >
                     {tag}
                   </span>
@@ -1233,7 +1233,7 @@ export default function SchoolDetail({ school }: { school: string }) {
       {/* Timeline */}
       <motion.div variants={itemVariants} className="space-y-4">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center">
+          <div className="w-10 h-10 rounded-xl bg-surface-hover flex items-center justify-center">
             <Calendar className="w-5 h-5 text-primary" />
           </div>
           <h2 className="text-xl font-bold font-display">招生时间轴</h2>
@@ -1243,7 +1243,7 @@ export default function SchoolDetail({ school }: { school: string }) {
             <motion.div
               key={item.step}
               variants={itemVariants}
-              className="relative rounded-2xl glass p-5 border border-white/5"
+              className="relative rounded-2xl bg-surface-elevated p-5 border border-border-subtle"
             >
               <div className="flex items-center gap-3 mb-3">
                 <div
@@ -1258,10 +1258,10 @@ export default function SchoolDetail({ school }: { school: string }) {
                 </div>
                 <div>
                   <p className="font-bold">{item.step}</p>
-                  <p className="text-xs text-slate-400">{item.time}</p>
+                  <p className="text-xs text-text-tertiary">{item.time}</p>
                 </div>
               </div>
-              <p className="text-sm text-slate-300 leading-relaxed">{item.desc}</p>
+              <p className="text-sm text-text-secondary leading-relaxed">{item.desc}</p>
             </motion.div>
           ))}
         </div>
@@ -1271,18 +1271,18 @@ export default function SchoolDetail({ school }: { school: string }) {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <motion.div variants={itemVariants} className="space-y-4">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center">
+            <div className="w-10 h-10 rounded-xl bg-surface-hover flex items-center justify-center">
               <Target className="w-5 h-5 text-secondary" />
             </div>
             <h2 className="text-xl font-bold font-display">录取偏好</h2>
           </div>
-          <div className="rounded-2xl glass p-6 border border-white/5">
-            <p className="text-sm text-slate-400 mb-4">学校最看重的能力与素养</p>
+          <div className="rounded-2xl bg-surface-elevated p-6 border border-border-subtle">
+            <p className="text-sm text-text-tertiary mb-4">学校最看重的能力与素养</p>
             <div className="flex flex-wrap gap-2">
               {data.preferences.map((pref) => (
                 <span
                   key={pref}
-                  className="px-3 py-1.5 rounded-lg text-sm text-slate-200 border border-white/10"
+                  className="px-3 py-1.5 rounded-lg text-sm text-text-primary border border-border-subtle"
                   style={{
                     backgroundColor: `${data.accent}12`,
                   }}
@@ -1296,22 +1296,22 @@ export default function SchoolDetail({ school }: { school: string }) {
 
         <motion.div variants={itemVariants} className="space-y-4">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center">
+            <div className="w-10 h-10 rounded-xl bg-surface-hover flex items-center justify-center">
               <MessageSquare className="w-5 h-5 text-accent" />
             </div>
             <h2 className="text-xl font-bold font-display">面谈形式</h2>
           </div>
-          <div className="rounded-2xl glass p-6 border border-white/5 space-y-4">
+          <div className="rounded-2xl bg-surface-elevated p-6 border border-border-subtle space-y-4">
             {data.interviewFormat.map((item) => (
               <div key={item} className="flex items-start gap-3">
                 {item.includes('机考') ? (
-                  <Monitor className="w-4 h-4 text-slate-400 mt-1 shrink-0" />
+                  <Monitor className="w-4 h-4 text-text-tertiary mt-1 shrink-0" />
                 ) : item.includes('小组') ? (
-                  <Users className="w-4 h-4 text-slate-400 mt-1 shrink-0" />
+                  <Users className="w-4 h-4 text-text-tertiary mt-1 shrink-0" />
                 ) : (
-                  <MessageSquare className="w-4 h-4 text-slate-400 mt-1 shrink-0" />
+                  <MessageSquare className="w-4 h-4 text-text-tertiary mt-1 shrink-0" />
                 )}
-                <p className="text-sm text-slate-300 leading-relaxed">{item}</p>
+                <p className="text-sm text-text-secondary leading-relaxed">{item}</p>
               </div>
             ))}
           </div>
@@ -1321,7 +1321,7 @@ export default function SchoolDetail({ school }: { school: string }) {
       {/* Checklist */}
       <motion.div variants={itemVariants} className="space-y-4">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center">
+          <div className="w-10 h-10 rounded-xl bg-surface-hover flex items-center justify-center">
             <CheckCircle2 className="w-5 h-5 text-success" />
           </div>
           <h2 className="text-xl font-bold font-display">准备清单</h2>
@@ -1331,18 +1331,18 @@ export default function SchoolDetail({ school }: { school: string }) {
             <motion.div
               key={group.grade}
               variants={itemVariants}
-              className="rounded-2xl glass p-6 border border-white/5"
+              className="rounded-2xl bg-surface-elevated p-6 border border-border-subtle"
             >
               <div className="flex items-center gap-3 mb-4">
                 <Clock className="w-4 h-4" style={{ color: data.accent }} />
                 <div>
                   <h3 className="font-bold">{group.grade}</h3>
-                  <p className="text-xs text-slate-400">{group.sub}</p>
+                  <p className="text-xs text-text-tertiary">{group.sub}</p>
                 </div>
               </div>
               <ul className="space-y-3">
                 {group.tasks.map((task) => (
-                  <li key={task} className="flex items-start gap-3 text-sm text-slate-300">
+                  <li key={task} className="flex items-start gap-3 text-sm text-text-secondary">
                     <span
                       className="w-1.5 h-1.5 rounded-full mt-2 shrink-0"
                       style={{ backgroundColor: data.accent }}
@@ -1359,20 +1359,20 @@ export default function SchoolDetail({ school }: { school: string }) {
       {/* Certificates */}
       <motion.div variants={itemVariants} className="space-y-4">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center">
+          <div className="w-10 h-10 rounded-xl bg-surface-hover flex items-center justify-center">
             <Award className="w-5 h-5 text-warning" />
           </div>
           <h2 className="text-xl font-bold font-display">关键证书 / 竞赛</h2>
         </div>
-        <div className="rounded-2xl glass p-6 border border-white/5">
+        <div className="rounded-2xl bg-surface-elevated p-6 border border-border-subtle">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {data.certificates.map((cert) => (
               <div
                 key={cert}
-                className="flex items-center gap-3 p-4 rounded-xl bg-white/[0.03] border border-white/5"
+                className="flex items-center gap-3 p-4 rounded-xl bg-surface-hover border border-border-subtle"
               >
                 <Sparkles className="w-4 h-4 text-warning shrink-0" />
-                <span className="text-sm text-slate-200">{cert}</span>
+                <span className="text-sm text-text-primary">{cert}</span>
               </div>
             ))}
           </div>
@@ -1382,20 +1382,20 @@ export default function SchoolDetail({ school }: { school: string }) {
       {/* Bottom CTA */}
       <motion.div
         variants={itemVariants}
-        className="flex flex-col sm:flex-row items-center justify-between gap-4 rounded-2xl glass p-6 border border-white/5"
+        className="flex flex-col sm:flex-row items-center justify-between gap-4 rounded-2xl bg-surface-elevated p-6 border border-border-subtle"
       >
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center">
-            <BookOpen className="w-5 h-5 text-slate-400" />
+          <div className="w-10 h-10 rounded-xl bg-surface-hover flex items-center justify-center">
+            <BookOpen className="w-5 h-5 text-text-tertiary" />
           </div>
           <div>
-            <p className="font-medium text-slate-200">继续规划升学路线</p>
-            <p className="text-xs text-slate-500">返回路线方案页查看全部目标与进度</p>
+            <p className="font-medium text-text-primary">继续规划升学路线</p>
+            <p className="text-xs text-text-muted">返回路线方案页查看全部目标与进度</p>
           </div>
         </div>
         <Link
           href="/dashboard/plan"
-          className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-gradient-to-r from-primary to-secondary text-white font-semibold hover:shadow-[0_0_30px_rgba(244,63,94,0.5)] transition-all duration-300"
+          className="inline-flex items-center gap-2 px-6 py-2.5 rounded-lg bg-gradient-to-r from-primary to-secondary text-text-primary font-semibold hover:shadow-[0_0_30px_rgba(244,63,94,0.5)] transition-all duration-300"
         >
           <FileText className="w-4 h-4" />
           返回路线方案页

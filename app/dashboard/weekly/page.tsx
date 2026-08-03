@@ -453,13 +453,13 @@ function EditPlanModal({ plan, onClose, onSave }: EditPlanModalProps) {
           <div className="flex items-center justify-end gap-3 w-full">
             <button
               onClick={handleClose}
-              className="px-4 py-2 rounded-xl text-slate-400 hover:text-white transition-colors"
+              className="px-4 py-2 rounded-lg text-text-tertiary hover:text-text-primary transition-colors"
             >
               取消
             </button>
             <button
               onClick={handleSave}
-              className="flex items-center gap-2 px-6 py-2 rounded-xl bg-accent text-white font-semibold transition-all"
+              className="flex items-center gap-2 px-6 py-2 rounded-lg bg-accent text-text-primary font-semibold transition-all"
             >
               <Send className="w-4 h-4" />
               保存
@@ -474,7 +474,7 @@ function EditPlanModal({ plan, onClose, onSave }: EditPlanModalProps) {
               onClick={() => setActiveTab('tasks')}
               className={`flex-1 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
                 activeTab === 'tasks'
-                  ? 'bg-primary text-white'
+                  ? 'bg-primary text-text-primary'
                   : 'text-text-tertiary hover:text-text-secondary'
               }`}
             >
@@ -485,7 +485,7 @@ function EditPlanModal({ plan, onClose, onSave }: EditPlanModalProps) {
               onClick={() => setActiveTab('goals')}
               className={`flex-1 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
                 activeTab === 'goals'
-                  ? 'bg-primary text-white'
+                  ? 'bg-primary text-text-primary'
                   : 'text-text-tertiary hover:text-text-secondary'
               }`}
             >
@@ -502,19 +502,19 @@ function EditPlanModal({ plan, onClose, onSave }: EditPlanModalProps) {
                 return (
                   <div
                     key={day}
-                    className="rounded-2xl bg-white/5 border border-white/10 overflow-hidden"
+                    className="rounded-2xl bg-surface-hover border border-border-subtle overflow-hidden"
                   >
                     <button
                       onClick={() => toggleDay(day)}
-                      className="w-full flex items-center justify-between px-4 py-3 hover:bg-white/[0.03] transition-colors"
+                      className="w-full flex items-center justify-between px-4 py-3 hover:bg-surface-hover/50 transition-colors"
                     >
                       <div className="flex items-center gap-3">
-                        <span className="text-sm font-bold text-slate-300">{day}</span>
-                        <span className="text-xs px-2 py-0.5 rounded-full bg-white/5 text-slate-400">
+                        <span className="text-sm font-bold text-text-secondary">{day}</span>
+                        <span className="text-xs px-2 py-0.5 rounded-full bg-surface-hover text-text-tertiary">
                           {count} 项
                         </span>
                         {minutes > 0 && (
-                          <span className="text-xs px-2 py-0.5 rounded-full bg-white/5 text-slate-400">
+                          <span className="text-xs px-2 py-0.5 rounded-full bg-surface-hover text-text-tertiary">
                             约 {minutes} 分钟
                           </span>
                         )}
@@ -525,13 +525,13 @@ function EditPlanModal({ plan, onClose, onSave }: EditPlanModalProps) {
                             e.stopPropagation();
                             addTask(day);
                           }}
-                          className="p-1.5 rounded-lg hover:bg-white/10 text-slate-400 hover:text-slate-200 transition-colors"
+                          className="p-1.5 rounded-lg hover:bg-surface-hover text-text-tertiary hover:text-text-secondary transition-colors"
                           aria-label={`${day}添加任务`}
                         >
                           <Plus className="w-4 h-4" />
                         </button>
                         <ChevronDown
-                          className={`w-4 h-4 text-slate-500 transition-transform ${
+                          className={`w-4 h-4 text-text-muted transition-transform ${
                             isCollapsed ? '-rotate-90' : ''
                           }`}
                         />
@@ -548,7 +548,7 @@ function EditPlanModal({ plan, onClose, onSave }: EditPlanModalProps) {
                         >
                           <div className="p-3 space-y-3">
                             {dayTasks.length === 0 && (
-                              <div className="text-center py-4 text-xs text-slate-500">
+                              <div className="text-center py-4 text-xs text-text-muted">
                                 暂无任务，点击上方 + 添加
                               </div>
                             )}
@@ -590,7 +590,7 @@ function EditPlanModal({ plan, onClose, onSave }: EditPlanModalProps) {
                 <button
                   type="button"
                   onClick={addGoal}
-                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-primary text-white text-xs font-medium"
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-primary text-text-primary text-xs font-medium"
                 >
                   <Plus className="w-3.5 h-3.5" />
                   新建目标
@@ -598,7 +598,7 @@ function EditPlanModal({ plan, onClose, onSave }: EditPlanModalProps) {
               </div>
 
               {goals.length === 0 && (
-                <div className="text-center py-10 rounded-2xl bg-white/5 border border-white/10">
+                <div className="text-center py-10 rounded-2xl bg-surface-hover border border-border-subtle">
                   <Target className="w-8 h-8 text-text-muted mx-auto mb-2" />
                   <p className="text-sm text-text-muted">还没有目标，点击上方添加</p>
                 </div>
@@ -608,7 +608,7 @@ function EditPlanModal({ plan, onClose, onSave }: EditPlanModalProps) {
                 {goals.map((goal) => (
                   <div
                     key={goal.id}
-                    className="rounded-2xl bg-white/5 border border-white/10 p-4 space-y-3"
+                    className="rounded-2xl bg-surface-hover border border-border-subtle p-4 space-y-3"
                   >
                     <div className="grid grid-cols-12 gap-3 items-start">
                       <div className="col-span-5">
@@ -618,7 +618,7 @@ function EditPlanModal({ plan, onClose, onSave }: EditPlanModalProps) {
                           value={goal.title}
                           onChange={(e) => updateGoal(goal.id, { title: e.target.value })}
                           placeholder="例如：阅读精读"
-                          className="w-full text-xs bg-surface-elevated border border-border-default rounded-lg px-2 py-1.5 text-text-secondary placeholder:text-text-muted focus:outline-none focus:border-accent/50"
+                          className="w-full text-xs rounded-lg border border-border-default bg-surface px-2 py-1.5 text-text-primary placeholder:text-text-tertiary focus:outline-none focus:border-primary"
                         />
                       </div>
                       <div className="col-span-3">
@@ -628,7 +628,7 @@ function EditPlanModal({ plan, onClose, onSave }: EditPlanModalProps) {
                           onChange={(e) =>
                             updateGoal(goal.id, { category: e.target.value as TaskCategory })
                           }
-                          className="w-full text-xs bg-surface-elevated border border-border-default rounded-lg px-2 py-1.5 text-text-secondary focus:outline-none focus:border-accent/50"
+                          className="w-full text-xs rounded-lg border border-border-default bg-surface px-2 py-1.5 text-text-primary focus:outline-none focus:border-primary"
                         >
                           {allCategories.map((c) => (
                             <option key={c} value={c}>
@@ -648,7 +648,7 @@ function EditPlanModal({ plan, onClose, onSave }: EditPlanModalProps) {
                               quantityTarget: parseInt(e.target.value || '0', 10),
                             })
                           }
-                          className="w-full text-xs bg-surface-elevated border border-border-default rounded-lg px-2 py-1.5 text-text-secondary focus:outline-none focus:border-accent/50"
+                          className="w-full text-xs rounded-lg border border-border-default bg-surface px-2 py-1.5 text-text-primary focus:outline-none focus:border-primary"
                         />
                       </div>
                       <div className="col-span-2">
@@ -660,7 +660,7 @@ function EditPlanModal({ plan, onClose, onSave }: EditPlanModalProps) {
                             updateGoal(goal.id, { quantityUnit: e.target.value })
                           }
                           placeholder="篇/首"
-                          className="w-full text-xs bg-surface-elevated border border-border-default rounded-lg px-2 py-1.5 text-text-secondary placeholder:text-text-muted focus:outline-none focus:border-accent/50"
+                          className="w-full text-xs rounded-lg border border-border-default bg-surface px-2 py-1.5 text-text-primary placeholder:text-text-tertiary focus:outline-none focus:border-primary"
                         />
                       </div>
                     </div>
@@ -686,7 +686,7 @@ function EditPlanModal({ plan, onClose, onSave }: EditPlanModalProps) {
                                 updateGoalChecklistItem(goal.id, item.id, e.target.value)
                               }
                               placeholder="例如：《朝花夕拾》精读第二章"
-                              className="flex-1 text-xs bg-surface-elevated border border-border-default rounded-lg px-2 py-1.5 text-text-secondary placeholder:text-text-muted focus:outline-none focus:border-accent/50"
+                              className="flex-1 text-xs rounded-lg border border-border-default bg-surface px-2 py-1.5 text-text-primary placeholder:text-text-tertiary focus:outline-none focus:border-primary"
                             />
                             <button
                               type="button"
@@ -790,7 +790,7 @@ function TaskEditRow({
                   category: e.target.value as TaskCategory,
                 })
               }
-              className="w-full pl-7 pr-2 text-xs bg-surface-elevated border border-border-default rounded-lg py-1.5 text-text-secondary focus:outline-none focus:border-accent/50"
+              className="w-full pl-7 pr-2 text-xs rounded-lg border border-border-default bg-surface py-1.5 text-text-primary focus:outline-none focus:border-primary"
             >
               {allCategories.map((c) => (
                 <option key={c} value={c}>
@@ -808,7 +808,7 @@ function TaskEditRow({
             value={task.focus}
             onChange={(e) => onUpdate(task.id, { focus: e.target.value })}
             placeholder="例如：古诗新学"
-            className="w-full text-xs bg-surface-elevated border border-border-default rounded-lg px-2 py-1.5 text-text-secondary placeholder:text-text-muted focus:outline-none focus:border-accent/50"
+            className="w-full text-xs rounded-lg border border-border-default bg-surface px-2 py-1.5 text-text-primary placeholder:text-text-tertiary focus:outline-none focus:border-primary"
           />
         </div>
 
@@ -817,7 +817,7 @@ function TaskEditRow({
           <select
             value={task.timeSlot || 'flexible'}
             onChange={(e) => onUpdate(task.id, { timeSlot: e.target.value as TimeSlot })}
-            className="w-full text-xs bg-surface-elevated border border-border-default rounded-lg px-2 py-1.5 text-text-secondary focus:outline-none focus:border-accent/50"
+            className="w-full text-xs rounded-lg border border-border-default bg-surface px-2 py-1.5 text-text-primary focus:outline-none focus:border-primary"
           >
             {timeSlotOrder.map((slot) => (
               <option key={slot} value={slot}>
@@ -834,7 +834,7 @@ function TaskEditRow({
             value={task.duration}
             onChange={(e) => onUpdate(task.id, { duration: e.target.value })}
             placeholder="30分钟"
-            className="w-full text-xs bg-surface-elevated border border-border-default rounded-lg px-2 py-1.5 text-text-secondary placeholder:text-text-muted focus:outline-none focus:border-accent/50"
+            className="w-full text-xs rounded-lg border border-border-default bg-surface px-2 py-1.5 text-text-primary placeholder:text-text-tertiary focus:outline-none focus:border-primary"
           />
           <div className="flex flex-wrap gap-1 mt-1.5">
             {durationPresets.map((preset) => (
@@ -886,7 +886,7 @@ function TaskEditRow({
               goalId: e.target.value || undefined,
             })
           }
-          className="w-full text-xs bg-surface-elevated border border-border-default rounded-lg px-2 py-1.5 text-text-secondary focus:outline-none focus:border-accent/50"
+          className="w-full text-xs rounded-lg border border-border-default bg-surface px-2 py-1.5 text-text-primary focus:outline-none focus:border-primary"
         >
           <option value="">不绑定目标</option>
           {goals.map((g) => (
@@ -951,7 +951,7 @@ function TaskEditRow({
               }
             }}
             placeholder={task.materials.length === 0 ? '输入后回车或逗号分隔' : ''}
-            className="min-w-[120px] text-xs bg-transparent border-none px-1 py-0.5 text-text-secondary placeholder:text-text-muted focus:outline-none focus:ring-0"
+            className="min-w-[120px] text-xs bg-transparent border-none px-1 py-0.5 text-text-primary placeholder:text-text-tertiary focus:outline-none focus:ring-0"
           />
         </div>
       </div>
@@ -965,7 +965,7 @@ function TaskEditRow({
           onChange={(e) => onUpdate(task.id, { note: e.target.value })}
           placeholder="例如：今天阅读《夏洛的网》第1-3章，完成生词摘抄..."
           rows={2}
-          className="w-full text-xs bg-surface-elevated border border-border-default rounded-lg px-2 py-1.5 text-text-secondary placeholder:text-text-muted focus:outline-none focus:border-accent/50 resize-none"
+          className="w-full text-xs rounded-lg border border-border-default bg-surface px-2 py-1.5 text-text-primary placeholder:text-text-tertiary focus:outline-none focus:border-primary resize-none"
         />
       </div>
 
@@ -1043,20 +1043,20 @@ function UnsavedPrompt({ onCancel, onConfirm }: UnsavedPromptProps) {
         <div className="flex items-center justify-center gap-3 w-full">
           <button
             onClick={onCancel}
-            className="px-4 py-2 rounded-xl text-slate-400 hover:text-white transition-colors"
+            className="px-4 py-2 rounded-lg text-text-tertiary hover:text-text-primary transition-colors"
           >
             继续编辑
           </button>
           <button
             onClick={onConfirm}
-            className="px-4 py-2 rounded-xl bg-error/15 text-error hover:bg-error/20 transition-colors"
+            className="px-4 py-2 rounded-lg bg-error/15 text-error hover:bg-error/20 transition-colors"
           >
             放弃更改
           </button>
         </div>
       }
     >
-      <p className="text-sm text-slate-400 text-center">
+      <p className="text-sm text-text-tertiary text-center">
         当前编辑内容尚未保存，确定要关闭弹窗吗？
       </p>
     </Modal>
@@ -1216,14 +1216,14 @@ function TaskLibraryModal({
           <div className="flex items-center gap-3">
             <button
               onClick={onClose}
-              className="px-4 py-2 rounded-xl text-text-tertiary hover:text-text-secondary transition-colors"
+              className="px-4 py-2 rounded-lg text-text-tertiary hover:text-text-secondary transition-colors"
             >
               取消
             </button>
             <button
               onClick={handleAdd}
               disabled={selectedTemplateIds.size === 0 || assess.isPending}
-              className="flex items-center gap-2 px-6 py-2 rounded-xl bg-primary text-white font-semibold disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+              className="flex items-center gap-2 px-6 py-2 rounded-lg bg-primary text-text-primary font-semibold disabled:opacity-50 disabled:cursor-not-allowed transition-all"
             >
               {assess.isPending ? (
                 <>
@@ -1252,7 +1252,7 @@ function TaskLibraryModal({
               onClick={() => setSelectedCategory('all')}
               className={`px-3 py-1.5 rounded-lg text-xs transition-colors ${
                 selectedCategory === 'all'
-                  ? 'bg-surface-highlight text-white'
+                  ? 'bg-surface-highlight text-text-primary'
                   : 'bg-surface-elevated text-text-tertiary hover:text-text-secondary'
               }`}
             >
@@ -1264,7 +1264,7 @@ function TaskLibraryModal({
                 onClick={() => setSelectedCategory(cat)}
                 className={`px-3 py-1.5 rounded-lg text-xs transition-colors ${
                   selectedCategory === cat
-                    ? 'bg-surface-highlight text-white'
+                    ? 'bg-surface-highlight text-text-primary'
                     : 'bg-surface-elevated text-text-tertiary hover:text-text-secondary'
                 }`}
               >
@@ -1276,14 +1276,14 @@ function TaskLibraryModal({
             <button
               onClick={toggleAllFiltered}
               disabled={filteredTemplates.length === 0}
-              className="flex items-center gap-1.5 text-xs text-text-secondary hover:text-white disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+              className="flex items-center gap-1.5 text-xs text-text-secondary hover:text-text-primary disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
             >
               <div
                 className={`w-4 h-4 rounded border flex items-center justify-center ${
                   allFilteredSelected ? 'bg-primary border-primary' : 'border-border-default'
                 }`}
               >
-                {allFilteredSelected && <CheckCircle2 className="w-3 h-3 text-white" />}
+                {allFilteredSelected && <CheckCircle2 className="w-3 h-3 text-text-primary" />}
               </div>
               全选
             </button>
@@ -1291,7 +1291,7 @@ function TaskLibraryModal({
             <select
               value={selectedDay}
               onChange={(e) => setSelectedDay(e.target.value as DayOfWeek)}
-              className="text-xs bg-surface-elevated border border-border-default rounded-lg px-2 py-1.5 text-text-secondary"
+              className="text-xs rounded-lg border border-border-default bg-surface px-2 py-1.5 text-text-primary focus:outline-none focus:border-primary"
             >
               {dayOrder.map((d) => (
                 <option key={d} value={d}>
@@ -1319,7 +1319,7 @@ function TaskLibraryModal({
                 <button
                   key={tpl.id}
                   onClick={() => toggleTemplate(tpl.id)}
-                  className={`text-left rounded-xl border p-3 transition-all ${
+                  className={`text-left rounded-lg border p-3 transition-all ${
                     selected
                       ? 'bg-primary/[0.08] border-primary/25'
                       : 'bg-surface-elevated border-border-subtle hover:bg-surface-highlight'
@@ -1327,7 +1327,7 @@ function TaskLibraryModal({
                 >
                   <div className="flex items-start gap-3">
                     <div className={`mt-0.5 w-5 h-5 rounded border flex items-center justify-center ${selected ? 'bg-primary border-primary' : 'border-border-default'}`}>
-                      {selected && <CheckCircle2 className="w-3.5 h-3.5 text-white" />}
+                      {selected && <CheckCircle2 className="w-3.5 h-3.5 text-text-primary" />}
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex flex-wrap items-center gap-1.5 mb-1">
@@ -1662,7 +1662,7 @@ function WeeklyTasksContent() {
             <select
               value={weekId}
               onChange={(e) => setWeekId(e.target.value)}
-              className="appearance-none pl-3 pr-9 py-1.5 rounded-lg bg-surface-elevated border border-border-default text-sm font-medium text-text-secondary min-w-[180px] focus:outline-none focus:border-primary/50 transition-colors cursor-pointer"
+              className="appearance-none pl-3 pr-9 py-1.5 rounded-lg border border-border-default bg-surface text-sm font-medium text-text-primary min-w-[180px] focus:outline-none focus:border-primary transition-colors cursor-pointer"
               aria-label="选择周"
             >
               {weekOptions.map((opt) => (
@@ -1693,7 +1693,7 @@ function WeeklyTasksContent() {
           {!displayPlan && (
             <button
               onClick={handleGenerate}
-              className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-primary text-white text-sm font-semibold transition-all duration-200 focus-ring"
+              className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-primary text-text-primary text-sm font-semibold transition-all duration-200 focus-ring"
             >
               <Target className="w-3.5 h-3.5" />
               生成本周计划
@@ -1703,7 +1703,7 @@ function WeeklyTasksContent() {
             <>
               <button
                 onClick={handlePublish}
-                className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-primary text-white text-sm font-semibold transition-all duration-200 focus-ring"
+                className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-primary text-text-primary text-sm font-semibold transition-all duration-200 focus-ring"
               >
                 <Send className="w-3.5 h-3.5" />
                 发布
@@ -1720,7 +1720,7 @@ function WeeklyTasksContent() {
           {isPublished && !isDraft && (
             <button
               onClick={handleOpenReview}
-              className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-accent text-white text-sm font-semibold transition-all duration-200 focus-ring"
+              className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-accent text-text-primary text-sm font-semibold transition-all duration-200 focus-ring"
             >
               <Sparkles className="w-3.5 h-3.5" />
               {plan?.reviewedAt ? '查看复盘' : '本周复盘'}
@@ -1901,7 +1901,7 @@ function WeeklyTasksContent() {
             initial={shouldReduceMotion ? false : { opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: -20 }}
-            className="rounded-2xl glass p-12 text-center"
+            className="rounded-2xl bg-surface-elevated p-12 text-center"
           >
             <div className="w-16 h-16 rounded-2xl bg-surface-elevated border border-border-default flex items-center justify-center mx-auto mb-4">
               <Calendar className="w-8 h-8 text-primary" />
@@ -1912,7 +1912,7 @@ function WeeklyTasksContent() {
             </p>
             <button
               onClick={handleGenerate}
-              className="px-6 py-3 rounded-xl bg-primary text-white font-semibold transition-all focus-ring"
+              className="px-6 py-3 rounded-lg bg-primary text-text-primary font-semibold transition-all focus-ring"
             >
               生成本周计划
             </button>
@@ -1926,7 +1926,7 @@ function WeeklyTasksContent() {
                   onClick={() => setMatrixView('calendar')}
                   className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
                     matrixView === 'calendar'
-                      ? 'bg-primary text-white'
+                      ? 'bg-primary text-text-primary'
                       : 'text-text-secondary hover:text-text-primary'
                   }`}
                 >
@@ -1937,7 +1937,7 @@ function WeeklyTasksContent() {
                   onClick={() => setMatrixView('checklist')}
                   className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
                     matrixView === 'checklist'
-                      ? 'bg-primary text-white'
+                      ? 'bg-primary text-text-primary'
                       : 'text-text-secondary hover:text-text-primary'
                   }`}
                 >
@@ -1948,7 +1948,7 @@ function WeeklyTasksContent() {
                   onClick={() => setMatrixView('goaltable')}
                   className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
                     matrixView === 'goaltable'
-                      ? 'bg-primary text-white'
+                      ? 'bg-primary text-text-primary'
                       : 'text-text-secondary hover:text-text-primary'
                   }`}
                 >
@@ -1996,13 +1996,13 @@ function WeeklyTasksContent() {
             <div className="flex items-center justify-end gap-3 w-full">
               <button
                 onClick={() => setReviewOpen(false)}
-                className="px-4 py-2 rounded-xl text-slate-400 hover:text-white transition-colors"
+                className="px-4 py-2 rounded-lg text-text-tertiary hover:text-text-primary transition-colors"
               >
                 取消
               </button>
               <button
                 onClick={handleSaveReview}
-                className="flex items-center gap-2 px-6 py-2 rounded-xl bg-accent text-white font-semibold transition-all"
+                className="flex items-center gap-2 px-6 py-2 rounded-lg bg-accent text-text-primary font-semibold transition-all"
               >
                 <RotateCcw className="w-4 h-4" />
                 保存复盘
@@ -2122,23 +2122,23 @@ function WeeklyTasksContent() {
             <div className="rounded-xl bg-accent/[0.06] border border-accent/15 p-4">
               <div className="flex items-center gap-2 mb-2">
                 <Sparkles className="w-4 h-4 text-accent" />
-                <p className="text-sm font-semibold text-slate-200">AI 点评</p>
+                <p className="text-sm font-semibold text-text-secondary">AI 点评</p>
               </div>
-              <p className="text-sm text-slate-400 leading-relaxed">
+              <p className="text-sm text-text-tertiary leading-relaxed">
                 {generateAiReview(displayPlan, currentChild.name)}
               </p>
             </div>
 
             {/* Parent comment */}
             <div>
-              <label className="block text-sm font-medium text-slate-200 mb-2">
+              <label className="block text-sm font-medium text-text-secondary mb-2">
                 家长评语
               </label>
               <textarea
                 value={reviewComment}
                 onChange={(e) => setReviewComment(e.target.value)}
                 placeholder="写下对孩子的鼓励、问题或下周调整..."
-                className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-slate-200 placeholder:text-slate-500 focus:outline-none focus:border-accent/50 resize-none"
+                className="w-full rounded-lg border border-border-default bg-surface px-4 py-3 text-sm text-text-primary placeholder:text-text-tertiary focus:outline-none focus:border-primary resize-none"
                 rows={4}
               />
             </div>

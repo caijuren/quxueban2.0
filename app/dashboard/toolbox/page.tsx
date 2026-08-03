@@ -270,7 +270,7 @@ export default function ToolboxPage() {
                   className={`group flex flex-col items-center gap-2 p-4 rounded-xl ${colors.bg} border ${colors.border} transition-all duration-200`}
                 >
                   <tool.icon className={`w-6 h-6 ${colors.text}`} />
-                  <span className="text-sm font-medium text-text-secondary group-hover:text-white transition-colors">
+                  <span className="text-sm font-medium text-text-secondary group-hover:text-text-primary transition-colors">
                     {tool.name}
                   </span>
                 </Link>
@@ -324,13 +324,13 @@ export default function ToolboxPage() {
                             即将上线
                           </span>
                         ) : (
-                          <div className="w-7 h-7 rounded-lg bg-surface border border-border-default flex items-center justify-center text-text-muted group-hover:text-white group-hover:border-border-strong transition-colors">
+                          <div className="w-7 h-7 rounded-lg bg-surface border border-border-default flex items-center justify-center text-text-muted group-hover:text-text-primary group-hover:border-border-strong transition-colors">
                             <ArrowRight className="w-3.5 h-3.5" />
                           </div>
                         )}
                       </div>
 
-                      <h3 className="text-base font-bold font-display mb-1.5 group-hover:text-white transition-colors">
+                      <h3 className="text-base font-bold font-display mb-1.5 group-hover:text-text-primary transition-colors">
                         {tool.name}
                       </h3>
                       <p className="text-sm text-text-tertiary leading-relaxed mb-4 line-clamp-2">

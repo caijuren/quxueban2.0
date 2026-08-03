@@ -14,11 +14,11 @@ export default function CurrentPhaseCard({ grade }: { grade: number }) {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.2 }}
-      className="rounded-2xl glass p-6 border border-border-subtle"
+      className="rounded-2xl bg-surface-elevated p-6 border border-border-subtle"
     >
       <div className="flex items-center gap-3 mb-6">
         <div className="w-10 h-10 rounded-xl bg-surface-elevated border border-border-default flex items-center justify-center">
-          <Target className="w-5 h-5 text-white" />
+          <Target className="w-5 h-5 text-text-primary" />
         </div>
         <div>
           <h2 className="text-xl font-bold font-display">当前阶段：{plan.grade}</h2>

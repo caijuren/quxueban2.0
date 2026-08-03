@@ -40,7 +40,7 @@ const milestones = [
 const statusConfig: Record<string, { icon: typeof CheckCircle2; color: string; bg: string; label: string }> = {
   completed: { icon: CheckCircle2, color: 'text-success', bg: 'bg-success/10', label: '已完成' },
   in_progress: { icon: Clock, color: 'text-warning', bg: 'bg-warning/10', label: '进行中' },
-  pending: { icon: Circle, color: 'text-slate-400', bg: 'bg-slate-500/10', label: '待开始' },
+  pending: { icon: Circle, color: 'text-text-tertiary', bg: 'bg-slate-500/10', label: '待开始' },
 };
 
 export default function MilestonesPage() {
@@ -56,7 +56,7 @@ export default function MilestonesPage() {
         className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
       >
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center">
+          <div className="w-10 h-10 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center">
             <Flag className="w-5 h-5 text-primary" />
           </div>
           <div>
@@ -78,15 +78,15 @@ export default function MilestonesPage() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: index * 0.1 }}
-            className="rounded-2xl glass p-6"
+            className="rounded-2xl bg-surface-elevated p-6"
           >
             <div className="flex items-center gap-4 mb-6">
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-secondary to-secondary-glow flex items-center justify-center">
-                <CalendarCheck className="w-6 h-6 text-white" />
+              <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-secondary to-secondary-glow flex items-center justify-center">
+                <CalendarCheck className="w-6 h-6 text-text-primary" />
               </div>
               <div>
                 <h2 className="text-xl font-bold font-display">{milestone.grade}</h2>
-                <p className="text-sm text-slate-400">{milestone.period}</p>
+                <p className="text-sm text-text-tertiary">{milestone.period}</p>
               </div>
               {milestone.period === '当前' && (
                 <span className="ml-auto px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-medium border border-primary/30">
@@ -101,13 +101,13 @@ export default function MilestonesPage() {
                 return (
                   <div
                     key={task.name}
-                    className="flex items-center justify-between p-4 rounded-xl bg-white/5 hover:bg-white/10 transition-all cursor-pointer group"
+                    className="flex items-center justify-between p-4 rounded-lg bg-surface-hover hover:bg-surface-hover transition-all cursor-pointer group"
                   >
                     <div className="flex items-center gap-4">
                       <div className={`w-10 h-10 rounded-lg ${config.bg} flex items-center justify-center`}>
                         <config.icon className={`w-5 h-5 ${config.color}`} />
                       </div>
-                      <span className="text-slate-200 group-hover:text-white transition-colors">{task.name}</span>
+                      <span className="text-text-secondary group-hover:text-text-primary transition-colors">{task.name}</span>
                     </div>
                     <span className={`text-sm font-medium ${config.color}`}>{config.label}</span>
                   </div>
@@ -122,13 +122,13 @@ export default function MilestonesPage() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.4 }}
-        className="rounded-2xl glass p-6 border border-warning/20 bg-warning/5"
+        className="rounded-2xl bg-surface-elevated p-6 border border-warning/20 bg-warning/5"
       >
         <div className="flex items-start gap-3">
           <AlertCircle className="w-5 h-5 text-warning shrink-0 mt-0.5" />
           <div>
             <h3 className="font-semibold text-warning mb-1">三年级是关键窗口期</h3>
-            <p className="text-sm text-slate-400">
+            <p className="text-sm text-text-tertiary">
               三公路线通常需要三年级开始系统奥数和英语拓展。当前一升二阶段重点是打好基础、确定方向。
             </p>
           </div>

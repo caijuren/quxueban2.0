@@ -31,14 +31,14 @@ function StatusIcon({ status }: { status: TaskStatus }) {
   const className = 'w-5 h-5';
   switch (status) {
     case 'done':
-      return <CheckCircle2 className={`${className} text-emerald-400`} />;
+      return <CheckCircle2 className={`${className} text-success`} />;
     case 'partially_done':
-      return <CircleDot className={`${className} text-amber-400`} />;
+      return <CircleDot className={`${className} text-warning`} />;
     case 'in_progress':
-      return <CircleEqual className={`${className} text-blue-400`} />;
+      return <CircleEqual className={`${className} text-accent`} />;
     case 'skipped':
     case 'rescheduled':
-      return <Circle className={`${className} text-text-muted opacity-40`} />;
+      return <Circle className={`${className} text-text-muted/40`} />;
     case 'pending':
     default:
       return <Circle className={`${className} text-text-muted`} />;
@@ -116,14 +116,14 @@ export default function WeeklyTaskChecklistMatrix({
       <div className="overflow-x-auto">
         <table className="w-full min-w-[800px] border-collapse">
           <thead>
-            <tr className="border-b border-border-subtle bg-surface-base/50">
-              <th className="sticky left-0 z-10 bg-surface-base/95 backdrop-blur-sm text-left py-3 px-4 text-sm font-semibold text-text-secondary w-[240px] min-w-[240px]">
+            <tr className="border-b border-border-subtle bg-surface-highlight/50">
+              <th className="sticky left-0 z-10 bg-surface-highlight/95 backdrop-blur-sm text-left py-3 px-4 text-xs font-medium text-text-muted w-[240px] min-w-[240px]">
                 任务
               </th>
               {DAYS.map((day) => (
                 <th
                   key={day}
-                  className="py-3 px-2 text-center text-sm font-medium text-text-secondary w-[1/7]"
+                  className="py-3 px-2 text-center text-xs font-medium text-text-muted w-[1/7]"
                 >
                   {day}
                 </th>
@@ -185,7 +185,7 @@ export default function WeeklyTaskChecklistMatrix({
                           type="button"
                           onClick={() => onCellClick?.(task)}
                           title={`${day} · ${StatusLabel(task.status)}`}
-                          className="inline-flex items-center justify-center w-9 h-9 rounded-xl hover:bg-surface-highlight transition-colors focus-ring"
+                          className="inline-flex items-center justify-center w-9 h-9 rounded-lg hover:bg-surface-hover transition-colors focus-ring"
                         >
                           <StatusIcon status={task.status} />
                         </button>

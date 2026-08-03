@@ -431,7 +431,7 @@ export default function TodayPage() {
                               : 'border-text-muted group-hover:border-text-tertiary'
                           }`}
                         >
-                          {isDone && <Check className="w-3 h-3 text-white" />}
+                          {isDone && <Check className="w-3 h-3 text-text-primary" />}
                         </div>
 
                         {/* Done indicator line */}

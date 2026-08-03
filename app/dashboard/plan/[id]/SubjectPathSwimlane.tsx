@@ -14,7 +14,7 @@ export default function SubjectPathSwimlane({ paths }: SubjectPathSwimlaneProps)
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.25 }}
-      className="rounded-2xl glass p-6 border border-border-subtle"
+      className="rounded-2xl bg-surface-elevated p-6 border border-border-subtle"
     >
       <h2 className="text-xl font-bold font-display mb-6 flex items-center gap-2">
         <Route className="w-5 h-5 text-secondary" />
@@ -38,7 +38,7 @@ export default function SubjectPathSwimlane({ paths }: SubjectPathSwimlaneProps)
                 <div
                   className={`w-10 h-10 rounded-lg bg-gradient-to-br ${path.color} flex items-center justify-center shrink-0`}
                 >
-                  <Icon className="w-5 h-5 text-white" />
+                  <Icon className="w-5 h-5 text-text-primary" />
                 </div>
                 <div>
                   <h3 className="font-bold text-text-secondary">{path.name}</h3>

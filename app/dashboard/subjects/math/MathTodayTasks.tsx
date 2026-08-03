@@ -50,7 +50,7 @@ export default function MathTodayTasks({ grade }: { grade: number }) {
         animate={{ backgroundPosition: ['200% 0', '-200% 0'] }}
         transition={{ duration: 4, repeat: Infinity, ease: 'linear' }}
       />
-      <div className="absolute inset-[1px] rounded-2xl bg-slate-950/80 pointer-events-none" />
+      <div className="absolute inset-[1px] rounded-2xl bg-surface/80 pointer-events-none" />
 
       <div className="relative z-10">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-5">
@@ -77,7 +77,7 @@ export default function MathTodayTasks({ grade }: { grade: number }) {
           <div className="lg:col-span-2 rounded-xl bg-surface-elevated border border-border-default p-5">
             <div className="flex items-start gap-4">
               <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-violet-500 flex items-center justify-center shrink-0">
-                <SkillIcon className="w-6 h-6 text-white" />
+                <SkillIcon className="w-6 h-6 text-text-primary" />
               </div>
               <div className="flex-1">
                 <p className="text-lg font-bold text-text-secondary mb-2">{todayTask.focus}</p>

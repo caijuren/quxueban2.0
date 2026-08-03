@@ -21,11 +21,11 @@ const subTasks = [
 
 export default function TimelineVisual() {
   return (
-    <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-5 corner-accent backdrop-blur-sm">
+    <div className="rounded-2xl border border-border-subtle bg-surface-elevated p-5">
       <div className="flex items-center justify-between mb-5">
         <div className="flex items-center gap-2">
-          <CalendarCheck className="w-3.5 h-3.5 text-primary" aria-hidden="true" />
-          <span className="text-[11px] font-mono text-slate-400 uppercase tracking-wider">
+          <CalendarCheck className="w-4 h-4 text-primary" aria-hidden="true" />
+          <span className="text-[11px] font-mono text-text-tertiary uppercase tracking-wider">
             里程碑时间线 · 2025-2030
           </span>
         </div>
@@ -38,8 +38,8 @@ export default function TimelineVisual() {
             <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(255,255,255,0.03)" strokeWidth="1" />
           </pattern>
           <linearGradient id="timelineLineGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="#ff2d6a" stopOpacity="0.6" />
-            <stop offset="100%" stopColor="#ff2d6a" stopOpacity="0.1" />
+            <stop offset="0%" stopColor="var(--color-primary)" stopOpacity="0.6" />
+            <stop offset="100%" stopColor="var(--color-primary)" stopOpacity="0.1" />
           </linearGradient>
         </defs>
         <rect width="900" height="250" fill="url(#timelineGrid)" />
@@ -68,28 +68,35 @@ export default function TimelineVisual() {
               y1="110"
               x2={milestone.x}
               y2={milestone.status === 'current' ? '55' : '165'}
-              stroke={milestone.status === 'current' ? '#ff2d6a' : 'rgba(255,255,255,0.08)'}
+              stroke="currentColor"
               strokeWidth="1"
               strokeDasharray={milestone.status === 'current' ? undefined : '3 3'}
+              className={milestone.status === 'current' ? 'text-primary' : 'text-text-muted/20'}
             />
 
             <circle
               cx={milestone.x}
               cy="110"
               r={milestone.status === 'current' ? 6 : 4}
-              fill={milestone.status === 'current' ? '#ff2d6a' : '#1a1a28'}
-              stroke={milestone.status === 'current' ? '#ff2d6a' : 'rgba(255,255,255,0.25)'}
+              fill="currentColor"
+              stroke="currentColor"
               strokeWidth="2"
+              className={
+                milestone.status === 'current'
+                  ? 'text-primary'
+                  : 'fill-surface stroke-text-muted/25'
+              }
             />
 
             <text
               x={milestone.x}
               y={milestone.status === 'current' ? '42' : '185'}
               textAnchor="middle"
-              fill={milestone.status === 'current' ? '#ff2d6a' : '#8b8b9a'}
+              fill="currentColor"
               fontSize="11"
               fontFamily="var(--font-mono)"
               fontWeight={milestone.status === 'current' ? '600' : '400'}
+              className={milestone.status === 'current' ? 'text-primary' : 'text-text-muted'}
             >
               {milestone.grade}
             </text>
@@ -97,15 +104,16 @@ export default function TimelineVisual() {
               x={milestone.x}
               y={milestone.status === 'current' ? '28' : '199'}
               textAnchor="middle"
-              fill={milestone.status === 'current' ? '#ffffff' : '#6b6b7b'}
+              fill="currentColor"
               fontSize="10"
               fontFamily="var(--font-body)"
+              className={milestone.status === 'current' ? 'text-text-primary' : 'text-text-muted'}
             >
               {milestone.event}
             </text>
 
             {milestone.status === 'current' && (
-              <circle cx={milestone.x} cy="110" r="12" fill="none" stroke="#ff2d6a" strokeWidth="1" opacity="0.3">
+              <circle cx={milestone.x} cy="110" r="12" fill="none" stroke="currentColor" strokeWidth="1" opacity="0.3" className="text-primary">
                 <animate attributeName="r" from="12" to="22" dur="2s" repeatCount="indefinite" />
                 <animate attributeName="opacity" from="0.3" to="0" dur="2s" repeatCount="indefinite" />
               </circle>
@@ -128,16 +136,18 @@ export default function TimelineVisual() {
                 width="100"
                 height="22"
                 rx="4"
-                fill="rgba(255,45,106,0.06)"
-                stroke="rgba(255,45,106,0.15)"
+                fill="currentColor"
+                stroke="currentColor"
+                className="fill-primary/[0.06] stroke-primary/15"
               />
               <text
                 x={parent.x}
                 y="234"
                 textAnchor="middle"
-                fill="#ff8aa8"
+                fill="currentColor"
                 fontSize="10"
                 fontFamily="var(--font-mono)"
+                className="text-primary-glow"
               >
                 {task.label}
               </text>
@@ -146,11 +156,11 @@ export default function TimelineVisual() {
         })}
       </svg>
 
-      <div className="mt-4 pt-4 border-t border-white/5 flex items-center justify-between text-[11px]">
-        <span className="text-slate-500">
+      <div className="mt-4 pt-4 border-t border-border-subtle flex items-center justify-between text-[11px]">
+        <span className="text-text-muted">
           当前: <span className="text-primary">一升二暑假 · 路线选择</span>
         </span>
-        <span className="font-mono text-slate-600">6 MAJOR MILESTONES</span>
+        <span className="font-mono text-text-muted">6 MAJOR MILESTONES</span>
       </div>
     </div>
   );

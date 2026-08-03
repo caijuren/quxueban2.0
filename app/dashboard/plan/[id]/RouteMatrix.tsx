@@ -40,9 +40,9 @@ function computeGradeTimeRange(grade: string, childGrade: number): string {
 }
 
 const priorityConfig = {
-  must: { label: '必须', color: 'text-rose-400', bg: 'bg-rose-500/10', border: 'border-rose-500/30' },
-  should: { label: '建议', color: 'text-amber-400', bg: 'bg-amber-500/10', border: 'border-amber-500/30' },
-  optional: { label: '可选', color: 'text-text-tertiary', bg: 'bg-slate-500/10', border: 'border-slate-500/30' },
+  must: { label: '必须', color: 'text-error', bg: 'bg-error/10', border: 'border-error/30' },
+  should: { label: '建议', color: 'text-warning', bg: 'bg-warning/10', border: 'border-warning/30' },
+  optional: { label: '可选', color: 'text-text-tertiary', bg: 'bg-text-muted/10', border: 'border-text-muted/30' },
 };
 
 export default function RouteMatrix({ rows, grades, currentGrade = '一升二', currentChildGrade = 1 }: RouteMatrixProps) {
@@ -51,7 +51,7 @@ export default function RouteMatrix({ rows, grades, currentGrade = '一升二', 
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.15 }}
-      className="rounded-2xl glass p-6 border border-border-subtle"
+      className="rounded-2xl bg-surface-elevated p-6 border border-border-subtle"
     >
       <div className="mb-6">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-2">
@@ -60,15 +60,15 @@ export default function RouteMatrix({ rows, grades, currentGrade = '一升二', 
             三公备考时间轴与成果矩阵
           </h2>
           <div className="flex items-center gap-3 text-xs">
-            <span className="flex items-center gap-1.5 px-2 py-1 rounded-lg bg-rose-500/10 text-rose-400 border border-rose-500/30">
+            <span className="flex items-center gap-1.5 px-2 py-1 rounded-lg bg-error/10 text-error border border-error/30">
               <Target className="w-3 h-3" />
               必须
             </span>
-            <span className="flex items-center gap-1.5 px-2 py-1 rounded-lg bg-amber-500/10 text-amber-400 border border-amber-500/30">
+            <span className="flex items-center gap-1.5 px-2 py-1 rounded-lg bg-warning/10 text-warning border border-warning/30">
               <Clock className="w-3 h-3" />
               建议
             </span>
-            <span className="flex items-center gap-1.5 px-2 py-1 rounded-lg bg-slate-500/10 text-text-tertiary border border-slate-500/30">
+            <span className="flex items-center gap-1.5 px-2 py-1 rounded-lg bg-text-muted/10 text-text-tertiary border border-text-muted/30">
               <RotateCcw className="w-3 h-3" />
               可选
             </span>
@@ -94,12 +94,12 @@ export default function RouteMatrix({ rows, grades, currentGrade = '一升二', 
                   key={grade}
                   className={`px-2 py-2 rounded-lg text-center flex flex-col items-center justify-center min-h-[48px] ${
                     isCurrent
-                      ? 'bg-primary text-white'
+                      ? 'bg-primary text-text-primary'
                       : 'bg-surface-elevated text-text-secondary border border-border-subtle'
                   }`}
                 >
                   <span className="text-xs font-bold">{grade}</span>
-                  <span className={`text-2xs mt-0.5 ${isCurrent ? 'text-white/80' : 'text-text-muted'}`}>
+                  <span className={`text-2xs mt-0.5 ${isCurrent ? 'text-text-primary/80' : 'text-text-muted'}`}>
                     {timeRange}
                   </span>
                 </div>
@@ -124,7 +124,7 @@ export default function RouteMatrix({ rows, grades, currentGrade = '一升二', 
                     <div
                       className={`w-9 h-9 rounded-lg bg-gradient-to-br ${row.color} flex items-center justify-center shrink-0`}
                     >
-                      <Icon className="w-4 h-4 text-white" />
+                      <Icon className="w-4 h-4 text-text-primary" />
                     </div>
                     <span className="text-sm font-bold text-text-secondary">{row.category}</span>
                   </div>

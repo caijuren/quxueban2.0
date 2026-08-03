@@ -18,19 +18,19 @@ export default function FinalCTA() {
         <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold font-display leading-tight mb-5">
           现在就为孩子绘制
           <br />
-          <span className="text-slate-500">第一张升学规划图</span>
+          <span className="text-text-muted">第一张升学规划图</span>
         </h2>
 
-        <p className="text-base text-slate-400 max-w-lg mx-auto mb-8">
+        <p className="text-base text-text-tertiary max-w-lg mx-auto mb-8">
           不需要复杂设置，5 分钟建立孩子档案，立刻看到当前阶段的关键任务和路线建议。
         </p>
 
         <Link
           href="/login"
-          className="group inline-flex items-center gap-2 px-7 py-3 rounded-full bg-primary text-white font-semibold text-sm hover:shadow-[0_0_50px_rgba(255,45,106,0.35)] transition-all duration-300 focus-ring"
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-primary text-text-primary text-sm font-medium hover:bg-primary/90 transition-colors"
         >
           免费开始规划
-          <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+          <ArrowRight className="w-4 h-4" />
         </Link>
       </MotionSection>
     </section>

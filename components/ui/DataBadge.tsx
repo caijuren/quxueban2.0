@@ -4,7 +4,7 @@ import { cn } from '@/lib/utils';
 
 interface DataBadgeProps {
   children: React.ReactNode;
-  variant?: 'primary' | 'secondary' | 'accent' | 'success' | 'warning' | 'danger' | 'default';
+  variant?: 'primary' | 'secondary' | 'accent' | 'success' | 'warning' | 'error' | 'default';
   size?: 'sm' | 'md';
   className?: string;
 }
@@ -15,7 +15,7 @@ const variantMap = {
   accent: 'bg-accent/[0.08] text-accent border-accent/15',
   success: 'bg-success/[0.08] text-success border-success/15',
   warning: 'bg-warning/[0.08] text-warning border-warning/15',
-  danger: 'bg-danger/[0.08] text-danger border-danger/15',
+  error: 'bg-error/[0.08] text-error border-error/15',
   default: 'bg-surface-elevated text-text-tertiary border-border-default',
 };
 

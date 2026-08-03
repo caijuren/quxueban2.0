@@ -83,14 +83,14 @@ export default function HelpSection() {
             onChange={(e) => setFeedback(e.target.value)}
             placeholder="请描述你遇到的问题或建议..."
             rows={4}
-            className="w-full px-4 py-3 rounded-xl bg-surface-elevated border border-border-default text-sm text-text-secondary placeholder-slate-500 focus:outline-none focus:border-primary transition-all resize-none"
+            className="w-full px-4 py-3 rounded-xl bg-surface-elevated border border-border-default text-sm text-text-secondary placeholder:text-text-tertiary focus:outline-none focus:border-primary transition-all resize-none"
           />
           <input
             type="text"
             value={contact}
             onChange={(e) => setContact(e.target.value)}
             placeholder="联系方式（选填）"
-            className="w-full px-4 py-2.5 rounded-xl bg-surface-elevated border border-border-default text-sm text-text-secondary placeholder-slate-500 focus:outline-none focus:border-primary transition-all"
+            className="w-full px-4 py-2.5 rounded-xl bg-surface-elevated border border-border-default text-sm text-text-secondary placeholder:text-text-tertiary focus:outline-none focus:border-primary transition-all"
           />
           {submitted && (
             <div className="text-sm px-4 py-2 rounded-lg bg-success/10 text-success border border-success/20">
@@ -101,7 +101,7 @@ export default function HelpSection() {
             <button
               onClick={handleSubmitFeedback}
               disabled={submitting || !feedback.trim()}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-primary text-white text-sm font-medium hover:opacity-90 transition-all disabled:opacity-70"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-primary text-text-primary text-sm font-medium hover:opacity-90 transition-all disabled:opacity-70"
             >
               {submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
               提交反馈

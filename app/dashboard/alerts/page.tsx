@@ -80,7 +80,7 @@ function AlertCard({ alert }: { alert: Alert }) {
       <CommandCard className="p-4 overflow-hidden">
         <div className="flex items-start gap-3">
           <div
-            className={`w-10 h-10 rounded-xl ${meta.bg} flex items-center justify-center shrink-0`}
+            className={`w-10 h-10 rounded-lg ${meta.bg} flex items-center justify-center shrink-0`}
           >
             <Icon className={`w-5 h-5 ${meta.color}`} />
           </div>
@@ -91,15 +91,15 @@ function AlertCard({ alert }: { alert: Alert }) {
               >
                 {meta.label}
               </span>
-              <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-white/5 text-slate-400 flex items-center gap-1">
+              <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-surface-hover text-text-tertiary flex items-center gap-1">
                 <TypeIcon className="w-3 h-3" />
                 {type.label}
               </span>
             </div>
-            <h3 className="text-sm font-bold text-slate-200 mb-1">
+            <h3 className="text-sm font-bold text-text-secondary mb-1">
               {alert.title}
             </h3>
-            <p className="text-xs text-slate-400 leading-relaxed mb-3">
+            <p className="text-xs text-text-tertiary leading-relaxed mb-3">
               {alert.content}
             </p>
             {alert.action && (
@@ -140,8 +140,8 @@ export default function AlertsPage() {
         className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
       >
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-danger/10 border border-danger/20 flex items-center justify-center">
-            <Bell className="w-5 h-5 text-danger" />
+          <div className="w-10 h-10 rounded-lg bg-error/10 border border-error/20 flex items-center justify-center">
+            <Bell className="w-5 h-5 text-error" />
           </div>
           <div>
             <h1 className="text-2xl sm:text-3xl font-bold font-display">提醒中心</h1>

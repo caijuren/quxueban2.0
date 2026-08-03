@@ -128,7 +128,7 @@ export default function NewPlanModal({ isOpen, onClose, onCreate }: NewPlanModal
           <button
             type="button"
             onClick={handleSubmit}
-            className="px-4 py-2 rounded-lg bg-primary text-white text-sm font-medium transition-all"
+            className="px-4 py-2 rounded-lg bg-primary text-text-primary text-sm font-medium transition-all"
           >
             创建方案
           </button>

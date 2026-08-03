@@ -167,7 +167,7 @@ export default function WeeklyMatrix({
       initial={shouldReduceMotion ? false : { opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: -20 }}
-      className="rounded-2xl glass p-5"
+      className="rounded-2xl bg-surface-elevated border border-border-subtle p-5"
     >
       {/* Desktop matrix */}
       <div className="hidden lg:block overflow-x-auto">
@@ -182,7 +182,7 @@ export default function WeeklyMatrix({
               return (
                 <div
                   key={day}
-                  className={`text-center px-2 py-2.5 rounded-xl border ${
+                  className={`text-center px-2 py-2.5 rounded-xl border transition-colors ${
                     isToday
                       ? 'bg-primary/[0.08] border-primary/20 text-primary'
                       : 'bg-surface-elevated border-border-subtle text-text-tertiary'
@@ -231,7 +231,7 @@ export default function WeeklyMatrix({
                       onDragOver={(e) => handleCellDragOver(e, key)}
                       onDragLeave={handleCellDragLeave}
                       onDrop={(e) => handleCellDrop(e, category, day)}
-                      className={`relative min-h-[96px] rounded-xl border transition-all duration-200 p-2.5 space-y-2 ${
+                      className={`relative min-h-[96px] rounded-xl border transition-colors duration-200 p-2.5 space-y-2 ${
                         isOver
                           ? 'bg-primary/[0.08] border-primary/30 ring-1 ring-primary/20'
                           : 'bg-surface-elevated border-border-subtle hover:border-border-strong hover:bg-surface-hover/30'
@@ -275,7 +275,7 @@ export default function WeeklyMatrix({
                 key={day}
                 onClick={() => setMatrixDay(day)}
                 aria-pressed={isSelected}
-                className={`flex-shrink-0 relative px-3 py-2 rounded-xl text-left min-w-[72px] transition-all border focus-ring ${
+                className={`flex-shrink-0 relative px-3 py-2 rounded-xl text-left min-w-[72px] transition-colors border focus-ring ${
                   isSelected
                     ? 'bg-surface-highlight border-primary/30'
                     : 'bg-surface-elevated border-border-subtle hover:border-border-default'
@@ -284,7 +284,7 @@ export default function WeeklyMatrix({
                 {isToday && (
                   <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-primary ring-2 ring-background" />
                 )}
-                <p className={`text-xs font-bold ${isSelected ? 'text-white' : 'text-text-secondary'}`}>
+                <p className={`text-xs font-bold ${isSelected ? 'text-text-primary' : 'text-text-secondary'}`}>
                   {day}
                 </p>
                 <p className="text-2xs text-text-muted mt-0.5 tabular-nums">{dayDates[i]}</p>
@@ -372,18 +372,18 @@ function MatrixTaskCard({
       aria-label={`${TASK_CATEGORY_LABELS[category]} ${task.day}：${task.focus}，${task.duration}，点击${
         done ? '取消完成' : '标记完成'
       }`}
-      className={`group relative flex items-start gap-2 px-2 py-2 rounded-xl border cursor-grab active:cursor-grabbing transition-all duration-200 ${
+      className={`group relative flex items-start gap-2 px-2 py-2 rounded-xl border cursor-grab active:cursor-grabbing transition-colors duration-200 ${
         done
           ? 'bg-success/[0.08] border-success/20 opacity-80'
-          : 'bg-surface-hover/40 border-border-subtle hover:border-border-strong hover:-translate-y-0.5 hover:shadow-md'
+          : 'bg-surface-hover/40 border-border-subtle hover:border-border-strong'
       } ${isDragging ? 'opacity-40 scale-[0.98]' : ''}`}
     >
       <div
-        className={`w-5 h-5 rounded-md flex items-center justify-center shrink-0 ${getCategoryColorClass(
+        className={`w-5 h-5 rounded-lg flex items-center justify-center shrink-0 ${getCategoryColorClass(
           category
         )}`}
       >
-        <CategoryIcon className="w-3 h-3" />
+        <CategoryIcon className="w-4 h-4" />
       </div>
       <div className="flex-1 min-w-0">
         <div className="flex items-center justify-between gap-1 mb-1">
@@ -424,7 +424,7 @@ function MatrixTaskCard({
           </div>
         )}
       </div>
-      <GripVertical className="w-3 h-3 text-text-tertiary/40 mt-0.5 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity" />
+      <GripVertical className="w-4 h-4 text-text-tertiary/40 mt-0.5 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity" />
     </div>
   );
 }
@@ -443,11 +443,11 @@ function MobileTaskRow({ task, onToggle }: MobileTaskRowProps) {
     <button
       type="button"
       onClick={onToggle}
-      className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl border transition-all text-left ${
+      className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl border transition-colors text-left ${
         done
           ? 'bg-success/[0.08] border-success/20'
           : 'bg-surface-hover/40 border-border-subtle hover:border-border-strong'
-      } active:scale-[0.99]`}
+      }`}
     >
       <div className="flex-1 min-w-0">
         <div className="flex items-center justify-between mb-1">

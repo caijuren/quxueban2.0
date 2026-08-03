@@ -39,7 +39,7 @@ export default function BookCard({ book, onClick }: BookCardProps) {
           <BookOpen className="w-5 h-5 text-primary" />
         </div>
         <div className="flex-1 min-w-0">
-          <h3 className="text-sm font-bold font-display text-text-primary leading-snug line-clamp-2 group-hover:text-white transition-colors">
+          <h3 className="text-sm font-bold font-display text-text-primary leading-snug line-clamp-2 group-hover:text-text-primary transition-colors">
             {book.title}
           </h3>
           <p className="text-xs text-text-tertiary mt-0.5 truncate">

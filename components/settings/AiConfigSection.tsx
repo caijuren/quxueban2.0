@@ -263,7 +263,7 @@ export default function AiConfigSection() {
           className={`text-xs px-3 py-1.5 rounded-lg flex items-center gap-2 ${
             message.type === 'success'
               ? 'bg-success/10 text-success border border-success/20'
-              : 'bg-danger/10 text-danger border border-danger/20'
+              : 'bg-error/10 text-error border border-error/20'
           }`}
         >
           {message.type === 'success' ? <CheckCircle2 className="w-3.5 h-3.5" /> : <AlertTriangle className="w-3.5 h-3.5" />}
@@ -283,7 +283,7 @@ export default function AiConfigSection() {
         <button
           onClick={handleSave}
           disabled={saving || !form.apiKey}
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-primary text-white text-xs font-medium hover:opacity-90 transition-all disabled:opacity-70"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-primary text-text-primary text-xs font-medium hover:opacity-90 transition-all disabled:opacity-70"
         >
           {saving ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Save className="w-3.5 h-3.5" />}
           保存配置

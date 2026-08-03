@@ -29,8 +29,8 @@ export default function MetricRing({
       <svg className="w-full h-full -rotate-90" viewBox={`0 0 ${size} ${size}`}>
         <defs>
           <linearGradient id="metricRingGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="#ff2d6a" />
-            <stop offset="100%" stopColor="#8b5cf6" />
+            <stop offset="0%" stopColor="var(--color-primary)" />
+            <stop offset="100%" stopColor="var(--color-secondary)" />
           </linearGradient>
         </defs>
         <circle
@@ -57,7 +57,7 @@ export default function MetricRing({
       {(label || sublabel) && (
         <div className="absolute inset-0 flex flex-col items-center justify-center">
           {label && <span className="text-base font-bold font-display tabular-nums">{label}</span>}
-          {sublabel && <span className="text-[10px] text-slate-500">{sublabel}</span>}
+          {sublabel && <span className="text-[10px] text-text-muted">{sublabel}</span>}
         </div>
       )}
     </div>

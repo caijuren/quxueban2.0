@@ -202,12 +202,12 @@ export default function CapabilitySection() {
               animate={{ scale: 1, opacity: 1 }}
               exit={shouldReduceMotion ? { opacity: 0 } : { scale: 0.95, opacity: 0 }}
               onClick={(e) => e.stopPropagation()}
-              className="w-full max-w-md rounded-3xl glass border border-border-default p-6 sm:p-8"
+              className="w-full max-w-md rounded-3xl bg-surface-elevated border border-border-default p-6 sm:p-8"
             >
               <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-xl bg-secondary flex items-center justify-center">
-                    {editing ? <Pencil className="w-5 h-5 text-white" /> : <Plus className="w-5 h-5 text-white" />}
+                    {editing ? <Pencil className="w-5 h-5 text-text-primary" /> : <Plus className="w-5 h-5 text-text-primary" />}
                   </div>
                   <h2 className="text-xl font-bold font-display">
                     {editing ? '编辑能力' : '添加能力'}
@@ -273,7 +273,7 @@ export default function CapabilitySection() {
                   <button
                     type="submit"
                     disabled={isSaving || !form.name?.trim()}
-                    className="flex items-center gap-2 px-6 py-2 rounded-xl bg-secondary text-white font-semibold hover:shadow-[0_0_30px_rgba(139,92,246,0.4)] transition-all disabled:opacity-50"
+                    className="flex items-center gap-2 px-6 py-2 rounded-xl bg-secondary text-text-primary font-semibold hover:shadow-[0_0_30px_rgba(139,92,246,0.4)] transition-all disabled:opacity-50"
                   >
                     {isSaving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
                     保存

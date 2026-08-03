@@ -109,7 +109,7 @@ export default function AIPage() {
           <h1 className="text-3xl font-bold font-display mb-2">
             {currentChild ? `${currentChild.name}的 AI 检视` : 'AI 检视'}
           </h1>
-          <p className="text-slate-400">
+          <p className="text-text-tertiary">
             {currentChild
               ? `当前阶段：${gradeLabel(currentChild.grade)} · 基于当前进度和目标生成诊断建议`
               : '基于当前进度和目标，智能生成诊断与调整建议'}
@@ -118,7 +118,7 @@ export default function AIPage() {
         <button
           onClick={generateDiagnosis}
           disabled={!currentChild || loading}
-          className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-secondary to-secondary-glow text-white font-semibold hover:shadow-[0_0_30px_rgba(139,92,246,0.4)] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="flex items-center gap-2 px-5 py-2.5 rounded-lg bg-gradient-to-r from-secondary to-secondary-glow text-text-primary font-semibold hover:shadow-[0_0_30px_rgba(139,92,246,0.4)] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <RefreshCw className="w-4 h-4" />}
           {loading ? '生成中...' : '重新生成'}
@@ -137,7 +137,7 @@ export default function AIPage() {
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="rounded-2xl glass p-6 border border-red-500/30 bg-red-500/10"
+          className="rounded-2xl bg-surface-elevated p-6 border border-red-500/30 bg-red-500/10"
         >
           <p className="text-red-300">生成失败：{error}</p>
         </motion.div>
@@ -149,28 +149,28 @@ export default function AIPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}
-            className="rounded-2xl glass p-6 border border-secondary/20"
+            className="rounded-2xl bg-surface-elevated p-6 border border-secondary/20"
             style={{ boxShadow: '0 0 60px rgba(139, 92, 246, 0.1)' }}
           >
             <div className="flex items-start gap-4">
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-secondary to-secondary-glow flex items-center justify-center shrink-0">
-                <Sparkles className="w-6 h-6 text-white" />
+              <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-secondary to-secondary-glow flex items-center justify-center shrink-0">
+                <Sparkles className="w-6 h-6 text-text-primary" />
               </div>
               <div className="flex-1">
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-2">
                   <h2 className="text-xl font-bold font-display">AI 综合评估</h2>
                   <div className="flex items-center gap-3">
-                    <span className="text-sm text-slate-400">路线匹配度</span>
+                    <span className="text-sm text-text-tertiary">路线匹配度</span>
                     <span className="text-2xl font-bold text-primary">{diagnosis.overallScore}%</span>
                   </div>
                 </div>
-                <p className="text-slate-300 leading-relaxed">{diagnosis.summary}</p>
+                <p className="text-text-secondary leading-relaxed">{diagnosis.summary}</p>
                 <div className="mt-4 flex items-center gap-2 text-sm">
-                  <span className="text-slate-400">匹配等级：</span>
+                  <span className="text-text-tertiary">匹配等级：</span>
                   <span className="px-2.5 py-0.5 rounded-full bg-secondary/20 text-secondary font-medium">
                     {diagnosis.routeMatch.level}
                   </span>
-                  <span className="text-slate-500">· {diagnosis.routeMatch.reason}</span>
+                  <span className="text-text-muted">· {diagnosis.routeMatch.reason}</span>
                 </div>
               </div>
             </div>
@@ -188,7 +188,7 @@ export default function AIPage() {
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: 0.2 + index * 0.1 }}
-                  className="rounded-2xl glass p-6"
+                  className="rounded-2xl bg-surface-elevated p-6"
                 >
                   <div className="flex items-center gap-3 mb-5">
                     <Icon className={`w-6 h-6 ${section.color}`} />
@@ -196,12 +196,12 @@ export default function AIPage() {
                   </div>
                   <ul className="space-y-3">
                     {items.length === 0 ? (
-                      <li className="text-sm text-slate-500">暂无数据</li>
+                      <li className="text-sm text-text-muted">暂无数据</li>
                     ) : (
                       items.map((item, itemIndex) => (
                         <li
                           key={itemIndex}
-                          className="flex items-start gap-3 text-sm text-slate-300 leading-relaxed"
+                          className="flex items-start gap-3 text-sm text-text-secondary leading-relaxed"
                         >
                           <span
                             className={`w-1.5 h-1.5 rounded-full ${section.color.replace('text-', 'bg-')} mt-2 shrink-0`}
@@ -219,9 +219,9 @@ export default function AIPage() {
       )}
 
       {!diagnosis && !loading && currentChild && !error && (
-        <div className="rounded-2xl glass p-12 text-center">
+        <div className="rounded-2xl bg-surface-elevated p-12 text-center">
           <Sparkles className="w-12 h-12 text-secondary mx-auto mb-4" />
-          <p className="text-slate-300">点击右上角「重新生成」获取 AI 诊断报告</p>
+          <p className="text-text-secondary">点击右上角「重新生成」获取 AI 诊断报告</p>
         </div>
       )}
     </div>

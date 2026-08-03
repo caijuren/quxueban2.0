@@ -32,7 +32,7 @@ export default function FAQ() {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   return (
-    <section className="py-14 px-4 sm:px-6 lg:px-8 border-t border-white/5">
+    <section className="py-14 px-4 sm:px-6 lg:px-8 border-t border-border-subtle">
       <div className="max-w-3xl mx-auto">
         <MotionSection direction="up" duration={0.6} className="mb-12">
           <span className="text-[11px] font-mono text-primary uppercase tracking-widest mb-3 block">
@@ -52,22 +52,22 @@ export default function FAQ() {
                 direction="up"
                 delay={index * 0.05}
                 duration={0.4}
-                className="border border-white/[0.06] rounded-xl overflow-hidden hover:border-white/[0.1] transition-colors duration-200 bg-white/[0.02]"
+                className="border border-border-subtle rounded-xl overflow-hidden hover:border-border-default transition-colors duration-200 bg-surface"
               >
                 <button
                   onClick={() => setOpenIndex(isOpen ? null : index)}
-                  className="w-full flex items-center justify-between p-4 text-left focus-ring"
+                  className="w-full flex items-center justify-between p-4 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/55 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
                   aria-expanded={isOpen}
                   aria-controls={`faq-answer-${index}`}
                 >
-                  <span className="text-sm font-medium text-slate-200 pr-4">{faq.question}</span>
+                  <span className="text-sm font-medium text-text-primary pr-4">{faq.question}</span>
                   <span
                     className={`shrink-0 w-7 h-7 rounded-lg flex items-center justify-center transition-colors duration-200 ${
-                      isOpen ? 'bg-primary text-white' : 'bg-white/[0.05] text-slate-400'
+                      isOpen ? 'bg-primary text-text-primary' : 'bg-surface-hover text-text-tertiary'
                     }`}
                     aria-hidden="true"
                   >
-                    {isOpen ? <Minus className="w-3.5 h-3.5" /> : <Plus className="w-3.5 h-3.5" />}
+                    {isOpen ? <Minus className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
                   </span>
                 </button>
                 <AnimatePresence initial={false}>
@@ -79,7 +79,7 @@ export default function FAQ() {
                       exit={{ height: 0, opacity: 0 }}
                       transition={{ duration: 0.2 }}
                     >
-                      <div className="px-4 pb-4 text-xs text-slate-400 leading-relaxed border-t border-white/[0.06] pt-3">
+                      <div className="px-4 pb-4 text-xs text-text-tertiary leading-relaxed border-t border-border-subtle pt-3">
                         {faq.answer}
                       </div>
                     </motion.div>

@@ -4,10 +4,10 @@ import { motion } from 'framer-motion';
 import { Target } from 'lucide-react';
 
 const routes = [
-  { id: 'sg', name: '三公冲刺', color: '#ff2d6a', y: 60, active: true },
-  { id: 'dual', name: '双轨维持', color: '#8b5cf6', y: 110, active: false },
-  { id: 'public', name: '公办直升', color: '#06b6d4', y: 160, active: false },
-  { id: 'international', name: '国际路线', color: '#22c55e', y: 210, active: false },
+  { id: 'sg', name: '三公冲刺', color: 'primary', y: 60, active: true },
+  { id: 'dual', name: '双轨维持', color: 'secondary', y: 110, active: false },
+  { id: 'public', name: '公办直升', color: 'accent', y: 160, active: false },
+  { id: 'international', name: '国际路线', color: 'success', y: 210, active: false },
 ];
 
 const stages = [
@@ -19,13 +19,29 @@ const stages = [
   { x: 850, label: '小升初' },
 ];
 
+const colorClass = (color: string, active: boolean) => {
+  const opacity = active ? '' : '/20';
+  switch (color) {
+    case 'primary':
+      return `text-primary${opacity}`;
+    case 'secondary':
+      return `text-secondary${opacity}`;
+    case 'accent':
+      return `text-accent${opacity}`;
+    case 'success':
+      return `text-success${opacity}`;
+    default:
+      return `text-text-muted${opacity}`;
+  }
+};
+
 export default function RouteMapVisual() {
   return (
-    <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-5 corner-accent backdrop-blur-sm">
+    <div className="rounded-2xl border border-border-subtle bg-surface-elevated p-5">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
-          <Target className="w-3.5 h-3.5 text-primary" aria-hidden="true" />
-          <span className="text-[11px] font-mono text-slate-400 uppercase tracking-wider">
+          <Target className="w-4 h-4 text-primary" aria-hidden="true" />
+          <span className="text-[11px] font-mono text-text-tertiary uppercase tracking-wider">
             路线矩阵 · 多路线并行评估
           </span>
         </div>
@@ -43,17 +59,21 @@ export default function RouteMapVisual() {
           <pattern id="routeGrid" width="40" height="40" patternUnits="userSpaceOnUse">
             <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(255,255,255,0.03)" strokeWidth="1" />
           </pattern>
-          <linearGradient id="routeActiveGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="#ff2d6a" stopOpacity="0.9" />
-            <stop offset="100%" stopColor="#ff5c8a" stopOpacity="0.3" />
-          </linearGradient>
         </defs>
         <rect width="950" height="270" fill="url(#routeGrid)" />
 
         {stages.map((stage) => (
           <g key={stage.label}>
             <line x1={stage.x} y1="30" x2={stage.x} y2="240" stroke="rgba(255,255,255,0.05)" strokeWidth="1" />
-            <text x={stage.x} y="262" textAnchor="middle" fill="#6b6b7b" fontSize="11" fontFamily="var(--font-mono)">
+            <text
+              x={stage.x}
+              y="262"
+              textAnchor="middle"
+              fill="currentColor"
+              className="text-text-muted"
+              fontSize="11"
+              fontFamily="var(--font-mono)"
+            >
               {stage.label}
             </text>
           </g>
@@ -64,10 +84,10 @@ export default function RouteMapVisual() {
             <motion.path
               d={`M 60 ${route.y} Q 250 ${route.y - (route.active ? 24 : 10)}, 450 ${route.y} T 890 ${route.y}`}
               fill="none"
-              stroke={route.active ? 'url(#routeActiveGradient)' : route.color}
+              stroke="currentColor"
               strokeWidth={route.active ? 2.5 : 1.5}
-              strokeOpacity={route.active ? 1 : 0.2}
               strokeDasharray={route.active ? undefined : '5 5'}
+              className={colorClass(route.color, route.active)}
               initial={{ pathLength: 0 }}
               animate={{ pathLength: 1 }}
               transition={{ duration: 1.5, delay: 0.3, ease: 'easeInOut' }}
@@ -76,7 +96,8 @@ export default function RouteMapVisual() {
               x="45"
               y={route.y + 4}
               textAnchor="end"
-              fill={route.active ? route.color : 'rgba(255,255,255,0.35)'}
+              fill="currentColor"
+              className={route.active ? colorClass(route.color, true) : 'text-text-muted'}
               fontSize="11"
               fontFamily="var(--font-body)"
             >
@@ -92,21 +113,21 @@ export default function RouteMapVisual() {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 1 + index * 0.15, duration: 0.35 }}
           >
-            <circle cx={stage.x} cy={60} r="4" fill="#ff2d6a" />
+            <circle cx={stage.x} cy={60} r="4" fill="currentColor" className="text-primary" />
           </motion.g>
         ))}
       </svg>
 
-      <div className="mt-4 pt-4 border-t border-white/5 flex items-center justify-between text-[11px]">
+      <div className="mt-4 pt-4 border-t border-border-subtle flex items-center justify-between text-[11px]">
         <div className="flex items-center gap-4">
-          <span className="text-slate-500">
+          <span className="text-text-muted">
             主路线: <span className="text-primary">三公冲刺型</span>
           </span>
-          <span className="text-slate-500 hidden sm:inline">
+          <span className="text-text-muted hidden sm:inline">
             备选: <span className="text-secondary">双轨维持</span> · <span className="text-accent">公办直升</span>
           </span>
         </div>
-        <span className="font-mono text-slate-600">4 ROUTES LOADED</span>
+        <span className="font-mono text-text-muted">4 ROUTES LOADED</span>
       </div>
     </div>
   );

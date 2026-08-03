@@ -65,7 +65,7 @@ export default function MilestonesMarketingPage() {
                     <h3 className="text-base font-bold font-display mt-0.5">{item.grade}</h3>
                   </div>
                   <div className="flex-1">
-                    <p className="text-sm text-white font-medium mb-0.5">{item.example}</p>
+                    <p className="text-sm text-text-primary font-medium mb-0.5">{item.example}</p>
                     <p className="text-xs text-slate-400">{item.detail}</p>
                   </div>
                 </div>

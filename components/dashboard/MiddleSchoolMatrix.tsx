@@ -111,7 +111,7 @@ const roleConfig: Record<
   },
   none: {
     label: '不适用',
-    color: 'text-slate-500',
+    color: 'text-text-muted',
     bg: 'bg-slate-500/5',
     border: 'border-slate-500/15',
     glow: '',
@@ -237,7 +237,7 @@ const jiadingMap: MapTier[] = [
   {
     id: 'benpu',
     name: '本区普高',
-    color: 'text-slate-300',
+    color: 'text-text-secondary',
     bg: 'bg-slate-500/10',
     channel: '统招为主，少量到校',
     schools: [
@@ -338,31 +338,31 @@ export default function MiddleSchoolMatrix() {
       <motion.div
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
-        className="rounded-2xl glass p-5 border border-white/5 relative overflow-hidden"
+        className="rounded-2xl bg-surface-elevated p-5 border border-border-subtle relative overflow-hidden"
       >
         <div className="absolute top-0 right-0 w-80 h-80 bg-gradient-to-br from-violet-500/10 to-cyan-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none" />
         <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-4">
           <div>
             <h2 className="text-xl font-bold font-display mb-1">中考升学路径矩阵</h2>
-            <p className="text-xs text-slate-400">
+            <p className="text-xs text-text-muted">
               纵向 = 目标学校层级（本区为主），横向 = 录取通道
             </p>
           </div>
           <div className="flex flex-wrap items-center gap-3">
-            <div className="flex flex-wrap items-center gap-2 text-[11px] text-slate-500">
-              <span className="flex items-center gap-1.5 px-2 py-1 rounded-full bg-white/5 border border-white/5">
+            <div className="flex flex-wrap items-center gap-2 text-[11px] text-text-muted">
+              <span className="flex items-center gap-1.5 px-2 py-1 rounded-full bg-surface-hover border border-border-subtle">
                 <span className="w-2 h-2 rounded-full bg-violet-500 shadow-[0_0_6px_rgba(139,92,246,0.8)]" />
                 主通道
               </span>
-              <span className="flex items-center gap-1.5 px-2 py-1 rounded-full bg-white/5 border border-white/5">
+              <span className="flex items-center gap-1.5 px-2 py-1 rounded-full bg-surface-hover border border-border-subtle">
                 <span className="w-2 h-2 rounded-full bg-cyan-500 shadow-[0_0_6px_rgba(6,182,212,0.8)]" />
                 可选
               </span>
-              <span className="flex items-center gap-1.5 px-2 py-1 rounded-full bg-white/5 border border-white/5">
+              <span className="flex items-center gap-1.5 px-2 py-1 rounded-full bg-surface-hover border border-border-subtle">
                 <span className="w-2 h-2 rounded-full bg-amber-500 shadow-[0_0_6px_rgba(245,158,11,0.8)]" />
                 部分有
               </span>
-              <span className="flex items-center gap-1.5 px-2 py-1 rounded-full bg-white/5 border border-white/5">
+              <span className="flex items-center gap-1.5 px-2 py-1 rounded-full bg-surface-hover border border-border-subtle">
                 <span className="w-2 h-2 rounded-full bg-slate-600" />
                 不适用
               </span>
@@ -370,14 +370,14 @@ export default function MiddleSchoolMatrix() {
             <div className="flex items-center gap-2">
               <button
                 onClick={() => console.log('导出图片')}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-[11px] text-slate-300 hover:bg-white/10 hover:border-white/20 transition-all"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-hover border border-border-subtle text-[11px] text-text-secondary hover:bg-surface-highlight hover:border-border-default transition-all"
               >
                 <Camera className="w-3.5 h-3.5" />
                 导出
               </button>
               <button
                 onClick={() => console.log('分享')}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-[11px] text-slate-300 hover:bg-white/10 hover:border-white/20 transition-all"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-hover border border-border-subtle text-[11px] text-text-secondary hover:bg-surface-highlight hover:border-border-default transition-all"
               >
                 <Share2 className="w-3.5 h-3.5" />
                 分享
@@ -392,14 +392,14 @@ export default function MiddleSchoolMatrix() {
         initial={{ opacity: 0, scale: 0.98 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.5, delay: 0.1 }}
-        className="rounded-2xl glass p-4 border border-white/5 overflow-x-auto"
+        className="rounded-2xl bg-surface-elevated p-4 border border-border-subtle overflow-x-auto"
       >
         <div className="min-w-[800px]">
           {/* Column headers */}
           <div className="grid grid-cols-[220px_repeat(4,1fr)] gap-2.5 mb-2.5">
-            <div className="flex flex-col items-center justify-center gap-1.5 py-2.5 px-2 rounded-lg border bg-white/5 border-white/5">
-              <Layers className="w-4 h-4 text-slate-400" />
-              <span className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider">
+            <div className="flex flex-col items-center justify-center gap-1.5 py-2.5 px-2 rounded-lg border bg-surface-hover border-border-subtle">
+              <Layers className="w-4 h-4 text-text-muted" />
+              <span className="text-[10px] font-semibold text-text-muted uppercase tracking-wider">
                 学校层级
               </span>
             </div>
@@ -412,11 +412,11 @@ export default function MiddleSchoolMatrix() {
                   onMouseEnter={() => setHoveredChannel(channel)}
                   onMouseLeave={() => setHoveredChannel(null)}
                   className={`flex flex-col items-center justify-center gap-1.5 py-2.5 px-2 rounded-lg border transition-all duration-300 ${
-                    isHovered ? 'bg-white/10 border-white/20' : 'bg-white/5 border-white/5'
+                    isHovered ? 'bg-surface-highlight border-border-default' : 'bg-surface-hover border-border-subtle'
                   }`}
                 >
-                  <Icon className={`w-4 h-4 ${isHovered ? 'text-white' : 'text-slate-400'}`} />
-                  <span className={`text-xs font-semibold ${isHovered ? 'text-white' : 'text-slate-300'}`}>
+                  <Icon className={`w-4 h-4 ${isHovered ? 'text-text-primary' : 'text-text-muted'}`} />
+                  <span className={`text-xs font-semibold ${isHovered ? 'text-text-primary' : 'text-text-secondary'}`}>
                     {channel}
                   </span>
                 </motion.div>
@@ -446,10 +446,10 @@ export default function MiddleSchoolMatrix() {
                 <div
                   className={`group relative flex flex-col justify-center gap-2 p-2.5 rounded-lg border transition-all duration-300 ${
                     isTierHovered
-                      ? 'bg-white/10 border-white/30 shadow-[0_0_20px_rgba(255,255,255,0.08)]'
+                      ? 'bg-surface-highlight border-border-default'
                       : isCurrentTier
                       ? 'bg-primary/5 border-primary/30'
-                      : 'bg-white/5 border-white/5'
+                      : 'bg-surface-hover border-border-subtle'
                   }`}
                 >
                   <div className="flex items-center justify-between gap-2">
@@ -488,10 +488,10 @@ export default function MiddleSchoolMatrix() {
                           }`,
                         }}
                       />
-                      <span className="text-sm font-bold text-slate-200 whitespace-nowrap">{tier.name}</span>
+                      <span className="text-sm font-bold text-text-secondary whitespace-nowrap">{tier.name}</span>
                     </div>
                     {outcome && (
-                      <div className="flex items-center gap-1.5 shrink-0 pl-2 ml-1 border-l border-white/10">
+                      <div className="flex items-center gap-1.5 shrink-0 pl-2 ml-1 border-l border-border-subtle">
                         <span
                           className="px-1.5 py-0.5 rounded text-[10px] font-bold"
                           style={{ backgroundColor: outcome.color, color: '#0f172a' }}
@@ -507,7 +507,7 @@ export default function MiddleSchoolMatrix() {
 
                   {/* Probability micro bar */}
                   {outcome && (
-                    <div className="w-full h-1 rounded-full bg-white/5 overflow-hidden">
+                    <div className="w-full h-1 rounded-full bg-surface-hover overflow-hidden">
                       <motion.div
                         initial={{ width: 0 }}
                         animate={{ width: `${outcome.prob}%` }}
@@ -520,15 +520,15 @@ export default function MiddleSchoolMatrix() {
 
                   {/* Current tier badge */}
                   {isCurrentTier && (
-                    <div className="absolute -top-2 -right-2 px-2 py-0.5 rounded-full bg-primary text-white text-[10px] font-bold shadow-[0_0_15px_rgba(244,63,94,0.5)]">
+                    <div className="absolute -top-2 -right-2 px-2 py-0.5 rounded-full bg-primary text-text-primary text-[10px] font-bold shadow-[0_0_15px_rgba(244,63,94,0.5)]">
                       当前目标
                     </div>
                   )}
 
                   {/* Row header hover tooltip */}
                   <div className="pointer-events-none absolute left-0 right-0 top-full z-30 mt-2 hidden group-hover:block">
-                    <div className="rounded-lg glass border border-white/10 p-2.5 shadow-xl">
-                      <p className="text-[11px] text-slate-200 leading-relaxed">{tier.note}</p>
+                    <div className="rounded-lg bg-surface-elevated border border-border-subtle p-2.5 shadow-xl">
+                      <p className="text-[11px] text-text-secondary leading-relaxed">{tier.note}</p>
                     </div>
                   </div>
                 </div>
@@ -552,7 +552,7 @@ export default function MiddleSchoolMatrix() {
                         dimmed ? 'opacity-35' : 'opacity-100'
                       } ${
                         isHighlighted
-                          ? 'border-white/40 shadow-[0_0_20px_rgba(255,255,255,0.1)]'
+                          ? 'border-border-default'
                           : ''
                       } ${isCurrentTier ? 'ring-1 ring-primary/20' : ''}`}
                     >
@@ -563,7 +563,7 @@ export default function MiddleSchoolMatrix() {
                           {config.label}
                         </span>
                         {cell.role !== 'none' && (
-                          <span className="text-xs font-medium truncate text-slate-200">
+                          <span className="text-xs font-medium truncate text-text-secondary">
                             {cell.short}
                           </span>
                         )}
@@ -571,8 +571,8 @@ export default function MiddleSchoolMatrix() {
 
                       {/* Hover tooltip */}
                       <div className="pointer-events-none absolute left-0 right-0 top-full z-30 mt-2 hidden group-hover:block">
-                        <div className="rounded-lg glass border border-white/10 p-2.5 shadow-xl">
-                          <p className="text-[11px] text-slate-200 leading-relaxed">{cell.note}</p>
+                        <div className="rounded-lg bg-surface-elevated border border-border-subtle p-2.5 shadow-xl">
+                          <p className="text-[11px] text-text-secondary leading-relaxed">{cell.note}</p>
                         </div>
                       </div>
                     </motion.div>
@@ -598,7 +598,7 @@ export default function MiddleSchoolMatrix() {
             </div>
             <div>
               <h4 className="text-sm font-bold text-amber-200 mb-1">名额到校资格门槛</h4>
-              <p className="text-xs text-slate-400 leading-relaxed">
+              <p className="text-xs text-text-muted leading-relaxed">
                 嘉定区名额到校主要面向不择生源的初中。学生需在<strong>同一所初中连续就读满 3 年</strong>
                 （含学籍与就读），民办初中是否具备名额到校资格以当年政策为准。提前转学、人户分离等情况可能影响资格。
               </p>
@@ -612,7 +612,7 @@ export default function MiddleSchoolMatrix() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.45 }}
-        className="rounded-2xl glass p-4 border border-white/5"
+        className="rounded-2xl bg-surface-elevated p-4 border border-border-subtle"
       >
         <div className="flex items-center gap-3 mb-3">
           <div className="p-2 rounded-lg bg-rose-500/10">
@@ -620,24 +620,24 @@ export default function MiddleSchoolMatrix() {
           </div>
           <div>
             <h3 className="text-base font-bold font-display">嘉定区高中地图</h3>
-            <p className="text-[11px] text-slate-400">本区高中层级 + 外区可冲学校</p>
+            <p className="text-[11px] text-text-muted">本区高中层级 + 外区可冲学校</p>
           </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-3 items-stretch">
           {jiadingMap.map((tier) => (
-            <div key={tier.id} className={`rounded-xl ${tier.bg} border border-white/5 p-3 flex flex-col`}>
+            <div key={tier.id} className={`rounded-xl ${tier.bg} border border-border-subtle p-3 flex flex-col`}>
               <div className="flex items-center justify-between mb-1">
                 <h4 className={`text-sm font-bold font-display ${tier.color}`}>{tier.name}</h4>
               </div>
-              <p className="text-[10px] text-slate-400 mb-2">{tier.channel}</p>
+              <p className="text-[10px] text-text-muted mb-2">{tier.channel}</p>
               <div className="flex flex-wrap content-start gap-1.5 flex-1">
                 {tier.schools.map((school) => {
                   const chip = (
                     <div className="flex items-center gap-1 min-w-0">
-                      <span className="text-xs text-slate-200 truncate">{school.name}</span>
+                      <span className="text-xs text-text-secondary truncate">{school.name}</span>
                       {school.slug && (
-                        <ExternalLink className="w-2.5 h-2.5 text-slate-500 group-hover:text-white transition-colors shrink-0" />
+                        <ExternalLink className="w-2.5 h-2.5 text-text-muted group-hover:text-text-primary transition-colors shrink-0" />
                       )}
                     </div>
                   );
@@ -645,14 +645,14 @@ export default function MiddleSchoolMatrix() {
                     <Link
                       key={school.name}
                       href={`/dashboard/schools/${school.slug}`}
-                      className="group flex items-center gap-1 px-2 py-1 rounded-md bg-black/20 hover:bg-white/10 border border-white/5 transition-colors"
+                      className="group flex items-center gap-1 px-2 py-1 rounded-md bg-surface-elevated hover:bg-surface-highlight border border-border-subtle transition-colors"
                     >
                       {chip}
                     </Link>
                   ) : (
                     <div
                       key={school.name}
-                      className="flex items-center gap-1 px-2 py-1 rounded-md bg-black/10 border border-white/5"
+                      className="flex items-center gap-1 px-2 py-1 rounded-md bg-surface-hover border border-border-subtle"
                     >
                       {chip}
                     </div>
@@ -676,16 +676,16 @@ export default function MiddleSchoolMatrix() {
           return [strategy.focus, strategy.high, strategy.safe].map((item) => (
           <div
             key={item.title}
-            className="rounded-xl glass p-3 border border-white/5 hover:border-white/10 transition-colors"
+            className="rounded-xl bg-surface-elevated p-3 border border-border-subtle hover:border-border-subtle transition-colors"
           >
             <div className="flex items-center gap-2.5 mb-1.5">
               <div className="p-1.5 rounded-lg" style={{ backgroundColor: `${item.accent}15` }}>
                 <item.icon className="w-3.5 h-3.5" style={{ color: item.accent }} />
               </div>
-              <span className="text-[11px] text-slate-400">{item.title}</span>
+              <span className="text-[11px] text-text-muted">{item.title}</span>
             </div>
             <p className="text-sm font-bold font-display mb-0.5">{item.value}</p>
-            <p className="text-[10px] text-slate-500">{item.desc}</p>
+            <p className="text-[10px] text-text-muted">{item.desc}</p>
           </div>
         ));
       })()}

@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { createPortal } from 'react-dom';
 import { X, LucideIcon } from 'lucide-react';
 
-export type ModalColorScheme = 'rose' | 'violet' | 'green' | 'danger' | 'accent' | 'gold';
+export type ModalColorScheme = 'rose' | 'violet' | 'green' | 'error' | 'accent' | 'gold';
 
 export interface ModalProps {
   isOpen: boolean;
@@ -37,34 +37,34 @@ const schemeStyles: Record<
   { border: string; shadow: string; glow: string }
 > = {
   rose: {
-    border: 'rgba(244,63,94,0.3)',
-    shadow: '0 0 80px rgba(244,63,94,0.25), 0 0 120px rgba(139,92,246,0.15), inset 0 1px 0 rgba(255,255,255,0.1)',
-    glow: 'rgba(244,63,94,0.15)',
+    border: 'color-mix(in srgb, var(--color-primary) 30%, transparent)',
+    shadow: '0 0 80px var(--shadow-primary), 0 0 120px var(--shadow-secondary), inset 0 1px 0 rgba(255,255,255,0.1)',
+    glow: 'var(--shadow-primary)',
   },
   violet: {
-    border: 'rgba(139,92,246,0.3)',
-    shadow: '0 0 80px rgba(139,92,246,0.25), 0 0 120px rgba(244,63,94,0.1), inset 0 1px 0 rgba(255,255,255,0.1)',
-    glow: 'rgba(139,92,246,0.15)',
+    border: 'color-mix(in srgb, var(--color-secondary) 30%, transparent)',
+    shadow: '0 0 80px var(--shadow-secondary), 0 0 120px var(--shadow-primary), inset 0 1px 0 rgba(255,255,255,0.1)',
+    glow: 'var(--shadow-secondary)',
   },
   green: {
-    border: 'rgba(7,193,96,0.3)',
-    shadow: '0 0 60px rgba(7,193,96,0.2), 0 0 100px rgba(7,193,96,0.08), inset 0 1px 0 rgba(255,255,255,0.1)',
-    glow: 'rgba(7,193,96,0.1)',
+    border: 'rgba(34,197,94,0.3)',
+    shadow: '0 0 60px rgba(34,197,94,0.2), 0 0 100px rgba(34,197,94,0.08), inset 0 1px 0 rgba(255,255,255,0.1)',
+    glow: 'rgba(34,197,94,0.1)',
   },
-  danger: {
+  error: {
     border: 'rgba(239,68,68,0.3)',
-    shadow: '0 0 60px rgba(239,68,68,0.2), 0 0 100px rgba(244,63,94,0.08), inset 0 1px 0 rgba(255,255,255,0.1)',
+    shadow: '0 0 60px rgba(239,68,68,0.2), 0 0 100px var(--shadow-primary), inset 0 1px 0 rgba(255,255,255,0.1)',
     glow: 'rgba(239,68,68,0.1)',
   },
   accent: {
     border: 'rgba(6,182,212,0.3)',
-    shadow: '0 0 60px rgba(6,182,212,0.2), 0 0 100px rgba(139,92,246,0.08), inset 0 1px 0 rgba(255,255,255,0.1)',
+    shadow: '0 0 60px rgba(6,182,212,0.2), 0 0 100px var(--shadow-secondary), inset 0 1px 0 rgba(255,255,255,0.1)',
     glow: 'rgba(6,182,212,0.1)',
   },
   gold: {
-    border: 'rgba(245,158,11,0.3)',
-    shadow: '0 0 60px rgba(245,158,11,0.2), 0 0 100px rgba(244,63,94,0.08), inset 0 1px 0 rgba(255,255,255,0.1)',
-    glow: 'rgba(245,158,11,0.1)',
+    border: 'rgba(217,119,6,0.3)',
+    shadow: '0 0 60px rgba(217,119,6,0.2), 0 0 100px var(--shadow-primary), inset 0 1px 0 rgba(255,255,255,0.1)',
+    glow: 'rgba(217,119,6,0.1)',
   },
 };
 
@@ -121,10 +121,8 @@ export default function Modal({
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
             transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-            className={`relative w-full ${sizeClasses[size]} max-h-[90vh] rounded-3xl flex flex-col overflow-hidden pointer-events-auto ${className}`}
+            className={`relative w-full ${sizeClasses[size]} max-h-[90vh] rounded-2xl bg-surface-elevated flex flex-col overflow-hidden pointer-events-auto ${className}`}
             style={{
-              background:
-                'linear-gradient(135deg, rgba(15,23,42,0.98) 0%, rgba(30,41,59,0.98) 100%)',
               border: `1px solid ${schemeStyles[colorScheme].border}`,
               boxShadow: schemeStyles[colorScheme].shadow,
             }}
@@ -137,7 +135,7 @@ export default function Modal({
               className="pointer-events-none absolute -bottom-16 -left-16 w-48 h-48 rounded-full blur-3xl"
               style={{ background: schemeStyles[colorScheme].glow }}
             />
-            <div className="relative z-10 p-6 pb-4 border-b border-white/5 flex items-center justify-between shrink-0">
+            <div className="relative z-10 p-6 pb-4 border-b border-border-subtle flex items-center justify-between shrink-0">
               <div className="flex items-center gap-3">
                 {Icon && (
                   <div
@@ -145,20 +143,20 @@ export default function Modal({
                       iconClassName || 'bg-gradient-to-br from-primary to-secondary'
                     }`}
                   >
-                    <Icon className="w-5 h-5 text-white" />
+                    <Icon className="w-5 h-5 text-text-primary" />
                   </div>
                 )}
                 <div>
                   <h3 className="text-lg font-bold font-display">{title}</h3>
                   {subtitle && (
-                    <p className="text-xs text-slate-400">{subtitle}</p>
+                    <p className="text-xs text-text-tertiary">{subtitle}</p>
                   )}
                 </div>
               </div>
               {showClose && (
                 <button
                   onClick={onClose}
-                  className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center text-slate-400 hover:text-white hover:bg-white/10 transition-all"
+                  className="w-8 h-8 rounded-lg bg-surface-hover flex items-center justify-center text-text-tertiary hover:text-text-primary hover:bg-surface-highlight transition-all"
                   aria-label="关闭"
                 >
                   <X className="w-4 h-4" />
@@ -171,7 +169,7 @@ export default function Modal({
             </div>
 
             {footer && (
-              <div className="relative z-10 p-6 pt-4 border-t border-white/5 shrink-0">
+              <div className="relative z-10 p-6 pt-4 border-t border-border-subtle shrink-0">
                 {footer}
               </div>
             )}

@@ -63,10 +63,10 @@ export default function DataPrivacySection() {
       </SettingsSection>
 
       <SettingsSection title="危险操作" description="以下操作不可逆，请谨慎">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 rounded-xl bg-danger/5 border border-danger/10">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 rounded-xl bg-error/5 border border-error/10">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-danger/10 flex items-center justify-center">
-              <Trash2 className="w-5 h-5 text-danger" />
+            <div className="w-10 h-10 rounded-xl bg-error/10 flex items-center justify-center">
+              <Trash2 className="w-5 h-5 text-error" />
             </div>
             <div>
               <p className="text-sm font-medium text-text-secondary">注销账号</p>
@@ -75,7 +75,7 @@ export default function DataPrivacySection() {
           </div>
           <button
             onClick={() => setShowDeleteConfirm(true)}
-            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-danger/10 text-danger text-sm font-medium hover:bg-danger/20 transition-colors"
+            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-error/10 text-error text-sm font-medium hover:bg-error/20 transition-colors"
           >
             <Trash2 className="w-4 h-4" />
             注销账号
@@ -91,8 +91,8 @@ export default function DataPrivacySection() {
           />
           <div className="relative w-full max-w-md rounded-2xl bg-[#0f172a] border border-border-default p-6 shadow-2xl">
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 rounded-full bg-danger/10 flex items-center justify-center">
-                <AlertTriangle className="w-5 h-5 text-danger" />
+              <div className="w-10 h-10 rounded-full bg-error/10 flex items-center justify-center">
+                <AlertTriangle className="w-5 h-5 text-error" />
               </div>
               <div>
                 <h4 className="text-base font-bold text-text-secondary">确认注销账号？</h4>
@@ -107,7 +107,7 @@ export default function DataPrivacySection() {
               value={deletePassword}
               onChange={(e) => setDeletePassword(e.target.value)}
               placeholder="当前密码"
-              className="w-full px-4 py-2.5 rounded-xl bg-surface-elevated border border-border-default text-sm text-text-secondary placeholder-slate-500 focus:outline-none focus:border-danger transition-all mb-4"
+              className="w-full px-4 py-2.5 rounded-xl bg-surface-elevated border border-border-default text-sm text-text-secondary placeholder:text-text-tertiary focus:outline-none focus:border-error transition-all mb-4"
             />
             <div className="flex justify-end gap-3">
               <button
@@ -120,7 +120,7 @@ export default function DataPrivacySection() {
               <button
                 onClick={handleDelete}
                 disabled={deleteAccount.isPending || !deletePassword}
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-danger text-white text-sm font-medium hover:bg-danger/90 transition-colors disabled:opacity-70"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-error text-text-primary text-sm font-medium hover:bg-error/90 transition-colors disabled:opacity-70"
               >
                 {deleteAccount.isPending && <Loader2 className="w-4 h-4 animate-spin" />}
                 确认注销

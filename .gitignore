@@ -36,7 +36,14 @@ pnpm-debug.log*
 # OS files
 .DS_Store
 *.pem
+*.key
+*.crt
+*.csr
 Thumbs.db
+
+# Certificates
+证书/
+certs/
 
 # IDE
 .idea/

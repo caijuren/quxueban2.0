@@ -154,12 +154,12 @@ export default function AccountSection({ user, onUpdate }: AccountSectionProps) 
     }
     if (name) {
       return (
-        <span className="text-xl font-bold text-white">
+        <span className="text-xl font-bold text-text-primary">
           {name.slice(0, 1).toUpperCase()}
         </span>
       );
     }
-    return <User className="w-7 h-7 text-white/80" />;
+    return <User className="w-7 h-7 text-text-primary/80" />;
   };
 
   return (
@@ -168,10 +168,10 @@ export default function AccountSection({ user, onUpdate }: AccountSectionProps) 
         <div className="flex flex-col sm:flex-row gap-4 sm:gap-5">
           <div className="flex flex-col items-center gap-2 shrink-0">
             <div
-              className="relative w-20 h-20 rounded-full flex items-center justify-center overflow-hidden ring-2 ring-white/5"
+              className="relative w-20 h-20 rounded-full flex items-center justify-center overflow-hidden ring-2 ring-border-default"
               style={{
-                background: 'linear-gradient(135deg, #ff2d6a, #8b5cf6)',
-                boxShadow: '0 0 20px rgba(255, 45, 106, 0.2)',
+                background: 'linear-gradient(135deg, var(--color-primary), var(--color-secondary))',
+                boxShadow: '0 0 20px var(--shadow-primary)',
               }}
             >
               {renderAvatar()}
@@ -223,7 +223,7 @@ export default function AccountSection({ user, onUpdate }: AccountSectionProps) 
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder="例如：宝妈"
-                  className="w-full px-3 py-2 rounded-lg bg-surface-elevated border border-border-default text-sm text-text-secondary placeholder-slate-500 focus:outline-none focus:border-primary transition-all"
+                  className="w-full px-3 py-2 rounded-lg bg-surface-elevated border border-border-default text-sm text-text-secondary placeholder:text-text-tertiary focus:outline-none focus:border-primary transition-all"
                 />
               </div>
               <div>
@@ -233,7 +233,7 @@ export default function AccountSection({ user, onUpdate }: AccountSectionProps) 
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
                   placeholder="接收短信提醒"
-                  className="w-full px-3 py-2 rounded-lg bg-surface-elevated border border-border-default text-sm text-text-secondary placeholder-slate-500 focus:outline-none focus:border-primary transition-all"
+                  className="w-full px-3 py-2 rounded-lg bg-surface-elevated border border-border-default text-sm text-text-secondary placeholder:text-text-tertiary focus:outline-none focus:border-primary transition-all"
                 />
               </div>
               <div>
@@ -243,7 +243,7 @@ export default function AccountSection({ user, onUpdate }: AccountSectionProps) 
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="接收邮件通知"
-                  className="w-full px-3 py-2 rounded-lg bg-surface-elevated border border-border-default text-sm text-text-secondary placeholder-slate-500 focus:outline-none focus:border-primary transition-all"
+                  className="w-full px-3 py-2 rounded-lg bg-surface-elevated border border-border-default text-sm text-text-secondary placeholder:text-text-tertiary focus:outline-none focus:border-primary transition-all"
                 />
               </div>
             </div>
@@ -253,7 +253,7 @@ export default function AccountSection({ user, onUpdate }: AccountSectionProps) 
                 className={`mt-3 text-xs px-3 py-1.5 rounded-lg ${
                   profileMessage.type === 'success'
                     ? 'bg-success/10 text-success border border-success/20'
-                    : 'bg-danger/10 text-danger border border-danger/20'
+                    : 'bg-error/10 text-error border border-error/20'
                 }`}
               >
                 {profileMessage.text}
@@ -264,7 +264,7 @@ export default function AccountSection({ user, onUpdate }: AccountSectionProps) 
               <button
                 onClick={handleSaveProfile}
                 disabled={savingProfile}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-primary text-white text-xs font-medium hover:opacity-90 transition-all disabled:opacity-70"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-primary text-text-primary text-xs font-medium hover:opacity-90 transition-all disabled:opacity-70"
               >
                 {savingProfile ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Save className="w-3.5 h-3.5" />}
                 保存
@@ -381,7 +381,7 @@ export default function AccountSection({ user, onUpdate }: AccountSectionProps) 
                   className={`text-xs px-3 py-1.5 rounded-lg ${
                     passwordMessage.type === 'success'
                       ? 'bg-success/10 text-success border border-success/20'
-                      : 'bg-danger/10 text-danger border border-danger/20'
+                      : 'bg-error/10 text-error border border-error/20'
                   }`}
                 >
                   {passwordMessage.text}
@@ -402,34 +402,34 @@ export default function AccountSection({ user, onUpdate }: AccountSectionProps) 
           )}
 
           <button
-            onClick={() => toggleSecurity('danger')}
-            className="w-full flex items-center justify-between p-3 rounded-lg bg-danger/5 border border-danger/10 hover:bg-danger/[0.07] transition-colors text-left"
+            onClick={() => toggleSecurity('error')}
+            className="w-full flex items-center justify-between p-3 rounded-lg bg-error/5 border border-error/10 hover:bg-error/[0.07] transition-colors text-left"
           >
             <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-lg bg-danger/10 flex items-center justify-center">
-                <Trash2 className="w-4 h-4 text-danger" />
+              <div className="w-9 h-9 rounded-lg bg-error/10 flex items-center justify-center">
+                <Trash2 className="w-4 h-4 text-error" />
               </div>
               <div>
                 <p className="text-sm font-medium text-text-secondary">注销账号</p>
                 <p className="text-xs text-text-muted">删除后数据无法恢复</p>
               </div>
             </div>
-            {expandedSecurity === 'danger' ? (
+            {expandedSecurity === 'error' ? (
               <ChevronUp className="w-4 h-4 text-text-muted" />
             ) : (
               <ChevronDown className="w-4 h-4 text-text-muted" />
             )}
           </button>
 
-          {expandedSecurity === 'danger' && (
-            <div className="p-3 rounded-lg bg-danger/5 border border-danger/10 space-y-3">
+          {expandedSecurity === 'error' && (
+            <div className="p-3 rounded-lg bg-error/5 border border-error/10 space-y-3">
               <p className="text-xs text-text-tertiary">
                 注销后所有孩子、计划、任务数据将无法恢复，请谨慎操作。
               </p>
               <div className="flex justify-end">
                 <button
                   onClick={() => setShowDeleteConfirm(true)}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-danger/10 text-danger text-xs font-medium hover:bg-danger/20 transition-colors"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-error/10 text-error text-xs font-medium hover:bg-error/20 transition-colors"
                 >
                   <Trash2 className="w-3.5 h-3.5" />
                   注销账号
@@ -447,8 +447,8 @@ export default function AccountSection({ user, onUpdate }: AccountSectionProps) 
           <div className="absolute inset-0 bg-black/80 backdrop-blur-md" onClick={() => setShowDeleteConfirm(false)} />
           <div className="relative w-full max-w-md rounded-2xl bg-[#0f172a] border border-border-default p-5 shadow-2xl">
             <div className="flex items-center gap-3 mb-3">
-              <div className="w-9 h-9 rounded-full bg-danger/10 flex items-center justify-center">
-                <AlertTriangle className="w-4 h-4 text-danger" />
+              <div className="w-9 h-9 rounded-full bg-error/10 flex items-center justify-center">
+                <AlertTriangle className="w-4 h-4 text-error" />
               </div>
               <div>
                 <h4 className="text-sm font-bold text-text-secondary">确认注销账号？</h4>
@@ -463,7 +463,7 @@ export default function AccountSection({ user, onUpdate }: AccountSectionProps) 
               value={deletePassword}
               onChange={(e) => setDeletePassword(e.target.value)}
               placeholder="当前密码"
-              className="w-full px-3 py-2 rounded-lg bg-surface-elevated border border-border-default text-sm text-text-secondary placeholder-slate-500 focus:outline-none focus:border-danger transition-all mb-3"
+              className="w-full px-3 py-2 rounded-lg bg-surface-elevated border border-border-default text-sm text-text-secondary placeholder:text-text-tertiary focus:outline-none focus:border-error transition-all mb-3"
             />
             <div className="flex justify-end gap-2">
               <button
@@ -476,7 +476,7 @@ export default function AccountSection({ user, onUpdate }: AccountSectionProps) 
               <button
                 onClick={handleDeleteAccount}
                 disabled={deleteAccount.isPending || !deletePassword}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-danger text-white text-xs font-medium hover:bg-danger/90 transition-colors disabled:opacity-70"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-error text-text-primary text-xs font-medium hover:bg-error/90 transition-colors disabled:opacity-70"
               >
                 {deleteAccount.isPending && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
                 确认注销

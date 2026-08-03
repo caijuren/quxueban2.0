@@ -32,11 +32,11 @@ export default function PainPoints() {
             <h2 className="text-3xl sm:text-4xl font-bold font-display leading-tight mb-4">
               上海升学
               <br />
-              <span className="text-slate-500">不是信息不够</span>
+              <span className="text-text-muted">不是信息不够</span>
               <br />
               是信息太杂
             </h2>
-            <p className="text-slate-400 text-base leading-relaxed max-w-sm">
+            <p className="text-text-tertiary text-base leading-relaxed max-w-sm">
               政策每年微调、学校要求各不相同、时间节点密集。家长最缺的不是资源，而是一张清晰的执行地图。
             </p>
           </MotionSection>
@@ -48,16 +48,16 @@ export default function PainPoints() {
                 direction="left"
                 delay={index * 0.1}
                 duration={0.5}
-                className="group flex gap-5 pb-6 border-b border-white/5 last:border-0 last:pb-0"
+                className="group flex gap-5 pb-6 border-b border-border-subtle last:border-0 last:pb-0"
               >
-                <span className="text-2xl font-mono text-slate-700 font-bold group-hover:text-primary transition-colors duration-300">
+                <span className="text-2xl font-mono text-text-muted font-bold group-hover:text-primary transition-colors duration-300">
                   {pain.number}
                 </span>
                 <div>
-                  <h3 className="text-lg font-bold font-display mb-1.5 text-white group-hover:text-primary transition-colors duration-300">
+                  <h3 className="text-lg font-bold font-display mb-1.5 text-text-primary group-hover:text-primary transition-colors duration-300">
                     {pain.title}
                   </h3>
-                  <p className="text-sm text-slate-400 leading-relaxed">{pain.description}</p>
+                  <p className="text-sm text-text-tertiary leading-relaxed">{pain.description}</p>
                 </div>
               </MotionSection>
             ))}

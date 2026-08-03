@@ -29,7 +29,7 @@ const features = [
 
 export default function FeatureCards() {
   return (
-    <section className="py-14 px-4 sm:px-6 lg:px-8 border-y border-white/5">
+    <section className="py-14 px-4 sm:px-6 lg:px-8 border-y border-border-subtle">
       <div className="max-w-6xl mx-auto">
         <MotionSection direction="up" duration={0.6} className="mb-12">
           <span className="text-[11px] font-mono text-primary uppercase tracking-widest mb-3 block">
@@ -38,7 +38,7 @@ export default function FeatureCards() {
           <h2 className="text-3xl sm:text-4xl font-bold font-display leading-tight">
             不只是记录工具
             <br />
-            <span className="text-slate-500">更是一套升学战略系统</span>
+            <span className="text-text-muted">更是一套升学战略系统</span>
           </h2>
         </MotionSection>
 
@@ -55,10 +55,10 @@ export default function FeatureCards() {
                     <feature.icon className="w-5 h-5 text-primary" aria-hidden="true" />
                   </div>
                   <div>
-                    <h3 className="text-base font-bold font-display mb-1.5 text-white group-hover:text-primary transition-colors duration-200">
+                    <h3 className="text-base font-bold font-display mb-1.5 text-text-primary group-hover:text-primary transition-colors duration-200">
                       {feature.title}
                     </h3>
-                    <p className="text-sm text-slate-400 leading-relaxed">{feature.description}</p>
+                    <p className="text-sm text-text-tertiary leading-relaxed">{feature.description}</p>
                   </div>
                 </div>
               </CommandCard>

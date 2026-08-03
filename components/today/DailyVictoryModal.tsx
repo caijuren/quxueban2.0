@@ -103,7 +103,7 @@ export default function DailyVictoryModal({
           <button
             onClick={onPush}
             disabled={pushing || pushed}
-            className="flex-1 py-3 rounded-xl bg-primary text-white text-sm font-medium hover:bg-primary/90 disabled:opacity-60 disabled:cursor-not-allowed transition-colors inline-flex items-center justify-center gap-2"
+            className="flex-1 py-3 rounded-xl bg-primary text-text-primary text-sm font-medium hover:bg-primary/90 disabled:opacity-60 disabled:cursor-not-allowed transition-colors inline-flex items-center justify-center gap-2"
           >
             {pushing ? (
               '推送中...'

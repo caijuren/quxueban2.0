@@ -78,7 +78,7 @@ function ViewToggle({
             : 'text-text-tertiary hover:text-text-secondary'
         }`}
       >
-        <User className="w-3.5 h-3.5" />
+        <User className="w-4 h-4" />
         当前孩子
       </button>
       <button
@@ -89,7 +89,7 @@ function ViewToggle({
             : 'text-text-tertiary hover:text-text-secondary'
         }`}
       >
-        <LayoutGrid className="w-3.5 h-3.5" />
+        <LayoutGrid className="w-4 h-4" />
         全家总览
       </button>
     </div>
@@ -101,7 +101,7 @@ function IdentityCard({ child }: { child: Child }) {
   const routeSummary = getRouteSummary(child);
 
   return (
-    <CommandCard active corner className="p-5 sm:p-6">
+    <CommandCard active className="p-6">
       <div className="flex flex-col sm:flex-row sm:items-center gap-5 sm:gap-6">
         <ChildAvatar child={child} size="2xl" shape="rounded" />
 
@@ -151,21 +151,21 @@ function IdentityCard({ child }: { child: Child }) {
           onClick={() => router.push('/dashboard/plan')}
           className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-surface-elevated text-xs font-medium text-text-secondary hover:text-text-primary hover:bg-surface-highlight transition-all"
         >
-          <Route className="w-3.5 h-3.5" />
+          <Route className="w-4 h-4" />
           路线方案
         </button>
         <button
           onClick={() => router.push('/dashboard/weekly')}
           className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-surface-elevated text-xs font-medium text-text-secondary hover:text-text-primary hover:bg-surface-highlight transition-all"
         >
-          <CalendarDays className="w-3.5 h-3.5" />
+          <CalendarDays className="w-4 h-4" />
           周计划
         </button>
         <button
           onClick={() => router.push('/dashboard/ai')}
           className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-surface-elevated text-xs font-medium text-text-secondary hover:text-text-primary hover:bg-surface-highlight transition-all"
         >
-          <Sparkles className="w-3.5 h-3.5" />
+          <Sparkles className="w-4 h-4" />
           AI 诊断
         </button>
       </div>
@@ -209,12 +209,12 @@ function TimelineNode({ item, isLast }: { item: TimelineItem; isLast: boolean })
       <div
         className={`relative z-10 w-6 h-6 rounded-full flex items-center justify-center shrink-0 ${config.dotClass}`}
       >
-        <Icon className={`w-3 h-3 ${item.status === 'current' ? 'text-white' : item.status === 'past' ? 'text-surface' : 'text-text-tertiary'}`} />
+        <Icon className={`w-4 h-4 ${item.status === 'current' ? 'text-text-primary' : 'text-text-tertiary'}`} />
       </div>
 
       <div className="flex-1 pb-6 min-w-0">
         <div className="flex flex-wrap items-center gap-2 mb-1">
-          <span className={`text-2xs font-medium px-2 py-0.5 rounded-md bg-surface-elevated ${config.textClass}`}>
+          <span className={`text-2xs font-medium px-2 py-0.5 rounded-lg bg-surface-hover ${config.textClass}`}>
             {item.time}
           </span>
           {item.status === 'current' && (
@@ -238,9 +238,9 @@ function TimelineSection({ child }: { child: Child }) {
 
   if (timeline.length === 0) {
     return (
-      <CommandCard className="p-5">
+      <CommandCard className="p-6">
         <div className="flex items-center gap-2 mb-4">
-          <TrendingUp className="w-4 h-4 text-primary" />
+          <TrendingUp className="w-5 h-5 text-primary" />
           <h2 className="text-base font-bold font-display">升学时间轴</h2>
         </div>
         <EmptyState
@@ -253,9 +253,9 @@ function TimelineSection({ child }: { child: Child }) {
   }
 
   return (
-    <CommandCard className="p-5">
+    <CommandCard className="p-6">
       <div className="flex items-center gap-2 mb-6">
-        <TrendingUp className="w-4 h-4 text-primary" />
+        <TrendingUp className="w-5 h-5 text-primary" />
         <h2 className="text-base font-bold font-display">升学时间轴</h2>
         <span className="ml-auto text-xs text-text-tertiary">
           {timeline.filter((t) => t.status === 'past').length} 个已过 /{' '}
@@ -280,9 +280,9 @@ function UpcomingMilestonesCard({ child }: { child: Child }) {
   const milestones = getUpcomingMilestones(child, 3);
 
   return (
-    <CommandCard className="p-5 h-full">
+    <CommandCard className="p-6 h-full">
       <div className="flex items-center gap-2 mb-4">
-        <AlertCircle className="w-4 h-4 text-warning" />
+        <AlertCircle className="w-5 h-5 text-warning" />
         <h2 className="text-base font-bold font-display">关键节点预警</h2>
       </div>
 
@@ -295,7 +295,7 @@ function UpcomingMilestonesCard({ child }: { child: Child }) {
           {milestones.map((milestone, index) => (
             <div
               key={milestone.id}
-              className="p-3 rounded-xl bg-surface-elevated hover:bg-surface-highlight transition-colors"
+              className="p-3 rounded-lg bg-surface-elevated hover:bg-surface-highlight transition-colors"
             >
               <div className="flex items-center gap-2 mb-1.5">
                 <span className="text-2xs font-medium px-1.5 py-0.5 rounded bg-warning/[0.10] text-warning">
@@ -330,9 +330,9 @@ function AIStrategyCard({
   );
 
   return (
-    <CommandCard className="p-5 h-full">
+    <CommandCard className="p-6 h-full">
       <div className="flex items-center gap-2 mb-4">
-        <Sparkles className="w-4 h-4 text-primary" />
+        <Sparkles className="w-5 h-5 text-primary" />
         <h2 className="text-base font-bold font-display">AI 战略建议</h2>
       </div>
 
@@ -372,7 +372,7 @@ function OverviewChildCard({
   const advice = generateStrategicAdvice(child);
 
   return (
-    <CommandCard hover onClick={onSelect} className="p-5 h-full">
+    <CommandCard hover onClick={onSelect} className="p-6 h-full">
       <div className="flex items-start gap-4 mb-4">
         <ChildAvatar child={child} size="xl" shape="rounded" />
         <div className="flex-1 min-w-0">
@@ -393,7 +393,7 @@ function OverviewChildCard({
       </div>
 
       <div className="space-y-2 mb-4">
-        <div className="flex items-center justify-between py-2 px-3 rounded-xl bg-surface-elevated">
+        <div className="flex items-center justify-between py-2 px-3 rounded-lg bg-surface-elevated">
           <span className="text-xs text-text-tertiary">当前路线</span>
           <span className="text-sm font-medium text-text-secondary truncate max-w-[60%]">
             {routeSummary.name}
@@ -401,7 +401,7 @@ function OverviewChildCard({
         </div>
 
         {upcoming[0] && (
-          <div className="flex items-start gap-2 py-2 px-3 rounded-xl bg-warning/[0.06]">
+          <div className="flex items-start gap-2 py-2 px-3 rounded-lg bg-warning/[0.06]">
             <Clock className="w-4 h-4 text-warning shrink-0 mt-0.5" />
             <div className="min-w-0">
               <p className="text-xs text-warning font-medium">下一个节点：{upcoming[0].time}</p>
@@ -411,7 +411,7 @@ function OverviewChildCard({
         )}
 
         {completionRate !== null && (
-          <div className="flex items-center justify-between py-2 px-3 rounded-xl bg-surface-elevated">
+          <div className="flex items-center justify-between py-2 px-3 rounded-lg bg-surface-elevated">
             <span className="text-xs text-text-tertiary">本周完成率</span>
             <span className="text-sm font-bold text-text-primary tabular-nums">
               {completionRate}%
@@ -420,7 +420,7 @@ function OverviewChildCard({
         )}
       </div>
 
-      <div className="py-2 px-3 rounded-xl bg-surface-elevated mb-4">
+      <div className="py-2 px-3 rounded-lg bg-surface-elevated mb-4">
         <p className="text-xs text-primary font-medium mb-1">AI 战略提示</p>
         <p className="text-xs text-text-tertiary line-clamp-2 leading-relaxed">{advice}</p>
       </div>
@@ -503,7 +503,7 @@ export default function DashboardPage() {
           variants={containerVariants}
           initial={shouldReduceMotion ? false : 'hidden'}
           animate="visible"
-          className="grid grid-cols-1 md:grid-cols-2 gap-4"
+          className="grid grid-cols-1 md:grid-cols-2 gap-6"
         >
           {children.map((child) => (
             <motion.div key={child.id} variants={itemVariants}>
@@ -518,9 +518,9 @@ export default function DashboardPage() {
           <motion.button
             variants={itemVariants}
             onClick={() => setChildModalOpen(true)}
-            className="rounded-2xl border border-dashed border-border-default bg-surface/[0.5] p-5 flex flex-col items-center justify-center gap-2 text-text-tertiary hover:text-text-secondary hover:bg-surface-light hover:border-border-strong transition-all text-sm min-h-[200px]"
+            className="rounded-2xl border border-dashed border-border-default bg-surface/[0.5] p-6 flex flex-col items-center justify-center gap-2 text-text-tertiary hover:text-text-secondary hover:bg-surface-hover hover:border-border-strong transition-all text-sm min-h-[200px]"
           >
-            <div className="w-12 h-12 rounded-xl bg-surface-light border border-border-default flex items-center justify-center">
+            <div className="w-12 h-12 rounded-2xl bg-surface-hover border border-border-default flex items-center justify-center">
               <Plus className="w-5 h-5" />
             </div>
             <span className="font-medium">添加孩子</span>
@@ -539,7 +539,7 @@ export default function DashboardPage() {
             <IdentityCard child={currentChild} />
           </motion.div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <motion.div
               initial={shouldReduceMotion ? false : { opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
@@ -553,7 +553,7 @@ export default function DashboardPage() {
               variants={containerVariants}
               initial={shouldReduceMotion ? false : 'hidden'}
               animate="visible"
-              className="space-y-4"
+              className="space-y-6"
             >
               <motion.div variants={itemVariants}>
                 <UpcomingMilestonesCard child={currentChild} />

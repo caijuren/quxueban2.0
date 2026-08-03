@@ -65,7 +65,7 @@ export const TASK_CATEGORY_COLORS: Record<TaskCategory, string> = {
   sport: 'text-orange-400 bg-orange-400/10',
   interest: 'text-pink-400 bg-pink-400/10',
   ability: 'text-indigo-400 bg-indigo-400/10',
-  other: 'text-slate-400 bg-slate-400/10',
+  other: 'text-text-muted bg-surface-highlight',
 };
 
 export const TASK_ALIGNMENT_LABELS: Record<TaskAlignment, string> = {

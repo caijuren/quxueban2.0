@@ -82,7 +82,7 @@ export default function ManageNodesModal({ isOpen, onClose, plans, onUpdate }: M
           <button
             type="button"
             onClick={handleSave}
-            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-accent text-white text-sm font-medium transition-all"
+            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-accent text-text-primary text-sm font-medium transition-all"
           >
             <Save className="w-4 h-4" />
             保存节点
@@ -126,7 +126,7 @@ export default function ManageNodesModal({ isOpen, onClose, plans, onUpdate }: M
                   <button
                     type="button"
                     onClick={() => removeMilestone(plan.id, index)}
-                    className="w-9 h-9 rounded-xl bg-surface-elevated flex items-center justify-center text-text-muted hover:text-danger hover:bg-danger/10 transition-all"
+                    className="w-9 h-9 rounded-xl bg-surface-elevated flex items-center justify-center text-text-muted hover:text-error hover:bg-error/10 transition-all"
                     aria-label="删除节点"
                   >
                     <Trash2 className="w-4 h-4" />

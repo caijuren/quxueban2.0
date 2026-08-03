@@ -73,7 +73,7 @@ export default function TaskCard({
                 compact ? 'w-7 h-7' : 'w-8 h-8'
               )}
             >
-              <CategoryIcon className={compact ? 'w-3.5 h-3.5' : 'w-4 h-4'} />
+              <CategoryIcon className="w-4 h-4" />
             </div>
             <span
               className={cn(
@@ -85,7 +85,7 @@ export default function TaskCard({
             </span>
 
             <span className="ml-auto text-2xs px-2 py-0.5 rounded-full bg-surface-elevated text-text-tertiary border border-border-subtle flex items-center gap-1">
-              <Clock className="w-3 h-3" />
+              <Clock className="w-4 h-4" />
               <span className="tabular-nums">{task.duration}</span>
             </span>
           </div>
@@ -118,7 +118,7 @@ export default function TaskCard({
               onBlur={(e) => onNoteBlur(e.target.value)}
               placeholder="完成备注（正确率、感受等）"
               onClick={(e) => e.stopPropagation()}
-              className="w-full mt-3 text-xs bg-surface-highlight border border-border-default rounded-xl px-3 py-2 text-text-secondary placeholder:text-text-muted focus:outline-none focus:border-primary/40 focus:ring-1 focus:ring-primary/20 resize-none"
+              className="w-full mt-3 text-xs bg-surface-highlight border border-border-default rounded-lg px-3 py-2 text-text-secondary placeholder:text-text-muted focus:outline-none focus:border-primary/40 focus:ring-1 focus:ring-primary/20 resize-none"
               rows={2}
             />
           )}

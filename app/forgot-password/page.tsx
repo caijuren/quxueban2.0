@@ -21,7 +21,7 @@ export default function ForgotPasswordPage() {
   };
 
   return (
-    <div className="min-h-screen animated-bg grid-pattern flex items-center justify-center p-4 relative overflow-hidden">
+    <div className="min-h-screen bg-background flex items-center justify-center p-4 relative overflow-hidden">
       <div className="absolute top-1/4 -left-32 w-64 h-64 bg-primary/5 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute bottom-1/4 -right-32 w-64 h-64 bg-secondary/5 rounded-full blur-3xl pointer-events-none" />
 
@@ -33,19 +33,19 @@ export default function ForgotPasswordPage() {
           className="hidden lg:block"
         >
           <div className="flex items-center gap-3 mb-10">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center glow-primary">
-              <Sparkles className="w-5 h-5 text-white" />
+            <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center">
+              <Sparkles className="w-5 h-5 text-text-primary" />
             </div>
-            <span className="text-2xl font-bold font-display gradient-text">趣学伴</span>
+            <span className="text-2xl font-bold font-display text-primary">趣学伴</span>
           </div>
 
-          <h1 className="text-4xl xl:text-5xl font-bold font-display leading-tight mb-5 text-balance">
+          <h1 className="text-4xl xl:text-5xl font-bold font-display leading-tight mb-5 text-balance text-text-primary">
             忘记密码
             <br />
-            <span className="gradient-text">找回账户</span>
+            <span className="text-primary">找回账户</span>
           </h1>
 
-          <p className="text-base text-slate-400 leading-relaxed mb-10 max-w-md">
+          <p className="text-base text-text-tertiary leading-relaxed mb-10 max-w-md">
             输入注册时使用的邮箱，我们会发送密码重置链接。如果暂未绑定邮箱，请联系管理员处理。
           </p>
         </motion.div>
@@ -55,10 +55,10 @@ export default function ForgotPasswordPage() {
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1 ]}}
         >
-          <div className="rounded-xl command-panel corner-accent p-6 sm:p-8">
+          <div className="rounded-2xl bg-surface-elevated border border-border-subtle p-6 sm:p-8">
             <div className="text-center mb-8">
-              <h2 className="text-xl font-bold font-display mb-1.5">重置密码</h2>
-              <p className="text-sm text-slate-500">我们将发送重置链接到你的邮箱</p>
+              <h2 className="text-xl font-bold font-display mb-1.5 text-text-primary">重置密码</h2>
+              <p className="text-sm text-text-muted">我们将发送重置链接到你的邮箱</p>
             </div>
 
             {submitted ? (
@@ -66,7 +66,7 @@ export default function ForgotPasswordPage() {
                 <div className="w-12 h-12 rounded-xl bg-success/10 flex items-center justify-center mx-auto border border-success/20">
                   <CheckCircle2 className="w-6 h-6 text-success" />
                 </div>
-                <p className="text-sm text-slate-300">如果该邮箱已注册，重置链接已发送。</p>
+                <p className="text-sm text-text-secondary">如果该邮箱已注册，重置链接已发送。</p>
                 <Link
                   href="/login"
                   className="inline-flex items-center gap-1.5 text-sm text-primary hover:text-primary-glow transition-colors"
@@ -77,11 +77,11 @@ export default function ForgotPasswordPage() {
             ) : (
               <form className="space-y-4" onSubmit={handleSubmit}>
                 <div>
-                  <label htmlFor="email" className="block text-sm font-medium text-slate-300 mb-1.5">
+                  <label htmlFor="email" className="block text-sm font-medium text-text-secondary mb-1.5">
                     邮箱
                   </label>
                   <div className="relative">
-                    <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+                    <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted" />
                     <input
                       id="email"
                       name="email"
@@ -91,7 +91,7 @@ export default function ForgotPasswordPage() {
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder="请输入注册邮箱"
-                      className="w-full pl-10 pr-4 py-2.5 rounded-lg bg-surface border border-white/[0.08] text-sm text-slate-100 placeholder:text-slate-600 focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/50 transition-colors"
+                      className="w-full pl-10 pr-4 py-2 rounded-lg border border-border-default bg-surface text-sm text-text-primary placeholder:text-text-tertiary focus:outline-none focus:border-primary transition-colors"
                     />
                   </div>
                 </div>
@@ -99,12 +99,12 @@ export default function ForgotPasswordPage() {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-gradient-to-r from-primary to-secondary text-white text-sm font-semibold hover:shadow-glow-primary transition-all duration-200 disabled:opacity-60 focus-ring"
+                  className="w-full inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-primary text-white text-sm font-medium hover:bg-primary/90 transition-colors disabled:opacity-50 cursor-not-allowed"
                 >
                   {loading ? '发送中...' : '发送重置链接'}
                 </button>
 
-                <p className="text-center text-xs text-slate-500">
+                <p className="text-center text-xs text-text-muted">
                   想起密码了？{' '}
                   <Link href="/login" className="text-primary hover:text-primary-glow transition-colors">
                     返回登录

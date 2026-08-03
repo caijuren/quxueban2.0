@@ -27,31 +27,49 @@ const reportItems = [
     icon: Target,
     title: '路线匹配度 78%',
     status: '良好',
-    variant: 'success',
+    variant: 'success' as const,
     description: '当前主路线与目标学校匹配良好，建议继续保持节奏',
-    color: '#22c55e',
   },
   {
     icon: AlertTriangle,
     title: '需关注：奥数尚未启动',
     status: '风险',
-    variant: 'warning',
+    variant: 'warning' as const,
     description: '建议根据三公路线要求，提前布局关键能力项',
-    color: '#f59e0b',
   },
   {
     icon: TrendingUp,
     title: '本月重点任务',
     status: '建议',
-    variant: 'accent',
+    variant: 'accent' as const,
     description: '确定数学学习形式，建立每周稳定的学习节奏',
-    color: '#06b6d4',
   },
 ];
 
+const reportVariantStyles = {
+  success: {
+    border: 'border-success/20',
+    bg: 'bg-success/[0.03]',
+    text: 'text-success',
+    pill: 'bg-success/20',
+  },
+  warning: {
+    border: 'border-warning/20',
+    bg: 'bg-warning/[0.03]',
+    text: 'text-warning',
+    pill: 'bg-warning/20',
+  },
+  accent: {
+    border: 'border-accent/20',
+    bg: 'bg-accent/[0.03]',
+    text: 'text-accent',
+    pill: 'bg-accent/20',
+  },
+};
+
 export default function AISection() {
   return (
-    <section className="py-14 px-4 sm:px-6 lg:px-8 border-y border-white/5">
+    <section className="py-14 px-4 sm:px-6 lg:px-8 border-y border-border-subtle">
       <div className="max-w-6xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
           <MotionSection
@@ -61,56 +79,51 @@ export default function AISection() {
           >
             <CommandCard corner className="p-1">
               <div className="rounded-xl bg-background p-5 space-y-3">
-                <div className="flex items-center justify-between pb-4 border-b border-white/5">
+                <div className="flex items-center justify-between pb-4 border-b border-border-subtle">
                   <div className="flex items-center gap-3">
                     <div className="w-9 h-9 rounded-lg bg-secondary/10 flex items-center justify-center">
                       <Sparkles className="w-4 h-4 text-secondary" aria-hidden="true" />
                     </div>
                     <div>
                       <h3 className="text-base font-bold font-display">AI 诊断报告</h3>
-                      <p className="text-[11px] text-slate-500">基于当前进度生成</p>
+                      <p className="text-[11px] text-text-muted">基于当前进度生成</p>
                     </div>
                   </div>
                   <span className="text-[11px] font-mono text-secondary">v2.4</span>
                 </div>
 
-                {reportItems.map((item) => (
-                  <div
-                    key={item.title}
-                    className="p-4 rounded-lg border"
-                    style={{
-                      backgroundColor: `${item.color}08`,
-                      borderColor: `${item.color}20`,
-                    }}
-                  >
-                    <div className="flex items-start gap-3">
-                      <item.icon
-                        className="w-4 h-4 shrink-0 mt-0.5"
-                        style={{ color: item.color }}
-                        aria-hidden="true"
-                      />
-                      <div className="flex-1">
-                        <div className="flex items-center justify-between mb-1">
-                          <span className="text-sm font-semibold" style={{ color: item.color }}>
-                            {item.title}
-                          </span>
-                          <span
-                            className="text-[10px] px-1.5 py-0.5 rounded"
-                            style={{ backgroundColor: `${item.color}20`, color: item.color }}
-                          >
-                            {item.status}
-                          </span>
+                {reportItems.map((item) => {
+                  const style = reportVariantStyles[item.variant];
+                  return (
+                    <div
+                      key={item.title}
+                      className={`p-4 rounded-lg border ${style.bg} ${style.border}`}
+                    >
+                      <div className="flex items-start gap-3">
+                        <item.icon
+                          className={`w-4 h-4 shrink-0 mt-0.5 ${style.text}`}
+                          aria-hidden="true"
+                        />
+                        <div className="flex-1">
+                          <div className="flex items-center justify-between mb-1">
+                            <span className={`text-sm font-semibold ${style.text}`}>
+                              {item.title}
+                            </span>
+                            <span className={`text-[10px] px-1.5 py-0.5 rounded ${style.pill} ${style.text}`}>
+                              {item.status}
+                            </span>
+                          </div>
+                          <p className="text-xs text-text-tertiary leading-relaxed">{item.description}</p>
                         </div>
-                        <p className="text-xs text-slate-400 leading-relaxed">{item.description}</p>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
 
                 <div className="pt-2">
-                  <div className="h-px bg-white/5 mb-3" />
+                  <div className="h-px bg-border-subtle mb-3" />
                   <div className="flex items-center justify-between text-[11px]">
-                    <span className="text-slate-500">AI 建议 action</span>
+                    <span className="text-text-muted">AI 建议 action</span>
                     <span className="font-mono text-primary">START MATH FOUNDATION</span>
                   </div>
                 </div>
@@ -129,9 +142,9 @@ export default function AISection() {
             <h2 className="text-3xl sm:text-4xl font-bold font-display leading-tight mb-4">
               不仅规划
               <br />
-              <span className="text-slate-500">更会主动提醒调整</span>
+              <span className="text-text-muted">更会主动提醒调整</span>
             </h2>
-            <p className="text-slate-400 text-base leading-relaxed mb-8">
+            <p className="text-text-secondary text-base leading-relaxed mb-8">
               输入孩子当前进度，AI 帮你判断路线是否合理、哪些任务需要加强、是否需要启动备选方案。
             </p>
 
@@ -148,7 +161,7 @@ export default function AISection() {
                   </div>
                   <div>
                     <h3 className="text-sm font-bold font-display mb-1">{insight.title}</h3>
-                    <p className="text-xs text-slate-400 leading-relaxed">{insight.description}</p>
+                    <p className="text-xs text-text-tertiary leading-relaxed">{insight.description}</p>
                   </div>
                 </MotionSection>
               ))}

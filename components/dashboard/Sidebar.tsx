@@ -56,7 +56,7 @@ export default function Sidebar({ mobileMenuOpen, onLinkClick }: SidebarProps) {
 
   return (
     <aside
-      className={`fixed left-0 top-0 h-full w-56 glass border-r border-border-subtle z-50 flex flex-col transition-transform duration-300 ${
+      className={`fixed left-0 top-0 h-full w-56 bg-surface-elevated/95 backdrop-blur-md border-r border-border-subtle z-50 flex flex-col transition-transform duration-300 ${
         mobileMenuOpen ? 'translate-x-0 lg:translate-x-0' : '-translate-x-full lg:translate-x-0 lg:flex hidden'
       }`}
     >
@@ -74,7 +74,7 @@ export default function Sidebar({ mobileMenuOpen, onLinkClick }: SidebarProps) {
           </Link>
           <button
             onClick={onLinkClick}
-            className="lg:hidden w-9 h-9 rounded-lg bg-surface-elevated flex items-center justify-center text-text-secondary hover:text-white hover:bg-surface-highlight transition-colors"
+            className="lg:hidden w-9 h-9 rounded-lg bg-surface-elevated flex items-center justify-center text-text-secondary hover:text-text-primary hover:bg-surface-highlight transition-colors"
             aria-label="关闭菜单"
           >
             <X className="w-5 h-5" />
@@ -102,14 +102,14 @@ export default function Sidebar({ mobileMenuOpen, onLinkClick }: SidebarProps) {
                     aria-current={isActive ? 'page' : undefined}
                     className={`group relative flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200 ${
                       isActive
-                        ? 'bg-primary/[0.08] text-white'
-                        : 'text-text-tertiary hover:text-white hover:bg-surface-elevated'
+                        ? 'bg-primary/[0.08] text-text-primary'
+                        : 'text-text-tertiary hover:text-text-primary hover:bg-surface-elevated'
                     }`}
                   >
                     {isActive && (
                       <div className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-5 rounded-r-full bg-primary" />
                     )}
-                    <item.icon className={`w-[18px] h-[18px] transition-colors ${isActive ? 'text-primary' : 'text-text-muted group-hover:text-text-secondary'}`} />
+                    <item.icon className={`w-5 h-5 transition-colors ${isActive ? 'text-primary' : 'text-text-muted group-hover:text-text-secondary'}`} />
                     <span className="text-sm font-medium">{item.name}</span>
                   </Link>
                 );

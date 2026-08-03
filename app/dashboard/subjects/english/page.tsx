@@ -91,7 +91,7 @@ export default function EnglishSubjectPage() {
 
         <Link
           href="/dashboard/subjects/english/config"
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-xl glass border border-white/[0.08] text-sm font-medium text-text-secondary hover:text-text-primary hover:bg-white/[0.04] transition-colors"
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-surface-elevated border border-border-subtle text-sm font-medium text-text-secondary hover:text-text-primary hover:bg-surface-hover transition-colors"
         >
           <Settings className="w-4 h-4" />
           编辑规划

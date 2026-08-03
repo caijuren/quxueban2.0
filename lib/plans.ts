@@ -877,7 +877,7 @@ export const typeConfig = {
 
 export const statusConfig = {
   active: { label: '执行中', icon: Target, color: 'text-success' },
-  standby: { label: '待命', icon: Clock, color: 'text-slate-400' },
+  standby: { label: '待命', icon: Clock, color: 'text-text-muted' },
   completed: { label: '已完成', icon: CheckCircle2, color: 'text-success' },
 };
 

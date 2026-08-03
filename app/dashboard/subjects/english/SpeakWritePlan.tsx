@@ -14,11 +14,11 @@ export default function SpeakWritePlan({ grade }: { grade: number }) {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.25 }}
-      className="rounded-2xl glass p-6 border border-border-subtle"
+      className="rounded-2xl bg-surface-elevated p-6 border border-border-subtle"
     >
       <div className="flex items-center gap-3 mb-6">
         <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-warning to-orange-400 flex items-center justify-center">
-          <Target className="w-5 h-5 text-white" />
+          <Target className="w-5 h-5 text-text-primary" />
         </div>
         <div>
           <h2 className="text-xl font-bold font-display">说写弱项专项补强</h2>
@@ -33,7 +33,7 @@ export default function SpeakWritePlan({ grade }: { grade: number }) {
         <div className="rounded-xl bg-surface-elevated border border-border-subtle p-5">
           <div className="flex items-center gap-3 mb-4">
             <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-secondary to-violet-400 flex items-center justify-center">
-              <Mic className="w-5 h-5 text-white" />
+              <Mic className="w-5 h-5 text-text-primary" />
             </div>
             <div>
               <p className="font-bold text-text-secondary">{plan.dailySpeaking.title}</p>
@@ -56,7 +56,7 @@ export default function SpeakWritePlan({ grade }: { grade: number }) {
         <div className="rounded-xl bg-surface-elevated border border-border-subtle p-5">
           <div className="flex items-center gap-3 mb-4">
             <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-primary to-rose-400 flex items-center justify-center">
-              <PenTool className="w-5 h-5 text-white" />
+              <PenTool className="w-5 h-5 text-text-primary" />
             </div>
             <div>
               <p className="font-bold text-text-secondary">{plan.dailyWriting.title}</p>

@@ -18,7 +18,7 @@ export default function MobileBottomNav() {
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-50 lg:hidden">
-      <div className="glass border-t border-border-subtle px-2 pb-safe">
+      <div className="bg-surface-elevated/95 backdrop-blur-md border-t border-border-subtle px-2 pb-safe">
         <div className="flex items-center justify-around h-[60px]">
           {navItems.map((item) => {
             const isActive =
@@ -46,7 +46,7 @@ export default function MobileBottomNav() {
                 />
                 <span
                   className={`text-2xs mt-1 font-medium transition-colors ${
-                    isActive ? 'text-white' : 'text-text-muted'
+                    isActive ? 'text-text-primary' : 'text-text-muted'
                   }`}
                 >
                   {item.name}

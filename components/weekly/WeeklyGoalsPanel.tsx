@@ -66,11 +66,11 @@ export default function WeeklyGoalsPanel({
       >
         <div className="flex items-start justify-between gap-4">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
+            <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
               <Target className="w-5 h-5 text-primary" />
             </div>
             <div>
-              <h2 className="text-base font-bold text-text-secondary">本周目标</h2>
+              <h2 className="text-base font-bold text-text-primary">本周目标</h2>
               <p className="text-xs text-text-muted mt-0.5">
                 把具体任务描述填在这里，例如读哪几本书、做多少题
               </p>
@@ -80,9 +80,9 @@ export default function WeeklyGoalsPanel({
             <button
               type="button"
               onClick={onConfigure}
-              className="shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-primary text-white text-xs font-medium"
+              className="shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-primary text-white text-xs font-medium hover:bg-primary/90 transition-colors"
             >
-              <Settings2 className="w-3.5 h-3.5" />
+              <Settings2 className="w-4 h-4" />
               去配置
             </button>
           )}
@@ -99,7 +99,7 @@ export default function WeeklyGoalsPanel({
     >
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <Target className="w-4 h-4 text-primary" />
+          <Target className="w-5 h-5 text-primary" />
           <h2 className="text-base font-bold text-text-primary">本周目标</h2>
         </div>
         <span className="text-xs text-text-muted">
@@ -165,7 +165,7 @@ export default function WeeklyGoalsPanel({
                   </div>
                   <div className="flex items-center justify-between mt-1.5">
                     <span className="text-2xs text-text-muted flex items-center gap-1">
-                      <TrendingUp className="w-3 h-3" />
+                      <TrendingUp className="w-4 h-4" />
                       完成率 {rate}%
                     </span>
                     {effectiveDone >= target && target > 0 && (
@@ -178,7 +178,7 @@ export default function WeeklyGoalsPanel({
               {checklist.length > 0 && (
                 <div className="space-y-2">
                   <div className="flex items-center gap-1.5 text-2xs text-text-muted">
-                    <ListChecks className="w-3 h-3" />
+                    <ListChecks className="w-4 h-4" />
                     明细清单
                     <span className="text-text-tertiary">
                       ({checklistDone}/{checklist.length})
@@ -197,9 +197,9 @@ export default function WeeklyGoalsPanel({
                         }`}
                       >
                         {item.done ? (
-                          <CheckSquare className="w-3.5 h-3.5 text-success shrink-0 mt-0.5" />
+                          <CheckSquare className="w-4 h-4 text-success shrink-0 mt-0.5" />
                         ) : (
-                          <Square className="w-3.5 h-3.5 text-text-tertiary shrink-0 mt-0.5" />
+                          <Square className="w-4 h-4 text-text-tertiary shrink-0 mt-0.5" />
                         )}
                         <span
                           className={`text-xs leading-relaxed ${
