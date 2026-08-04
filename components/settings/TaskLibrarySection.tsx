@@ -249,6 +249,7 @@ export default function TaskLibrarySection() {
     const {
       source: _source,
       isActive: _isActive,
+      childId: _childId,
       ...rest
     } = data;
     return {
