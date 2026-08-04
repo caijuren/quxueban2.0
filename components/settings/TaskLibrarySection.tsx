@@ -173,14 +173,14 @@ export default function TaskLibrarySection() {
     data: templates = [],
     isLoading: loading,
     error: queryError,
-  } = useTaskTemplates({
+  } = useTaskTemplates(currentChild?.id, {
     category: filterCategory === 'all' ? undefined : filterCategory,
     status: filterStatus,
   });
   const { data: capabilities = [] } = useCapabilities();
-  const createTemplate = useCreateTaskTemplate();
-  const updateTemplate = useUpdateTaskTemplate();
-  const deleteTemplate = useDeleteTaskTemplate();
+  const createTemplate = useCreateTaskTemplate(currentChild?.id);
+  const updateTemplate = useUpdateTaskTemplate(currentChild?.id);
+  const deleteTemplate = useDeleteTaskTemplate(currentChild?.id);
 
   const error = queryError instanceof Error ? queryError.message : '';
 

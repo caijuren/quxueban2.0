@@ -367,7 +367,7 @@ export default function WeeklyTaskList({
       if (a.moduleName !== b.moduleName) return a.moduleName.localeCompare(b.moduleName);
       return a.taskName.localeCompare(b.taskName);
     });
-  }, [draftGoals, tasks]);
+  }, [draftGoals, baseTasks]);
 
   const grouped = useMemo(() => {
     const map = new Map<string, TaskRow[]>();
