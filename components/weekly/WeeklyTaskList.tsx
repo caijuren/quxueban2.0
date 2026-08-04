@@ -2,7 +2,7 @@
 
 import { useMemo, useState, useCallback, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Check, Plus, Trash2, Pencil, CalendarDays, BookOpen, Lock, Target, GraduationCap } from 'lucide-react';
+import { Check, Plus, Trash2, Pencil, CalendarDays, BookOpen, Lock, Target, GraduationCap, type LucideIcon } from 'lucide-react';
 import {
   type WeeklyGoal,
   type WeeklyGoalChecklistItem,
@@ -132,7 +132,7 @@ const CATEGORY_TO_SUBJECT: Record<TaskCategory, string> = {
   other: 'other',
 };
 
-const MODULE_ICONS: Record<TaskCategory, React.FC<{ className?: string; strokeWidth?: number }>> = {
+const MODULE_ICONS: Record<TaskCategory, LucideIcon> = {
   reading: BookOpen,
   school: Lock,
   sport: GraduationCap,
@@ -160,7 +160,7 @@ const SUBJECT_META: Record<
     name: string;
     shortName: string;
     color: string;
-    icon: React.FC<{ className?: string }>;
+    icon: LucideIcon;
     gradient: string;
     glow: string;
   }
