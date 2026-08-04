@@ -5,6 +5,7 @@ import { motion, useReducedMotion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import {
   Check,
+  X,
   ChevronRight,
   CalendarCheck,
   Clock,
@@ -341,11 +342,10 @@ export default function TodayPage() {
                 </div>
                 <button
                   onClick={() => setVictoryOpen(true)}
-                  disabled={!isFullyDone}
-                  className="hidden sm:inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border border-border-default text-xs font-medium text-text-secondary hover:bg-surface-light transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="hidden sm:inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-primary text-white text-sm font-bold hover:bg-primary/90 transition-all shadow-[0_0_20px_rgba(244,63,122,0.25)]"
                 >
-                  <Send className="w-3.5 h-3.5" />
-                  推送
+                  <Send className="w-5 h-5" />
+                  推送简报
                 </button>
               </div>
             </CommandCard>
@@ -407,7 +407,9 @@ export default function TodayPage() {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                   {tasks.map((task) => {
-                    const isDone = task.status === 'done';
+                    const status = task.status;
+                    const isDone = status === 'done';
+                    const isPending = status === 'pending';
                     const record = getTodayRecord(task, todayDate);
                     const quality = record?.quality;
                     const CategoryIcon = categoryIcons[category];
@@ -420,6 +422,8 @@ export default function TodayPage() {
                         className={`group relative text-left p-2.5 rounded-xl border transition-all duration-200 min-h-[84px] flex items-start gap-3 overflow-hidden ${
                           isDone
                             ? 'bg-surface border-success/20 opacity-80'
+                            : isPending
+                            ? 'bg-surface-light border-rose-500/20'
                             : 'bg-surface-light border-border-default hover:border-border-strong hover:bg-surface-highlight'
                         }`}
                       >
@@ -428,10 +432,13 @@ export default function TodayPage() {
                           className={`shrink-0 w-5 h-5 mt-0.5 rounded-md border-2 flex items-center justify-center transition-all ${
                             isDone
                               ? 'bg-success border-success'
+                              : isPending
+                              ? 'bg-rose-500 border-rose-500'
                               : 'border-text-muted group-hover:border-text-tertiary'
                           }`}
                         >
                           {isDone && <Check className="w-3 h-3 text-text-primary" />}
+                          {isPending && <X className="w-3 h-3 text-white" />}
                         </div>
 
                         {/* Done indicator line */}
@@ -515,10 +522,9 @@ export default function TodayPage() {
         >
           <button
             onClick={() => setVictoryOpen(true)}
-            disabled={!isFullyDone}
-            className="inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl border border-border-default text-sm font-medium text-text-secondary hover:bg-surface-light transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-primary text-white text-sm font-bold hover:bg-primary/90 transition-all shadow-[0_0_20px_rgba(244,63,122,0.25)]"
           >
-            <Send className="w-4 h-4" />
+            <Send className="w-5 h-5" />
             手动推送简报
           </button>
           <button

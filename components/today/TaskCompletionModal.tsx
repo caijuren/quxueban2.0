@@ -95,6 +95,7 @@ function getLatestRecord(
 interface TaskCompletionModalProps {
   open: boolean;
   task: WeeklyTaskItem | null;
+  date?: string;
   onClose: () => void;
   onSubmit: (taskId: string, input: TaskCompletionInput) => Promise<void>;
 }
@@ -102,10 +103,11 @@ interface TaskCompletionModalProps {
 export default function TaskCompletionModal({
   open,
   task,
+  date: dateProp,
   onClose,
   onSubmit,
 }: TaskCompletionModalProps) {
-  const date = getTodayStr();
+  const date = dateProp && /^\d{4}-\d{2}-\d{2}$/.test(dateProp) ? dateProp : getTodayStr();
   const latestRecord = useMemo(
     () => (task ? getLatestRecord(task, date) : undefined),
     [task, date]

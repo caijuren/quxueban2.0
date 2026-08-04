@@ -40,7 +40,7 @@ import CommandCard from '@/components/ui/CommandCard';
 import MetricRing from '@/components/ui/MetricRing';
 import WeeklyReportExport from '@/components/weekly/WeeklyReportExport';
 import GeneratePlanModal from '@/components/weekly/GeneratePlanModal';
-import WeeklyMatrix from '@/components/weekly/WeeklyMatrix';
+import WeeklyTaskChecklistMatrix from '@/components/weekly/WeeklyTaskChecklistMatrix';
 import WeeklyTaskList from '@/components/weekly/WeeklyTaskList';
 import { gradeLabel } from '@/lib/children';
 import {
@@ -62,7 +62,6 @@ import {
   formatWeekLabel,
   getPlanStats,
   generateAiReview,
-  getTodayName,
   toggleTaskStatus,
   dayOrder,
   subjectMeta,
@@ -1423,7 +1422,6 @@ function WeeklyTasksContent() {
   const [libraryOpen, setLibraryOpen] = useState(false);
   const [reportOpen, setReportOpen] = useState(false);
   const [generateOpen, setGenerateOpen] = useState(false);
-  const today = getTodayName();
 
   useEffect(() => {
     setDraftPlan(null);
@@ -1553,23 +1551,6 @@ function WeeklyTasksContent() {
       setDraftPlan({ ...displayPlan, goals });
     } else {
       await publishWeeklyPlan({ ...displayPlan, goals });
-    }
-  };
-
-  const handleMoveTask = async (
-    taskId: string,
-    targetDay: DayOfWeek,
-    targetCategory: TaskCategory
-  ) => {
-    if (!displayPlan || !currentChild) return;
-    const updatedTasks = displayPlan.tasks.map((t) =>
-      t.id === taskId ? { ...t, day: targetDay, category: targetCategory } : t
-    );
-    const updatedPlan = { ...displayPlan, tasks: updatedTasks };
-    if (isDraft) {
-      setDraftPlan(updatedPlan);
-    } else {
-      await publishWeeklyPlan(updatedPlan);
     }
   };
 
@@ -1894,13 +1875,10 @@ function WeeklyTasksContent() {
             </button>
           </motion.div>
         ) : (
-          <WeeklyMatrix
+          <WeeklyTaskChecklistMatrix
             tasks={displayPlan.tasks}
             weekId={weekId}
-            today={today}
-            stats={stats}
-            onToggleTask={handleToggleTask}
-            onMoveTask={handleMoveTask}
+            onCellClick={handleToggleTask}
           />
         )}
       </AnimatePresence>

@@ -41,6 +41,11 @@ export default function DailyVictoryModal({
   pushing,
   pushed,
 }: DailyVictoryModalProps) {
+  const isAllDone = useMemo(
+    () => tasks.length > 0 && tasks.every((t) => t.status === 'done'),
+    [tasks]
+  );
+
   const stats = useMemo(() => {
     const targetDate = date || getTodayStr();
     const doneTasks = tasks.filter((t) => t.status === 'done');
@@ -85,7 +90,7 @@ export default function DailyVictoryModal({
     <Modal
       isOpen={open}
       onClose={onClose}
-      title="今日任务全部完成"
+      title={isAllDone ? '今日任务全部完成' : '今日学习简报'}
       subtitle={`${childName} · ${date}`}
       icon={Trophy}
       iconClassName="bg-gradient-to-br from-amber-400 to-orange-500"
@@ -125,8 +130,14 @@ export default function DailyVictoryModal({
           <div className="w-20 h-20 rounded-full bg-gradient-to-br from-amber-400/20 to-orange-500/20 border-2 border-amber-400/30 flex items-center justify-center mb-4">
             <Trophy className="w-10 h-10 text-amber-400" />
           </div>
-          <p className="text-lg font-bold text-text-primary">太棒了！</p>
-          <p className="text-sm text-text-tertiary">所有任务都已打卡完成</p>
+          <p className="text-lg font-bold text-text-primary">
+            {isAllDone ? '太棒了！' : '今日学习简报'}
+          </p>
+          <p className="text-sm text-text-tertiary">
+            {isAllDone
+              ? '所有任务都已打卡完成'
+              : `已完成 ${stats.doneCount} 项任务，继续加油`}
+          </p>
         </div>
 
         {/* Stats grid */}

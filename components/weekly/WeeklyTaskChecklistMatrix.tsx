@@ -2,7 +2,7 @@
 
 import { useMemo } from 'react';
 import { motion } from 'framer-motion';
-import { CheckCircle2, CircleDot, Pause } from 'lucide-react';
+import { CheckCircle2, CircleDot, Pause, XCircle } from 'lucide-react';
 import {
   type WeeklyTaskItem,
   type TaskCategory,
@@ -28,10 +28,35 @@ interface WeeklyTaskChecklistMatrixProps {
   onCellClick?: (task: WeeklyTaskItem) => void;
 }
 
-function StatusCell({ task, onClick }: { task: WeeklyTaskItem; onClick?: () => void }) {
+function getStartOfDay(date: Date): Date {
+  const d = new Date(date);
+  d.setHours(0, 0, 0, 0);
+  return d;
+}
+
+function StatusCell({
+  task,
+  dayIndex,
+  weekStart,
+  onClick,
+}: {
+  task: WeeklyTaskItem;
+  dayIndex: number;
+  weekStart: Date;
+  onClick?: () => void;
+}) {
   const status = task.status;
   const minutes = parseDurationMinutes(task.duration);
   const durationText = minutes > 0 ? `${minutes}分钟` : task.duration;
+
+  const isOverdue = useMemo(() => {
+    if (status === 'done' || status === 'in_progress' || status === 'partially_done') {
+      return false;
+    }
+    const taskDate = getStartOfDay(weekStart);
+    taskDate.setDate(weekStart.getDate() + dayIndex);
+    return taskDate <= getStartOfDay(new Date());
+  }, [status, dayIndex, weekStart]);
 
   if (status === 'done') {
     return (
@@ -59,15 +84,15 @@ function StatusCell({ task, onClick }: { task: WeeklyTaskItem; onClick?: () => v
     );
   }
 
-  if (status === 'pending') {
+  if (isOverdue) {
     return (
       <button
         type="button"
         onClick={onClick}
         className="inline-flex flex-col items-center justify-center gap-1 w-full py-2.5 rounded-[14px] hover:bg-surface-hover transition-colors"
       >
-        <Pause className="w-4 h-4 text-warning" />
-        <span className="text-[10px] text-text-tertiary">待开始</span>
+        <XCircle className="w-5 h-5 text-error" />
+        <span className="text-[10px] text-text-tertiary">未完成</span>
       </button>
     );
   }
@@ -76,9 +101,10 @@ function StatusCell({ task, onClick }: { task: WeeklyTaskItem; onClick?: () => v
     <button
       type="button"
       onClick={onClick}
-      className="inline-flex items-center justify-center w-full py-4 text-text-muted/30 hover:bg-surface-hover rounded-[14px] transition-colors"
+      className="inline-flex flex-col items-center justify-center gap-1 w-full py-2.5 rounded-[14px] hover:bg-surface-hover transition-colors"
     >
-      —
+      <Pause className="w-4 h-4 text-warning" />
+      <span className="text-[10px] text-text-tertiary">待开始</span>
     </button>
   );
 }
@@ -88,16 +114,17 @@ export default function WeeklyTaskChecklistMatrix({
   weekId,
   onCellClick,
 }: WeeklyTaskChecklistMatrixProps) {
+  const weekStart = useMemo(() => getWeekRange(weekId).start, [weekId]);
+
   const weekDates = useMemo(() => {
-    const { start } = getWeekRange(weekId);
     const dates: string[] = [];
     for (let i = 0; i < 7; i++) {
-      const d = new Date(start);
-      d.setDate(start.getDate() + i);
+      const d = new Date(weekStart);
+      d.setDate(weekStart.getDate() + i);
       dates.push(`${d.getMonth() + 1}/${d.getDate()}`);
     }
     return dates;
-  }, [weekId]);
+  }, [weekStart]);
 
   const rows = useMemo<TaskRow[]>(() => {
     const groups = new Map<string, TaskRow>();
@@ -216,7 +243,12 @@ export default function WeeklyTaskChecklistMatrix({
                         key={day}
                         className="py-2 px-1 text-center align-middle"
                       >
-                        <StatusCell task={task} onClick={() => onCellClick?.(task)} />
+                        <StatusCell
+                          task={task}
+                          dayIndex={dayIndex}
+                          weekStart={weekStart}
+                          onClick={() => onCellClick?.(task)}
+                        />
                       </td>
                     );
                   })}
@@ -239,6 +271,10 @@ export default function WeeklyTaskChecklistMatrix({
           <div className="flex items-center gap-1.5 text-xs text-text-tertiary">
             <Pause className="w-3 h-3 text-warning" />
             <span>未开始</span>
+          </div>
+          <div className="flex items-center gap-1.5 text-xs text-text-tertiary">
+            <XCircle className="w-3.5 h-3.5 text-error" />
+            <span>未完成</span>
           </div>
           <div className="flex items-center gap-1.5 text-xs text-text-tertiary">
             <span className="w-3.5 text-center text-text-muted/30">—</span>
