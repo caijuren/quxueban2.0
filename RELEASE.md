@@ -43,9 +43,32 @@ main
 - [ ] 数据库迁移与 seed 脚本已验证
 - [ ] `.env.production` 已按 `.env.example` 配置并替换密钥
 - [ ] `package.json` 版本号已更新
+- [ ] **已验证 `package.json` 中的 `version` 与即将推送的 `vX.X.X` 标签完全一致**（例：tag `v2.1.0` 必须对应 `"version": "2.1.0"`）
 - [ ] 已打 `vX.X.X` 标签并推送到远程
 - [ ] 生产镜像已构建并推送
 - [ ] 线上功能验证通过
+
+## 3.1 版本号一致性强制校验
+
+历史多次出现 **tag 版本号与 `package.json` 中的 `version` 不一致**，导致生产环境显示旧版本（如 tag `v2.1.0` 指向的 commit 里 `package.json` 仍是 `2.0.12`）。发版前必须执行以下校验：
+
+```bash
+# 1. 确认 package.json 中的 version
+node -p "require('./package.json').version"
+# 预期输出：2.1.0
+
+# 2. 打 tag 前，确认 tag 名与 version 完全一致
+git tag -a v$(node -p "require('./package.json').version") -m "release v$(node -p "require('./package.json').version")"
+
+# 3. 推送前再次验证 tag 指向的 commit 中 package.json 版本正确
+git show v2.1.0:package.json | grep '"version"'
+# 预期输出："version": "2.1.0"
+```
+
+**规则：**
+- tag 名必须以 `v` 开头，后接 `package.json` 中的完整版本号。
+- 禁止在 `package.json` 未更新的情况下移动或新建 tag。
+- 若已推送的错误 tag 需要修正，必须先在本地删除并重建，再强制推送：`git push origin vX.X.X --force`。
 
 ## 4. 构建说明
 
