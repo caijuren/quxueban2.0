@@ -160,7 +160,7 @@ const SUBJECT_META: Record<
     name: string;
     shortName: string;
     color: string;
-    icon: LucideIcon;
+    icon: React.FC<{ className?: string }>;
     gradient: string;
     glow: string;
   }
