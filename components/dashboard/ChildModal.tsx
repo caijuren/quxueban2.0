@@ -40,6 +40,17 @@ interface ChildModalProps {
 
 const GRADES = Array.from({ length: 12 }, (_, i) => i + 1);
 const MAX_AVATAR_SIZE = 2 * 1024 * 1024;
+const UPLOAD_ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+
+function findPresetByAvatarUrl(url?: string | null) {
+  if (!url) return null;
+  return AVATAR_PRESETS.find((p) => p.emoji === url)?.id ?? null;
+}
+
+function isImageUrl(url?: string | null) {
+  if (!url) return false;
+  return url.startsWith('data:image') || url.startsWith('/uploads/avatars/') || /^https?:\/\//.test(url);
+}
 
 function formatDateForInput(date?: string | null): string {
   if (!date) return '';
@@ -70,6 +81,7 @@ export default function ChildModal({ isOpen, onClose, child }: ChildModalProps) 
   const [selectedPreset, setSelectedPreset] = useState<string | null>(null);
 
   const [saving, setSaving] = useState(false);
+  const [uploadingAvatar, setUploadingAvatar] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [touched, setTouched] = useState(false);
@@ -98,6 +110,7 @@ export default function ChildModal({ isOpen, onClose, child }: ChildModalProps) 
         setRouteId(child.routeId ?? null);
         setDingTalkWebhook(child.dingTalkWebhook ?? '');
         setDingTalkSecret(child.dingTalkSecret ?? '');
+        setSelectedPreset(findPresetByAvatarUrl(child.avatarUrl));
       } else {
         setName('');
         setGrade(1);
@@ -128,7 +141,7 @@ export default function ChildModal({ isOpen, onClose, child }: ChildModalProps) 
     }
   }, [grade, routeId, stage]);
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
@@ -137,19 +150,40 @@ export default function ChildModal({ isOpen, onClose, child }: ChildModalProps) 
       return;
     }
 
-    if (!file.type.startsWith('image/')) {
-      setError('请上传图片文件');
+    if (!UPLOAD_ALLOWED_TYPES.includes(file.type)) {
+      setError('仅支持 JPG、PNG、WebP、GIF 格式');
       return;
     }
 
-    const reader = new FileReader();
-    reader.onload = () => {
-      setAvatarUrl(reader.result as string);
+    setUploadingAvatar(true);
+    setError(null);
+
+    try {
+      const formData = new FormData();
+      formData.append('avatar', file);
+
+      const res = await fetch('/api/upload/avatar', {
+        method: 'POST',
+        body: formData,
+        credentials: 'same-origin',
+      });
+
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        throw new Error(data.error || '头像上传失败');
+      }
+
+      setAvatarUrl(data.avatarUrl);
       setSelectedPreset(null);
-      setError(null);
-    };
-    reader.onerror = () => setError('图片读取失败，请重试');
-    reader.readAsDataURL(file);
+    } catch (err) {
+      const message = err instanceof Error ? err.message : '头像上传失败，请重试';
+      setError(message);
+    } finally {
+      setUploadingAvatar(false);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+    }
   };
 
   const handlePresetSelect = (preset: (typeof AVATAR_PRESETS)[0]) => {
@@ -225,10 +259,10 @@ export default function ChildModal({ isOpen, onClose, child }: ChildModalProps) 
   };
 
   const renderAvatarPreview = () => {
-    if (avatarUrl?.startsWith('data:image')) {
+    if (isImageUrl(avatarUrl)) {
       return (
         <img
-          src={avatarUrl}
+          src={avatarUrl || undefined}
           alt={name || '头像'}
           className="w-full h-full object-cover"
         />
@@ -331,10 +365,15 @@ export default function ChildModal({ isOpen, onClose, child }: ChildModalProps) 
                   <button
                     type="button"
                     onClick={() => fileInputRef.current?.click()}
-                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-hover text-text-secondary text-xs hover:bg-surface-highlight transition-colors"
+                    disabled={uploadingAvatar}
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-hover text-text-secondary text-xs hover:bg-surface-highlight transition-colors disabled:opacity-50"
                   >
-                    <Upload className="w-3.5 h-3.5" />
-                    上传头像
+                    {uploadingAvatar ? (
+                      <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                    ) : (
+                      <Upload className="w-3.5 h-3.5" />
+                    )}
+                    {uploadingAvatar ? '上传中...' : '上传头像'}
                   </button>
                   {avatarUrl && (
                     <button
@@ -650,10 +689,10 @@ export default function ChildModal({ isOpen, onClose, child }: ChildModalProps) 
                 </button>
                 <button
                   type="submit"
-                  disabled={saving}
+                  disabled={saving || uploadingAvatar}
                   className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-gradient-to-r from-primary to-secondary text-text-primary text-sm font-medium transition-all disabled:opacity-70"
                 >
-                  {saving && <Loader2 className="w-4 h-4 animate-spin" />}
+                  {(saving || uploadingAvatar) && <Loader2 className="w-4 h-4 animate-spin" />}
                   {isEdit ? '保存修改' : '添加孩子'}
                 </button>
               </div>

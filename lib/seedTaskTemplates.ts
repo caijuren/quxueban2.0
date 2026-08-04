@@ -1,12 +1,13 @@
 import { PrismaClient } from './generated/prisma';
 import { SYSTEM_TASK_TEMPLATES } from './taskTemplates';
 
-export async function seedSystemTaskTemplatesForUser(
+export async function seedSystemTaskTemplatesForChild(
   prisma: PrismaClient,
-  userId: string
+  userId: string,
+  childId: string
 ): Promise<number> {
   const existingCount = await prisma.taskTemplate.count({
-    where: { userId, source: 'SYSTEM' },
+    where: { userId, childId, source: 'SYSTEM' } as any,
   });
 
   let createdCount = 0;
@@ -14,6 +15,7 @@ export async function seedSystemTaskTemplatesForUser(
   if (existingCount === 0) {
     const data = SYSTEM_TASK_TEMPLATES.map((tpl) => ({
       userId,
+      childId,
       title: tpl.title,
       category: tpl.category.toUpperCase() as any,
       duration: tpl.duration,
@@ -43,23 +45,24 @@ export async function seedSystemTaskTemplatesForUser(
   }
 
   // 同步创建系统模板的能力关联（已存在模板时也会补全缺失的关联）
-  await seedSystemTemplateCapabilityLinks(prisma, userId);
+  await seedSystemTemplateCapabilityLinks(prisma, userId, childId);
 
   // 同步更新已存在系统模板的路线标签（修正路线 ID 与最新定义保持一致）
-  await syncSystemTemplateRouteTags(prisma, userId);
+  await syncSystemTemplateRouteTags(prisma, userId, childId);
 
   // 同步更新已存在系统模板的时间属性
-  await syncSystemTemplateWeeklySchedule(prisma, userId);
+  await syncSystemTemplateWeeklySchedule(prisma, userId, childId);
 
   return createdCount;
 }
 
 async function syncSystemTemplateRouteTags(
   prisma: PrismaClient,
-  userId: string
+  userId: string,
+  childId: string
 ): Promise<void> {
   const systemTemplates = await prisma.taskTemplate.findMany({
-    where: { userId, source: 'SYSTEM' },
+    where: { userId, childId, source: 'SYSTEM' } as any,
   });
 
   for (const dbTpl of systemTemplates) {
@@ -84,10 +87,11 @@ async function syncSystemTemplateRouteTags(
 
 async function syncSystemTemplateWeeklySchedule(
   prisma: PrismaClient,
-  userId: string
+  userId: string,
+  childId: string
 ): Promise<void> {
   const systemTemplates = await prisma.taskTemplate.findMany({
-    where: { userId, source: 'SYSTEM' },
+    where: { userId, childId, source: 'SYSTEM' } as any,
   });
 
   for (const dbTpl of systemTemplates) {
@@ -121,7 +125,8 @@ async function syncSystemTemplateWeeklySchedule(
 
 async function seedSystemTemplateCapabilityLinks(
   prisma: PrismaClient,
-  userId: string
+  userId: string,
+  childId: string
 ): Promise<void> {
   const systemCapabilities = await prisma.capability.findMany({
     where: { isSystem: true },
@@ -131,7 +136,7 @@ async function seedSystemTemplateCapabilityLinks(
   const capabilityMap = new Map(systemCapabilities.map((c) => [c.name, c.id]));
 
   const createdTemplates = await prisma.taskTemplate.findMany({
-    where: { userId, source: 'SYSTEM' },
+    where: { userId, childId, source: 'SYSTEM' } as any,
   });
   const templateMap = new Map(createdTemplates.map((t) => [t.title, t.id]));
 

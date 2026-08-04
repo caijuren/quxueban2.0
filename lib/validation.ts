@@ -2,6 +2,9 @@ import { z, ZodIssue, ZodSchema } from 'zod';
 
 const hexColorRegex = /^#([0-9A-Fa-f]{3}){1,2}$/;
 const timeRegex = /^([01]\d|2[0-3]):([0-5]\d)$/;
+const uploadPathRegex = /^\/uploads\/avatars\//;
+const dataImageRegex = /^data:image\/[a-zA-Z0-9+]+;base64,/;
+const emojiRegex = /^\p{Emoji_Presentation}+$/u;
 
 export const taskCategorySchema = z.enum([
   'school',
@@ -75,12 +78,26 @@ export const childCreateSchema = z.object({
     .string()
     .regex(hexColorRegex, '头像颜色必须是有效 HEX 色值')
     .optional(),
-  avatarUrl: z.string().url('头像链接格式不正确').nullable().optional(),
+  avatarUrl: z
+    .union([
+      z.string().url('头像链接格式不正确'),
+      z.string().regex(uploadPathRegex, '头像链接格式不正确'),
+      z.string().regex(emojiRegex, '头像格式不正确'),
+      z.string().regex(dataImageRegex, '头像格式不正确'),
+    ])
+    .nullable()
+    .optional(),
   targetSchool: z.string().max(100).nullable().optional(),
   currentSchool: z.string().max(100).nullable().optional(),
-  birthday: z.string().datetime('生日格式不正确').nullable().optional(),
+  birthday: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/, '生日格式不正确')
+    .nullable()
+    .optional(),
   notes: z.string().max(500).nullable().optional(),
   routeId: z.string().max(50).nullable().optional(),
+  dingTalkWebhook: z.string().max(500).nullable().optional(),
+  dingTalkSecret: z.string().max(200).nullable().optional(),
 });
 
 export const childUpdateSchema = childCreateSchema.partial();
@@ -103,6 +120,7 @@ export const customFrequencySchema = z.object({
 });
 
 export const taskTemplateCreateSchema = z.object({
+  childId: z.string().min(1, '孩子 ID 不能为空'),
   title: z.string().min(1, '任务标题不能为空').max(100, '任务标题最多 100 字符'),
   category: taskCategorySchema,
   duration: z.string().max(50).default('30分钟'),

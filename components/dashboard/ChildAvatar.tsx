@@ -28,8 +28,13 @@ export default function ChildAvatar({
   className,
   fallbackIcon = false,
 }: ChildAvatarProps) {
-  const isDataImage = child?.avatarUrl?.startsWith('data:image');
-  const isEmoji = child?.avatarUrl && !isDataImage;
+  const avatarUrl = child?.avatarUrl;
+  const isImage =
+    typeof avatarUrl === 'string' &&
+    (avatarUrl.startsWith('data:image') ||
+      avatarUrl.startsWith('/uploads/avatars/') ||
+      /^https?:\/\//.test(avatarUrl));
+  const isEmoji = typeof avatarUrl === 'string' && !isImage;
 
   const containerClass = cn(
     'inline-flex items-center justify-center font-bold text-text-primary shrink-0 overflow-hidden ring-1 ring-border-default',
@@ -52,11 +57,11 @@ export default function ChildAvatar({
     );
   }
 
-  if (isDataImage) {
+  if (isImage) {
     return (
       <div className={containerClass} style={style}>
         <img
-          src={child.avatarUrl || undefined}
+          src={avatarUrl}
           alt={child.name}
           className="w-full h-full object-cover"
         />
@@ -68,7 +73,7 @@ export default function ChildAvatar({
     <div className={containerClass} style={style}>
       {isEmoji ? (
         <span className={size === 'xs' || size === 'sm' ? 'text-base' : 'text-xl'}>
-          {child.avatarUrl}
+          {avatarUrl}
         </span>
       ) : (
         <span>{getInitials(child.name)}</span>

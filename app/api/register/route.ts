@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import bcrypt from 'bcryptjs';
 import { prisma } from '@/lib/prisma';
-import { seedSystemTaskTemplatesForUser } from '@/lib/seedTaskTemplates';
 import { userRegisterSchema, validateBody } from '@/lib/validation';
 import { authRateLimit, getClientIp } from '@/lib/rateLimit';
 
@@ -44,8 +43,6 @@ export async function POST(req: NextRequest) {
         role: 'PARENT',
       },
     });
-
-    await seedSystemTaskTemplatesForUser(prisma, user.id);
 
     return NextResponse.json({ message: '注册成功' }, { status: 201 });
   } catch (error) {

@@ -8,37 +8,48 @@ import {
   TaskTemplateUpdateInput,
 } from '@/lib/validation';
 
-function buildKey(filters?: { category?: TaskCategory; status?: 'active' | 'archived' | 'all' }) {
-  return ['task-templates', filters ?? {}];
+function buildKey(
+  childId: string | undefined,
+  filters?: { category?: TaskCategory; status?: 'active' | 'archived' | 'all' }
+) {
+  return ['task-templates', childId, filters ?? {}];
 }
 
-export function useTaskTemplates(filters?: {
-  category?: TaskCategory;
-  status?: 'active' | 'archived' | 'all';
-}) {
+export function useTaskTemplates(
+  childId: string | undefined,
+  filters?: {
+    category?: TaskCategory;
+    status?: 'active' | 'archived' | 'all';
+  }
+) {
   return useQuery<TaskTemplate[]>({
-    queryKey: buildKey(filters),
+    queryKey: buildKey(childId, filters),
     queryFn: () => {
       const params = new URLSearchParams();
+      if (childId) params.set('childId', childId);
       if (filters?.category) params.set('category', filters.category);
       if (filters?.status) params.set('status', filters.status);
       const qs = params.toString();
       return apiGet<TaskTemplate[]>(`/api/task-templates${qs ? `?${qs}` : ''}`);
     },
+    enabled: !!childId,
   });
 }
 
-export function useCreateTaskTemplate() {
+export function useCreateTaskTemplate(childId: string | undefined) {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (data: TaskTemplateCreateInput) =>
-      apiPost<TaskTemplate>('/api/task-templates', data),
+    mutationFn: (data: Omit<TaskTemplateCreateInput, 'childId'>) =>
+      apiPost<TaskTemplate>('/api/task-templates', {
+        ...data,
+        childId,
+      } as TaskTemplateCreateInput),
     onSuccess: () =>
-      queryClient.invalidateQueries({ queryKey: ['task-templates'] }),
+      queryClient.invalidateQueries({ queryKey: ['task-templates', childId] }),
   });
 }
 
-export function useUpdateTaskTemplate() {
+export function useUpdateTaskTemplate(childId: string | undefined) {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: ({
@@ -49,16 +60,16 @@ export function useUpdateTaskTemplate() {
       data: TaskTemplateUpdateInput;
     }) => apiPatch<TaskTemplate>(`/api/task-templates/${id}`, data),
     onSuccess: () =>
-      queryClient.invalidateQueries({ queryKey: ['task-templates'] }),
+      queryClient.invalidateQueries({ queryKey: ['task-templates', childId] }),
   });
 }
 
-export function useDeleteTaskTemplate() {
+export function useDeleteTaskTemplate(childId: string | undefined) {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (id: string) =>
       apiDelete<{ success: boolean }>(`/api/task-templates/${id}`),
     onSuccess: () =>
-      queryClient.invalidateQueries({ queryKey: ['task-templates'] }),
+      queryClient.invalidateQueries({ queryKey: ['task-templates', childId] }),
   });
 }

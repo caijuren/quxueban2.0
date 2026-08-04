@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
-import { seedSystemTaskTemplatesForUser } from '@/lib/seedTaskTemplates';
+import { seedSystemTaskTemplatesForChild } from '@/lib/seedTaskTemplates';
 import { seedSystemCapabilities } from '@/lib/seedCapabilities';
 import {
   taskCategorySchema,
@@ -51,13 +51,33 @@ export async function GET(req: Request) {
     const { searchParams } = new URL(req.url);
     const category = searchParams.get('category');
     const status = searchParams.get('status') as 'active' | 'archived' | 'all' | null;
+    const childId = searchParams.get('childId');
 
-    // Auto-seed system presets for existing users on first load
-    await seedSystemTaskTemplatesForUser(prisma, session.user.id);
+    if (!childId) {
+      return NextResponse.json(
+        { error: '缺少 childId 参数' },
+        { status: 400 }
+      );
+    }
+
+    // 验证当前用户确实拥有该孩子
+    const child = await prisma.child.findFirst({
+      where: { id: childId, userId: session.user.id },
+    });
+    if (!child) {
+      return NextResponse.json(
+        { error: '孩子不存在或无权限' },
+        { status: 404 }
+      );
+    }
+
+    // 同步系统预设（按孩子维度）
+    await seedSystemTaskTemplatesForChild(prisma, session.user.id, childId);
     await seedSystemCapabilities(prisma);
 
     const where: Record<string, unknown> = {
       userId: session.user.id,
+      childId,
     };
 
     if (status === 'active' || !status) {
@@ -80,7 +100,7 @@ export async function GET(req: Request) {
     }
 
     const templates = await prisma.taskTemplate.findMany({
-      where,
+      where: where as any,
       orderBy: [{ source: 'asc' }, { category: 'asc' }, { createdAt: 'desc' }],
       include: {
         capabilityLinks: {
@@ -112,9 +132,21 @@ export async function POST(req: Request) {
 
   const body = validation.data;
 
+  // 验证当前用户确实拥有该孩子
+  const child = await prisma.child.findFirst({
+    where: { id: body.childId, userId: session.user.id },
+  });
+  if (!child) {
+    return NextResponse.json(
+      { error: '孩子不存在或无权限' },
+      { status: 404 }
+    );
+  }
+
   const template = await prisma.taskTemplate.create({
     data: {
       userId: session.user.id,
+      childId: body.childId,
       title: body.title,
       category: body.category.toUpperCase() as TaskTemplateWithLinks['category'],
       duration: body.duration,
@@ -142,7 +174,7 @@ export async function POST(req: Request) {
             expectedProgress: link.expectedProgress,
           })),
       },
-    },
+    } as any,
     include: {
       capabilityLinks: {
         include: {

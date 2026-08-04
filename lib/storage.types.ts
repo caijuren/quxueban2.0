@@ -146,6 +146,7 @@ export interface AssessmentCriterion {
 export interface TaskTemplate {
   id: string;
   userId: string;
+  childId?: string | null;
   title: string;
   category: TaskCategory;
   duration: string;

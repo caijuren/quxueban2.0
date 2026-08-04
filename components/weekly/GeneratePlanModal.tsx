@@ -91,7 +91,10 @@ export default function GeneratePlanModal({
 
   const [step, setStep] = useState<Step>('week');
   const [weekId, setWeekId] = useState<string>(initialWeekId ?? getCurrentWeekId());
-  const { data: templates = [], isLoading: loadingTemplates } = useTaskTemplates({ status: 'active' });
+  const { data: templates = [], isLoading: loadingTemplates } = useTaskTemplates(
+    currentChild?.id,
+    { status: 'active' }
+  );
   const [selectedTemplateIds, setSelectedTemplateIds] = useState<Set<string>>(new Set());
   const [search, setSearch] = useState('');
   const [filterCategory, setFilterCategory] = useState<TaskCategory | 'all'>('all');

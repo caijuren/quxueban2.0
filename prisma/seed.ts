@@ -5,7 +5,7 @@ import {
   generateWeeklyPlan,
   getCurrentWeekId,
 } from '../lib/weeklyTasks';
-import { seedSystemTaskTemplatesForUser } from '../lib/seedTaskTemplates';
+import { seedSystemTaskTemplatesForChild } from '../lib/seedTaskTemplates';
 import { seedSystemCapabilities } from '../lib/seedCapabilities';
 import { seedSystemSubjectPlans } from '../lib/seedSubjectPlans';
 import { seedBooks } from '../lib/seedBooks';
@@ -49,12 +49,6 @@ async function main() {
     console.log(`Admin user already exists: ${adminUsername}`);
   }
 
-  // 1b. Seed system task templates for admin
-  const adminTemplatesCount = await seedSystemTaskTemplatesForUser(prisma, admin.id);
-  if (adminTemplatesCount > 0) {
-    console.log(`Seeded ${adminTemplatesCount} system task templates for admin`);
-  }
-
   // 2. Demo parent user
   const demoParentUsername = process.env.DEMO_PARENT_USERNAME || 'parent';
   const demoParentPassword = process.env.DEMO_PARENT_PASSWORD || 'parent123';
@@ -76,12 +70,6 @@ async function main() {
     console.log(`Created demo parent user: ${demoParentUsername}`);
   } else {
     console.log(`Demo parent user already exists: ${demoParentUsername}`);
-  }
-
-  // 2b. Seed system task templates for demo parent
-  const parentTemplatesCount = await seedSystemTaskTemplatesForUser(prisma, parent.id);
-  if (parentTemplatesCount > 0) {
-    console.log(`Seeded ${parentTemplatesCount} system task templates for demo parent`);
   }
 
   // 3. Demo children
@@ -130,6 +118,14 @@ async function main() {
       data: { routeId: 'sanchu_gongban' },
     });
     console.log(`Updated child route: 小宝 -> sanchu_gongban`);
+  }
+
+  // 3b. Seed system task templates for each demo child
+  for (const child of [dabao, xiaobao]) {
+    const count = await seedSystemTaskTemplatesForChild(prisma, parent.id, child.id);
+    if (count > 0) {
+      console.log(`Seeded ${count} system task templates for ${child.name}`);
+    }
   }
 
   // 4. Demo weekly plan for current week (published)

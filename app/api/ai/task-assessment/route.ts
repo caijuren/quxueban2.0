@@ -65,9 +65,10 @@ export async function POST(req: Request) {
     const rawTemplates = await prisma.taskTemplate.findMany({
       where: {
         userId,
+        childId,
         isActive: true,
         archivedAt: null,
-      },
+      } as any,
       include: {
         capabilityLinks: {
           include: { capability: true },

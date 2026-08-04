@@ -80,9 +80,10 @@ model Child {
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
 
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  plans       Plan[]
-  weeklyPlans WeeklyPlan[]
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  plans        Plan[]
+  weeklyPlans  WeeklyPlan[]
+  taskTemplates TaskTemplate[]
 
   @@index([userId])
 }
@@ -114,6 +115,8 @@ model TaskTemplate {
   id            String     @id @default(uuid())
   userId        String
   user          User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  childId       String?
+  child         Child?     @relation(fields: [childId], references: [id], onDelete: Cascade)
 
   title         String
   category      TaskCategory
@@ -145,6 +148,7 @@ model TaskTemplate {
   updatedAt           DateTime   @updatedAt
 
   @@index([userId])
+  @@index([childId])
   @@index([category])
   @@index([source])
   @@index([archivedAt])
