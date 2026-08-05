@@ -293,6 +293,10 @@ Page({
     this.setData({ audioUrl: '' });
   },
 
+  preventTouchMove() {
+    // 阻止录音时页面滚动
+  },
+
   cancel() {
     wx.navigateBack();
   },

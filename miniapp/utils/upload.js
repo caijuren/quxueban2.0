@@ -44,13 +44,27 @@ function chooseImage(count = 1) {
       count,
       mediaType: ['image'],
       sourceType: ['album', 'camera'],
+      sizeType: ['compressed'],
       success(res) {
-        const files = res.tempFiles.map((file) => ({
-          path: file.tempFilePath,
-          size: file.size,
-          type: 'image',
-        }));
-        resolve(files);
+        const compressTasks = res.tempFiles.map((file) => {
+          return new Promise((resResolve) => {
+            wx.compressImage({
+              src: file.tempFilePath,
+              quality: 80,
+              success: (cRes) => resResolve({
+                path: cRes.tempFilePath,
+                size: file.size,
+                type: 'image',
+              }),
+              fail: () => resResolve({
+                path: file.tempFilePath,
+                size: file.size,
+                type: 'image',
+              }),
+            });
+          });
+        });
+        Promise.all(compressTasks).then((files) => resolve(files));
       },
       fail(err) {
         reject(err);

@@ -3,7 +3,7 @@
   background-color: var(--bg-page);
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-start;
   padding: calc(var(--status-bar-height, 0) + 80rpx) 48rpx 48rpx;
   box-sizing: border-box;
   position: relative;
@@ -179,6 +179,8 @@
   gap: 24rpx;
   position: relative;
   z-index: 1;
+  margin-top: 48rpx;
+  padding-top: 32rpx;
   padding-bottom: calc(env(safe-area-inset-bottom) + 128rpx);
 }
 

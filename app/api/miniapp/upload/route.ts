@@ -10,10 +10,29 @@ const MAX_SIZES = {
   audio: 10 * 1024 * 1024,
 };
 
+function getBaseUrl(req: NextRequest): string {
+  const forwardedProto = req.headers.get('x-forwarded-proto');
+  const forwardedHost = req.headers.get('x-forwarded-host');
+  const host = req.headers.get('host');
+  const protocol = forwardedProto || 'http';
+  const hostname = forwardedHost || host || 'localhost';
+  return `${protocol}://${hostname}`;
+}
+
+function getFileExtension(type: string, name: string): string {
+  const extFromName = path.extname(name);
+  if (extFromName) return extFromName;
+
+  const [main, sub] = type.split('/');
+  if (main === 'audio' && sub === 'x-m4a') return '.m4a';
+  if (sub) return `.${sub}`;
+  return '.bin';
+}
+
 const ALLOWED_TYPES: Record<string, string[]> = {
   image: ['image/jpeg', 'image/png', 'image/webp', 'image/gif'],
   video: ['video/mp4', 'video/quicktime', 'video/webm'],
-  audio: ['audio/mp4', 'audio/mpeg', 'audio/wav', 'audio/webm', 'audio/ogg'],
+  audio: ['audio/mp4', 'audio/x-m4a', 'audio/mpeg', 'audio/wav', 'audio/webm', 'audio/ogg'],
 };
 
 function getFileType(type: string): 'image' | 'video' | 'audio' | null {
@@ -55,7 +74,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const ext = path.extname(file.name) || `.${file.type.split('/')[1]}` || '.bin';
+    const ext = getFileExtension(file.type, file.name);
     const timestamp = Date.now();
     const random = Math.random().toString(36).slice(2, 8);
     const filename = `${timestamp}-${random}${ext}`;
@@ -68,7 +87,8 @@ export async function POST(req: NextRequest) {
     const filePath = path.join(uploadsDir, filename);
     await writeFile(filePath, buffer);
 
-    const fileUrl = `/uploads/miniapp/${actorId}/${fileType}/${filename}`;
+    const baseUrl = getBaseUrl(req);
+    const fileUrl = `${baseUrl}/uploads/miniapp/${actorId}/${fileType}/${filename}`;
 
     return NextResponse.json({
       url: fileUrl,

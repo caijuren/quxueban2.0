@@ -128,6 +128,7 @@
           class="voice-btn {{isRecording ? 'recording' : ''}}"
           bindtouchstart="onVoiceStart"
           bindtouchend="onVoiceEnd"
+          bindtouchcancel="onVoiceEnd"
         >
           <text class="voice-btn-icon">🎤</text>
           <text class="voice-btn-text">{{isRecording ? '松开结束' : '按住说话'}}</text>
@@ -160,7 +161,7 @@
     <view class="safe-area-bottom" style="height: calc(40rpx + env(safe-area-inset-bottom));"></view>
   </scroll-view>
 
-  <view wx:if="{{isRecording}}" class="voice-toast" catchtouchmove="true">
+  <view wx:if="{{isRecording}}" class="voice-toast" catchtouchmove="preventTouchMove" bindtouchend="onVoiceEnd" bindtouchcancel="onVoiceEnd">
     <view class="voice-toast-icon">🎙</view>
     <text class="voice-toast-title">录音识别中...</text>
     <text class="voice-toast-text">松开手指完成录音</text>
