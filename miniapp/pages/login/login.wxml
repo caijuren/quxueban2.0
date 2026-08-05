@@ -1,0 +1,46 @@
+<view class="login-page">
+  <view class="login-content">
+    <view class="brand-section">
+      <view class="logo">
+        <text class="logo-text">趣</text>
+      </view>
+      <text class="brand-name">趣学伴</text>
+      <text class="brand-slogan">家庭学习规划中心</text>
+    </view>
+
+    <view class="feature-list">
+      <view class="feature-item">
+        <view class="feature-dot"></view>
+        <text class="feature-text">每日任务打卡</text>
+      </view>
+      <view class="feature-item">
+        <view class="feature-dot"></view>
+        <text class="feature-text">AI 学习日报</text>
+      </view>
+      <view class="feature-item">
+        <view class="feature-dot"></view>
+        <text class="feature-text">家庭成长记录</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="login-footer">
+    <button
+      class="btn-primary login-btn"
+      bindtap="loginAsParent"
+      disabled="{{loading}}"
+    >
+      {{loading ? '登录中...' : '微信一键登录'}}
+    </button>
+
+    <button
+      class="btn-ghost login-btn"
+      bindtap="goBindChild"
+      disabled="{{loading}}"
+    >
+      我是孩子，绑定微信
+    </button>
+
+    <text class="privacy-text">登录即表示同意《用户协议》和《隐私政策》</text>
+  </view>
+</view>

@@ -65,6 +65,7 @@ function normalizeCompletionRecord(
     quality: record.quality ?? null,
     note: record.note ?? '',
     imageUrls: record.imageUrls ?? [],
+    audioUrls: record.audioUrls ?? [],
     capabilityProgress: record.capabilityProgress ?? [],
     quantityIncrement: record.quantityIncrement ?? 0,
     checklistProgress: record.checklistProgress ?? [],

@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { createPortal } from 'react-dom';
@@ -259,12 +260,15 @@ export default function ChildModal({ isOpen, onClose, child }: ChildModalProps) 
   };
 
   const renderAvatarPreview = () => {
-    if (isImageUrl(avatarUrl)) {
+    if (avatarUrl && isImageUrl(avatarUrl)) {
       return (
-        <img
-          src={avatarUrl || undefined}
+        <Image
+          src={avatarUrl}
           alt={name || '头像'}
-          className="w-full h-full object-cover"
+          fill
+          sizes="96px"
+          unoptimized
+          className="object-cover"
         />
       );
     }

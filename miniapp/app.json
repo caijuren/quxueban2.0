@@ -1,0 +1,21 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/login/login",
+    "pages/bind-child/bind-child",
+    "pages/role-select/role-select",
+    "pages/tasks/tasks",
+    "pages/profile/profile"
+  ],
+  "entryPagePath": "pages/index/index",
+  "window": {
+    "navigationBarBackgroundColor": "#090B12",
+    "navigationBarTextStyle": "white",
+    "navigationBarTitleText": "趣学伴",
+    "backgroundColor": "#090B12",
+    "backgroundTextStyle": "light"
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json",
+  "lazyCodeLoading": "requiredComponents"
+}

@@ -1,0 +1,65 @@
+<view class="profile-page">
+  <view class="profile-header">
+    <view class="profile-avatar">
+      <text>{{displayFirstChar}}</text>
+    </view>
+    <text class="profile-name">{{displayName}}</text>
+    <text class="profile-role">{{activeRole === 'parent' ? '家长身份' : '孩子身份'}}</text>
+  </view>
+
+  <view class="card">
+    <view class="section-title">当前查看</view>
+    <view class="info-row">
+      <text class="info-label">孩子</text>
+      <text class="info-value">{{selectedChildName}}</text>
+    </view>
+    <view class="info-row">
+      <text class="info-label">年级</text>
+      <text class="info-value">{{selectedChildGradeText}}</text>
+    </view>
+  </view>
+
+  <view wx:if="{{activeRole === 'parent'}}" class="card">
+    <view class="section-title">孩子微信绑定</view>
+    <view
+      wx:for="{{children}}"
+      wx:key="id"
+      class="child-bind-row"
+    >
+      <view class="child-bind-info">
+        <view class="child-bind-avatar" style="background-color: {{item.avatarColor}};">
+          {{item.name[0]}}
+        </view>
+        <text class="child-bind-name">{{item.name}}</text>
+      </view>
+      <button
+        class="bind-code-btn"
+        bindtap="generateBindCode"
+        data-child-id="{{item.id}}"
+        disabled="{{generatingChildId === item.id}}"
+      >
+        {{generatingChildId === item.id ? '生成中...' : '生成绑定码'}}
+      </button>
+    </view>
+  </view>
+
+  <view class="action-list">
+    <button class="action-btn btn-secondary" bindtap="switchRole">切换身份 / 切换孩子</button>
+    <button class="action-btn btn-ghost" bindtap="logout">退出登录</button>
+  </view>
+
+  <!-- 绑定码 Modal -->
+  <view wx:if="{{bindCode}}" class="bind-modal" catchtouchmove="true">
+    <view class="bind-modal-mask" bindtap="closeBindModal"></view>
+    <view class="bind-modal-content">
+      <text class="bind-modal-title">孩子绑定码</text>
+      <text class="bind-modal-code">{{bindCode}}</text>
+      <text class="bind-modal-desc">让孩子在微信小程序「我是孩子，去绑定」中输入此码</text>
+      <text class="bind-modal-expiry">有效期至：{{bindCodeExpiry}}</text>
+      <view class="bind-modal-actions">
+        <button class="btn-primary bind-modal-btn" bindtap="copyBindCode">复制绑定码</button>
+        <button class="btn-ghost bind-modal-btn" bindtap="closeBindModal">关闭</button>
+      </view>
+    </view>
+  </view>
+</view>

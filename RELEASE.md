@@ -234,6 +234,28 @@ docker image prune -f
 
 # 发版记录
 
+## v2.2.0（2026-08-05）
+
+**主题：家庭协作与设置中心升级 + 微信小程序 MVP**
+
+- 家庭成员与权限
+  - 新增 `Family`、`FamilyMember`、`FamilyInvite` 模型与相关迁移
+  - 支持家庭创建、成员邀请（用户名 / 邮箱 / 手机）、角色分配（OWNER / ADMIN / MEMBER / VIEWER）
+  - 支持转让创建者、解散家庭、退出家庭
+  - 孩子、学习目标、周计划、任务模板等数据接口接入家庭权限控制
+- 设置中心重构
+  - 控制台改为纯设置中心，左侧导航保留原结构
+  - 新增「家庭成员与权限」入口
+  - 优化头像、账户安全、数据导出等模块
+- 工程化与质量
+  - 修复 `/register`、`/invite` 等页面 `useSearchParams` 缺少 Suspense 边界的问题
+  - `/api/books/*` 标记为 `force-dynamic`，避免静态生成报错
+  - 全站 JSX `<img>` 替换为 Next.js `<Image />`
+  - `npm run type-check`、`npm run lint`、`npm run build` 全部通过
+- 微信小程序
+  - 新增 `miniapp/` 目录，包含登录、绑定孩子、角色选择、今日任务、个人中心等基础页面
+  - 小程序通过 API 与主服务通信，不部署到服务器，需单独上传发布
+
 ## v2.0.1（2026-08-02）
 
 **主题：修复周计划保存失败（数据库缺失 goals 列）**

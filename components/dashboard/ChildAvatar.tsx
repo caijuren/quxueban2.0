@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { User } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Child, getInitials } from '@/lib/children';
@@ -59,11 +60,14 @@ export default function ChildAvatar({
 
   if (isImage) {
     return (
-      <div className={containerClass} style={style}>
-        <img
+      <div className={cn(containerClass, 'relative')} style={style}>
+        <Image
           src={avatarUrl}
           alt={child.name}
-          className="w-full h-full object-cover"
+          fill
+          sizes="64px"
+          unoptimized
+          className="object-cover"
         />
       </div>
     );

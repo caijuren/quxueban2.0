@@ -1,14 +1,16 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, Suspense } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { Sparkles, User, Lock, ArrowRight, Loader2, UserCircle } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { useRegister } from '@/lib/hooks/useAuth';
 
-export default function RegisterPage() {
+function RegisterPageContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const inviteToken = searchParams.get('inviteToken');
   const shouldReduceMotion = useReducedMotion();
 
   const [username, setUsername] = useState('');
@@ -33,8 +35,11 @@ export default function RegisterPage() {
     }
 
     try {
-      await register.mutateAsync({ username, password, name });
-      router.push('/login?registered=1');
+      await register.mutateAsync({ username, password, name, inviteToken: inviteToken ?? null });
+      const loginUrl = inviteToken
+        ? `/login?registered=1&inviteToken=${encodeURIComponent(inviteToken)}`
+        : '/login?registered=1';
+      router.push(loginUrl);
     } catch (err) {
       setError(err instanceof Error ? err.message : '注册失败');
     }
@@ -208,9 +213,18 @@ export default function RegisterPage() {
               </button>
             </form>
 
+            {inviteToken && (
+              <div className="mb-4 rounded-lg bg-primary/5 border border-primary/10 px-3 py-2 text-xs text-primary">
+                你正在通过家庭邀请注册，注册并登录后将自动加入对应家庭。
+              </div>
+            )}
+
             <p className="mt-6 text-center text-xs text-text-muted">
               已有账号？{' '}
-              <Link href="/login" className="text-primary hover:text-primary-glow transition-colors">
+              <Link
+                href={inviteToken ? `/login?inviteToken=${encodeURIComponent(inviteToken)}` : '/login'}
+                className="text-primary hover:text-primary-glow transition-colors"
+              >
                 直接登录
               </Link>
             </p>
@@ -218,5 +232,19 @@ export default function RegisterPage() {
         </motion.div>
       </div>
     </div>
+  );
+}
+
+export default function RegisterPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-background flex items-center justify-center p-4">
+          <Loader2 className="w-5 h-5 animate-spin text-text-muted" />
+        </div>
+      }
+    >
+      <RegisterPageContent />
+    </Suspense>
   );
 }

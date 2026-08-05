@@ -18,6 +18,7 @@ function LoginForm() {
   const shouldReduceMotion = useReducedMotion();
   const callbackUrl = searchParams.get('callbackUrl') || '/dashboard';
   const justRegistered = searchParams.get('registered') === '1';
+  const inviteToken = searchParams.get('inviteToken');
 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -57,6 +58,15 @@ function LoginForm() {
           localStorage.setItem(REMEMBER_USERNAME_KEY, username);
         } else {
           localStorage.removeItem(REMEMBER_USERNAME_KEY);
+        }
+      }
+
+      // 如果携带邀请 token，先接受邀请
+      if (inviteToken) {
+        try {
+          await fetch(`/api/family/invites/${inviteToken}`, { method: 'POST' });
+        } catch {
+          // 接受失败不影响登录流程
         }
       }
 

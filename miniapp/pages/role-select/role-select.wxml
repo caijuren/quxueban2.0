@@ -1,0 +1,75 @@
+<view class="role-page">
+  <!-- 选择角色 -->
+  <block wx:if="{{step === 'role'}}">
+    <view class="role-header">
+      <text class="role-title">选择你的身份</text>
+      <text class="role-subtitle">不同身份看到的界面不同</text>
+    </view>
+
+    <view class="role-grid">
+      <view
+        class="role-card"
+        bindtap="selectRole"
+        data-role="parent"
+      >
+        <view class="role-icon parent-icon">
+          <text class="icon-text">👤</text>
+        </view>
+        <text class="role-name">我是家长</text>
+        <text class="role-desc">查看任务、监督进度、帮孩子打卡</text>
+      </view>
+
+      <view
+        class="role-card"
+        bindtap="selectRole"
+        data-role="child"
+      >
+        <view class="role-icon child-icon">
+          <text class="icon-text">🎒</text>
+        </view>
+        <text class="role-name">我是孩子</text>
+        <text class="role-desc">查看自己的任务、自己打卡</text>
+      </view>
+    </view>
+  </block>
+
+  <!-- 选择孩子 -->
+  <block wx:if="{{step === 'child'}}">
+    <view class="role-header">
+      <text class="role-title">选择孩子</text>
+      <text class="role-subtitle">你将以家长身份查看孩子的学习任务</text>
+    </view>
+
+    <view class="child-list">
+      <view
+        wx:for="{{children}}"
+        wx:key="id"
+        class="child-card"
+        bindtap="selectChild"
+        data-child="{{item}}"
+      >
+        <view
+          class="child-avatar"
+          style="background-color: {{item.avatarColor || '#F43F5E'}};"
+        >
+          <text class="child-avatar-text">{{item.name[0]}}</text>
+        </view>
+        <view class="child-info">
+          <text class="child-name">{{item.name}}</text>
+          <text class="child-meta">{{item.grade}}年级 · {{item.currentSchool || '未设置学校'}}</text>
+        </view>
+        <view class="child-arrow">›</view>
+      </view>
+
+      <view wx:if="{{children.length === 0 && !loading}}" class="empty-state">
+        <view class="empty-icon">
+          <text>📝</text>
+        </view>
+        <text class="text-secondary">还没有添加孩子</text>
+        <text class="text-tertiary" style="font-size: 24rpx; margin-top: 12rpx;">请先在 Web 端添加孩子信息</text>
+      </view>
+    </view>
+
+    <button class="btn-ghost back-btn" bindtap="backToRole">返回重新选择</button>
+  </block>
+</view>

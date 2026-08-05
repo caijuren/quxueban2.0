@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { useState, useRef, useEffect } from 'react';
 import {
   User,
@@ -147,7 +148,16 @@ export default function AccountSection({ user, onUpdate }: AccountSectionProps) 
 
   const renderAvatar = () => {
     if (avatarUrl?.startsWith('data:image')) {
-      return <img src={avatarUrl} alt="头像" className="w-full h-full object-cover" />;
+      return (
+        <Image
+          src={avatarUrl}
+          alt="头像"
+          fill
+          sizes="80px"
+          unoptimized
+          className="object-cover"
+        />
+      );
     }
     if (avatarUrl) {
       return <span className="text-2xl">{avatarUrl}</span>;

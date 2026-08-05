@@ -4,6 +4,7 @@ import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 import { normalizeWeeklyTask } from '@/lib/taskAlignment';
 import { taskCompletionInputSchema, validateBody } from '@/lib/validation';
+import { canManageChild, canViewChild } from '@/lib/family';
 import type { WeeklyTaskItem, TaskCompletionRecord } from '@/lib/storage.types';
 
 type Params = { params: { id: string; taskId: string } };
@@ -32,12 +33,15 @@ export async function POST(req: Request, { params }: Params) {
     return validation.response;
   }
 
-  const existing = await prisma.weeklyPlan.findFirst({
-    where: { id: params.id, userId },
+  const existing = await prisma.weeklyPlan.findUnique({
+    where: { id: params.id },
     include: { child: true },
   });
-  if (!existing) {
+  if (!existing || !(await canViewChild(userId, existing.child))) {
     return NextResponse.json({ error: 'Not found' }, { status: 404 });
+  }
+  if (!(await canManageChild(userId, existing.child))) {
+    return NextResponse.json({ error: '无权限编辑' }, { status: 403 });
   }
 
   const rawTasks = (existing.tasks as unknown as Partial<WeeklyTaskItem>[]) || [];
@@ -60,6 +64,7 @@ export async function POST(req: Request, { params }: Params) {
     quality: body.quality ?? null,
     note: body.note,
     imageUrls: body.imageUrls,
+    audioUrls: body.audioUrls,
     capabilityProgress: body.capabilityProgress,
     quantityIncrement: body.quantityIncrement,
     checklistProgress: body.checklistProgress,

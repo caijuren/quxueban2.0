@@ -183,6 +183,7 @@ export const taskCompletionRecordSchema = z.object({
   quality: taskCompletionQualitySchema.nullable().default(null),
   note: z.string().max(1000).default(''),
   imageUrls: z.array(z.string().url()).default([]),
+  audioUrls: z.array(z.string().url()).default([]),
   capabilityProgress: z.array(taskCapabilityProgressSchema).default([]),
   quantityIncrement: z.number().int().min(0).default(0),
   checklistProgress: z.array(z.string().min(1)).default([]),
@@ -199,6 +200,7 @@ export const taskCompletionInputSchema = z.object({
   quality: taskCompletionQualitySchema.nullable().optional(),
   note: z.string().max(1000).default(''),
   imageUrls: z.array(z.string().url()).default([]),
+  audioUrls: z.array(z.string().url()).default([]),
   capabilityProgress: z.array(taskCapabilityProgressSchema).default([]),
   quantityIncrement: z.number().int().min(0).default(0),
   checklistProgress: z.array(z.string()).default([]),
@@ -286,6 +288,7 @@ export const userRegisterSchema = z.object({
     .min(6, '密码至少 6 个字符')
     .max(50, '密码最多 50 个字符'),
   name: z.string().max(50).nullable().optional(),
+  inviteToken: z.string().max(100).nullable().optional(),
 });
 
 export const passwordChangeSchema = z.object({
@@ -395,6 +398,48 @@ export const subjectPlanConfigDataSchema = z.object({
 
 export const subjectPlanUpdateSchema = subjectPlanConfigDataSchema;
 
+export const learningGoalCreateSchema = z.object({
+  subject: z.enum(['chinese', 'math', 'english', 'overall']),
+  goalType: z.enum(['reading_count', 'ability_score', 'habit', 'custom']),
+  metricType: z.enum(['count', 'score', 'duration', 'habit']),
+  title: z.string().min(1, '目标标题不能为空').max(100, '目标标题最多 100 字符'),
+  target: z.string().max(100).nullable().optional(),
+  period: z.string().min(1, '目标周期不能为空').max(50),
+  source: z.enum(['parent', 'ai', 'system', 'teacher']).default('parent'),
+  status: z.enum(['active', 'completed', 'paused']).default('active'),
+});
+
+export const learningGoalUpdateSchema = learningGoalCreateSchema.partial().extend({
+  status: z.enum(['active', 'completed', 'paused']).optional(),
+});
+
+export const familyCreateSchema = z.object({
+  name: z.string().min(1, '家庭名称不能为空').max(50, '家庭名称最多 50 字符'),
+});
+
+export const familyInviteSchema = z.object({
+  username: z.string().min(1, '请输入用户名').max(50, '用户名最多 50 字符'),
+  role: z.enum(['ADMIN', 'MEMBER', 'VIEWER']),
+});
+
+export const familyMemberUpdateSchema = z.object({
+  role: z.enum(['ADMIN', 'MEMBER', 'VIEWER']).optional(),
+  status: z.enum(['INVITED', 'ACTIVE', 'DISABLED']).optional(),
+});
+
+export const familyInviteCreateSchema = z.object({
+  role: z.enum(['ADMIN', 'MEMBER', 'VIEWER']),
+  email: z.string().email('邮箱格式不正确').max(100).nullable().optional(),
+  phone: z
+    .string()
+    .regex(/^1[3-9]\d{9}$/, '手机号格式不正确')
+    .max(20)
+    .nullable()
+    .optional(),
+}).refine((data) => data.email || data.phone, {
+  message: '邮箱或手机号至少填写一个',
+});
+
 export type ChildCreateInput = z.infer<typeof childCreateSchema>;
 export type ChildUpdateInput = z.infer<typeof childUpdateSchema>;
 export type TaskTemplateCreateInput = z.infer<typeof taskTemplateCreateSchema>;
@@ -410,8 +455,14 @@ export type UserSettingsUpdateInput = z.infer<typeof userSettingsUpdateSchema>;
 export type TaskCompletionInput = z.infer<typeof taskCompletionInputSchema>;
 export type DingTalkPushInput = z.infer<typeof dingTalkPushSchema>;
 export type DailySummaryInput = z.infer<typeof dailySummarySchema>;
+export type LearningGoalCreateInput = z.infer<typeof learningGoalCreateSchema>;
+export type LearningGoalUpdateInput = z.infer<typeof learningGoalUpdateSchema>;
 export type AiTaskAssessmentInput = z.infer<typeof aiTaskAssessmentSchema>;
 export type SubjectPlanUpdateInput = z.infer<typeof subjectPlanUpdateSchema>;
+export type FamilyCreateInput = z.infer<typeof familyCreateSchema>;
+export type FamilyInviteInput = z.infer<typeof familyInviteSchema>;
+export type FamilyMemberUpdateInput = z.infer<typeof familyMemberUpdateSchema>;
+export type FamilyInviteCreateInput = z.infer<typeof familyInviteCreateSchema>;
 
 export interface ValidationError {
   error: string;

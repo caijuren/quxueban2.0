@@ -1,0 +1,135 @@
+import { NextResponse } from 'next/server';
+import { getMiniAppUser, unauthorizedResponse } from '@/lib/miniapp/auth';
+import { prisma } from '@/lib/prisma';
+import { normalizeWeeklyTask } from '@/lib/taskAlignment';
+import { taskCompletionInputSchema, validateBody } from '@/lib/validation';
+import { sendTaskCompletedReminder } from '@/lib/miniapp/subscription';
+import type { NextRequest } from 'next/server';
+import type { WeeklyTaskItem, TaskCompletionRecord } from '@/lib/storage.types';
+
+function generateId() {
+  return `${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
+}
+
+function getTodayStr() {
+  return new Date().toISOString().split('T')[0];
+}
+
+export async function POST(
+  req: NextRequest,
+  { params }: { params: { taskId: string } }
+) {
+  const auth = await getMiniAppUser(req);
+  if (!auth) return unauthorizedResponse();
+
+  const validation = await validateBody(req, taskCompletionInputSchema);
+  if (!validation.success) {
+    return validation.response;
+  }
+
+  const body = validation.data;
+  const taskId = params.taskId;
+
+  const activeRole = auth.type === 'child' ? 'child' : (req.headers.get('x-active-role') || 'parent');
+
+  // 查找包含该任务的周计划
+  const plans = await prisma.weeklyPlan.findMany({
+    where: auth.type === 'child' ? { childId: auth.childId } : { userId: auth.userId },
+    include: { child: true },
+    orderBy: { weekId: 'desc' },
+  });
+
+  let targetPlan: (typeof plans)[0] | null = null;
+  let taskIndex = -1;
+
+  for (const plan of plans) {
+    const rawTasks = (plan.tasks as unknown as Partial<WeeklyTaskItem>[]) || [];
+    const tasks = rawTasks.map((task) => normalizeWeeklyTask(task as WeeklyTaskItem));
+    const index = tasks.findIndex((t) => t.id === taskId);
+    if (index !== -1) {
+      targetPlan = plan;
+      taskIndex = index;
+      break;
+    }
+  }
+
+  if (!targetPlan || taskIndex === -1) {
+    return NextResponse.json({ error: 'Task not found' }, { status: 404 });
+  }
+
+  const rawTasks = (targetPlan.tasks as unknown as Partial<WeeklyTaskItem>[]) || [];
+  const tasks = rawTasks.map((task) => normalizeWeeklyTask(task as WeeklyTaskItem));
+
+  const now = new Date().toISOString();
+  const date = body.date || getTodayStr();
+
+  const record: TaskCompletionRecord = {
+    id: generateId(),
+    date,
+    status: body.status,
+    progress: body.progress,
+    actualDurationMinutes: body.actualDurationMinutes,
+    quality: body.quality ?? null,
+    note: body.note || (activeRole === 'parent' ? '家长代打卡' : '孩子自己打卡'),
+    imageUrls: body.imageUrls || [],
+    audioUrls: body.audioUrls || [],
+    capabilityProgress: body.capabilityProgress || [],
+    quantityIncrement: body.quantityIncrement || 0,
+    checklistProgress: body.checklistProgress || [],
+    createdAt: now,
+    updatedAt: now,
+  };
+
+  const existingRecords = tasks[taskIndex].completionRecords || [];
+  const sameDayIndex = existingRecords.findIndex((r) => r.date === date);
+
+  let completionRecords: TaskCompletionRecord[];
+  if (sameDayIndex >= 0) {
+    completionRecords = existingRecords.map((r, idx) =>
+      idx === sameDayIndex ? { ...record, id: r.id, createdAt: r.createdAt } : r
+    );
+  } else {
+    completionRecords = [...existingRecords, record];
+  }
+
+  const isDone = body.status === 'done';
+
+  tasks[taskIndex] = {
+    ...tasks[taskIndex],
+    status: body.status,
+    completedAt: isDone ? now : tasks[taskIndex].completedAt,
+    note: body.note || undefined,
+    completionRecords,
+  };
+
+  const updated = await prisma.weeklyPlan.update({
+    where: { id: targetPlan.id },
+    data: {
+      tasks: tasks as unknown as object[],
+    },
+  });
+
+  // 打卡成功后异步通知家长
+  if (isDone && targetPlan.child) {
+    const parentUserId = auth.type === 'child' ? targetPlan.child.userId : auth.userId;
+
+    const user = await prisma.user.findUnique({
+      where: { id: parentUserId },
+      select: { wechatOpenId: true },
+    });
+
+    if (user?.wechatOpenId) {
+      sendTaskCompletedReminder(
+        parentUserId,
+        user.wechatOpenId,
+        targetPlan.child.name,
+        tasks[taskIndex].focus,
+        activeRole === 'parent' ? 'parent' : 'child'
+      ).catch((err) => {
+        console.error('[miniapp complete] send notification failed:', err);
+      });
+    }
+  }
+
+  return NextResponse.json({ success: true, planId: updated.id });
+}

@@ -3,6 +3,7 @@ import bcrypt from 'bcryptjs';
 import { prisma } from '@/lib/prisma';
 import { userRegisterSchema, validateBody } from '@/lib/validation';
 import { authRateLimit, getClientIp } from '@/lib/rateLimit';
+import { getValidInvite } from '@/lib/invite';
 
 export async function POST(req: NextRequest) {
   const ip = getClientIp(req);
@@ -35,16 +36,45 @@ export async function POST(req: NextRequest) {
 
     const passwordHash = await bcrypt.hash(body.password, 10);
 
-    const user = await prisma.user.create({
-      data: {
-        username: body.username,
-        passwordHash,
-        name: body.name ?? null,
-        role: 'PARENT',
-      },
+    const inviteToken = body.inviteToken ?? null;
+    const invite = inviteToken ? await getValidInvite(inviteToken) : null;
+
+    const user = await prisma.$transaction(async (tx) => {
+      const created = await tx.user.create({
+        data: {
+          username: body.username,
+          passwordHash,
+          name: body.name ?? null,
+          role: 'PARENT',
+          email: invite?.email ?? null,
+          phone: invite?.phone ?? null,
+        },
+      });
+
+      if (invite) {
+        await tx.familyInvite.update({
+          where: { id: invite.id },
+          data: { usedAt: new Date(), usedByUserId: created.id },
+        });
+
+        await tx.familyMember.create({
+          data: {
+            familyId: invite.familyId,
+            userId: created.id,
+            role: invite.role,
+            status: 'ACTIVE',
+            joinedAt: new Date(),
+          },
+        });
+      }
+
+      return created;
     });
 
-    return NextResponse.json({ message: '注册成功' }, { status: 201 });
+    return NextResponse.json(
+      { message: '注册成功', familyId: invite?.familyId ?? null },
+      { status: 201 }
+    );
   } catch (error) {
     console.error('Registration error:', error);
     return NextResponse.json(

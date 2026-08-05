@@ -7,7 +7,7 @@ import {
   Calendar,
   Bell,
   Target,
-  Settings,
+  Home,
   Wrench,
   X,
   Library,
@@ -41,8 +41,8 @@ const menuGroups = [
     items: [{ name: '规划工具', href: '/dashboard/toolbox', icon: Wrench }],
   },
   {
-    title: '设置',
-    items: [{ name: '设置', href: '/dashboard/settings', icon: Settings }],
+    title: '控制台',
+    items: [{ name: '家庭学习控制台', href: '/dashboard/console', icon: Home }],
   },
 ];
 

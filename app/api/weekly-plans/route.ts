@@ -4,6 +4,7 @@ import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 import { normalizeWeeklyTask, alignTaskFromTemplate } from '@/lib/taskAlignment';
 import { weeklyPlanCreateSchema, validateBody } from '@/lib/validation';
+import { canManageChild, canViewChild, getViewableChildIdsForUser } from '@/lib/family';
 import type { WeeklyTaskItem } from '@/lib/storage.types';
 
 export async function GET(req: Request) {
@@ -15,10 +16,14 @@ export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
   const childId = searchParams.get('childId');
 
+  const viewableChildIds = await getViewableChildIdsForUser(session.user.id);
+  if (childId && !viewableChildIds.includes(childId)) {
+    return NextResponse.json([]);
+  }
+
   const plans = await prisma.weeklyPlan.findMany({
     where: {
-      userId: session.user.id,
-      ...(childId ? { childId } : {}),
+      childId: childId ?? { in: viewableChildIds },
     },
     orderBy: { weekId: 'desc' },
   });
@@ -50,10 +55,10 @@ export async function POST(req: Request) {
 
   const body = validation.data;
 
-  const child = await prisma.child.findFirst({
-    where: { id: body.childId, userId: session.user.id },
+  const child = await prisma.child.findUnique({
+    where: { id: body.childId },
   });
-  if (!child) {
+  if (!child || !(await canManageChild(session.user.id, child))) {
     return NextResponse.json({ error: 'Child not found' }, { status: 404 });
   }
 

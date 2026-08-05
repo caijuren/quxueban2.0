@@ -50,6 +50,21 @@ export interface ContentType {
   description: string | null;
 }
 
+export interface LearningGoal {
+  id: string;
+  childId: string;
+  subject: 'chinese' | 'math' | 'english' | 'overall';
+  goalType: 'reading_count' | 'ability_score' | 'habit' | 'custom';
+  metricType: 'count' | 'score' | 'duration' | 'habit';
+  title: string;
+  target: string | null;
+  period: string;
+  source: 'parent' | 'ai' | 'system' | 'teacher';
+  status: 'active' | 'completed' | 'paused';
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface Book {
   id: string;
   bookId: string;

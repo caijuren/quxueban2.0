@@ -1,0 +1,199 @@
+<view class="tasks-page">
+  <!-- 顶部 Header -->
+  <view class="tasks-header">
+    <view class="header-top">
+      <view class="date-section">
+        <text class="today-name">{{todayName}}</text>
+        <text class="today-date">{{todayDate}}</text>
+      </view>
+      <view class="header-actions">
+        <view wx:if="{{activeRole === 'parent'}}" class="child-section" bindtap="switchChild">
+          <view
+            class="child-avatar-small"
+            style="background-color: {{selectedChild.avatarColor || '#F43F5E'}};"
+          >
+            <text>{{selectedChild.name[0]}}</text>
+          </view>
+          <text class="child-name-small">{{selectedChild.name}}</text>
+          <text class="switch-text">切换</text>
+        </view>
+        <view wx:else class="child-section">
+          <view
+            class="child-avatar-small"
+            style="background-color: {{selectedChild.avatarColor || '#F43F5E'}};"
+          >
+            <text>{{selectedChild.name[0]}}</text>
+          </view>
+          <text class="child-name-small">{{selectedChild.name}}</text>
+        </view>
+        <view class="profile-entry" bindtap="goProfile">
+          <text class="profile-entry-text">我的</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="progress-section">
+      <view class="progress-info">
+        <text class="progress-title">今日完成度</text>
+        <text class="progress-rate">{{doneCount}} / {{totalCount}}</text>
+      </view>
+      <view class="progress-bar">
+        <view
+          class="progress-fill"
+          style="width: {{totalCount ? (doneCount / totalCount * 100) : 0}}%;"
+        ></view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 任务列表 -->
+  <scroll-view scroll-y class="tasks-list">
+    <view wx:if="{{loading}}" class="loading-wrapper">
+      <view class="loading-spinner"></view>
+    </view>
+
+    <view wx:elif="{{tasks.length === 0}}" class="empty-state">
+      <view class="empty-icon">
+        <text>🌿</text>
+      </view>
+      <text class="text-secondary">今天没有安排任务</text>
+      <text class="text-tertiary" style="font-size: 24rpx; margin-top: 12rpx;">可以去 Web 端制定周计划</text>
+    </view>
+
+    <view wx:else class="task-groups">
+      <view class="task-group">
+        <text class="group-title">待完成</text>
+        <view
+          wx:for="{{tasks}}"
+          wx:key="id"
+          wx:if="{{item.status !== 'done'}}"
+          class="task-card"
+        >
+          <view
+            class="category-line"
+            style="background-color: {{getCategoryColor(item.category)}};"
+          ></view>
+          <view class="task-content">
+            <view class="task-main">
+              <view class="task-title-row">
+                <text class="task-title">{{item.focus}}</text>
+                <view
+                  class="category-tag"
+                  style="color: {{getCategoryColor(item.category)}}; background-color: {{getCategoryColor(item.category)}}15;"
+                >
+                  {{getCategoryLabel(item.category)}}
+                </view>
+              </view>
+              <view class="task-meta">
+                <text class="meta-item">⏱ {{item.duration || '30分钟'}}</text>
+                <text wx:if="{{item.materials && item.materials.length}}" class="meta-item">📚 {{item.materials[0]}}</text>
+              </view>
+              <!-- 已上传凭证 -->
+              <view wx:if="{{item.evidence.images.length || item.evidence.audios.length}}" class="evidence-preview">
+                <view
+                  wx:for="{{item.evidence.images}}"
+                  wx:for-item="imgUrl"
+                  wx:key="imgUrl"
+                  class="evidence-image"
+                  bindtap="previewImage"
+                  data-url="{{imgUrl}}"
+                >
+                  <image src="{{imgUrl}}" mode="aspectFill" lazy-load />
+                </view>
+                <view
+                  wx:for="{{item.evidence.audios}}"
+                  wx:for-item="audioUrl"
+                  wx:key="audioUrl"
+                  class="evidence-audio"
+                  bindtap="playAudio"
+                  data-url="{{audioUrl}}"
+                >
+                  <text>🔊 语音</text>
+                </view>
+              </view>
+            </view>
+            <button
+              class="check-btn"
+              bindtap="completeTask"
+              data-task="{{item}}"
+              disabled="{{completingTaskId === item.id}}"
+            >
+              {{completingTaskId === item.id ? '...' : (activeRole === 'parent' ? '代打卡' : '打卡')}}
+            </button>
+          </view>
+        </view>
+      </view>
+
+      <view wx:if="{{hasDoneTasks}}" class="task-group">
+        <text class="group-title">已完成</text>
+        <view
+          wx:for="{{tasks}}"
+          wx:key="id"
+          wx:if="{{item.status === 'done'}}"
+          class="task-card task-done"
+        >
+          <view
+            class="category-line"
+            style="background-color: {{getCategoryColor(item.category)}};"
+          ></view>
+          <view class="task-content">
+            <view class="task-main">
+              <view class="task-title-row">
+                <text class="task-title">{{item.focus}}</text>
+                <view class="done-badge">✓ 已完成</view>
+              </view>
+              <view class="task-meta">
+                <text class="meta-item">{{item.duration || '30分钟'}}</text>
+              </view>
+              <!-- 已完成凭证 -->
+              <view wx:if="{{item.evidence.images.length || item.evidence.audios.length}}" class="evidence-preview">
+                <view
+                  wx:for="{{item.evidence.images}}"
+                  wx:for-item="imgUrl"
+                  wx:key="imgUrl"
+                  class="evidence-image"
+                  bindtap="previewImage"
+                  data-url="{{imgUrl}}"
+                >
+                  <image src="{{imgUrl}}" mode="aspectFill" lazy-load />
+                </view>
+                <view
+                  wx:for="{{item.evidence.audios}}"
+                  wx:for-item="audioUrl"
+                  wx:key="audioUrl"
+                  class="evidence-audio"
+                  bindtap="playAudio"
+                  data-url="{{audioUrl}}"
+                >
+                  <text>🔊 语音</text>
+                </view>
+              </view>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <view class="safe-area-bottom" style="height: 40rpx;"></view>
+  </scroll-view>
+
+  <!-- 录音 Modal -->
+  <view wx:if="{{recordingTaskId}}" class="voice-modal" catchtouchmove="true">
+    <view class="voice-modal-mask" bindtap="closeVoiceModal"></view>
+    <view class="voice-modal-content">
+      <text class="voice-modal-title">按住录音</text>
+      <text class="voice-modal-desc">{{isRecording ? '松开结束录音' : '按住下方按钮开始录音'}}</text>
+      <text wx:if="{{isRecording}}" class="voice-duration">{{formatDuration(recordDuration)}}</text>
+
+      <view
+        class="voice-record-btn {{isRecording ? 'recording' : ''}}"
+        bindtouchstart="onVoiceRecordStart"
+        bindtouchend="onVoiceRecordEnd"
+      >
+        <text class="voice-record-icon">🎙</text>
+      </view>
+
+      <button class="voice-cancel-btn btn-ghost" bindtap="closeVoiceModal">取消</button>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,27 @@
+<view class="bind-child-page">
+  <view class="bind-child-content">
+    <view class="bind-icon">🔐</view>
+    <text class="bind-title">孩子绑定</text>
+    <text class="bind-desc">请让家长在「我的」页面生成绑定码，然后在这里输入</text>
+
+    <input
+      class="bind-input"
+      type="number"
+      maxlength="6"
+      placeholder="请输入6位绑定码"
+      placeholder-class="input-placeholder"
+      value="{{bindCode}}"
+      bindinput="onInput"
+    />
+
+    <button
+      class="btn-primary bind-btn"
+      bindtap="onBind"
+      disabled="{{loading || bindCode.length !== 6}}"
+    >
+      {{loading ? '绑定中...' : '确认绑定'}}
+    </button>
+
+    <button class="btn-ghost bind-btn" bindtap="goBack">返回</button>
+  </view>
+</view>

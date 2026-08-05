@@ -1,7 +1,8 @@
 'use client';
 
+import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { Bell, Search, Menu, Check, LogOut, Settings, User, ChevronDown } from 'lucide-react';
+import { Bell, Search, Menu, Check, LogOut, Home, User, ChevronDown } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { signOut, useSession } from 'next-auth/react';
@@ -129,9 +130,9 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
     router.push('/');
   };
 
-  const handleGoToSettings = () => {
+  const handleGoToConsole = () => {
     setUserMenuOpen(false);
-    router.push('/dashboard/settings');
+    router.push('/dashboard/console');
   };
 
   const currentStage = currentChild ? gradeToStage(currentChild.grade, currentChild.educationSystem) : null;
@@ -239,16 +240,19 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
         <div className="relative" ref={userMenuRef}>
           <button
             onClick={() => setUserMenuOpen((prev) => !prev)}
-            className="flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-surface-elevated/60 border border-border-subtle hover:border-border-default hover:bg-surface-elevated text-text-primary text-left focus-ring transition-all overflow-hidden"
+            className="relative flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-surface-elevated/60 border border-border-subtle hover:border-border-default hover:bg-surface-elevated text-text-primary text-left focus-ring transition-all overflow-hidden"
             aria-label="用户菜单"
             aria-haspopup="menu"
             aria-expanded={userMenuOpen}
           >
             {userAvatarUrl ? (
-              <img
+              <Image
                 src={userAvatarUrl}
                 alt={currentUser?.name || '用户头像'}
-                className="w-full h-full object-cover"
+                fill
+                sizes="40px"
+                unoptimized
+                className="object-cover"
               />
             ) : currentUser?.name ? (
               <span className="text-sm font-bold text-text-primary">
@@ -275,11 +279,11 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
                 </div>
                 <button
                   role="menuitem"
-                  onClick={handleGoToSettings}
+                  onClick={handleGoToConsole}
                   className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-left text-sm text-text-secondary hover:bg-surface-elevated transition-colors"
                 >
-                  <Settings className="w-4 h-4" />
-                  系统设置
+                  <Home className="w-4 h-4" />
+                  家庭学习控制台
                 </button>
                 <button
                   role="menuitem"

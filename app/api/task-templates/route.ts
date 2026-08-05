@@ -9,6 +9,7 @@ import {
   taskTemplateCreateSchema,
   validateBody,
 } from '@/lib/validation';
+import { canManageChild, canViewChild } from '@/lib/family';
 import type {
   TaskTemplate,
   TaskCapabilityLink,
@@ -60,11 +61,11 @@ export async function GET(req: Request) {
       );
     }
 
-    // 验证当前用户确实拥有该孩子
-    const child = await prisma.child.findFirst({
-      where: { id: childId, userId: session.user.id },
+    // 验证当前用户是否可查看该孩子
+    const child = await prisma.child.findUnique({
+      where: { id: childId },
     });
-    if (!child) {
+    if (!child || !(await canViewChild(session.user.id, child))) {
       return NextResponse.json(
         { error: '孩子不存在或无权限' },
         { status: 404 }
@@ -76,7 +77,6 @@ export async function GET(req: Request) {
     await seedSystemCapabilities(prisma);
 
     const where: Record<string, unknown> = {
-      userId: session.user.id,
       childId,
     };
 
@@ -132,11 +132,11 @@ export async function POST(req: Request) {
 
   const body = validation.data;
 
-  // 验证当前用户确实拥有该孩子
-  const child = await prisma.child.findFirst({
-    where: { id: body.childId, userId: session.user.id },
+  // 验证当前用户是否可管理该孩子
+  const child = await prisma.child.findUnique({
+    where: { id: body.childId },
   });
-  if (!child) {
+  if (!child || !(await canManageChild(session.user.id, child))) {
     return NextResponse.json(
       { error: '孩子不存在或无权限' },
       { status: 404 }

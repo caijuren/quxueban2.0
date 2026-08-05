@@ -1,6 +1,7 @@
 'use client';
 
 import { useMemo } from 'react';
+import Image from 'next/image';
 import { Trophy, Send, Image as ImageIcon } from 'lucide-react';
 import Modal from '@/components/ui/Modal';
 import { WeeklyTaskItem, TaskCompletionQuality } from '@/lib/storage.types';
@@ -173,12 +174,15 @@ export default function DailyVictoryModal({
               {stats.imageUrls.map((url, idx) => (
                 <div
                   key={`${url}-${idx}`}
-                  className="shrink-0 w-16 h-16 rounded-lg bg-surface border border-border-default overflow-hidden"
+                  className="relative shrink-0 w-16 h-16 rounded-lg bg-surface border border-border-default overflow-hidden"
                 >
-                  <img
+                  <Image
                     src={url}
                     alt={`打卡照片 ${idx + 1}`}
-                    className="w-full h-full object-cover"
+                    fill
+                    sizes="64px"
+                    unoptimized
+                    className="object-cover"
                   />
                 </div>
               ))}

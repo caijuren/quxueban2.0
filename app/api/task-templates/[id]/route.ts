@@ -6,6 +6,7 @@ import {
   taskTemplateUpdateSchema,
   validateBody,
 } from '@/lib/validation';
+import { canManageChild, canViewChild } from '@/lib/family';
 import type {
   TaskTemplate,
   TaskCapabilityLink,
@@ -21,6 +22,20 @@ type TaskTemplateWithLinks = TaskTemplate & {
 async function authenticate() {
   const session = await getServerSession(authOptions);
   return session?.user?.id ?? null;
+}
+
+async function canManageTemplate(userId: string, template: { userId: string; childId: string | null }) {
+  if (!template.childId) return template.userId === userId;
+  const child = await prisma.child.findUnique({ where: { id: template.childId } });
+  if (!child) return false;
+  return canManageChild(userId, child);
+}
+
+async function canViewTemplate(userId: string, template: { userId: string; childId: string | null }) {
+  if (!template.childId) return template.userId === userId;
+  const child = await prisma.child.findUnique({ where: { id: template.childId } });
+  if (!child) return false;
+  return canViewChild(userId, child);
 }
 
 function normalizeTemplate(tpl: TaskTemplateWithLinks) {
@@ -93,11 +108,14 @@ export async function PATCH(req: Request, { params }: Params) {
     return validation.response;
   }
 
-  const existing = await prisma.taskTemplate.findFirst({
-    where: { id: params.id, userId },
+  const existing = await prisma.taskTemplate.findUnique({
+    where: { id: params.id },
   });
-  if (!existing) {
+  if (!existing || !(await canViewTemplate(userId, existing))) {
     return NextResponse.json({ error: 'Not found' }, { status: 404 });
+  }
+  if (!(await canManageTemplate(userId, existing))) {
+    return NextResponse.json({ error: '无权限编辑' }, { status: 403 });
   }
 
   const body = validation.data;
@@ -142,11 +160,14 @@ export async function DELETE(_req: Request, { params }: Params) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
-  const existing = await prisma.taskTemplate.findFirst({
-    where: { id: params.id, userId },
+  const existing = await prisma.taskTemplate.findUnique({
+    where: { id: params.id },
   });
-  if (!existing) {
+  if (!existing || !(await canViewTemplate(userId, existing))) {
     return NextResponse.json({ error: 'Not found' }, { status: 404 });
+  }
+  if (!(await canManageTemplate(userId, existing))) {
+    return NextResponse.json({ error: '无权限删除' }, { status: 403 });
   }
 
   await prisma.taskTemplate.delete({ where: { id: params.id } });

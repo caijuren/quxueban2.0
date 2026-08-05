@@ -13,6 +13,19 @@ enum UserRole {
   ADMIN
 }
 
+enum FamilyMemberRole {
+  OWNER
+  ADMIN
+  MEMBER
+  VIEWER
+}
+
+enum FamilyMemberStatus {
+  INVITED
+  ACTIVE
+  DISABLED
+}
+
 model User {
   id           String   @id @default(uuid())
   username     String   @unique
@@ -35,7 +48,70 @@ model User {
   capabilities       Capability[]
   subjectPlanConfigs SubjectPlanConfig[]
 
+  ownedFamilies    Family[]        @relation("FamilyOwner")
+  familyMemberships FamilyMember[]
+
   @@index([role])
+}
+
+model Family {
+  id             String   @id @default(uuid())
+  name           String
+  createdByUserId String
+  createdBy      User     @relation("FamilyOwner", fields: [createdByUserId], references: [id], onDelete: Cascade)
+
+  members        FamilyMember[]
+  children       Child[]
+  invites        FamilyInvite[]
+
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@index([createdByUserId])
+}
+
+model FamilyMember {
+  id        String             @id @default(uuid())
+  familyId  String
+  family    Family             @relation(fields: [familyId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role      FamilyMemberRole   @default(MEMBER)
+  status    FamilyMemberStatus @default(INVITED)
+  invitedBy String?
+  invitedAt DateTime           @default(now())
+  joinedAt  DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([familyId, userId])
+  @@index([familyId])
+  @@index([userId])
+  @@index([status])
+}
+
+model FamilyInvite {
+  id        String   @id @default(uuid())
+  familyId  String
+  family    Family   @relation(fields: [familyId], references: [id], onDelete: Cascade)
+  token     String   @unique
+  role      FamilyMemberRole @default(MEMBER)
+  email     String?
+  phone     String?
+  invitedBy String?
+  invitedAt DateTime @default(now())
+  expiresAt DateTime
+  usedAt    DateTime?
+  usedByUserId String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([familyId])
+  @@index([token])
+  @@index([email])
+  @@index([phone])
 }
 
 model UserSetting {
@@ -65,6 +141,7 @@ model UserSetting {
 model Child {
   id               String   @id @default(uuid())
   userId           String
+  familyId         String?
   name             String
   grade            Int
   educationSystem  String   @default("six-three") // 学制：six-three（六三制）或 five-four（五四制）
@@ -75,17 +152,46 @@ model Child {
   birthday         DateTime?
   notes            String?
   routeId          String?
+  wechatOpenId     String?  @unique
+  bindCode         String?  @unique
+  bindCodeExpiresAt DateTime?
   dingTalkWebhook  String? // 钉钉自定义机器人 webhook
   dingTalkSecret   String? // 钉钉机器人加签密钥
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
 
   user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  family       Family?       @relation(fields: [familyId], references: [id], onDelete: SetNull)
   plans        Plan[]
   weeklyPlans  WeeklyPlan[]
   taskTemplates TaskTemplate[]
+  learningGoals LearningGoal[]
 
   @@index([userId])
+  @@index([familyId])
+}
+
+model LearningGoal {
+  id          String   @id @default(uuid())
+  childId     String
+
+  subject     String   // chinese | math | english | overall
+  goalType    String   // reading_count | ability_score | habit | custom
+  metricType  String   // count | score | duration | habit
+  title       String
+  target      String?
+  period      String   // 2026春季
+
+  source      String   @default("parent") // parent | ai | system | teacher
+  status      String   @default("active") // active | completed | paused
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  child       Child    @relation(fields: [childId], references: [id], onDelete: Cascade)
+
+  @@index([childId])
+  @@index([status])
 }
 
 model Plan {

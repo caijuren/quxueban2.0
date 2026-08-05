@@ -203,6 +203,7 @@ export async function POST(req: Request) {
           quality: null,
           note: '',
           imageUrls: [],
+          audioUrls: [],
           dingtalkPushedAt: pushedAt,
         },
       ],

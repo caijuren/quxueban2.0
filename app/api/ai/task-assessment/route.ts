@@ -8,6 +8,7 @@ import {
   AssessmentContext,
 } from '@/lib/ai/taskAssessment';
 import { Child, type EducationSystem } from '@/lib/children';
+import { normalizeWeeklyTask } from '@/lib/taskAlignment';
 import { WeeklyTaskItem, TaskTemplate, Capability } from '@/lib/storage.types';
 import { aiTaskAssessmentSchema, validateBody } from '@/lib/validation';
 
@@ -47,7 +48,8 @@ export async function POST(req: Request) {
   };
 
   // 若前端未传上下文，从数据库补齐当前周计划与任务模板
-  let existingTasks: WeeklyTaskItem[] = context.existingTasks ?? [];
+  let existingTasks: WeeklyTaskItem[] =
+    context.existingTasks?.map((task) => normalizeWeeklyTask(task)) ?? [];
   let existingTemplates: TaskTemplate[] =
     (context.existingTemplates as TaskTemplate[] | undefined) ?? [];
 
@@ -57,7 +59,8 @@ export async function POST(req: Request) {
       orderBy: { weekId: 'desc' },
     });
     if (currentWeekPlan) {
-      existingTasks = (currentWeekPlan.tasks as unknown as WeeklyTaskItem[]) ?? [];
+      const rawTasks = (currentWeekPlan.tasks as unknown as Partial<WeeklyTaskItem>[]) ?? [];
+      existingTasks = rawTasks.map((task) => normalizeWeeklyTask(task as WeeklyTaskItem));
     }
   }
 
