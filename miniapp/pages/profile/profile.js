@@ -19,9 +19,12 @@ Page({
     bindCodeExpiry: null,
     generatingChildId: null,
     loading: false,
+    statusBarHeight: 0,
   },
 
   onLoad() {
+    const app = getApp();
+    this.setData({ statusBarHeight: app.globalData.statusBarHeight || 0 });
     this.loadProfile();
   },
 

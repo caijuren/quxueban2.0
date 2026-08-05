@@ -64,7 +64,6 @@
   border: 1rpx solid var(--border);
   border-radius: var(--radius-full);
   margin-bottom: 40rpx;
-  width: fit-content;
 }
 
 .role-brand-dot {
@@ -108,4 +107,226 @@
 .role-card {
   background: linear-gradient(145deg, rgba(17, 21, 34, 0.95), rgba(26, 31, 53, 0.7));
   border: 1rpx solid var(--border);
-  border-radius
+  border-radius: var(--radius-xl);
+  padding: 40rpx;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+}
+
+.role-card:active {
+  transform: scale(0.98);
+}
+
+.role-card--active {
+  border-color: rgba(244, 63, 122, 0.45);
+  box-shadow: 0 8rpx 40rpx rgba(244, 63, 122, 0.18);
+}
+
+.role-card-main {
+  display: flex;
+  align-items: center;
+  gap: 28rpx;
+}
+
+.role-icon {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.role-icon--parent {
+  background: linear-gradient(135deg, rgba(244, 63, 122, 0.25), rgba(244, 63, 122, 0.08));
+  box-shadow: 0 0 40rpx rgba(244, 63, 122, 0.18);
+}
+
+.role-icon--child {
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.25), rgba(139, 92, 246, 0.08));
+  box-shadow: 0 0 40rpx rgba(139, 92, 246, 0.18);
+}
+
+.role-icon-text {
+  font-size: 48rpx;
+  font-weight: 800;
+  color: #fff;
+}
+
+.role-info {
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
+}
+
+.role-name {
+  font-size: 34rpx;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.role-desc {
+  font-size: 26rpx;
+  color: var(--text-tertiary);
+  line-height: 1.4;
+}
+
+.role-check {
+  width: 56rpx;
+  height: 56rpx;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.06);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.role-check-icon {
+  font-size: 36rpx;
+  color: var(--text-tertiary);
+  font-weight: 300;
+}
+
+.role-hint {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12rpx;
+  padding: 24rpx;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1rpx solid var(--border);
+  border-radius: var(--radius-lg);
+}
+
+.role-hint-icon {
+  font-size: 28rpx;
+}
+
+.role-hint-text {
+  font-size: 24rpx;
+  color: var(--text-tertiary);
+}
+
+.child-list {
+  display: flex;
+  flex-direction: column;
+  gap: 24rpx;
+  margin-bottom: 40rpx;
+}
+
+.child-card {
+  background: linear-gradient(145deg, rgba(17, 21, 34, 0.95), rgba(26, 31, 53, 0.7));
+  border: 1rpx solid var(--border);
+  border-radius: var(--radius-xl);
+  padding: 32rpx;
+  display: flex;
+  align-items: center;
+  gap: 24rpx;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.child-card:active {
+  transform: scale(0.98);
+  box-shadow: 0 8rpx 32rpx rgba(244, 63, 122, 0.12);
+}
+
+.child-avatar-ring {
+  width: 104rpx;
+  height: 104rpx;
+  border-radius: 50%;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.04));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.child-avatar {
+  width: 88rpx;
+  height: 88rpx;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.child-avatar-text {
+  color: #fff;
+  font-size: 34rpx;
+  font-weight: 700;
+}
+
+.child-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
+}
+
+.child-name {
+  font-size: 34rpx;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.child-meta {
+  font-size: 24rpx;
+  color: var(--text-tertiary);
+}
+
+.child-arrow {
+  width: 48rpx;
+  height: 48rpx;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.06);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32rpx;
+  color: var(--text-tertiary);
+}
+
+.back-btn {
+  width: 100%;
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 120rpx 48rpx;
+  text-align: center;
+}
+
+.empty-icon {
+  width: 160rpx;
+  height: 160rpx;
+  border-radius: 50%;
+  background: linear-gradient(145deg, var(--bg-elevated), var(--bg-card));
+  margin-bottom: 32rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1rpx solid var(--border);
+  box-shadow: var(--shadow-sm);
+  font-size: 64rpx;
+}
+
+.empty-title {
+  font-size: 32rpx;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 12rpx;
+}
+
+.empty-desc {
+  font-size: 26rpx;
+  color: var(--text-tertiary);
+  line-height: 1.5;
+}

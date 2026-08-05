@@ -450,7 +450,7 @@ export default function AccountSection({ user, onUpdate }: AccountSectionProps) 
         </div>
       </SettingsSection>
 
-      <WechatBindModal isOpen={showWechatModal} onClose={() => setShowWechatModal(false)} />
+      <WechatBindModal isOpen={showWechatModal} onClose={() => setShowWechatModal(false)} user={user} />
 
       {showDeleteConfirm && (
         <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4">

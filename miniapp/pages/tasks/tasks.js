@@ -68,9 +68,12 @@ Page({
     isRecording: false,
     recordDuration: 0,
     recordTimer: null,
+    statusBarHeight: 0,
   },
 
   onLoad() {
+    const app = getApp();
+    this.setData({ statusBarHeight: app.globalData.statusBarHeight || 0 });
     this.checkAuth();
   },
 
@@ -96,7 +99,7 @@ Page({
       selectedChild,
       isGuest,
       todayName: dayNames[now.getDay()],
-      todayDate: now.toISOString().split('T')[0],
+      todayDate: `${now.getMonth() + 1}月${now.getDate()}日`,
     });
 
     if (isGuest) {

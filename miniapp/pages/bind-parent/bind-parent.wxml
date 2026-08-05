@@ -8,11 +8,11 @@
     <view class="bind-child-header">
       <view class="bind-icon-ring">
         <view class="bind-icon">
-          <text>🔐</text>
+          <text>👩‍👧</text>
         </view>
       </view>
-      <text class="bind-title">输入绑定码</text>
-      <text class="bind-desc">请让家长在「我的」页面生成绑定码，然后在这里输入</text>
+      <text class="bind-title">绑定家长账号</text>
+      <text class="bind-desc">请家长在 Web 端「我的账户 → 微信绑定」生成绑定码，然后在这里输入</text>
     </view>
 
     <view class="bind-code-section">

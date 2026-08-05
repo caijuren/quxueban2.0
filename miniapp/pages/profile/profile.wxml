@@ -1,4 +1,4 @@
-<view class="profile-page">
+<view class="profile-page" style="--status-bar-height: {{statusBarHeight}}px;">
   <view class="profile-bg">
     <view class="profile-bg-glow profile-bg-glow--primary"></view>
     <view class="profile-bg-glow profile-bg-glow--ai"></view>

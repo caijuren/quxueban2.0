@@ -234,6 +234,16 @@ docker image prune -f
 
 # 发版记录
 
+## v2.2.2（2026-08-05）
+
+**主题：小程序家长微信绑定**
+
+- 为 `User` 模型新增 `bindCode`、`bindCodeExpiresAt` 字段及迁移
+- 新增 Web 端接口 `POST /api/user/bind-code`，用于生成家长 6 位绑定码
+- 新增小程序接口 `POST /api/miniapp/auth/bind-parent`，支持用绑定码把微信 openid 写入家长 `wechatOpenId`
+- 改造 Web 端「我的账户 → 微信绑定」弹窗，展示绑定码与倒计时
+- 小程序新增 `pages/bind-parent` 绑定页，并在登录页 `NOT_BOUND` 流程中引导选择家长/孩子绑定
+
 ## v2.2.1（2026-08-05）
 
 **主题：修复生产环境 Child 表缺失字段导致孩子数据无法加载**

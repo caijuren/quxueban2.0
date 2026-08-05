@@ -35,9 +35,11 @@ model User {
   avatarUrl    String?
   phone        String?
   email        String?
-  wechatOpenId String?  @unique
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  wechatOpenId      String?  @unique
+  bindCode          String?  @unique
+  bindCodeExpiresAt DateTime?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
 
   children      Child[]
   plans         Plan[]

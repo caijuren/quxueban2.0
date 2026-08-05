@@ -54,19 +54,19 @@ Page({
     try {
       const { code: wxCode } = await wx.login({ provider: 'weixin' });
 
-      const res = await api.post('/api/miniapp/auth/bind-child', {
+      const res = await api.post('/api/miniapp/auth/bind-parent', {
         code: wxCode,
         bindCode: code,
       });
 
       storage.setToken(res.token);
-      storage.setUser(res.child);
-      storage.setActiveRole('child');
-      storage.setSelectedChild(res.child);
+      storage.setUser(res.user);
+      storage.setActiveRole('parent');
+      storage.removeSelectedChild();
 
       wx.showToast({ title: '绑定成功', icon: 'success' });
 
-      wx.reLaunch({ url: '/pages/tasks/tasks' });
+      wx.reLaunch({ url: '/pages/role-select/role-select' });
     } catch (err) {
       wx.showToast({
         title: err.message || '绑定失败',

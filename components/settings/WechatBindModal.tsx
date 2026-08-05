@@ -1,43 +1,147 @@
 'use client';
 
-import { QrCode, MessageCircle } from 'lucide-react';
+import { useState, useEffect, useCallback } from 'react';
+import { MessageCircle, RefreshCw, Loader2 } from 'lucide-react';
 import Modal from '@/components/ui/Modal';
+import { UserWithSettings } from '@/lib/settings';
+import { apiPost } from '@/lib/apiClient';
 
 interface WechatBindModalProps {
   isOpen: boolean;
   onClose: () => void;
+  user: UserWithSettings;
 }
 
-export default function WechatBindModal({
-  isOpen,
-  onClose,
-}: WechatBindModalProps) {
+interface BindCodeResponse {
+  bindCode: string;
+  expiresAt: string;
+}
+
+function maskOpenId(openId: string | null): string {
+  if (!openId) return '';
+  if (openId.length <= 8) return openId;
+  return `${openId.slice(0, 4)}****${openId.slice(-4)}`;
+}
+
+function formatCountdown(target: Date): string {
+  const diff = Math.max(0, Math.floor((target.getTime() - Date.now()) / 1000));
+  const m = Math.floor(diff / 60);
+  const s = diff % 60;
+  return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+}
+
+export default function WechatBindModal({ isOpen, onClose, user }: WechatBindModalProps) {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [bindCode, setBindCode] = useState<string | null>(null);
+  const [expiresAt, setExpiresAt] = useState<Date | null>(null);
+  const [countdown, setCountdown] = useState('00:00');
+
+  const generateCode = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await apiPost<BindCodeResponse>('/api/user/bind-code', {});
+      setBindCode(res.bindCode);
+      const expiry = new Date(res.expiresAt);
+      setExpiresAt(expiry);
+      setCountdown(formatCountdown(expiry));
+    } catch (err) {
+      setError(err instanceof Error ? err.message : '生成绑定码失败');
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!isOpen) {
+      setBindCode(null);
+      setExpiresAt(null);
+      setError(null);
+      return;
+    }
+
+    if (!user.wechatOpenId && !bindCode) {
+      generateCode();
+    }
+  }, [isOpen, user.wechatOpenId, bindCode, generateCode]);
+
+  useEffect(() => {
+    if (!expiresAt) return;
+
+    const timer = setInterval(() => {
+      const remaining = formatCountdown(expiresAt);
+      setCountdown(remaining);
+      if (remaining === '00:00') {
+        clearInterval(timer);
+      }
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [expiresAt]);
+
+  const codeDigits = bindCode ? bindCode.split('') : ['', '', '', '', '', ''];
+
   return (
     <Modal
       isOpen={isOpen}
       onClose={onClose}
       title="微信绑定"
-      subtitle="绑定后支持微信提醒与一键登录"
+      subtitle="绑定后可在小程序使用微信一键登录"
       icon={MessageCircle}
       iconClassName="bg-wechat/20 text-wechat"
       size="sm"
       colorScheme="green"
     >
-      <div className="text-center">
-        <div className="aspect-square max-w-[200px] mx-auto rounded-2xl bg-white flex items-center justify-center mb-5">
-          <div className="text-center p-6">
-            <QrCode className="w-12 h-12 text-text-muted mx-auto mb-3" />
-            <span className="text-sm text-text-muted">微信扫码绑定</span>
+      <div className="space-y-4">
+        {user.wechatOpenId && (
+          <div className="rounded-lg bg-success/10 border border-success/20 px-3 py-2 text-xs text-success">
+            已绑定微信：{maskOpenId(user.wechatOpenId)}
           </div>
-        </div>
-        <p className="text-sm text-text-tertiary mb-6">
-          正式版上线后将支持微信扫码一键绑定，当前请使用账号密码登录。
+        )}
+
+        <p className="text-sm text-text-tertiary">
+          打开趣学伴小程序，在登录页选择「绑定家长账号」，输入下方 6 位绑定码即可。
         </p>
+
+        {error && (
+          <div className="rounded-lg bg-error/10 border border-error/20 px-3 py-2 text-xs text-error">
+            {error}
+          </div>
+        )}
+
+        <div className="flex justify-center gap-2">
+          {codeDigits.map((digit, index) => (
+            <div
+              key={index}
+              className="w-10 h-12 rounded-lg bg-surface-elevated border border-border-subtle flex items-center justify-center text-lg font-bold text-text-primary"
+            >
+              {digit}
+            </div>
+          ))}
+        </div>
+
+        <div className="text-center">
+          {expiresAt ? (
+            <p className="text-xs text-text-muted">
+              绑定码有效期：<span className="font-mono text-text-secondary">{countdown}</span>
+            </p>
+          ) : (
+            <p className="text-xs text-text-muted">点击下方按钮生成绑定码</p>
+          )}
+        </div>
+
         <button
-          onClick={onClose}
-          className="w-full py-2.5 rounded-lg bg-wechat text-text-primary text-sm font-semibold transition-all"
+          onClick={generateCode}
+          disabled={loading}
+          className="w-full py-2.5 rounded-lg bg-wechat text-text-primary text-sm font-semibold transition-all inline-flex items-center justify-center gap-2 disabled:opacity-70"
         >
-          知道了
+          {loading ? (
+            <Loader2 className="w-4 h-4 animate-spin" />
+          ) : (
+            <RefreshCw className="w-4 h-4" />
+          )}
+          {bindCode ? '重新生成绑定码' : '生成绑定码'}
         </button>
       </div>
     </Modal>

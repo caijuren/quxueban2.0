@@ -1,0 +1,2 @@
+/* 复用 bind-child 样式，保持视觉一致 */
+@import "../bind-child/bind-child.wxss";

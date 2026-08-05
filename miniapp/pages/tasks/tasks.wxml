@@ -1,4 +1,9 @@
-<view class="tasks-page">
+<view class="tasks-page" style="--status-bar-height: {{statusBarHeight}}px;">
+  <view class="tasks-bg">
+    <view class="tasks-bg-glow tasks-bg-glow--primary"></view>
+    <view class="tasks-bg-glow tasks-bg-glow--ai"></view>
+  </view>
+
   <!-- 顶部 Header -->
   <view class="tasks-header">
     <view class="header-top">

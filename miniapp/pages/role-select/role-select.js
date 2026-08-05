@@ -7,10 +7,15 @@ Page({
     user: null,
     children: [],
     selectedChild: null,
+    selectedRole: '',
     loading: false,
+    statusBarHeight: 0,
   },
 
   onLoad(options) {
+    const app = getApp();
+    this.setData({ statusBarHeight: app.globalData.statusBarHeight || 0 });
+
     const user = storage.getUser();
     this.setData({ user });
 
@@ -23,13 +28,19 @@ Page({
 
   selectRole(e) {
     const role = e.currentTarget.dataset.role;
+    this.setData({ selectedRole: role });
 
     if (role === 'parent') {
-      storage.setActiveRole('parent');
-      this.setData({ step: 'child' });
-      this.loadChildren();
+      setTimeout(() => {
+        storage.setActiveRole('parent');
+        this.setData({ step: 'child' });
+        this.loadChildren();
+      }, 180);
     } else {
-      this.handleChildLogin();
+      setTimeout(() => {
+        this.handleChildLogin();
+        this.setData({ selectedRole: '' });
+      }, 180);
     }
   },
 
@@ -71,6 +82,6 @@ Page({
   },
 
   backToRole() {
-    this.setData({ step: 'role', selectedChild: null });
+    this.setData({ step: 'role', selectedChild: null, selectedRole: '' });
   },
 });

@@ -4,9 +4,12 @@ const storage = require('../../utils/storage');
 Page({
   data: {
     loading: true,
+    statusBarHeight: 0,
   },
 
   onLoad() {
+    const app = getApp();
+    this.setData({ statusBarHeight: app.globalData.statusBarHeight || 0 });
     this.checkAuthState();
   },
 
