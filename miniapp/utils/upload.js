@@ -114,9 +114,17 @@ function getRecorderManager() {
   return recorderManager;
 }
 
-function startRecord() {
+function startRecord(options = {}) {
   return new Promise((resolve, reject) => {
     const manager = getRecorderManager();
+    const config = {
+      duration: 60000,
+      sampleRate: 16000,
+      numberOfChannels: 1,
+      encodeBitRate: 32000,
+      format: 'aac',
+      ...options,
+    };
 
     wx.getSetting({
       success(res) {
@@ -124,13 +132,7 @@ function startRecord() {
           wx.authorize({
             scope: 'scope.record',
             success() {
-              manager.start({
-                duration: 60000,
-                sampleRate: 44100,
-                numberOfChannels: 1,
-                encodeBitRate: 192000,
-                format: 'mp3',
-              });
+              manager.start(config);
               resolve();
             },
             fail(err) {
@@ -138,13 +140,7 @@ function startRecord() {
             },
           });
         } else {
-          manager.start({
-            duration: 60000,
-            sampleRate: 44100,
-            numberOfChannels: 1,
-            encodeBitRate: 192000,
-            format: 'mp3',
-          });
+          manager.start(config);
           resolve();
         }
       },

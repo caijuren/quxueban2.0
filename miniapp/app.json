@@ -6,7 +6,8 @@
     "pages/bind-parent/bind-parent",
     "pages/role-select/role-select",
     "pages/tasks/tasks",
-    "pages/profile/profile"
+    "pages/profile/profile",
+    "pages/task-complete/task-complete"
   ],
   "entryPagePath": "pages/index/index",
   "window": {
@@ -15,6 +16,14 @@
     "navigationBarTitleText": "趣学伴",
     "backgroundColor": "#090B12",
     "backgroundTextStyle": "light"
+  },
+  "tabBar": {
+    "custom": true,
+    "list": [
+      { "pagePath": "pages/index/index", "text": "首页" },
+      { "pagePath": "pages/tasks/tasks", "text": "今日任务" },
+      { "pagePath": "pages/profile/profile", "text": "我的" }
+    ]
   },
   "style": "v2",
   "sitemapLocation": "sitemap.json",

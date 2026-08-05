@@ -1,0 +1,38 @@
+<cover-view class="tab-bar" style="padding-bottom: {{safeAreaBottom}}px;">
+  <cover-view class="tab-bar-bg">
+    <cover-view class="tab-bar-glow"></cover-view>
+  </cover-view>
+
+  <cover-view
+    class="tab-bar-item {{selected === 0 ? 'active' : ''}}"
+    data-index="0"
+    data-url="/pages/index/index"
+    bindtap="switchTab"
+  >
+    <cover-view class="tab-icon">🏠</cover-view>
+    <cover-view class="tab-label">首页</cover-view>
+    <cover-view wx:if="{{selected === 0}}" class="tab-indicator"></cover-view>
+  </cover-view>
+
+  <cover-view
+    class="tab-bar-item {{selected === 1 ? 'active' : ''}}"
+    data-index="1"
+    data-url="/pages/tasks/tasks"
+    bindtap="switchTab"
+  >
+    <cover-view class="tab-icon">📋</cover-view>
+    <cover-view class="tab-label">今日任务</cover-view>
+    <cover-view wx:if="{{selected === 1}}" class="tab-indicator"></cover-view>
+  </cover-view>
+
+  <cover-view
+    class="tab-bar-item {{selected === 2 ? 'active' : ''}}"
+    data-index="2"
+    data-url="/pages/profile/profile"
+    bindtap="switchTab"
+  >
+    <cover-view class="tab-icon">👤</cover-view>
+    <cover-view class="tab-label">我的</cover-view>
+    <cover-view wx:if="{{selected === 2}}" class="tab-indicator"></cover-view>
+  </cover-view>
+</cover-view>

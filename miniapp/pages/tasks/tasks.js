@@ -80,6 +80,9 @@ Page({
   },
 
   onShow() {
+    if (typeof this.getTabBar === 'function' && this.getTabBar()) {
+      this.getTabBar().setData({ selected: 1 });
+    }
     this.checkAuth();
   },
 
@@ -219,7 +222,7 @@ Page({
 
   async completeTask(e) {
     const task = e.currentTarget.dataset.task;
-    if (!task || this.data.completingTaskId) return;
+    if (!task) return;
 
     if (this.data.isGuest) {
       const { confirm } = await wx.showModal({
@@ -234,19 +237,8 @@ Page({
       return;
     }
 
-    const isParent = this.data.activeRole === 'parent';
-
-    const { tapIndex } = await wx.showActionSheet({
-      itemList: ['直接打卡', '拍照/选图打卡', '语音打卡'],
-    });
-
-    if (tapIndex === 0) {
-      await this.submitComplete(task, { imageUrls: [], audioUrls: [] });
-    } else if (tapIndex === 1) {
-      await this.completeWithImage(task);
-    } else if (tapIndex === 2) {
-      this.startVoiceModal(task);
-    }
+    wx.setStorageSync('task_complete_pending', task);
+    wx.navigateTo({ url: '/pages/task-complete/task-complete' });
   },
 
   async completeWithImage(task) {
@@ -417,14 +409,6 @@ Page({
 
   switchChild() {
     wx.navigateTo({ url: '/pages/role-select/role-select?step=child' });
-  },
-
-  goProfile() {
-    if (this.data.isGuest) {
-      wx.navigateTo({ url: '/pages/login/login' });
-      return;
-    }
-    wx.navigateTo({ url: '/pages/profile/profile' });
   },
 
   goLogin() {

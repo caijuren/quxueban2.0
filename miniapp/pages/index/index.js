@@ -16,6 +16,9 @@ Page({
   },
 
   onShow() {
+    if (typeof this.getTabBar === 'function' && this.getTabBar()) {
+      this.getTabBar().setData({ selected: 0 });
+    }
     this.checkAuthState();
   },
 
@@ -24,7 +27,7 @@ Page({
     const activeRole = auth.getActiveRole();
 
     if (token && activeRole) {
-      wx.reLaunch({ url: '/pages/tasks/tasks' });
+      wx.switchTab({ url: '/pages/tasks/tasks' });
       return;
     }
 
@@ -32,7 +35,7 @@ Page({
   },
 
   goTasks() {
-    wx.reLaunch({ url: '/pages/tasks/tasks' });
+    wx.switchTab({ url: '/pages/tasks/tasks' });
   },
 
   async loginWithWechat() {

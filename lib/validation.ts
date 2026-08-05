@@ -184,6 +184,7 @@ export const taskCompletionRecordSchema = z.object({
   note: z.string().max(1000).default(''),
   imageUrls: z.array(z.string().url()).default([]),
   audioUrls: z.array(z.string().url()).default([]),
+  audioTranscript: z.string().max(2000).optional(),
   capabilityProgress: z.array(taskCapabilityProgressSchema).default([]),
   quantityIncrement: z.number().int().min(0).default(0),
   checklistProgress: z.array(z.string().min(1)).default([]),
@@ -192,8 +193,10 @@ export const taskCompletionRecordSchema = z.object({
   updatedAt: z.string().datetime(),
 });
 
+const todayStr = () => new Date().toISOString().split('T')[0];
+
 export const taskCompletionInputSchema = z.object({
-  date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, '日期格式不正确'),
+  date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, '日期格式不正确').default(todayStr),
   status: taskStatusSchema,
   progress: z.number().int().min(0).max(100).default(0),
   actualDurationMinutes: z.number().int().min(0).default(0),
@@ -201,6 +204,7 @@ export const taskCompletionInputSchema = z.object({
   note: z.string().max(1000).default(''),
   imageUrls: z.array(z.string().url()).default([]),
   audioUrls: z.array(z.string().url()).default([]),
+  audioTranscript: z.string().max(2000).optional(),
   capabilityProgress: z.array(taskCapabilityProgressSchema).default([]),
   quantityIncrement: z.number().int().min(0).default(0),
   checklistProgress: z.array(z.string()).default([]),

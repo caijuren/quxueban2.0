@@ -73,6 +73,7 @@ export async function POST(
     note: body.note || (activeRole === 'parent' ? '家长代打卡' : '孩子自己打卡'),
     imageUrls: body.imageUrls || [],
     audioUrls: body.audioUrls || [],
+    audioTranscript: body.audioTranscript,
     capabilityProgress: body.capabilityProgress || [],
     quantityIncrement: body.quantityIncrement || 0,
     checklistProgress: body.checklistProgress || [],

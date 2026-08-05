@@ -1,0 +1,169 @@
+<view class="page" style="--status-bar-height: {{statusBarHeight}}px;">
+  <view class="page-bg">
+    <view class="bg-glow bg-glow--primary"></view>
+    <view class="bg-glow bg-glow--ai"></view>
+  </view>
+
+  <scroll-view scroll-y class="page-scroll" enhanced show-scrollbar="{{false}}">
+    <view class="task-header">
+      <view class="task-category">{{categoryLabel}}</view>
+      <view class="task-focus">{{taskFocus}}</view>
+      <view class="task-meta">
+        <text class="task-meta-item">计划时长：{{taskDurationText}}</text>
+        <text wx:if="{{taskDifficulty}}" class="task-meta-item">难度：{{taskDifficulty}}</text>
+      </view>
+    </view>
+
+    <view class="form-card">
+      <view class="section-title">完成状态</view>
+      <view class="status-options">
+        <view
+          wx:for="{{statusOptions}}"
+          wx:key="value"
+          class="status-option {{form.status === item.value ? 'active' : ''}}"
+          data-value="{{item.value}}"
+          bindtap="onStatusChange"
+        >
+          {{item.label}}
+        </view>
+      </view>
+    </view>
+
+    <view wx:if="{{form.status === 'partially_done'}}" class="form-card">
+      <view class="section-title">完成进度：{{form.progress}}%</view>
+      <slider
+        class="progress-slider"
+        min="0"
+        max="100"
+        step="5"
+        value="{{form.progress}}"
+        block-size="20"
+        activeColor="#F43F7A"
+        backgroundColor="rgba(255,255,255,0.08)"
+        bindchange="onProgressChange"
+        bindchanging="onProgressChanging"
+      />
+    </view>
+
+    <view class="form-card">
+      <view class="section-title">实际耗时（分钟）</view>
+      <input
+        class="duration-input"
+        type="number"
+        value="{{form.actualDurationMinutes}}"
+        placeholder="输入实际用时"
+        placeholder-class="input-placeholder"
+        bindinput="onDurationInput"
+      />
+    </view>
+
+    <view class="form-card">
+      <view class="section-title">完成质量</view>
+      <view class="quality-options">
+        <view
+          wx:for="{{qualityOptions}}"
+          wx:key="value"
+          class="quality-option {{form.quality === item.value ? 'active' : ''}}"
+          data-value="{{item.value}}"
+          bindtap="onQualityChange"
+        >
+          <text class="quality-emoji">{{item.emoji}}</text>
+          <text class="quality-label">{{item.label}}</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="form-card">
+      <view class="section-header">
+        <view class="section-title">文字备注</view>
+        <text class="section-hint">可手动输入，也可通过语音转文字</text>
+      </view>
+      <textarea
+        class="note-textarea"
+        value="{{form.note}}"
+        placeholder="今天完成情况怎么样？孩子有没有遇到困难？"
+        placeholder-class="input-placeholder"
+        maxlength="1000"
+        bindinput="onNoteInput"
+      />
+    </view>
+
+    <view class="form-card">
+      <view class="section-header">
+        <view class="section-title">拍照证明</view>
+        <text class="section-hint">{{imageUrls.length}}/9</text>
+      </view>
+      <view class="image-grid">
+        <view
+          wx:for="{{imageUrls}}"
+          wx:key="*this"
+          class="image-item"
+        >
+          <image class="image-preview" src="{{item}}" mode="aspectFill" bindtap="previewImage" data-url="{{item}}" />
+          <view class="image-delete" data-index="{{index}}" bindtap="deleteImage">✕</view>
+        </view>
+        <view wx:if="{{imageUrls.length < 9}}" class="image-add" bindtap="chooseImage">
+          <text class="image-add-icon">+</text>
+          <text class="image-add-text">添加照片</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="form-card">
+      <view class="section-header">
+        <view class="section-title">语音输入</view>
+        <text class="section-hint">按住说话，自动转成文字</text>
+      </view>
+
+      <view wx:if="{{audioUrl}}" class="audio-preview">
+        <view class="audio-preview-btn" bindtap="playAudio">
+          <text class="audio-preview-icon">🔊</text>
+          <text class="audio-preview-text">已录制语音</text>
+        </view>
+        <view class="audio-delete" bindtap="deleteAudio">✕</view>
+      </view>
+
+      <view class="voice-section">
+        <view
+          class="voice-btn {{isRecording ? 'recording' : ''}}"
+          bindtouchstart="onVoiceStart"
+          bindtouchend="onVoiceEnd"
+        >
+          <text class="voice-btn-icon">🎤</text>
+          <text class="voice-btn-text">{{isRecording ? '松开结束' : '按住说话'}}</text>
+        </view>
+        <text wx:if="{{isRecording}}" class="voice-recording-tip">{{recordingDurationText}}</text>
+      </view>
+
+      <view wx:if="{{recordingTranscript}}" class="transcript-box">
+        <view class="transcript-label">识别结果</view>
+        <text class="transcript-text">{{recordingTranscript}}</text>
+        <view class="transcript-actions">
+          <button class="btn-ghost transcript-btn" bindtap="clearTranscript">清空</button>
+          <button class="btn-primary transcript-btn" bindtap="appendTranscriptToNote">填入备注</button>
+        </view>
+      </view>
+    </view>
+
+    <view class="form-actions">
+      <button class="btn-ghost action-btn" bindtap="cancel">取消</button>
+      <button
+        class="btn-primary action-btn"
+        loading="{{submitting}}"
+        disabled="{{submitting}}"
+        bindtap="submit"
+      >
+        {{submitting ? '提交中...' : '确认打卡'}}
+      </button>
+    </view>
+
+    <view class="safe-area-bottom" style="height: calc(40rpx + env(safe-area-inset-bottom));"></view>
+  </scroll-view>
+
+  <view wx:if="{{isRecording}}" class="voice-toast" catchtouchmove="true">
+    <view class="voice-toast-icon">🎙</view>
+    <text class="voice-toast-title">录音识别中...</text>
+    <text class="voice-toast-text">松开手指完成录音</text>
+    <text class="voice-toast-duration">{{recordingDurationText}}</text>
+  </view>
+</view>

@@ -110,7 +110,7 @@
         </view>
       </view>
 
-      <view class="safe-area-bottom" style="height: 40rpx;"></view>
+      <view class="safe-area-bottom" style="height: calc(128rpx + env(safe-area-inset-bottom));"></view>
     </view>
   </scroll-view>
 

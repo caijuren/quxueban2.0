@@ -42,6 +42,7 @@ export interface TaskCompletionRecord {
   note: string;
   imageUrls: string[];
   audioUrls: string[];
+  audioTranscript?: string;
   capabilityProgress: TaskCapabilityProgress[];
   quantityIncrement: number;
   checklistProgress: string[];

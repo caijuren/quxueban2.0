@@ -79,7 +79,7 @@ Page({
       return;
     }
 
-    wx.reLaunch({ url: '/pages/tasks/tasks' });
+    wx.switchTab({ url: '/pages/tasks/tasks' });
   },
 
   handleChildLogin() {
