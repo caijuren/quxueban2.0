@@ -10,14 +10,19 @@ Page({
     selectedRole: '',
     loading: false,
     statusBarHeight: 0,
+    from: '',
   },
 
   onLoad(options) {
     const app = getApp();
-    this.setData({ statusBarHeight: app.globalData.statusBarHeight || 0 });
+    this.setData({
+      statusBarHeight: app.globalData.statusBarHeight || 0,
+      from: options?.from || '',
+    });
 
     const user = storage.getUser();
-    this.setData({ user });
+    const selectedChild = storage.getSelectedChild();
+    this.setData({ user, selectedChild });
 
     if (options?.step === 'child') {
       storage.setActiveRole('parent');
@@ -33,7 +38,7 @@ Page({
     if (role === 'parent') {
       setTimeout(() => {
         storage.setActiveRole('parent');
-        this.setData({ step: 'child' });
+        this.setData({ step: 'child', selectedChild: storage.getSelectedChild() });
         this.loadChildren();
       }, 180);
     } else {
@@ -69,6 +74,11 @@ Page({
     storage.setSelectedChild(child);
     this.setData({ selectedChild: child });
 
+    if (this.data.from === 'profile') {
+      wx.navigateBack();
+      return;
+    }
+
     wx.reLaunch({ url: '/pages/tasks/tasks' });
   },
 
@@ -82,6 +92,11 @@ Page({
   },
 
   backToRole() {
+    const pages = getCurrentPages();
+    if (this.data.from === 'profile' && pages.length > 1) {
+      wx.navigateBack();
+      return;
+    }
     this.setData({ step: 'role', selectedChild: null, selectedRole: '' });
   },
 });

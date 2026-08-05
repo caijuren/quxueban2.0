@@ -90,7 +90,10 @@ async function removeMember(id: string): Promise<void> {
 
 async function inviteUnregistered(
   input: FamilyInviteCreateInput
-): Promise<{ invite: { token: string; email: string | null; phone: string | null }; message: string }> {
+): Promise<{
+  invite: { token: string; email: string | null; phone: string | null; expiresAt: string };
+  message: string;
+}> {
   const res = await fetch('/api/family/invites', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },

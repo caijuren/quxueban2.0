@@ -52,7 +52,13 @@
 
   <view class="index-footer">
     <button class="btn-primary index-btn" bindtap="goTasks">立即体验</button>
-    <button class="btn-ghost index-btn" bindtap="goLogin">微信一键登录</button>
+    <button
+      class="btn-ghost index-btn"
+      bindtap="loginWithWechat"
+      disabled="{{loginLoading}}"
+    >
+      {{loginLoading ? '登录中...' : '微信一键登录'}}
+    </button>
     <text class="privacy-text">登录即表示同意《用户协议》和《隐私政策》</text>
   </view>
 </view>

@@ -79,7 +79,7 @@
         <view
           wx:for="{{children}}"
           wx:key="id"
-          class="child-card"
+          class="child-card {{selectedChild && selectedChild.id === item.id ? 'child-card--active' : ''}}"
           bindtap="selectChild"
           data-child="{{item}}"
         >
@@ -95,7 +95,8 @@
             <text class="child-name">{{item.name}}</text>
             <text class="child-meta">{{item.grade}}年级 · {{item.currentSchool || '未设置学校'}}</text>
           </view>
-          <view class="child-arrow">›</view>
+          <view wx:if="{{selectedChild && selectedChild.id === item.id}}" class="child-check">✓</view>
+          <view wx:else class="child-arrow">›</view>
         </view>
 
         <view wx:if="{{children.length === 0 && !loading}}" class="empty-state">

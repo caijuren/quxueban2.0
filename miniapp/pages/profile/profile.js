@@ -57,7 +57,9 @@ Page({
     });
 
     if (activeRole === 'parent') {
-      this.loadChildren();
+      this.setData({ loading: true });
+      await this.loadChildren();
+      this.setData({ loading: false });
     }
   },
 
@@ -101,6 +103,10 @@ Page({
 
   closeBindModal() {
     this.setData({ bindCode: null, bindCodeExpiry: null });
+  },
+
+  switchChild() {
+    wx.navigateTo({ url: '/pages/role-select/role-select?step=child&from=profile' });
   },
 
   switchRole() {

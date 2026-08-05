@@ -16,6 +16,7 @@ import {
   AlertCircle,
   LogOut,
   Trash2,
+  Copy,
 } from 'lucide-react';
 import SettingsSection from './SettingsSection';
 import {
@@ -99,6 +100,12 @@ export default function FamilySection() {
   const [inviteEmail, setInviteEmail] = useState('');
   const [invitePhone, setInvitePhone] = useState('');
   const [inviteSuccess, setInviteSuccess] = useState<string | null>(null);
+  const [generatedInvite, setGeneratedInvite] = useState<{
+    token: string;
+    url: string;
+    expiresAt: string;
+  } | null>(null);
+  const [copied, setCopied] = useState(false);
 
   const family = data?.family;
   const myRole = data?.role;
@@ -120,19 +127,24 @@ export default function FamilySection() {
     e.preventDefault();
     setActionError(null);
     setInviteSuccess(null);
+    setGeneratedInvite(null);
+    setCopied(false);
 
     try {
       if (inviteMode === 'username') {
         if (!inviteUsername.trim()) return;
         await inviteMember.mutateAsync({ username: inviteUsername.trim(), role: inviteRole });
         setInviteUsername('');
+        setShowInvite(false);
       } else if (inviteMode === 'email') {
         if (!inviteEmail.trim()) return;
         const result = await inviteUnregistered.mutateAsync({
           role: inviteRole,
           email: inviteEmail.trim(),
         });
+        const url = `${window.location.origin}/invite?token=${result.invite.token}`;
         setInviteSuccess(result.message || '邀请链接已生成');
+        setGeneratedInvite({ token: result.invite.token, url, expiresAt: result.invite.expiresAt });
         setInviteEmail('');
       } else if (inviteMode === 'phone') {
         if (!invitePhone.trim()) return;
@@ -140,11 +152,10 @@ export default function FamilySection() {
           role: inviteRole,
           phone: invitePhone.trim(),
         });
+        const url = `${window.location.origin}/invite?token=${result.invite.token}`;
         setInviteSuccess(result.message || '邀请链接已生成');
+        setGeneratedInvite({ token: result.invite.token, url, expiresAt: result.invite.expiresAt });
         setInvitePhone('');
-      }
-      if (inviteMode === 'username') {
-        setShowInvite(false);
       }
     } catch (err) {
       setActionError(err instanceof Error ? err.message : '邀请失败');
@@ -446,6 +457,8 @@ export default function FamilySection() {
                           setInviteMode(mode.value as typeof inviteMode);
                           setActionError(null);
                           setInviteSuccess(null);
+                          setGeneratedInvite(null);
+                          setCopied(false);
                         }}
                         className={`px-2.5 py-1 rounded-lg text-xs transition-colors ${
                           inviteMode === mode.value
@@ -514,6 +527,45 @@ export default function FamilySection() {
                     </div>
                   )}
 
+                  {generatedInvite && (
+                    <div className="rounded-lg bg-surface-hover border border-border-subtle p-3 space-y-2">
+                      <p className="text-xs text-text-secondary">
+                        邮件/短信尚未接入真实服务，请复制下方链接发给对方：
+                      </p>
+                      <div className="flex items-center gap-2">
+                        <input
+                          type="text"
+                          readOnly
+                          value={generatedInvite.url}
+                          className="flex-1 min-w-0 px-2.5 py-1.5 rounded-md bg-surface-elevated border border-border-subtle text-xs text-text-secondary focus:outline-none"
+                        />
+                        <button
+                          type="button"
+                          onClick={async () => {
+                            try {
+                              await navigator.clipboard.writeText(generatedInvite.url);
+                              setCopied(true);
+                              setTimeout(() => setCopied(false), 2000);
+                            } catch {
+                              // ignore
+                            }
+                          }}
+                          className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-md bg-primary/10 text-primary text-xs hover:bg-primary/20 transition-colors"
+                        >
+                          {copied ? (
+                            <Check className="w-3.5 h-3.5" />
+                          ) : (
+                            <Copy className="w-3.5 h-3.5" />
+                          )}
+                          {copied ? '已复制' : '复制'}
+                        </button>
+                      </div>
+                      <p className="text-2xs text-text-muted">
+                        链接有效期至 {new Date(generatedInvite.expiresAt).toLocaleString('zh-CN')}
+                      </p>
+                    </div>
+                  )}
+
                   <div className="flex items-center gap-2">
                     <button
                       type="submit"
@@ -542,6 +594,8 @@ export default function FamilySection() {
                         setInvitePhone('');
                         setActionError(null);
                         setInviteSuccess(null);
+                        setGeneratedInvite(null);
+                        setCopied(false);
                       }}
                       className="px-3 py-1.5 rounded-lg text-xs text-text-secondary hover:text-text-primary transition-colors"
                     >

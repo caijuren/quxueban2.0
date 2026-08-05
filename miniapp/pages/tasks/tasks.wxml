@@ -21,24 +21,24 @@
           </view>
           <text class="user-name-small">登录</text>
         </view>
-        <view wx:elif="{{activeRole === 'parent'}}" class="user-pill" bindtap="switchChild">
+        <view wx:elif="{{activeRole === 'parent'}}" class="user-pill" bindtap="openChildPicker">
           <view
             class="user-avatar-small"
-            style="background-color: {{selectedChild.avatarColor || '#F43F5E'}};"
+            style="background-color: {{selectedChild ? (selectedChild.avatarColor || '#F43F5E') : '#64748B'}};"
           >
-            <text>{{selectedChild.name[0]}}</text>
+            <text>{{selectedChild ? selectedChild.name[0] : '?'}}</text>
           </view>
-          <text class="user-name-small">{{selectedChild.name}}</text>
+          <text class="user-name-small">{{selectedChild ? selectedChild.name : '选择孩子'}}</text>
           <text class="user-arrow">›</text>
         </view>
         <view wx:else class="user-pill">
           <view
             class="user-avatar-small"
-            style="background-color: {{selectedChild.avatarColor || '#F43F5E'}};"
+            style="background-color: {{selectedChild ? (selectedChild.avatarColor || '#F43F5E') : '#64748B'}};"
           >
-            <text>{{selectedChild.name[0]}}</text>
+            <text>{{selectedChild ? selectedChild.name[0] : '?'}}</text>
           </view>
-          <text class="user-name-small">{{selectedChild.name}}</text>
+          <text class="user-name-small">{{selectedChild ? selectedChild.name : '选择孩子'}}</text>
         </view>
         <view class="icon-btn" bindtap="goProfile">
           <text class="icon-text">👤</text>
@@ -230,6 +230,43 @@
       </view>
 
       <button class="voice-cancel-btn btn-ghost" bindtap="closeVoiceModal">取消</button>
+    </view>
+  </view>
+
+  <!-- 切换孩子面板 -->
+  <view wx:if="{{childPickerVisible}}" class="child-picker" catchtouchmove="true">
+    <view class="child-picker-mask" bindtap="closeChildPicker"></view>
+    <view class="child-picker-sheet">
+      <view class="child-picker-header">
+        <view class="child-picker-title">切换孩子</view>
+        <view class="child-picker-close" bindtap="closeChildPicker">✕</view>
+      </view>
+      <view class="child-picker-list">
+        <view
+          wx:for="{{children}}"
+          wx:key="id"
+          class="child-picker-row {{selectedChild && selectedChild.id === item.id ? 'child-picker-row--active' : ''}}"
+          bindtap="selectChildInPicker"
+          data-child="{{item}}"
+        >
+          <view class="child-picker-avatar-ring">
+            <view
+              class="child-picker-avatar"
+              style="background-color: {{item.avatarColor || '#F43F5E'}};"
+            >
+              <text>{{item.name[0]}}</text>
+            </view>
+          </view>
+          <view class="child-picker-info">
+            <text class="child-picker-name">{{item.name}}</text>
+            <text class="child-picker-meta">{{item.grade}}年级</text>
+          </view>
+          <view wx:if="{{selectedChild && selectedChild.id === item.id}}" class="child-picker-check">✓</view>
+        </view>
+      </view>
+      <view class="child-picker-actions">
+        <button class="btn-ghost child-picker-btn" bindtap="closeChildPicker">取消</button>
+      </view>
     </view>
   </view>
 </view>

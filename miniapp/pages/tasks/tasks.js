@@ -69,6 +69,8 @@ Page({
     recordDuration: 0,
     recordTimer: null,
     statusBarHeight: 0,
+    children: [],
+    childPickerVisible: false,
   },
 
   onLoad() {
@@ -79,9 +81,6 @@ Page({
 
   onShow() {
     this.checkAuth();
-    if (this.data.activeRole && this.data.selectedChild) {
-      this.loadTasks();
-    }
   },
 
   onUnload() {
@@ -112,6 +111,54 @@ Page({
       return;
     }
 
+    if (activeRole === 'parent') {
+      this.loadChildren();
+    }
+
+    this.loadTasks();
+  },
+
+  async loadChildren() {
+    try {
+      const res = await api.get('/api/miniapp/children');
+      this.setData({ children: res.children || [] });
+    } catch (err) {
+      console.error('加载孩子列表失败:', err);
+    }
+  },
+
+  openChildPicker() {
+    if (this.data.activeRole !== 'parent') return;
+
+    if (this.data.children.length === 0) {
+      wx.showModal({
+        title: '暂无孩子',
+        content: '当前账号下没有可管理的孩子，请先在 Web 端添加孩子信息。',
+        showCancel: false,
+        confirmText: '知道了',
+      });
+      return;
+    }
+
+    if (this.data.children.length === 1) {
+      wx.showToast({
+        title: '只有一个孩子，无需切换',
+        icon: 'none',
+      });
+      return;
+    }
+
+    this.setData({ childPickerVisible: true });
+  },
+
+  closeChildPicker() {
+    this.setData({ childPickerVisible: false });
+  },
+
+  selectChildInPicker(e) {
+    const child = e.currentTarget.dataset.child;
+    auth.setSelectedChild(child);
+    this.setData({ selectedChild: child, childPickerVisible: false });
     this.loadTasks();
   },
 

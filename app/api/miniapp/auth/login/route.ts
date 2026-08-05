@@ -10,7 +10,7 @@ interface WechatSessionResponse {
   errmsg?: string;
 }
 
-async function fetchWechatOpenId(code: string): Promise<string | null> {
+async function fetchWechatOpenId(code: string): Promise<string> {
   const appId = process.env.WECHAT_MINIAPP_APPID;
   const secret = process.env.WECHAT_MINIAPP_SECRET;
 
@@ -24,10 +24,14 @@ async function fetchWechatOpenId(code: string): Promise<string | null> {
 
   if (data.errcode) {
     console.error('[miniapp login] wechat error:', data);
-    return null;
+    throw new Error(`微信接口错误：${data.errmsg || '未知错误'}（errcode: ${data.errcode}）`);
   }
 
-  return data.openid || null;
+  if (!data.openid) {
+    throw new Error('微信未返回用户 openid');
+  }
+
+  return data.openid;
 }
 
 export async function POST(req: Request) {
@@ -39,9 +43,13 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: '缺少微信登录 code' }, { status: 400 });
     }
 
-    const openId = await fetchWechatOpenId(code);
-    if (!openId) {
-      return NextResponse.json({ error: '微信登录失败，请重试' }, { status: 400 });
+    let openId: string;
+    try {
+      openId = await fetchWechatOpenId(code);
+    } catch (wechatErr) {
+      const message = wechatErr instanceof Error ? wechatErr.message : '微信登录失败';
+      console.error('[miniapp login] fetch openid failed:', wechatErr);
+      return NextResponse.json({ error: message }, { status: 400 });
     }
 
     // 先尝试家长登录

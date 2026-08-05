@@ -42,7 +42,7 @@
     "useCompilerPlugins": false,
     "compileWorklet": false,
     "localPlugins": false,
-    "condition": false,
+    "condition": true,
     "swc": false,
     "disableSWC": true,
     "babelSetting": {
@@ -57,5 +57,6 @@
   "projectname": "quxueban-miniapp",
   "condition": {},
   "simulatorPluginLibVersion": {},
-  "editorSetting": {}
+  "editorSetting": {},
+  "projectArchitecture": "multiPlatform"
 }

@@ -1,14 +1,22 @@
 import { NextResponse } from 'next/server';
 import { getMiniAppUser, unauthorizedResponse } from '@/lib/miniapp/auth';
 import { prisma } from '@/lib/prisma';
+import { getViewableChildIdsForUser } from '@/lib/family';
 import type { NextRequest } from 'next/server';
 
 export async function GET(req: NextRequest) {
   const auth = await getMiniAppUser(req);
   if (!auth || auth.type !== 'parent') return unauthorizedResponse();
 
+  const viewableIds = await getViewableChildIdsForUser(auth.userId);
+
   const children = await prisma.child.findMany({
-    where: { userId: auth.userId },
+    where: {
+      OR: [
+        { userId: auth.userId },
+        ...(viewableIds.length > 0 ? [{ id: { in: viewableIds } }] : []),
+      ],
+    },
     orderBy: { createdAt: 'asc' },
     select: {
       id: true,
