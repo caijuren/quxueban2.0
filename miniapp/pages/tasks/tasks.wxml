@@ -3,47 +3,69 @@
   <view class="tasks-header">
     <view class="header-top">
       <view class="date-section">
-        <text class="today-name">{{todayName}}</text>
-        <text class="today-date">{{todayDate}}</text>
+        <text class="greeting">{{isGuest ? '欢迎体验' : '今日任务'}}</text>
+        <view class="date-row">
+          <text class="today-name">{{todayName}}</text>
+          <text class="today-date">{{todayDate}}</text>
+        </view>
       </view>
       <view class="header-actions">
-        <view wx:if="{{activeRole === 'parent'}}" class="child-section" bindtap="switchChild">
+        <view wx:if="{{isGuest}}" class="user-pill guest-pill" bindtap="goLogin">
+          <view class="user-avatar-small" style="background-color: #64748B;">
+            <text>游</text>
+          </view>
+          <text class="user-name-small">登录</text>
+        </view>
+        <view wx:elif="{{activeRole === 'parent'}}" class="user-pill" bindtap="switchChild">
           <view
-            class="child-avatar-small"
+            class="user-avatar-small"
             style="background-color: {{selectedChild.avatarColor || '#F43F5E'}};"
           >
             <text>{{selectedChild.name[0]}}</text>
           </view>
-          <text class="child-name-small">{{selectedChild.name}}</text>
-          <text class="switch-text">切换</text>
+          <text class="user-name-small">{{selectedChild.name}}</text>
+          <text class="user-arrow">›</text>
         </view>
-        <view wx:else class="child-section">
+        <view wx:else class="user-pill">
           <view
-            class="child-avatar-small"
+            class="user-avatar-small"
             style="background-color: {{selectedChild.avatarColor || '#F43F5E'}};"
           >
             <text>{{selectedChild.name[0]}}</text>
           </view>
-          <text class="child-name-small">{{selectedChild.name}}</text>
+          <text class="user-name-small">{{selectedChild.name}}</text>
         </view>
-        <view class="profile-entry" bindtap="goProfile">
-          <text class="profile-entry-text">我的</text>
+        <view class="icon-btn" bindtap="goProfile">
+          <text class="icon-text">👤</text>
         </view>
       </view>
     </view>
 
-    <view class="progress-section">
-      <view class="progress-info">
-        <text class="progress-title">今日完成度</text>
-        <text class="progress-rate">{{doneCount}} / {{totalCount}}</text>
+    <view class="progress-card">
+      <view class="progress-left">
+        <text class="progress-label">今日完成度</text>
+        <text class="progress-rate">{{doneCount}}<text class="progress-total">/{{totalCount}}</text></text>
       </view>
-      <view class="progress-bar">
-        <view
-          class="progress-fill"
-          style="width: {{totalCount ? (doneCount / totalCount * 100) : 0}}%;"
-        ></view>
+      <view class="progress-right">
+        <view class="progress-bar-bg">
+          <view
+            class="progress-bar-fill"
+            style="width: {{totalCount ? (doneCount / totalCount * 100) : 0}}%;"
+          ></view>
+        </view>
+        <text class="progress-text">{{progressPercent}}% 已完成</text>
       </view>
     </view>
+  </view>
+
+  <!-- 游客提示 -->
+  <view wx:if="{{isGuest}}" class="guest-banner" bindtap="goLogin">
+    <view class="guest-banner-icon">✨</view>
+    <view class="guest-banner-text">
+      <text class="guest-banner-title">游客模式</text>
+      <text class="guest-banner-desc">登录后可查看真实任务并记录学习成长</text>
+    </view>
+    <text class="guest-banner-arrow">›</text>
   </view>
 
   <!-- 任务列表 -->
@@ -56,13 +78,17 @@
       <view class="empty-icon">
         <text>🌿</text>
       </view>
-      <text class="text-secondary">今天没有安排任务</text>
-      <text class="text-tertiary" style="font-size: 24rpx; margin-top: 12rpx;">可以去 Web 端制定周计划</text>
+      <text class="empty-title">今天没有安排任务</text>
+      <text class="empty-desc">可以去 Web 端制定周计划</text>
     </view>
 
     <view wx:else class="task-groups">
-      <view class="task-group">
-        <text class="group-title">待完成</text>
+      <view class="task-group" wx:if="{{hasPendingTasks}}">
+        <view class="group-header">
+          <view class="group-dot" style="background-color: var(--primary);"></view>
+          <text class="group-title">待完成</text>
+          <text class="group-count">{{pendingCount}}</text>
+        </view>
         <view
           wx:for="{{tasks}}"
           wx:key="id"
@@ -77,18 +103,19 @@
             <view class="task-main">
               <view class="task-title-row">
                 <text class="task-title">{{item.focus}}</text>
+              </view>
+              <view class="task-tags">
                 <view
                   class="category-tag"
                   style="color: {{getCategoryColor(item.category)}}; background-color: {{getCategoryColor(item.category)}}15;"
                 >
                   {{getCategoryLabel(item.category)}}
                 </view>
-              </view>
-              <view class="task-meta">
                 <text class="meta-item">⏱ {{item.duration || '30分钟'}}</text>
-                <text wx:if="{{item.materials && item.materials.length}}" class="meta-item">📚 {{item.materials[0]}}</text>
               </view>
-              <!-- 已上传凭证 -->
+              <view wx:if="{{item.materials && item.materials.length}}" class="task-materials">
+                <text class="material-item">📚 {{item.materials[0]}}</text>
+              </view>
               <view wx:if="{{item.evidence.images.length || item.evidence.audios.length}}" class="evidence-preview">
                 <view
                   wx:for="{{item.evidence.images}}"
@@ -124,8 +151,12 @@
         </view>
       </view>
 
-      <view wx:if="{{hasDoneTasks}}" class="task-group">
-        <text class="group-title">已完成</text>
+      <view class="task-group" wx:if="{{hasDoneTasks}}">
+        <view class="group-header">
+          <view class="group-dot" style="background-color: var(--success);"></view>
+          <text class="group-title">已完成</text>
+          <text class="group-count">{{doneCount}}</text>
+        </view>
         <view
           wx:for="{{tasks}}"
           wx:key="id"
@@ -140,12 +171,11 @@
             <view class="task-main">
               <view class="task-title-row">
                 <text class="task-title">{{item.focus}}</text>
-                <view class="done-badge">✓ 已完成</view>
+                <view class="done-badge">✓</view>
               </view>
-              <view class="task-meta">
+              <view class="task-tags">
                 <text class="meta-item">{{item.duration || '30分钟'}}</text>
               </view>
-              <!-- 已完成凭证 -->
               <view wx:if="{{item.evidence.images.length || item.evidence.audios.length}}" class="evidence-preview">
                 <view
                   wx:for="{{item.evidence.images}}"
@@ -181,8 +211,9 @@
   <view wx:if="{{recordingTaskId}}" class="voice-modal" catchtouchmove="true">
     <view class="voice-modal-mask" bindtap="closeVoiceModal"></view>
     <view class="voice-modal-content">
-      <text class="voice-modal-title">按住录音</text>
-      <text class="voice-modal-desc">{{isRecording ? '松开结束录音' : '按住下方按钮开始录音'}}</text>
+      <view class="voice-modal-icon">🎙</view>
+      <text class="voice-modal-title">{{isRecording ? '录音中...' : '按住录音'}}</text>
+      <text class="voice-modal-desc">{{isRecording ? '松开手指结束录音' : '按住下方按钮开始录音'}}</text>
       <text wx:if="{{isRecording}}" class="voice-duration">{{formatDuration(recordDuration)}}</text>
 
       <view
@@ -190,7 +221,7 @@
         bindtouchstart="onVoiceRecordStart"
         bindtouchend="onVoiceRecordEnd"
       >
-        <text class="voice-record-icon">🎙</text>
+        <text class="voice-record-icon">🎤</text>
       </view>
 
       <button class="voice-cancel-btn btn-ghost" bindtap="closeVoiceModal">取消</button>

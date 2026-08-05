@@ -9,15 +9,13 @@ Page({
     wxCode: null,
   },
 
-  async onLoad() {
+  onLoad() {
     const token = storage.getToken();
-    if (token) {
-      wx.reLaunch({ url: '/pages/role-select/role-select' });
-      return;
-    }
+    const activeRole = storage.getActiveRole();
 
-    // 自动尝试静默登录（已绑定微信的家长或孩子）
-    await this.doLogin();
+    if (token && activeRole) {
+      wx.reLaunch({ url: '/pages/tasks/tasks' });
+    }
   },
 
   async getWechatCode() {

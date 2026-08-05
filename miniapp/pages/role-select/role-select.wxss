@@ -1,145 +1,111 @@
 .role-page {
   min-height: 100vh;
   background-color: var(--bg-page);
-  padding: 120rpx 40rpx 48rpx;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  padding: calc(var(--status-bar-height, 0) + 60rpx) 40rpx 48rpx;
   box-sizing: border-box;
 }
 
+.role-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 560rpx;
+  background: linear-gradient(180deg, rgba(17, 21, 34, 0.98) 0%, var(--bg-page) 100%);
+  z-index: 0;
+  overflow: hidden;
+}
+
+.role-bg-glow {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(90rpx);
+  pointer-events: none;
+}
+
+.role-bg-glow--primary {
+  top: -200rpx;
+  right: -180rpx;
+  width: 560rpx;
+  height: 560rpx;
+  background: radial-gradient(circle, rgba(244, 63, 122, 0.35) 0%, transparent 70%);
+}
+
+.role-bg-glow--ai {
+  top: 120rpx;
+  left: -200rpx;
+  width: 460rpx;
+  height: 460rpx;
+  background: radial-gradient(circle, rgba(139, 92, 246, 0.28) 0%, transparent 70%);
+}
+
+.role-content {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
 .role-header {
-  margin-bottom: 60rpx;
+  margin-bottom: 64rpx;
+}
+
+.role-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 12rpx;
+  padding: 10rpx 24rpx;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1rpx solid var(--border);
+  border-radius: var(--radius-full);
+  margin-bottom: 40rpx;
+  width: fit-content;
+}
+
+.role-brand-dot {
+  width: 12rpx;
+  height: 12rpx;
+  border-radius: 50%;
+  background-color: var(--primary);
+  box-shadow: 0 0 12rpx var(--primary);
+}
+
+.role-brand-text {
+  font-size: 24rpx;
+  color: var(--text-secondary);
+  font-weight: 600;
+  letter-spacing: 2rpx;
 }
 
 .role-title {
   display: block;
-  font-size: 48rpx;
-  font-weight: 700;
+  font-size: 52rpx;
+  font-weight: 900;
   color: var(--text-primary);
   margin-bottom: 16rpx;
+  letter-spacing: 2rpx;
 }
 
 .role-subtitle {
   display: block;
   font-size: 28rpx;
-  color: var(--text-secondary);
+  color: var(--text-tertiary);
+  line-height: 1.5;
 }
 
 .role-grid {
   display: flex;
   flex-direction: column;
   gap: 32rpx;
+  margin-bottom: 48rpx;
 }
 
 .role-card {
-  background-color: var(--bg-card);
+  background: linear-gradient(145deg, rgba(17, 21, 34, 0.95), rgba(26, 31, 53, 0.7));
   border: 1rpx solid var(--border);
-  border-radius: 32rpx;
-  padding: 48rpx;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  transition: transform 0.2s;
-}
-
-.role-card:active {
-  transform: scale(0.98);
-}
-
-.role-icon {
-  width: 120rpx;
-  height: 120rpx;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 28rpx;
-}
-
-.parent-icon {
-  background: linear-gradient(135deg, rgba(244, 63, 122, 0.2), rgba(244, 63, 122, 0.05));
-}
-
-.child-icon {
-  background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(139, 92, 246, 0.05));
-}
-
-.icon-text {
-  font-size: 56rpx;
-}
-
-.role-name {
-  font-size: 34rpx;
-  font-weight: 600;
-  color: var(--text-primary);
-  margin-bottom: 12rpx;
-}
-
-.role-desc {
-  font-size: 26rpx;
-  color: var(--text-tertiary);
-  line-height: 1.5;
-}
-
-.child-list {
-  display: flex;
-  flex-direction: column;
-  gap: 24rpx;
-  margin-bottom: 40rpx;
-}
-
-.child-card {
-  background-color: var(--bg-card);
-  border: 1rpx solid var(--border);
-  border-radius: 28rpx;
-  padding: 28rpx;
-  display: flex;
-  align-items: center;
-  gap: 24rpx;
-}
-
-.child-card:active {
-  opacity: 0.8;
-}
-
-.child-avatar {
-  width: 88rpx;
-  height: 88rpx;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-.child-avatar-text {
-  color: #fff;
-  font-size: 34rpx;
-  font-weight: 600;
-}
-
-.child-info {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 8rpx;
-}
-
-.child-name {
-  font-size: 32rpx;
-  font-weight: 600;
-  color: var(--text-primary);
-}
-
-.child-meta {
-  font-size: 24rpx;
-  color: var(--text-tertiary);
-}
-
-.child-arrow {
-  font-size: 40rpx;
-  color: var(--text-tertiary);
-}
-
-.back-btn {
-  width: 100%;
-}
+  border-radius

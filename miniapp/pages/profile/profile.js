@@ -8,6 +8,9 @@ Page({
     displayName: '用户',
     displayFirstChar: '用',
     activeRole: null,
+    roleLabel: '',
+    roleThemeColor: '#F43F7A',
+    roleThemeColor2: '#E11D5D',
     selectedChild: null,
     selectedChildName: '未选择',
     selectedChildGradeText: '未设置',
@@ -15,6 +18,7 @@ Page({
     bindCode: null,
     bindCodeExpiry: null,
     generatingChildId: null,
+    loading: false,
   },
 
   onLoad() {
@@ -34,12 +38,16 @@ Page({
     const displayFirstChar = (displayName && displayName[0]) || '用';
     const selectedChildName = selectedChild?.name || '未选择';
     const selectedChildGradeText = selectedChild?.grade ? selectedChild.grade + '年级' : '未设置';
+    const isParent = activeRole === 'parent';
 
     this.setData({
       user,
       displayName,
       displayFirstChar,
       activeRole,
+      roleLabel: isParent ? '家长身份' : '孩子身份',
+      roleThemeColor: isParent ? '#F43F7A' : '#8B5CF6',
+      roleThemeColor2: isParent ? '#E11D5D' : '#7C3AED',
       selectedChild,
       selectedChildName,
       selectedChildGradeText,

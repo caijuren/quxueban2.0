@@ -18,10 +18,10 @@ App({
     }
 
     const baseUrl = env === 'release'
-      ? 'https://your-production-domain.com'
+      ? 'https://edu.quxueban.cn'
       : env === 'trial'
-        ? 'https://your-staging-domain.com'
-        : 'http://localhost:3000';
+        ? 'https://edu.quxueban.cn'
+        : 'https://edu.quxueban.cn';
 
     this.globalData.apiBaseUrl = baseUrl;
 

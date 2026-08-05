@@ -1,75 +1,115 @@
 <view class="role-page">
+  <view class="role-bg">
+    <view class="role-bg-glow role-bg-glow--primary"></view>
+    <view class="role-bg-glow role-bg-glow--ai"></view>
+  </view>
+
   <!-- 选择角色 -->
   <block wx:if="{{step === 'role'}}">
-    <view class="role-header">
-      <text class="role-title">选择你的身份</text>
-      <text class="role-subtitle">不同身份看到的界面不同</text>
-    </view>
-
-    <view class="role-grid">
-      <view
-        class="role-card"
-        bindtap="selectRole"
-        data-role="parent"
-      >
-        <view class="role-icon parent-icon">
-          <text class="icon-text">👤</text>
+    <view class="role-content">
+      <view class="role-header">
+        <view class="role-brand">
+          <view class="role-brand-dot"></view>
+          <text class="role-brand-text">趣学伴</text>
         </view>
-        <text class="role-name">我是家长</text>
-        <text class="role-desc">查看任务、监督进度、帮孩子打卡</text>
+        <text class="role-title">选择你的身份</text>
+        <text class="role-subtitle">不同身份看到的界面会有所不同</text>
       </view>
 
-      <view
-        class="role-card"
-        bindtap="selectRole"
-        data-role="child"
-      >
-        <view class="role-icon child-icon">
-          <text class="icon-text">🎒</text>
+      <view class="role-grid">
+        <view
+          class="role-card {{selectedRole === 'parent' ? 'role-card--active' : ''}}"
+          bindtap="selectRole"
+          data-role="parent"
+        >
+          <view class="role-card-main">
+            <view class="role-icon role-icon--parent">
+              <text class="role-icon-text">家</text>
+            </view>
+            <view class="role-info">
+              <text class="role-name">我是家长</text>
+              <text class="role-desc">查看任务、监督进度、帮孩子打卡</text>
+            </view>
+          </view>
+          <view class="role-check">
+            <text class="role-check-icon">›</text>
+          </view>
         </view>
-        <text class="role-name">我是孩子</text>
-        <text class="role-desc">查看自己的任务、自己打卡</text>
+
+        <view
+          class="role-card {{selectedRole === 'child' ? 'role-card--active' : ''}}"
+          bindtap="selectRole"
+          data-role="child"
+        >
+          <view class="role-card-main">
+            <view class="role-icon role-icon--child">
+              <text class="role-icon-text">孩</text>
+            </view>
+            <view class="role-info">
+              <text class="role-name">我是孩子</text>
+              <text class="role-desc">查看自己的任务、自己打卡学习</text>
+            </view>
+          </view>
+          <view class="role-check">
+            <text class="role-check-icon">›</text>
+          </view>
+        </view>
+      </view>
+
+      <view class="role-hint">
+        <text class="role-hint-icon">💡</text>
+        <text class="role-hint-text">孩子身份需家长先生成绑定码</text>
       </view>
     </view>
   </block>
 
   <!-- 选择孩子 -->
   <block wx:if="{{step === 'child'}}">
-    <view class="role-header">
-      <text class="role-title">选择孩子</text>
-      <text class="role-subtitle">你将以家长身份查看孩子的学习任务</text>
-    </view>
+    <view class="role-content">
+      <view class="role-header">
+        <view class="role-brand">
+          <view class="role-brand-dot"></view>
+          <text class="role-brand-text">趣学伴</text>
+        </view>
+        <text class="role-title">选择孩子</text>
+        <text class="role-subtitle">你将以家长身份查看孩子的学习任务</text>
+      </view>
 
-    <view class="child-list">
-      <view
-        wx:for="{{children}}"
-        wx:key="id"
-        class="child-card"
-        bindtap="selectChild"
-        data-child="{{item}}"
-      >
+      <view class="child-list">
         <view
-          class="child-avatar"
-          style="background-color: {{item.avatarColor || '#F43F5E'}};"
+          wx:for="{{children}}"
+          wx:key="id"
+          class="child-card"
+          bindtap="selectChild"
+          data-child="{{item}}"
         >
-          <text class="child-avatar-text">{{item.name[0]}}</text>
+          <view class="child-avatar-ring">
+            <view
+              class="child-avatar"
+              style="background-color: {{item.avatarColor || '#F43F5E'}};"
+            >
+              <text class="child-avatar-text">{{item.name[0]}}</text>
+            </view>
+          </view>
+          <view class="child-info">
+            <text class="child-name">{{item.name}}</text>
+            <text class="child-meta">{{item.grade}}年级 · {{item.currentSchool || '未设置学校'}}</text>
+          </view>
+          <view class="child-arrow">›</view>
         </view>
-        <view class="child-info">
-          <text class="child-name">{{item.name}}</text>
-          <text class="child-meta">{{item.grade}}年级 · {{item.currentSchool || '未设置学校'}}</text>
+
+        <view wx:if="{{children.length === 0 && !loading}}" class="empty-state">
+          <view class="empty-icon">
+            <text>📝</text>
+          </view>
+          <text class="empty-title">还没有添加孩子</text>
+          <text class="empty-desc">请先在 Web 端添加孩子信息</text>
         </view>
-        <view class="child-arrow">›</view>
       </view>
 
-      <view wx:if="{{children.length === 0 && !loading}}" class="empty-state">
-        <view class="empty-icon">
-          <text>📝</text>
-        </view>
-        <text class="text-secondary">还没有添加孩子</text>
-        <text class="text-tertiary" style="font-size: 24rpx; margin-top: 12rpx;">请先在 Web 端添加孩子信息</text>
-      </view>
+      <button class="btn-ghost back-btn" bindtap="backToRole">返回重新选择</button>
     </view>
-
-    <button class="btn-ghost back-btn" bindtap="backToRole">返回重新选择</button>
   </block>
+
+  <view class="safe-area-bottom" style="height: 40rpx;"></view>
 </view>

@@ -18,16 +18,19 @@ Page({
     const token = storage.getToken();
     const activeRole = auth.getActiveRole();
 
-    if (!token) {
-      wx.reLaunch({ url: '/pages/login/login' });
+    if (token && activeRole) {
+      wx.reLaunch({ url: '/pages/tasks/tasks' });
       return;
     }
 
-    if (!activeRole) {
-      wx.reLaunch({ url: '/pages/role-select/role-select' });
-      return;
-    }
+    this.setData({ loading: false });
+  },
 
+  goTasks() {
     wx.reLaunch({ url: '/pages/tasks/tasks' });
+  },
+
+  goLogin() {
+    wx.navigateTo({ url: '/pages/login/login' });
   },
 });

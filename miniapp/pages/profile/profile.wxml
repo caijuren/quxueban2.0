@@ -1,57 +1,115 @@
 <view class="profile-page">
-  <view class="profile-header">
-    <view class="profile-avatar">
-      <text>{{displayFirstChar}}</text>
-    </view>
-    <text class="profile-name">{{displayName}}</text>
-    <text class="profile-role">{{activeRole === 'parent' ? '家长身份' : '孩子身份'}}</text>
+  <view class="profile-bg">
+    <view class="profile-bg-glow profile-bg-glow--primary"></view>
+    <view class="profile-bg-glow profile-bg-glow--ai"></view>
   </view>
 
-  <view class="card">
-    <view class="section-title">当前查看</view>
-    <view class="info-row">
-      <text class="info-label">孩子</text>
-      <text class="info-value">{{selectedChildName}}</text>
-    </view>
-    <view class="info-row">
-      <text class="info-label">年级</text>
-      <text class="info-value">{{selectedChildGradeText}}</text>
-    </view>
-  </view>
-
-  <view wx:if="{{activeRole === 'parent'}}" class="card">
-    <view class="section-title">孩子微信绑定</view>
-    <view
-      wx:for="{{children}}"
-      wx:key="id"
-      class="child-bind-row"
-    >
-      <view class="child-bind-info">
-        <view class="child-bind-avatar" style="background-color: {{item.avatarColor}};">
-          {{item.name[0]}}
+  <scroll-view scroll-y class="profile-scroll" enhanced show-scrollbar="{{false}}">
+    <view class="profile-header">
+      <view class="avatar-ring">
+        <view class="profile-avatar" style="background: linear-gradient(135deg, {{roleThemeColor}}, {{roleThemeColor2}});">
+          <text>{{displayFirstChar}}</text>
         </view>
-        <text class="child-bind-name">{{item.name}}</text>
       </view>
-      <button
-        class="bind-code-btn"
-        bindtap="generateBindCode"
-        data-child-id="{{item.id}}"
-        disabled="{{generatingChildId === item.id}}"
-      >
-        {{generatingChildId === item.id ? '生成中...' : '生成绑定码'}}
-      </button>
+      <text class="profile-name">{{displayName}}</text>
+      <view class="profile-role-badge">
+        <text class="role-dot" style="background-color: {{roleThemeColor}};"></text>
+        <text class="profile-role">{{roleLabel}}</text>
+      </view>
     </view>
-  </view>
 
-  <view class="action-list">
-    <button class="action-btn btn-secondary" bindtap="switchRole">切换身份 / 切换孩子</button>
-    <button class="action-btn btn-ghost" bindtap="logout">退出登录</button>
-  </view>
+    <view class="profile-body">
+      <view class="card info-card">
+        <view class="section-title">当前查看</view>
+        <view class="info-list">
+          <view class="info-item">
+            <view class="info-left">
+              <view class="info-icon" style="background-color: rgba(244, 63, 122, 0.15); color: var(--primary-light);">
+                <text class="info-icon-text">👶</text>
+              </view>
+              <text class="info-label">孩子</text>
+            </view>
+            <text class="info-value">{{selectedChildName}}</text>
+          </view>
+          <view class="info-item">
+            <view class="info-left">
+              <view class="info-icon" style="background-color: rgba(6, 182, 212, 0.15); color: var(--info);">
+                <text class="info-icon-text">🎓</text>
+              </view>
+              <text class="info-label">年级</text>
+            </view>
+            <text class="info-value">{{selectedChildGradeText}}</text>
+          </view>
+        </view>
+      </view>
+
+      <view wx:if="{{activeRole === 'parent'}}" class="card bind-card">
+        <view class="section-title">孩子微信绑定</view>
+        <view wx:if="{{children.length === 0 && !loading}}" class="empty-mini">
+          <view class="empty-mini-icon">📝</view>
+          <text class="empty-mini-text">还没有添加孩子</text>
+          <text class="empty-mini-desc">请先在 Web 端添加孩子信息</text>
+        </view>
+        <view
+          wx:for="{{children}}"
+          wx:key="id"
+          class="child-bind-row"
+        >
+          <view class="child-bind-info">
+            <view class="child-avatar-ring">
+              <view class="child-bind-avatar" style="background-color: {{item.avatarColor || '#F43F5E'}};">
+                {{item.name[0]}}
+              </view>
+            </view>
+            <view class="child-bind-detail">
+              <text class="child-bind-name">{{item.name}}</text>
+              <text class="child-bind-meta">{{item.grade}}年级</text>
+            </view>
+          </view>
+          <button
+            class="bind-code-btn"
+            bindtap="generateBindCode"
+            data-child-id="{{item.id}}"
+            disabled="{{generatingChildId === item.id}}"
+          >
+            {{generatingChildId === item.id ? '生成中...' : '生成绑定码'}}
+          </button>
+        </view>
+      </view>
+
+      <view class="card menu-card">
+        <view class="section-title">常用操作</view>
+        <view class="menu-list">
+          <view class="menu-item" bindtap="switchRole">
+            <view class="menu-left">
+              <view class="menu-icon" style="background-color: rgba(139, 92, 246, 0.15); color: var(--ai-light);">
+                <text>🔄</text>
+              </view>
+              <text class="menu-text">切换身份 / 切换孩子</text>
+            </view>
+            <text class="menu-arrow">›</text>
+          </view>
+          <view class="menu-item menu-item--danger" bindtap="logout">
+            <view class="menu-left">
+              <view class="menu-icon" style="background-color: rgba(244, 63, 122, 0.12); color: var(--primary-light);">
+                <text>↪</text>
+              </view>
+              <text class="menu-text">退出登录</text>
+            </view>
+            <text class="menu-arrow">›</text>
+          </view>
+        </view>
+      </view>
+
+      <view class="safe-area-bottom" style="height: 40rpx;"></view>
+    </view>
+  </scroll-view>
 
   <!-- 绑定码 Modal -->
   <view wx:if="{{bindCode}}" class="bind-modal" catchtouchmove="true">
     <view class="bind-modal-mask" bindtap="closeBindModal"></view>
     <view class="bind-modal-content">
+      <view class="bind-modal-icon">🔑</view>
       <text class="bind-modal-title">孩子绑定码</text>
       <text class="bind-modal-code">{{bindCode}}</text>
       <text class="bind-modal-desc">让孩子在微信小程序「我是孩子，去绑定」中输入此码</text>

@@ -21,16 +21,47 @@ const categoryColors = {
   other: '#94A3B8',
 };
 
+const guestTasks = [
+  {
+    id: 'guest-1',
+    focus: '阅读课外书 30 分钟',
+    category: 'reading',
+    duration: '30分钟',
+    status: 'pending',
+    evidence: { images: [], audios: [] },
+  },
+  {
+    id: 'guest-2',
+    focus: '完成数学口算练习',
+    category: 'school',
+    duration: '20分钟',
+    status: 'pending',
+    evidence: { images: [], audios: [] },
+  },
+  {
+    id: 'guest-3',
+    focus: '跳绳 5 分钟',
+    category: 'sport',
+    duration: '5分钟',
+    status: 'done',
+    evidence: { images: [], audios: [] },
+  },
+];
+
 Page({
   data: {
     activeRole: null,
     selectedChild: null,
+    isGuest: true,
     todayName: '',
     todayDate: '',
     tasks: [],
     doneCount: 0,
     totalCount: 0,
+    pendingCount: 0,
     hasDoneTasks: false,
+    hasPendingTasks: false,
+    progressPercent: 0,
     loading: true,
     completingTaskId: null,
     recordingTaskId: null,
@@ -57,9 +88,19 @@ Page({
   checkAuth() {
     const activeRole = auth.getActiveRole();
     const selectedChild = auth.getSelectedChild();
+    const isGuest = !storage.getToken();
 
-    if (!storage.getToken()) {
-      wx.reLaunch({ url: '/pages/login/login' });
+    const now = new Date();
+    this.setData({
+      activeRole,
+      selectedChild,
+      isGuest,
+      todayName: dayNames[now.getDay()],
+      todayDate: now.toISOString().split('T')[0],
+    });
+
+    if (isGuest) {
+      this.loadGuestTasks();
       return;
     }
 
@@ -68,12 +109,26 @@ Page({
       return;
     }
 
-    const now = new Date();
+    this.loadTasks();
+  },
+
+  loadGuestTasks() {
+    const tasks = guestTasks.map((task) => ({
+      ...task,
+      evidence: { images: [], audios: [] },
+    }));
+    const doneCount = tasks.filter((t) => t.status === 'done').length;
+    const totalCount = tasks.length;
+    const pendingCount = totalCount - doneCount;
     this.setData({
-      activeRole,
-      selectedChild,
-      todayName: dayNames[now.getDay()],
-      todayDate: now.toISOString().split('T')[0],
+      tasks,
+      doneCount,
+      totalCount,
+      pendingCount,
+      hasDoneTasks: doneCount > 0,
+      hasPendingTasks: pendingCount > 0,
+      progressPercent: totalCount ? Math.round((doneCount / totalCount) * 100) : 0,
+      loading: false,
     });
   },
 
@@ -92,11 +147,15 @@ Page({
       }));
       const doneCount = tasks.filter((t) => t.status === 'done').length;
       const totalCount = tasks.length;
+      const pendingCount = totalCount - doneCount;
       this.setData({
         tasks,
         doneCount,
         totalCount,
+        pendingCount,
         hasDoneTasks: doneCount > 0,
+        hasPendingTasks: pendingCount > 0,
+        progressPercent: totalCount ? Math.round((doneCount / totalCount) * 100) : 0,
       });
     } catch (err) {
       wx.showToast({
@@ -111,6 +170,19 @@ Page({
   async completeTask(e) {
     const task = e.currentTarget.dataset.task;
     if (!task || this.data.completingTaskId) return;
+
+    if (this.data.isGuest) {
+      const { confirm } = await wx.showModal({
+        title: '登录后打卡',
+        content: '体验模式下无法打卡，登录后即可记录孩子的学习成长。',
+        confirmText: '去登录',
+        cancelText: '再看看',
+      });
+      if (confirm) {
+        wx.navigateTo({ url: '/pages/login/login' });
+      }
+      return;
+    }
 
     const isParent = this.data.activeRole === 'parent';
 
@@ -298,6 +370,14 @@ Page({
   },
 
   goProfile() {
+    if (this.data.isGuest) {
+      wx.navigateTo({ url: '/pages/login/login' });
+      return;
+    }
     wx.navigateTo({ url: '/pages/profile/profile' });
+  },
+
+  goLogin() {
+    wx.navigateTo({ url: '/pages/login/login' });
   },
 });

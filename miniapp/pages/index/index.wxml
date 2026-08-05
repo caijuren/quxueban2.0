@@ -1,4 +1,58 @@
-<view class="loading-container">
-  <view class="loading-spinner"></view>
-  <text class="loading-text">加载中...</text>
+<view class="index-page">
+  <view class="bg-glow bg-glow-1"></view>
+  <view class="bg-glow bg-glow-2"></view>
+
+  <view class="index-content">
+    <view class="brand-section">
+      <view class="logo-ring">
+        <view class="logo">
+          <text class="logo-text">趣</text>
+        </view>
+      </view>
+      <text class="brand-name">趣学伴</text>
+      <text class="brand-slogan">家庭学习规划中心</text>
+      <view class="brand-tag">
+        <text class="tag-dot"></text>
+        <text class="tag-text">让学习更有趣</text>
+      </view>
+    </view>
+
+    <view class="feature-cards">
+      <view class="feature-card">
+        <view class="feature-icon" style="background: linear-gradient(135deg, rgba(244, 63, 122, 0.2), rgba(244, 63, 122, 0.05)); color: var(--primary-light);">
+          <text class="icon-text">📋</text>
+        </view>
+        <view class="feature-info">
+          <text class="feature-title">每日任务打卡</text>
+          <text class="feature-desc">孩子自主完成，家长实时查看进度</text>
+        </view>
+      </view>
+
+      <view class="feature-card">
+        <view class="feature-icon" style="background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(139, 92, 246, 0.05)); color: var(--ai-light);">
+          <text class="icon-text">🤖</text>
+        </view>
+        <view class="feature-info">
+          <text class="feature-title">AI 学习日报</text>
+          <text class="feature-desc">智能分析学习情况，生成成长建议</text>
+        </view>
+      </view>
+
+      <view class="feature-card">
+        <view class="feature-icon" style="background: linear-gradient(135deg, rgba(6, 182, 212, 0.2), rgba(6, 182, 212, 0.05)); color: var(--info);">
+          <text class="icon-text">📈</text>
+        </view>
+        <view class="feature-info">
+          <text class="feature-title">家庭成长记录</text>
+          <text class="feature-desc">记录每个成长里程碑，见证进步</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view class="index-footer">
+    <button class="btn-primary index-btn" bindtap="goTasks">立即体验</button>
+    <button class="btn-ghost index-btn" bindtap="goLogin">微信一键登录</button>
+    <text class="privacy-text">登录即表示同意《用户协议》和《隐私政策》</text>
+  </view>
 </view>

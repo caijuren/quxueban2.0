@@ -234,6 +234,14 @@ docker image prune -f
 
 # 发版记录
 
+## v2.2.1（2026-08-05）
+
+**主题：修复生产环境 Child 表缺失字段导致孩子数据无法加载**
+
+- 原因：`Child` 模型新增了 `wechatOpenId`、`bindCode`、`bindCodeExpiresAt` 字段，但对应数据库迁移文件未提交到仓库
+- 生产环境执行 `prisma migrate deploy` 后，`Child.wechatOpenId` 列不存在，导致 `/api/children` 查询报错，页面显示「还没有孩子档案」
+- 修复：新增迁移 `20260805120000_add_child_wechat_bind`，为 `Child` 表补全上述三列及唯一索引
+
 ## v2.2.0（2026-08-05）
 
 **主题：家庭协作与设置中心升级 + 微信小程序 MVP**

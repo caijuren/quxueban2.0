@@ -2,20 +2,37 @@ page {
   --bg-page: #090B12;
   --bg-card: #111522;
   --bg-elevated: #1A1F35;
+  --bg-hover: #232942;
   --primary: #F43F7A;
   --primary-light: #FB7185;
+  --primary-dark: #E11D5D;
   --ai: #8B5CF6;
   --ai-light: #A78BFA;
+  --ai-dark: #7C3AED;
   --text-primary: #F1F5F9;
   --text-secondary: #CBD5E1;
   --text-tertiary: #94A3B8;
+  --text-muted: #64748B;
   --border: rgba(255, 255, 255, 0.08);
+  --border-strong: rgba(255, 255, 255, 0.12);
   --success: #22C55E;
   --warning: #F59E0B;
+  --info: #06B6D4;
+
+  --radius-sm: 12rpx;
+  --radius-md: 20rpx;
+  --radius-lg: 28rpx;
+  --radius-xl: 40rpx;
+  --radius-full: 9999rpx;
+
+  --shadow-sm: 0 4rpx 12rpx rgba(0, 0, 0, 0.2);
+  --shadow-md: 0 8rpx 32rpx rgba(0, 0, 0, 0.3);
+  --shadow-glow: 0 8rpx 32rpx rgba(244, 63, 122, 0.25);
+  --shadow-ai: 0 8rpx 32rpx rgba(139, 92, 246, 0.25);
 
   background-color: var(--bg-page);
   color: var(--text-primary);
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
   font-size: 28rpx;
   line-height: 1.5;
   min-height: 100vh;
@@ -27,18 +44,37 @@ page {
 }
 
 .card {
-  background-color: var(--bg-card);
+  background: linear-gradient(145deg, var(--bg-card), #0f1320);
   border: 1rpx solid var(--border);
-  border-radius: 28rpx;
+  border-radius: var(--radius-lg);
   padding: 28rpx;
   margin-bottom: 24rpx;
+  box-shadow: var(--shadow-sm);
 }
 
 .card-title {
   font-size: 32rpx;
-  font-weight: 600;
+  font-weight: 700;
   color: var(--text-primary);
   margin-bottom: 20rpx;
+}
+
+.section-title {
+  font-size: 26rpx;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 20rpx;
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+}
+
+.section-title::before {
+  content: '';
+  width: 6rpx;
+  height: 26rpx;
+  background: linear-gradient(180deg, var(--primary), var(--ai));
+  border-radius: 4rpx;
 }
 
 .text-secondary {
@@ -49,60 +85,112 @@ page {
   color: var(--text-tertiary);
 }
 
+.text-muted {
+  color: var(--text-muted);
+}
+
+/* Buttons */
 .btn-primary {
-  background: linear-gradient(135deg, var(--primary), var(--primary-light));
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
   color: #fff;
-  border-radius: 40rpx;
-  height: 88rpx;
-  line-height: 88rpx;
+  border-radius: var(--radius-full);
+  height: 92rpx;
+  line-height: 92rpx;
   font-size: 30rpx;
-  font-weight: 600;
+  font-weight: 700;
   text-align: center;
   border: none;
+  box-shadow: var(--shadow-glow);
+  transition: all 0.2s ease;
 }
 
 .btn-primary::after {
   border: none;
 }
 
+.btn-primary:active {
+  transform: scale(0.98);
+  box-shadow: 0 4rpx 16rpx rgba(244, 63, 122, 0.35);
+}
+
+.btn-primary[disabled] {
+  opacity: 0.6;
+  box-shadow: none;
+}
+
 .btn-secondary {
-  background-color: var(--bg-elevated);
+  background: linear-gradient(145deg, var(--bg-elevated), var(--bg-card));
   color: var(--text-primary);
-  border-radius: 40rpx;
-  height: 88rpx;
-  line-height: 88rpx;
+  border-radius: var(--radius-full);
+  height: 92rpx;
+  line-height: 92rpx;
   font-size: 30rpx;
-  font-weight: 500;
+  font-weight: 600;
   text-align: center;
   border: 1rpx solid var(--border);
+  box-shadow: var(--shadow-sm);
 }
 
 .btn-secondary::after {
   border: none;
 }
 
+.btn-secondary:active {
+  background: var(--bg-hover);
+}
+
 .btn-ghost {
-  background-color: transparent;
+  background: transparent;
   color: var(--text-secondary);
-  border-radius: 40rpx;
-  height: 80rpx;
-  line-height: 80rpx;
+  border-radius: var(--radius-full);
+  height: 88rpx;
+  line-height: 88rpx;
   font-size: 28rpx;
+  font-weight: 500;
   text-align: center;
-  border: 1rpx solid var(--border);
+  border: 1rpx solid var(--border-strong);
 }
 
 .btn-ghost::after {
   border: none;
 }
 
+.btn-ghost:active {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+/* Inputs */
+.input {
+  width: 100%;
+  height: 100rpx;
+  background: linear-gradient(145deg, var(--bg-card), #0f1320);
+  border: 1rpx solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 0 32rpx;
+  box-sizing: border-box;
+  font-size: 30rpx;
+  color: var(--text-primary);
+  transition: all 0.2s;
+}
+
+.input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 4rpx rgba(244, 63, 122, 0.15);
+}
+
+.input-placeholder {
+  color: var(--text-muted);
+  font-size: 28rpx;
+}
+
+/* Badges */
 .badge {
   display: inline-flex;
   align-items: center;
   padding: 6rpx 16rpx;
   border-radius: 20rpx;
   font-size: 22rpx;
-  font-weight: 500;
+  font-weight: 600;
 }
 
 .badge-primary {
@@ -115,6 +203,12 @@ page {
   color: var(--ai-light);
 }
 
+.badge-success {
+  background-color: rgba(34, 197, 94, 0.15);
+  color: var(--success);
+}
+
+/* Empty state */
 .empty-state {
   display: flex;
   flex-direction: column;
@@ -128,14 +222,57 @@ page {
   width: 160rpx;
   height: 160rpx;
   border-radius: 50%;
-  background-color: var(--bg-elevated);
+  background: linear-gradient(145deg, var(--bg-elevated), var(--bg-card));
   margin-bottom: 32rpx;
   display: flex;
   align-items: center;
   justify-content: center;
+  border: 1rpx solid var(--border);
+  box-shadow: var(--shadow-sm);
 }
 
+.empty-title {
+  font-size: 32rpx;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 12rpx;
+}
+
+.empty-desc {
+  font-size: 26rpx;
+  color: var(--text-tertiary);
+  line-height: 1.5;
+}
+
+/* Loading */
+.loading-wrapper {
+  display: flex;
+  justify-content: center;
+  padding: 80rpx;
+}
+
+.loading-spinner {
+  width: 48rpx;
+  height: 48rpx;
+  border: 4rpx solid rgba(244, 63, 122, 0.2);
+  border-top-color: var(--primary);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Safe area */
 .safe-area-bottom {
   padding-bottom: constant(safe-area-inset-bottom);
   padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* Utility */
+.divider {
+  height: 1rpx;
+  background-color: var(--border);
+  margin: 24rpx 0;
 }
