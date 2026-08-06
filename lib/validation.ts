@@ -2,7 +2,7 @@ import { z, ZodIssue, ZodSchema } from 'zod';
 
 const hexColorRegex = /^#([0-9A-Fa-f]{3}){1,2}$/;
 const timeRegex = /^([01]\d|2[0-3]):([0-5]\d)$/;
-const uploadPathRegex = /^\/uploads\/avatars\//;
+const uploadPathRegex = /^\/(api\/)?uploads\/avatars\//;
 const dataImageRegex = /^data:image\/[a-zA-Z0-9+]+;base64,/;
 const emojiRegex = /^\p{Emoji_Presentation}+$/u;
 
