@@ -8,7 +8,7 @@ const LOGIN_WINDOW_MS = 15 * 60 * 1000;
 const loginAttempts = new Map<string, { count: number; resetAt: number }>();
 
 // 不需要登录即可访问的公开路由
-const PUBLIC_API_PREFIXES = ['/api/auth/', '/api/health', '/api/register', '/api/miniapp/'];
+const PUBLIC_API_PREFIXES = ['/api/auth/', '/api/health', '/api/register', '/api/miniapp/', '/api/uploads/'];
 
 function isPublicApiPath(pathname: string): boolean {
   return PUBLIC_API_PREFIXES.some((prefix) => pathname.startsWith(prefix));
