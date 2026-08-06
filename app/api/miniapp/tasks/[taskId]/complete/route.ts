@@ -4,6 +4,7 @@ import { prisma } from '@/lib/prisma';
 import { normalizeWeeklyTask } from '@/lib/taskAlignment';
 import { taskCompletionInputSchema, validateBody } from '@/lib/validation';
 import { sendTaskCompletedReminder } from '@/lib/miniapp/subscription';
+import { getManageableChildIdsForUser } from '@/lib/family';
 import type { NextRequest } from 'next/server';
 import type { WeeklyTaskItem, TaskCompletionRecord } from '@/lib/storage.types';
 
@@ -32,9 +33,21 @@ export async function POST(
 
   const activeRole = auth.type === 'child' ? 'child' : (req.headers.get('x-active-role') || 'parent');
 
-  // 查找包含该任务的周计划
+  // 查找包含该任务的周计划（家长包含自己创建及家庭可管理的孩子）
+  let planWhere;
+  if (auth.type === 'child') {
+    planWhere = { childId: auth.childId };
+  } else {
+    const manageableChildIds = await getManageableChildIdsForUser(auth.userId);
+    planWhere = {
+      OR: [{ userId: auth.userId }, ...(manageableChildIds.length > 0 ? [{ childId: { in: manageableChildIds } }] : [])],
+    };
+  }
+
+  console.log('[miniapp complete] planWhere:', JSON.stringify(planWhere), 'taskId:', taskId);
+
   const plans = await prisma.weeklyPlan.findMany({
-    where: auth.type === 'child' ? { childId: auth.childId } : { userId: auth.userId },
+    where: planWhere,
     include: { child: true },
     orderBy: { weekId: 'desc' },
   });
@@ -54,8 +67,11 @@ export async function POST(
   }
 
   if (!targetPlan || taskIndex === -1) {
+    console.error('[miniapp complete] task not found, searched plans:', plans.length);
     return NextResponse.json({ error: 'Task not found' }, { status: 404 });
   }
+
+  console.log('[miniapp complete] found plan:', targetPlan.id, 'child:', targetPlan.childId);
 
   const rawTasks = (targetPlan.tasks as unknown as Partial<WeeklyTaskItem>[]) || [];
   const tasks = rawTasks.map((task) => normalizeWeeklyTask(task as WeeklyTaskItem));
@@ -110,9 +126,11 @@ export async function POST(
     },
   });
 
-  // 打卡成功后异步通知家长
+  console.log('[miniapp complete] updated plan:', updated.id, 'task status:', tasks[taskIndex].status);
+
+  // 打卡成功后异步通知孩子的实际家长
   if (isDone && targetPlan.child) {
-    const parentUserId = auth.type === 'child' ? targetPlan.child.userId : auth.userId;
+    const parentUserId = targetPlan.child.userId;
 
     const user = await prisma.user.findUnique({
       where: { id: parentUserId },

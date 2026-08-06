@@ -163,7 +163,7 @@ body {
 
 /* Command panel - refined card */
 .command-panel {
-  @apply rounded-[20px] bg-surface border border-border-default transition-all duration-200;
+  @apply rounded-card bg-surface border border-border-default transition-all duration-200;
   box-shadow: var(--shadow-card);
 }
 
@@ -173,7 +173,7 @@ body {
 }
 
 .command-panel-active {
-  @apply rounded-[20px] bg-surface relative;
+  @apply rounded-card bg-surface relative;
   border: 1px solid var(--border-primary);
 }
 

@@ -52,9 +52,9 @@ function InvitePageContent() {
 
   return (
     <div className="min-h-screen bg-background flex items-center justify-center p-4">
-      <div className="w-full max-w-md rounded-2xl bg-surface-elevated border border-border-subtle p-6 sm:p-8">
+      <div className="w-full max-w-md rounded-card bg-surface border border-border-default shadow-card p-6 sm:p-8">
         <div className="text-center mb-6">
-          <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mx-auto mb-3">
+          <div className="w-12 h-12 rounded-module bg-primary-dim flex items-center justify-center mx-auto mb-3">
             <Users className="w-6 h-6 text-primary" />
           </div>
           <h1 className="text-xl font-bold font-display text-text-primary">家庭邀请</h1>
@@ -69,12 +69,12 @@ function InvitePageContent() {
         )}
 
         {!loading && error && (
-          <div className="rounded-xl bg-danger/5 border border-danger/10 p-4 text-center">
-            <AlertCircle className="w-6 h-6 text-danger mx-auto mb-2" />
-            <p className="text-sm text-danger">{error}</p>
+          <div className="rounded-module bg-error/10 border border-error/20 p-4 text-center">
+            <AlertCircle className="w-6 h-6 text-error mx-auto mb-2" />
+            <p className="text-sm text-error">{error}</p>
             <Link
               href="/login"
-              className="inline-block mt-4 text-sm text-primary hover:opacity-90"
+              className="inline-block mt-4 text-sm text-primary hover:text-primary-glow"
             >
               返回登录
             </Link>
@@ -83,7 +83,7 @@ function InvitePageContent() {
 
         {!loading && invite && (
           <div className="space-y-5">
-            <div className="rounded-xl bg-surface-hover border border-border-subtle p-4 text-center">
+            <div className="rounded-module bg-surface border border-border-default p-4 text-center">
               <p className="text-sm text-text-secondary mb-1">你收到了来自家庭的邀请</p>
               <p className="text-lg font-bold text-text-primary">{invite.family.name}</p>
               <p className="text-xs text-text-muted mt-1">
@@ -91,7 +91,7 @@ function InvitePageContent() {
               </p>
             </div>
 
-            <div className="flex items-start gap-3 text-xs text-text-muted bg-success/5 border border-success/10 rounded-lg p-3">
+            <div className="flex items-start gap-3 text-xs text-text-muted bg-success/10 border border-success/20 rounded-module p-3">
               <CheckCircle className="w-4 h-4 text-success shrink-0 mt-0.5" />
               <p>
                 点击下方按钮登录或注册账号，接受邀请后即可共同管理孩子的学习。
@@ -103,13 +103,13 @@ function InvitePageContent() {
             <div className="grid grid-cols-2 gap-3">
               <Link
                 href={`/login?inviteToken=${token}`}
-                className="inline-flex items-center justify-center px-4 py-2 rounded-lg bg-surface-hover text-text-secondary text-sm hover:bg-surface-highlight transition-colors"
+                className="inline-flex items-center justify-center px-4 py-2 rounded-module bg-surface-hover text-text-secondary text-sm hover:bg-surface-highlight transition-colors"
               >
                 登录并加入
               </Link>
               <Link
                 href={`/register?inviteToken=${token}`}
-                className="inline-flex items-center justify-center px-4 py-2 rounded-lg bg-primary text-white text-sm hover:opacity-90 transition-opacity"
+                className="inline-flex items-center justify-center px-4 py-2 rounded-module bg-primary text-text-primary text-sm hover:bg-primary/90 transition-colors"
               >
                 注册并加入
               </Link>
@@ -125,7 +125,7 @@ export default function InvitePage() {
   return (
     <Suspense fallback={
       <div className="min-h-screen bg-background flex items-center justify-center p-4">
-        <div className="w-full max-w-md rounded-2xl bg-surface-elevated border border-border-subtle p-6 text-center">
+        <div className="w-full max-w-md rounded-card bg-surface border border-border-default shadow-card p-6 text-center">
           <Loader2 className="w-5 h-5 animate-spin mx-auto text-text-muted" />
           <p className="text-sm text-text-muted mt-2">加载中...</p>
         </div>

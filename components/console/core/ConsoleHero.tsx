@@ -26,7 +26,7 @@ export default function ConsoleHero({
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.35 }}
-      className="relative overflow-hidden rounded-[20px] bg-gradient-to-br from-[#111522] to-[#1a1f35] border border-white/[0.08] p-6"
+      className="relative overflow-hidden rounded-[20px] bg-gradient-to-br from-surface to-surface-elevated border border-border-default p-6"
     >
       {/* Ambient glow */}
       <div className="absolute -top-20 -right-20 w-64 h-64 bg-primary/10 rounded-full blur-3xl pointer-events-none" />
@@ -45,7 +45,7 @@ export default function ConsoleHero({
         <div className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-6">
           <button
             onClick={onSwitchChild}
-            className="group flex items-center gap-3 p-2 pr-4 rounded-2xl bg-white/[0.03] border border-white/[0.06] hover:border-primary/30 hover:bg-white/[0.05] transition-all"
+            className="group flex items-center gap-3 p-2 pr-4 rounded-2xl bg-surface-hover border border-border-subtle hover:border-primary/30 hover:bg-surface-hover transition-all"
           >
             <ChildAvatar child={child} size="xl" shape="rounded" fallbackIcon />
             <div className="text-left">
@@ -63,13 +63,13 @@ export default function ConsoleHero({
 
           <div className="flex items-center gap-3 sm:gap-4">
             {completionRate !== undefined && (
-              <div className="px-4 py-2 rounded-xl bg-white/[0.03]">
+              <div className="px-4 py-2 rounded-xl bg-surface-hover">
                 <p className="text-2xs text-text-muted">本周完成</p>
                 <p className="text-base font-bold text-primary">{completionRate}%</p>
               </div>
             )}
             {aiSuggestionsCount !== undefined && (
-              <div className="px-4 py-2 rounded-xl bg-white/[0.03]">
+              <div className="px-4 py-2 rounded-xl bg-surface-hover">
                 <p className="text-2xs text-text-muted">AI 建议</p>
                 <p className="text-base font-bold text-ai">{aiSuggestionsCount} 条</p>
               </div>

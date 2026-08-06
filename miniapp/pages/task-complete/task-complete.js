@@ -28,10 +28,10 @@ const statusOptions = [
 ];
 
 const qualityOptions = [
-  { value: 'excellent', label: '优秀', emoji: '🌟' },
-  { value: 'good', label: '良好', emoji: '👍' },
-  { value: 'average', label: '一般', emoji: '😐' },
-  { value: 'needs_work', label: '需努力', emoji: '💪' },
+  { value: 'excellent', label: '优秀', icon: '/assets/icons/star.svg' },
+  { value: 'good', label: '良好', icon: '/assets/icons/thumb-up.svg' },
+  { value: 'average', label: '一般', icon: '/assets/icons/face-neutral.svg' },
+  { value: 'needs_work', label: '需努力', icon: '/assets/icons/target.svg' },
 ];
 
 let recordTimer = null;
@@ -67,12 +67,14 @@ Page({
     this.setData({ statusBarHeight: app.globalData.statusBarHeight || 0 });
 
     const task = wx.getStorageSync('task_complete_pending') || null;
+    wx.removeStorageSync('task_complete_pending');
     if (!task) {
       wx.showToast({ title: '未找到任务', icon: 'none' });
       wx.navigateBack();
       return;
     }
 
+    console.log('[task-complete] loaded task:', task.id, task.focus);
     this.setTaskData(task);
   },
 
@@ -319,15 +321,24 @@ Page({
     };
 
     this.setData({ submitting: true });
+    console.log('[task-complete] submit payload:', payload);
     api.post(`/api/miniapp/tasks/${task.id}/complete`, payload)
-      .then(() => {
+      .then((res) => {
+        console.log('[task-complete] submit success:', res);
         wx.showToast({ title: '打卡成功', icon: 'success' });
         setTimeout(() => {
           wx.navigateBack();
         }, 800);
       })
       .catch((err) => {
-        wx.showToast({ title: err.message || '打卡失败', icon: 'none' });
+        const message = err.message || '打卡失败';
+        console.error('[task-complete] submit failed:', message);
+        wx.showModal({
+          title: '打卡失败',
+          content: `${message}\n\n如持续失败，请截图并检查网络。`,
+          showCancel: false,
+          confirmText: '知道了',
+        });
       })
       .finally(() => {
         this.setData({ submitting: false });

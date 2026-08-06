@@ -10,17 +10,12 @@
         </view>
       </view>
       <text class="brand-name">趣学伴</text>
-      <text class="brand-slogan">家庭学习规划中心</text>
-      <view class="brand-tag">
-        <text class="tag-dot"></text>
-        <text class="tag-text">让学习更有趣</text>
-      </view>
     </view>
 
     <view class="feature-cards">
       <view class="feature-card">
-        <view class="feature-icon" style="background: linear-gradient(135deg, rgba(244, 63, 122, 0.2), rgba(244, 63, 122, 0.05)); color: var(--primary-light);">
-          <text class="icon-text">📋</text>
+        <view class="feature-icon" style="background: linear-gradient(135deg, rgba(244, 63, 122, 0.2), rgba(244, 63, 122, 0.05));">
+          <image src="/assets/icons/checklist.svg" class="feature-icon-img" mode="aspectFit" />
         </view>
         <view class="feature-info">
           <text class="feature-title">每日任务打卡</text>
@@ -29,8 +24,8 @@
       </view>
 
       <view class="feature-card">
-        <view class="feature-icon" style="background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(139, 92, 246, 0.05)); color: var(--ai-light);">
-          <text class="icon-text">🤖</text>
+        <view class="feature-icon" style="background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(139, 92, 246, 0.05));">
+          <image src="/assets/icons/robot.svg" class="feature-icon-img" mode="aspectFit" />
         </view>
         <view class="feature-info">
           <text class="feature-title">AI 学习日报</text>
@@ -39,8 +34,8 @@
       </view>
 
       <view class="feature-card">
-        <view class="feature-icon" style="background: linear-gradient(135deg, rgba(6, 182, 212, 0.2), rgba(6, 182, 212, 0.05)); color: var(--info);">
-          <text class="icon-text">📈</text>
+        <view class="feature-icon" style="background: linear-gradient(135deg, rgba(6, 182, 212, 0.2), rgba(6, 182, 212, 0.05));">
+          <image src="/assets/icons/chart.svg" class="feature-icon-img" mode="aspectFit" />
         </view>
         <view class="feature-info">
           <text class="feature-title">家庭成长记录</text>

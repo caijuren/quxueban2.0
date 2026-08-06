@@ -92,7 +92,7 @@ export default function ConsoleLayout({ children }: { children: React.ReactNode 
                       className={`flex items-center gap-2 px-3 py-2 rounded-xl text-left transition-colors whitespace-nowrap ${
                         isActive
                           ? 'bg-primary/[0.08] text-primary font-medium'
-                          : 'text-text-tertiary hover:bg-white/[0.04] hover:text-text-secondary'
+                          : 'text-text-tertiary hover:bg-surface-hover hover:text-text-secondary'
                       }`}
                       title={collapsed ? item.name : undefined}
                     >
@@ -108,7 +108,7 @@ export default function ConsoleLayout({ children }: { children: React.ReactNode 
 
         <button
           onClick={() => setCollapsed(!collapsed)}
-          className="hidden lg:flex items-center justify-center w-8 h-8 mt-4 rounded-lg bg-white/[0.04] text-text-muted hover:text-text-secondary transition-colors"
+          className="hidden lg:flex items-center justify-center w-8 h-8 mt-4 rounded-lg bg-surface-hover text-text-muted hover:text-text-secondary transition-colors"
           title={collapsed ? '展开' : '收起'}
         >
           <ChevronLeft className={`w-4 h-4 transition-transform ${collapsed ? 'rotate-180' : ''}`} />

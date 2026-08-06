@@ -30,9 +30,9 @@ export default function TodayTasks() {
         {mockTasks.map((task) => (
           <div
             key={task.id}
-            className="flex items-center gap-3 p-3 rounded-xl bg-white/[0.03] hover:bg-white/[0.05] transition-colors"
+            className="flex items-center gap-3 p-3 rounded-xl bg-surface-hover hover:bg-surface-hover transition-colors"
           >
-            <div className="w-10 h-10 rounded-xl bg-white/[0.05] flex items-center justify-center shrink-0">
+            <div className="w-10 h-10 rounded-xl bg-surface-hover flex items-center justify-center shrink-0">
               <task.icon className="w-5 h-5 text-text-tertiary" />
             </div>
             <div className="flex-1 min-w-0">
@@ -40,7 +40,7 @@ export default function TodayTasks() {
                 <p className="text-sm font-medium text-text-secondary">{task.title}</p>
                 <span className="text-xs text-text-muted">{task.progress}%</span>
               </div>
-              <div className="h-2 rounded-full bg-white/[0.06] overflow-hidden">
+              <div className="h-2 rounded-full bg-surface-hover overflow-hidden">
                 <div
                   className={`h-full rounded-full transition-all duration-500 ${subjectColors[task.subject]}`}
                   style={{ width: `${task.progress}%` }}

@@ -103,19 +103,19 @@ const roleConfig: Record<
   },
   partial: {
     label: '部分有',
-    color: 'text-amber-300',
-    bg: 'bg-amber-500/15',
-    border: 'border-amber-500/40',
+    color: 'text-warning',
+    bg: 'bg-warning/15',
+    border: 'border-warning/40',
     glow: 'shadow-[0_0_25px_rgba(245,158,11,0.25)]',
-    pillBg: 'bg-amber-500/25',
+    pillBg: 'bg-warning/25',
   },
   none: {
     label: '不适用',
     color: 'text-text-muted',
-    bg: 'bg-slate-500/5',
+    bg: 'bg-surface-hover',
     border: 'border-slate-500/15',
     glow: '',
-    pillBg: 'bg-slate-500/15',
+    pillBg: 'bg-surface-hover',
   },
 };
 
@@ -238,7 +238,7 @@ const jiadingMap: MapTier[] = [
     id: 'benpu',
     name: '本区普高',
     color: 'text-text-secondary',
-    bg: 'bg-slate-500/10',
+    bg: 'bg-surface-hover',
     channel: '统招为主，少量到校',
     schools: [
       { name: '中光高级中学', note: '公办普高' },
@@ -359,7 +359,7 @@ export default function MiddleSchoolMatrix() {
                 可选
               </span>
               <span className="flex items-center gap-1.5 px-2 py-1 rounded-full bg-surface-hover border border-border-subtle">
-                <span className="w-2 h-2 rounded-full bg-amber-500 shadow-[0_0_6px_rgba(245,158,11,0.8)]" />
+                <span className="w-2 h-2 rounded-full bg-warning shadow-[0_0_6px_rgba(245,158,11,0.8)]" />
                 部分有
               </span>
               <span className="flex items-center gap-1.5 px-2 py-1 rounded-full bg-surface-hover border border-border-subtle">
@@ -590,14 +590,14 @@ export default function MiddleSchoolMatrix() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, delay: 0.35 }}
-          className="rounded-xl border border-amber-500/20 bg-amber-500/5 p-4"
+          className="rounded-xl border border-warning/20 bg-warning/5 p-4"
         >
           <div className="flex items-start gap-3">
-            <div className="p-1.5 rounded-lg bg-amber-500/10 shrink-0">
-              <Shield className="w-4 h-4 text-amber-400" />
+            <div className="p-1.5 rounded-lg bg-warning/10 shrink-0">
+              <Shield className="w-4 h-4 text-warning" />
             </div>
             <div>
-              <h4 className="text-sm font-bold text-amber-200 mb-1">名额到校资格门槛</h4>
+              <h4 className="text-sm font-bold text-warning mb-1">名额到校资格门槛</h4>
               <p className="text-xs text-text-muted leading-relaxed">
                 嘉定区名额到校主要面向不择生源的初中。学生需在<strong>同一所初中连续就读满 3 年</strong>
                 （含学籍与就读），民办初中是否具备名额到校资格以当年政策为准。提前转学、人户分离等情况可能影响资格。

@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { getMiniAppUser, unauthorizedResponse } from '@/lib/miniapp/auth';
-import { writeFile, mkdir } from 'fs/promises';
+import { createStorageProvider } from '@/lib/storage';
 import path from 'path';
 import type { NextRequest } from 'next/server';
 
@@ -17,16 +17,6 @@ function getBaseUrl(req: NextRequest): string {
   const protocol = forwardedProto || 'http';
   const hostname = forwardedHost || host || 'localhost';
   return `${protocol}://${hostname}`;
-}
-
-function getFileExtension(type: string, name: string): string {
-  const extFromName = path.extname(name);
-  if (extFromName) return extFromName;
-
-  const [main, sub] = type.split('/');
-  if (main === 'audio' && sub === 'x-m4a') return '.m4a';
-  if (sub) return `.${sub}`;
-  return '.bin';
 }
 
 const ALLOWED_TYPES: Record<string, string[]> = {
@@ -74,21 +64,19 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const ext = getFileExtension(file.type, file.name);
-    const timestamp = Date.now();
-    const random = Math.random().toString(36).slice(2, 8);
-    const filename = `${timestamp}-${random}${ext}`;
-
     const actorId = auth.type === 'child' ? auth.childId : auth.userId;
-    const uploadsDir = path.join(process.cwd(), 'public', 'uploads', 'miniapp', actorId, fileType);
-    await mkdir(uploadsDir, { recursive: true });
+    const directory = path.posix.join('miniapp', actorId, fileType);
 
     const buffer = Buffer.from(await file.arrayBuffer());
-    const filePath = path.join(uploadsDir, filename);
-    await writeFile(filePath, buffer);
-
-    const baseUrl = getBaseUrl(req);
-    const fileUrl = `${baseUrl}/uploads/miniapp/${actorId}/${fileType}/${filename}`;
+    const storage = createStorageProvider(getBaseUrl(req));
+    const fileUrl = await storage.upload(
+      {
+        buffer,
+        mimetype: file.type,
+        originalName: file.name,
+      },
+      directory
+    );
 
     return NextResponse.json({
       url: fileUrl,

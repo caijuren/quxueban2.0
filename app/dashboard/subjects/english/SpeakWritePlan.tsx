@@ -17,7 +17,7 @@ export default function SpeakWritePlan({ grade }: { grade: number }) {
       className="rounded-2xl bg-surface-elevated p-6 border border-border-subtle"
     >
       <div className="flex items-center gap-3 mb-6">
-        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-warning to-orange-400 flex items-center justify-center">
+        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-warning to-warning/70 flex items-center justify-center">
           <Target className="w-5 h-5 text-text-primary" />
         </div>
         <div>
@@ -55,7 +55,7 @@ export default function SpeakWritePlan({ grade }: { grade: number }) {
         {/* Writing */}
         <div className="rounded-xl bg-surface-elevated border border-border-subtle p-5">
           <div className="flex items-center gap-3 mb-4">
-            <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-primary to-rose-400 flex items-center justify-center">
+            <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-primary to-primary-glow flex items-center justify-center">
               <PenTool className="w-5 h-5 text-text-primary" />
             </div>
             <div>

@@ -8,7 +8,7 @@
     <view class="bind-child-header">
       <view class="bind-icon-ring">
         <view class="bind-icon">
-          <text>👩‍👧</text>
+          <image src="/assets/icons/lock.svg" class="bind-icon-img" mode="aspectFit" />
         </view>
       </view>
       <text class="bind-title">绑定家长账号</text>

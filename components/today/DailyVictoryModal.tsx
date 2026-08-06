@@ -2,7 +2,7 @@
 
 import { useMemo } from 'react';
 import Image from 'next/image';
-import { Trophy, Send, Image as ImageIcon } from 'lucide-react';
+import { Trophy, Send, Image as ImageIcon, Mic, FileText } from 'lucide-react';
 import Modal from '@/components/ui/Modal';
 import { WeeklyTaskItem, TaskCompletionQuality } from '@/lib/storage.types';
 
@@ -79,11 +79,22 @@ export default function DailyVictoryModal({
       (t) => getTodayRecord(t, targetDate)?.imageUrls || []
     );
 
+    const audioUrls = doneTasks.flatMap(
+      (t) => getTodayRecord(t, targetDate)?.audioUrls || []
+    );
+
+    const audioTranscript = doneTasks
+      .map((t) => getTodayRecord(t, targetDate)?.audioTranscript)
+      .filter(Boolean)
+      .join('\n');
+
     return {
       doneCount: doneTasks.length,
       totalMinutes,
       avgQuality,
       imageUrls,
+      audioUrls,
+      audioTranscript,
     };
   }, [tasks, date]);
 
@@ -186,6 +197,39 @@ export default function DailyVictoryModal({
                   />
                 </div>
               ))}
+            </div>
+          </div>
+        )}
+
+        {/* Audio recordings */}
+        {stats.audioUrls.length > 0 && (
+          <div className="space-y-2">
+            <p className="text-xs font-medium text-text-secondary flex items-center gap-1.5">
+              <Mic className="w-3.5 h-3.5" />
+              今日语音记录
+            </p>
+            <div className="flex flex-col gap-2">
+              {stats.audioUrls.map((url, idx) => (
+                <audio
+                  key={`${url}-${idx}`}
+                  src={url}
+                  controls
+                  className="w-full h-8"
+                />
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Voice transcript */}
+        {stats.audioTranscript && (
+          <div className="space-y-2">
+            <p className="text-xs font-medium text-text-secondary flex items-center gap-1.5">
+              <FileText className="w-3.5 h-3.5" />
+              语音转文字
+            </p>
+            <div className="p-3 rounded-lg bg-surface border border-border-default text-xs text-text-tertiary leading-relaxed whitespace-pre-line">
+              {stats.audioTranscript}
             </div>
           </div>
         )}

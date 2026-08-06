@@ -46,6 +46,11 @@ const config: Config = {
       fontSize: {
         '2xs': ['0.6875rem', { lineHeight: '1rem' }], // 11px
       },
+      borderRadius: {
+        'card': '20px',
+        'module': '14px',
+        'badge': '999px',
+      },
       boxShadow: {
         'glow-primary': '0 0 24px var(--shadow-primary)',
         'glow-secondary': '0 0 24px var(--shadow-secondary)',

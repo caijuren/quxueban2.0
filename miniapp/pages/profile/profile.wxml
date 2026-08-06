@@ -24,17 +24,17 @@
         <view class="info-list">
           <view class="info-item">
             <view class="info-left">
-              <view class="info-icon" style="background-color: rgba(244, 63, 122, 0.15); color: var(--primary-light);">
-                <text class="info-icon-text">👶</text>
+              <view class="info-icon" style="background-color: rgba(244, 63, 122, 0.15);">
+                <image src="/assets/icons/child.svg" class="small-icon" mode="aspectFit" />
               </view>
               <text class="info-label">孩子</text>
             </view>
-            <text class="info-value">{{selectedChildName}}</text>
+            <text class="info-value info-value--truncate">{{selectedChildName}}</text>
           </view>
           <view class="info-item">
             <view class="info-left">
-              <view class="info-icon" style="background-color: rgba(6, 182, 212, 0.15); color: var(--info);">
-                <text class="info-icon-text">🎓</text>
+              <view class="info-icon" style="background-color: rgba(6, 182, 212, 0.15);">
+                <image src="/assets/icons/school.svg" class="small-icon" mode="aspectFit" />
               </view>
               <text class="info-label">年级</text>
             </view>
@@ -46,7 +46,9 @@
       <view wx:if="{{activeRole === 'parent'}}" class="card bind-card">
         <view class="section-title">孩子微信绑定</view>
         <view wx:if="{{children.length === 0 && !loading}}" class="empty-mini">
-          <view class="empty-mini-icon">📝</view>
+          <view class="empty-mini-icon">
+            <image src="/assets/icons/document.svg" class="small-icon" mode="aspectFit" />
+          </view>
           <text class="empty-mini-text">还没有添加孩子</text>
           <text class="empty-mini-desc">请先在 Web 端添加孩子信息</text>
         </view>
@@ -82,30 +84,30 @@
         <view class="menu-list">
           <view wx:if="{{activeRole === 'parent'}}" class="menu-item" bindtap="switchChild">
             <view class="menu-left">
-              <view class="menu-icon" style="background-color: rgba(244, 63, 122, 0.15); color: var(--primary-light);">
-                <text>👶</text>
+              <view class="menu-icon" style="background-color: rgba(244, 63, 122, 0.15);">
+                <image src="/assets/icons/child.svg" class="small-icon" mode="aspectFit" />
               </view>
               <text class="menu-text">切换孩子</text>
             </view>
-            <text class="menu-arrow">›</text>
+            <image src="/assets/icons/arrow-right.svg" class="menu-arrow" mode="aspectFit" />
           </view>
           <view class="menu-item" bindtap="switchRole">
             <view class="menu-left">
-              <view class="menu-icon" style="background-color: rgba(139, 92, 246, 0.15); color: var(--ai-light);">
-                <text>🔄</text>
+              <view class="menu-icon" style="background-color: rgba(139, 92, 246, 0.15);">
+                <image src="/assets/icons/switch.svg" class="small-icon" mode="aspectFit" />
               </view>
               <text class="menu-text">切换身份</text>
             </view>
-            <text class="menu-arrow">›</text>
+            <image src="/assets/icons/arrow-right.svg" class="menu-arrow" mode="aspectFit" />
           </view>
           <view class="menu-item menu-item--danger" bindtap="logout">
             <view class="menu-left">
-              <view class="menu-icon" style="background-color: rgba(244, 63, 122, 0.12); color: var(--primary-light);">
-                <text>↪</text>
+              <view class="menu-icon" style="background-color: rgba(244, 63, 122, 0.12);">
+                <image src="/assets/icons/logout.svg" class="small-icon" mode="aspectFit" />
               </view>
               <text class="menu-text">退出登录</text>
             </view>
-            <text class="menu-arrow">›</text>
+            <image src="/assets/icons/arrow-right.svg" class="menu-arrow" mode="aspectFit" />
           </view>
         </view>
       </view>
@@ -115,10 +117,12 @@
   </scroll-view>
 
   <!-- 绑定码 Modal -->
-  <view wx:if="{{bindCode}}" class="bind-modal" catchtouchmove="true">
+  <view wx:if="{{bindCode}}" class="bind-modal" catchtouchmove="preventTouchMove">
     <view class="bind-modal-mask" bindtap="closeBindModal"></view>
     <view class="bind-modal-content">
-      <view class="bind-modal-icon">🔑</view>
+      <view class="bind-modal-icon">
+        <image src="/assets/icons/key.svg" class="bind-modal-icon-img" mode="aspectFit" />
+      </view>
       <text class="bind-modal-title">孩子绑定码</text>
       <text class="bind-modal-code">{{bindCode}}</text>
       <text class="bind-modal-desc">让孩子在微信小程序「我是孩子，去绑定」中输入此码</text>

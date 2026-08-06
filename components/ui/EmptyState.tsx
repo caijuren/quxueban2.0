@@ -14,9 +14,9 @@ interface EmptyStateProps {
 
 export default function EmptyState({ icon: Icon, title, description, action }: EmptyStateProps) {
   return (
-    <div className="rounded-2xl bg-surface-elevated border border-border-subtle p-8 text-center">
+    <div className="rounded-card bg-surface border border-border-default shadow-card p-8 text-center">
       {Icon && (
-        <div className="w-12 h-12 rounded-2xl bg-surface-hover flex items-center justify-center mx-auto mb-4">
+        <div className="w-12 h-12 rounded-module bg-surface-hover flex items-center justify-center mx-auto mb-4">
           <Icon className="w-6 h-6 text-text-tertiary" />
         </div>
       )}
@@ -25,7 +25,7 @@ export default function EmptyState({ icon: Icon, title, description, action }: E
       {action && (
         <button
           onClick={action.onClick}
-          className="px-4 py-2 rounded-lg bg-primary/10 text-primary text-sm font-medium hover:bg-primary/20 transition-all focus-ring"
+          className="px-4 py-2 rounded-module bg-primary/10 text-primary text-sm font-medium hover:bg-primary/20 transition-all focus-ring"
         >
           {action.label}
         </button>

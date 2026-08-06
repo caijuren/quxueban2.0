@@ -67,7 +67,7 @@
           data-value="{{item.value}}"
           bindtap="onQualityChange"
         >
-          <text class="quality-emoji">{{item.emoji}}</text>
+          <image src="{{item.icon}}" class="quality-icon" mode="aspectFit" />
           <text class="quality-label">{{item.label}}</text>
         </view>
       </view>
@@ -100,10 +100,12 @@
           class="image-item"
         >
           <image class="image-preview" src="{{item}}" mode="aspectFill" bindtap="previewImage" data-url="{{item}}" />
-          <view class="image-delete" data-index="{{index}}" bindtap="deleteImage">✕</view>
+          <view class="image-delete" data-index="{{index}}" bindtap="deleteImage">
+            <image src="/assets/icons/close.svg" class="small-icon" mode="aspectFit" />
+          </view>
         </view>
         <view wx:if="{{imageUrls.length < 9}}" class="image-add" bindtap="chooseImage">
-          <text class="image-add-icon">+</text>
+          <image src="/assets/icons/plus.svg" class="image-add-icon" mode="aspectFit" />
           <text class="image-add-text">添加照片</text>
         </view>
       </view>
@@ -117,10 +119,12 @@
 
       <view wx:if="{{audioUrl}}" class="audio-preview">
         <view class="audio-preview-btn" bindtap="playAudio">
-          <text class="audio-preview-icon">🔊</text>
+          <image src="/assets/icons/speaker.svg" class="audio-preview-icon" mode="aspectFit" />
           <text class="audio-preview-text">已录制语音</text>
         </view>
-        <view class="audio-delete" bindtap="deleteAudio">✕</view>
+        <view class="audio-delete" bindtap="deleteAudio">
+          <image src="/assets/icons/close.svg" class="small-icon" mode="aspectFit" />
+        </view>
       </view>
 
       <view class="voice-section">
@@ -130,7 +134,7 @@
           bindtouchend="onVoiceEnd"
           bindtouchcancel="onVoiceEnd"
         >
-          <text class="voice-btn-icon">🎤</text>
+          <image src="/assets/icons/mic.svg" class="voice-btn-icon" mode="aspectFit" />
           <text class="voice-btn-text">{{isRecording ? '松开结束' : '按住说话'}}</text>
         </view>
         <text wx:if="{{isRecording}}" class="voice-recording-tip">{{recordingDurationText}}</text>
@@ -146,23 +150,22 @@
       </view>
     </view>
 
-    <view class="form-actions">
-      <button class="btn-ghost action-btn" bindtap="cancel">取消</button>
-      <button
-        class="btn-primary action-btn"
-        loading="{{submitting}}"
-        disabled="{{submitting}}"
-        bindtap="submit"
-      >
-        {{submitting ? '提交中...' : '确认打卡'}}
-      </button>
-    </view>
-
-    <view class="safe-area-bottom" style="height: calc(40rpx + env(safe-area-inset-bottom));"></view>
   </scroll-view>
 
+  <view class="form-actions">
+    <button class="btn-ghost action-btn" bindtap="cancel">取消</button>
+    <button
+      class="btn-primary action-btn"
+      loading="{{submitting}}"
+      disabled="{{submitting}}"
+      bindtap="submit"
+    >
+      {{submitting ? '提交中...' : '确认打卡'}}
+    </button>
+  </view>
+
   <view wx:if="{{isRecording}}" class="voice-toast" catchtouchmove="preventTouchMove" bindtouchend="onVoiceEnd" bindtouchcancel="onVoiceEnd">
-    <view class="voice-toast-icon">🎙</view>
+    <image src="/assets/icons/mic.svg" class="voice-toast-icon" mode="aspectFit" />
     <text class="voice-toast-title">录音识别中...</text>
     <text class="voice-toast-text">松开手指完成录音</text>
     <text class="voice-toast-duration">{{recordingDurationText}}</text>

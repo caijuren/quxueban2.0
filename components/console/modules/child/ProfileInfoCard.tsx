@@ -59,7 +59,7 @@ export default function ProfileInfoCard({ child }: ProfileInfoCardProps) {
       description="孩子的核心档案信息"
       action={{ label: '编辑资料', onClick: () => {} }}
     >
-      <div className="p-4 flex items-center gap-4 border-b border-white/[0.06]">
+      <div className="p-4 flex items-center gap-4 border-b border-border-subtle">
         <ChildAvatar child={child} size="2xl" shape="rounded" />
         <div>
           <div className="flex items-center gap-2">
@@ -80,7 +80,7 @@ export default function ProfileInfoCard({ child }: ProfileInfoCardProps) {
             key={item.label}
             className="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-white/[0.02] transition-colors"
           >
-            <div className="w-9 h-9 rounded-xl bg-white/[0.04] flex items-center justify-center shrink-0">
+            <div className="w-9 h-9 rounded-xl bg-surface-hover flex items-center justify-center shrink-0">
               <item.icon className="w-4 h-4 text-text-tertiary" />
             </div>
             <div className="min-w-0">

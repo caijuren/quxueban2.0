@@ -24,7 +24,7 @@
         >
           <view class="role-card-main">
             <view class="role-icon role-icon--parent">
-              <text class="role-icon-text">家</text>
+              <image src="/assets/icons/parent.svg" class="role-icon-img" mode="aspectFit" />
             </view>
             <view class="role-info">
               <text class="role-name">我是家长</text>
@@ -32,7 +32,7 @@
             </view>
           </view>
           <view class="role-check">
-            <text class="role-check-icon">›</text>
+            <image src="/assets/icons/arrow-right.svg" class="role-check-icon" mode="aspectFit" />
           </view>
         </view>
 
@@ -43,7 +43,7 @@
         >
           <view class="role-card-main">
             <view class="role-icon role-icon--child">
-              <text class="role-icon-text">孩</text>
+              <image src="/assets/icons/child-user.svg" class="role-icon-img" mode="aspectFit" />
             </view>
             <view class="role-info">
               <text class="role-name">我是孩子</text>
@@ -51,13 +51,13 @@
             </view>
           </view>
           <view class="role-check">
-            <text class="role-check-icon">›</text>
+            <image src="/assets/icons/arrow-right.svg" class="role-check-icon" mode="aspectFit" />
           </view>
         </view>
       </view>
 
       <view class="role-hint">
-        <text class="role-hint-icon">💡</text>
+        <image src="/assets/icons/bulb.svg" class="role-hint-icon" mode="aspectFit" />
         <text class="role-hint-text">孩子身份需家长先生成绑定码</text>
       </view>
     </view>
@@ -95,13 +95,15 @@
             <text class="child-name">{{item.name}}</text>
             <text class="child-meta">{{item.grade}}年级 · {{item.currentSchool || '未设置学校'}}</text>
           </view>
-          <view wx:if="{{selectedChild && selectedChild.id === item.id}}" class="child-check">✓</view>
-          <view wx:else class="child-arrow">›</view>
+          <view wx:if="{{selectedChild && selectedChild.id === item.id}}" class="child-check">
+            <image src="/assets/icons/check.svg" class="small-icon" mode="aspectFit" />
+          </view>
+          <image wx:else src="/assets/icons/arrow-right.svg" class="child-arrow" mode="aspectFit" />
         </view>
 
         <view wx:if="{{children.length === 0 && !loading}}" class="empty-state">
           <view class="empty-icon">
-            <text>📝</text>
+            <image src="/assets/icons/document.svg" class="empty-icon-img" mode="aspectFit" />
           </view>
           <text class="empty-title">还没有添加孩子</text>
           <text class="empty-desc">请先在 Web 端添加孩子信息</text>
@@ -112,5 +114,5 @@
     </view>
   </block>
 
-  <view class="safe-area-bottom" style="height: 40rpx;"></view>
+  <view class="safe-area-bottom" style="height: calc(40rpx + env(safe-area-inset-bottom));"></view>
 </view>

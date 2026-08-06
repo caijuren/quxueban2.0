@@ -17,6 +17,8 @@ import {
   X,
   Target,
   ListChecks,
+  Mic,
+  FileText,
 } from 'lucide-react';
 import {
   TaskStatus,
@@ -48,8 +50,8 @@ const statusConfig: Record<
   partially_done: {
     label: '部分完成',
     icon: Minus,
-    color: 'text-amber-400',
-    bg: 'bg-amber-500/10 border-amber-500/30',
+    color: 'text-warning',
+    bg: 'bg-warning/10 border-warning/30',
   },
   done: {
     label: '已完成',
@@ -75,10 +77,10 @@ const qualityConfig: Record<
   TaskCompletionQuality,
   { label: string; color: string }
 > = {
-  excellent: { label: '优秀', color: 'text-emerald-400 bg-emerald-500/10 border-emerald-500/30' },
+  excellent: { label: '优秀', color: 'text-success bg-success/10 border-success/30' },
   good: { label: '良好', color: 'text-blue-400 bg-blue-500/10 border-blue-500/30' },
-  average: { label: '一般', color: 'text-amber-400 bg-amber-500/10 border-amber-500/30' },
-  needs_work: { label: '需努力', color: 'text-rose-400 bg-rose-500/10 border-rose-500/30' },
+  average: { label: '一般', color: 'text-warning bg-warning/10 border-warning/30' },
+  needs_work: { label: '需努力', color: 'text-error bg-error/10 border-error/30' },
 };
 
 function getTodayStr() {
@@ -120,6 +122,8 @@ export default function TaskCompletionModal({
   const [note, setNote] = useState('');
   const [imageUrls, setImageUrls] = useState<string[]>([]);
   const [imageInput, setImageInput] = useState('');
+  const [audioUrls, setAudioUrls] = useState<string[]>([]);
+  const [audioTranscript, setAudioTranscript] = useState('');
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
@@ -131,6 +135,8 @@ export default function TaskCompletionModal({
     setNote(latestRecord?.note ?? '');
     setImageUrls(latestRecord?.imageUrls ?? []);
     setImageInput('');
+    setAudioUrls(latestRecord?.audioUrls ?? []);
+    setAudioTranscript(latestRecord?.audioTranscript ?? '');
   }, [open, latestRecord, task]);
 
   useEffect(() => {
@@ -150,6 +156,13 @@ export default function TaskCompletionModal({
     setImageUrls(imageUrls.filter((u) => u !== url));
   };
 
+  const handleRemoveAudio = (url: string) => {
+    setAudioUrls(audioUrls.filter((u) => u !== url));
+    if (audioUrls.length <= 1) {
+      setAudioTranscript('');
+    }
+  };
+
   const handleSubmit = async () => {
     if (!task) return;
     setSubmitting(true);
@@ -162,6 +175,8 @@ export default function TaskCompletionModal({
         quality,
         note,
         imageUrls,
+        audioUrls,
+        audioTranscript,
         capabilityProgress: latestRecord?.capabilityProgress ?? [],
       });
       onClose();
@@ -345,7 +360,7 @@ export default function TaskCompletionModal({
                   <span className="truncate max-w-[180px]">{url}</span>
                   <button
                     onClick={() => handleRemoveImage(url)}
-                    className="p-0.5 rounded hover:bg-rose-500/10 text-text-muted hover:text-rose-400 transition-colors"
+                    className="p-0.5 rounded hover:bg-error/10 text-text-muted hover:text-error transition-colors"
                   >
                     <X className="w-3 h-3" />
                   </button>
@@ -354,6 +369,45 @@ export default function TaskCompletionModal({
             </div>
           )}
         </div>
+
+        {/* Audio evidence from miniapp */}
+        {audioUrls.length > 0 && (
+          <div className="space-y-2">
+            <label className="text-xs font-medium text-text-secondary flex items-center gap-1.5">
+              <Mic className="w-3.5 h-3.5" />
+              语音记录
+            </label>
+            <div className="flex flex-wrap gap-2">
+              {audioUrls.map((url) => (
+                <div
+                  key={url}
+                  className="group flex items-center gap-2 px-2.5 py-1.5 rounded-lg bg-surface border border-border-default text-xs text-text-tertiary max-w-full"
+                >
+                  <audio src={url} controls className="h-6 max-w-[220px]" />
+                  <button
+                    onClick={() => handleRemoveAudio(url)}
+                    className="p-0.5 rounded hover:bg-error/10 text-text-muted hover:text-error transition-colors"
+                  >
+                    <X className="w-3 h-3" />
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Voice transcript */}
+        {audioTranscript && (
+          <div className="space-y-2">
+            <label className="text-xs font-medium text-text-secondary flex items-center gap-1.5">
+              <FileText className="w-3.5 h-3.5" />
+              语音转文字
+            </label>
+            <div className="px-3 py-2.5 rounded-xl bg-surface border border-border-default text-xs text-text-tertiary leading-relaxed">
+              {audioTranscript}
+            </div>
+          </div>
+        )}
 
         {/* Preview */}
         <CommandCard className="p-3.5 bg-surface/50">

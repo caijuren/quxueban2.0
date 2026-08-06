@@ -89,6 +89,19 @@ page {
   color: var(--text-muted);
 }
 
+/* Icon images */
+.feature-icon-img {
+  width: 44rpx;
+  height: 44rpx;
+  display: block;
+}
+
+.small-icon {
+  width: 32rpx;
+  height: 32rpx;
+  display: block;
+}
+
 /* Buttons */
 .btn-primary {
   display: flex;
@@ -241,6 +254,12 @@ page {
   justify-content: center;
   border: 1rpx solid var(--border);
   box-shadow: var(--shadow-sm);
+}
+
+.empty-icon-img {
+  width: 72rpx;
+  height: 72rpx;
+  display: block;
 }
 
 .empty-title {

@@ -33,6 +33,9 @@ services:
       - .env.production
     environment:
       DATABASE_URL: postgresql://quxueban:quxueban@db:5432/quxueban?schema=public
+    volumes:
+      # 上传文件持久化卷：避免容器重建后照片/语音丢失
+      - app_uploads:/app/public/uploads
     depends_on:
       db:
         condition: service_healthy
@@ -62,3 +65,4 @@ services:
 
 volumes:
   postgres_data:
+  app_uploads:

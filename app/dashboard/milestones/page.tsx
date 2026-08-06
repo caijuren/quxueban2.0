@@ -40,7 +40,7 @@ const milestones = [
 const statusConfig: Record<string, { icon: typeof CheckCircle2; color: string; bg: string; label: string }> = {
   completed: { icon: CheckCircle2, color: 'text-success', bg: 'bg-success/10', label: '已完成' },
   in_progress: { icon: Clock, color: 'text-warning', bg: 'bg-warning/10', label: '进行中' },
-  pending: { icon: Circle, color: 'text-text-tertiary', bg: 'bg-slate-500/10', label: '待开始' },
+  pending: { icon: Circle, color: 'text-text-tertiary', bg: 'bg-surface-hover', label: '待开始' },
 };
 
 export default function MilestonesPage() {

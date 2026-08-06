@@ -38,7 +38,7 @@ export default function CommandCard({
   return (
     <div
       className={cn(
-        'rounded-2xl border transition-all duration-200 overflow-hidden',
+        'border transition-all duration-200 overflow-hidden',
         active
           ? 'command-panel-active'
           : 'command-panel',

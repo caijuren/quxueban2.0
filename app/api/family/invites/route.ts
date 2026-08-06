@@ -22,7 +22,12 @@ export async function POST(req: Request) {
     return validation.response;
   }
 
-  const { email, phone, role } = validation.data;
+  let { email, phone, role } = validation.data;
+
+  // 统一手机号格式，方便查询和存储
+  if (phone) {
+    phone = phone.replace(/[\s-]/g, '').replace(/^\+?86/, '');
+  }
 
   const myMembership = await prisma.familyMember.findFirst({
     where: { userId: session.user.id, status: 'ACTIVE' },

@@ -26,7 +26,7 @@ export default function SettingRow({
     <>
       <div className="flex items-center gap-3 min-w-0">
         {Icon && (
-          <div className="w-9 h-9 rounded-xl bg-white/[0.04] flex items-center justify-center shrink-0">
+          <div className="w-9 h-9 rounded-xl bg-surface-hover flex items-center justify-center shrink-0">
             <Icon className={`w-4 h-4 ${variant === 'warning' ? 'text-warning' : 'text-text-tertiary'}`} />
           </div>
         )}
@@ -47,7 +47,7 @@ export default function SettingRow({
   );
 
   const className =
-    'flex items-center justify-between px-4 py-3.5 rounded-xl transition-colors hover:bg-white/[0.04] group';
+    'flex items-center justify-between px-4 py-3.5 rounded-xl transition-colors hover:bg-surface-hover group';
 
   if (href) {
     return (

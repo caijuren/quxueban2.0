@@ -18,15 +18,15 @@ const subjectLabels: Record<string, string> = {
 };
 
 function scoreColor(score: number): string {
-  if (score >= 80) return 'text-emerald-400';
-  if (score >= 60) return 'text-amber-400';
-  return 'text-rose-400';
+  if (score >= 80) return 'text-success';
+  if (score >= 60) return 'text-warning';
+  return 'text-error';
 }
 
 function scoreBg(score: number): string {
-  if (score >= 80) return 'bg-emerald-500';
-  if (score >= 60) return 'bg-amber-500';
-  return 'bg-rose-500';
+  if (score >= 80) return 'bg-success';
+  if (score >= 60) return 'bg-warning';
+  return 'bg-error';
 }
 
 export default function AIDiagnosisCard({
@@ -58,7 +58,7 @@ export default function AIDiagnosisCard({
         <div className="flex items-start justify-between gap-4">
           <div className="w-full">
             <div className="flex items-center gap-2 mb-3">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-secondary to-violet-400 flex items-center justify-center">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-secondary to-secondary-glow flex items-center justify-center">
                 <Brain className="w-5 h-5 text-text-primary" />
               </div>
               <div className="px-2 py-0.5 rounded-md bg-secondary/10 text-secondary text-xs border border-secondary/20 flex items-center gap-1">
@@ -149,10 +149,10 @@ export default function AIDiagnosisCard({
                           className={cn(
                             'px-3 py-1.5 rounded-lg border text-xs font-medium',
                             risk.level === 'high'
-                              ? 'bg-rose-500/10 border-rose-500/20 text-rose-400'
+                              ? 'bg-error/10 border-error/20 text-error'
                               : risk.level === 'medium'
-                                ? 'bg-amber-500/10 border-amber-500/20 text-amber-400'
-                                : 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400'
+                                ? 'bg-warning/10 border-warning/20 text-warning'
+                                : 'bg-success/10 border-success/20 text-success'
                           )}
                         >
                           {risk.title}
@@ -183,10 +183,10 @@ export default function AIDiagnosisCard({
                               className={cn(
                                 'mt-1 w-1.5 h-1.5 rounded-full shrink-0',
                                 s.priority === 'must'
-                                  ? 'bg-rose-400'
+                                  ? 'bg-error'
                                   : s.priority === 'should'
-                                    ? 'bg-amber-400'
-                                    : 'bg-emerald-400'
+                                    ? 'bg-warning'
+                                    : 'bg-success'
                               )}
                             />
                             <span>

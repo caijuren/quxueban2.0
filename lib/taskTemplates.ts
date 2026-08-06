@@ -60,12 +60,12 @@ export const TASK_CATEGORY_ICONS: Record<TaskCategory, string> = {
 };
 
 export const TASK_CATEGORY_COLORS: Record<TaskCategory, string> = {
-  school: 'text-emerald-400 bg-emerald-400/10',
-  reading: 'text-violet-400 bg-violet-400/10',
-  sport: 'text-orange-400 bg-orange-400/10',
-  interest: 'text-pink-400 bg-pink-400/10',
-  ability: 'text-indigo-400 bg-indigo-400/10',
-  other: 'text-text-muted bg-surface-highlight',
+  school: 'text-success bg-success/10',
+  reading: 'text-secondary bg-secondary/10',
+  sport: 'text-warning bg-warning/10',
+  interest: 'text-primary bg-primary/10',
+  ability: 'text-accent bg-accent/10',
+  other: 'text-text-muted bg-surface-hover',
 };
 
 export const TASK_ALIGNMENT_LABELS: Record<TaskAlignment, string> = {

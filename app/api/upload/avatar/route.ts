@@ -5,7 +5,33 @@ import { writeFile, mkdir } from 'fs/promises';
 import path from 'path';
 
 const MAX_SIZE = 2 * 1024 * 1024;
-const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+
+const MIME_TO_EXT: Record<string, string> = {
+  'image/jpeg': 'jpg',
+  'image/jpg': 'jpg',
+  'image/png': 'png',
+  'image/webp': 'webp',
+  'image/gif': 'gif',
+};
+
+const EXT_TO_MIME: Record<string, string> = {
+  jpg: 'image/jpeg',
+  jpeg: 'image/jpeg',
+  png: 'image/png',
+  webp: 'image/webp',
+  gif: 'image/gif',
+};
+
+function resolveMimeType(file: File): string | null {
+  if (MIME_TO_EXT[file.type]) {
+    return file.type;
+  }
+  const ext = file.name.split('.').pop()?.toLowerCase();
+  if (ext && EXT_TO_MIME[ext]) {
+    return EXT_TO_MIME[ext];
+  }
+  return null;
+}
 
 export async function POST(req: Request) {
   try {
@@ -21,9 +47,10 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: '请上传图片文件' }, { status: 400 });
     }
 
-    if (!ALLOWED_TYPES.includes(file.type)) {
+    const mimeType = resolveMimeType(file);
+    if (!mimeType) {
       return NextResponse.json(
-        { error: '仅支持 JPG、PNG、WebP、GIF 格式' },
+        { error: `仅支持 JPG、PNG、WebP、GIF 格式（当前 ${file.type || '未知类型'}）` },
         { status: 400 }
       );
     }
@@ -35,7 +62,7 @@ export async function POST(req: Request) {
       );
     }
 
-    const ext = file.type.split('/')[1] || 'png';
+    const ext = MIME_TO_EXT[mimeType];
     const timestamp = Date.now();
     const random = Math.random().toString(36).slice(2, 8);
     const filename = `${session.user.id}-${timestamp}-${random}.${ext}`;
@@ -48,6 +75,8 @@ export async function POST(req: Request) {
     await writeFile(filePath, buffer);
 
     const avatarUrl = `/uploads/avatars/${filename}`;
+
+    console.log(`[avatar upload] success: user=${session.user.id}, url=${avatarUrl}, size=${file.size}, type=${mimeType}`);
 
     return NextResponse.json({ avatarUrl });
   } catch (error) {

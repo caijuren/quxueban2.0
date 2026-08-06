@@ -42,7 +42,7 @@ export default function MilestonesMarketingPage() {
           <>
             把大目标
             <br />
-            <span className="text-slate-500">拆成可执行节点</span>
+            <span className="text-text-muted">拆成可执行节点</span>
           </>
         }
         description="升学不是一蹴而就。趣学伴将长远目标拆分为年级目标、学期目标、月度任务和周计划，让每一步都有明确的截止时间。"
@@ -66,7 +66,7 @@ export default function MilestonesMarketingPage() {
                   </div>
                   <div className="flex-1">
                     <p className="text-sm text-text-primary font-medium mb-0.5">{item.example}</p>
-                    <p className="text-xs text-slate-400">{item.detail}</p>
+                    <p className="text-xs text-text-tertiary">{item.detail}</p>
                   </div>
                 </div>
               </CommandCard>

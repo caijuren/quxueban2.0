@@ -11,27 +11,13 @@ Page({
 
   onLoad() {
     const app = getApp();
-    this.setData({ statusBarHeight: app.globalData.statusBarHeight || 0 });
-    this.checkAuthState();
+    this.setData({ statusBarHeight: app.globalData.statusBarHeight || 0, loading: false });
   },
 
   onShow() {
     if (typeof this.getTabBar === 'function' && this.getTabBar()) {
       this.getTabBar().setData({ selected: 0 });
     }
-    this.checkAuthState();
-  },
-
-  checkAuthState() {
-    const token = storage.getToken();
-    const activeRole = auth.getActiveRole();
-
-    if (token && activeRole) {
-      wx.switchTab({ url: '/pages/tasks/tasks' });
-      return;
-    }
-
-    this.setData({ loading: false });
   },
 
   goTasks() {

@@ -436,8 +436,11 @@ export const familyInviteCreateSchema = z.object({
   email: z.string().email('邮箱格式不正确').max(100).nullable().optional(),
   phone: z
     .string()
-    .regex(/^1[3-9]\d{9}$/, '手机号格式不正确')
     .max(20)
+    .transform((val) => val.replace(/[\s-]/g, '').replace(/^\+?86/, ''))
+    .refine((val) => /^1[3-9]\d{9}$/.test(val), {
+      message: '手机号格式不正确',
+    })
     .nullable()
     .optional(),
 }).refine((data) => data.email || data.phone, {

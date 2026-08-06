@@ -66,15 +66,15 @@ export default function PrivacyPage() {
       <Navbar />
       <div className="mx-auto max-w-3xl px-6 py-24">
         <h1 className="mb-4 text-3xl font-bold font-display">隐私协议</h1>
-        <p className="mb-12 text-sm text-slate-500">更新日期：2026 年 7 月 27 日</p>
+        <p className="mb-12 text-sm text-text-muted">更新日期：2026 年 7 月 27 日</p>
 
         <div className="space-y-8">
           {sections.map((section) => (
             <section key={section.title}>
-              <h2 className="mb-2 text-lg font-semibold text-slate-100">
+              <h2 className="mb-2 text-lg font-semibold text-text-primary">
                 {section.title}
               </h2>
-              <p className="leading-relaxed text-slate-400">{section.content}</p>
+              <p className="leading-relaxed text-text-secondary">{section.content}</p>
             </section>
           ))}
         </div>

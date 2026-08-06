@@ -118,7 +118,7 @@ export default function AIPage() {
         <button
           onClick={generateDiagnosis}
           disabled={!currentChild || loading}
-          className="flex items-center gap-2 px-5 py-2.5 rounded-lg bg-gradient-to-r from-secondary to-secondary-glow text-text-primary font-semibold hover:shadow-[0_0_30px_rgba(139,92,246,0.4)] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="flex items-center gap-2 px-5 py-2.5 rounded-module bg-gradient-to-r from-secondary to-secondary-glow text-text-primary font-semibold hover:shadow-glow-secondary transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <RefreshCw className="w-4 h-4" />}
           {loading ? '生成中...' : '重新生成'}
@@ -137,9 +137,9 @@ export default function AIPage() {
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="rounded-2xl bg-surface-elevated p-6 border border-red-500/30 bg-red-500/10"
+          className="rounded-2xl bg-surface-elevated p-6 border border-error/30 bg-error/10"
         >
-          <p className="text-red-300">生成失败：{error}</p>
+          <p className="text-error">生成失败：{error}</p>
         </motion.div>
       )}
 
@@ -161,7 +161,7 @@ export default function AIPage() {
                   <h2 className="text-xl font-bold font-display">AI 综合评估</h2>
                   <div className="flex items-center gap-3">
                     <span className="text-sm text-text-tertiary">路线匹配度</span>
-                    <span className="text-2xl font-bold text-primary">{diagnosis.overallScore}%</span>
+                    <span className="text-2xl font-bold text-secondary">{diagnosis.overallScore}%</span>
                   </div>
                 </div>
                 <p className="text-text-secondary leading-relaxed">{diagnosis.summary}</p>

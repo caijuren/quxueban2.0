@@ -471,7 +471,7 @@ export default function WeeklyTaskList({
       <motion.div
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
-        className="rounded-[20px] bg-[#0a0c12] border border-white/[0.06] shadow-[0_8px_32px_rgba(0,0,0,0.4)] px-5 py-4"
+        className="rounded-[20px] bg-background border border-border-subtle shadow-[0_8px_32px_rgba(0,0,0,0.4)] px-5 py-4"
       >
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3 flex-1 min-w-0">
@@ -499,10 +499,10 @@ export default function WeeklyTaskList({
     <motion.div
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
-      className="rounded-[20px] bg-[#0a0c12] border border-white/[0.06] shadow-[0_8px_32px_rgba(0,0,0,0.4)] overflow-hidden"
+      className="rounded-[20px] bg-background border border-border-subtle shadow-[0_8px_32px_rgba(0,0,0,0.4)] overflow-hidden"
     >
       {/* Header */}
-      <div className="group flex items-center justify-between px-5 py-4 border-b border-white/[0.06]">
+      <div className="group flex items-center justify-between px-5 py-4 border-b border-border-subtle">
         <div className="flex items-center gap-3 flex-1 min-w-0">
           <div className="w-8 h-8 rounded-[10px] bg-primary/10 border border-primary/20 flex items-center justify-center shrink-0">
             <CalendarDays className="w-4 h-4 text-primary" />
@@ -538,7 +538,7 @@ export default function WeeklyTaskList({
       <div className="overflow-x-auto">
         <table className="w-full min-w-[820px] table-fixed border-collapse">
           <thead>
-            <tr className="border-b border-white/[0.05]">
+            <tr className="border-b border-border-subtle">
               <th className="text-left py-7 px-4 text-[13px] font-medium text-text-muted/80 whitespace-nowrap w-[140px]">
                 学科
               </th>
@@ -589,7 +589,7 @@ export default function WeeklyTaskList({
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: 'auto', opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            className="overflow-hidden border-t border-white/[0.06] bg-white/[0.02]"
+            className="overflow-hidden border-t border-border-subtle bg-white/[0.02]"
           >
             <div className="flex flex-wrap items-center gap-3 px-5 py-3">
               <span className="text-xs text-text-muted/70">添加模块到：</span>
@@ -599,7 +599,7 @@ export default function WeeklyTaskList({
                   <button
                     key={sid}
                     onClick={() => addGoal(sid)}
-                    className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-white/[0.04] border border-white/[0.08] text-xs text-text-muted hover:text-text-primary hover:bg-white/[0.08] transition-colors"
+                    className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-surface-hover border border-border-default text-xs text-text-muted hover:text-text-primary hover:bg-surface-hover transition-colors"
                   >
                     <Plus className="w-3 h-3" />
                     {meta.name}
@@ -685,7 +685,7 @@ function SubjectGroup({
                     type="text"
                     value={row.moduleName}
                     onChange={(e) => onUpdateGoalTitle(row.goalId, e.target.value)}
-                    className="w-full text-[13px] rounded-md border border-white/[0.08] bg-[#0f1117] px-2 py-1 text-[#e2e8f0] focus:outline-none focus:border-primary"
+                    className="w-full text-[13px] rounded-md border border-border-default bg-surface-elevated px-2 py-1 text-[#e2e8f0] focus:outline-none focus:border-primary"
                   />
                 ) : (
                   <span className="text-[13px] text-[#a0aec0] whitespace-nowrap overflow-hidden text-ellipsis">{row.moduleName}</span>
@@ -722,7 +722,7 @@ function SubjectGroup({
                   onChange={(e) =>
                     onUpdateItem(row.goalId, row.itemId, { title: e.target.value })
                   }
-                  className="w-full text-[13px] rounded-md border border-white/[0.08] bg-[#0f1117] px-2 py-1 text-[#e2e8f0] focus:outline-none focus:border-primary"
+                  className="w-full text-[13px] rounded-md border border-border-default bg-surface-elevated px-2 py-1 text-[#e2e8f0] focus:outline-none focus:border-primary"
                 />
               ) : (
                 <span
@@ -747,7 +747,7 @@ function SubjectGroup({
                     onUpdateItem(row.goalId, row.itemId, { text: e.target.value })
                   }
                   placeholder="填写检验标准"
-                  className="w-full text-[13px] rounded-md border border-white/[0.08] bg-[#0f1117] px-2 py-1 text-[#e2e8f0] placeholder:text-text-tertiary focus:outline-none focus:border-primary"
+                  className="w-full text-[13px] rounded-md border border-border-default bg-surface-elevated px-2 py-1 text-[#e2e8f0] placeholder:text-text-tertiary focus:outline-none focus:border-primary"
                 />
               ) : (
                 <span

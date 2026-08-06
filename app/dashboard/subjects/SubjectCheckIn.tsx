@@ -118,7 +118,7 @@ export default function SubjectCheckIn({
     >
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-400 to-teal-400 flex items-center justify-center">
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-success to-accent flex items-center justify-center">
             <CheckCircle2 className="w-5 h-5 text-text-primary" />
           </div>
           <div>
@@ -136,7 +136,7 @@ export default function SubjectCheckIn({
           </div>
           <div className="text-right">
             <p className="text-xs text-text-muted">今日进度</p>
-            <p className="text-lg font-bold text-emerald-400">{progress}%</p>
+            <p className="text-lg font-bold text-success">{progress}%</p>
           </div>
         </div>
       </div>
@@ -146,7 +146,7 @@ export default function SubjectCheckIn({
           initial={{ width: 0 }}
           animate={{ width: `${progress}%` }}
           transition={{ duration: 0.5 }}
-          className="h-full rounded-full bg-gradient-to-r from-emerald-400 to-teal-400"
+          className="h-full rounded-full bg-gradient-to-r from-success to-accent"
         />
       </div>
 
@@ -161,17 +161,17 @@ export default function SubjectCheckIn({
                 whileTap={{ scale: 0.98 }}
                 className={`w-full flex items-center justify-between p-4 rounded-xl border transition-all text-left ${
                   isDone
-                    ? 'bg-emerald-500/10 border-emerald-500/30'
+                    ? 'bg-success/10 border-success/30'
                     : 'bg-surface-elevated border-border-subtle hover:bg-surface-elevated'
                 }`}
               >
                 <div className="flex items-center gap-3">
                   {isDone ? (
-                    <CheckCircle2 className="w-5 h-5 text-emerald-400" />
+                    <CheckCircle2 className="w-5 h-5 text-success" />
                   ) : (
                     <Circle className="w-5 h-5 text-text-muted" />
                   )}
-                  <span className={`text-sm ${isDone ? 'text-emerald-200 line-through' : 'text-text-secondary'}`}>
+                  <span className={`text-sm ${isDone ? 'text-success line-through' : 'text-text-secondary'}`}>
                     {task.label}
                   </span>
                 </div>
@@ -188,10 +188,10 @@ export default function SubjectCheckIn({
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="mt-5 flex items-center gap-3 rounded-xl bg-gradient-to-r from-emerald-500/20 to-teal-500/10 border border-emerald-500/20 p-4"
+          className="mt-5 flex items-center gap-3 rounded-xl bg-gradient-to-r from-success/20 to-accent/10 border border-success/20 p-4"
         >
-          <Trophy className="w-5 h-5 text-emerald-400" />
-          <p className="text-sm text-emerald-300">今日任务全部完成！继续保持。</p>
+          <Trophy className="w-5 h-5 text-success" />
+          <p className="text-sm text-success">今日任务全部完成！继续保持。</p>
         </motion.div>
       )}
     </motion.div>

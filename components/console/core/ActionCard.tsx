@@ -17,7 +17,7 @@ interface ActionCardProps {
 
 export default function ActionCard({ icon: Icon, title, description, actions }: ActionCardProps) {
   return (
-    <div className="rounded-xl bg-white/[0.03] border border-white/[0.06] p-4">
+    <div className="rounded-xl bg-surface-hover border border-border-subtle p-4">
       <div className="flex items-start gap-3">
         {Icon && (
           <div className="w-9 h-9 rounded-xl bg-ai/10 flex items-center justify-center shrink-0">
@@ -38,7 +38,7 @@ export default function ActionCard({ icon: Icon, title, description, actions }: 
               className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
                 action.variant === 'primary'
                   ? 'bg-primary text-white hover:opacity-90'
-                  : 'bg-white/[0.06] text-text-secondary hover:bg-white/[0.10]'
+                  : 'bg-surface-hover text-text-secondary hover:bg-surface-hover'
               }`}
             >
               {action.label}

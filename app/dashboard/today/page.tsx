@@ -423,8 +423,8 @@ export default function TodayPage() {
                           isDone
                             ? 'bg-surface border-success/20 opacity-80'
                             : isPending
-                            ? 'bg-surface-light border-rose-500/20'
-                            : 'bg-surface-light border-border-default hover:border-border-strong hover:bg-surface-highlight'
+                            ? 'bg-surface border-error/20'
+                            : 'bg-surface border-border-default hover:border-border-strong hover:bg-surface-highlight'
                         }`}
                       >
                         {/* Left completion checkbox */}
@@ -433,7 +433,7 @@ export default function TodayPage() {
                             isDone
                               ? 'bg-success border-success'
                               : isPending
-                              ? 'bg-rose-500 border-rose-500'
+                              ? 'bg-error border-error'
                               : 'border-text-muted group-hover:border-text-tertiary'
                           }`}
                         >
@@ -483,12 +483,12 @@ export default function TodayPage() {
                               <span
                                 className={`text-[10px] px-1.5 py-0.5 rounded-full border ${
                                   quality === 'excellent'
-                                    ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30'
+                                    ? 'bg-success/10 text-success border-success/30'
                                     : quality === 'good'
-                                    ? 'bg-blue-500/10 text-blue-400 border-blue-500/30'
+                                    ? 'bg-accent/10 text-accent border-accent/30'
                                     : quality === 'average'
-                                    ? 'bg-amber-500/10 text-amber-400 border-amber-500/30'
-                                    : 'bg-rose-500/10 text-rose-400 border-rose-500/30'
+                                    ? 'bg-warning/10 text-warning border-warning/30'
+                                    : 'bg-error/10 text-error border-error/30'
                                 }`}
                               >
                                 {quality === 'excellent'
@@ -529,7 +529,7 @@ export default function TodayPage() {
           </button>
           <button
             onClick={() => router.push('/dashboard/weekly')}
-            className="inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl border border-dashed border-border-default text-text-tertiary hover:text-text-secondary hover:border-border-strong hover:bg-surface-light transition-all text-sm"
+            className="inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl border border-dashed border-border-default text-text-tertiary hover:text-text-secondary hover:border-border-strong hover:bg-surface-hover transition-all text-sm"
           >
             <Target className="w-4 h-4" />
             查看完整周计划
@@ -548,7 +548,7 @@ export default function TodayPage() {
         >
           <button
             onClick={() => router.push('/dashboard/weekly')}
-            className="w-full py-3 rounded-xl border border-dashed border-border-default text-text-tertiary hover:text-text-secondary hover:border-border-strong hover:bg-surface-light transition-all flex items-center justify-center gap-2 text-sm"
+            className="w-full py-3 rounded-xl border border-dashed border-border-default text-text-tertiary hover:text-text-secondary hover:border-border-strong hover:bg-surface-hover transition-all flex items-center justify-center gap-2 text-sm"
           >
             <Target className="w-4 h-4" />
             查看完整周计划

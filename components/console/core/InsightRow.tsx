@@ -30,7 +30,7 @@ export default function InsightRow({
   return (
     <div className="flex items-center justify-between px-4 py-3.5 rounded-xl hover:bg-white/[0.02] transition-colors">
       <div className="flex items-center gap-3">
-        <div className="w-9 h-9 rounded-xl bg-white/[0.04] flex items-center justify-center shrink-0">
+        <div className="w-9 h-9 rounded-xl bg-surface-hover flex items-center justify-center shrink-0">
           <Icon className="w-4 h-4 text-text-tertiary" />
         </div>
         <div>

@@ -65,6 +65,7 @@ export async function POST(req: Request, { params }: Params) {
     note: body.note,
     imageUrls: body.imageUrls,
     audioUrls: body.audioUrls,
+    audioTranscript: body.audioTranscript,
     capabilityProgress: body.capabilityProgress,
     quantityIncrement: body.quantityIncrement,
     checklistProgress: body.checklistProgress,

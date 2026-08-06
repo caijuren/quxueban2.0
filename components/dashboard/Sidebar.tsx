@@ -42,7 +42,7 @@ const menuGroups = [
   },
   {
     title: '控制台',
-    items: [{ name: '家庭学习控制台', href: '/dashboard/console', icon: Home }],
+    items: [{ name: '设置', href: '/dashboard/console', icon: Home }],
   },
 ];
 
@@ -56,15 +56,15 @@ export default function Sidebar({ mobileMenuOpen, onLinkClick }: SidebarProps) {
 
   return (
     <aside
-      className={`fixed left-0 top-0 h-full w-56 bg-surface-elevated/95 backdrop-blur-md border-r border-border-subtle z-50 flex flex-col transition-transform duration-300 ${
+      className={`fixed left-0 top-0 h-full w-56 bg-surface-elevated/95 backdrop-blur-md border-r border-border-default z-50 flex flex-col transition-transform duration-300 ${
         mobileMenuOpen ? 'translate-x-0 lg:translate-x-0' : '-translate-x-full lg:translate-x-0 lg:flex hidden'
       }`}
     >
       {/* Logo */}
-      <div className="p-5 border-b border-border-subtle">
+      <div className="p-5 border-b border-border-default">
         <div className="flex items-center justify-between">
           <Link href="/" className="flex items-center gap-3" onClick={onLinkClick}>
-            <div className="w-10 h-10 rounded-xl bg-surface-elevated border border-border-default flex items-center justify-center">
+            <div className="w-10 h-10 rounded-module bg-surface border border-border-default flex items-center justify-center">
               <Sparkles className="w-5 h-5 text-primary" />
             </div>
             <div>
@@ -74,7 +74,7 @@ export default function Sidebar({ mobileMenuOpen, onLinkClick }: SidebarProps) {
           </Link>
           <button
             onClick={onLinkClick}
-            className="lg:hidden w-9 h-9 rounded-lg bg-surface-elevated flex items-center justify-center text-text-secondary hover:text-text-primary hover:bg-surface-highlight transition-colors"
+            className="lg:hidden w-9 h-9 rounded-module bg-surface flex items-center justify-center text-text-secondary hover:text-text-primary hover:bg-surface-highlight transition-colors"
             aria-label="关闭菜单"
           >
             <X className="w-5 h-5" />
@@ -100,7 +100,7 @@ export default function Sidebar({ mobileMenuOpen, onLinkClick }: SidebarProps) {
                     href={item.href}
                     onClick={onLinkClick}
                     aria-current={isActive ? 'page' : undefined}
-                    className={`group relative flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200 ${
+                    className={`group relative flex items-center gap-3 px-3 py-2.5 rounded-module transition-all duration-200 ${
                       isActive
                         ? 'bg-primary/[0.08] text-text-primary'
                         : 'text-text-tertiary hover:text-text-primary hover:bg-surface-elevated'
@@ -120,7 +120,7 @@ export default function Sidebar({ mobileMenuOpen, onLinkClick }: SidebarProps) {
       </nav>
 
       {/* Version */}
-      <div className="p-4 border-t border-border-subtle">
+      <div className="p-4 border-t border-border-default">
         <p className="px-3 text-2xs text-text-muted tabular-nums">
           趣学伴 v{packageInfo.version}
         </p>

@@ -236,7 +236,7 @@ export default function FamilySection() {
   if (error && !family) {
     return (
       <SettingsSection title="家庭成员与权限" description="管理家庭成员和访问权限">
-        <div className="flex items-center gap-2 text-sm text-danger">
+        <div className="flex items-center gap-2 text-sm text-error">
           <AlertCircle className="w-4 h-4" />
           {error.message}
         </div>
@@ -259,7 +259,7 @@ export default function FamilySection() {
             />
           </div>
           {actionError && (
-            <div className="flex items-center gap-2 text-xs text-danger">
+            <div className="flex items-center gap-2 text-xs text-error">
               <AlertCircle className="w-3.5 h-3.5" />
               {actionError}
             </div>
@@ -304,7 +304,7 @@ export default function FamilySection() {
               onClick={handleDeleteFamily}
               disabled={deleteFamily.isPending}
               title="解散家庭"
-              className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-danger/10 text-danger text-xs hover:bg-danger/20 transition-colors disabled:opacity-50"
+              className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-error/10 text-error text-xs hover:bg-error/20 transition-colors disabled:opacity-50"
             >
               {deleteFamily.isPending ? (
                 <Loader2 className="w-3.5 h-3.5 animate-spin" />
@@ -323,7 +323,7 @@ export default function FamilySection() {
       >
         <div className="space-y-3">
           {actionError && (
-            <div className="flex items-center gap-2 text-xs text-danger bg-danger/5 border border-danger/10 rounded-lg px-3 py-2">
+            <div className="flex items-center gap-2 text-xs text-error bg-error/5 border border-error/10 rounded-lg px-3 py-2">
               <AlertCircle className="w-3.5 h-3.5" />
               {actionError}
             </div>
@@ -409,7 +409,7 @@ export default function FamilySection() {
                       <button
                         onClick={() => handleRemove(member.id)}
                         disabled={removeMember.isPending}
-                        className="p-1.5 rounded-lg text-text-muted hover:text-danger hover:bg-danger/10 transition-colors"
+                        className="p-1.5 rounded-lg text-text-muted hover:text-error hover:bg-error/10 transition-colors"
                         title="移除成员"
                       >
                         <X className="w-4 h-4" />
@@ -421,7 +421,7 @@ export default function FamilySection() {
                         onClick={() => handleLeaveFamily(member.id)}
                         disabled={removeMember.isPending}
                         title="退出家庭"
-                        className="p-1.5 rounded-lg text-text-muted hover:text-danger hover:bg-danger/10 transition-colors"
+                        className="p-1.5 rounded-lg text-text-muted hover:text-error hover:bg-error/10 transition-colors"
                       >
                         <LogOut className="w-4 h-4" />
                       </button>
@@ -530,7 +530,7 @@ export default function FamilySection() {
                   {generatedInvite && (
                     <div className="rounded-lg bg-surface-hover border border-border-subtle p-3 space-y-2">
                       <p className="text-xs text-text-secondary">
-                        邮件/短信尚未接入真实服务，请复制下方链接发给对方：
+                        邀请链接已生成，请复制或打开下方链接发送给对方：
                       </p>
                       <div className="flex items-center gap-2">
                         <input
@@ -559,6 +559,14 @@ export default function FamilySection() {
                           )}
                           {copied ? '已复制' : '复制'}
                         </button>
+                        <a
+                          href={generatedInvite.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-md bg-surface-elevated border border-border-subtle text-text-secondary text-xs hover:bg-surface-highlight transition-colors"
+                        >
+                          打开链接
+                        </a>
                       </div>
                       <p className="text-2xs text-text-muted">
                         链接有效期至 {new Date(generatedInvite.expiresAt).toLocaleString('zh-CN')}

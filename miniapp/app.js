@@ -21,15 +21,15 @@ App({
       ? 'https://edu.quxueban.cn'
       : env === 'trial'
         ? 'https://edu.quxueban.cn'
-        : 'https://edu.quxueban.cn';
+        : 'http://localhost:3000';
 
     this.globalData.apiBaseUrl = baseUrl;
 
     try {
-      const systemInfo = wx.getSystemInfoSync();
-      this.globalData.statusBarHeight = systemInfo.statusBarHeight || 0;
-      this.globalData.safeAreaBottom = systemInfo.safeArea
-        ? systemInfo.screenHeight - systemInfo.safeArea.bottom
+      const windowInfo = wx.getWindowInfo();
+      this.globalData.statusBarHeight = windowInfo.statusBarHeight || 0;
+      this.globalData.safeAreaBottom = windowInfo.safeArea
+        ? windowInfo.screenHeight - windowInfo.safeArea.bottom
         : 0;
     } catch (e) {
       console.error('获取系统信息失败:', e);

@@ -42,6 +42,18 @@ interface ChildModalProps {
 const GRADES = Array.from({ length: 12 }, (_, i) => i + 1);
 const MAX_AVATAR_SIZE = 2 * 1024 * 1024;
 const UPLOAD_ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+const UPLOAD_ALLOWED_EXTS = ['jpg', 'jpeg', 'png', 'webp', 'gif'];
+
+function resolveFileMimeType(file: File): string | null {
+  if (UPLOAD_ALLOWED_TYPES.includes(file.type)) {
+    return file.type;
+  }
+  const ext = file.name.split('.').pop()?.toLowerCase();
+  if (ext && UPLOAD_ALLOWED_EXTS.includes(ext)) {
+    return `image/${ext === 'jpg' ? 'jpeg' : ext}`;
+  }
+  return null;
+}
 
 function findPresetByAvatarUrl(url?: string | null) {
   if (!url) return null;
@@ -151,8 +163,8 @@ export default function ChildModal({ isOpen, onClose, child }: ChildModalProps) 
       return;
     }
 
-    if (!UPLOAD_ALLOWED_TYPES.includes(file.type)) {
-      setError('仅支持 JPG、PNG、WebP、GIF 格式');
+    if (!resolveFileMimeType(file)) {
+      setError(`仅支持 JPG、PNG、WebP、GIF 格式（当前 ${file.type || '未知类型'}）`);
       return;
     }
 
@@ -346,7 +358,7 @@ export default function ChildModal({ isOpen, onClose, child }: ChildModalProps) 
             className="relative z-10 flex-1 overflow-y-auto p-6 modal-scroll"
           >
             {error && (
-              <div className="mb-4 flex items-start gap-2 rounded-xl bg-danger/[0.08] border border-danger/[0.15] p-3 text-sm text-danger">
+              <div className="mb-4 flex items-start gap-2 rounded-xl bg-error/[0.08] border border-error/[0.15] p-3 text-sm text-error">
                 <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
                 <span>{error}</span>
               </div>
@@ -474,7 +486,7 @@ export default function ChildModal({ isOpen, onClose, child }: ChildModalProps) 
                     placeholder="例如：大宝"
                     className={`w-full px-4 py-2 rounded-lg bg-surface border text-sm text-text-primary placeholder:text-text-tertiary focus:outline-none focus:border-primary transition-all ${
                       touched && !name.trim()
-                        ? 'border-danger/50'
+                        ? 'border-error/50'
                         : 'border-border-default'
                     }`}
                   />
@@ -671,7 +683,7 @@ export default function ChildModal({ isOpen, onClose, child }: ChildModalProps) 
                   type="button"
                   onClick={() => setShowDeleteConfirm(true)}
                   disabled={saving}
-                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-danger/[0.08] text-danger text-sm hover:bg-danger/[0.12] transition-all disabled:opacity-50"
+                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-error/[0.08] text-error text-sm hover:bg-error/[0.12] transition-all disabled:opacity-50"
                 >
                   <Trash2 className="w-4 h-4" />
                   删除
@@ -719,8 +731,8 @@ export default function ChildModal({ isOpen, onClose, child }: ChildModalProps) 
                   className="w-full max-w-sm rounded-2xl bg-surface-elevated border border-border-subtle p-6 shadow-2xl"
                 >
                   <div className="flex items-center gap-3 mb-4">
-                    <div className="w-10 h-10 rounded-full bg-danger/[0.08] flex items-center justify-center">
-                      <Trash2 className="w-5 h-5 text-danger" />
+                    <div className="w-10 h-10 rounded-full bg-error/[0.08] flex items-center justify-center">
+                      <Trash2 className="w-5 h-5 text-error" />
                     </div>
                     <div>
                       <h4 className="text-base font-bold text-text-secondary">
@@ -744,7 +756,7 @@ export default function ChildModal({ isOpen, onClose, child }: ChildModalProps) 
                       type="button"
                       onClick={handleDelete}
                       disabled={saving}
-                      className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-danger text-text-primary text-sm font-medium hover:bg-danger/90 transition-all disabled:opacity-70"
+                      className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-error text-text-primary text-sm font-medium hover:bg-error/90 transition-all disabled:opacity-70"
                     >
                       {saving && <Loader2 className="w-4 h-4 animate-spin" />}
                       确认删除

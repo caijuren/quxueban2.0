@@ -29,7 +29,7 @@
             <text>{{selectedChild ? selectedChild.name[0] : '?'}}</text>
           </view>
           <text class="user-name-small">{{selectedChild ? selectedChild.name : '选择孩子'}}</text>
-          <text class="user-arrow">›</text>
+          <image src="/assets/icons/arrow-right.svg" class="user-arrow" mode="aspectFit" />
         </view>
         <view wx:else class="user-pill">
           <view
@@ -63,12 +63,12 @@
 
   <!-- 游客提示 -->
   <view wx:if="{{isGuest}}" class="guest-banner" bindtap="goLogin">
-    <view class="guest-banner-icon">✨</view>
+    <image src="/assets/icons/sparkle.svg" class="guest-banner-icon" mode="aspectFit" />
     <view class="guest-banner-text">
       <text class="guest-banner-title">游客模式</text>
       <text class="guest-banner-desc">登录后可查看真实任务并记录学习成长</text>
     </view>
-    <text class="guest-banner-arrow">›</text>
+    <image src="/assets/icons/arrow-right.svg" class="guest-banner-arrow" mode="aspectFit" />
   </view>
 
   <!-- 任务列表 -->
@@ -79,7 +79,7 @@
 
     <view wx:elif="{{tasks.length === 0}}" class="empty-state">
       <view class="empty-icon">
-        <text>🌿</text>
+        <image src="/assets/icons/leaf.svg" class="empty-icon-img" mode="aspectFit" />
       </view>
       <text class="empty-title">今天没有安排任务</text>
       <text class="empty-desc">可以去 Web 端制定周计划</text>
@@ -114,12 +114,12 @@
                 >
                   {{getCategoryLabel(item.category)}}
                 </view>
-                <text class="meta-item">⏱ {{item.duration || '30分钟'}}</text>
+                <view class="meta-item">
+                  <image src="/assets/icons/clock.svg" class="meta-icon" mode="aspectFit" />
+                  <text>{{item.duration || '30分钟'}}</text>
+                </view>
               </view>
-              <view wx:if="{{item.materials && item.materials.length}}" class="task-materials">
-                <text class="material-item">📚 {{item.materials[0]}}</text>
-              </view>
-              <view wx:if="{{item.evidence.images.length || item.evidence.audios.length}}" class="evidence-preview">
+              <view wx:if="{{item.evidence.images.length || item.evidence.audios.length || item.evidence.transcript}}" class="evidence-preview">
                 <view
                   wx:for="{{item.evidence.images}}"
                   wx:for-item="imgUrl"
@@ -138,8 +138,13 @@
                   bindtap="playAudio"
                   data-url="{{audioUrl}}"
                 >
-                  <text>🔊 语音</text>
+                  <image src="/assets/icons/speaker.svg" class="evidence-audio-icon" mode="aspectFit" />
+                  <text>语音</text>
                 </view>
+              </view>
+              <view wx:if="{{item.evidence.transcript}}" class="transcript-preview">
+                <image src="/assets/icons/document.svg" class="transcript-icon" mode="aspectFit" />
+                <text class="transcript-text">{{item.evidence.transcript}}</text>
               </view>
             </view>
             <button
@@ -174,12 +179,14 @@
             <view class="task-main">
               <view class="task-title-row">
                 <text class="task-title">{{item.focus}}</text>
-                <view class="done-badge">✓</view>
+                <view class="done-badge">
+                  <image src="/assets/icons/check.svg" class="done-badge-img" mode="aspectFit" />
+                </view>
               </view>
               <view class="task-tags">
                 <text class="meta-item">{{item.duration || '30分钟'}}</text>
               </view>
-              <view wx:if="{{item.evidence.images.length || item.evidence.audios.length}}" class="evidence-preview">
+              <view wx:if="{{item.evidence.images.length || item.evidence.audios.length || item.evidence.transcript}}" class="evidence-preview">
                 <view
                   wx:for="{{item.evidence.images}}"
                   wx:for-item="imgUrl"
@@ -198,8 +205,13 @@
                   bindtap="playAudio"
                   data-url="{{audioUrl}}"
                 >
-                  <text>🔊 语音</text>
+                  <image src="/assets/icons/speaker.svg" class="evidence-audio-icon" mode="aspectFit" />
+                  <text>语音</text>
                 </view>
+              </view>
+              <view wx:if="{{item.evidence.transcript}}" class="transcript-preview">
+                <image src="/assets/icons/document.svg" class="transcript-icon" mode="aspectFit" />
+                <text class="transcript-text">{{item.evidence.transcript}}</text>
               </view>
             </view>
           </view>
@@ -211,10 +223,10 @@
   </scroll-view>
 
   <!-- 录音 Modal -->
-  <view wx:if="{{recordingTaskId}}" class="voice-modal" catchtouchmove="true">
+  <view wx:if="{{recordingTaskId}}" class="voice-modal" catchtouchmove="preventTouchMove">
     <view class="voice-modal-mask" bindtap="closeVoiceModal"></view>
     <view class="voice-modal-content">
-      <view class="voice-modal-icon">🎙</view>
+      <image src="/assets/icons/mic.svg" class="voice-modal-icon" mode="aspectFit" />
       <text class="voice-modal-title">{{isRecording ? '录音中...' : '按住录音'}}</text>
       <text class="voice-modal-desc">{{isRecording ? '松开手指结束录音' : '按住下方按钮开始录音'}}</text>
       <text wx:if="{{isRecording}}" class="voice-duration">{{formatDuration(recordDuration)}}</text>
@@ -223,8 +235,9 @@
         class="voice-record-btn {{isRecording ? 'recording' : ''}}"
         bindtouchstart="onVoiceRecordStart"
         bindtouchend="onVoiceRecordEnd"
+        bindtouchcancel="onVoiceRecordEnd"
       >
-        <text class="voice-record-icon">🎤</text>
+        <image src="/assets/icons/mic.svg" class="voice-record-icon" mode="aspectFit" />
       </view>
 
       <button class="voice-cancel-btn btn-ghost" bindtap="closeVoiceModal">取消</button>
@@ -232,12 +245,14 @@
   </view>
 
   <!-- 切换孩子面板 -->
-  <view wx:if="{{childPickerVisible}}" class="child-picker" catchtouchmove="true">
+  <view wx:if="{{childPickerVisible}}" class="child-picker" catchtouchmove="preventTouchMove">
     <view class="child-picker-mask" bindtap="closeChildPicker"></view>
     <view class="child-picker-sheet">
       <view class="child-picker-header">
         <view class="child-picker-title">切换孩子</view>
-        <view class="child-picker-close" bindtap="closeChildPicker">✕</view>
+        <view class="child-picker-close" bindtap="closeChildPicker">
+          <image src="/assets/icons/close.svg" class="small-icon" mode="aspectFit" />
+        </view>
       </view>
       <view class="child-picker-list">
         <view
@@ -259,7 +274,9 @@
             <text class="child-picker-name">{{item.name}}</text>
             <text class="child-picker-meta">{{item.grade}}年级</text>
           </view>
-          <view wx:if="{{selectedChild && selectedChild.id === item.id}}" class="child-picker-check">✓</view>
+          <view wx:if="{{selectedChild && selectedChild.id === item.id}}" class="child-picker-check">
+            <image src="/assets/icons/check.svg" class="small-icon" mode="aspectFit" />
+          </view>
         </view>
       </view>
       <view class="child-picker-actions">

@@ -25,7 +25,7 @@ export default function SubjectExamTimeline({
       className="rounded-2xl bg-surface-elevated p-6 border border-border-subtle"
     >
       <div className="flex items-center gap-3 mb-6">
-        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-400 to-orange-400 flex items-center justify-center">
+        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-warning to-warning/70 flex items-center justify-center">
           <Award className="w-5 h-5 text-text-primary" />
         </div>
         <div>
@@ -35,7 +35,7 @@ export default function SubjectExamTimeline({
       </div>
 
       <div className="relative">
-        <div className="absolute left-5 top-4 bottom-4 w-px bg-gradient-to-b from-amber-500/50 via-orange-500/30 to-transparent" />
+        <div className="absolute left-5 top-4 bottom-4 w-px bg-gradient-to-b from-warning/50 via-warning/30 to-transparent" />
 
         <div className="space-y-4">
           {exams.map((exam, index) => (
@@ -58,7 +58,7 @@ export default function SubjectExamTimeline({
                     <h3 className="font-bold text-text-secondary flex items-center gap-2">
                       {exam.name}
                       {exam.target && (
-                        <span className="px-2 py-0.5 rounded-md bg-amber-500/10 text-amber-400 text-xs border border-amber-500/20">
+                        <span className="px-2 py-0.5 rounded-md bg-warning/10 text-warning text-xs border border-warning/20">
                           目标 {exam.target}
                         </span>
                       )}

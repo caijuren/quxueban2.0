@@ -28,23 +28,23 @@ const guestTasks = [
     category: 'reading',
     duration: '30分钟',
     status: 'pending',
-    evidence: { images: [], audios: [] },
+    evidence: { images: [], audios: [], transcript: '' },
   },
   {
     id: 'guest-2',
-    focus: '完成数学口算练习',
+    focus: '数学练习',
     category: 'school',
     duration: '20分钟',
     status: 'pending',
-    evidence: { images: [], audios: [] },
+    evidence: { images: [], audios: [], transcript: '' },
   },
   {
     id: 'guest-3',
-    focus: '跳绳 5 分钟',
+    focus: '跳绳',
     category: 'sport',
     duration: '5分钟',
     status: 'done',
-    evidence: { images: [], audios: [] },
+    evidence: { images: [], audios: [], transcript: '' },
   },
 ];
 
@@ -90,6 +90,12 @@ Page({
     this.clearRecordTimer();
   },
 
+  onPullDownRefresh() {
+    console.log('[tasks] pull down refresh');
+    this.checkAuth();
+    wx.stopPullDownRefresh();
+  },
+
   checkAuth() {
     const activeRole = auth.getActiveRole();
     const selectedChild = auth.getSelectedChild();
@@ -102,6 +108,7 @@ Page({
       isGuest,
       todayName: dayNames[now.getDay()],
       todayDate: `${now.getMonth() + 1}月${now.getDate()}日`,
+      todayIso: now.toISOString().split('T')[0],
     });
 
     if (isGuest) {
@@ -113,6 +120,8 @@ Page({
       wx.reLaunch({ url: '/pages/role-select/role-select' });
       return;
     }
+
+    console.log('[tasks] checkAuth child:', selectedChild.id, selectedChild.name);
 
     if (activeRole === 'parent') {
       this.loadChildren();
@@ -168,7 +177,7 @@ Page({
   loadGuestTasks() {
     const tasks = guestTasks.map((task) => ({
       ...task,
-      evidence: { images: [], audios: [] },
+      evidence: { images: [], audios: [], transcript: '' },
     }));
     const doneCount = tasks.filter((t) => t.status === 'done').length;
     const totalCount = tasks.length;
@@ -201,6 +210,7 @@ Page({
       const doneCount = tasks.filter((t) => t.status === 'done').length;
       const totalCount = tasks.length;
       const pendingCount = totalCount - doneCount;
+      console.log('[tasks] loaded tasks:', totalCount, 'done:', doneCount);
       this.setData({
         tasks,
         doneCount,
@@ -211,6 +221,7 @@ Page({
         progressPercent: totalCount ? Math.round((doneCount / totalCount) * 100) : 0,
       });
     } catch (err) {
+      console.error('[tasks] loadTasks failed:', err.message || err);
       wx.showToast({
         title: err.message || '获取任务失败',
         icon: 'none',
@@ -342,15 +353,19 @@ Page({
     const isParent = this.data.activeRole === 'parent';
     this.setData({ completingTaskId: task.id });
 
+    const payload = {
+      status: 'done',
+      progress: 100,
+      actualDurationMinutes: this.parseDuration(task.duration),
+      note: isParent ? '家长代打卡' : '孩子自己打卡',
+      imageUrls: evidence.imageUrls || [],
+      audioUrls: evidence.audioUrls || [],
+    };
+    console.log('[miniapp complete] quick submit payload:', payload);
+
     try {
-      await api.post(`/api/miniapp/tasks/${task.id}/complete`, {
-        status: 'done',
-        progress: 100,
-        actualDurationMinutes: this.parseDuration(task.duration),
-        note: isParent ? '家长代打卡' : '孩子自己打卡',
-        imageUrls: evidence.imageUrls || [],
-        audioUrls: evidence.audioUrls || [],
-      });
+      const res = await api.post(`/api/miniapp/tasks/${task.id}/complete`, payload);
+      console.log('[miniapp complete] quick submit success:', res);
 
       wx.showToast({
         title: '打卡成功',
@@ -359,6 +374,7 @@ Page({
 
       this.loadTasks();
     } catch (err) {
+      console.error('[miniapp complete] quick submit failed:', err.message || err);
       wx.showToast({
         title: err.message || '打卡失败',
         icon: 'none',
@@ -383,12 +399,13 @@ Page({
 
   getEvidence(task) {
     const records = task.completionRecords || [];
-    const today = this.data.todayDate;
+    const today = this.data.todayIso || new Date().toISOString().split('T')[0];
     const record = records.find((r) => r.date === today);
-    if (!record) return { images: [], audios: [] };
+    if (!record) return { images: [], audios: [], transcript: '' };
     return {
       images: record.imageUrls || [],
       audios: record.audioUrls || [],
+      transcript: record.audioTranscript || '',
     };
   },
 
@@ -413,5 +430,9 @@ Page({
 
   goLogin() {
     wx.navigateTo({ url: '/pages/login/login' });
+  },
+
+  preventTouchMove() {
+    // 阻止遮罩层下方内容滚动
   },
 });

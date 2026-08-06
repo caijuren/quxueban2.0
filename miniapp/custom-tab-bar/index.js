@@ -19,5 +19,9 @@ Component({
       this.setData({ selected: index });
       wx.switchTab({ url });
     },
+
+    preventTouchMove() {
+      // 阻止底部 TabBar 区域触摸穿透
+    },
   },
 });

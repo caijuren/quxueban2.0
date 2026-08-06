@@ -95,7 +95,7 @@ function LoginForm() {
     <div className="min-h-screen bg-background flex items-center justify-center p-4 relative overflow-hidden">
       {/* Decorative orbs */}
       <div className="absolute top-1/4 -left-32 w-64 h-64 bg-primary/5 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-1/4 -right-32 w-64 h-64 bg-secondary/5 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute bottom-1/4 -right-32 w-64 h-64 bg-primary/5 rounded-full blur-3xl pointer-events-none" />
 
       <div className="w-full max-w-5xl grid grid-cols-1 lg:grid-cols-2 gap-12 items-center relative z-10">
         <motion.div
@@ -105,7 +105,7 @@ function LoginForm() {
           className="hidden lg:block"
         >
           <div className="flex items-center gap-3 mb-10">
-            <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center">
+            <div className="w-10 h-10 rounded-module bg-primary flex items-center justify-center">
               <Sparkles className="w-5 h-5 text-text-primary" />
             </div>
             <span className="text-2xl font-bold font-display text-primary">趣学伴</span>
@@ -148,7 +148,7 @@ function LoginForm() {
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
         >
-          <div className="rounded-2xl bg-surface-elevated border border-border-subtle p-6 sm:p-8">
+          <div className="rounded-card bg-surface border border-border-default shadow-card p-6 sm:p-8">
             <div className="text-center mb-8">
               <h2 className="text-xl font-bold font-display mb-1.5 text-text-primary">欢迎回来</h2>
               <p className="text-sm text-text-muted">登录后继续规划孩子的升学路线</p>
@@ -170,7 +170,7 @@ function LoginForm() {
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
                     placeholder="请输入用户名"
-                    className="w-full pl-10 pr-4 py-2 rounded-lg border border-border-default bg-surface text-sm text-text-primary placeholder:text-text-tertiary focus:outline-none focus:border-primary transition-colors"
+                    className="w-full pl-10 pr-4 py-2 rounded-module border border-border-default bg-surface text-sm text-text-primary placeholder:text-text-tertiary focus:outline-none focus:border-primary transition-colors"
                   />
                 </div>
               </div>
@@ -190,7 +190,7 @@ function LoginForm() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="请输入密码"
-                    className="w-full pl-10 pr-4 py-2 rounded-lg border border-border-default bg-surface text-sm text-text-primary placeholder:text-text-tertiary focus:outline-none focus:border-primary transition-colors"
+                    className="w-full pl-10 pr-4 py-2 rounded-module border border-border-default bg-surface text-sm text-text-primary placeholder:text-text-tertiary focus:outline-none focus:border-primary transition-colors"
                   />
                 </div>
               </div>
@@ -211,13 +211,13 @@ function LoginForm() {
               </div>
 
               {justRegistered && (
-                <div className="rounded-lg bg-success/10 border border-success/20 px-3 py-2 text-xs text-success">
+                <div className="rounded-module bg-success/10 border border-success/20 px-3 py-2 text-xs text-success">
                   注册成功，请使用新账号登录
                 </div>
               )}
 
               {error && (
-                <div className="rounded-lg bg-error/10 border border-error/20 px-3 py-2 text-xs text-error">
+                <div className="rounded-module bg-error/10 border border-error/20 px-3 py-2 text-xs text-error">
                   {error}
                 </div>
               )}
@@ -225,7 +225,7 @@ function LoginForm() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-primary text-white text-sm font-medium hover:bg-primary/90 transition-colors disabled:opacity-50 cursor-not-allowed"
+                className="w-full inline-flex items-center justify-center gap-2 px-4 py-2 rounded-module bg-primary text-text-primary text-sm font-medium hover:bg-primary/90 transition-colors disabled:opacity-50 cursor-not-allowed"
               >
                 {loading ? (
                   <Loader2 className="w-4 h-4 animate-spin" />

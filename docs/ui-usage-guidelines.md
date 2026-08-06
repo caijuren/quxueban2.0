@@ -1,6 +1,15 @@
 # 趣学伴 UI 使用规范（当前深色主题）
 
-> 基于现有 `tailwind.config.ts` 与 `app/globals.css` 制定，目标：统一全站图标、文字、间距、按钮、表格、配色。
+> **⚠️ 本文档正在与 Dark Premium Theme v2.1 对齐中**
+>
+> 本文档基于现有 `tailwind.config.ts` 与 `app/globals.css` 制定，但部分示例尚未完全对齐 `docs/design-tokens-v2.1.md`。如有冲突，请以 **`docs/design-tokens-v2.1.md`** 为准。
+>
+> 核心差异速查：
+> - 卡片背景：`bg-surface`（#111522），不是 `bg-surface-elevated`
+> - 默认边框：`border-border-default`（rgba 0.08），不是 `border-border-subtle`
+> - 大卡片圆角：`rounded-[20px]`，按钮/输入框圆角：`rounded-[14px]`，徽章圆角：`rounded-full`
+>
+> 目标：统一全站图标、文字、间距、按钮、表格、配色。
 
 ---
 
@@ -11,7 +20,7 @@
 | 场景 | 正确 Class | 禁止 |
 |------|-----------|------|
 | 页面主背景 | `bg-background` | `#050508`、`#0a0a0f`、`bg-gray-900`、`bg-slate-900` |
-| 卡片/面板背景 | `bg-surface-elevated` | `bg-white`、`bg-[#ffffff]`、`bg-slate-800` |
+| 卡片/面板背景 | `bg-surface` | `bg-surface-elevated`、`bg-white`、`bg-[#ffffff]`、`bg-slate-800` |
 | 卡片 Hover / 高亮背景 | `bg-surface-hover` | `bg-white/5`、`bg-white/[0.04]`、内联 `rgba(255,255,255,0.x)` |
 | 表头 / 次级背景 | `bg-surface-highlight` | `bg-slate-100`、`bg-gray-100`、`bg-[#f1f5f9]` |
 | 输入框背景 | `bg-surface` | `bg-white`、透明 |
@@ -33,7 +42,7 @@
 
 | 场景 | 正确 Class | 禁止 |
 |------|-----------|------|
-| 卡片/面板边框 | `border-border-subtle` | `border-white/[0.08]`、`border-slate-700`、`border-gray-200` |
+| 卡片/面板边框 | `border-border-default` | `border-border-subtle`、`border-white/[0.08]`、`border-slate-700`、`border-gray-200` |
 | 输入框 / 按钮边框 | `border-border-default` | `border-white/10`、`border-slate-500` |
 | 强调边框 / 聚焦 | `border-primary` | 硬编码 `#2563eb` |
 | 错误边框 | `border-error` | 硬编码红 |
@@ -56,13 +65,13 @@
 ### 2.1 主按钮
 
 ```jsx
-<button className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-primary text-white text-sm font-medium hover:bg-primary/90 transition-colors">
+<button className="inline-flex items-center gap-2 px-4 py-2 rounded-[14px] bg-primary text-text-primary text-sm font-medium hover:bg-primary/90 transition-colors">
   保存
 </button>
 ```
 
 - 高度：标准 `36px`（`py-2` + `text-sm`），小按钮 `28px`
-- 圆角：`rounded-lg`（8px）
+- 圆角：`rounded-[14px]`（14px）
 - 内边距：`px-4 py-2`
 - 图标 + 文字间距：`gap-2`
 - Hover：`hover:bg-primary/90`，**禁止有位移、缩放、阴影变化**
@@ -71,7 +80,7 @@
 ### 2.2 次按钮 / 边框按钮
 
 ```jsx
-<button className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-border-default bg-surface-elevated text-text-secondary text-sm font-medium hover:bg-surface-hover transition-colors">
+<button className="inline-flex items-center gap-2 px-4 py-2 rounded-[14px] border border-border-default bg-surface text-text-secondary text-sm font-medium hover:bg-surface-hover transition-colors">
   编辑
 </button>
 ```
@@ -79,7 +88,7 @@
 ### 2.3 Ghost 按钮
 
 ```jsx
-<button className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm text-text-tertiary hover:text-text-secondary hover:bg-surface-hover transition-colors">
+<button className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-[14px] text-sm text-text-tertiary hover:text-text-secondary hover:bg-surface-hover transition-colors">
   <Icon className="w-4 h-4" />
   取消
 </button>
@@ -88,7 +97,7 @@
 ### 2.4 图标按钮
 
 ```jsx
-<button className="inline-flex items-center justify-center w-9 h-9 rounded-lg hover:bg-surface-hover transition-colors">
+<button className="inline-flex items-center justify-center w-9 h-9 rounded-[14px] hover:bg-surface-hover transition-colors">
   <Icon className="w-5 h-5 text-text-tertiary" />
 </button>
 ```
@@ -105,16 +114,16 @@
 ### 3.1 标准卡片
 
 ```jsx
-<div className="rounded-2xl bg-surface-elevated border border-border-subtle p-5 sm:p-6">
+<div className="rounded-[20px] bg-surface border border-border-default p-5 sm:p-6 shadow-card">
   {/* 内容 */}
 </div>
 ```
 
-- 圆角：`rounded-2xl`（16px）
-- 背景：`bg-surface-elevated`
-- 边框：`border-border-subtle`
+- 圆角：`rounded-[20px]`（20px）
+- 背景：`bg-surface`
+- 边框：`border-border-default`
 - 内边距：桌面 `p-6`，移动端 `p-5`
-- 阴影：**不加 `shadow`**，当前主题靠边框和背景层级区分
+- 阴影：`shadow-card`
 
 ### 3.2 卡片头部结构
 
@@ -265,13 +274,13 @@
 
 ```jsx
 <input
-  className="w-full rounded-lg border border-border-default bg-surface px-3 py-2 text-sm text-text-primary placeholder:text-text-tertiary focus:border-primary focus:outline-none"
+  className="w-full rounded-[14px] border border-border-default bg-surface px-3 py-2 text-sm text-text-primary placeholder:text-text-tertiary focus:border-primary focus:outline-none"
   placeholder="请输入"
 />
 ```
 
 - 高度：`36px`（`py-2` + `text-sm`）
-- 圆角：`rounded-lg`
+- 圆角：`rounded-[14px]`
 - 背景：`bg-surface`
 - 边框：`border-border-default`
 - Focus：`focus:border-primary`
@@ -283,8 +292,8 @@
 ## 9. 弹窗 / Modal
 
 ```jsx
-<div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 p-4">
-  <div className="w-full max-w-lg max-h-[85vh] overflow-y-auto rounded-2xl bg-surface-elevated border border-border-subtle p-6">
+<div className="fixed inset-0 z-[100] flex items-center justify-center bg-background/85 p-4">
+  <div className="w-full max-w-lg max-h-[85vh] overflow-y-auto rounded-[20px] bg-surface-elevated border border-border-default p-6 shadow-card">
     {/* 内容 */}
   </div>
 </div>
@@ -292,9 +301,10 @@
 
 - z-index：`>= 100`，必须覆盖导航栏
 - 最大高度：`max-h-[85vh]`
-- 圆角：`rounded-2xl`
+- 圆角：`rounded-[20px]`
 - 背景：`bg-surface-elevated`
-- 边框：`border-border-subtle`
+- 边框：`border-border-default`
+- 阴影：`shadow-card`
 - 内容可滚动
 
 ---
@@ -343,11 +353,11 @@
 
 写新页面或重构前，逐条检查：
 
-- [ ] 背景色是否用了 `bg-background` / `bg-surface-elevated`？
+- [ ] 背景色是否用了 `bg-background` / `bg-surface`？
 - [ ] 文字色是否用了 `text-text-primary/secondary/tertiary/muted`？
-- [ ] 边框色是否用了 `border-border-subtle/default`？
+- [ ] 边框色是否用了 `border-border-default`？
 - [ ] 按钮是否用了标准按钮结构？
-- [ ] 卡片是否 `rounded-2xl` + `bg-surface-elevated` + `border-border-subtle`？
+- [ ] 卡片是否 `rounded-[20px]` + `bg-surface` + `border-border-default` + `shadow-card`？
 - [ ] 图标尺寸是否统一？颜色是否来自 token？
 - [ ] 表格表头是否 `bg-surface-highlight` + `text-text-muted`？
 - [ ] 是否还有硬编码颜色或内联 `style`？

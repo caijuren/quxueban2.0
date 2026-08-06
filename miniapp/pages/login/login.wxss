@@ -108,6 +108,11 @@
   gap: 28rpx;
   backdrop-filter: blur(20rpx);
   box-shadow: var(--shadow-sm);
+  transition: transform 0.2s;
+}
+
+.feature-card:active {
+  transform: scale(0.98);
 }
 
 .feature-icon {

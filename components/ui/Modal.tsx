@@ -37,34 +37,34 @@ const schemeStyles: Record<
   { border: string; shadow: string; glow: string }
 > = {
   rose: {
-    border: 'color-mix(in srgb, var(--color-primary) 30%, transparent)',
-    shadow: '0 0 80px var(--shadow-primary), 0 0 120px var(--shadow-secondary), inset 0 1px 0 rgba(255,255,255,0.1)',
+    border: 'color-mix(in srgb, var(--color-primary) 45%, transparent)',
+    shadow: 'var(--shadow-card)',
     glow: 'var(--shadow-primary)',
   },
   violet: {
-    border: 'color-mix(in srgb, var(--color-secondary) 30%, transparent)',
-    shadow: '0 0 80px var(--shadow-secondary), 0 0 120px var(--shadow-primary), inset 0 1px 0 rgba(255,255,255,0.1)',
+    border: 'color-mix(in srgb, var(--color-secondary) 45%, transparent)',
+    shadow: 'var(--shadow-card)',
     glow: 'var(--shadow-secondary)',
   },
   green: {
-    border: 'rgba(34,197,94,0.3)',
-    shadow: '0 0 60px rgba(34,197,94,0.2), 0 0 100px rgba(34,197,94,0.08), inset 0 1px 0 rgba(255,255,255,0.1)',
-    glow: 'rgba(34,197,94,0.1)',
+    border: 'color-mix(in srgb, var(--success) 45%, transparent)',
+    shadow: 'var(--shadow-card)',
+    glow: 'color-mix(in srgb, var(--success) 22%, transparent)',
   },
   error: {
-    border: 'rgba(239,68,68,0.3)',
-    shadow: '0 0 60px rgba(239,68,68,0.2), 0 0 100px var(--shadow-primary), inset 0 1px 0 rgba(255,255,255,0.1)',
-    glow: 'rgba(239,68,68,0.1)',
+    border: 'color-mix(in srgb, var(--danger) 45%, transparent)',
+    shadow: 'var(--shadow-card)',
+    glow: 'color-mix(in srgb, var(--danger) 22%, transparent)',
   },
   accent: {
-    border: 'rgba(6,182,212,0.3)',
-    shadow: '0 0 60px rgba(6,182,212,0.2), 0 0 100px var(--shadow-secondary), inset 0 1px 0 rgba(255,255,255,0.1)',
-    glow: 'rgba(6,182,212,0.1)',
+    border: 'color-mix(in srgb, var(--accent) 45%, transparent)',
+    shadow: 'var(--shadow-card)',
+    glow: 'color-mix(in srgb, var(--accent) 22%, transparent)',
   },
   gold: {
-    border: 'rgba(217,119,6,0.3)',
-    shadow: '0 0 60px rgba(217,119,6,0.2), 0 0 100px var(--shadow-primary), inset 0 1px 0 rgba(255,255,255,0.1)',
-    glow: 'rgba(217,119,6,0.1)',
+    border: 'color-mix(in srgb, var(--warning) 45%, transparent)',
+    shadow: 'var(--shadow-card)',
+    glow: 'color-mix(in srgb, var(--warning) 22%, transparent)',
   },
 };
 
@@ -113,7 +113,7 @@ export default function Modal({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="absolute inset-0 bg-black/85 backdrop-blur-md"
+            className="absolute inset-0 bg-background/85 backdrop-blur-md"
             onClick={closeOnBackdrop ? onClose : undefined}
           />
           <motion.div
@@ -121,7 +121,7 @@ export default function Modal({
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
             transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-            className={`relative w-full ${sizeClasses[size]} max-h-[90vh] rounded-2xl bg-surface-elevated flex flex-col overflow-hidden pointer-events-auto ${className}`}
+            className={`relative w-full ${sizeClasses[size]} max-h-[90vh] rounded-card bg-surface-elevated flex flex-col overflow-hidden pointer-events-auto shadow-card ${className}`}
             style={{
               border: `1px solid ${schemeStyles[colorScheme].border}`,
               boxShadow: schemeStyles[colorScheme].shadow,
@@ -135,12 +135,12 @@ export default function Modal({
               className="pointer-events-none absolute -bottom-16 -left-16 w-48 h-48 rounded-full blur-3xl"
               style={{ background: schemeStyles[colorScheme].glow }}
             />
-            <div className="relative z-10 p-6 pb-4 border-b border-border-subtle flex items-center justify-between shrink-0">
+            <div className="relative z-10 p-6 pb-4 border-b border-border-default flex items-center justify-between shrink-0">
               <div className="flex items-center gap-3">
                 {Icon && (
                   <div
-                    className={`w-10 h-10 rounded-xl flex items-center justify-center ${
-                      iconClassName || 'bg-gradient-to-br from-primary to-secondary'
+                    className={`w-10 h-10 rounded-module flex items-center justify-center ${
+                      iconClassName || 'bg-gradient-to-br from-primary to-primary-glow'
                     }`}
                   >
                     <Icon className="w-5 h-5 text-text-primary" />
@@ -156,7 +156,7 @@ export default function Modal({
               {showClose && (
                 <button
                   onClick={onClose}
-                  className="w-8 h-8 rounded-lg bg-surface-hover flex items-center justify-center text-text-tertiary hover:text-text-primary hover:bg-surface-highlight transition-all"
+                  className="w-8 h-8 rounded-module bg-surface-hover flex items-center justify-center text-text-tertiary hover:text-text-primary hover:bg-surface-highlight transition-all"
                   aria-label="关闭"
                 >
                   <X className="w-4 h-4" />
@@ -169,7 +169,7 @@ export default function Modal({
             </div>
 
             {footer && (
-              <div className="relative z-10 p-6 pt-4 border-t border-border-subtle shrink-0">
+              <div className="relative z-10 p-6 pt-4 border-t border-border-default shrink-0">
                 {footer}
               </div>
             )}

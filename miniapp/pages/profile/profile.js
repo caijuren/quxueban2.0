@@ -128,4 +128,8 @@ Page({
       auth.logout();
     }
   },
+
+  preventTouchMove() {
+    // 阻止遮罩层下方内容滚动
+  },
 });
