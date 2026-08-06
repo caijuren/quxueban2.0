@@ -31,6 +31,10 @@ import {
   Pause,
   Share2,
   Loader2,
+  Save,
+  LayoutTemplate,
+  History,
+  Star,
 } from 'lucide-react';
 import Modal from '@/components/ui/Modal';
 import { useChildren } from '@/components/dashboard/ChildrenContext';
@@ -53,6 +57,7 @@ import {
   type TaskTemplate,
   type TaskAlignment,
   type TimeSlot,
+  type WeeklyPlanTemplate,
 } from '@/lib/storage.types';
 import {
   getCurrentWeekId,
@@ -87,6 +92,17 @@ import {
 } from '@/lib/ai/taskAssessment';
 import { useTaskTemplates } from '@/lib/hooks/useTaskTemplates';
 import { useAssessTasks } from '@/lib/hooks/useTaskAssessment';
+import {
+  useWeeklyPlanTemplates,
+  useCreateWeeklyPlanTemplate,
+  useUpdateWeeklyPlanTemplate,
+  useDeleteWeeklyPlanTemplate,
+} from '@/lib/hooks/useWeeklyPlanTemplates';
+import { useCopyWeeklyPlan, useWeeklyPlans } from '@/lib/hooks/useWeeklyPlans';
+import {
+  detectConflicts,
+  WeeklyPlanConflict,
+} from '@/lib/weeklyPlanConflicts';
 
 const categoryIcons: Record<TaskCategory, typeof BookOpen> = {
   school: Backpack,
@@ -1422,6 +1438,15 @@ function WeeklyTasksContent() {
   const [libraryOpen, setLibraryOpen] = useState(false);
   const [reportOpen, setReportOpen] = useState(false);
   const [generateOpen, setGenerateOpen] = useState(false);
+  const [saveTemplateOpen, setSaveTemplateOpen] = useState(false);
+  const [applyTemplateOpen, setApplyTemplateOpen] = useState(false);
+  const [copyHistoryOpen, setCopyHistoryOpen] = useState(false);
+
+  const createTemplate = useCreateWeeklyPlanTemplate(currentChild?.id);
+  const { data: weeklyPlanTemplates = [] } = useWeeklyPlanTemplates(
+    currentChild?.id
+  );
+  const copyPlan = useCopyWeeklyPlan();
 
   useEffect(() => {
     setDraftPlan(null);
@@ -1566,6 +1591,11 @@ function WeeklyTasksContent() {
     );
   }, [lastWeekPlan]);
 
+  const conflicts = useMemo(
+    () => (displayPlan ? detectConflicts(displayPlan.tasks) : []),
+    [displayPlan]
+  );
+
   if (!currentChild) {
     return (
       <div className="space-y-8">
@@ -1611,6 +1641,75 @@ function WeeklyTasksContent() {
         tasks: carriedTasks,
       });
     }
+  };
+
+  const handleSaveAsTemplate = async (name: string, description: string) => {
+    if (!displayPlan || !currentChild) return;
+    const resetTasks = displayPlan.tasks.map((t) => ({
+      ...t,
+      id: `template-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+      status: 'pending' as TaskStatus,
+      completedAt: undefined,
+      completionRecords: undefined,
+    }));
+    const resetGoals = (displayPlan.goals ?? []).map((g) => ({
+      ...g,
+      id: `template-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+      quantityDone: 0,
+      checklist: (g.checklist || []).map((item) => ({
+        ...item,
+        id: `template-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+        done: false,
+      })),
+    }));
+    await createTemplate.mutateAsync({
+      name,
+      description,
+      tasks: resetTasks,
+      goals: resetGoals,
+    });
+    setSaveTemplateOpen(false);
+  };
+
+  const handleApplyTemplate = async (templateId: string, mode: 'merge' | 'replace') => {
+    if (!displayPlan || !currentChild) return;
+    const tpl = weeklyPlanTemplates.find((t) => t.id === templateId);
+    if (!tpl) return;
+    const resetTasks = tpl.tasks.map((t) => ({
+      ...t,
+      id: `tplapply-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+      status: 'pending' as TaskStatus,
+      completedAt: undefined,
+      completionRecords: undefined,
+    }));
+    const resetGoals = (tpl.goals ?? []).map((g) => ({
+      ...g,
+      id: `tplapply-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+      quantityDone: 0,
+      checklist: (g.checklist || []).map((item) => ({
+        ...item,
+        id: `tplapply-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+        done: false,
+      })),
+    }));
+    const nextTasks = mode === 'replace' ? resetTasks : [...displayPlan.tasks, ...resetTasks];
+    const nextGoals = mode === 'replace' ? resetGoals : [...(displayPlan.goals ?? []), ...resetGoals];
+    if (isDraft) {
+      setDraftPlan({ ...displayPlan, tasks: nextTasks, goals: nextGoals });
+    } else {
+      await publishWeeklyPlan({ ...displayPlan, tasks: nextTasks, goals: nextGoals });
+    }
+    setApplyTemplateOpen(false);
+  };
+
+  const handleCopyFromHistory = async (sourceWeekId: string) => {
+    if (!currentChild) return;
+    await copyPlan.mutateAsync({
+      childId: currentChild.id,
+      targetWeekId: weekId,
+      sourceWeekId,
+    });
+    setCopyHistoryOpen(false);
   };
 
   return (
@@ -1663,6 +1762,27 @@ function WeeklyTasksContent() {
                 >
                   <Library className="w-3.5 h-3.5" />
                   从任务库选择
+                </button>
+                <button
+                  onClick={() => setSaveTemplateOpen(true)}
+                  className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-[14px] bg-surface border border-border-default text-sm font-medium text-text-secondary hover:bg-surface-hover hover:text-text-primary transition-colors"
+                >
+                  <Save className="w-3.5 h-3.5" />
+                  保存为模板
+                </button>
+                <button
+                  onClick={() => setApplyTemplateOpen(true)}
+                  className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-[14px] bg-surface border border-border-default text-sm font-medium text-text-secondary hover:bg-surface-hover hover:text-text-primary transition-colors"
+                >
+                  <LayoutTemplate className="w-3.5 h-3.5" />
+                  套用模板
+                </button>
+                <button
+                  onClick={() => setCopyHistoryOpen(true)}
+                  className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-[14px] bg-surface border border-border-default text-sm font-medium text-text-secondary hover:bg-surface-hover hover:text-text-primary transition-colors"
+                >
+                  <History className="w-3.5 h-3.5" />
+                  复制历史周
                 </button>
               </>
             )}
@@ -1728,6 +1848,36 @@ function WeeklyTasksContent() {
           </div>
         </div>
       </motion.div>
+
+      {conflicts.length > 0 && (
+        <motion.div
+          initial={shouldReduceMotion ? false : { opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4 }}
+          className="rounded-2xl border border-warning/20 bg-warning/[0.06] p-4"
+        >
+          <div className="flex items-start gap-3">
+            <AlertTriangle className="w-5 h-5 text-warning shrink-0 mt-0.5" />
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-medium text-text-secondary mb-1">
+                本周计划存在 {conflicts.length} 项潜在冲突
+              </p>
+              <ul className="space-y-1">
+                {conflicts.slice(0, 3).map((c) => (
+                  <li key={c.id} className="text-xs text-text-tertiary">
+                    {c.message}
+                  </li>
+                ))}
+                {conflicts.length > 3 && (
+                  <li className="text-xs text-text-muted">
+                    还有 {conflicts.length - 3} 项，可在编辑周计划中查看
+                  </li>
+                )}
+              </ul>
+            </div>
+          </div>
+        </motion.div>
+      )}
 
       {stats && displayPlan && (
         <motion.div
@@ -2080,7 +2230,256 @@ function WeeklyTasksContent() {
           onPublish={handlePublishDraft}
         />
       )}
+
+      {saveTemplateOpen && displayPlan && (
+        <SaveTemplateModal
+          onClose={() => setSaveTemplateOpen(false)}
+          onSave={handleSaveAsTemplate}
+          saving={createTemplate.isPending}
+        />
+      )}
+
+      {applyTemplateOpen && displayPlan && (
+        <ApplyTemplateModal
+          templates={weeklyPlanTemplates}
+          onClose={() => setApplyTemplateOpen(false)}
+          onApply={handleApplyTemplate}
+        />
+      )}
+
+      {copyHistoryOpen && currentChild && (
+        <CopyHistoryModal
+          childId={currentChild.id}
+          currentWeekId={weekId}
+          onClose={() => setCopyHistoryOpen(false)}
+          onCopy={handleCopyFromHistory}
+        />
+      )}
     </div>
+  );
+}
+
+function SaveTemplateModal({
+  onClose,
+  onSave,
+  saving,
+}: {
+  onClose: () => void;
+  onSave: (name: string, description: string) => void;
+  saving: boolean;
+}) {
+  const [name, setName] = useState('');
+  const [description, setDescription] = useState('');
+
+  return (
+    <Modal
+      isOpen
+      onClose={onClose}
+      title="保存为周计划模板"
+      subtitle="将当前周计划保存为可复用的模板"
+      icon={Save}
+      size="md"
+      footer={
+        <div className="flex items-center justify-end gap-3">
+          <button
+            onClick={onClose}
+            className="px-4 py-2 rounded-xl text-text-tertiary hover:text-text-secondary transition-colors"
+          >
+            取消
+          </button>
+          <button
+            onClick={() => onSave(name, description)}
+            disabled={saving || !name.trim()}
+            className="flex items-center gap-2 px-5 py-2 rounded-xl bg-secondary text-text-primary font-semibold hover:shadow-[0_0_30px_rgba(139,92,246,0.4)] transition-all disabled:opacity-50"
+          >
+            {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
+            保存
+          </button>
+        </div>
+      }
+    >
+      <div className="space-y-4">
+        <div>
+          <label className="block text-xs text-text-tertiary mb-1.5">模板名称</label>
+          <input
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder="例如：三年级上学期第 1 周"
+            className="w-full text-sm bg-surface-elevated border border-border-default rounded-lg px-3 py-2 text-text-secondary placeholder:text-text-muted focus:outline-none focus:border-primary/50"
+          />
+        </div>
+        <div>
+          <label className="block text-xs text-text-tertiary mb-1.5">备注说明（可选）</label>
+          <textarea
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            placeholder="简要描述模板适用场景"
+            rows={3}
+            className="w-full text-sm bg-surface-elevated border border-border-default rounded-lg px-3 py-2 text-text-secondary placeholder:text-text-muted focus:outline-none focus:border-primary/50 resize-none"
+          />
+        </div>
+      </div>
+    </Modal>
+  );
+}
+
+function ApplyTemplateModal({
+  templates,
+  onClose,
+  onApply,
+}: {
+  templates: WeeklyPlanTemplate[];
+  onClose: () => void;
+  onApply: (templateId: string, mode: 'merge' | 'replace') => void;
+}) {
+  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [mode, setMode] = useState<'merge' | 'replace'>('merge');
+
+  return (
+    <Modal
+      isOpen
+      onClose={onClose}
+      title="套用周计划模板"
+      subtitle="选择已有模板应用到当前周计划"
+      icon={LayoutTemplate}
+      size="lg"
+      footer={
+        <div className="flex items-center justify-end gap-3">
+          <button
+            onClick={onClose}
+            className="px-4 py-2 rounded-xl text-text-tertiary hover:text-text-secondary transition-colors"
+          >
+            取消
+          </button>
+          <button
+            onClick={() => selectedId && onApply(selectedId, mode)}
+            disabled={!selectedId}
+            className="flex items-center gap-2 px-5 py-2 rounded-xl bg-secondary text-text-primary font-semibold hover:shadow-[0_0_30px_rgba(139,92,246,0.4)] transition-all disabled:opacity-50"
+          >
+            套用
+          </button>
+        </div>
+      }
+    >
+      <div className="space-y-4">
+        <div className="flex items-center gap-2 p-1 rounded-xl bg-surface-elevated border border-border-default">
+          <button
+            onClick={() => setMode('merge')}
+            className={`flex-1 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
+              mode === 'merge'
+                ? 'bg-secondary text-text-primary'
+                : 'text-text-tertiary hover:text-text-secondary'
+            }`}
+          >
+            合并到当前计划
+          </button>
+          <button
+            onClick={() => setMode('replace')}
+            className={`flex-1 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
+              mode === 'replace'
+                ? 'bg-secondary text-text-primary'
+                : 'text-text-tertiary hover:text-text-secondary'
+            }`}
+          >
+            替换当前计划
+          </button>
+        </div>
+
+        {templates.length === 0 ? (
+          <p className="text-sm text-text-muted text-center py-8">暂无可用模板</p>
+        ) : (
+          <div className="space-y-2 max-h-[50vh] overflow-y-auto">
+            {templates.map((tpl) => (
+              <button
+                key={tpl.id}
+                onClick={() => setSelectedId(tpl.id)}
+                className={`w-full text-left p-3 rounded-xl border transition-all ${
+                  selectedId === tpl.id
+                    ? 'bg-secondary/10 border-secondary/30'
+                    : 'bg-surface-elevated border-border-subtle hover:border-border-default'
+                }`}
+              >
+                <div className="flex items-center justify-between">
+                  <span className="text-sm font-medium text-text-secondary">{tpl.name}</span>
+                  {selectedId === tpl.id && <CheckCircle2 className="w-4 h-4 text-secondary" />}
+                </div>
+                {tpl.description && (
+                  <p className="text-xs text-text-muted mt-1 line-clamp-2">{tpl.description}</p>
+                )}
+                <p className="text-2xs text-text-tertiary mt-2">
+                  {tpl.tasks.length} 个任务
+                </p>
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
+    </Modal>
+  );
+}
+
+function CopyHistoryModal({
+  childId,
+  currentWeekId,
+  onClose,
+  onCopy,
+}: {
+  childId: string;
+  currentWeekId: string;
+  onClose: () => void;
+  onCopy: (sourceWeekId: string) => void;
+}) {
+  const { data: plans = [], isLoading } = useWeeklyPlans(childId);
+  const history = useMemo(
+    () =>
+      plans
+        .filter((p) => p.weekId !== currentWeekId)
+        .sort((a, b) => b.weekId.localeCompare(a.weekId)),
+    [plans, currentWeekId]
+  );
+
+  return (
+    <Modal
+      isOpen
+      onClose={onClose}
+      title="复制历史周计划"
+      subtitle="选择历史周计划复制到当前周"
+      icon={History}
+      size="lg"
+    >
+      <div className="space-y-2 max-h-[60vh] overflow-y-auto">
+        {isLoading ? (
+          <div className="py-8 text-center text-text-muted text-sm">
+            <Loader2 className="w-5 h-5 animate-spin mx-auto mb-2" />
+            加载历史周计划...
+          </div>
+        ) : history.length === 0 ? (
+          <p className="text-sm text-text-muted text-center py-8">暂无历史周计划</p>
+        ) : (
+          history.map((plan) => (
+            <div
+              key={plan.weekId}
+              className="flex items-center justify-between p-3 rounded-xl bg-surface-elevated border border-border-subtle"
+            >
+              <div>
+                <p className="text-sm font-medium text-text-secondary">{formatWeekLabel(plan.weekId)}</p>
+                <p className="text-2xs text-text-tertiary mt-0.5">
+                  {plan.tasks.length} 个任务 · {plan.tasks.filter((t) => t.status === 'done').length} 已完成
+                </p>
+              </div>
+              <button
+                onClick={() => onCopy(plan.weekId)}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-secondary/10 text-secondary text-xs font-medium hover:bg-secondary/20 transition-colors"
+              >
+                <Copy className="w-3.5 h-3.5" />
+                复制
+              </button>
+            </div>
+          ))
+        )}
+      </div>
+    </Modal>
   );
 }
 

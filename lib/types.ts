@@ -32,6 +32,7 @@ export interface NotificationItem {
   content: string;
   readAt: string | null;
   createdAt: string;
+  type: import('./notifications').NotificationType;
 }
 
 export interface Publisher {

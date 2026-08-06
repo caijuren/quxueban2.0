@@ -49,6 +49,11 @@ model User {
   taskTemplates      TaskTemplate[]
   capabilities       Capability[]
   subjectPlanConfigs SubjectPlanConfig[]
+  weeklyPlanTemplates WeeklyPlanTemplate[]
+  badges             Badge[]
+  pointLogs          PointLog[]
+  parentLogs         ParentLog[]
+  chatSessions       ChatSession[]
 
   ownedFamilies    Family[]        @relation("FamilyOwner")
   familyMemberships FamilyMember[]
@@ -168,6 +173,13 @@ model Child {
   weeklyPlans  WeeklyPlan[]
   taskTemplates TaskTemplate[]
   learningGoals LearningGoal[]
+  milestones   Milestone[]
+  subjectPlanConfigs SubjectPlanConfig[]
+  weeklyPlanTemplates WeeklyPlanTemplate[]
+  badges       Badge[]
+  pointLogs    PointLog[]
+  parentLogs   ParentLog[]
+  chatSessions ChatSession[]
 
   @@index([userId])
   @@index([familyId])
@@ -191,6 +203,7 @@ model LearningGoal {
   updatedAt   DateTime @updatedAt
 
   child       Child    @relation(fields: [childId], references: [id], onDelete: Cascade)
+  milestones  Milestone[]
 
   @@index([childId])
   @@index([status])
@@ -214,9 +227,42 @@ model Plan {
 
   user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
   child Child @relation(fields: [childId], references: [id], onDelete: Cascade)
+  planMilestones Milestone[]
 
   @@index([userId])
   @@index([childId])
+}
+
+model Milestone {
+  id              String   @id @default(uuid())
+  childId         String
+  title           String
+  description     String?
+  targetGrade     Int?
+  targetPeriod    String?
+  routeId         String?
+  source          String   @default("system") // system | parent | ai
+  status          String   @default("pending") // pending | in_progress | completed
+  dueDate         DateTime?
+  completedAt     DateTime?
+  certificateUrls String[] @default([])
+  score           String?
+  notes           String?
+  learningGoalId  String?
+  planId          String?
+
+  child         Child         @relation(fields: [childId], references: [id], onDelete: Cascade)
+  learningGoal  LearningGoal? @relation(fields: [learningGoalId], references: [id], onDelete: SetNull)
+  plan          Plan?         @relation(fields: [planId], references: [id], onDelete: SetNull)
+
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  @@index([childId])
+  @@index([status])
+  @@index([routeId])
+  @@index([learningGoalId])
+  @@index([planId])
 }
 
 model TaskTemplate {
@@ -239,6 +285,7 @@ model TaskTemplate {
 
   source              TaskTemplateSource @default(USER)
   isActive            Boolean    @default(true)
+  isFavorite          Boolean    @default(false)
   archivedAt          DateTime?
   useCount            Int        @default(0)
   lastUsedAt          DateTime?
@@ -261,6 +308,7 @@ model TaskTemplate {
   @@index([source])
   @@index([archivedAt])
   @@index([isActive])
+  @@index([isFavorite])
   @@index([taskType])
   @@index([frequency])
   @@index([weeklySchedule])
@@ -385,6 +433,7 @@ model Notification {
 model SubjectPlanConfig {
   id            String   @id @default(uuid())
   userId        String?
+  childId       String?
   subject       String
   tracks          Json
   timeAxis        Json
@@ -395,11 +444,124 @@ model SubjectPlanConfig {
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 
-  user User? @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user  User?  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  child Child? @relation(fields: [childId], references: [id], onDelete: Cascade)
 
-  @@unique([subject, userId])
+  @@unique([subject, userId, childId])
   @@index([subject])
   @@index([userId])
+  @@index([childId])
+}
+
+model WeeklyPlanTemplate {
+  id          String   @id @default(uuid())
+  userId      String
+  childId     String?
+  name        String
+  description String?
+  tasks       Json     @default("[]")
+  goals       Json?    @default("[]")
+  isDefault   Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  child Child? @relation(fields: [childId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([childId])
+  @@index([isDefault])
+}
+
+model Badge {
+  id          String   @id @default(uuid())
+  userId      String
+  childId     String?
+  key         String
+  name        String
+  description String?
+  icon        String?
+  color       String?
+  level       Int      @default(1)
+  unlockedAt  DateTime @default(now())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  child Child? @relation(fields: [childId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, childId, key])
+  @@index([userId])
+  @@index([childId])
+  @@index([key])
+}
+
+model PointLog {
+  id          String   @id @default(uuid())
+  userId      String
+  childId     String?
+  points      Int
+  total       Int
+  reason      String
+  source      String   @default("system")
+  createdAt   DateTime @default(now())
+
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  child Child? @relation(fields: [childId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([childId])
+  @@index([createdAt])
+}
+
+model ParentLog {
+  id          String   @id @default(uuid())
+  userId      String
+  childId     String
+  date        String
+  content     String
+  imageUrls   String[] @default([])
+  tags        String[] @default([])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  child Child @relation(fields: [childId], references: [id], onDelete: Cascade)
+
+  @@unique([childId, date])
+  @@index([userId])
+  @@index([childId])
+  @@index([date])
+}
+
+model ChatSession {
+  id        String   @id @default(uuid())
+  userId    String
+  childId   String?
+  title     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user     User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  child    Child?      @relation(fields: [childId], references: [id], onDelete: Cascade)
+  messages ChatMessage[]
+
+  @@index([userId])
+  @@index([childId])
+  @@index([updatedAt])
+}
+
+model ChatMessage {
+  id        String   @id @default(uuid())
+  sessionId String
+  role      String   // user | assistant
+  content   String   @db.Text
+  createdAt DateTime @default(now())
+
+  session ChatSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@index([sessionId])
+  @@index([createdAt])
 }
 
 model Publisher {

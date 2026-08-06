@@ -2,8 +2,11 @@
 
 import { BookOpen } from 'lucide-react';
 import SubjectPlanConfigEditor from '@/components/subjects/SubjectPlanConfigEditor';
+import { useChildren } from '@/components/dashboard/ChildrenContext';
 
 export default function ChinesePlanConfigPage() {
+  const { currentChild } = useChildren();
+
   return (
     <SubjectPlanConfigEditor
       subject="chinese"
@@ -12,6 +15,7 @@ export default function ChinesePlanConfigPage() {
       backHref="/dashboard/subjects/chinese"
       backLabel="返回语文学科路径"
       headerIcon={BookOpen}
+      childId={currentChild?.id}
       description={
         <div>
           <p className="font-medium text-text-secondary mb-1">

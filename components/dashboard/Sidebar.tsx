@@ -7,10 +7,11 @@ import {
   Calendar,
   Bell,
   Target,
-  Home,
+  Settings,
   Wrench,
   X,
   Library,
+  MessageSquare,
 } from 'lucide-react';
 import packageInfo from '@/package.json';
 import Link from 'next/link';
@@ -34,15 +35,18 @@ const menuGroups = [
   },
   {
     title: 'AI 助手',
-    items: [{ name: 'AI 诊断', href: '/dashboard/ai', icon: Brain }],
+    items: [
+      { name: 'AI 诊断', href: '/dashboard/ai', icon: Brain },
+      { name: 'AI 学习助手', href: '/dashboard/ai-assistant', icon: MessageSquare },
+    ],
   },
   {
     title: '规划工具',
     items: [{ name: '规划工具', href: '/dashboard/toolbox', icon: Wrench }],
   },
   {
-    title: '控制台',
-    items: [{ name: '设置', href: '/dashboard/console', icon: Home }],
+    title: '系统',
+    items: [{ name: '设置', href: '/dashboard/settings', icon: Settings }],
   },
 ];
 

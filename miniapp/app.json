@@ -6,6 +6,8 @@
     "pages/bind-parent/bind-parent",
     "pages/role-select/role-select",
     "pages/tasks/tasks",
+    "pages/weekly/weekly",
+    "pages/growth-card/growth-card",
     "pages/profile/profile",
     "pages/task-complete/task-complete"
   ],

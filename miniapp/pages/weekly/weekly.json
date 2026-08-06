@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "周计划",
+  "navigationBarBackgroundColor": "#090B12",
+  "navigationBarTextStyle": "white",
+  "backgroundColor": "#090B12",
+  "enablePullDownRefresh": true
+}

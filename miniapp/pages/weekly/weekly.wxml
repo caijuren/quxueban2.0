@@ -1,0 +1,93 @@
+<view class="weekly-page" style="--status-bar-height: {{statusBarHeight}}px;">
+  <view class="weekly-bg">
+    <view class="weekly-bg-glow weekly-bg-glow--primary"></view>
+    <view class="weekly-bg-glow weekly-bg-glow--ai"></view>
+  </view>
+
+  <scroll-view scroll-y class="weekly-scroll" enhanced show-scrollbar="{{false}}">
+    <view class="weekly-header">
+      <view class="weekly-title-row">
+        <text class="weekly-title">周计划</text>
+        <text class="week-label">{{weekLabel}}</text>
+      </view>
+      <text class="weekly-subtitle">{{selectedChild.name}} 本周共 {{stats.total}} 项任务</text>
+    </view>
+
+    <view class="stats-card card">
+      <view class="stats-list">
+        <view class="stats-item">
+          <text class="stats-value">{{stats.completionRate}}%</text>
+          <text class="stats-label">完成率</text>
+        </view>
+        <view class="stats-divider"></view>
+        <view class="stats-item">
+          <text class="stats-value">{{stats.done}}/{{stats.total}}</text>
+          <text class="stats-label">已完成</text>
+        </view>
+        <view class="stats-divider"></view>
+        <view class="stats-item">
+          <text class="stats-value">{{stats.estimatedMinutes}}</text>
+          <text class="stats-label">计划分钟</text>
+        </view>
+      </view>
+      <view class="progress-track">
+        <view class="progress-fill" style="width: {{stats.completionRate}}%;"></view>
+      </view>
+    </view>
+
+    <view class="day-tabs card">
+      <view
+        wx:for="{{dayNames}}"
+        wx:key="*this"
+        class="day-tab {{selectedDayIndex === index ? 'active' : ''}} {{todayIndex === index ? 'today' : ''}}"
+        data-index="{{index}}"
+        bindtap="selectDay"
+      >
+        <text class="day-name">{{item}}</text>
+        <text wx:if="{{todayIndex === index}}" class="day-today-tag">今</text>
+      </view>
+    </view>
+
+    <view wx:if="{{loading}}" class="loading-wrapper">
+      <view class="loading-spinner"></view>
+    </view>
+
+    <view wx:elif="{{dayTasks.length === 0}}" class="empty-state">
+      <view class="empty-icon">
+        <image src="/assets/icons/checklist.svg" class="empty-icon-img" mode="aspectFit" />
+      </view>
+      <text class="empty-title">{{dayNames[selectedDayIndex]}}没有安排任务</text>
+      <text class="empty-desc">好好休息，或者去 Web 端调整本周计划</text>
+    </view>
+
+    <view wx:else class="task-list">
+      <view
+        wx:for="{{dayTasks}}"
+        wx:key="id"
+        class="task-card {{item.done ? 'done' : ''}}"
+        data-task="{{item}}"
+        bindtap="navigateToTask"
+      >
+        <view class="task-left">
+          <view class="task-status-ring {{item.done ? 'done' : ''}}">
+            <image wx:if="{{item.done}}" src="/assets/icons/check.svg" class="task-check" mode="aspectFit" />
+          </view>
+        </view>
+        <view class="task-body">
+          <view class="task-meta-row">
+            <text class="task-category" style="color: {{item.categoryColor}}; border-color: {{item.categoryColor}}33; background: {{item.categoryColor}}1A;">{{item.categoryLabel}}</text>
+            <text wx:if="{{item.subjectLabel}}" class="task-subject">{{item.subjectLabel}}</text>
+          </view>
+          <text class="task-focus">{{item.focus}}</text>
+          <view class="task-footer">
+            <text class="task-duration">{{item.duration}}</text>
+            <text wx:if="{{item.timeSlot}}" class="task-time-slot">{{item.timeSlot}}</text>
+          </view>
+        </view>
+        <image src="/assets/icons/arrow-right.svg" class="task-arrow" mode="aspectFit" />
+      </view>
+    </view>
+
+    <view class="safe-area-bottom" style="height: calc(40rpx + env(safe-area-inset-bottom));"></view>
+  </scroll-view>
+</view>

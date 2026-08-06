@@ -2,8 +2,11 @@
 
 import { Calculator } from 'lucide-react';
 import SubjectPlanConfigEditor from '@/components/subjects/SubjectPlanConfigEditor';
+import { useChildren } from '@/components/dashboard/ChildrenContext';
 
 export default function MathPlanConfigPage() {
+  const { currentChild } = useChildren();
+
   return (
     <SubjectPlanConfigEditor
       subject="math"
@@ -12,6 +15,7 @@ export default function MathPlanConfigPage() {
       backHref="/dashboard/subjects/math"
       backLabel="返回数学学科路径"
       headerIcon={Calculator}
+      childId={currentChild?.id}
       description={
         <div>
           <p className="font-medium text-text-secondary mb-1">

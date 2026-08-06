@@ -55,6 +55,7 @@ interface SubjectPlanConfigEditorProps {
   backLabel: string;
   headerIcon?: React.ComponentType<{ className?: string }>;
   description?: React.ReactNode;
+  childId?: string;
 }
 
 export default function SubjectPlanConfigEditor({
@@ -65,10 +66,11 @@ export default function SubjectPlanConfigEditor({
   backLabel,
   headerIcon: HeaderIcon = Target,
   description,
+  childId,
 }: SubjectPlanConfigEditorProps) {
   const shouldReduceMotion = useReducedMotion();
-  const { data: config, isLoading, error: queryError } = useSubjectPlan(subject);
-  const updateConfig = useUpdateSubjectPlan(subject);
+  const { data: config, isLoading, error: queryError } = useSubjectPlan(subject, childId);
+  const updateConfig = useUpdateSubjectPlan(subject, childId);
 
   const [activeTab, setActiveTab] = useState<TabId>('tracks');
   const [draft, setDraft] = useState<SubjectPlanConfigData | null>(null);

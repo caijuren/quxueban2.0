@@ -85,7 +85,9 @@ Page({
   setTaskData(task) {
     const duration = this.parseDuration(task.duration);
     const activeRole = storage.getActiveRole();
-    const defaultNote = activeRole === 'parent' ? '家长代打卡' : '孩子自己打卡';
+    const evidence = task.evidence || { images: [], audios: [], transcript: '' };
+    const existingNote = task.note || (evidence.transcript ? '' : '');
+    const defaultNote = existingNote || (activeRole === 'parent' ? '家长代打卡' : '孩子自己打卡');
 
     this.setData({
       task,
@@ -93,9 +95,12 @@ Page({
       taskFocus: task.focus || '未命名任务',
       taskDurationText: task.duration || '未设置',
       taskDifficulty: difficultyLabels[task.difficulty] || '',
+      imageUrls: evidence.images || [],
+      audioUrl: evidence.audios && evidence.audios[0] ? evidence.audios[0] : '',
+      recordingTranscript: evidence.transcript || '',
       form: {
-        status: 'done',
-        progress: 100,
+        status: task.status === 'done' ? 'done' : 'done',
+        progress: task.status === 'done' ? 100 : 100,
         actualDurationMinutes: duration,
         quality: 'good',
         note: defaultNote,

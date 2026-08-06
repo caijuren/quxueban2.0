@@ -5,6 +5,10 @@ import { normalizeWeeklyTask } from '@/lib/taskAlignment';
 import { taskCompletionInputSchema, validateBody } from '@/lib/validation';
 import { sendTaskCompletedReminder } from '@/lib/miniapp/subscription';
 import { getManageableChildIdsForUser } from '@/lib/family';
+import {
+  getGamificationContext,
+  checkAndAwardBadges,
+} from '@/lib/gamification';
 import type { NextRequest } from 'next/server';
 import type { WeeklyTaskItem, TaskCompletionRecord } from '@/lib/storage.types';
 
@@ -127,6 +131,19 @@ export async function POST(
   });
 
   console.log('[miniapp complete] updated plan:', updated.id, 'task status:', tasks[taskIndex].status);
+
+  // 打卡成功后触发徽章/积分/连续打卡
+  if (isDone && targetPlan.child) {
+    try {
+      const gamificationContext = await getGamificationContext(
+        targetPlan.child.id,
+        targetPlan.child.userId
+      );
+      await checkAndAwardBadges(targetPlan.child.id, gamificationContext);
+    } catch (err) {
+      console.error('[miniapp complete] gamification failed:', err);
+    }
+  }
 
   // 打卡成功后异步通知孩子的实际家长
   if (isDone && targetPlan.child) {

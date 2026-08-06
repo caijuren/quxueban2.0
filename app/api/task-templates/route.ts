@@ -101,7 +101,12 @@ export async function GET(req: Request) {
 
     const templates = await prisma.taskTemplate.findMany({
       where: where as any,
-      orderBy: [{ source: 'asc' }, { category: 'asc' }, { createdAt: 'desc' }],
+      orderBy: [
+        { isFavorite: 'desc' },
+        { source: 'asc' },
+        { category: 'asc' },
+        { createdAt: 'desc' },
+      ],
       include: {
         capabilityLinks: {
           include: {

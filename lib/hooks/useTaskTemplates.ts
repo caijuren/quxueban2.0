@@ -73,3 +73,26 @@ export function useDeleteTaskTemplate(childId: string | undefined) {
       queryClient.invalidateQueries({ queryKey: ['task-templates', childId] }),
   });
 }
+
+export function useToggleTaskTemplateFavorite(childId: string | undefined) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, isFavorite }: { id: string; isFavorite: boolean }) =>
+      apiPatch<TaskTemplate>(`/api/task-templates/${id}`, { isFavorite }),
+    onSuccess: () =>
+      queryClient.invalidateQueries({ queryKey: ['task-templates', childId] }),
+  });
+}
+
+export function useImportSystemTaskTemplates(childId: string | undefined) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (templateIds: string[]) =>
+      apiPost<{ createdCount: number; templates: TaskTemplate[] }>(
+        '/api/task-templates/import-system',
+        { childId, templateIds }
+      ),
+    onSuccess: () =>
+      queryClient.invalidateQueries({ queryKey: ['task-templates', childId] }),
+  });
+}

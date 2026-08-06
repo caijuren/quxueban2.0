@@ -131,6 +131,7 @@ export const taskTemplateCreateSchema = z.object({
   milestoneTag: z.string().max(100).nullable().optional(),
   semesterTag: z.string().max(100).nullable().optional(),
   tags: z.array(z.string().max(50)).default([]),
+  isFavorite: z.boolean().default(false),
   taskType: taskTypeSchema.default('daily'),
   frequency: taskFrequencySchema.default('once'),
   customFrequency: customFrequencySchema.nullable().optional(),
@@ -276,6 +277,22 @@ export const weeklyPlanUpdateSchema = z.object({
   publishedAt: z.string().datetime().nullable().optional(),
   reviewedAt: z.string().datetime().nullable().optional(),
   parentComment: z.string().max(1000).nullable().optional(),
+});
+
+export const weeklyPlanTemplateCreateSchema = z.object({
+  name: z.string().min(1, '模板名称不能为空').max(100, '模板名称最多 100 字符'),
+  description: z.string().max(500).nullable().optional(),
+  childId: z.string().nullable().optional(),
+  tasks: z.array(weeklyTaskItemSchema).default([]),
+  goals: z.array(weeklyGoalSchema).default([]),
+  isDefault: z.boolean().default(false),
+});
+
+export const weeklyPlanTemplateUpdateSchema = weeklyPlanTemplateCreateSchema.partial();
+
+export const weeklyPlanCopySchema = z.object({
+  sourceWeekId: z.string().min(1, '源周 ID 不能为空'),
+  targetWeekId: z.string().min(1, '目标周 ID 不能为空'),
 });
 
 export const userRegisterSchema = z.object({
@@ -447,6 +464,24 @@ export const familyInviteCreateSchema = z.object({
   message: '邮箱或手机号至少填写一个',
 });
 
+export const chatSessionCreateSchema = z.object({
+  title: z.string().max(100, '标题最多 100 字符').optional(),
+  childId: z.string().optional(),
+});
+
+export const chatMessageCreateSchema = z.object({
+  content: z.string().min(1, '消息不能为空').max(10000, '消息过长'),
+});
+
+export const parentLogCreateSchema = z.object({
+  date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, '日期格式不正确'),
+  content: z.string().min(1, '内容不能为空').max(5000, '内容过长'),
+  imageUrls: z.array(z.string().url()).default([]),
+  tags: z.array(z.string().max(20)).default([]),
+});
+
+export const parentLogUpdateSchema = parentLogCreateSchema.partial();
+
 export type ChildCreateInput = z.infer<typeof childCreateSchema>;
 export type ChildUpdateInput = z.infer<typeof childUpdateSchema>;
 export type TaskTemplateCreateInput = z.infer<typeof taskTemplateCreateSchema>;
@@ -455,6 +490,9 @@ export type CapabilityCreateInput = z.infer<typeof capabilityCreateSchema>;
 export type CapabilityUpdateInput = z.infer<typeof capabilityUpdateSchema>;
 export type WeeklyPlanCreateInput = z.infer<typeof weeklyPlanCreateSchema>;
 export type WeeklyPlanUpdateInput = z.infer<typeof weeklyPlanUpdateSchema>;
+export type WeeklyPlanTemplateCreateInput = z.infer<typeof weeklyPlanTemplateCreateSchema>;
+export type WeeklyPlanTemplateUpdateInput = z.infer<typeof weeklyPlanTemplateUpdateSchema>;
+export type WeeklyPlanCopyInput = z.infer<typeof weeklyPlanCopySchema>;
 export type UserRegisterInput = z.infer<typeof userRegisterSchema>;
 export type PasswordChangeInput = z.infer<typeof passwordChangeSchema>;
 export type AccountDeleteInput = z.infer<typeof accountDeleteSchema>;
@@ -470,6 +508,10 @@ export type FamilyCreateInput = z.infer<typeof familyCreateSchema>;
 export type FamilyInviteInput = z.infer<typeof familyInviteSchema>;
 export type FamilyMemberUpdateInput = z.infer<typeof familyMemberUpdateSchema>;
 export type FamilyInviteCreateInput = z.infer<typeof familyInviteCreateSchema>;
+export type ChatSessionCreateInput = z.infer<typeof chatSessionCreateSchema>;
+export type ChatMessageCreateInput = z.infer<typeof chatMessageCreateSchema>;
+export type ParentLogCreateInput = z.infer<typeof parentLogCreateSchema>;
+export type ParentLogUpdateInput = z.infer<typeof parentLogUpdateSchema>;
 
 export interface ValidationError {
   error: string;

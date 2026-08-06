@@ -1,0 +1,103 @@
+'use client';
+
+import { motion } from 'framer-motion';
+import {
+  Star,
+  Trophy,
+  Flame,
+  Zap,
+  Medal,
+  LucideIcon,
+  Loader2,
+} from 'lucide-react';
+import { useGamification } from '@/lib/hooks/useGamification';
+
+const ICON_MAP: Record<string, LucideIcon> = {
+  Star,
+  Trophy,
+  Flame,
+  Zap,
+  Medal,
+};
+
+interface BadgeShowcaseProps {
+  childId: string | undefined;
+}
+
+export default function BadgeShowcase({ childId }: BadgeShowcaseProps) {
+  const { data, isLoading } = useGamification(childId);
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center py-12">
+        <Loader2 className="w-6 h-6 animate-spin text-primary" />
+      </div>
+    );
+  }
+
+  const badges = data?.badges ?? [];
+  const points = data?.points ?? 0;
+  const streaks = data?.streaks ?? { currentStreak: 0, longestStreak: 0 };
+
+  return (
+    <div className="space-y-4">
+      <div className="grid grid-cols-3 gap-3">
+        <div className="rounded-xl bg-surface-elevated border border-border-default p-3 text-center">
+          <p className="text-2xs text-text-muted mb-1">总积分</p>
+          <p className="text-xl font-bold text-primary">{points}</p>
+        </div>
+        <div className="rounded-xl bg-surface-elevated border border-border-default p-3 text-center">
+          <p className="text-2xs text-text-muted mb-1">当前连续</p>
+          <p className="text-xl font-bold text-warning">{streaks.currentStreak} 天</p>
+        </div>
+        <div className="rounded-xl bg-surface-elevated border border-border-default p-3 text-center">
+          <p className="text-2xs text-text-muted mb-1">最长连续</p>
+          <p className="text-xl font-bold text-success">{streaks.longestStreak} 天</p>
+        </div>
+      </div>
+
+      {badges.length === 0 ? (
+        <div className="rounded-xl bg-surface-elevated border border-border-default p-6 text-center">
+          <p className="text-sm text-text-secondary">还没有获得徽章</p>
+          <p className="text-2xs text-text-muted mt-1">坚持完成任务即可获得徽章和积分</p>
+        </div>
+      ) : (
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+          {badges.map((badge, index) => {
+            const Icon = ICON_MAP[badge.icon ?? ''] ?? Star;
+            return (
+              <motion.div
+                key={badge.id}
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: index * 0.05 }}
+                className="rounded-xl bg-surface-elevated border border-border-default p-4 text-center hover:border-primary/30 transition-colors"
+              >
+                <div
+                  className="w-12 h-12 rounded-full mx-auto mb-3 flex items-center justify-center"
+                  style={{
+                    background: `color-mix(in srgb, ${badge.color ?? '#f59e0b'} 20%, transparent)`,
+                    color: badge.color ?? '#f59e0b',
+                  }}
+                >
+                  <Icon className="w-6 h-6" />
+                </div>
+                <p className="text-sm font-semibold text-text-primary truncate">
+                  {badge.name}
+                </p>
+                <p className="text-[10px] text-text-muted mt-0.5 line-clamp-2">
+                  {badge.description}
+                </p>
+                {badge.points > 0 && (
+                  <p className="text-[10px] font-medium mt-1.5 text-warning">
+                    +{badge.points} 积分
+                  </p>
+                )}
+              </motion.div>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+}

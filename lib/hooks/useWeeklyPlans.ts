@@ -71,3 +71,27 @@ export function useCompleteTask() {
     },
   });
 }
+
+export function useCopyWeeklyPlan() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (data: {
+      childId: string;
+      targetWeekId: string;
+      sourceWeekId: string;
+    }) =>
+      apiPost<WeeklyPlan>(
+        `/api/children/${data.childId}/weekly-plans/${data.targetWeekId}/copy`,
+        {
+          sourceWeekId: data.sourceWeekId,
+          targetWeekId: data.targetWeekId,
+        }
+      ),
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({
+        queryKey: buildKey(variables.childId),
+      });
+      queryClient.invalidateQueries({ queryKey: ['weekly-plans'] });
+    },
+  });
+}

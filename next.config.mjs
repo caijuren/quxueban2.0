@@ -7,6 +7,21 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
+  async redirects() {
+    return [
+      // Legacy console routes now live under /dashboard/settings
+      {
+        source: '/dashboard/console',
+        destination: '/dashboard/settings/account',
+        permanent: true,
+      },
+      {
+        source: '/dashboard/console/:path*',
+        destination: '/dashboard/settings/account',
+        permanent: true,
+      },
+    ];
+  },
 };
 
 export default nextConfig;

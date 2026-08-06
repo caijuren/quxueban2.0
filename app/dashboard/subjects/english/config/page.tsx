@@ -2,8 +2,11 @@
 
 import { Languages } from 'lucide-react';
 import SubjectPlanConfigEditor from '@/components/subjects/SubjectPlanConfigEditor';
+import { useChildren } from '@/components/dashboard/ChildrenContext';
 
 export default function EnglishPlanConfigPage() {
+  const { currentChild } = useChildren();
+
   return (
     <SubjectPlanConfigEditor
       subject="english"
@@ -12,6 +15,7 @@ export default function EnglishPlanConfigPage() {
       backHref="/dashboard/subjects/english"
       backLabel="返回英语学科路径"
       headerIcon={Languages}
+      childId={currentChild?.id}
       description={
         <div>
           <p className="font-medium text-text-secondary mb-1">

@@ -33,11 +33,20 @@ function normalizeConfig(config: {
   };
 }
 
-async function getConfig(subject: string, userId: string) {
-  // Prefer user config, fall back to system config
-  const userConfig = await prisma.subjectPlanConfig.findUnique({
-    where: { subject_userId: { subject, userId } },
+async function findUserConfig(subject: string, userId: string, childId: string | null) {
+  if (childId) {
+    return prisma.subjectPlanConfig.findUnique({
+      where: { subject_userId_childId: { subject, userId, childId } },
+    });
+  }
+  return prisma.subjectPlanConfig.findFirst({
+    where: { subject, userId, childId: null },
   });
+}
+
+async function getConfig(subject: string, userId: string, childId: string | null) {
+  // Prefer child-specific config, then user-level legacy config, then system config
+  const userConfig = await findUserConfig(subject, userId, childId);
 
   if (userConfig) {
     return normalizeConfig(userConfig);
@@ -54,7 +63,7 @@ async function getConfig(subject: string, userId: string) {
   return normalizeConfig(systemConfig);
 }
 
-export async function GET(_req: Request, { params }: Params) {
+export async function GET(req: Request, { params }: Params) {
   const session = await getServerSession(authOptions);
   if (!session?.user?.id) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
@@ -65,8 +74,11 @@ export async function GET(_req: Request, { params }: Params) {
     return NextResponse.json({ error: 'Invalid subject' }, { status: 400 });
   }
 
+  const { searchParams } = new URL(req.url);
+  const childId = searchParams.get('childId');
+
   const subject = subjectValidation.data;
-  const config = await getConfig(subject, session.user.id);
+  const config = await getConfig(subject, session.user.id, childId);
 
   if (!config) {
     return NextResponse.json({ error: 'Subject plan config not found' }, { status: 404 });
@@ -86,6 +98,9 @@ export async function PATCH(req: Request, { params }: Params) {
     return NextResponse.json({ error: 'Invalid subject' }, { status: 400 });
   }
 
+  const { searchParams } = new URL(req.url);
+  const childId = searchParams.get('childId');
+
   const subject = subjectValidation.data;
 
   const validation = await validateBody(req, subjectPlanUpdateSchema);
@@ -95,9 +110,7 @@ export async function PATCH(req: Request, { params }: Params) {
 
   const data = validation.data;
 
-  const existing = await prisma.subjectPlanConfig.findUnique({
-    where: { subject_userId: { subject, userId: session.user.id } },
-  });
+  const existing = await findUserConfig(subject, session.user.id, childId);
 
   let config;
   if (existing) {
@@ -115,6 +128,7 @@ export async function PATCH(req: Request, { params }: Params) {
     config = await prisma.subjectPlanConfig.create({
       data: {
         userId: session.user.id,
+        childId,
         subject,
         tracks: data.tracks as any,
         timeAxis: data.timeAxis as any,

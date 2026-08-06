@@ -5,6 +5,10 @@ import { prisma } from '@/lib/prisma';
 import { normalizeWeeklyTask } from '@/lib/taskAlignment';
 import { taskCompletionInputSchema, validateBody } from '@/lib/validation';
 import { canManageChild, canViewChild } from '@/lib/family';
+import {
+  getGamificationContext,
+  checkAndAwardBadges,
+} from '@/lib/gamification';
 import type { WeeklyTaskItem, TaskCompletionRecord } from '@/lib/storage.types';
 
 type Params = { params: { id: string; taskId: string } };
@@ -106,6 +110,18 @@ export async function POST(req: Request, { params }: Params) {
   const normalizedTasks = ((updated.tasks as unknown as Partial<WeeklyTaskItem>[]) || []).map(
     (task) => normalizeWeeklyTask(task as WeeklyTaskItem)
   );
+
+  if (isDone && existing.child) {
+    try {
+      const gamificationContext = await getGamificationContext(
+        existing.child.id,
+        userId
+      );
+      await checkAndAwardBadges(existing.child.id, gamificationContext);
+    } catch (err) {
+      console.error('[complete] gamification failed:', err);
+    }
+  }
 
   return NextResponse.json({ ...updated, tasks: normalizedTasks });
 }

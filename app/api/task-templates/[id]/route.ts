@@ -87,6 +87,7 @@ function toPrismaUpdateData(body: ReturnType<typeof taskTemplateUpdateSchema.par
   if (body.assessmentCriteria !== undefined) data.assessmentCriteria = body.assessmentCriteria;
   if (body.weeklySchedule !== undefined) data.weeklySchedule = body.weeklySchedule.toUpperCase();
   if (body.customScheduleDays !== undefined) data.customScheduleDays = { set: body.customScheduleDays };
+  if (body.isFavorite !== undefined) data.isFavorite = body.isFavorite;
 
   if (body.archive === true) {
     data.archivedAt = new Date();

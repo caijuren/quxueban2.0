@@ -141,7 +141,7 @@
       </view>
 
       <view wx:if="{{recordingTranscript}}" class="transcript-box">
-        <view class="transcript-label">识别结果</view>
+        <view class="transcript-label">{{audioUrl ? '语音转文字' : '识别结果'}}</view>
         <text class="transcript-text">{{recordingTranscript}}</text>
         <view class="transcript-actions">
           <button class="btn-ghost transcript-btn" bindtap="clearTranscript">清空</button>

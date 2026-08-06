@@ -108,6 +108,14 @@ Page({
     this.setData({ bindCode: null, bindCodeExpiry: null });
   },
 
+  goWeeklyPlan() {
+    wx.navigateTo({ url: '/pages/weekly/weekly' });
+  },
+
+  goGrowthCard() {
+    wx.navigateTo({ url: '/pages/growth-card/growth-card' });
+  },
+
   switchChild() {
     wx.navigateTo({ url: '/pages/role-select/role-select?step=child&from=profile' });
   },

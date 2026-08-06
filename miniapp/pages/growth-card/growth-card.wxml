@@ -1,0 +1,120 @@
+<view class="growth-page" style="--status-bar-height: {{statusBarHeight}}px;">
+  <view class="growth-bg">
+    <view class="growth-bg-glow growth-bg-glow--primary"></view>
+    <view class="growth-bg-glow growth-bg-glow--ai"></view>
+  </view>
+
+  <scroll-view scroll-y class="growth-scroll" enhanced show-scrollbar="{{false}}">
+    <view class="growth-header">
+      <text class="growth-title">成长卡片</text>
+      <text class="growth-subtitle">{{selectedChild.name}} 的成长足迹</text>
+    </view>
+
+    <view wx:if="{{loading}}" class="loading-wrapper">
+      <view class="loading-spinner"></view>
+    </view>
+
+    <block wx:else>
+      <view class="hero-card card">
+        <view class="hero-ring" style="--completion-deg: {{completionDeg}}deg;">
+          <view class="hero-inner">
+            <text class="hero-value">{{weeklyStats.completionRate}}%</text>
+            <text class="hero-label">本周完成率</text>
+          </view>
+        </view>
+        <view class="hero-stats">
+          <view class="hero-stat">
+            <text class="hero-stat-value">{{streak}}</text>
+            <text class="hero-stat-label">连续打卡</text>
+          </view>
+          <view class="hero-stat">
+            <text class="hero-stat-value">{{todayDone}}</text>
+            <text class="hero-stat-label">今日完成</text>
+          </view>
+          <view class="hero-stat">
+            <text class="hero-stat-value">{{todayMinutes}}</text>
+            <text class="hero-stat-label">今日分钟</text>
+          </view>
+        </view>
+      </view>
+
+      <view class="section-card card">
+        <view class="section-title">本周任务</view>
+        <view class="weekly-summary">
+          <view class="summary-item">
+            <text class="summary-value">{{weeklyStats.total}}</text>
+            <text class="summary-label">总任务</text>
+          </view>
+          <view class="summary-item">
+            <text class="summary-value">{{weeklyStats.done}}</text>
+            <text class="summary-label">已完成</text>
+          </view>
+          <view class="summary-item">
+            <text class="summary-value">{{weeklyStats.pending}}</text>
+            <text class="summary-label">待完成</text>
+          </view>
+          <view class="summary-item">
+            <text class="summary-value">{{weeklyStats.estimatedMinutes}}</text>
+            <text class="summary-label">计划分钟</text>
+          </view>
+        </view>
+        <view class="progress-track">
+          <view class="progress-fill" style="width: {{weeklyStats.completionRate}}%;"></view>
+        </view>
+      </view>
+
+      <view class="section-card card">
+        <view class="section-title">获得徽章</view>
+        <view wx:if="{{badges.length === 0}}" class="empty-mini">
+          <text class="empty-mini-text">还没有获得徽章</text>
+          <text class="empty-mini-desc">坚持打卡，解锁更多成就</text>
+        </view>
+        <view wx:else class="badge-list">
+          <view
+            wx:for="{{badges}}"
+            wx:key="id"
+            class="badge-item"
+            style="border-color: {{item.color || '#F43F7A'}}33; background: {{item.color || '#F43F7A'}}12;"
+          >
+            <view class="badge-icon" style="background: {{item.color || '#F43F7A'}}22;">
+              <image wx:if="{{item.icon}}" src="{{item.icon}}" class="badge-icon-img" mode="aspectFit" />
+              <image wx:else src="/assets/icons/star.svg" class="badge-icon-img" mode="aspectFit" />
+            </view>
+            <view class="badge-info">
+              <text class="badge-name" style="color: {{item.color || '#F43F7A'}};">{{item.name}}</text>
+              <text class="badge-desc">{{item.description || '继续加油'}}</text>
+            </view>
+            <text wx:if="{{item.level > 1}}" class="badge-level" style="color: {{item.color || '#F43F7A'}};">Lv.{{item.level}}</text>
+          </view>
+        </view>
+      </view>
+
+      <view class="section-card card">
+        <view class="section-title">最近里程碑</view>
+        <view wx:if="{{milestones.length === 0}}" class="empty-mini">
+          <text class="empty-mini-text">暂无里程碑</text>
+          <text class="empty-mini-desc">完成阶段性目标后将自动展示</text>
+        </view>
+        <view wx:else class="milestone-list">
+          <view
+            wx:for="{{milestones}}"
+            wx:key="id"
+            class="milestone-item"
+          >
+            <view class="milestone-dot" style="background: {{item.statusColor}}; box-shadow: 0 0 16rpx {{item.statusColor}}66;"></view>
+            <view class="milestone-body">
+              <text class="milestone-title">{{item.title}}</text>
+              <text wx:if="{{item.description}}" class="milestone-desc">{{item.description}}</text>
+            </view>
+            <view class="milestone-right">
+              <text class="milestone-status" style="color: {{item.statusColor}};">{{item.statusLabel}}</text>
+              <text class="milestone-date">{{item.dateText}}</text>
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <view class="safe-area-bottom" style="height: calc(40rpx + env(safe-area-inset-bottom));"></view>
+    </block>
+  </scroll-view>
+</view>

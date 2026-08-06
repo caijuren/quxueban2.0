@@ -82,6 +82,24 @@
       <view class="card menu-card">
         <view class="section-title">常用操作</view>
         <view class="menu-list">
+          <view class="menu-item" bindtap="goWeeklyPlan">
+            <view class="menu-left">
+              <view class="menu-icon" style="background-color: rgba(6, 182, 212, 0.15);">
+                <image src="/assets/icons/clock.svg" class="small-icon" mode="aspectFit" />
+              </view>
+              <text class="menu-text">周计划</text>
+            </view>
+            <image src="/assets/icons/arrow-right.svg" class="menu-arrow" mode="aspectFit" />
+          </view>
+          <view class="menu-item" bindtap="goGrowthCard">
+            <view class="menu-left">
+              <view class="menu-icon" style="background-color: rgba(245, 158, 11, 0.15);">
+                <image src="/assets/icons/chart.svg" class="small-icon" mode="aspectFit" />
+              </view>
+              <text class="menu-text">成长卡片</text>
+            </view>
+            <image src="/assets/icons/arrow-right.svg" class="menu-arrow" mode="aspectFit" />
+          </view>
           <view wx:if="{{activeRole === 'parent'}}" class="menu-item" bindtap="switchChild">
             <view class="menu-left">
               <view class="menu-icon" style="background-color: rgba(244, 63, 122, 0.15);">

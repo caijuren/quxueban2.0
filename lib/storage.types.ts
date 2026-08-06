@@ -161,6 +161,7 @@ export interface TaskTemplate {
   tags: string[];
   source: 'system' | 'user';
   isActive: boolean;
+  isFavorite?: boolean;
   archivedAt?: string | null;
   useCount: number;
   lastUsedAt?: string | null;
@@ -171,6 +172,19 @@ export interface TaskTemplate {
   customScheduleDays: DayOfWeek[];
   assessmentCriteria: AssessmentCriterion[];
   capabilityLinks: TaskCapabilityLink[];
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface WeeklyPlanTemplate {
+  id: string;
+  userId: string;
+  childId?: string | null;
+  name: string;
+  description?: string | null;
+  tasks: WeeklyTaskItem[];
+  goals?: WeeklyGoal[];
+  isDefault: boolean;
   createdAt: string;
   updatedAt: string;
 }
