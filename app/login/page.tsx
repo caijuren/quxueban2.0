@@ -40,12 +40,20 @@ function LoginForm() {
     setError('');
     setLoading(true);
 
-    const result = await signIn('credentials', {
-      username,
-      password,
-      redirect: false,
-      callbackUrl,
-    });
+    let result;
+    try {
+      result = await signIn('credentials', {
+        username,
+        password,
+        redirect: false,
+        callbackUrl,
+      });
+    } catch (err) {
+      console.error('[login] signIn error:', err);
+      setLoading(false);
+      setError('登录请求失败，请检查网络或稍后重试');
+      return;
+    }
 
     setLoading(false);
 
