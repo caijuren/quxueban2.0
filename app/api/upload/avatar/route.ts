@@ -74,7 +74,7 @@ export async function POST(req: Request) {
     const filePath = path.join(uploadsDir, filename);
     await writeFile(filePath, buffer);
 
-    const avatarUrl = `/uploads/avatars/${filename}`;
+    const avatarUrl = `/api/uploads/avatars/${filename}`;
 
     console.log(`[avatar upload] success: user=${session.user.id}, url=${avatarUrl}, size=${file.size}, type=${mimeType}`);
 

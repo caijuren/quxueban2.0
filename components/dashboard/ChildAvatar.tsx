@@ -34,6 +34,7 @@ export default function ChildAvatar({
     typeof avatarUrl === 'string' &&
     (avatarUrl.startsWith('data:image') ||
       avatarUrl.startsWith('/uploads/avatars/') ||
+      avatarUrl.startsWith('/api/uploads/avatars/') ||
       /^https?:\/\//.test(avatarUrl));
   const isEmoji = typeof avatarUrl === 'string' && !isImage;
 

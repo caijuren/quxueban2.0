@@ -62,7 +62,7 @@ function findPresetByAvatarUrl(url?: string | null) {
 
 function isImageUrl(url?: string | null) {
   if (!url) return false;
-  return url.startsWith('data:image') || url.startsWith('/uploads/avatars/') || /^https?:\/\//.test(url);
+  return url.startsWith('data:image') || url.startsWith('/uploads/avatars/') || url.startsWith('/api/uploads/avatars/') || /^https?:\/\//.test(url);
 }
 
 function formatDateForInput(date?: string | null): string {
