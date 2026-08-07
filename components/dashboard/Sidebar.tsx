@@ -12,6 +12,7 @@ import {
   X,
   Library,
   MessageSquare,
+  BarChart3,
 } from 'lucide-react';
 import packageInfo from '@/package.json';
 import Link from 'next/link';
@@ -32,6 +33,10 @@ const menuGroups = [
       { name: '任务库', href: '/dashboard/task-library', icon: Library },
       { name: '提醒中心', href: '/dashboard/alerts', icon: Bell },
     ],
+  },
+  {
+    title: '报告',
+    items: [{ name: '成长报告', href: '/dashboard/reports', icon: BarChart3 }],
   },
   {
     title: 'AI 助手',
