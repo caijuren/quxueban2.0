@@ -227,17 +227,53 @@ export function getCurrentMilestone(child: Child): TimelineItem | undefined {
   return timeline.find((item) => item.status === 'current');
 }
 
-export function getRouteMatchSnapshot(child: Child): RouteMatchSnapshot {
-  const summary = getRouteSummary(child);
-  // Deterministic mock change based on child id to simulate trend
-  const hash = child.id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
-  const change = (hash % 15) - 3; // -3% to +11%
-  const remaining = Math.max(0, 100 - summary.probability);
-  return {
-    probability: summary.probability,
-    change,
-    remaining,
-  };
+export function getRouteMatchSnapshot(
+  child: Child,
+  completionRate?: number | null
+): RouteMatchSnapshot {
+  const route = getChildRoute(child);
+  const timeline = getStrategicTimeline(child);
+
+  // 基于实际数据计算路线匹配度，不再是静态的 route.probability
+  let score = route ? 25 : 10;
+
+  // 周计划完成率贡献（最高 30 分）
+  if (completionRate !== null && completionRate !== undefined) {
+    score += Math.round((completionRate / 100) * 30);
+  } else {
+    score += 15;
+  }
+
+  // 里程碑进度贡献（最高 25 分）
+  const totalMilestones = timeline.length || 1;
+  const pastMilestones = timeline.filter((t) => t.status === 'past').length;
+  score += Math.round((pastMilestones / totalMilestones) * 25);
+
+  // 目标学校已设定
+  if (child.targetSchool) score += 10;
+
+  // 存在当前阶段里程碑
+  if (timeline.some((t) => t.status === 'current')) score += 5;
+
+  // 主路线额外加权
+  if (route?.type === 'primary') score += 5;
+
+  const probability = Math.min(100, Math.max(0, score));
+
+  // 变化幅度基于完成率给出方向性提示
+  let change: number;
+  if (completionRate !== null && completionRate !== undefined) {
+    if (completionRate >= 80) change = 5;
+    else if (completionRate >= 60) change = 2;
+    else if (completionRate >= 40) change = -1;
+    else change = -3;
+  } else {
+    const hash = child.id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+    change = (hash % 11) - 3;
+  }
+
+  const remaining = Math.max(0, 100 - probability);
+  return { probability, change, remaining };
 }
 
 export function generateStrategicAdvice(

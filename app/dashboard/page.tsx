@@ -108,10 +108,16 @@ function ViewToggle({
   );
 }
 
-function IdentityCard({ child }: { child: Child }) {
+function IdentityCard({
+  child,
+  completionRate,
+}: {
+  child: Child;
+  completionRate: number | null;
+}) {
   const router = useRouter();
   const routeSummary = getRouteSummary(child);
-  const matchSnapshot = getRouteMatchSnapshot(child);
+  const matchSnapshot = getRouteMatchSnapshot(child, completionRate);
 
   const primaryTarget = child.targetSchool || routeSummary.targetSchools[0] || '待设定';
   const backupTargets = routeSummary.targetSchools
@@ -220,17 +226,20 @@ function IdentityCard({ child }: { child: Child }) {
         </div>
 
         {/* Right column: match gauge */}
-        <div className="shrink-0 flex flex-col items-center justify-center min-w-[150px] xl:border-l xl:border-border-default xl:pl-6 pt-5 xl:pt-0 border-t xl:border-t-0 border-border-default">
-          <div className="flex items-center gap-1 mb-1">
+        <div className="shrink-0 flex flex-col items-center justify-center min-w-[160px] xl:border-l xl:border-border-default xl:pl-8 pt-6 xl:pt-0 border-t xl:border-t-0 border-border-default">
+          <div className="flex items-center gap-1.5 mb-4">
             <span className="text-xs text-text-tertiary">路线匹配度</span>
-            <HelpCircle className="w-3 h-3 text-text-muted" />
+            <HelpCircle className="w-3.5 h-3.5 text-text-muted" />
           </div>
-          <GaugeChart value={matchSnapshot.probability} size={120} strokeWidth={10} />
-          <div className="flex items-center gap-1 mt-1 text-xs">
-            <TrendingUpIcon className="w-3.5 h-3.5 text-primary" />
-            <span className="text-primary font-medium">较上次提升 {matchSnapshot.change}%</span>
+          <GaugeChart value={matchSnapshot.probability} size={132} strokeWidth={11} />
+          <div className="flex items-center gap-1.5 mt-4 text-xs">
+            <TrendingUpIcon className="w-4 h-4 text-primary" />
+            <span className="text-primary font-medium">
+              较上次提升 {matchSnapshot.change > 0 ? '+' : ''}
+              {matchSnapshot.change}%
+            </span>
           </div>
-          <p className="text-xs text-text-tertiary mt-1">
+          <p className="text-xs text-text-tertiary mt-2 leading-relaxed">
             距离目标还有 {matchSnapshot.remaining}% 提升空间
           </p>
         </div>
@@ -682,7 +691,7 @@ export default function DashboardPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            <IdentityCard child={currentChild} />
+            <IdentityCard child={currentChild} completionRate={completionRate} />
           </motion.div>
 
           <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
