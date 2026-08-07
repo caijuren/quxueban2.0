@@ -97,6 +97,7 @@ function getLatestRecord(
 interface TaskCompletionModalProps {
   open: boolean;
   task: WeeklyTaskItem | null;
+  childId?: string;
   date?: string;
   onClose: () => void;
   onSubmit: (taskId: string, input: TaskCompletionInput) => Promise<void>;
@@ -105,6 +106,7 @@ interface TaskCompletionModalProps {
 export default function TaskCompletionModal({
   open,
   task,
+  childId,
   date: dateProp,
   onClose,
   onSubmit,
@@ -121,10 +123,11 @@ export default function TaskCompletionModal({
   const [quality, setQuality] = useState<TaskCompletionQuality | null>(null);
   const [note, setNote] = useState('');
   const [imageUrls, setImageUrls] = useState<string[]>([]);
-  const [imageInput, setImageInput] = useState('');
   const [audioUrls, setAudioUrls] = useState<string[]>([]);
   const [audioTranscript, setAudioTranscript] = useState('');
   const [submitting, setSubmitting] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const [uploadError, setUploadError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!open) return;
@@ -134,8 +137,8 @@ export default function TaskCompletionModal({
     setQuality(latestRecord?.quality ?? null);
     setNote(latestRecord?.note ?? '');
     setImageUrls(latestRecord?.imageUrls ?? []);
-    setImageInput('');
     setAudioUrls(latestRecord?.audioUrls ?? []);
+    setUploadError(null);
     setAudioTranscript(latestRecord?.audioTranscript ?? '');
   }, [open, latestRecord, task]);
 
@@ -144,16 +147,57 @@ export default function TaskCompletionModal({
     else if (status === 'pending') setProgress(0);
   }, [status]);
 
-  const handleAddImage = () => {
-    const url = imageInput.trim();
-    if (!url) return;
-    if (imageUrls.includes(url)) return;
-    setImageUrls([...imageUrls, url]);
-    setImageInput('');
-  };
-
   const handleRemoveImage = (url: string) => {
     setImageUrls(imageUrls.filter((u) => u !== url));
+  };
+
+  const uploadFile = async (file: File): Promise<string> => {
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('taskId', task?.id ?? 'unknown');
+    if (childId) formData.append('childId', childId);
+    formData.append('date', date);
+
+    const res = await fetch('/api/upload/task-evidence', {
+      method: 'POST',
+      body: formData,
+      credentials: 'same-origin',
+    });
+
+    const data = await res.json();
+    if (!res.ok) {
+      throw new Error(data.error || '上传失败');
+    }
+    return data.url as string;
+  };
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
+    if (!task) return;
+
+    setUploading(true);
+    setUploadError(null);
+
+    const newUrls: string[] = [];
+    for (const file of Array.from(files)) {
+      try {
+        const url = await uploadFile(file);
+        if (!imageUrls.includes(url)) {
+          newUrls.push(url);
+        }
+      } catch (err) {
+        const message = err instanceof Error ? err.message : '上传失败';
+        setUploadError(message);
+        console.error('[TaskCompletionModal] upload error:', err);
+      }
+    }
+
+    if (newUrls.length > 0) {
+      setImageUrls((prev) => [...prev, ...newUrls]);
+    }
+    setUploading(false);
+    e.target.value = '';
   };
 
   const handleRemoveAudio = (url: string) => {
@@ -334,33 +378,54 @@ export default function TaskCompletionModal({
             <ImageIcon className="w-3.5 h-3.5" />
             佐证图片
           </label>
-          <div className="flex gap-2">
+          <label
+            className={`flex items-center justify-center gap-2 px-4 py-3 rounded-xl border border-dashed transition-colors cursor-pointer ${
+              uploading
+                ? 'border-border-default bg-surface/50 text-text-muted cursor-not-allowed'
+                : 'border-border-default bg-surface hover:border-primary/50 hover:bg-surface-light text-text-secondary'
+            }`}
+          >
             <input
-              type="text"
-              value={imageInput}
-              onChange={(e) => setImageInput(e.target.value)}
-              onKeyDown={(e) => e.key === 'Enter' && handleAddImage()}
-              placeholder="粘贴图片 URL 后回车"
-              className="flex-1 px-3 py-2.5 rounded-xl bg-surface border border-border-default text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-primary/50"
+              type="file"
+              accept="image/jpeg,image/png,image/webp,image/gif"
+              multiple
+              onChange={handleFileChange}
+              disabled={uploading}
+              className="hidden"
             />
-            <button
-              onClick={handleAddImage}
-              className="px-4 py-2.5 rounded-xl bg-surface-light border border-border-default text-sm text-text-secondary hover:border-border-strong transition-colors"
-            >
-              添加
-            </button>
-          </div>
+            {uploading ? (
+              <>
+                <span className="w-4 h-4 border-2 border-primary/30 border-t-primary rounded-full animate-spin" />
+                <span className="text-sm">上传中...</span>
+              </>
+            ) : (
+              <>
+                <ImageIcon className="w-4 h-4" />
+                <span className="text-sm">点击上传照片</span>
+              </>
+            )}
+          </label>
+          {uploadError && (
+            <p className="text-xs text-error flex items-center gap-1">
+              <AlertCircle className="w-3 h-3" />
+              {uploadError}
+            </p>
+          )}
           {imageUrls.length > 0 && (
             <div className="flex flex-wrap gap-2">
               {imageUrls.map((url) => (
                 <div
                   key={url}
-                  className="group relative flex items-center gap-2 px-2.5 py-1.5 rounded-lg bg-surface border border-border-default text-xs text-text-tertiary max-w-full"
+                  className="group relative w-20 h-20 rounded-lg overflow-hidden border border-border-default bg-surface"
                 >
-                  <span className="truncate max-w-[180px]">{url}</span>
+                  <img
+                    src={url}
+                    alt="佐证图片"
+                    className="w-full h-full object-cover"
+                  />
                   <button
                     onClick={() => handleRemoveImage(url)}
-                    className="p-0.5 rounded hover:bg-error/10 text-text-muted hover:text-error transition-colors"
+                    className="absolute top-0.5 right-0.5 p-0.5 rounded bg-surface/80 text-text-muted hover:text-error transition-colors"
                   >
                     <X className="w-3 h-3" />
                   </button>

@@ -2,7 +2,7 @@
 // FIXME: 本页面包含大量未完成的类型和组件引用，需要后续重构补齐
 'use client';
 
-import { Suspense, useEffect, useMemo, useState } from 'react';
+import React, { Suspense, useEffect, useMemo, useRef, useState } from 'react';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import {
   Calendar,
@@ -1420,6 +1420,62 @@ function TaskLibraryModal({
   );
 }
 
+function MoreActions({ children }: { children: React.ReactNode }) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClick(e: MouseEvent) {
+      if (ref.current && !ref.current.contains(e.target as Node)) {
+        setOpen(false);
+      }
+    }
+    if (open) {
+      document.addEventListener('mousedown', handleClick);
+      return () => document.removeEventListener('mousedown', handleClick);
+    }
+  }, [open]);
+
+  const wrappedChildren = React.Children.map(children, (child) => {
+    if (!React.isValidElement(child)) return child;
+    const originalOnClick = child.props.onClick as (() => void) | undefined;
+    return React.cloneElement(child, {
+      onClick: () => {
+        originalOnClick?.();
+        setOpen(false);
+      },
+    });
+  });
+
+  return (
+    <div className="relative" ref={ref}>
+      <button
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-[14px] bg-surface border border-border-default text-sm font-medium text-text-secondary hover:bg-surface-hover hover:text-text-primary transition-colors"
+      >
+        更多
+        <ChevronDown
+          className={`w-3.5 h-3.5 transition-transform ${open ? 'rotate-180' : ''}`}
+        />
+      </button>
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ opacity: 0, y: -4, scale: 0.98 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -4, scale: 0.98 }}
+            transition={{ duration: 0.15 }}
+            className="absolute right-0 mt-2 w-52 rounded-[14px] bg-surface-elevated border border-border-default shadow-[0_8px_32px_rgba(0,0,0,0.4)] py-1.5 z-50"
+          >
+            {wrappedChildren}
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
+
 function WeeklyTasksContent() {
   const shouldReduceMotion = useReducedMotion();
   const {
@@ -1441,6 +1497,7 @@ function WeeklyTasksContent() {
   const [saveTemplateOpen, setSaveTemplateOpen] = useState(false);
   const [applyTemplateOpen, setApplyTemplateOpen] = useState(false);
   const [copyHistoryOpen, setCopyHistoryOpen] = useState(false);
+  const [conflictsExpanded, setConflictsExpanded] = useState(false);
 
   const createTemplate = useCreateWeeklyPlanTemplate(currentChild?.id);
   const { data: weeklyPlanTemplates = [] } = useWeeklyPlanTemplates(
@@ -1718,103 +1775,32 @@ function WeeklyTasksContent() {
         initial={shouldReduceMotion ? false : { opacity: 0, y: -8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4 }}
-        className="flex flex-col lg:flex-row lg:items-center justify-between gap-4"
+        className="space-y-4"
       >
+        {/* Header */}
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-[14px] bg-primary/10 border border-primary/20 flex items-center justify-center">
             <Calendar className="w-5 h-5 text-primary" />
           </div>
-          <h1 className="text-2xl sm:text-3xl font-bold font-display text-text-primary">周计划</h1>
+          <div>
+            <div className="flex items-center gap-2">
+              <h1 className="text-2xl sm:text-3xl font-bold font-display text-text-primary">周计划</h1>
+              {isDraft && (
+                <span className="px-2 py-0.5 rounded-full bg-primary/10 border border-primary/20 text-xs font-medium text-primary">
+                  草稿待发布
+                </span>
+              )}
+            </div>
+            <p className="text-xs text-text-muted mt-0.5">{currentChild.name}</p>
+          </div>
         </div>
 
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
-          <div className="flex flex-wrap items-center gap-2">
-            {isPublished && !isDraft && (
-              <button
-                onClick={handleOpenReview}
-                className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-[14px] bg-primary text-white text-sm font-medium hover:bg-primary/90 transition-all shadow-[0_0_16px_rgba(244,63,122,0.25)]"
-              >
-                <Sparkles className="w-3.5 h-3.5" />
-                {plan?.reviewedAt ? '查看复盘' : '本周复盘'}
-              </button>
-            )}
-            {isPublished && !isDraft && stats && (
-              <button
-                onClick={() => setReportOpen(true)}
-                className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-[14px] bg-surface border border-border-default text-sm font-medium text-text-secondary hover:bg-surface-hover hover:text-text-primary transition-colors"
-              >
-                <Share2 className="w-3.5 h-3.5" />
-                导出周计划
-              </button>
-            )}
-            {displayPlan && (
-              <>
-                <button
-                  onClick={() => setEditOpen(true)}
-                  className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-[14px] bg-surface border border-border-default text-sm font-medium text-text-secondary hover:bg-surface-hover hover:text-text-primary transition-colors"
-                >
-                  <Pencil className="w-3.5 h-3.5" />
-                  编辑周计划
-                </button>
-                <button
-                  onClick={() => setLibraryOpen(true)}
-                  className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-[14px] bg-surface border border-border-default text-sm font-medium text-text-secondary hover:bg-surface-hover hover:text-text-primary transition-colors"
-                >
-                  <Library className="w-3.5 h-3.5" />
-                  从任务库选择
-                </button>
-                <button
-                  onClick={() => setSaveTemplateOpen(true)}
-                  className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-[14px] bg-surface border border-border-default text-sm font-medium text-text-secondary hover:bg-surface-hover hover:text-text-primary transition-colors"
-                >
-                  <Save className="w-3.5 h-3.5" />
-                  保存为模板
-                </button>
-                <button
-                  onClick={() => setApplyTemplateOpen(true)}
-                  className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-[14px] bg-surface border border-border-default text-sm font-medium text-text-secondary hover:bg-surface-hover hover:text-text-primary transition-colors"
-                >
-                  <LayoutTemplate className="w-3.5 h-3.5" />
-                  套用模板
-                </button>
-                <button
-                  onClick={() => setCopyHistoryOpen(true)}
-                  className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-[14px] bg-surface border border-border-default text-sm font-medium text-text-secondary hover:bg-surface-hover hover:text-text-primary transition-colors"
-                >
-                  <History className="w-3.5 h-3.5" />
-                  复制历史周
-                </button>
-              </>
-            )}
-            {!displayPlan && (
-              <button
-                onClick={handleGenerate}
-                className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-[14px] bg-primary text-white text-sm font-medium hover:bg-primary/90 transition-all shadow-[0_0_16px_rgba(244,63,122,0.25)]"
-              >
-                <Target className="w-3.5 h-3.5" />
-                生成本周计划
-              </button>
-            )}
-            {isDraft && (
-              <>
-                <button
-                  onClick={handlePublish}
-                  className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-[14px] bg-primary text-white text-sm font-medium hover:bg-primary/90 transition-all"
-                >
-                  <Send className="w-3.5 h-3.5" />
-                  发布
-                </button>
-                <button
-                  onClick={handleCancelDraft}
-                  className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-[14px] bg-surface border border-border-default text-sm font-medium text-text-secondary hover:bg-surface-hover transition-colors"
-                >
-                  <X className="w-3.5 h-3.5" />
-                  取消
-                </button>
-              </>
-            )}
-          </div>
-
+        {/* Week selector */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <p className="text-sm text-text-secondary">
+            <span className="text-text-muted">当前周：</span>
+            {formatWeekLabel(weekId)}
+          </p>
           <div className="flex items-center gap-2">
             <button
               onClick={() => setWeekId((w) => shiftWeekId(w, -1))}
@@ -1847,6 +1833,105 @@ function WeeklyTasksContent() {
             </button>
           </div>
         </div>
+
+        {/* Toolbar */}
+        <CommandCard className="p-3">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div className="flex flex-wrap items-center gap-2">
+              {!displayPlan && (
+                <button
+                  onClick={handleGenerate}
+                  className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-[14px] bg-primary text-white text-sm font-medium hover:bg-primary/90 transition-all shadow-[0_0_16px_rgba(244,63,122,0.25)]"
+                >
+                  <Target className="w-3.5 h-3.5" />
+                  生成本周计划
+                </button>
+              )}
+              {displayPlan && !isDraft && (
+                <button
+                  onClick={() => setEditOpen(true)}
+                  className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-[14px] bg-primary text-white text-sm font-medium hover:bg-primary/90 transition-all shadow-[0_0_16px_rgba(244,63,122,0.25)]"
+                >
+                  <Pencil className="w-3.5 h-3.5" />
+                  编辑周计划
+                </button>
+              )}
+              {isDraft && (
+                <>
+                  <button
+                    onClick={handlePublish}
+                    className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-[14px] bg-primary text-white text-sm font-medium hover:bg-primary/90 transition-all shadow-[0_0_16px_rgba(244,63,122,0.25)]"
+                  >
+                    <Send className="w-3.5 h-3.5" />
+                    发布
+                  </button>
+                  <button
+                    onClick={handleCancelDraft}
+                    className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-[14px] bg-surface border border-border-default text-sm font-medium text-text-secondary hover:bg-surface-hover transition-colors"
+                  >
+                    <X className="w-3.5 h-3.5" />
+                    取消
+                  </button>
+                </>
+              )}
+            </div>
+
+            <div className="flex flex-wrap items-center gap-2">
+              {displayPlan && !isDraft && isPublished && (
+                <button
+                  onClick={handleOpenReview}
+                  className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-[14px] bg-surface border border-border-default text-sm font-medium text-text-secondary hover:bg-surface-hover hover:text-text-primary transition-colors"
+                >
+                  <Sparkles className="w-3.5 h-3.5" />
+                  {plan?.reviewedAt ? '查看复盘' : '本周复盘'}
+                </button>
+              )}
+              {displayPlan && (
+                <>
+                  <button
+                    onClick={() => setLibraryOpen(true)}
+                    className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-[14px] bg-surface border border-border-default text-sm font-medium text-text-secondary hover:bg-surface-hover hover:text-text-primary transition-colors"
+                  >
+                    <Library className="w-3.5 h-3.5" />
+                    从任务库选择
+                  </button>
+                  <MoreActions>
+                    <button
+                      onClick={() => setSaveTemplateOpen(true)}
+                      className="w-full text-left px-3 py-2 text-sm text-text-secondary hover:bg-surface-hover hover:text-text-primary flex items-center gap-2 transition-colors"
+                    >
+                      <Save className="w-4 h-4" />
+                      保存为模板
+                    </button>
+                    <button
+                      onClick={() => setApplyTemplateOpen(true)}
+                      className="w-full text-left px-3 py-2 text-sm text-text-secondary hover:bg-surface-hover hover:text-text-primary flex items-center gap-2 transition-colors"
+                    >
+                      <LayoutTemplate className="w-4 h-4" />
+                      套用模板
+                    </button>
+                    <button
+                      onClick={() => setCopyHistoryOpen(true)}
+                      className="w-full text-left px-3 py-2 text-sm text-text-secondary hover:bg-surface-hover hover:text-text-primary flex items-center gap-2 transition-colors"
+                    >
+                      <History className="w-4 h-4" />
+                      复制历史周
+                    </button>
+                    {isPublished && !isDraft && stats && (
+                      <button
+                        onClick={() => setReportOpen(true)}
+                        className="w-full text-left px-3 py-2 text-sm text-text-secondary hover:bg-surface-hover hover:text-text-primary flex items-center gap-2 transition-colors"
+                      >
+                        <Share2 className="w-4 h-4" />
+                        导出周计划
+                      </button>
+                    )}
+                  </MoreActions>
+                </>
+              )}
+            </div>
+          </div>
+        </CommandCard>
       </motion.div>
 
       {conflicts.length > 0 && (
@@ -1859,21 +1944,42 @@ function WeeklyTasksContent() {
           <div className="flex items-start gap-3">
             <AlertTriangle className="w-5 h-5 text-warning shrink-0 mt-0.5" />
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-text-secondary mb-1">
-                本周计划存在 {conflicts.length} 项潜在冲突
-              </p>
-              <ul className="space-y-1">
-                {conflicts.slice(0, 3).map((c) => (
-                  <li key={c.id} className="text-xs text-text-tertiary">
-                    {c.message}
-                  </li>
-                ))}
-                {conflicts.length > 3 && (
-                  <li className="text-xs text-text-muted">
-                    还有 {conflicts.length - 3} 项，可在编辑周计划中查看
-                  </li>
+              <div className="flex items-center justify-between gap-3">
+                <p className="text-sm font-medium text-text-secondary">
+                  本周计划存在 {conflicts.length} 项潜在冲突
+                </p>
+                <button
+                  onClick={() => setConflictsExpanded((v) => !v)}
+                  className="inline-flex items-center gap-1 text-xs text-text-muted hover:text-text-secondary transition-colors"
+                >
+                  {conflictsExpanded ? '收起' : '查看详情'}
+                  <ChevronDown
+                    className={`w-3.5 h-3.5 transition-transform ${conflictsExpanded ? 'rotate-180' : ''}`}
+                  />
+                </button>
+              </div>
+              <AnimatePresence initial={false}>
+                {conflictsExpanded && (
+                  <motion.ul
+                    initial={shouldReduceMotion ? false : { height: 0, opacity: 0 }}
+                    animate={{ height: 'auto', opacity: 1 }}
+                    exit={shouldReduceMotion ? { opacity: 0 } : { height: 0, opacity: 0 }}
+                    className="space-y-1 mt-2 overflow-hidden"
+                  >
+                    {conflicts.map((c) => (
+                      <li key={c.id} className="text-xs text-text-tertiary">
+                        {c.message}
+                      </li>
+                    ))}
+                  </motion.ul>
                 )}
-              </ul>
+              </AnimatePresence>
+              {!conflictsExpanded && (
+                <p className="text-xs text-text-muted mt-1 line-clamp-1">
+                  {conflicts.slice(0, 2).map((c) => c.message).join(' · ')}
+                  {conflicts.length > 2 && ` 等 ${conflicts.length} 项`}
+                </p>
+              )}
             </div>
           </div>
         </motion.div>

@@ -1,0 +1,97 @@
+import { NextResponse } from 'next/server';
+import { getServerSession } from 'next-auth/next';
+import { authOptions } from '@/lib/auth';
+import { writeFile, mkdir } from 'fs/promises';
+import path from 'path';
+
+const MAX_SIZE = 5 * 1024 * 1024;
+
+const MIME_TO_EXT: Record<string, string> = {
+  'image/jpeg': 'jpg',
+  'image/jpg': 'jpg',
+  'image/png': 'png',
+  'image/webp': 'webp',
+  'image/gif': 'gif',
+};
+
+const EXT_TO_MIME: Record<string, string> = {
+  jpg: 'image/jpeg',
+  jpeg: 'image/jpeg',
+  png: 'image/png',
+  webp: 'image/webp',
+  gif: 'image/gif',
+};
+
+function resolveMimeType(file: File): string | null {
+  if (MIME_TO_EXT[file.type]) {
+    return file.type;
+  }
+  const ext = file.name.split('.').pop()?.toLowerCase();
+  if (ext && EXT_TO_MIME[ext]) {
+    return EXT_TO_MIME[ext];
+  }
+  return null;
+}
+
+function sanitize(value: string): string {
+  return value.replace(/[^a-zA-Z0-9_-]/g, '_').slice(0, 64);
+}
+
+export async function POST(req: Request) {
+  try {
+    const session = await getServerSession(authOptions);
+    if (!session?.user?.id) {
+      return NextResponse.json({ error: '未登录' }, { status: 401 });
+    }
+
+    const formData = await req.formData();
+    const file = formData.get('file') as File | null;
+    const taskId = (formData.get('taskId') as string) || '';
+    const childId = (formData.get('childId') as string) || '';
+    const date = (formData.get('date') as string) || '';
+
+    if (!file || typeof file === 'string') {
+      return NextResponse.json({ error: '请上传文件' }, { status: 400 });
+    }
+
+    if (!taskId) {
+      return NextResponse.json({ error: '缺少任务 ID' }, { status: 400 });
+    }
+
+    const mimeType = resolveMimeType(file);
+    if (!mimeType) {
+      return NextResponse.json(
+        { error: `仅支持 JPG、PNG、WebP、GIF 格式（当前 ${file.type || '未知类型'}）` },
+        { status: 400 }
+      );
+    }
+
+    if (file.size > MAX_SIZE) {
+      return NextResponse.json({ error: '图片大小不能超过 5MB' }, { status: 400 });
+    }
+
+    const ext = MIME_TO_EXT[mimeType];
+    const timestamp = Date.now();
+    const random = Math.random().toString(36).slice(2, 8);
+    const filename = `evidence-${sanitize(childId)}-${sanitize(taskId)}-${sanitize(date)}-${timestamp}-${random}.${ext}`;
+
+    const uploadsDir = path.join(process.cwd(), 'public', 'uploads', 'task-evidence');
+    await mkdir(uploadsDir, { recursive: true });
+
+    const buffer = Buffer.from(await file.arrayBuffer());
+    const filePath = path.join(uploadsDir, filename);
+    await writeFile(filePath, buffer);
+
+    const url = `/api/uploads/task-evidence/${filename}`;
+
+    console.log(`[task-evidence upload] success: user=${session.user.id}, task=${taskId}, url=${url}`);
+
+    return NextResponse.json({ url });
+  } catch (error) {
+    console.error('[task-evidence upload] error:', error);
+    return NextResponse.json(
+      { error: error instanceof Error ? error.message : '上传失败' },
+      { status: 500 }
+    );
+  }
+}
