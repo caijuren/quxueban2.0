@@ -273,8 +273,9 @@ export default function AiConfigSection() {
 
       <div className="flex flex-wrap justify-end items-center gap-2">
         <button
+          type="button"
           onClick={handleTest}
-          disabled={testing || !form.apiKey || keyIsMasked}
+          disabled={testing || !config}
           className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-elevated border border-border-default text-text-secondary text-xs font-medium hover:bg-surface-highlight transition-all disabled:opacity-70"
         >
           {testing ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <RefreshCw className="w-3.5 h-3.5" />}

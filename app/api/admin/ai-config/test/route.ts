@@ -6,8 +6,8 @@ import { getEnabledAiConfig } from '@/lib/aiConfig';
 export async function POST() {
   try {
     const session = await getServerSession(authOptions);
-    if (!session?.user?.id || session.user.role !== 'ADMIN') {
-      return NextResponse.json({ error: '无权限' }, { status: 403 });
+    if (!session?.user?.id) {
+      return NextResponse.json({ error: '未登录' }, { status: 401 });
     }
 
     const config = await getEnabledAiConfig();

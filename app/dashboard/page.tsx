@@ -16,7 +16,6 @@ import {
   Circle,
   Flame,
   ChevronRight,
-  Plus,
   HelpCircle,
   School,
   Flag,
@@ -42,7 +41,6 @@ import {
 } from '@/lib/dashboard';
 import ChildAvatar from '@/components/dashboard/ChildAvatar';
 import ChildEmptyState from '@/components/dashboard/ChildEmptyState';
-import ChildModal from '@/components/dashboard/ChildModal';
 import CommandCard from '@/components/ui/CommandCard';
 import DataBadge from '@/components/ui/DataBadge';
 import EmptyState from '@/components/ui/EmptyState';
@@ -613,7 +611,6 @@ export default function DashboardPage() {
     getWeeklyPlan,
   } = useChildren();
   const [viewMode, setViewMode] = useState<ViewMode>('command');
-  const [childModalOpen, setChildModalOpen] = useState(false);
 
   const canOverview = children.length >= 2;
   const completionRate = currentChild ? getCompletionRate(currentChild, getWeeklyPlan) : null;
@@ -670,16 +667,6 @@ export default function DashboardPage() {
             </motion.div>
           ))}
 
-          <motion.button
-            variants={itemVariants}
-            onClick={() => setChildModalOpen(true)}
-            className="rounded-[20px] border border-dashed border-border-default bg-surface/[0.5] p-6 flex flex-col items-center justify-center gap-2 text-text-tertiary hover:text-text-secondary hover:bg-surface-hover hover:border-border-strong transition-all text-sm min-h-[200px]"
-          >
-            <div className="w-12 h-12 rounded-[20px] bg-surface-hover border border-border-default flex items-center justify-center">
-              <Plus className="w-5 h-5" />
-            </div>
-            <span className="font-medium">添加孩子</span>
-          </motion.button>
         </motion.div>
       )}
 
@@ -724,7 +711,6 @@ export default function DashboardPage() {
         </>
       )}
 
-      <ChildModal isOpen={childModalOpen} onClose={() => setChildModalOpen(false)} />
     </div>
   );
 }

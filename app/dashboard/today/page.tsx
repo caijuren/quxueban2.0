@@ -512,32 +512,6 @@ export default function TodayPage() {
         </div>
       )}
 
-      {/* Bottom action bar */}
-      {totalCount > 0 && (
-        <motion.div
-          initial={shouldReduceMotion ? false : { opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, delay: 0.3 }}
-          className="flex flex-col sm:flex-row items-stretch sm:items-center justify-end gap-3 pt-2"
-        >
-          <button
-            onClick={() => setVictoryOpen(true)}
-            className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-primary text-white text-sm font-bold hover:bg-primary/90 transition-all shadow-[0_0_20px_rgba(244,63,122,0.25)]"
-          >
-            <Send className="w-5 h-5" />
-            手动推送简报
-          </button>
-          <button
-            onClick={() => router.push('/dashboard/weekly')}
-            className="inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl border border-dashed border-border-default text-text-tertiary hover:text-text-secondary hover:border-border-strong hover:bg-surface-hover transition-all text-sm"
-          >
-            <Target className="w-4 h-4" />
-            查看完整周计划
-            <ChevronRight className="w-4 h-4" />
-          </button>
-        </motion.div>
-      )}
-
       {/* Weekly view shortcut */}
       {totalCount === 0 && (
         <motion.div
