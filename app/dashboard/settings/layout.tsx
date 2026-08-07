@@ -7,7 +7,6 @@ import {
   User,
   Users,
   Target,
-  Library,
   Sparkles,
   Database,
   UserCog,
@@ -44,20 +43,17 @@ const settingsNav: NavGroup[] = [
   },
   {
     title: '学习系统',
-    items: [
-      { name: '能力模型', href: '/dashboard/settings/capabilities', icon: Target },
-      { name: '任务库', href: '/dashboard/settings/task-library', icon: Library },
-    ],
+    items: [{ name: '能力模型', href: '/dashboard/settings/capabilities', icon: Target }],
   },
   {
     title: 'AI 能力',
-    items: [{ name: 'AI 配置', href: '/dashboard/settings/ai', icon: Sparkles, adminOnly: true }],
+    items: [{ name: 'AI 配置', href: '/dashboard/settings/ai', icon: Sparkles }],
   },
   {
     title: '数据资产',
     items: [
       { name: '数据与隐私', href: '/dashboard/settings/data', icon: Database },
-      { name: '家长日志', href: '/dashboard/parent-log', icon: BookHeart },
+      { name: '家长日志', href: '/dashboard/settings/parent-log', icon: BookHeart },
     ],
   },
   {

@@ -8,19 +8,11 @@ import {
   type SafeAiConfigData,
 } from '@/lib/aiConfig';
 
-function isAdmin(session: Session | null): boolean {
-  return session?.user?.role === 'ADMIN';
-}
-
 export async function GET() {
   try {
     const session = (await getServerSession(authOptions)) as Session | null;
     if (!session?.user?.id) {
       return NextResponse.json({ error: '未登录' }, { status: 401 });
-    }
-
-    if (!isAdmin(session)) {
-      return NextResponse.json({ error: '无权限' }, { status: 403 });
     }
 
     const config = await getAiConfig();
@@ -51,10 +43,6 @@ export async function POST(req: NextRequest) {
     const session = (await getServerSession(authOptions)) as Session | null;
     if (!session?.user?.id) {
       return NextResponse.json({ error: '未登录' }, { status: 401 });
-    }
-
-    if (!isAdmin(session)) {
-      return NextResponse.json({ error: '无权限' }, { status: 403 });
     }
 
     const body = (await req.json()) as {

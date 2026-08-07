@@ -1,4 +1,5 @@
 import type { Child } from '@/lib/children';
+import { getEnabledAiConfig } from '@/lib/aiConfig';
 
 export interface DailyTaskSnapshot {
   focus: string;
@@ -143,23 +144,20 @@ function buildRuleSummary(input: DailySummaryInput): string {
 }
 
 async function callLLM(messages: LLMMessage[]): Promise<string | null> {
-  const apiBase = process.env.AI_API_BASE;
-  const apiKey = process.env.AI_API_KEY;
-  const model = process.env.AI_MODEL || 'doubao-pro-32k';
-
-  if (!apiBase || !apiKey) {
+  const config = await getEnabledAiConfig();
+  if (!config || !config.apiKey) {
     return null;
   }
 
   try {
-    const res = await fetch(`${apiBase.replace(/\/$/, '')}/chat/completions`, {
+    const res = await fetch(config.apiUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${apiKey}`,
+        Authorization: `Bearer ${config.apiKey}`,
       },
       body: JSON.stringify({
-        model,
+        model: config.model,
         messages,
         temperature: 0.7,
         max_tokens: 300,
