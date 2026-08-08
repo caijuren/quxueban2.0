@@ -23,7 +23,7 @@ const variantMap = {
 };
 
 const sizeMap = {
-  xs: 'h-7 px-2.5 text-xs',
+  xs: 'h-7 min-h-[44px] px-2.5 text-xs',
   sm: 'h-8 px-3 text-xs',
   md: 'h-10 px-4 text-sm',
   lg: 'h-12 px-6 text-base',

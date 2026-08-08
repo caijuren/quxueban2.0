@@ -329,7 +329,7 @@ export default function ReportsPage() {
     <div className="space-y-6">
       {/* Header */}
       <SlideUp>
-        <GlassCard strength="strong" glow="secondary" className="p-5 sm:p-6">
+        <GlassCard strength="strong" glow="secondary" className="max-sm:!bg-surface max-sm:!backdrop-blur-none max-sm:!border-border-default p-5 sm:p-6">
           <div className="flex flex-col gap-5">
             <div className="flex items-center gap-3">
               <div className="bg-primary/10 border-primary/20 flex size-10 items-center justify-center rounded-xl border">
@@ -383,7 +383,7 @@ export default function ReportsPage() {
         <StaggerContainer className="space-y-6">
           {/* AI weekly summary */}
           <StaggerItem>
-            <GlassCard strength="strong" glow="ai" className="p-5">
+            <GlassCard strength="strong" glow="ai" className="max-sm:!bg-surface max-sm:!backdrop-blur-none max-sm:!border-border-default p-5">
               <div className="mb-4 flex items-center justify-between gap-3">
                 <div className="flex items-center gap-2">
                   <Icon name="Sparkles" size="md" animate="pulse" className="text-ai" />
@@ -418,7 +418,7 @@ export default function ReportsPage() {
           </StaggerItem>
 
           {/* Overview cards */}
-          <StaggerItem className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+          <StaggerItem className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
             <MetricCard
               label="计划任务"
               value={stats.total}

@@ -98,7 +98,7 @@ function IdentityCard({ child, completionRate }: { child: Child; completionRate:
   ];
 
   return (
-    <GlassCard strength="strong" glow="primary" hover className="p-5 sm:p-6">
+    <GlassCard strength="strong" glow="primary" hover className="max-sm:!bg-surface max-sm:!backdrop-blur-none max-sm:!border-border-default p-5 sm:p-6">
       <div className="flex flex-col gap-6 xl:flex-row xl:items-stretch">
         {/* Left column: header + metrics + footer */}
         <div className="flex min-w-0 flex-1 flex-col">

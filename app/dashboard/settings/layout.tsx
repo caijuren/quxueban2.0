@@ -61,6 +61,7 @@ const settingsNav: NavGroup[] = [
 export default function SettingsLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const [collapsed, setCollapsed] = useState(false);
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const { data: user } = useUser();
   const isAdmin = user?.role === 'ADMIN';
 
@@ -69,8 +70,121 @@ export default function SettingsLayout({ children }: { children: React.ReactNode
     items: group.items.filter((item) => !item.adminOnly || isAdmin),
   }));
 
+  const navContent = (
+    <nav className="flex gap-4 overflow-x-auto pb-2 lg:flex-col lg:overflow-visible lg:pb-0">
+      {visibleNav.map((group) => (
+        <div key={group.title} className={collapsed ? 'hidden lg:block' : ''}>
+          {!collapsed && (
+            <p className="mb-1.5 px-3 text-2xs font-semibold uppercase tracking-wider text-text-muted">
+              {group.title}
+            </p>
+          )}
+          <div className="flex gap-0.5 lg:flex-col">
+            {group.items.map((item) => {
+              const isActive = pathname === item.href || pathname.startsWith(`${item.href}/`);
+              return (
+                <Link
+                  key={item.name}
+                  href={item.href}
+                  onClick={() => setMobileNavOpen(false)}
+                  className={`relative flex items-center gap-2 whitespace-nowrap rounded-xl px-3 py-2 text-left transition-colors ${
+                    isActive
+                      ? 'glass-subtle font-medium text-primary'
+                      : 'text-text-tertiary hover:bg-surface-hover hover:text-text-secondary'
+                  }`}
+                  title={collapsed ? item.name : undefined}
+                >
+                  {isActive && (
+                    <span className="absolute left-0 top-1/2 h-4 w-[3px] -translate-y-1/2 rounded-r-full bg-primary" />
+                  )}
+                  <Icon name={item.icon} className="shrink-0" size="sm" />
+                  {!collapsed && <span className="text-xs">{item.name}</span>}
+                </Link>
+              );
+            })}
+          </div>
+        </div>
+      ))}
+    </nav>
+  );
+
   return (
     <div className="flex min-h-[calc(100vh-8rem)] flex-col gap-4 lg:flex-row">
+      {/* Mobile menu button */}
+      <div className="flex items-center justify-between lg:hidden">
+        <div className="flex items-center gap-2">
+          <Icon name="Settings" size="sm" className="text-primary" />
+          <h1 className="font-display text-base font-bold text-text-primary">设置</h1>
+        </div>
+        <button
+          onClick={() => setMobileNavOpen(true)}
+          className="inline-flex items-center gap-1.5 rounded-lg bg-surface px-3 py-2 text-xs font-medium text-text-secondary transition-colors hover:bg-surface-hover"
+        >
+          <Icon name="Menu" size="sm" />
+          菜单
+        </button>
+      </div>
+
+      {/* Mobile overlay */}
+      {mobileNavOpen && (
+        <div className="fixed inset-0 z-50 lg:hidden">
+          {/* Backdrop */}
+          <div
+            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+            onClick={() => setMobileNavOpen(false)}
+          />
+          {/* Drawer panel */}
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.2 }}
+            className="absolute left-0 top-0 h-full w-72 overflow-y-auto bg-surface p-4 shadow-xl"
+          >
+            <div className="mb-4 flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Icon name="Settings" size="sm" className="text-primary" />
+                <h2 className="font-display text-base font-bold text-text-primary">设置</h2>
+              </div>
+              <button
+                onClick={() => setMobileNavOpen(false)}
+                className="flex size-8 items-center justify-center rounded-lg text-text-tertiary transition-colors hover:bg-surface-hover hover:text-text-primary"
+              >
+                <Icon name="X" size="sm" />
+              </button>
+            </div>
+            <div className="space-y-4">
+              {visibleNav.map((group) => (
+                <div key={group.title}>
+                  <p className="mb-1.5 px-3 text-2xs font-semibold uppercase tracking-wider text-text-muted">
+                    {group.title}
+                  </p>
+                  <div className="space-y-0.5">
+                    {group.items.map((item) => {
+                      const isActive = pathname === item.href || pathname.startsWith(`${item.href}/`);
+                      return (
+                        <Link
+                          key={item.name}
+                          href={item.href}
+                          onClick={() => setMobileNavOpen(false)}
+                          className={`flex items-center gap-3 rounded-xl px-4 py-3 text-left transition-colors ${
+                            isActive
+                              ? 'glass-subtle font-medium text-primary'
+                              : 'text-text-tertiary hover:bg-surface-hover hover:text-text-secondary'
+                          }`}
+                        >
+                          <Icon name={item.icon} className="shrink-0" size="sm" />
+                          <span className="text-sm">{item.name}</span>
+                        </Link>
+                      );
+                    })}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </motion.div>
+        </div>
+      )}
+
       <motion.aside
         initial={{ opacity: 0, x: -12 }}
         animate={{ opacity: 1, x: 0 }}
@@ -84,41 +198,8 @@ export default function SettingsLayout({ children }: { children: React.ReactNode
           )}
         </div>
 
-        <GlassCard strength="subtle" className="p-2">
-          <nav className="flex gap-4 overflow-x-auto pb-2 lg:flex-col lg:overflow-visible lg:pb-0">
-            {visibleNav.map((group) => (
-              <div key={group.title} className={collapsed ? 'hidden lg:block' : ''}>
-                {!collapsed && (
-                  <p className="mb-1.5 px-3 text-2xs font-semibold uppercase tracking-wider text-text-muted">
-                    {group.title}
-                  </p>
-                )}
-                <div className="flex gap-0.5 lg:flex-col">
-                  {group.items.map((item) => {
-                    const isActive = pathname === item.href || pathname.startsWith(`${item.href}/`);
-                    return (
-                      <Link
-                        key={item.name}
-                        href={item.href}
-                        className={`relative flex items-center gap-2 whitespace-nowrap rounded-xl px-3 py-2 text-left transition-colors ${
-                          isActive
-                            ? 'glass-subtle font-medium text-primary'
-                            : 'text-text-tertiary hover:bg-surface-hover hover:text-text-secondary'
-                        }`}
-                        title={collapsed ? item.name : undefined}
-                      >
-                        {isActive && (
-                          <span className="absolute left-0 top-1/2 h-4 w-[3px] -translate-y-1/2 rounded-r-full bg-primary" />
-                        )}
-                        <Icon name={item.icon} className="shrink-0" size="sm" />
-                        {!collapsed && <span className="text-xs">{item.name}</span>}
-                      </Link>
-                    );
-                  })}
-                </div>
-              </div>
-            ))}
-          </nav>
+        <GlassCard strength="subtle" className="hidden p-2 lg:block">
+          {navContent}
         </GlassCard>
 
         <button
