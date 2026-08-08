@@ -36,7 +36,6 @@ export const authOptions: NextAuthOptions = {
           id: user.id,
           username: user.username,
           name: user.name,
-          avatarUrl: user.avatarUrl,
           role: user.role,
         };
       },
@@ -48,11 +47,7 @@ export const authOptions: NextAuthOptions = {
         token.id = user.id;
         token.username = user.username;
         token.name = user.name;
-        token.avatarUrl = user.avatarUrl;
         token.role = user.role;
-      }
-      if (trigger === 'update' && jwtSession?.avatarUrl !== undefined) {
-        token.avatarUrl = jwtSession.avatarUrl;
       }
       return token;
     },
@@ -60,7 +55,6 @@ export const authOptions: NextAuthOptions = {
       session.user.id = token.id;
       session.user.username = token.username;
       session.user.name = token.name;
-      session.user.avatarUrl = token.avatarUrl;
       session.user.role = token.role;
       return session;
     },
