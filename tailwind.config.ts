@@ -186,6 +186,7 @@ const config: Config = {
         float: 'float 6s ease-in-out infinite',
         glow: 'glow 2s ease-in-out infinite alternate',
         'line-flow': 'lineFlow 3s linear infinite',
+        shimmer: 'shimmer 2s ease-in-out infinite',
       },
       keyframes: {
         float: {
@@ -201,6 +202,10 @@ const config: Config = {
         lineFlow: {
           '0%': { strokeDashoffset: '1000' },
           '100%': { strokeDashoffset: '0' },
+        },
+        shimmer: {
+          '0%': { backgroundPosition: '200% 0' },
+          '100%': { backgroundPosition: '-200% 0' },
         },
       },
     },

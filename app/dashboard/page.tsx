@@ -357,7 +357,7 @@ function UpcomingMilestonesCard({ child }: { child: Child }) {
       </div>
 
       {milestones.length === 0 ? (
-        <div className="py-8 text-center text-sm text-text-tertiary">暂无即将到来的关键节点</div>
+        <EmptyState scene="no-data" size="sm" />
       ) : (
         <div className="space-y-3">
           {milestones.map((milestone, index) => {

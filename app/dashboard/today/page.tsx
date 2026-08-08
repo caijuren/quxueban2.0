@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import { Icon } from '@/components/ui/icon';
 import { useChildren } from '@/components/dashboard/ChildrenContext';
 import EmptyState from '@/components/ui/EmptyState';
+import Skeleton from '@/components/ui/skeleton';
 import ChildEmptyState from '@/components/dashboard/ChildEmptyState';
 import CommandCard from '@/components/ui/CommandCard';
 import TaskCompletionModal from '@/components/today/TaskCompletionModal';

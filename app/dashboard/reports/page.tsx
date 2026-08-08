@@ -8,6 +8,12 @@ import { useChildren } from '@/components/dashboard/ChildrenContext';
 import ChildEmptyState from '@/components/dashboard/ChildEmptyState';
 import EmptyState from '@/components/ui/EmptyState';
 import GlassCard from '@/components/ui/glass-card';
+import MetricCard from '@/components/ui/metric-card';
+import ProgressRing from '@/components/ui/progress-ring';
+import TrendChart from '@/components/ui/trend-chart';
+import Heatmap from '@/components/ui/heatmap';
+import { ProgressBar } from '@/components/motion/progress-bar';
+import Skeleton from '@/components/ui/skeleton';
 import { categoryIcons } from '@/lib/taskIcons';
 import { TASK_CATEGORY_LABELS, TASK_CATEGORY_COLORS } from '@/lib/taskTemplates';
 import {
@@ -413,14 +419,14 @@ export default function ReportsPage() {
 
           {/* Overview cards */}
           <StaggerItem className="grid grid-cols-2 gap-4 lg:grid-cols-4">
-            <GlassCard className="p-4">
-              <div className="mb-2 flex items-center gap-2">
-                <Icon name="Target" size="sm" className="text-primary" />
-                <span className="text-xs text-text-muted">计划任务</span>
-              </div>
-              <p className="font-display text-2xl font-bold text-text-primary">{stats.total}</p>
-              <p className="mt-0.5 text-xs text-text-tertiary">已完成 {stats.done} 项</p>
-            </GlassCard>
+            <MetricCard
+              label="计划任务"
+              value={stats.total}
+              icon="Target"
+              variant="glass"
+              countUp
+              suffix="项"
+            />
 
             <GlassCard className="p-4">
               <div className="mb-2 flex items-center gap-2">
@@ -435,27 +441,23 @@ export default function ReportsPage() {
               </p>
             </GlassCard>
 
-            <GlassCard className="p-4">
-              <div className="mb-2 flex items-center gap-2">
-                <Icon name="Calendar" size="sm" className="text-accent" />
-                <span className="text-xs text-text-muted">打卡天数</span>
-              </div>
-              <p className="font-display text-2xl font-bold text-text-primary">{checkedInDays}</p>
-              <p className="mt-0.5 text-xs text-text-tertiary">本周有打卡</p>
-            </GlassCard>
+            <MetricCard
+              label="打卡天数"
+              value={checkedInDays}
+              icon="Calendar"
+              variant="glass"
+              countUp
+              suffix="天"
+            />
 
-            <GlassCard className="p-4">
-              <div className="mb-2 flex items-center gap-2">
-                <Icon name="TrendingUp" size="sm" className="text-success" />
-                <span className="text-xs text-text-muted">完成率</span>
-              </div>
-              <p className="font-display text-2xl font-bold text-text-primary">
-                {stats.completionRate}%
-              </p>
-              <p className="mt-0.5 text-xs text-text-tertiary">
-                {stats.pending > 0 ? `${stats.pending} 项待完成` : '全部完成'}
-              </p>
-            </GlassCard>
+            <MetricCard
+              label="完成率"
+              value={stats.completionRate}
+              icon="TrendingUp"
+              variant="glass"
+              countUp
+              suffix="%"
+            />
           </StaggerItem>
 
           {/* Progress analysis */}
@@ -472,14 +474,7 @@ export default function ReportsPage() {
                     <span className="text-sm text-text-secondary">时间进度</span>
                     <span className="text-sm font-bold text-text-primary">{timeProgress}%</span>
                   </div>
-                  <div className="h-2.5 w-full overflow-hidden rounded-full bg-surface">
-                    <motion.div
-                      initial={{ width: 0 }}
-                      animate={{ width: `${timeProgress}%` }}
-                      transition={{ duration: 0.6, delay: 0.3 }}
-                      className="h-full rounded-full bg-secondary"
-                    />
-                  </div>
+                  <ProgressBar value={timeProgress} size="lg" barClassName="bg-secondary" />
                   <p className="text-xs text-text-muted">
                     本周已过去 {Math.round((timeProgress / 100) * 7)} / 7 天
                   </p>
@@ -490,14 +485,7 @@ export default function ReportsPage() {
                     <span className="text-sm text-text-secondary">任务进度</span>
                     <span className="text-sm font-bold text-text-primary">{taskProgress}%</span>
                   </div>
-                  <div className="h-2.5 w-full overflow-hidden rounded-full bg-surface">
-                    <motion.div
-                      initial={{ width: 0 }}
-                      animate={{ width: `${taskProgress}%` }}
-                      transition={{ duration: 0.6, delay: 0.35 }}
-                      className="h-full rounded-full bg-primary"
-                    />
-                  </div>
+                  <ProgressBar value={taskProgress} variant="gradient" size="lg" />
                   <p className="text-xs text-text-muted">
                     已完成 {stats.done} / {stats.total} 项任务
                   </p>
@@ -550,15 +538,7 @@ export default function ReportsPage() {
                       <span className="text-lg font-bold text-text-primary">{subject.rate}%</span>
                     </div>
 
-                    <div className="h-1.5 w-full overflow-hidden rounded-full bg-surface">
-                      <motion.div
-                        initial={{ width: 0 }}
-                        animate={{ width: `${subject.rate}%` }}
-                        transition={{ duration: 0.5, delay: 0.35 }}
-                        className="h-full rounded-full"
-                        style={{ backgroundColor: subject.color }}
-                      />
-                    </div>
+                    <ProgressBar value={subject.rate} size="sm" />
 
                     <div className="space-y-1 text-xs">
                       <p className="text-text-muted">
@@ -660,7 +640,7 @@ export default function ReportsPage() {
               </div>
 
               {categoryStats.length === 0 ? (
-                <p className="py-8 text-center text-sm text-text-muted">暂无分类数据</p>
+                <EmptyState scene="no-data" size="sm" />
               ) : (
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
                   {categoryStats.map((cat) => {
@@ -690,14 +670,7 @@ export default function ReportsPage() {
                             <span className="text-text-muted">完成率</span>
                             <span className="font-bold text-text-primary">{cat.rate}%</span>
                           </div>
-                          <div className="h-1.5 w-full overflow-hidden rounded-full bg-surface">
-                            <motion.div
-                              initial={{ width: 0 }}
-                              animate={{ width: `${cat.rate}%` }}
-                              transition={{ duration: 0.5, delay: 0.35 }}
-                              className="h-full rounded-full bg-primary"
-                            />
-                          </div>
+                          <ProgressBar value={cat.rate} variant="gradient" size="sm" />
                         </div>
                       </div>
                     );
@@ -715,42 +688,16 @@ export default function ReportsPage() {
                 <h2 className="text-lg font-bold text-text-secondary">每日完成趋势</h2>
               </div>
 
-              <div className="flex h-44 items-end justify-between gap-2">
-                {dailyTrend.map((day) => {
-                  const maxTotal = Math.max(...dailyTrend.map((d) => d.total), 1);
-                  const heightPercent = maxTotal > 0 ? (day.total / maxTotal) * 100 : 0;
-                  const donePercent = day.total > 0 ? (day.done / day.total) * 100 : 0;
-                  return (
-                    <div key={day.day} className="flex flex-1 flex-col items-center gap-2">
-                      <div className="relative h-28 w-full overflow-hidden rounded-xl bg-surface">
-                        <motion.div
-                          initial={{ height: 0 }}
-                          animate={{ height: `${heightPercent}%` }}
-                          transition={{ duration: 0.5, delay: 0.35 }}
-                          className="absolute inset-x-0 bottom-0 bg-surface-elevated"
-                        />
-                        <motion.div
-                          initial={{ height: 0 }}
-                          animate={{ height: `${heightPercent * (donePercent / 100)}%` }}
-                          transition={{ duration: 0.5, delay: 0.4 }}
-                          className="to-primary/70 absolute inset-x-0 bottom-0 rounded-xl bg-gradient-to-t from-primary"
-                        />
-                        {day.total > 0 && (
-                          <div className="absolute inset-0 flex items-center justify-center">
-                            <span className="text-xs font-bold text-text-primary drop-shadow">
-                              {day.done}/{day.total}
-                            </span>
-                          </div>
-                        )}
-                      </div>
-                      <div className="text-center">
-                        <p className="text-xs font-medium text-text-secondary">{day.day}</p>
-                        <p className="text-[10px] text-text-muted">{day.date}</p>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
+              <TrendChart
+                data={dailyTrend.map((d) => ({ ...d, date: `${d.day}\n${d.date}` }))}
+                xKey="day"
+                bars={[
+                  { key: 'total', name: '总任务', color: 'var(--color-primary)' },
+                  { key: 'done', name: '已完成', color: 'var(--color-secondary)' },
+                ]}
+                type="bar"
+                height={180}
+              />
             </GlassCard>
           </StaggerItem>
 

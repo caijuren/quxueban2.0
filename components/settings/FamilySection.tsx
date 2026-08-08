@@ -4,6 +4,8 @@ import Image from 'next/image';
 import { useState } from 'react';
 import { Icon, type IconName } from '@/components/ui/icon';
 import SettingsSection from './SettingsSection';
+import Skeleton from '@/components/ui/skeleton';
+import ErrorState from '@/components/ui/error-state';
 import {
   useFamily,
   useCreateFamily,
@@ -214,9 +216,8 @@ export default function FamilySection() {
   if (isLoading) {
     return (
       <SettingsSection title="家庭成员与权限" description="管理家庭成员和访问权限">
-        <div className="flex items-center justify-center py-12 text-text-muted">
-          <Icon name="Loader2" size="md" animate="spin" className="mr-2" />
-          加载中...
+        <div className="flex items-center justify-center py-12">
+          <Skeleton variant="rounded" width={240} height={24} />
         </div>
       </SettingsSection>
     );
@@ -225,10 +226,7 @@ export default function FamilySection() {
   if (error && !family) {
     return (
       <SettingsSection title="家庭成员与权限" description="管理家庭成员和访问权限">
-        <div className="flex items-center gap-2 text-sm text-error">
-          <Icon name="AlertCircle" size="sm" />
-          {error.message}
-        </div>
+        <ErrorState type="generic" title="加载失败" description={error.message} />
       </SettingsSection>
     );
   }

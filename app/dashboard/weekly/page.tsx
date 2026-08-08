@@ -8,6 +8,7 @@ import { Icon } from '@/components/ui/icon';
 import Modal from '@/components/ui/Modal';
 import { useChildren } from '@/components/dashboard/ChildrenContext';
 import EmptyState from '@/components/ui/EmptyState';
+import Skeleton from '@/components/ui/skeleton';
 import ChildEmptyState from '@/components/dashboard/ChildEmptyState';
 import CommandCard from '@/components/ui/CommandCard';
 import MetricRing from '@/components/ui/MetricRing';
@@ -505,9 +506,7 @@ function EditPlanModal({ plan, onClose, onSave }: EditPlanModalProps) {
                         >
                           <div className="space-y-3 p-3">
                             {dayTasks.length === 0 && (
-                              <div className="py-4 text-center text-xs text-text-muted">
-                                暂无任务，点击上方 + 添加
-                              </div>
+                              <EmptyState scene="no-data" size="sm" compact />
                             )}
                             {dayTasks.map((task) => (
                               <TaskEditRow
@@ -1258,9 +1257,11 @@ function TaskLibraryModal({
       </div>
 
       {loading ? (
-        <div className="py-12 text-center text-sm text-text-muted">加载中...</div>
+        <div className="flex items-center justify-center py-12">
+          <Skeleton variant="rounded" width={200} height={24} />
+        </div>
       ) : filteredTemplates.length === 0 ? (
-        <div className="py-12 text-center text-sm text-text-muted">暂无任务模板</div>
+        <EmptyState scene="no-data" size="sm" />
       ) : (
         <div className="mb-6 grid max-h-[50vh] grid-cols-1 gap-3 overflow-y-auto pr-1 sm:grid-cols-2">
           {filteredTemplates.map((tpl) => {
@@ -2466,7 +2467,7 @@ function ApplyTemplateModal({
         </div>
 
         {templates.length === 0 ? (
-          <p className="py-8 text-center text-sm text-text-muted">暂无可用模板</p>
+          <EmptyState scene="no-data" size="sm" />
         ) : (
           <div className="max-h-[50vh] space-y-2 overflow-y-auto">
             {templates.map((tpl) => (
@@ -2529,12 +2530,11 @@ function CopyHistoryModal({
     >
       <div className="max-h-[60vh] space-y-2 overflow-y-auto">
         {isLoading ? (
-          <div className="py-8 text-center text-sm text-text-muted">
-            <Icon name="Loader" size="md" animate="spin" className="mx-auto mb-2" />
-            加载历史周计划...
+          <div className="flex items-center justify-center py-8">
+            <Skeleton variant="rounded" width={240} height={24} />
           </div>
         ) : history.length === 0 ? (
-          <p className="py-8 text-center text-sm text-text-muted">暂无历史周计划</p>
+          <EmptyState scene="no-data" size="sm" />
         ) : (
           history.map((plan) => (
             <div
