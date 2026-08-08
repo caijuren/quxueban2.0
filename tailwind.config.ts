@@ -118,9 +118,18 @@ const config: Config = {
         mono: ['var(--font-mono)', 'SF Mono', 'monospace'],
       },
       transitionDuration: {
+        micro: 'var(--duration-micro)',
+        hover: 'var(--duration-hover)',
+        layout: 'var(--duration-layout)',
+        entrance: 'var(--duration-entrance)',
         fast: 'var(--duration-fast)',
         normal: 'var(--duration-normal)',
         slow: 'var(--duration-slow)',
+      },
+      transitionTimingFunction: {
+        layout: 'var(--ease-layout)',
+        entrance: 'var(--ease-entrance)',
+        spring: 'var(--ease-spring)',
       },
       backdropBlur: {
         'glass-subtle': 'var(--glass-blur-subtle)',

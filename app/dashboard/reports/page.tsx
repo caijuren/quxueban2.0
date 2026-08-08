@@ -1,7 +1,9 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
-import { motion, useReducedMotion } from 'framer-motion';
+import { motion } from 'framer-motion';
+import { useReducedMotion } from '@/components/motion';
+import { SlideUp, StaggerContainer, StaggerItem } from '@/components/motion';
 import {
   BarChart3,
   Calendar,
@@ -321,17 +323,12 @@ export default function ReportsPage() {
   if (!currentChild) {
     return (
       <div className="space-y-8">
-        <motion.div
-          initial={shouldReduceMotion ? false : { opacity: 0, y: -8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4 }}
-          className="flex items-center gap-3"
-        >
+        <SlideUp className="flex items-center gap-3">
           <div className="bg-primary/10 border-primary/20 flex size-10 items-center justify-center rounded-xl border">
             <BarChart3 className="size-5 text-primary" />
           </div>
           <h1 className="font-display text-2xl font-bold sm:text-3xl">成长报告</h1>
-        </motion.div>
+        </SlideUp>
         <ChildEmptyState description="添加孩子后，即可查看日报与周报" />
       </div>
     );
@@ -340,11 +337,7 @@ export default function ReportsPage() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <motion.div
-        initial={shouldReduceMotion ? false : { opacity: 0, y: -8 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4 }}
-      >
+      <SlideUp>
         <GlassCard strength="strong" glow="secondary" className="p-5 sm:p-6">
           <div className="flex flex-col gap-5">
             <div className="flex items-center gap-3">
@@ -389,16 +382,12 @@ export default function ReportsPage() {
             )}
           </div>
         </GlassCard>
-      </motion.div>
+      </SlideUp>
 
       {plan && stats && (
-        <>
+        <StaggerContainer className="space-y-6">
           {/* AI weekly summary */}
-          <motion.div
-            initial={shouldReduceMotion ? false : { opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, delay: 0.1 }}
-          >
+          <StaggerItem>
             <GlassCard strength="strong" glow="ai" className="p-5">
               <div className="mb-4 flex items-center justify-between gap-3">
                 <div className="flex items-center gap-2">
@@ -431,15 +420,10 @@ export default function ReportsPage() {
                 </div>
               )}
             </GlassCard>
-          </motion.div>
+          </StaggerItem>
 
           {/* Overview cards */}
-          <motion.div
-            initial={shouldReduceMotion ? false : { opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, delay: 0.15 }}
-            className="grid grid-cols-2 gap-4 lg:grid-cols-4"
-          >
+          <StaggerItem className="grid grid-cols-2 gap-4 lg:grid-cols-4">
             <GlassCard className="p-4">
               <div className="mb-2 flex items-center gap-2">
                 <Target className="size-4 text-primary" />
@@ -483,14 +467,10 @@ export default function ReportsPage() {
                 {stats.pending > 0 ? `${stats.pending} 项待完成` : '全部完成'}
               </p>
             </GlassCard>
-          </motion.div>
+          </StaggerItem>
 
           {/* Progress analysis */}
-          <motion.div
-            initial={shouldReduceMotion ? false : { opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, delay: 0.2 }}
-          >
+          <StaggerItem>
             <GlassCard className="p-5">
               <div className="mb-5 flex items-center gap-2">
                 <TrendingUp className="size-5 text-primary" />
@@ -546,14 +526,10 @@ export default function ReportsPage() {
                 </GlassCard>
               </div>
             </GlassCard>
-          </motion.div>
+          </StaggerItem>
 
           {/* Subject analysis */}
-          <motion.div
-            initial={shouldReduceMotion ? false : { opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, delay: 0.25 }}
-          >
+          <StaggerItem>
             <GlassCard className="p-5">
               <div className="mb-5 flex items-center gap-2">
                 <Target className="size-5 text-secondary" />
@@ -647,15 +623,11 @@ export default function ReportsPage() {
                 ))}
               </div>
             </GlassCard>
-          </motion.div>
+          </StaggerItem>
 
           {/* High-frequency task details */}
           {highFrequencyTasks.length > 0 && (
-            <motion.div
-              initial={shouldReduceMotion ? false : { opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, delay: 0.3 }}
-            >
+            <StaggerItem>
               <GlassCard className="p-5">
                 <div className="mb-5 flex items-center gap-2">
                   <Calendar className="size-5 text-accent" />
@@ -691,15 +663,11 @@ export default function ReportsPage() {
                   })}
                 </div>
               </GlassCard>
-            </motion.div>
+            </StaggerItem>
           )}
 
           {/* Category analysis */}
-          <motion.div
-            initial={shouldReduceMotion ? false : { opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, delay: 0.35 }}
-          >
+          <StaggerItem>
             <GlassCard className="p-5">
               <div className="mb-5 flex items-center gap-2">
                 <BarChart3 className="size-5 text-secondary" />
@@ -752,14 +720,10 @@ export default function ReportsPage() {
                 </div>
               )}
             </GlassCard>
-          </motion.div>
+          </StaggerItem>
 
           {/* Daily trend */}
-          <motion.div
-            initial={shouldReduceMotion ? false : { opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, delay: 0.4 }}
-          >
+          <StaggerItem>
             <GlassCard className="p-5">
               <div className="mb-5 flex items-center gap-2">
                 <Calendar className="size-5 text-accent" />
@@ -803,15 +767,10 @@ export default function ReportsPage() {
                 })}
               </div>
             </GlassCard>
-          </motion.div>
+          </StaggerItem>
 
           {/* Share action */}
-          <motion.div
-            initial={shouldReduceMotion ? false : { opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, delay: 0.45 }}
-            className="flex justify-end"
-          >
+          <StaggerItem className="flex justify-end">
             <button
               onClick={() => alert('分享图功能将在后续迭代中提供')}
               className="hover:bg-primary/90 flex items-center gap-2 rounded-[14px] bg-primary px-5 py-2.5 text-sm font-medium text-text-primary shadow-[0_0_16px_rgba(244,63,122,0.25)] transition-all"

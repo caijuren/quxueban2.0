@@ -234,6 +234,30 @@ docker image prune -f
 
 # 发版记录
 
+## v2.8.2（2026-08-09）
+
+**主题：全局动画系统 + 钉钉推送修复**
+
+本版本在 v2.8.1 视觉升级基础上，建立统一的全局动画系统，避免各页面自行实现不一致的入场/交互动画；同时修复钉钉推送按钮点击无反馈的问题。
+
+- 全局动画系统
+  - 新增 `components/motion/` 动画组件库：`SlideUp`、`FadeIn`、`StaggerContainer`、`StaggerItem`、`ScaleOnHover`、`CountUp`、`ProgressBar`
+  - 扩展 `app/globals.css` Motion Token：`duration-micro/hover/layout/entrance`、`ease-layout/entrance/spring`、`stagger-*`、`hover-lift/scale/press`、`entrance-offset`
+  - 扩展 `tailwind.config.ts`：`transitionDuration` 与 `transitionTimingFunction` 接入 Token
+  - 新增 `MotionProvider`（`components/providers/MotionProvider.tsx`）统一接管 reduced-motion 偏好
+  - `Button`、`GlassCard` 接入 press scale 与 hover lift 动画
+  - 首页 `/dashboard`、今日任务 `/dashboard/today`、AI 诊断 `/dashboard/ai` 等核心页面接入统一动画组件
+
+- 钉钉推送修复
+  - 修复 `/api/dingtalk/push` 在家庭共享场景下因 `userId` 限制导致查不到孩子/周计划的问题
+  - 改用 `canManageChild()` 进行权限校验
+  - 后端增加全局 `try-catch`，异常时向前端返回具体错误信息
+  - 今日任务页 `handlePush` 增加 `try-catch`，失败时通过 Toast 提示用户
+
+- 质量验证
+  - `npm run type-check` 通过
+  - `npm run lint` 通过（仅剩余既有 `<img>` 警告）
+
 ## v2.8.1（2026-08-09）
 
 **主题：Liquid Glass 核心页面视觉升级**

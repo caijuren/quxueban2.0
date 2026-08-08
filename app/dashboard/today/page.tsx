@@ -26,6 +26,7 @@ import { TASK_CATEGORY_LABELS } from '@/lib/taskTemplates';
 import { getCategoryColorClass } from '@/lib/taskAlignment';
 import { useCompleteTask } from '@/lib/hooks/useWeeklyPlans';
 import { useDingTalkPush } from '@/lib/hooks/useDingTalk';
+import { toast } from '@/lib/toast';
 import { TaskCategory, WeeklyTaskItem } from '@/lib/storage.types';
 import { TaskCompletionInput } from '@/lib/validation';
 
@@ -179,11 +180,17 @@ export default function TodayPage() {
 
   const handlePush = useCallback(async () => {
     if (!currentChild) return;
-    await dingTalkPush.mutateAsync({
-      childId: currentChild.id,
-      date: todayDate,
-    });
-    setManualPushTriggered(true);
+    try {
+      await dingTalkPush.mutateAsync({
+        childId: currentChild.id,
+        date: todayDate,
+      });
+      setManualPushTriggered(true);
+      toast.success('推送成功', '学习简报已推送到钉钉');
+    } catch (err) {
+      const message = err instanceof Error ? err.message : '推送失败，请稍后重试';
+      toast.error('推送到钉钉失败', message);
+    }
   }, [currentChild, todayDate, dingTalkPush]);
 
   // Auto-push at 23:59:50 if all done and not yet pushed

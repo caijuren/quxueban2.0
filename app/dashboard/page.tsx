@@ -1,7 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { motion, useReducedMotion } from 'framer-motion';
+import { useReducedMotion } from '@/components/motion';
+import { SlideUp, StaggerContainer, StaggerItem } from '@/components/motion';
 import {
   LayoutGrid,
   User,
@@ -45,23 +46,6 @@ import DataBadge from '@/components/ui/DataBadge';
 import EmptyState from '@/components/ui/EmptyState';
 import GaugeChart from '@/components/ui/GaugeChart';
 import GlassCard from '@/components/ui/glass-card';
-
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: { staggerChildren: 0.06 },
-  },
-};
-
-const itemVariants = {
-  hidden: { opacity: 0, y: 12 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.4, ease: [0.22, 1, 0.36, 1] },
-  },
-};
 
 type ViewMode = 'command' | 'overview';
 
@@ -620,10 +604,8 @@ export default function DashboardPage() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <motion.div
-        initial={shouldReduceMotion ? false : { opacity: 0, y: -8 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4 }}
+      <SlideUp
+        distance={8}
         className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
       >
         <div className="flex items-center gap-3">
@@ -640,62 +622,43 @@ export default function DashboardPage() {
             <ViewToggle mode={viewMode} onChange={setViewMode} />
           </div>
         )}
-      </motion.div>
+      </SlideUp>
 
       {/* Overview mode */}
       {viewMode === 'overview' && (
-        <motion.div
-          variants={containerVariants}
-          initial={shouldReduceMotion ? false : 'hidden'}
-          animate="visible"
-          className="grid grid-cols-1 gap-6 md:grid-cols-2"
-        >
+        <StaggerContainer className="grid grid-cols-1 gap-6 md:grid-cols-2">
           {children.map((child) => (
-            <motion.div key={child.id} variants={itemVariants}>
+            <StaggerItem key={child.id}>
               <OverviewChildCard
                 child={child}
                 onSelect={() => handleSelectChild(child.id)}
                 getWeeklyPlan={getWeeklyPlan}
               />
-            </motion.div>
+            </StaggerItem>
           ))}
-        </motion.div>
+        </StaggerContainer>
       )}
 
       {/* Command mode */}
       {viewMode === 'command' && currentChild && (
         <>
-          <motion.div
-            initial={shouldReduceMotion ? false : { opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-          >
+          <SlideUp>
             <IdentityCard child={currentChild} completionRate={completionRate} />
-          </motion.div>
+          </SlideUp>
 
           <div className="grid grid-cols-1 gap-6 xl:grid-cols-3">
-            <motion.div
-              initial={shouldReduceMotion ? false : { opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.1 }}
-              className="xl:col-span-2"
-            >
+            <SlideUp delay={0.05} className="xl:col-span-2">
               <TimelineSection child={currentChild} />
-            </motion.div>
+            </SlideUp>
 
-            <motion.div
-              variants={containerVariants}
-              initial={shouldReduceMotion ? false : 'hidden'}
-              animate="visible"
-              className="space-y-6"
-            >
-              <motion.div variants={itemVariants}>
+            <StaggerContainer delayChildren={0.1} className="space-y-6">
+              <StaggerItem>
                 <UpcomingMilestonesCard child={currentChild} />
-              </motion.div>
-              <motion.div variants={itemVariants}>
+              </StaggerItem>
+              <StaggerItem>
                 <AIStrategyCard child={currentChild} completionRate={completionRate} />
-              </motion.div>
-            </motion.div>
+              </StaggerItem>
+            </StaggerContainer>
           </div>
         </>
       )}

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { motion } from 'framer-motion';
+import { SlideUp, StaggerContainer, StaggerItem } from '@/components/motion';
 import {
   Sparkles,
   RefreshCw,
@@ -100,12 +100,7 @@ export default function AIPage() {
 
   return (
     <div className="space-y-8">
-      <motion.div
-        initial={{ opacity: 0, y: -10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
-      >
+      <SlideUp className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h1 className="mb-2 font-display text-3xl font-bold">
             {currentChild ? `${currentChild.name}的 AI 检视` : 'AI 检视'}
@@ -124,7 +119,7 @@ export default function AIPage() {
           {loading ? <Loader2 className="size-4 animate-spin" /> : <RefreshCw className="size-4" />}
           {loading ? '生成中...' : '重新生成'}
         </button>
-      </motion.div>
+      </SlideUp>
 
       {!currentChild && (
         <EmptyState
@@ -135,22 +130,15 @@ export default function AIPage() {
       )}
 
       {error && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="border-error/30 bg-error/10 rounded-2xl border p-6"
-        >
+        <SlideUp className="rounded-2xl border border-error/30 bg-error/10 p-6">
           <p className="text-error">生成失败：{error}</p>
-        </motion.div>
+        </SlideUp>
       )}
 
       {diagnosis && (
         <>
-          <GlassCard
-            strength="strong"
-            glow="ai"
-            className="p-6"
-          >
+          <SlideUp>
+            <GlassCard strength="strong" glow="ai" className="p-6">
             <div className="flex items-start gap-4">
               <div className="flex size-12 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-secondary to-secondary-glow">
                 <Sparkles className="size-6 text-text-primary" />
@@ -176,18 +164,17 @@ export default function AIPage() {
               </div>
             </div>
           </GlassCard>
+          </SlideUp>
 
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+          <StaggerContainer className="grid grid-cols-1 gap-6 md:grid-cols-2">
             {(Object.keys(sectionConfig) as Array<keyof typeof sectionConfig>).map((key, index) => {
               const section = sectionConfig[key];
               const items = diagnosis[key] as unknown[];
               const Icon = section.icon;
 
               return (
-                <GlassCard
-                  key={key}
-                  className="p-6"
-                >
+                <StaggerItem key={key}>
+                  <GlassCard className="h-full p-6">
                   <div className="mb-5 flex items-center gap-3">
                     <Icon className={`size-6 ${section.color}`} />
                     <h2 className="font-display text-lg font-bold">{section.title}</h2>
@@ -210,9 +197,10 @@ export default function AIPage() {
                     )}
                   </ul>
                 </GlassCard>
+                </StaggerItem>
               );
             })}
-          </div>
+          </StaggerContainer>
         </>
       )}
 
