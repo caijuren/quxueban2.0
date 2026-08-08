@@ -1,6 +1,6 @@
 'use client';
 
-import { Target, BookOpen, Headphones } from 'lucide-react';
+import { Icon, type IconName } from '@/components/ui/icon';
 import Section from '@/components/console/core/Section';
 
 interface Task {
@@ -8,13 +8,13 @@ interface Task {
   title: string;
   subject: string;
   progress: number;
-  icon: typeof Target;
+  icon: IconName;
 }
 
 const mockTasks: Task[] = [
-  { id: '1', title: '数学训练', subject: 'math', progress: 80, icon: Target },
-  { id: '2', title: '阅读任务', subject: 'chinese', progress: 100, icon: BookOpen },
-  { id: '3', title: '英语听力', subject: 'english', progress: 30, icon: Headphones },
+  { id: '1', title: '数学训练', subject: 'math', progress: 80, icon: 'Target' },
+  { id: '2', title: '阅读任务', subject: 'chinese', progress: 100, icon: 'BookOpen' },
+  { id: '3', title: '英语听力', subject: 'english', progress: 30, icon: 'Headphones' },
 ];
 
 const subjectColors: Record<string, string> = {
@@ -33,7 +33,7 @@ export default function TodayTasks() {
             className="flex items-center gap-3 rounded-xl bg-surface-hover p-3 transition-colors hover:bg-surface-hover"
           >
             <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-surface-hover">
-              <task.icon className="size-5 text-text-tertiary" />
+              <Icon name={task.icon} size="md" className="text-text-tertiary" />
             </div>
             <div className="min-w-0 flex-1">
               <div className="mb-1.5 flex items-center justify-between">

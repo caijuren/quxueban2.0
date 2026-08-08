@@ -1,7 +1,8 @@
 'use client';
+import { Icon } from '@/components/ui/icon';
 
 import { useState, useEffect } from 'react';
-import { Plus, Trash2, Save, Route } from 'lucide-react';
+
 import Modal from '@/components/ui/Modal';
 import type { RoutePlan } from '@/lib/plans';
 
@@ -77,7 +78,7 @@ export default function ManageNodesModal({
       onClose={onClose}
       title="管理节点"
       subtitle="编辑各条路线的关键里程碑"
-      icon={Route}
+      icon="Route"
       iconClassName="bg-accent"
       size="lg"
       colorScheme="violet"
@@ -96,7 +97,7 @@ export default function ManageNodesModal({
             onClick={handleSave}
             className="flex items-center gap-2 rounded-lg bg-accent px-4 py-2 text-sm font-medium text-text-primary transition-all"
           >
-            <Save className="size-4" />
+            <Icon name="Save" size="sm" />
             保存节点
           </button>
         </div>
@@ -141,7 +142,7 @@ export default function ManageNodesModal({
                     className="hover:bg-error/10 flex size-9 items-center justify-center rounded-xl bg-surface-elevated text-text-muted transition-all hover:text-error"
                     aria-label="删除节点"
                   >
-                    <Trash2 className="size-4" />
+                    <Icon name="Trash2" size="sm" />
                   </button>
                 </div>
               ))}
@@ -152,7 +153,7 @@ export default function ManageNodesModal({
               onClick={() => addMilestone(plan.id)}
               className="mt-3 flex items-center gap-1.5 text-sm text-secondary transition-colors hover:text-secondary-glow"
             >
-              <Plus className="size-4" />
+              <Icon name="Plus" size="sm" />
               添加节点
             </button>
           </div>

@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Bell, Loader2, Check, Trash2, CheckCheck } from 'lucide-react';
+import { Icon } from '@/components/ui/icon';
 import ConsolePageShell from '@/components/console/core/ConsolePageShell';
 import EmptyState from '@/components/ui/EmptyState';
 import {
@@ -37,7 +37,7 @@ export default function NotificationsPage() {
       <div className="space-y-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2 text-sm text-text-secondary">
-            <Bell className="size-4 text-primary" />
+            <Icon name="Bell" size="sm" className="text-primary" />
             <span>未读通知：{data?.unreadCount ?? 0}</span>
           </div>
           {(data?.unreadCount ?? 0) > 0 && (
@@ -47,9 +47,9 @@ export default function NotificationsPage() {
               className="bg-primary/10 hover:bg-primary/20 flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium text-primary transition-all disabled:opacity-60"
             >
               {markAllRead.isPending ? (
-                <Loader2 className="size-3.5 animate-spin" />
+                <Icon name="Loader2" size="xs" animate="spin" />
               ) : (
-                <CheckCheck className="size-3.5" />
+                <Icon name="CheckCheck" size="xs" />
               )}
               全部已读
             </button>
@@ -58,7 +58,7 @@ export default function NotificationsPage() {
 
         {isLoading ? (
           <div className="flex items-center justify-center py-16">
-            <Loader2 className="size-8 animate-spin text-primary" />
+            <Icon name="Loader2" size="xl" animate="spin" className="text-primary" />
           </div>
         ) : error ? (
           <div className="border-error/20 bg-error/10 rounded-2xl border p-6 text-sm text-error">
@@ -66,7 +66,7 @@ export default function NotificationsPage() {
           </div>
         ) : notifications.length === 0 ? (
           <EmptyState
-            icon={Bell}
+            icon="Bell"
             title="暂无通知"
             description="系统消息、任务提醒和预警会出现在这里"
           />
@@ -109,7 +109,7 @@ export default function NotificationsPage() {
                         className="hover:bg-primary/10 flex size-8 items-center justify-center rounded-lg bg-surface-hover text-text-secondary transition-colors hover:text-primary disabled:opacity-50"
                         title="标记为已读"
                       >
-                        <Check className="size-4" />
+                        <Icon name="Check" size="sm" />
                       </button>
                     )}
                     <button
@@ -118,7 +118,7 @@ export default function NotificationsPage() {
                       className="hover:bg-error/10 flex size-8 items-center justify-center rounded-lg bg-surface-hover text-text-secondary transition-colors hover:text-error disabled:opacity-50"
                       title="删除"
                     >
-                      <Trash2 className="size-4" />
+                      <Icon name="Trash2" size="sm" />
                     </button>
                   </div>
                 </div>

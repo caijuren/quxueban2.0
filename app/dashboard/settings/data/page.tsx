@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { Sprout, FileDown, ArrowRight } from 'lucide-react';
+import { Icon } from '@/components/ui/icon';
 import ConsolePageShell from '@/components/console/core/ConsolePageShell';
 import SettingsSection from '@/components/settings/SettingsSection';
 import DataPrivacySection from '@/components/settings/DataPrivacySection';
@@ -17,18 +17,22 @@ export default function DataPage() {
               className="hover:border-primary/30 group flex items-center gap-3 rounded-xl border border-border-subtle bg-surface-elevated p-4 transition-all hover:bg-surface-hover"
             >
               <div className="bg-primary/10 flex size-10 items-center justify-center rounded-xl">
-                <Sprout className="size-5 text-primary" />
+                <Icon name="Sprout" size="md" className="text-primary" />
               </div>
               <div className="min-w-0 flex-1">
                 <p className="text-sm font-semibold text-text-secondary">成长档案</p>
                 <p className="mt-0.5 text-[11px] text-text-muted">时间线、证据库与完成趋势</p>
               </div>
-              <ArrowRight className="size-4 text-text-muted transition-colors group-hover:text-primary" />
+              <Icon
+                name="ArrowRight"
+                size="sm"
+                className="text-text-muted transition-colors group-hover:text-primary"
+              />
             </Link>
 
             <div className="flex items-center gap-3 rounded-xl border border-border-subtle bg-surface-elevated p-4 opacity-70">
               <div className="bg-ai/10 flex size-10 items-center justify-center rounded-xl">
-                <FileDown className="size-5 text-ai" />
+                <Icon name="FileDown" size="md" className="text-ai" />
               </div>
               <div className="min-w-0 flex-1">
                 <p className="text-sm font-semibold text-text-secondary">数据导出</p>

@@ -1,8 +1,9 @@
 'use client';
+import { Icon } from '@/components/ui/icon';
 
 import { useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
-import { Calculator, CheckCircle2, AlertCircle, XCircle, HelpCircle } from 'lucide-react';
+
 import { apiPost } from '@/lib/apiClient';
 
 interface CalculatorResult {
@@ -14,28 +15,28 @@ interface CalculatorResult {
 
 const levelConfig = {
   highly_likely: {
-    icon: CheckCircle2,
+    icon: 'CheckCircle2',
     title: '大概率符合',
     color: 'text-success',
     bg: 'bg-success/10',
     border: 'border-success/20',
   },
   possible: {
-    icon: HelpCircle,
+    icon: 'HelpCircle',
     title: '可能符合',
     color: 'text-warning',
     bg: 'bg-warning/10',
     border: 'border-warning/20',
   },
   unlikely: {
-    icon: AlertCircle,
+    icon: 'AlertCircle',
     title: '不符合或存疑',
     color: 'text-orange-400',
     bg: 'bg-orange-400/10',
     border: 'border-orange-400/20',
   },
   not_eligible: {
-    icon: XCircle,
+    icon: 'XCircle',
     title: '不符合',
     color: 'text-error',
     bg: 'bg-error/10',
@@ -87,7 +88,7 @@ export default function AdmissionCalculatorPage() {
       >
         <div className="flex items-center gap-3">
           <div className="bg-primary/10 border-primary/20 flex size-10 items-center justify-center rounded-xl border">
-            <Calculator className="size-5 text-primary" />
+            <Icon name="Calculator" size="md" className="text-primary" />
           </div>
           <div>
             <h1 className="font-display text-2xl font-bold text-text-primary sm:text-3xl">
@@ -212,10 +213,11 @@ export default function AdmissionCalculatorPage() {
           className={`rounded-2xl border ${levelConfig[result.level].border} ${levelConfig[result.level].bg} p-5 sm:p-6`}
         >
           <div className="flex items-start gap-4">
-            {(() => {
-              const Icon = levelConfig[result.level].icon;
-              return <Icon className={`size-8 ${levelConfig[result.level].color} shrink-0`} />;
-            })()}
+            <Icon
+              name={levelConfig[result.level].icon}
+              size="xl"
+              className={`size-8 ${levelConfig[result.level].color} shrink-0`}
+            />
             <div className="flex-1">
               <h2
                 className={`font-display text-xl font-bold ${levelConfig[result.level].color} mb-2`}

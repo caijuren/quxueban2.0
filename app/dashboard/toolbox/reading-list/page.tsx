@@ -1,8 +1,9 @@
 'use client';
+import { Icon } from '@/components/ui/icon';
 
 import { useEffect, useMemo, useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
-import { BookOpen, Search, X, Check, Library } from 'lucide-react';
+
 import { useQuery } from '@tanstack/react-query';
 import { apiGet } from '@/lib/apiClient';
 import { useChildren } from '@/components/dashboard/ChildrenContext';
@@ -118,7 +119,7 @@ export default function ReadingListPage() {
       >
         <div className="flex items-center gap-3">
           <div className="bg-secondary/10 border-secondary/20 flex size-10 items-center justify-center rounded-xl border">
-            <Library className="size-5 text-secondary" />
+            <Icon name="Library" size="md" className="text-secondary" />
           </div>
           <div>
             <h1 className="font-display text-2xl font-bold text-text-primary sm:text-3xl">
@@ -130,7 +131,7 @@ export default function ReadingListPage() {
         <div className="flex items-center gap-2">
           {data && (
             <div className="flex items-center gap-2 rounded-xl border border-border-default bg-surface px-3 py-1.5 text-xs text-text-tertiary">
-              <BookOpen className="size-3.5 text-secondary" />
+              <Icon name="BookOpen" size="xs" className="text-secondary" />
               <span>
                 共 <span className="font-medium text-text-secondary">{data.total}</span> 本
               </span>
@@ -147,7 +148,11 @@ export default function ReadingListPage() {
       >
         <div className="flex flex-col gap-3 sm:flex-row">
           <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-text-muted" />
+            <Icon
+              name="Search"
+              size="sm"
+              className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted"
+            />
             <input
               type="text"
               value={keyword}
@@ -161,7 +166,7 @@ export default function ReadingListPage() {
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-text-muted hover:text-text-secondary"
                 aria-label="清空搜索"
               >
-                <X className="size-4" />
+                <Icon name="X" size="sm" />
               </button>
             )}
           </div>
@@ -211,13 +216,13 @@ export default function ReadingListPage() {
         </div>
       ) : error ? (
         <EmptyState
-          icon={BookOpen}
+          icon="BookOpen"
           title="加载失败"
           description={error instanceof Error ? error.message : '无法加载书单'}
         />
       ) : filteredBooks.length === 0 ? (
         <EmptyState
-          icon={BookOpen}
+          icon="BookOpen"
           title="没有找到相关书籍"
           description="尝试调整筛选条件或搜索关键词"
           action={{
@@ -255,7 +260,11 @@ export default function ReadingListPage() {
                     }`}
                     aria-label={isRead ? '标记为未读' : '标记为已读'}
                   >
-                    <Check className={`size-4 ${isRead ? 'opacity-100' : 'opacity-50'}`} />
+                    <Icon
+                      name="Check"
+                      size="md"
+                      className={`size-4 ${isRead ? 'opacity-100' : 'opacity-50'}`}
+                    />
                   </button>
                 </div>
 
@@ -295,7 +304,7 @@ export default function ReadingListPage() {
 
                 {isRead && (
                   <div className="mt-3 flex items-center gap-1 text-xs text-success">
-                    <Check className="size-3.5" />
+                    <Icon name="Check" size="xs" />
                     已读
                   </div>
                 )}

@@ -1,17 +1,6 @@
 'use client';
+import { Icon, type IconName } from '@/components/ui/icon';
 
-import {
-  ExternalLink,
-  BookOpen,
-  Star,
-  Package,
-  Calendar,
-  User,
-  Target,
-  FileText,
-  Lightbulb,
-  Layers,
-} from 'lucide-react';
 import Modal from '@/components/ui/Modal';
 import { useBookDetail } from '@/lib/hooks/useBooks';
 import EmptyState from '@/components/ui/EmptyState';
@@ -23,11 +12,11 @@ interface BookDetailModalProps {
 }
 
 function Section({
-  icon: Icon,
+  icon,
   title,
   children,
 }: {
-  icon: React.ElementType;
+  icon: IconName;
   title: string;
   children: React.ReactNode;
 }) {
@@ -35,7 +24,7 @@ function Section({
   return (
     <div className="space-y-2">
       <div className="flex items-center gap-2 text-text-secondary">
-        <Icon className="size-4 text-primary" />
+        <Icon name={icon} size="sm" className="size-4 text-primary" />
         <h4 className="font-display text-sm font-semibold">{title}</h4>
       </div>
       <div className="pl-6 text-sm leading-relaxed text-text-tertiary">{children}</div>
@@ -47,11 +36,11 @@ function DifficultyStars({ difficulty }: { difficulty: number }) {
   return (
     <div className="flex items-center gap-0.5">
       {Array.from({ length: 5 }).map((_, i) => (
-        <Star
+        <Icon
+          name="Star"
+          size="md"
           key={i}
-          className={`size-4 ${
-            i < difficulty ? 'fill-warning text-warning' : 'text-text-muted/30'
-          }`}
+          className={`size-4 ${i < difficulty ? 'fill-warning text-warning' : 'text-text-muted/30'}`}
         />
       ))}
     </div>
@@ -76,7 +65,7 @@ function PurchaseLink({
     >
       <div className="flex items-center gap-2.5">
         <div className="bg-primary/10 flex size-8 items-center justify-center rounded-lg">
-          <Package className="size-4 text-primary" />
+          <Icon name="Package" size="sm" className="text-primary" />
         </div>
         <div>
           <p className="text-sm font-medium text-text-secondary transition-colors group-hover:text-text-primary">
@@ -85,7 +74,11 @@ function PurchaseLink({
           <p className="text-2xs text-text-muted">{platform}</p>
         </div>
       </div>
-      <ExternalLink className="size-4 text-text-muted transition-colors group-hover:text-primary" />
+      <Icon
+        name="ExternalLink"
+        size="sm"
+        className="text-text-muted transition-colors group-hover:text-primary"
+      />
     </a>
   );
 }
@@ -99,7 +92,7 @@ export default function BookDetailModal({ bookId, isOpen, onClose }: BookDetailM
       onClose={onClose}
       title={book?.title ?? '教辅详情'}
       subtitle={book ? `${book.publisher.name} · ${book.grade}` : undefined}
-      icon={BookOpen}
+      icon="BookOpen"
       size="lg"
       colorScheme="accent"
     >
@@ -111,7 +104,7 @@ export default function BookDetailModal({ bookId, isOpen, onClose }: BookDetailM
 
       {error && (
         <EmptyState
-          icon={BookOpen}
+          icon="BookOpen"
           title="加载失败"
           description={error instanceof Error ? error.message : '无法加载教辅详情'}
         />
@@ -181,19 +174,19 @@ export default function BookDetailModal({ bookId, isOpen, onClose }: BookDetailM
             </div>
           ) : null}
 
-          <Section icon={Lightbulb} title="核心卖点">
+          <Section icon="Lightbulb" title="核心卖点">
             {book.sellingPoints}
           </Section>
 
-          <Section icon={Layers} title="结构说明">
+          <Section icon="Layers" title="结构说明">
             {book.structureDesc}
           </Section>
 
-          <Section icon={Target} title="适合人群">
+          <Section icon="Target" title="适合人群">
             {book.targetAudience}
           </Section>
 
-          <Section icon={FileText} title="配套建议">
+          <Section icon="FileText" title="配套建议">
             {book.companionSuggestion}
           </Section>
 
@@ -201,7 +194,7 @@ export default function BookDetailModal({ bookId, isOpen, onClose }: BookDetailM
           {(book.jdUrl || book.dangdangUrl || book.officialUrl) && (
             <div className="space-y-2">
               <div className="flex items-center gap-2 text-text-secondary">
-                <Calendar className="size-4 text-primary" />
+                <Icon name="Calendar" size="sm" className="text-primary" />
                 <h4 className="font-display text-sm font-semibold">购买渠道</h4>
               </div>
               <div className="grid grid-cols-1 gap-2 pl-6 sm:grid-cols-2">

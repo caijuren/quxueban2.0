@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { X } from 'lucide-react';
+import { Icon } from '@/components/ui/icon';
 import { LearningGoal } from '@/lib/types';
 import { LearningGoalCreateInput } from '@/lib/validation';
 
@@ -70,7 +70,7 @@ export default function GoalForm({ initial, onSubmit, onCancel, isLoading }: Goa
             onClick={onCancel}
             className="flex size-8 items-center justify-center rounded-lg bg-surface-hover text-text-muted transition-colors hover:text-text-secondary"
           >
-            <X className="size-4" />
+            <Icon name="X" size="sm" />
           </button>
         </div>
 

@@ -1,6 +1,5 @@
 'use client';
 
-import { Languages } from 'lucide-react';
 import SubjectPlanConfigEditor from '@/components/subjects/SubjectPlanConfigEditor';
 import { useChildren } from '@/components/dashboard/ChildrenContext';
 
@@ -14,7 +13,7 @@ export default function EnglishPlanConfigPage() {
       subtitle="通过表单调整 3 条线、节点、阶段目标和赛事"
       backHref="/dashboard/subjects/english"
       backLabel="返回英语学科路径"
-      headerIcon={Languages}
+      headerIcon="Languages"
       childId={currentChild?.id}
       description={
         <div>

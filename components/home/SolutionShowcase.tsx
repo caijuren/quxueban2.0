@@ -1,15 +1,15 @@
 'use client';
 
-import { Check, Route, Calendar, LineChart, Brain } from 'lucide-react';
+import { Icon } from '@/components/ui/icon';
 import CommandCard from '@/components/ui/CommandCard';
 import MotionSection from '@/components/ui/MotionSection';
 
 const steps = [
-  { icon: Route, text: '选定主路线 + 备选路线' },
-  { icon: Calendar, text: '按时间节点拆解任务' },
-  { icon: LineChart, text: '持续追踪执行进度' },
-  { icon: Brain, text: 'AI 诊断并动态调整' },
-];
+  { icon: 'Route', text: '选定主路线 + 备选路线' },
+  { icon: 'Calendar', text: '按时间节点拆解任务' },
+  { icon: 'LineChart', text: '持续追踪执行进度' },
+  { icon: 'Brain', text: 'AI 诊断并动态调整' },
+] as const;
 
 export default function SolutionShowcase() {
   return (
@@ -91,14 +91,14 @@ export default function SolutionShowcase() {
                   className="hover:border-primary/20 flex items-center gap-4 rounded-xl border border-border-subtle bg-surface p-4 transition-all duration-200 hover:bg-surface-hover"
                 >
                   <div className="bg-primary/10 flex size-9 shrink-0 items-center justify-center rounded-lg">
-                    <step.icon className="size-4 text-primary" aria-hidden="true" />
+                    <Icon name={step.icon} size="sm" className="text-primary" aria-hidden="true" />
                   </div>
                   <div className="flex-1">
                     <h3 className="font-display text-sm font-bold text-text-primary">
                       {step.text}
                     </h3>
                   </div>
-                  <Check className="size-4 text-text-muted" aria-hidden="true" />
+                  <Icon name="Check" size="sm" className="text-text-muted" aria-hidden="true" />
                 </MotionSection>
               ))}
             </div>

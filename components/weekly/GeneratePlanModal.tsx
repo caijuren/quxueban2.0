@@ -2,24 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
-import {
-  Calendar,
-  ChevronRight,
-  ChevronLeft,
-  CheckCircle2,
-  Search,
-  Filter,
-  Send,
-  BookOpen,
-  Backpack,
-  Dumbbell,
-  Palette,
-  GraduationCap,
-  Trophy,
-  Trash2,
-  Loader2,
-  AlertTriangle,
-} from 'lucide-react';
+import { Icon, type IconName } from '@/components/ui/icon';
 import { useChildren } from '@/components/dashboard/ChildrenContext';
 import Modal from '@/components/ui/Modal';
 import {
@@ -45,13 +28,13 @@ import { getCategoryColorClass } from '@/lib/taskAlignment';
 
 type Step = 'week' | 'tasks' | 'preview';
 
-const categoryIcons: Record<TaskCategory, typeof BookOpen> = {
-  school: Backpack,
-  reading: BookOpen,
-  sport: Dumbbell,
-  interest: Palette,
-  ability: Trophy,
-  other: GraduationCap,
+const categoryIcons: Record<TaskCategory, IconName> = {
+  school: 'Backpack',
+  reading: 'BookOpen',
+  sport: 'Dumbbell',
+  interest: 'Palette',
+  ability: 'Trophy',
+  other: 'GraduationCap',
 };
 
 const allCategories: TaskCategory[] = [
@@ -250,7 +233,7 @@ export default function GeneratePlanModal({
       onClose={onClose}
       title="生成本周计划"
       subtitle={subtitle}
-      icon={Calendar}
+      icon="Calendar"
       iconClassName="bg-primary"
       size="xl"
       footer={
@@ -265,7 +248,7 @@ export default function GeneratePlanModal({
                 onClick={handleBack}
                 className="flex items-center gap-1.5 rounded-lg px-4 py-2 text-text-tertiary transition-colors hover:bg-surface-hover hover:text-text-secondary"
               >
-                <ChevronLeft className="size-5" />
+                <Icon name="ChevronLeft" size="md" />
                 上一步
               </button>
             )}
@@ -273,21 +256,21 @@ export default function GeneratePlanModal({
               <button
                 onClick={handleNext}
                 disabled={!canNext}
-                className="flex items-center gap-1.5 rounded-lg bg-primary px-6 py-2 font-medium text-inverse transition-colors hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50"
+                className="hover:bg-primary/90 flex items-center gap-1.5 rounded-lg bg-primary px-6 py-2 font-medium text-inverse transition-colors disabled:cursor-not-allowed disabled:opacity-50"
               >
                 下一步
-                <ChevronRight className="size-5" />
+                <Icon name="ChevronRight" size="md" />
               </button>
             ) : (
               <button
                 onClick={handlePublish}
                 disabled={publishing || previewTasks.length === 0}
-                className="flex items-center gap-1.5 rounded-lg bg-primary px-6 py-2 font-medium text-inverse transition-colors hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50"
+                className="hover:bg-primary/90 flex items-center gap-1.5 rounded-lg bg-primary px-6 py-2 font-medium text-inverse transition-colors disabled:cursor-not-allowed disabled:opacity-50"
               >
                 {publishing ? (
-                  <Loader2 className="size-5 animate-spin" />
+                  <Icon name="Loader2" size="md" animate="spin" />
                 ) : (
-                  <Send className="size-5" />
+                  <Icon name="Send" size="md" />
                 )}
                 发布
               </button>
@@ -427,7 +410,11 @@ function StepTasks({
     >
       <div className="flex flex-col gap-3 sm:flex-row">
         <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-text-muted" />
+          <Icon
+            name="Search"
+            size="sm"
+            className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted"
+          />
           <input
             type="text"
             value={search}
@@ -437,7 +424,7 @@ function StepTasks({
           />
         </div>
         <div className="flex flex-wrap items-center gap-2">
-          <Filter className="size-4 text-text-muted" />
+          <Icon name="Filter" size="sm" className="text-text-muted" />
           <select
             value={filterCategory}
             onChange={(e) => setFilterCategory(e.target.value as TaskCategory | 'all')}
@@ -473,7 +460,9 @@ function StepTasks({
                 allFilteredSelected ? 'border-primary bg-primary' : 'border-border-default'
               }`}
             >
-              {allFilteredSelected && <CheckCircle2 className="size-3 text-text-primary" />}
+              {allFilteredSelected && (
+                <Icon name="CheckCircle2" size="xs" className="text-text-primary" />
+              )}
             </div>
             全选
           </button>
@@ -488,7 +477,6 @@ function StepTasks({
         <div className="grid max-h-[50vh] grid-cols-1 gap-3 overflow-y-auto pr-1 sm:grid-cols-2 lg:grid-cols-3">
           {templates.map((tpl) => {
             const selected = selectedIds.has(tpl.id);
-            const CategoryIcon = categoryIcons[tpl.category];
             const scheduleDays = getScheduledDays(tpl.weeklySchedule, tpl.customScheduleDays);
             return (
               <button
@@ -506,11 +494,17 @@ function StepTasks({
                       selected ? 'border-primary bg-primary' : 'border-border-default'
                     }`}
                   >
-                    {selected && <CheckCircle2 className="size-3.5 text-text-primary" />}
+                    {selected && (
+                      <Icon name="CheckCircle2" size="xs" className="text-text-primary" />
+                    )}
                   </div>
                   <div className="min-w-0 flex-1">
                     <div className="mb-1 flex flex-wrap items-center gap-1.5">
-                      <CategoryIcon className="size-4 text-text-tertiary" />
+                      <Icon
+                        name={categoryIcons[tpl.category]}
+                        size="sm"
+                        className="text-text-tertiary"
+                      />
                       <span className="text-[10px] text-text-muted">
                         {TASK_CATEGORY_LABELS[tpl.category]}
                       </span>
@@ -580,7 +574,7 @@ function StepPreview({
     >
       {overloadedDays.length > 0 && (
         <div className="border-warning/20 bg-warning/5 flex items-start gap-2 rounded-2xl border p-3">
-          <AlertTriangle className="mt-0.5 size-4 shrink-0 text-warning" />
+          <Icon name="AlertTriangle" size="sm" className="mt-0.5 shrink-0 text-warning" />
           <p className="text-xs text-text-secondary">
             {overloadedDays.join('、')} 任务量超过 3 小时，建议适当减少或调整。
           </p>
@@ -663,14 +657,13 @@ interface PreviewTaskCardProps {
 }
 
 function PreviewTaskCard({ task, onMove, onRemove }: PreviewTaskCardProps) {
-  const CategoryIcon = categoryIcons[task.category];
   return (
     <div className="bg-surface-hover/40 group rounded-lg border border-border-subtle p-2 transition-colors hover:bg-surface-hover">
       <div className="flex items-start gap-2">
         <div
           className={`flex size-6 shrink-0 items-center justify-center rounded-lg ${getCategoryColorClass(task.category)}`}
         >
-          <CategoryIcon className="size-4" />
+          <Icon name={categoryIcons[task.category]} size="sm" />
         </div>
         <div className="min-w-0 flex-1">
           <p className="truncate text-xs font-medium text-text-secondary">{task.focus}</p>
@@ -681,7 +674,7 @@ function PreviewTaskCard({ task, onMove, onRemove }: PreviewTaskCardProps) {
           className="hover:bg-error/10 rounded-lg p-1 text-text-tertiary opacity-0 transition-opacity hover:text-error group-hover:opacity-100"
           aria-label="删除"
         >
-          <Trash2 className="size-4" />
+          <Icon name="Trash2" size="sm" />
         </button>
       </div>
       <div className="mt-2 flex items-center gap-2">

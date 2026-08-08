@@ -1,8 +1,9 @@
 'use client';
+import { Icon } from '@/components/ui/icon';
 
 import { useEffect, useMemo, useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
-import { BookOpen, Search, X, RotateCcw, Library } from 'lucide-react';
+
 import { useChildren } from '@/components/dashboard/ChildrenContext';
 import { useBooks, useBookFilters } from '@/lib/hooks/useBooks';
 import EmptyState from '@/components/ui/EmptyState';
@@ -113,7 +114,7 @@ export default function TeachingAidsPage() {
       >
         <div className="flex items-center gap-3">
           <div className="bg-secondary/10 border-secondary/20 flex size-10 items-center justify-center rounded-xl border">
-            <Library className="size-5 text-secondary" />
+            <Icon name="Library" size="md" className="text-secondary" />
           </div>
           <div>
             <h1 className="font-display text-2xl font-bold text-text-primary sm:text-3xl">
@@ -125,7 +126,7 @@ export default function TeachingAidsPage() {
         <div className="flex items-center gap-2">
           {booksData && (
             <div className="flex items-center gap-2 rounded-xl border border-border-default bg-surface px-3 py-1.5 text-xs text-text-tertiary">
-              <BookOpen className="size-3.5 text-secondary" />
+              <Icon name="BookOpen" size="xs" className="text-secondary" />
               <span>
                 共 <span className="font-medium text-text-secondary">{booksData.total}</span> 本
               </span>
@@ -142,9 +143,13 @@ export default function TeachingAidsPage() {
         className="space-y-4 rounded-2xl border border-border-default bg-surface-elevated p-4 sm:p-5"
       >
         <div className="flex flex-col gap-3 sm:flex-row">
-          {/* Search */}
+          {/* "Search" */}
           <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-text-muted" />
+            <Icon
+              name="Search"
+              size="sm"
+              className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted"
+            />
             <input
               type="text"
               value={keyword}
@@ -158,7 +163,7 @@ export default function TeachingAidsPage() {
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-text-muted hover:text-text-secondary"
                 aria-label="清空搜索"
               >
-                <X className="size-4" />
+                <Icon name="X" size="sm" />
               </button>
             )}
           </div>
@@ -168,7 +173,7 @@ export default function TeachingAidsPage() {
               onClick={clearFilters}
               className="flex h-10 shrink-0 items-center justify-center gap-1.5 rounded-xl border border-border-default px-4 text-sm text-text-tertiary transition-all hover:border-border-strong hover:bg-surface hover:text-text-secondary"
             >
-              <RotateCcw className="size-4" />
+              <Icon name="RotateCcw" size="sm" />
               清除筛选
               {activeFiltersCount > 0 && (
                 <span className="bg-primary/10 ml-1 rounded-full px-1.5 py-0.5 text-2xs text-primary">
@@ -234,13 +239,13 @@ export default function TeachingAidsPage() {
         </div>
       ) : error ? (
         <EmptyState
-          icon={BookOpen}
+          icon="BookOpen"
           title="加载失败"
           description={error instanceof Error ? error.message : '无法加载教辅列表'}
         />
       ) : booksData?.books.length === 0 ? (
         <EmptyState
-          icon={BookOpen}
+          icon="BookOpen"
           title="没有找到相关教辅"
           description="尝试调整筛选条件或搜索关键词"
           action={{

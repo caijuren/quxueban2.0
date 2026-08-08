@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Plus, Target, School, GraduationCap, Home, Globe, Layers, Scale } from 'lucide-react';
+
 import Modal from '@/components/ui/Modal';
 import type { RoutePlan } from '@/lib/plans';
 
@@ -12,12 +12,12 @@ interface NewPlanModalProps {
 }
 
 const targetPresets = [
-  { icon: School, color: 'from-primary to-primary-glow', shadow: '' },
-  { icon: GraduationCap, color: 'from-secondary to-purple-400', shadow: '' },
-  { icon: Home, color: 'from-accent to-cyan-400', shadow: '' },
-  { icon: Globe, color: 'from-secondary to-secondary-glow', shadow: '' },
-  { icon: Layers, color: 'from-indigo-500 to-purple-500', shadow: '' },
-  { icon: Scale, color: 'from-accent to-accent-glow', shadow: '' },
+  { icon: 'School', color: 'from-primary to-primary-glow', shadow: '' },
+  { icon: 'GraduationCap', color: 'from-secondary to-purple-400', shadow: '' },
+  { icon: 'Home', color: 'from-accent to-cyan-400', shadow: '' },
+  { icon: 'Globe', color: 'from-secondary to-secondary-glow', shadow: '' },
+  { icon: 'Layers', color: 'from-indigo-500 to-purple-500', shadow: '' },
+  { icon: 'Scale', color: 'from-accent to-accent-glow', shadow: '' },
 ];
 
 export default function NewPlanModal({ isOpen, onClose, onCreate }: NewPlanModalProps) {
@@ -74,7 +74,7 @@ export default function NewPlanModal({ isOpen, onClose, onCreate }: NewPlanModal
             slug: `custom-${Date.now()}-default`,
             name: '自定义目标',
             tag: '请完善',
-            icon: School,
+            icon: 'School',
             color: 'from-slate-500 to-slate-400' as const,
             shadow: '' as const,
           },
@@ -111,7 +111,7 @@ export default function NewPlanModal({ isOpen, onClose, onCreate }: NewPlanModal
       onClose={onClose}
       title="新建方案"
       subtitle="添加一条自定义升学路线"
-      icon={Plus}
+      icon="Plus"
       iconClassName="bg-secondary"
       size="md"
       colorScheme="rose"

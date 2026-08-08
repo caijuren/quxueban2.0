@@ -1,15 +1,15 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Star, Trophy, Flame, Zap, Medal, LucideIcon, Loader2 } from 'lucide-react';
+import { Icon, type IconName } from '@/components/ui/icon';
 import { useGamification } from '@/lib/hooks/useGamification';
 
-const ICON_MAP: Record<string, LucideIcon> = {
-  Star,
-  Trophy,
-  Flame,
-  Zap,
-  Medal,
+const ICON_MAP: Record<string, IconName> = {
+  Star: 'Star',
+  Trophy: 'Trophy',
+  Flame: 'Flame',
+  Zap: 'Zap',
+  Medal: 'Medal',
 };
 
 interface BadgeShowcaseProps {
@@ -22,7 +22,7 @@ export default function BadgeShowcase({ childId }: BadgeShowcaseProps) {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center py-12">
-        <Loader2 className="size-6 animate-spin text-primary" />
+        <Icon name="Loader2" size="lg" animate="spin" className="text-primary" />
       </div>
     );
   }
@@ -56,7 +56,7 @@ export default function BadgeShowcase({ childId }: BadgeShowcaseProps) {
       ) : (
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4">
           {badges.map((badge, index) => {
-            const Icon = ICON_MAP[badge.icon ?? ''] ?? Star;
+            const badgeIcon = ICON_MAP[badge.icon ?? ''] ?? 'Star';
             return (
               <motion.div
                 key={badge.id}
@@ -72,7 +72,7 @@ export default function BadgeShowcase({ childId }: BadgeShowcaseProps) {
                     color: badge.color ?? 'var(--warning)',
                   }}
                 >
-                  <Icon className="size-6" />
+                  <Icon name={badgeIcon} size="lg" />
                 </div>
                 <p className="truncate text-sm font-semibold text-text-primary">{badge.name}</p>
                 <p className="mt-0.5 line-clamp-2 text-[10px] text-text-muted">

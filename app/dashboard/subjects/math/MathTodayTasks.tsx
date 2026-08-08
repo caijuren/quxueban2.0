@@ -1,30 +1,17 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import {
-  Calendar,
-  CheckCircle2,
-  Clock,
-  BookOpen,
-  Calculator,
-  FunctionSquare,
-  Award,
-  ClipboardList,
-  Gamepad2,
-  Shapes,
-  Sparkles,
-  HelpCircle,
-} from 'lucide-react';
+import { Icon } from '@/components/ui/icon';
 import { getMathPlanByGrade, type WeeklyTask } from '@/lib/subjects/math';
 
 const dayNames = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
 
 function getSkillIcon(focus: string) {
-  if (focus.includes('计算')) return Calculator;
+  if (focus.includes('计算')) return 'Calculator';
   if (focus.includes('奥数') || focus.includes('模块') || focus.includes('AMC8 知识点'))
-    return FunctionSquare;
-  if (focus.includes('校内')) return BookOpen;
-  if (focus.includes('应用题')) return HelpCircle;
+    return 'FunctionSquare';
+  if (focus.includes('校内')) return 'BookOpen';
+  if (focus.includes('应用题')) return 'HelpCircle';
   if (
     focus.includes('袋鼠') ||
     focus.includes('澳洲 AMC') ||
@@ -37,12 +24,12 @@ function getSkillIcon(focus: string) {
     focus.includes('AMC8 高频') ||
     focus.includes('AMC8 专题')
   )
-    return Award;
-  if (focus.includes('错题') || focus.includes('复习')) return ClipboardList;
-  if (focus.includes('游戏')) return Gamepad2;
-  if (focus.includes('图形')) return Shapes;
-  if (focus.includes('趣味')) return Sparkles;
-  return Calculator;
+    return 'Award';
+  if (focus.includes('错题') || focus.includes('复习')) return 'ClipboardList';
+  if (focus.includes('游戏')) return 'Gamepad2';
+  if (focus.includes('图形')) return 'Shapes';
+  if (focus.includes('趣味')) return 'Sparkles';
+  return 'Calculator';
 }
 
 export default function MathTodayTasks({ grade }: { grade: number }) {
@@ -53,7 +40,7 @@ export default function MathTodayTasks({ grade }: { grade: number }) {
 
   if (!todayTask) return null;
 
-  const SkillIcon = getSkillIcon(todayTask.focus);
+  const skillIconName = getSkillIcon(todayTask.focus);
 
   return (
     <motion.div
@@ -89,8 +76,10 @@ export default function MathTodayTasks({ grade }: { grade: number }) {
                 boxShadow: '0 0 20px rgba(59,130,246,0.3)',
               }}
             >
-              <Calendar
-                className="size-6 text-blue-400"
+              <Icon
+                name="Calendar"
+                size="lg"
+                className="text-blue-400"
                 style={{ filter: 'drop-shadow(0 0 8px rgba(59,130,246,0.8))' }}
               />
             </div>
@@ -102,7 +91,7 @@ export default function MathTodayTasks({ grade }: { grade: number }) {
             </div>
           </div>
           <div className="flex items-center gap-2 rounded-lg border border-border-default bg-surface-elevated px-3 py-1.5">
-            <Clock className="size-4 text-text-tertiary" />
+            <Icon name="Clock" size="sm" className="text-text-tertiary" />
             <span className="text-sm text-text-secondary">{todayTask.duration}</span>
           </div>
         </div>
@@ -112,7 +101,7 @@ export default function MathTodayTasks({ grade }: { grade: number }) {
           <div className="rounded-xl border border-border-default bg-surface-elevated p-5 lg:col-span-2">
             <div className="flex items-start gap-4">
               <div className="flex size-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-blue-500 to-violet-500">
-                <SkillIcon className="size-6 text-text-primary" />
+                <Icon name={skillIconName} size="lg" className="text-text-primary" />
               </div>
               <div className="flex-1">
                 <p className="mb-2 text-lg font-bold text-text-secondary">{todayTask.focus}</p>
@@ -136,7 +125,7 @@ export default function MathTodayTasks({ grade }: { grade: number }) {
           {/* Quick checklist */}
           <div className="rounded-xl border border-border-default bg-surface-elevated p-5">
             <p className="mb-3 flex items-center gap-2 text-sm font-medium text-text-secondary">
-              <CheckCircle2 className="size-4 text-success" />
+              <Icon name="CheckCircle2" size="sm" className="text-success" />
               完成检查
             </p>
             <div className="space-y-2">

@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { BarChart3 } from 'lucide-react';
+import { Icon } from '@/components/ui/icon';
 
 const subjects = [
   { name: '数学', progress: 72, color: 'primary' as const },
@@ -28,7 +28,7 @@ export default function DashboardVisual() {
     <div className="rounded-2xl border border-border-subtle bg-surface-elevated p-5">
       <div className="mb-5 flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <BarChart3 className="size-4 text-primary" aria-hidden="true" />
+          <Icon name="BarChart3" size="sm" className="text-primary" aria-hidden="true" />
           <span className="font-mono text-[11px] uppercase tracking-wider text-text-tertiary">
             实时进度总览
           </span>

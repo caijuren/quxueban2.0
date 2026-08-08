@@ -1,10 +1,10 @@
 'use client';
 
-import { ChevronRight, LucideIcon } from 'lucide-react';
 import Link from 'next/link';
+import { Icon, type IconName } from '@/components/ui/icon';
 
 interface SettingRowProps {
-  icon?: LucideIcon;
+  icon?: IconName;
   label: string;
   value?: string;
   description?: string;
@@ -14,7 +14,7 @@ interface SettingRowProps {
 }
 
 export default function SettingRow({
-  icon: Icon,
+  icon,
   label,
   value,
   description,
@@ -22,14 +22,20 @@ export default function SettingRow({
   onClick,
   variant = 'default',
 }: SettingRowProps) {
+  const iconNode = icon ? (
+    <Icon
+      name={icon}
+      size="sm"
+      className={variant === 'warning' ? 'text-warning' : 'text-text-tertiary'}
+    />
+  ) : null;
+
   const content = (
     <>
       <div className="flex min-w-0 items-center gap-3">
-        {Icon && (
+        {iconNode && (
           <div className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-surface-hover">
-            <Icon
-              className={`size-4 ${variant === 'warning' ? 'text-warning' : 'text-text-tertiary'}`}
-            />
+            {iconNode}
           </div>
         )}
         <div className="min-w-0">
@@ -43,7 +49,7 @@ export default function SettingRow({
       </div>
       <div className="flex shrink-0 items-center gap-2">
         {value && <span className="text-xs text-text-tertiary">{value}</span>}
-        <ChevronRight className="size-4 text-text-muted" />
+        <Icon name="ChevronRight" size="sm" className="text-text-muted" />
       </div>
     </>
   );

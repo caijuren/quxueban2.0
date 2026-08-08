@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { BookOpen, CheckCircle2 } from 'lucide-react';
+import { Icon } from '@/components/ui/icon';
 import { englishResources, englishCheckpoints } from '@/lib/subjects/english';
 
 export default function ResourceList() {
@@ -14,7 +14,7 @@ export default function ResourceList() {
         className="rounded-2xl border border-border-subtle bg-surface-elevated p-6"
       >
         <h2 className="mb-6 flex items-center gap-2 font-display text-xl font-bold">
-          <BookOpen className="size-5 text-accent" />
+          <Icon name="BookOpen" size="md" className="text-accent" />
           已有资源清单
         </h2>
         <div className="space-y-3">
@@ -45,7 +45,7 @@ export default function ResourceList() {
         className="rounded-2xl border border-border-subtle bg-surface-elevated p-6"
       >
         <h2 className="mb-6 flex items-center gap-2 font-display text-xl font-bold">
-          <CheckCircle2 className="size-5 text-success" />
+          <Icon name="CheckCircle2" size="md" className="text-success" />
           关键检查点
         </h2>
         <div className="space-y-3">

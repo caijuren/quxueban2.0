@@ -1,8 +1,9 @@
 'use client';
+import { Icon } from '@/components/ui/icon';
 
 import { useMemo } from 'react';
 import { motion } from 'framer-motion';
-import { CheckSquare, Square, Target } from 'lucide-react';
+
 import {
   type WeeklyGoal,
   type WeeklyTaskItem,
@@ -134,7 +135,7 @@ export default function WeeklyGoalTable({ goals, tasks, onChange }: WeeklyGoalTa
         className="rounded-2xl border border-border-subtle bg-surface-elevated p-8 text-center"
       >
         <div className="bg-primary/10 mx-auto mb-3 flex size-12 items-center justify-center rounded-xl">
-          <Target className="size-6 text-primary" />
+          <Icon name="Target" size="lg" className="text-primary" />
         </div>
         <h3 className="mb-1 text-base font-bold text-text-primary">暂无本周目标</h3>
         <p className="text-sm text-text-muted">
@@ -214,9 +215,9 @@ export default function WeeklyGoalTable({ goals, tasks, onChange }: WeeklyGoalTa
                         className="inline-flex items-center justify-center rounded-lg p-1 transition-colors hover:bg-surface-hover"
                       >
                         {row.done ? (
-                          <CheckSquare className="size-5 text-success" />
+                          <Icon name="CheckSquare" size="md" className="text-success" />
                         ) : (
-                          <Square className="size-5 text-text-tertiary" />
+                          <Icon name="Square" size="md" className="text-text-tertiary" />
                         )}
                       </button>
                     ) : (

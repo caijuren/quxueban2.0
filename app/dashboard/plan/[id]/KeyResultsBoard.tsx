@@ -1,7 +1,8 @@
 'use client';
+import { Icon } from '@/components/ui/icon';
 
 import { motion } from 'framer-motion';
-import { Flag, AlertTriangle, CheckCircle2, Clock, CircleDashed } from 'lucide-react';
+
 import type { KeyResultNode } from '@/lib/plans';
 
 interface KeyResultsBoardProps {
@@ -10,7 +11,7 @@ interface KeyResultsBoardProps {
 
 const statusConfig = {
   completed: {
-    icon: CheckCircle2,
+    icon: 'CheckCircle2',
     label: '已完成',
     bg: 'bg-success/10',
     border: 'border-success/30',
@@ -18,7 +19,7 @@ const statusConfig = {
     dot: 'bg-success',
   },
   'in-progress': {
-    icon: Clock,
+    icon: 'Clock',
     label: '进行中',
     bg: 'bg-primary/10',
     border: 'border-primary/30',
@@ -26,7 +27,7 @@ const statusConfig = {
     dot: 'bg-primary',
   },
   pending: {
-    icon: CircleDashed,
+    icon: 'CircleDashed',
     label: '待开始',
     bg: 'bg-surface-elevated',
     border: 'border-border-default',
@@ -34,7 +35,7 @@ const statusConfig = {
     dot: 'bg-text-muted',
   },
   'at-risk': {
-    icon: AlertTriangle,
+    icon: 'AlertTriangle',
     label: '有风险',
     bg: 'bg-warning/10',
     border: 'border-warning/30',
@@ -52,7 +53,7 @@ export default function KeyResultsBoard({ nodes }: KeyResultsBoardProps) {
       className="rounded-2xl border border-border-subtle bg-surface-elevated p-6"
     >
       <h2 className="mb-6 flex items-center gap-2 font-display text-xl font-bold">
-        <Flag className="size-5 text-primary" />
+        <Icon name="Flag" size="md" className="text-primary" />
         关键结果看板
       </h2>
 
@@ -61,7 +62,6 @@ export default function KeyResultsBoard({ nodes }: KeyResultsBoardProps) {
         <div className="space-y-4">
           {nodes.map((node, index) => {
             const status = statusConfig[node.status];
-            const StatusIcon = status.icon;
             const isFinal = index === nodes.length - 1;
 
             return (
@@ -81,7 +81,7 @@ export default function KeyResultsBoard({ nodes }: KeyResultsBoardProps) {
                     <span
                       className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium ${status.bg} ${status.text} border ${status.border}`}
                     >
-                      <StatusIcon className="size-3" />
+                      <Icon name={status.icon} size="xs" className="size-3" />
                       {status.label}
                     </span>
                   </div>
@@ -89,7 +89,11 @@ export default function KeyResultsBoard({ nodes }: KeyResultsBoardProps) {
                   <p className="mb-2 text-sm text-text-secondary">{node.result}</p>
                   {node.fallbackSignal && (
                     <p className="flex items-start gap-1 text-xs text-text-muted">
-                      <AlertTriangle className="mt-0.5 size-3 shrink-0 text-warning" />
+                      <Icon
+                        name="AlertTriangle"
+                        size="xs"
+                        className="mt-0.5 shrink-0 text-warning"
+                      />
                       {node.fallbackSignal}
                     </p>
                   )}

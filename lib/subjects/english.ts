@@ -1,9 +1,11 @@
-import { Languages, BookOpen, Target, Award, Layers, Clock } from 'lucide-react';
+
+
+import type { IconName } from '@/components/ui/icon';
 
 export interface EnglishTrack {
   id: string;
   name: string;
-  icon: typeof Languages;
+  icon: IconName;
   color: string;
   description: string;
 }
@@ -51,21 +53,21 @@ export const englishTracks: EnglishTrack[] = [
   {
     id: 'raz',
     name: 'RAZ 阅读线',
-    icon: BookOpen,
+    icon: 'BookOpen',
     color: 'from-success to-accent',
     description: '分级阅读建立阅读量和阅读速度',
   },
   {
     id: 'od',
     name: 'OD 体系线',
-    icon: Layers,
+    icon: 'Layers',
     color: 'from-secondary to-secondary-glow',
     description: '系统语法、写作和综合输入输出',
   },
   {
     id: 'exam',
     name: '考证线',
-    icon: Award,
+    icon: 'Award',
     color: 'from-warning to-warning/70',
     description: 'KET → PET → 小托福，三公硬通货',
   },

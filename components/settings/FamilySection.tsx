@@ -2,22 +2,7 @@
 
 import Image from 'next/image';
 import { useState } from 'react';
-import {
-  Users,
-  Plus,
-  Loader2,
-  UserPlus,
-  Shield,
-  User,
-  Eye,
-  X,
-  Check,
-  Crown,
-  AlertCircle,
-  LogOut,
-  Trash2,
-  Copy,
-} from 'lucide-react';
+import { Icon, type IconName } from '@/components/ui/icon';
 import SettingsSection from './SettingsSection';
 import {
   useFamily,
@@ -39,11 +24,11 @@ const ROLE_LABELS: Record<FamilyMemberRole, string> = {
   VIEWER: '仅查看',
 };
 
-const ROLE_ICONS: Record<FamilyMemberRole, typeof User> = {
-  OWNER: Crown,
-  ADMIN: Shield,
-  MEMBER: User,
-  VIEWER: Eye,
+const ROLE_ICONS: Record<FamilyMemberRole, IconName> = {
+  OWNER: 'Crown',
+  ADMIN: 'Shield',
+  MEMBER: 'User',
+  VIEWER: 'Eye',
 };
 
 const ROLE_OPTIONS: {
@@ -230,7 +215,7 @@ export default function FamilySection() {
     return (
       <SettingsSection title="家庭成员与权限" description="管理家庭成员和访问权限">
         <div className="flex items-center justify-center py-12 text-text-muted">
-          <Loader2 className="mr-2 size-5 animate-spin" />
+          <Icon name="Loader2" size="md" animate="spin" className="mr-2" />
           加载中...
         </div>
       </SettingsSection>
@@ -241,7 +226,7 @@ export default function FamilySection() {
     return (
       <SettingsSection title="家庭成员与权限" description="管理家庭成员和访问权限">
         <div className="flex items-center gap-2 text-sm text-error">
-          <AlertCircle className="size-4" />
+          <Icon name="AlertCircle" size="sm" />
           {error.message}
         </div>
       </SettingsSection>
@@ -264,7 +249,7 @@ export default function FamilySection() {
           </div>
           {actionError && (
             <div className="flex items-center gap-2 text-xs text-error">
-              <AlertCircle className="size-3.5" />
+              <Icon name="AlertCircle" size="sm" />
               {actionError}
             </div>
           )}
@@ -274,9 +259,9 @@ export default function FamilySection() {
             className="inline-flex items-center gap-1.5 rounded-lg bg-primary px-4 py-2 text-xs font-medium text-text-primary transition-all hover:opacity-90 disabled:opacity-50"
           >
             {createFamily.isPending ? (
-              <Loader2 className="size-3.5 animate-spin" />
+              <Icon name="Loader2" size="sm" animate="spin" />
             ) : (
-              <Users className="size-3.5" />
+              <Icon name="Users" size="sm" />
             )}
             创建家庭
           </button>
@@ -293,7 +278,7 @@ export default function FamilySection() {
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="bg-primary/10 flex size-10 items-center justify-center rounded-xl">
-              <Users className="size-5 text-primary" />
+              <Icon name="Users" size="md" className="text-primary" />
             </div>
             <div>
               <h3 className="text-sm font-bold text-text-primary">{family.name}</h3>
@@ -311,9 +296,9 @@ export default function FamilySection() {
               className="bg-error/10 hover:bg-error/20 inline-flex items-center gap-1 rounded-lg px-3 py-1.5 text-xs text-error transition-colors disabled:opacity-50"
             >
               {deleteFamily.isPending ? (
-                <Loader2 className="size-3.5 animate-spin" />
+                <Icon name="Loader2" size="sm" animate="spin" />
               ) : (
-                <Trash2 className="size-3.5" />
+                <Icon name="Trash2" size="sm" />
               )}
               解散家庭
             </button>
@@ -325,7 +310,7 @@ export default function FamilySection() {
         <div className="space-y-3">
           {actionError && (
             <div className="bg-error/5 border-error/10 flex items-center gap-2 rounded-lg border px-3 py-2 text-xs text-error">
-              <AlertCircle className="size-3.5" />
+              <Icon name="AlertCircle" size="sm" />
               {actionError}
             </div>
           )}
@@ -360,7 +345,7 @@ export default function FamilySection() {
                         )}
                       </div>
                       <div className="flex items-center gap-2 text-xs text-text-muted">
-                        <RoleIcon className="size-3" />
+                        <Icon name={RoleIcon} size="xs" />
                         {ROLE_LABELS[member.role]}
                         <span className="text-text-tertiary">·</span>
                         <span className="truncate">{member.user.username}</span>
@@ -375,7 +360,7 @@ export default function FamilySection() {
                         disabled={updateMember.isPending}
                         className="bg-success/10 hover:bg-success/20 flex items-center gap-1 rounded-lg px-2.5 py-1.5 text-xs text-success transition-colors"
                       >
-                        <Check className="size-3.5" />
+                        <Icon name="Check" size="sm" />
                         接受
                       </button>
                     )}
@@ -387,7 +372,7 @@ export default function FamilySection() {
                         title="转让创建者身份"
                         className="bg-warning/10 hover:bg-warning/20 flex items-center gap-1 rounded-lg px-2.5 py-1.5 text-xs text-warning transition-colors"
                       >
-                        <Crown className="size-3.5" />
+                        <Icon name="Crown" size="sm" />
                         转让
                       </button>
                     )}
@@ -419,7 +404,7 @@ export default function FamilySection() {
                         className="hover:bg-error/10 rounded-lg p-1.5 text-text-muted transition-colors hover:text-error"
                         title="移除成员"
                       >
-                        <X className="size-4" />
+                        <Icon name="X" size="sm" />
                       </button>
                     )}
 
@@ -430,7 +415,7 @@ export default function FamilySection() {
                         title="退出家庭"
                         className="hover:bg-error/10 rounded-lg p-1.5 text-text-muted transition-colors hover:text-error"
                       >
-                        <LogOut className="size-4" />
+                        <Icon name="LogOut" size="sm" />
                       </button>
                     )}
                   </div>
@@ -446,7 +431,7 @@ export default function FamilySection() {
                   onClick={() => setShowInvite(true)}
                   className="inline-flex items-center gap-1.5 rounded-lg bg-surface-hover px-3 py-2 text-xs text-text-secondary transition-colors hover:bg-surface-highlight"
                 >
-                  <UserPlus className="size-3.5" />
+                  <Icon name="UserPlus" size="sm" />
                   邀请成员
                 </button>
               ) : (
@@ -566,7 +551,11 @@ export default function FamilySection() {
                           }}
                           className="bg-primary/10 hover:bg-primary/20 inline-flex items-center gap-1 rounded-md px-2.5 py-1.5 text-xs text-primary transition-colors"
                         >
-                          {copied ? <Check className="size-3.5" /> : <Copy className="size-3.5" />}
+                          {copied ? (
+                            <Icon name="Check" size="sm" />
+                          ) : (
+                            <Icon name="Copy" size="sm" />
+                          )}
                           {copied ? '已复制' : '复制'}
                         </button>
                         <a
@@ -597,9 +586,9 @@ export default function FamilySection() {
                       className="inline-flex items-center gap-1.5 rounded-lg bg-primary px-3 py-1.5 text-xs font-medium text-text-primary transition-all hover:opacity-90 disabled:opacity-50"
                     >
                       {inviteMember.isPending || inviteUnregistered.isPending ? (
-                        <Loader2 className="size-3.5 animate-spin" />
+                        <Icon name="Loader2" size="sm" animate="spin" />
                       ) : (
-                        <Plus className="size-3.5" />
+                        <Icon name="Plus" size="sm" />
                       )}
                       发送邀请
                     </button>

@@ -1,8 +1,8 @@
 'use client';
 
 import Image from 'next/image';
-import { User } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { Icon } from '@/components/ui/icon';
 import { Child, getInitials } from '@/lib/children';
 
 interface ChildAvatarProps {
@@ -21,6 +21,15 @@ const sizeMap = {
   xl: 'w-12 h-12 text-lg',
   '2xl': 'w-14 h-14 text-xl',
 };
+
+const fallbackIconSizeMap = {
+  xs: 'xs',
+  sm: 'sm',
+  md: 'md',
+  lg: 'md',
+  xl: 'lg',
+  '2xl': 'xl',
+} as const;
 
 export default function ChildAvatar({
   child,
@@ -54,7 +63,7 @@ export default function ChildAvatar({
   if (!child) {
     return (
       <div className={cn(containerClass, 'bg-surface-elevated')} style={style}>
-        {fallbackIcon ? <User className="size-1/2" /> : <span>?</span>}
+        {fallbackIcon ? <Icon name="User" size={fallbackIconSizeMap[size]} /> : <span>?</span>}
       </div>
     );
   }

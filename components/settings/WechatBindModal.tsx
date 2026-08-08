@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { MessageCircle, RefreshCw, Loader2 } from 'lucide-react';
+import { Icon } from '@/components/ui/icon';
 import Modal from '@/components/ui/Modal';
 import { UserWithSettings } from '@/lib/settings';
 import { apiPost } from '@/lib/apiClient';
@@ -88,7 +88,7 @@ export default function WechatBindModal({ isOpen, onClose, user }: WechatBindMod
       onClose={onClose}
       title="微信绑定"
       subtitle="绑定后可在小程序使用微信一键登录"
-      icon={MessageCircle}
+      icon="MessageCircle"
       iconClassName="bg-wechat/20 text-wechat"
       size="sm"
       colorScheme="green"
@@ -136,7 +136,11 @@ export default function WechatBindModal({ isOpen, onClose, user }: WechatBindMod
           disabled={loading}
           className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-wechat py-2.5 text-sm font-semibold text-text-primary transition-all disabled:opacity-70"
         >
-          {loading ? <Loader2 className="size-4 animate-spin" /> : <RefreshCw className="size-4" />}
+          {loading ? (
+            <Icon name="Loader2" size="sm" animate="spin" />
+          ) : (
+            <Icon name="RefreshCw" size="sm" />
+          )}
           {bindCode ? '重新生成绑定码' : '生成绑定码'}
         </button>
       </div>

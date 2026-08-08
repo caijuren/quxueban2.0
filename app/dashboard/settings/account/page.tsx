@@ -1,6 +1,6 @@
 'use client';
 
-import { Loader2 } from 'lucide-react';
+import { Icon } from '@/components/ui/icon';
 import { UserWithSettings } from '@/lib/settings';
 import ConsolePageShell from '@/components/console/core/ConsolePageShell';
 import { useConsoleSettings } from '@/components/console/core/useConsoleSettings';
@@ -12,7 +12,7 @@ export default function AccountPage() {
   if (isLoading) {
     return (
       <div className="flex h-[60vh] items-center justify-center">
-        <Loader2 className="size-8 animate-spin text-primary" />
+        <Icon name="Loader2" size="xl" animate="spin" className="text-primary" />
       </div>
     );
   }

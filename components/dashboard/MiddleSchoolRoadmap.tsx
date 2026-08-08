@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion';
 import { useEffect, useMemo, useState } from 'react';
-import { AlertTriangle, Clock, Target, School, Trophy, Zap } from 'lucide-react';
+import { Icon, type IconName } from '@/components/ui/icon';
 
 interface Checkpoint {
   id: string;
@@ -283,10 +283,10 @@ const outcomes: Record<string, { label: string; prob: number; name: string }> = 
 };
 
 const checkpointConfig = {
-  soft: { icon: Clock, color: '#f59e0b', label: '软检查点' },
-  hard: { icon: AlertTriangle, color: '#ef4444', label: '硬熔断点' },
-  event: { icon: Trophy, color: '#22c55e', label: '关键事件' },
-  current: { icon: Target, color: '#f43f5e', label: '当前位置' },
+  soft: { icon: 'Clock' as IconName, color: '#f59e0b', label: '软检查点' },
+  hard: { icon: 'AlertTriangle' as IconName, color: '#ef4444', label: '硬熔断点' },
+  event: { icon: 'Trophy' as IconName, color: '#22c55e', label: '关键事件' },
+  current: { icon: 'Target' as IconName, color: '#f43f5e', label: '当前位置' },
 };
 
 const statusConfig = {
@@ -381,8 +381,10 @@ export default function MiddleSchoolRoadmap() {
               boxShadow: '0 0 20px var(--shadow-secondary)',
             }}
           >
-            <Zap
-              className="size-6 text-secondary"
+            <Icon
+              name="Zap"
+              size="lg"
+              className="text-secondary"
               style={{ filter: 'drop-shadow(0 0 8px var(--shadow-secondary))' }}
             />
           </div>
@@ -947,7 +949,7 @@ export default function MiddleSchoolRoadmap() {
                 <div className="mb-2 flex items-center gap-2">
                   {(() => {
                     const config = checkpointConfig[selectedCheckpoint.type];
-                    return <config.icon className="size-5" style={{ color: config.color }} />;
+                    return <Icon name={config.icon} size="md" style={{ color: config.color }} />;
                   })()}
                   <h3 className="font-display text-lg font-bold">{selectedCheckpoint.name}</h3>
                   {(() => {

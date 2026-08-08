@@ -2,18 +2,7 @@
 
 import { useMemo, useState, useCallback, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import {
-  Check,
-  Plus,
-  Trash2,
-  Pencil,
-  CalendarDays,
-  BookOpen,
-  Lock,
-  Target,
-  GraduationCap,
-  type LucideIcon,
-} from 'lucide-react';
+import { Icon, type IconName } from '@/components/ui/icon';
 import {
   type WeeklyGoal,
   type WeeklyGoalChecklistItem,
@@ -202,13 +191,13 @@ const CATEGORY_TO_SUBJECT: Record<TaskCategory, string> = {
   other: 'other',
 };
 
-const MODULE_ICONS: Record<TaskCategory, LucideIcon> = {
-  reading: BookOpen,
-  school: Lock,
-  sport: GraduationCap,
-  interest: GraduationCap,
-  ability: Target,
-  other: GraduationCap,
+const MODULE_ICONS: Record<TaskCategory, IconName> = {
+  reading: 'BookOpen',
+  school: 'Lock',
+  sport: 'GraduationCap',
+  interest: 'GraduationCap',
+  ability: 'Target',
+  other: 'GraduationCap',
 };
 
 function getSubjectIdForGoal(goal: WeeklyGoal, tasks: WeeklyTaskItem[]): string {
@@ -542,7 +531,7 @@ export default function WeeklyTaskList({ goals, tasks, weekLabel, onChange }: We
         <div className="flex items-center justify-between">
           <div className="flex min-w-0 flex-1 items-center gap-3">
             <div className="bg-primary/10 border-primary/20 flex size-8 shrink-0 items-center justify-center rounded-[10px] border">
-              <CalendarDays className="size-4 text-primary" />
+              <Icon name="CalendarDays" size="sm" className="text-primary" />
             </div>
             <div className="min-w-0">
               <h3 className="text-base font-bold text-text-primary">本周任务清单</h3>
@@ -553,9 +542,9 @@ export default function WeeklyTaskList({ goals, tasks, weekLabel, onChange }: We
           </div>
           <button
             onClick={() => addGoal('chinese')}
-            className="inline-flex items-center gap-1.5 rounded-lg bg-primary/90 px-3 py-1.5 text-xs font-medium text-inverse transition-colors hover:bg-primary"
+            className="bg-primary/90 inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium text-inverse transition-colors hover:bg-primary"
           >
-            <Plus className="size-3.5" />
+            <Icon name="Plus" size="xs" />
             添加任务
           </button>
         </div>
@@ -573,7 +562,7 @@ export default function WeeklyTaskList({ goals, tasks, weekLabel, onChange }: We
       <div className="group flex items-center justify-between border-b border-border-subtle px-5 py-4">
         <div className="flex min-w-0 flex-1 items-center gap-3">
           <div className="bg-primary/10 border-primary/20 flex size-8 shrink-0 items-center justify-center rounded-[10px] border">
-            <CalendarDays className="size-4 text-primary" />
+            <Icon name="CalendarDays" size="sm" className="text-primary" />
           </div>
           <div className="min-w-0">
             <h3 className="text-base font-bold text-text-primary">本周任务清单</h3>
@@ -585,7 +574,7 @@ export default function WeeklyTaskList({ goals, tasks, weekLabel, onChange }: We
 
         <div className="flex items-center gap-3">
           <div className="text-text-muted/80 hidden items-center gap-2 rounded-lg px-3 py-1.5 text-xs sm:flex">
-            <CalendarDays className="text-text-muted/60 size-3.5" />
+            <Icon name="CalendarDays" size="xs" className="text-text-muted/60" />
             <span>本周：{weekLabel}</span>
           </div>
           <button
@@ -597,7 +586,7 @@ export default function WeeklyTaskList({ goals, tasks, weekLabel, onChange }: We
             }`}
             title={isEditing ? '完成' : '编辑'}
           >
-            {isEditing ? <Check className="size-4" /> : <Pencil className="size-4" />}
+            {isEditing ? <Icon name="Check" size="sm" /> : <Icon name="Pencil" size="sm" />}
           </button>
         </div>
       </div>
@@ -669,7 +658,7 @@ export default function WeeklyTaskList({ goals, tasks, weekLabel, onChange }: We
                     onClick={() => addGoal(sid)}
                     className="inline-flex items-center gap-1.5 rounded-lg border border-border-default bg-surface-hover px-2.5 py-1.5 text-xs text-text-muted transition-colors hover:bg-surface-hover hover:text-text-primary"
                   >
-                    <Plus className="size-3" />
+                    <Icon name="Plus" size="xs" />
                     {meta.name}
                   </button>
                 );
@@ -746,9 +735,10 @@ function SubjectGroup({
             {/* Module cell */}
             <td className={`h-12 w-[120px] px-4 align-middle ${rowDivider}`}>
               <div className="flex items-center gap-2">
-                <ModuleIcon
+                <Icon
+                  name={MODULE_ICONS[row.category]}
+                  size="sm"
                   className="h-[18px] w-[18px] shrink-0 text-text-muted"
-                  strokeWidth={1.5}
                 />
                 {isEditing ? (
                   <input
@@ -767,14 +757,14 @@ function SubjectGroup({
                       className="hover:bg-primary/10 rounded-md p-1 text-text-muted transition-colors hover:text-primary"
                       title="添加任务"
                     >
-                      <Plus className="size-3" />
+                      <Icon name="Plus" size="xs" />
                     </button>
                     <button
                       onClick={() => onDeleteGoal(row.goalId)}
                       className="hover:bg-error/10 rounded-md p-1 text-text-muted transition-colors hover:text-error"
                       title="删除模块"
                     >
-                      <Trash2 className="size-3" />
+                      <Icon name="Trash2" size="xs" />
                     </button>
                   </>
                 )}
@@ -835,7 +825,7 @@ function SubjectGroup({
                     onClick={() => onToggle(row.goalId, row.itemId)}
                     className="border-text-disabled/60 flex size-4 items-center justify-center rounded-[3px] border transition-colors hover:border-text-muted"
                   >
-                    {row.done && <Check className="size-3 text-text-tertiary" strokeWidth={2.5} />}
+                    {row.done && <Icon name="Check" size="xs" className="text-text-tertiary" />}
                   </button>
                 )}
                 {isEditing && row.itemId && (
@@ -844,7 +834,7 @@ function SubjectGroup({
                     className="hover:bg-error/10 rounded-md p-1 text-text-muted transition-colors hover:text-error"
                     title="删除任务"
                   >
-                    <Trash2 className="size-3.5" />
+                    <Icon name="Trash2" size="xs" />
                   </button>
                 )}
               </div>

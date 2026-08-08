@@ -1,21 +1,9 @@
 'use client';
+import { Icon } from '@/components/ui/icon';
 
 import { useEffect, useMemo, useState } from 'react';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
-import {
-  Plus,
-  Pencil,
-  Trash2,
-  Search,
-  X,
-  Save,
-  Loader2,
-  Sparkles,
-  Filter,
-  Archive,
-  RotateCcw,
-  Info,
-} from 'lucide-react';
+
 import {
   TaskTemplate,
   TaskCategory,
@@ -277,7 +265,7 @@ export default function TaskLibrarySection() {
     <div className="space-y-4">
       <div className="flex flex-col gap-3 sm:flex-row">
         <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 size-3.5 -translate-y-1/2 text-text-muted" />
+          <Icon name="Search" size="xs" className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted" />
           <input
             type="text"
             value={search}
@@ -288,7 +276,7 @@ export default function TaskLibrarySection() {
         </div>
 
         <div className="flex flex-wrap items-center gap-2">
-          <Filter className="size-3.5 text-text-muted" />
+          <Icon name="Filter" size="xs" className="text-text-muted" />
           <select
             value={filterCategory}
             onChange={(e) => setFilterCategory(e.target.value as TaskCategory | 'all')}
@@ -324,7 +312,7 @@ export default function TaskLibrarySection() {
             onClick={handleAdd}
             className="flex items-center gap-1.5 rounded-lg bg-primary px-3 py-2 text-xs font-semibold text-text-primary transition-all hover:opacity-90"
           >
-            <Plus className="size-3.5" />
+            <Icon name="Plus" size="xs" />
             添加任务
           </button>
         </div>
@@ -332,7 +320,7 @@ export default function TaskLibrarySection() {
 
       {loading ? (
         <div className="py-12 text-center text-sm text-text-muted">
-          <Loader2 className="mx-auto mb-2 size-5 animate-spin" />
+          <Icon name="Loader2" size="md" animate="spin" className="mx-auto mb-2" />
           加载任务库...
         </div>
       ) : error ? (
@@ -473,7 +461,7 @@ export default function TaskLibrarySection() {
                     onClick={() => handleEdit(tpl)}
                     className="flex items-center gap-1 rounded-lg bg-surface-elevated px-3 py-1.5 text-xs text-text-secondary transition-colors hover:bg-surface-highlight"
                   >
-                    <Pencil className="size-3" />
+                    <Icon name="Pencil" size="xs" />
                     编辑
                   </button>
                   <button
@@ -486,11 +474,11 @@ export default function TaskLibrarySection() {
                     }`}
                   >
                     {archivingId === tpl.id ? (
-                      <Loader2 className="size-3 animate-spin" />
+                      <Icon name="Loader2" size="xs" animate="spin" />
                     ) : isArchived ? (
-                      <RotateCcw className="size-3" />
+                      <Icon name="RotateCcw" size="xs" />
                     ) : (
-                      <Archive className="size-3" />
+                      <Icon name="Archive" size="xs" />
                     )}
                     {isArchived ? '恢复' : '归档'}
                   </button>
@@ -500,9 +488,9 @@ export default function TaskLibrarySection() {
                     className="bg-error/10 hover:bg-error/15 flex items-center gap-1 rounded-lg px-3 py-1.5 text-xs text-error transition-colors disabled:opacity-50"
                   >
                     {deletingId === tpl.id ? (
-                      <Loader2 className="size-3 animate-spin" />
+                      <Icon name="Loader2" size="xs" animate="spin" />
                     ) : (
-                      <Trash2 className="size-3" />
+                      <Icon name="Trash2" size="xs" />
                     )}
                     删除
                   </button>
@@ -697,9 +685,9 @@ function TaskTemplateModal({
           <div className="flex items-center gap-3">
             <div className="flex size-10 items-center justify-center rounded-xl bg-secondary">
               {initial ? (
-                <Pencil className="size-5 text-text-primary" />
+                <Icon name="Pencil" size="md" className="text-text-primary" />
               ) : (
-                <Plus className="size-5 text-text-primary" />
+                <Icon name="Plus" size="md" className="text-text-primary" />
               )}
             </div>
             <div>
@@ -716,7 +704,7 @@ function TaskTemplateModal({
             className="focus-ring rounded-lg p-2 text-text-tertiary hover:bg-surface-elevated"
             aria-label="关闭"
           >
-            <X className="size-5" />
+            <Icon name="X" size="md" />
           </button>
         </div>
 
@@ -867,7 +855,7 @@ function TaskTemplateModal({
                 className="cursor-help text-text-muted"
                 title="选择任务对应的升学路线，不选则该任务对所有路线都可见"
               >
-                <Info className="size-3" />
+                <Icon name="Info" size="xs" />
               </span>
             </div>
             <div className="flex flex-wrap gap-2">
@@ -884,7 +872,7 @@ function TaskTemplateModal({
                         : 'border border-border-subtle bg-surface-elevated text-text-tertiary hover:bg-surface-highlight'
                     }`}
                   >
-                    {selected && <Sparkles className="mr-1 inline-block size-3" />}
+                    {selected && <Icon name="Sparkles" size="xs" className="mr-1 inline-block" />}
                     {route.label}
                   </button>
                 );
@@ -969,7 +957,7 @@ function TaskTemplateModal({
                 className="cursor-help text-text-muted"
                 title="设置任务在周计划中的默认出现规则"
               >
-                <Info className="size-3" />
+                <Icon name="Info" size="xs" />
               </span>
             </div>
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
@@ -1086,7 +1074,7 @@ function TaskTemplateModal({
                           onClick={() => removeCapabilityLink(link.capabilityId)}
                           className="rounded-lg p-1.5 text-text-tertiary hover:bg-surface-highlight"
                         >
-                          <X className="size-3.5" />
+                          <Icon name="X" size="xs" />
                         </button>
                       </div>
                     </div>
@@ -1169,7 +1157,7 @@ function TaskTemplateModal({
                       onClick={() => removeAssessmentCriterion(index)}
                       className="rounded-lg p-1.5 text-text-tertiary hover:bg-surface-highlight"
                     >
-                      <X className="size-3.5" />
+                      <Icon name="X" size="xs" />
                     </button>
                   </div>
                 ))}
@@ -1192,7 +1180,7 @@ function TaskTemplateModal({
             disabled={saving || !form.title.trim()}
             className="flex items-center gap-2 rounded-xl bg-secondary px-6 py-2 font-semibold text-text-primary transition-all hover:shadow-[0_0_30px_rgba(139,92,246,0.4)] disabled:cursor-not-allowed disabled:opacity-50"
           >
-            {saving ? <Loader2 className="size-4 animate-spin" /> : <Save className="size-4" />}
+            {saving ? <Icon name="Loader2" size="sm" animate="spin" /> : <Icon name="Save" size="sm" />}
             保存
           </button>
         </div>

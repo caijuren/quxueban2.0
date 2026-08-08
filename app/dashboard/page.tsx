@@ -3,29 +3,7 @@
 import { useState } from 'react';
 import { useReducedMotion } from '@/components/motion';
 import { SlideUp, StaggerContainer, StaggerItem } from '@/components/motion';
-import {
-  LayoutGrid,
-  User,
-  Target,
-  Sparkles,
-  MapPin,
-  AlertCircle,
-  CalendarDays,
-  Route,
-  TrendingUp,
-  CheckCircle2,
-  Circle,
-  Flame,
-  ChevronRight,
-  HelpCircle,
-  School,
-  Flag,
-  Compass,
-  TrendingUpIcon,
-  ListChecks,
-  Calendar,
-  Lightbulb,
-} from 'lucide-react';
+import { Icon } from '@/components/ui/icon';
 import { useRouter } from 'next/navigation';
 import { useChildren } from '@/components/dashboard/ChildrenContext';
 import { Child, gradeLabel, gradeToStage } from '@/lib/children';
@@ -69,7 +47,7 @@ function ViewToggle({ mode, onChange }: { mode: ViewMode; onChange: (mode: ViewM
             : 'text-text-tertiary hover:text-text-secondary'
         }`}
       >
-        <User className="size-4" />
+        <Icon name="User" size="sm" />
         当前孩子
       </button>
       <button
@@ -80,7 +58,7 @@ function ViewToggle({ mode, onChange }: { mode: ViewMode; onChange: (mode: ViewM
             : 'text-text-tertiary hover:text-text-secondary'
         }`}
       >
-        <LayoutGrid className="size-4" />
+        <Icon name="LayoutGrid" size="sm" />
         全家总览
       </button>
     </div>
@@ -100,19 +78,19 @@ function IdentityCard({ child, completionRate }: { child: Child; completionRate:
 
   const metrics = [
     {
-      icon: School,
+      icon: 'School' as const,
       label: '目标学校',
       value: primaryTarget,
       sub: backupTargets || routeSummary.name,
     },
     {
-      icon: Flag,
+      icon: 'Flag' as const,
       label: '当前阶段',
       value: '基础能力构建期',
       sub: '夯实基础，稳步提升',
     },
     {
-      icon: Compass,
+      icon: 'Compass' as const,
       label: '路线方向',
       value: routeSummary.direction,
       sub: routeSummary.directionDetail,
@@ -164,7 +142,7 @@ function IdentityCard({ child, completionRate }: { child: Child; completionRate:
                 className="flex h-full flex-col rounded-[14px] border border-border-default bg-surface p-4"
               >
                 <div className="mb-2 flex items-center gap-1.5">
-                  <metric.icon className="size-3.5 text-text-muted" />
+                  <Icon name={metric.icon} size="xs" className="text-text-muted" />
                   <span className="text-2xs text-text-muted">{metric.label}</span>
                 </div>
                 <p className="mb-0.5 truncate text-base font-semibold text-text-primary">
@@ -181,21 +159,21 @@ function IdentityCard({ child, completionRate }: { child: Child; completionRate:
               onClick={() => router.push('/dashboard/plan')}
               className="inline-flex items-center gap-1.5 rounded-lg bg-surface px-3 py-2 text-xs font-medium text-text-secondary transition-all hover:bg-surface-hover hover:text-text-primary"
             >
-              <Route className="size-4" />
+              <Icon name="Route" size="sm" />
               路线方案
             </button>
             <button
               onClick={() => router.push('/dashboard/weekly')}
               className="inline-flex items-center gap-1.5 rounded-lg bg-surface px-3 py-2 text-xs font-medium text-text-secondary transition-all hover:bg-surface-hover hover:text-text-primary"
             >
-              <CalendarDays className="size-4" />
+              <Icon name="CalendarDays" size="sm" />
               周计划
             </button>
             <button
               onClick={() => router.push('/dashboard/ai')}
               className="inline-flex items-center gap-1.5 rounded-lg bg-surface px-3 py-2 text-xs font-medium text-text-secondary transition-all hover:bg-surface-hover hover:text-text-primary"
             >
-              <Sparkles className="size-4" />
+              <Icon name="Sparkles" size="sm" animate="pulse" />
               AI 诊断
             </button>
           </div>
@@ -205,11 +183,11 @@ function IdentityCard({ child, completionRate }: { child: Child; completionRate:
         <div className="flex min-w-[160px] shrink-0 flex-col items-center justify-center border-t border-border-default pt-6 xl:border-l xl:border-t-0 xl:border-border-default xl:pl-8 xl:pt-0">
           <div className="mb-4 flex items-center gap-1.5">
             <span className="text-xs text-text-tertiary">路线匹配度</span>
-            <HelpCircle className="size-3.5 text-text-muted" />
+            <Icon name="CircleHelp" size="xs" className="text-text-muted" />
           </div>
           <GaugeChart value={matchSnapshot.probability} size={132} strokeWidth={11} />
           <div className="mt-4 flex items-center gap-1.5 text-xs">
-            <TrendingUpIcon className="size-4 text-primary" />
+            <Icon name="TrendingUp" size="sm" className="text-primary" />
             <span className="font-medium text-primary">
               较上次提升 {matchSnapshot.change > 0 ? '+' : ''}
               {matchSnapshot.change}%
@@ -227,7 +205,7 @@ function IdentityCard({ child, completionRate }: { child: Child; completionRate:
 function TimelineNode({ item, isLast }: { item: TimelineItem; isLast: boolean }) {
   const statusConfig = {
     past: {
-      icon: CheckCircle2,
+      icon: 'CircleCheck' as const,
       dotClass: 'bg-surface border border-success/40',
       iconClass: 'text-success',
       lineClass: 'bg-border-default',
@@ -236,7 +214,7 @@ function TimelineNode({ item, isLast }: { item: TimelineItem; isLast: boolean })
       objectiveIconClass: 'text-success/70',
     },
     current: {
-      icon: Flame,
+      icon: 'Flame' as const,
       dotClass: 'bg-primary/15 border border-primary/40 shadow-[0_0_16px_var(--shadow-primary)]',
       iconClass: 'text-primary',
       lineClass: 'bg-border-default',
@@ -245,7 +223,7 @@ function TimelineNode({ item, isLast }: { item: TimelineItem; isLast: boolean })
       objectiveIconClass: 'text-primary/70',
     },
     future: {
-      icon: Circle,
+      icon: 'Circle' as const,
       dotClass: 'bg-surface border border-border-default',
       iconClass: 'text-text-muted',
       lineClass: 'bg-border-default',
@@ -256,7 +234,6 @@ function TimelineNode({ item, isLast }: { item: TimelineItem; isLast: boolean })
   };
 
   const config = statusConfig[item.status];
-  const Icon = config.icon;
 
   return (
     <div className="relative flex gap-4">
@@ -270,7 +247,7 @@ function TimelineNode({ item, isLast }: { item: TimelineItem; isLast: boolean })
         <div
           className={`relative z-10 flex size-7 items-center justify-center rounded-full ${config.dotClass}`}
         >
-          <Icon className={`size-4 ${config.iconClass}`} />
+          <Icon name={config.icon} size="sm" className={config.iconClass} />
         </div>
       </div>
 
@@ -296,7 +273,11 @@ function TimelineNode({ item, isLast }: { item: TimelineItem; isLast: boolean })
             <div className="space-y-1.5">
               {item.objectives.map((objective, idx) => (
                 <div key={idx} className="flex items-center gap-2 text-xs text-text-secondary">
-                  <CheckCircle2 className={`size-3.5 shrink-0 ${config.objectiveIconClass}`} />
+                  <Icon
+                    name="CircleCheck"
+                    size="xs"
+                    className={`shrink-0 ${config.objectiveIconClass}`}
+                  />
                   <span>{objective}</span>
                 </div>
               ))}
@@ -313,24 +294,24 @@ function TimelineSection({ child }: { child: Child }) {
 
   if (timeline.length === 0) {
     return (
-    <GlassCard className="h-full p-6">
-      <div className="mb-4 flex items-center gap-2">
-        <TrendingUp className="size-5 text-primary" />
-        <h2 className="font-display text-base font-bold">升学时间轴</h2>
-      </div>
-      <EmptyState
-        icon={CalendarDays}
-        title="暂无时间轴数据"
-        description="当前阶段还没有配置详细的升学里程碑"
-      />
-    </GlassCard>
-  );
+      <GlassCard className="h-full p-6">
+        <div className="mb-4 flex items-center gap-2">
+          <Icon name="TrendingUp" size="md" className="text-primary" />
+          <h2 className="font-display text-base font-bold">升学时间轴</h2>
+        </div>
+        <EmptyState
+          icon="CalendarDays"
+          title="暂无时间轴数据"
+          description="当前阶段还没有配置详细的升学里程碑"
+        />
+      </GlassCard>
+    );
   }
 
   return (
     <GlassCard className="h-full p-5 sm:p-6">
       <div className="mb-6 flex items-center gap-2">
-        <TrendingUp className="size-5 text-primary" />
+        <Icon name="TrendingUp" size="md" className="text-primary" />
         <h2 className="font-display text-base font-bold">升学时间轴</h2>
         <span className="ml-auto text-xs text-text-tertiary">
           {timeline.filter((t) => t.status === 'past').length} 个已过 /{' '}
@@ -371,7 +352,7 @@ function UpcomingMilestonesCard({ child }: { child: Child }) {
   return (
     <GlassCard className="h-full p-5 sm:p-6">
       <div className="mb-4 flex items-center gap-2">
-        <AlertCircle className="size-5 text-warning" />
+        <Icon name="CircleAlert" size="md" className="text-warning" />
         <h2 className="font-display text-base font-bold">关键节点预警</h2>
       </div>
 
@@ -406,7 +387,11 @@ function UpcomingMilestonesCard({ child }: { child: Child }) {
                   {milestone.riskReason}
                 </p>
                 <div className="flex items-start gap-1.5 text-xs">
-                  <AlertCircle className={`mt-0.5 size-3.5 shrink-0 ${risk.iconClass}`} />
+                  <Icon
+                    name="CircleAlert"
+                    size="xs"
+                    className={`mt-0.5 shrink-0 ${risk.iconClass}`}
+                  />
                   <span className="text-text-secondary">{milestone.suggestedAction}</span>
                 </div>
               </div>
@@ -438,7 +423,7 @@ function AIStrategyCard({
     <GlassCard strength="subtle" className="h-full p-5 sm:p-6">
       <div className="mb-4 flex items-center justify-between gap-2">
         <div className="flex items-center gap-2">
-          <Sparkles className="size-5 text-secondary" />
+          <Icon name="Sparkles" size="md" animate="pulse" className="text-secondary" />
           <h2 className="font-display text-base font-bold">AI 战略建议</h2>
         </div>
         <span className="text-2xs text-text-muted">基于当前数据分析</span>
@@ -447,7 +432,7 @@ function AIStrategyCard({
       <div className="space-y-4">
         <div>
           <div className="mb-1.5 flex items-center gap-2">
-            <Lightbulb className="size-4 text-secondary" />
+            <Icon name="Lightbulb" size="sm" className="text-secondary" />
             <h3 className="text-xs font-semibold text-text-secondary">当前判断</h3>
           </div>
           <p className="pl-6 text-xs leading-relaxed text-text-tertiary">
@@ -457,7 +442,7 @@ function AIStrategyCard({
 
         <div>
           <div className="mb-1.5 flex items-center gap-2">
-            <Target className="size-4 text-secondary" />
+            <Icon name="Target" size="sm" className="text-secondary" />
             <h3 className="text-xs font-semibold text-text-secondary">重点关注</h3>
           </div>
           <ol className="space-y-1 pl-6">
@@ -472,13 +457,13 @@ function AIStrategyCard({
 
         <div>
           <div className="mb-1.5 flex items-center gap-2">
-            <Calendar className="size-4 text-secondary" />
+            <Icon name="Calendar" size="sm" className="text-secondary" />
             <h3 className="text-xs font-semibold text-text-secondary">未来 90 天目标</h3>
           </div>
           <ul className="space-y-1 pl-6">
             {advice.next90DaysGoals.map((goal, idx) => (
               <li key={idx} className="flex items-center gap-2 text-xs text-text-tertiary">
-                <CheckCircle2 className="text-secondary/70 size-3.5 shrink-0" />
+                <Icon name="CircleCheck" size="xs" className="text-secondary/70 shrink-0" />
                 <span>{goal}</span>
               </li>
             ))}
@@ -522,7 +507,7 @@ function OverviewChildCard({
             {child.targetSchool ? ` · 目标 ${child.targetSchool}` : ''}
           </p>
         </div>
-        <ChevronRight className="size-5 shrink-0 text-text-muted" />
+        <Icon name="ChevronRight" size="md" className="shrink-0 text-text-muted" />
       </div>
 
       <div className="mb-4 space-y-2">
@@ -535,7 +520,7 @@ function OverviewChildCard({
 
         {upcoming[0] && (
           <div className="bg-warning/[0.06] flex items-start gap-2 rounded-lg px-3 py-2">
-            <AlertCircle className="mt-0.5 size-4 shrink-0 text-warning" />
+            <Icon name="CircleAlert" size="sm" className="mt-0.5 shrink-0 text-warning" />
             <div className="min-w-0">
               <p className="text-xs font-medium text-warning">下一个节点：{upcoming[0].time}</p>
               <p className="truncate text-sm text-text-secondary">{upcoming[0].title}</p>
@@ -610,7 +595,7 @@ export default function DashboardPage() {
       >
         <div className="flex items-center gap-3">
           <div className="bg-primary/10 border-primary/20 flex size-10 items-center justify-center rounded-[14px] border">
-            <LayoutGrid className="size-5 text-primary" />
+            <Icon name="LayoutGrid" size="md" className="text-primary" />
           </div>
           <div>
             <h1 className="font-display text-2xl font-bold sm:text-3xl">升学规划中心</h1>

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Plus, Pencil, Trash2, Star, School, Route } from 'lucide-react';
+import { Icon } from '@/components/ui/icon';
 import { useChildren } from '@/components/dashboard/ChildrenContext';
 import ChildAvatar from '@/components/dashboard/ChildAvatar';
 import ChildModal from '@/components/dashboard/ChildModal';
@@ -39,7 +39,7 @@ export default function ChildrenSection() {
             >
               {currentChildId === child.id && (
                 <div className="bg-primary/10 absolute right-3 top-3 flex items-center gap-1 rounded-full px-2 py-0.5 text-2xs text-primary">
-                  <Star className="size-3" />
+                  <Icon name="Star" size="xs" />
                   默认
                 </div>
               )}
@@ -59,15 +59,15 @@ export default function ChildrenSection() {
 
               <div className="mb-4 space-y-2">
                 <div className="flex items-center gap-2 text-xs text-text-tertiary">
-                  <School className="size-3.5 text-text-muted" />
+                  <Icon name="School" size="xs" className="text-text-muted" />
                   <span className="truncate">当前：{child.currentSchool || '未填写'}</span>
                 </div>
                 <div className="flex items-center gap-2 text-xs text-text-tertiary">
-                  <Route className="size-3.5 text-text-muted" />
+                  <Icon name="Route" size="xs" className="text-text-muted" />
                   <span className="truncate">目标：{child.targetSchool || '未填写'}</span>
                 </div>
                 <div className="flex items-center gap-2 text-xs text-text-tertiary">
-                  <Route className="size-3.5 text-text-muted" />
+                  <Icon name="Route" size="xs" className="text-text-muted" />
                   <span className="truncate">
                     路线：
                     {child.routeId ? getRouteById(child.routeId)?.name || child.routeId : '未绑定'}
@@ -80,7 +80,7 @@ export default function ChildrenSection() {
                   onClick={() => handleEdit(child)}
                   className="flex flex-1 items-center justify-center gap-1 rounded-lg bg-surface-elevated px-3 py-2 text-xs text-text-secondary transition-colors hover:bg-surface-highlight"
                 >
-                  <Pencil className="size-3.5" />
+                  <Icon name="Pencil" size="xs" />
                   编辑
                 </button>
                 {currentChildId !== child.id && (
@@ -100,7 +100,7 @@ export default function ChildrenSection() {
             className="flex min-h-[180px] flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-border-default bg-surface-elevated p-4 text-sm text-text-muted transition-all hover:border-border-default hover:bg-surface-elevated hover:text-text-secondary"
           >
             <div className="flex size-10 items-center justify-center rounded-full bg-surface-elevated">
-              <Plus className="size-5" />
+              <Icon name="Plus" size="md" />
             </div>
             <span className="font-medium">添加孩子</span>
           </button>

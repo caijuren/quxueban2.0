@@ -1,24 +1,26 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Calendar, CheckCircle2, Clock, BookOpen, Feather, ScrollText, Pencil } from 'lucide-react';
+import { Icon } from '@/components/ui/icon';
 import { getChinesePlanByGrade, type WeeklyTask } from '@/lib/subjects/chinese';
 
 const dayNames = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
 
 function getSkillIcon(focus: string) {
-  if (focus.includes('古诗') || focus.includes('古文') || focus.includes('经典')) return ScrollText;
-  if (focus.includes('阅读') || focus.includes('读书')) return BookOpen;
+  if (focus.includes('古诗') || focus.includes('古文') || focus.includes('经典'))
+    return 'ScrollText';
+  if (focus.includes('阅读') || focus.includes('读书')) return 'BookOpen';
   if (
     focus.includes('写作') ||
     focus.includes('作文') ||
     focus.includes('写话') ||
     focus.includes('写作')
   )
-    return Feather;
-  if (focus.includes('写字') || focus.includes('汉字') || focus.includes('练字')) return Pencil;
-  if (focus.includes('面谈') || focus.includes('表达') || focus.includes('话题')) return ScrollText;
-  return BookOpen;
+    return 'Feather';
+  if (focus.includes('写字') || focus.includes('汉字') || focus.includes('练字')) return 'Pencil';
+  if (focus.includes('面谈') || focus.includes('表达') || focus.includes('话题'))
+    return 'ScrollText';
+  return 'BookOpen';
 }
 
 export default function ChineseTodayTasks({ grade }: { grade: number }) {
@@ -29,7 +31,7 @@ export default function ChineseTodayTasks({ grade }: { grade: number }) {
 
   if (!todayTask) return null;
 
-  const SkillIcon = getSkillIcon(todayTask.focus);
+  const skillIconName = getSkillIcon(todayTask.focus);
 
   return (
     <motion.div
@@ -65,8 +67,10 @@ export default function ChineseTodayTasks({ grade }: { grade: number }) {
                 boxShadow: '0 0 20px rgba(244,63,94,0.3)',
               }}
             >
-              <Calendar
-                className="size-6 text-warning"
+              <Icon
+                name="Calendar"
+                size="lg"
+                className="text-warning"
                 style={{ filter: 'drop-shadow(0 0 8px rgba(244,63,94,0.8))' }}
               />
             </div>
@@ -78,7 +82,7 @@ export default function ChineseTodayTasks({ grade }: { grade: number }) {
             </div>
           </div>
           <div className="flex items-center gap-2 rounded-lg border border-border-default bg-surface-elevated px-3 py-1.5">
-            <Clock className="size-4 text-text-tertiary" />
+            <Icon name="Clock" size="sm" className="text-text-tertiary" />
             <span className="text-sm text-text-secondary">{todayTask.duration}</span>
           </div>
         </div>
@@ -88,7 +92,7 @@ export default function ChineseTodayTasks({ grade }: { grade: number }) {
           <div className="rounded-xl border border-border-default bg-surface-elevated p-5 lg:col-span-2">
             <div className="flex items-start gap-4">
               <div className="flex size-12 shrink-0 items-center justify-center rounded-xl border border-border-default bg-surface-elevated">
-                <SkillIcon className="size-6 text-text-primary" />
+                <Icon name={skillIconName} size="lg" className="text-text-primary" />
               </div>
               <div className="flex-1">
                 <p className="mb-2 text-lg font-bold text-text-secondary">{todayTask.focus}</p>
@@ -112,7 +116,7 @@ export default function ChineseTodayTasks({ grade }: { grade: number }) {
           {/* Quick checklist */}
           <div className="rounded-xl border border-border-default bg-surface-elevated p-5">
             <p className="mb-3 flex items-center gap-2 text-sm font-medium text-text-secondary">
-              <CheckCircle2 className="size-4 text-success" />
+              <Icon name="CheckCircle2" size="sm" className="text-success" />
               完成检查
             </p>
             <div className="space-y-2">

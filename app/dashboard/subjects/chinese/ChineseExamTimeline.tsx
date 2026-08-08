@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Award, Calendar, AlertTriangle } from 'lucide-react';
+import { Icon } from '@/components/ui/icon';
 import { SubjectPlanConfig } from '@/lib/subjects/subjectPlan';
 
 interface ChineseExamTimelineProps {
@@ -20,7 +20,7 @@ export default function ChineseExamTimeline({ config }: ChineseExamTimelineProps
     >
       <div className="mb-6 flex items-center gap-3">
         <div className="to-warning/70 flex size-10 items-center justify-center rounded-xl bg-gradient-to-br from-warning">
-          <Award className="size-5 text-text-primary" />
+          <Icon name="Award" size="md" className="text-text-primary" />
         </div>
         <div>
           <h2 className="font-display text-xl font-bold">语文荣誉与赛事时间轴</h2>
@@ -63,13 +63,13 @@ export default function ChineseExamTimeline({ config }: ChineseExamTimelineProps
                     </p>
                   </div>
                   <div className="flex items-center gap-1.5 text-xs text-text-muted">
-                    <Calendar className="size-3.5" />
+                    <Icon name="Calendar" size="xs" />
                     {exam.registerBefore}
                   </div>
                 </div>
 
                 <div className="bg-warning/5 border-warning/10 flex items-start gap-2 rounded-lg border p-3">
-                  <AlertTriangle className="mt-0.5 size-4 shrink-0 text-warning" />
+                  <Icon name="AlertTriangle" size="sm" className="mt-0.5 shrink-0 text-warning" />
                   <p className="text-xs text-text-tertiary">{exam.notes}</p>
                 </div>
               </div>

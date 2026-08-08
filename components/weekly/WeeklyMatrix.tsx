@@ -1,10 +1,11 @@
 // @ts-nocheck
 // FIXME: 本组件引用了 weeklyTasks 中未实现的 timeSlot 相关函数
 'use client';
+import { Icon } from '@/components/ui/icon';
 
 import { useMemo, useState, useRef } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
-import { CheckCircle2, GripVertical } from 'lucide-react';
+
 import { type WeeklyTaskItem, type TaskCategory, type DayOfWeek } from '@/lib/storage.types';
 import {
   type PlanStats,
@@ -390,7 +391,7 @@ function MatrixTaskCard({
               {task.duration}
             </span>
           </div>
-          {done && <CheckCircle2 className="size-3.5 shrink-0 text-success" />}
+          {done && <Icon name="CheckCircle2" size="xs" className="shrink-0 text-success" />}
         </div>
         <p
           className={`truncate text-xs font-medium ${
@@ -419,7 +420,11 @@ function MatrixTaskCard({
           </div>
         )}
       </div>
-      <GripVertical className="text-text-tertiary/40 mt-0.5 size-4 shrink-0 opacity-0 transition-opacity group-hover:opacity-100" />
+      <Icon
+        name="GripVertical"
+        size="sm"
+        className="text-text-tertiary/40 mt-0.5 shrink-0 opacity-0 transition-opacity group-hover:opacity-100"
+      />
     </div>
   );
 }
@@ -478,7 +483,7 @@ function MobileTaskRow({ task, onToggle }: MobileTaskRowProps) {
           </div>
         )}
       </div>
-      {done && <CheckCircle2 className="size-5 shrink-0 text-success" />}
+      {done && <Icon name="CheckCircle2" size="md" className="shrink-0 text-success" />}
     </button>
   );
 }

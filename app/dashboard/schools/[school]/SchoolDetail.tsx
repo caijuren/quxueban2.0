@@ -1,26 +1,8 @@
 'use client';
+import { Icon } from '@/components/ui/icon';
 
 import { motion, useReducedMotion } from 'framer-motion';
 import Link from 'next/link';
-import {
-  ArrowLeft,
-  BookOpen,
-  Calendar,
-  Target,
-  CheckCircle2,
-  Award,
-  MessageSquare,
-  GraduationCap,
-  MapPin,
-  Clock,
-  Sparkles,
-  FileText,
-  Users,
-  Monitor,
-  School,
-  Banknote,
-  Trophy,
-} from 'lucide-react';
 
 interface TimelineStep {
   step: string;
@@ -1312,7 +1294,7 @@ export default function SchoolDetail({ school }: { school: string }) {
       <div className="flex min-h-[60vh] flex-col items-center justify-center space-y-6 text-center">
         <div className="mb-2 flex items-center justify-center gap-3">
           <div className="bg-secondary/10 border-secondary/20 flex size-10 items-center justify-center rounded-xl border">
-            <School className="size-5 text-secondary" />
+            <Icon name="School" size="md" className="text-secondary" />
           </div>
           <div>
             <h1 className="font-display text-2xl font-bold sm:text-3xl">未找到学校</h1>
@@ -1323,7 +1305,7 @@ export default function SchoolDetail({ school }: { school: string }) {
           href="/dashboard/plan"
           className="inline-flex items-center gap-2 rounded-lg bg-surface-hover px-5 py-2.5 text-text-primary transition-all hover:bg-surface-hover"
         >
-          <ArrowLeft className="size-4" />
+          <Icon name="ArrowLeft" size="sm" />
           返回路线方案
         </Link>
       </div>
@@ -1343,7 +1325,7 @@ export default function SchoolDetail({ school }: { school: string }) {
           href="/dashboard/plan"
           className="inline-flex items-center gap-2 text-sm text-text-tertiary transition-colors hover:text-text-primary"
         >
-          <ArrowLeft className="size-4" />
+          <Icon name="ArrowLeft" size="sm" />
           返回路线方案
         </Link>
 
@@ -1361,19 +1343,19 @@ export default function SchoolDetail({ school }: { school: string }) {
                   {data.title}
                 </span>
                 <span className="flex items-center gap-1.5 text-xs text-text-tertiary">
-                  <MapPin className="size-3.5" />
+                  <Icon name="MapPin" size="xs" />
                   {data.location}
                 </span>
                 <span className="flex items-center gap-1.5 text-xs text-text-tertiary">
-                  <GraduationCap className="size-3.5" />
+                  <Icon name="GraduationCap" size="xs" />
                   {data.nature}
                 </span>
                 <span className="flex items-center gap-1.5 text-xs text-text-tertiary">
-                  <Trophy className="size-3.5" />
+                  <Icon name="Trophy" size="xs" />
                   {data.ranking}
                 </span>
                 <span className="flex items-center gap-1.5 text-xs text-text-tertiary">
-                  <Banknote className="size-3.5" />
+                  <Icon name="Banknote" size="xs" />
                   {data.fees}
                 </span>
               </div>
@@ -1385,7 +1367,7 @@ export default function SchoolDetail({ school }: { school: string }) {
               >
                 <div className="flex items-center gap-3">
                   <div className="bg-secondary/10 border-secondary/20 flex size-10 items-center justify-center rounded-xl border">
-                    <School className="size-5 text-secondary" />
+                    <Icon name="School" size="md" className="text-secondary" />
                   </div>
                   <div>
                     <h1 className="font-display text-2xl font-bold sm:text-3xl">{data.name}</h1>
@@ -1411,7 +1393,7 @@ export default function SchoolDetail({ school }: { school: string }) {
       <motion.div variants={itemVariants} className="space-y-4">
         <div className="flex items-center gap-3">
           <div className="flex size-10 items-center justify-center rounded-xl bg-surface-hover">
-            <Calendar className="size-5 text-primary" />
+            <Icon name="Calendar" size="md" className="text-primary" />
           </div>
           <h2 className="font-display text-xl font-bold">招生时间轴</h2>
         </div>
@@ -1449,7 +1431,7 @@ export default function SchoolDetail({ school }: { school: string }) {
         <motion.div variants={itemVariants} className="space-y-4">
           <div className="flex items-center gap-3">
             <div className="flex size-10 items-center justify-center rounded-xl bg-surface-hover">
-              <Target className="size-5 text-secondary" />
+              <Icon name="Target" size="md" className="text-secondary" />
             </div>
             <h2 className="font-display text-xl font-bold">录取偏好</h2>
           </div>
@@ -1474,7 +1456,7 @@ export default function SchoolDetail({ school }: { school: string }) {
         <motion.div variants={itemVariants} className="space-y-4">
           <div className="flex items-center gap-3">
             <div className="flex size-10 items-center justify-center rounded-xl bg-surface-hover">
-              <MessageSquare className="size-5 text-accent" />
+              <Icon name="MessageSquare" size="md" className="text-accent" />
             </div>
             <h2 className="font-display text-xl font-bold">面谈形式</h2>
           </div>
@@ -1482,11 +1464,11 @@ export default function SchoolDetail({ school }: { school: string }) {
             {data.interviewFormat.map((item) => (
               <div key={item} className="flex items-start gap-3">
                 {item.includes('机考') ? (
-                  <Monitor className="mt-1 size-4 shrink-0 text-text-tertiary" />
+                  <Icon name="Monitor" size="sm" className="mt-1 shrink-0 text-text-tertiary" />
                 ) : item.includes('小组') ? (
-                  <Users className="mt-1 size-4 shrink-0 text-text-tertiary" />
+                  <Icon name="Users" size="sm" className="mt-1 shrink-0 text-text-tertiary" />
                 ) : (
-                  <MessageSquare className="mt-1 size-4 shrink-0 text-text-tertiary" />
+                  <Icon name="MessageSquare" size="sm" className="mt-1 shrink-0 text-text-tertiary" />
                 )}
                 <p className="text-sm leading-relaxed text-text-secondary">{item}</p>
               </div>
@@ -1499,7 +1481,7 @@ export default function SchoolDetail({ school }: { school: string }) {
       <motion.div variants={itemVariants} className="space-y-4">
         <div className="flex items-center gap-3">
           <div className="flex size-10 items-center justify-center rounded-xl bg-surface-hover">
-            <CheckCircle2 className="size-5 text-success" />
+            <Icon name="CheckCircle2" size="md" className="text-success" />
           </div>
           <h2 className="font-display text-xl font-bold">准备清单</h2>
         </div>
@@ -1511,7 +1493,7 @@ export default function SchoolDetail({ school }: { school: string }) {
               className="rounded-2xl border border-border-subtle bg-surface-elevated p-6"
             >
               <div className="mb-4 flex items-center gap-3">
-                <Clock className="size-4" style={{ color: data.accent }} />
+                <Icon name="Clock" size="sm" style={{ color: data.accent }} />
                 <div>
                   <h3 className="font-bold">{group.grade}</h3>
                   <p className="text-xs text-text-tertiary">{group.sub}</p>
@@ -1537,7 +1519,7 @@ export default function SchoolDetail({ school }: { school: string }) {
       <motion.div variants={itemVariants} className="space-y-4">
         <div className="flex items-center gap-3">
           <div className="flex size-10 items-center justify-center rounded-xl bg-surface-hover">
-            <Award className="size-5 text-warning" />
+            <Icon name="Award" size="md" className="text-warning" />
           </div>
           <h2 className="font-display text-xl font-bold">关键证书 / 竞赛</h2>
         </div>
@@ -1548,7 +1530,7 @@ export default function SchoolDetail({ school }: { school: string }) {
                 key={cert}
                 className="flex items-center gap-3 rounded-xl border border-border-subtle bg-surface-hover p-4"
               >
-                <Sparkles className="size-4 shrink-0 text-warning" />
+                <Icon name="Sparkles" size="sm" className="shrink-0 text-warning" />
                 <span className="text-sm text-text-primary">{cert}</span>
               </div>
             ))}
@@ -1563,7 +1545,7 @@ export default function SchoolDetail({ school }: { school: string }) {
       >
         <div className="flex items-center gap-3">
           <div className="flex size-10 items-center justify-center rounded-xl bg-surface-hover">
-            <BookOpen className="size-5 text-text-tertiary" />
+            <Icon name="BookOpen" size="md" className="text-text-tertiary" />
           </div>
           <div>
             <p className="font-medium text-text-primary">继续规划升学路线</p>
@@ -1574,7 +1556,7 @@ export default function SchoolDetail({ school }: { school: string }) {
           href="/dashboard/plan"
           className="inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-primary to-secondary px-6 py-2.5 font-semibold text-text-primary transition-all duration-300 hover:shadow-[0_0_30px_rgba(244,63,94,0.5)]"
         >
-          <FileText className="size-4" />
+          <Icon name="FileText" size="sm" />
           返回路线方案页
         </Link>
       </motion.div>

@@ -1,28 +1,28 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Target, TrendingUp, AlertTriangle, Sparkles } from 'lucide-react';
+import { Icon } from '@/components/ui/icon';
 
 const insights = [
   {
-    icon: Target,
+    icon: 'Target',
     title: '路线匹配度 78%',
     status: '良好',
     color: 'success' as const,
   },
   {
-    icon: AlertTriangle,
+    icon: 'TriangleAlert',
     title: '需关注：奥数尚未启动',
     status: '风险',
     color: 'warning' as const,
   },
   {
-    icon: TrendingUp,
+    icon: 'TrendingUp',
     title: '本月重点任务',
     status: '建议',
     color: 'accent' as const,
   },
-];
+] as const;
 
 const colorClasses = {
   success: 'bg-success/10 border-success/20 text-success [&_span]:bg-success/20',
@@ -35,7 +35,13 @@ export default function AIReportVisual() {
     <div className="rounded-2xl border border-border-subtle bg-surface-elevated p-5">
       <div className="mb-5 flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <Sparkles className="size-4 text-secondary" aria-hidden="true" />
+          <Icon
+            name="Sparkles"
+            size="sm"
+            animate="pulse"
+            className="text-secondary"
+            aria-hidden="true"
+          />
           <span className="font-mono text-[11px] uppercase tracking-wider text-text-tertiary">
             AI 智能检视
           </span>
@@ -47,7 +53,13 @@ export default function AIReportVisual() {
         <div className="flex items-center justify-between border-b border-border-subtle pb-3">
           <div className="flex items-center gap-3">
             <div className="bg-secondary/10 flex size-9 items-center justify-center rounded-lg">
-              <Sparkles className="size-4 text-secondary" aria-hidden="true" />
+              <Icon
+                name="Sparkles"
+                size="sm"
+                animate="pulse"
+                className="text-secondary"
+                aria-hidden="true"
+              />
             </div>
             <div>
               <h3 className="font-display text-base font-bold text-text-primary">AI 诊断报告</h3>
@@ -66,7 +78,7 @@ export default function AIReportVisual() {
             className={`rounded-lg p-3 ${colorClasses[insight.color]}`}
           >
             <div className="flex items-start gap-3">
-              <insight.icon className="mt-0.5 size-4 shrink-0" aria-hidden="true" />
+              <Icon name={insight.icon} size="sm" className="mt-0.5 shrink-0" aria-hidden="true" />
               <div className="flex-1">
                 <div className="mb-0.5 flex items-center justify-between">
                   <span className="text-sm font-semibold">{insight.title}</span>

@@ -1,7 +1,7 @@
 'use client';
 
 import { useRef, useState, useMemo } from 'react';
-import { Download, Share2, Calendar, Clock, Printer, CheckCircle2, Target } from 'lucide-react';
+import { Icon } from '@/components/ui/icon';
 import { WeeklyPlan, TaskCategory, DayOfWeek, WeeklyTaskItem } from '@/lib/storage.types';
 import {
   getPlanStats,
@@ -145,7 +145,7 @@ export default function WeeklyReportExport({ plan, childName, onClose }: WeeklyR
       onClose={onClose}
       title="导出周计划"
       subtitle="生成 A4 尺寸打卡表，可下载图片或直接打印"
-      icon={Share2}
+      icon="Share2"
       iconClassName="bg-secondary"
       size="md"
     >
@@ -159,7 +159,7 @@ export default function WeeklyReportExport({ plan, childName, onClose }: WeeklyR
           <div className="mb-5 flex items-start justify-between border-b-2 border-neutral-900 pb-5">
             <div>
               <div className="mb-2 flex items-center gap-2 text-xs text-neutral-500">
-                <Calendar className="size-4" />
+                <Icon name="Calendar" size="sm" />
                 <span>{formatWeekLabel(plan.weekId)}</span>
                 <span className="text-neutral-300">|</span>
                 <span>第 {plan.weekId.split('-W')[1]} 周</span>
@@ -171,7 +171,7 @@ export default function WeeklyReportExport({ plan, childName, onClose }: WeeklyR
             </div>
             <div className="text-right">
               <div className="mb-2 ml-auto flex size-10 items-center justify-center rounded-lg bg-primary">
-                <Target className="size-5 text-text-primary" />
+                <Icon name="Target" size="md" className="text-text-primary" />
               </div>
               <p className="text-xs font-semibold text-neutral-700">趣学伴</p>
               <p className="text-xs text-neutral-400">周计划 · 可打印</p>
@@ -190,7 +190,7 @@ export default function WeeklyReportExport({ plan, childName, onClose }: WeeklyR
             </div>
             <div className="rounded-lg border border-neutral-200 bg-neutral-50 p-3 text-center">
               <p className="mb-1 flex items-center justify-center gap-1 text-xs text-neutral-500">
-                <Clock className="size-4" /> 总时长
+                <Icon name="Clock" size="sm" /> 总时长
               </p>
               <p className="text-2xl font-bold text-neutral-900">{estimatedHours}h</p>
             </div>
@@ -257,7 +257,11 @@ export default function WeeklyReportExport({ plan, childName, onClose }: WeeklyR
                                       }`}
                                     >
                                       {done && (
-                                        <CheckCircle2 className="size-3 text-text-primary" />
+                                        <Icon
+                                          name="CheckCircle2"
+                                          size="xs"
+                                          className="text-text-primary"
+                                        />
                                       )}
                                     </div>
                                     <div className="min-w-0 flex-1">
@@ -333,7 +337,7 @@ export default function WeeklyReportExport({ plan, childName, onClose }: WeeklyR
               </>
             ) : (
               <>
-                <Share2 className="size-5" />
+                <Icon name="Share2" size="md" />
                 生成 A4 打卡表
               </>
             )}
@@ -344,14 +348,14 @@ export default function WeeklyReportExport({ plan, childName, onClose }: WeeklyR
               onClick={handleDownload}
               className="bg-success/10 border-success/20 hover:bg-success/20 flex items-center justify-center gap-2 rounded-lg border py-3 font-medium text-success transition-colors"
             >
-              <Download className="size-5" />
+              <Icon name="Download" size="md" />
               下载图片
             </button>
             <button
               onClick={handlePrint}
               className="flex items-center justify-center gap-2 rounded-lg border border-border-default bg-surface-elevated py-3 font-medium text-text-secondary transition-colors hover:bg-surface-highlight"
             >
-              <Printer className="size-5" />
+              <Icon name="Printer" size="md" />
               打印
             </button>
           </div>

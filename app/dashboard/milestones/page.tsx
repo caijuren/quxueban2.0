@@ -2,18 +2,7 @@
 
 import { useState, useRef } from 'react';
 import { motion, useReducedMotion, AnimatePresence } from 'framer-motion';
-import {
-  CalendarCheck,
-  Clock,
-  CheckCircle2,
-  Circle,
-  AlertCircle,
-  Flag,
-  Plus,
-  Trash2,
-  X,
-  Image as ImageIcon,
-} from 'lucide-react';
+import { Icon, type IconName } from '@/components/ui/icon';
 import { useChildren } from '@/components/dashboard/ChildrenContext';
 import { gradeLabel } from '@/lib/children';
 import ChildEmptyState from '@/components/dashboard/ChildEmptyState';
@@ -27,24 +16,24 @@ import {
 
 const statusConfig: Record<
   string,
-  { icon: typeof CheckCircle2; color: string; bg: string; label: string; next: string }
+  { icon: IconName; color: string; bg: string; label: string; next: string }
 > = {
   completed: {
-    icon: CheckCircle2,
+    icon: 'CheckCircle2',
     color: 'text-success',
     bg: 'bg-success/10',
     label: '已完成',
     next: 'pending',
   },
   in_progress: {
-    icon: Clock,
+    icon: 'Clock',
     color: 'text-warning',
     bg: 'bg-warning/10',
     label: '进行中',
     next: 'completed',
   },
   pending: {
-    icon: Circle,
+    icon: 'Circle',
     color: 'text-text-tertiary',
     bg: 'bg-surface-hover',
     label: '待开始',
@@ -134,7 +123,7 @@ export default function MilestonesPage() {
       >
         <div className="flex items-center gap-3">
           <div className="bg-primary/10 border-primary/20 flex size-10 items-center justify-center rounded-lg border">
-            <Flag className="size-5 text-primary" />
+            <Icon name="Flag" size="md" className="text-primary" />
           </div>
           <div>
             <h1 className="font-display text-2xl font-bold sm:text-3xl">
@@ -147,7 +136,7 @@ export default function MilestonesPage() {
             onClick={() => setShowAdd(true)}
             className="inline-flex items-center gap-1.5 rounded-lg bg-primary px-3 py-2 text-xs font-medium text-text-primary transition-all hover:opacity-90"
           >
-            <Plus className="size-3.5" />
+            <Icon name="Plus" size="xs" />
             添加里程碑
           </button>
         )}
@@ -159,7 +148,7 @@ export default function MilestonesPage() {
 
       {isLoading && currentChild && (
         <div className="flex items-center justify-center py-12 text-text-muted">
-          <Clock className="mr-2 size-5 animate-spin" />
+          <Icon name="Clock" size="md" animate="spin" className="mr-2" />
           加载中...
         </div>
       )}
@@ -222,7 +211,7 @@ export default function MilestonesPage() {
             >
               <div className="mb-6 flex items-center gap-4">
                 <div className="flex size-12 items-center justify-center rounded-lg bg-gradient-to-br from-secondary to-secondary-glow">
-                  <CalendarCheck className="size-6 text-text-primary" />
+                  <Icon name="CalendarCheck" size="lg" className="text-text-primary" />
                 </div>
                 <div>
                   <h2 className="font-display text-xl font-bold">
@@ -255,7 +244,7 @@ export default function MilestonesPage() {
                             className={`size-10 rounded-lg ${config.bg} flex items-center justify-center transition-opacity hover:opacity-80`}
                             title={`标记为${statusConfig[config.next]?.label ?? ''}`}
                           >
-                            <config.icon className={`size-5 ${config.color}`} />
+                            <Icon name={config.icon} size="sm" className={config.color} />
                           </button>
                           <div>
                             <span className="font-medium text-text-secondary">
@@ -277,7 +266,7 @@ export default function MilestonesPage() {
                             className="hover:bg-error/10 rounded-lg p-1.5 text-text-tertiary transition-colors hover:text-error"
                             title="删除"
                           >
-                            <Trash2 className="size-4" />
+                            <Icon name="Trash2" size="sm" />
                           </button>
                         </div>
                       </div>
@@ -295,7 +284,7 @@ export default function MilestonesPage() {
                                   onClick={() => handleRemoveImage(milestone.id, url)}
                                   className="absolute right-0.5 top-0.5 rounded bg-black/60 p-0.5 text-white opacity-0 transition-opacity group-hover:opacity-100"
                                 >
-                                  <X className="size-3" />
+                                  <Icon name="X" size="xs" />
                                 </button>
                               </div>
                             ))}
@@ -309,9 +298,9 @@ export default function MilestonesPage() {
                             className="inline-flex items-center gap-1.5 rounded-lg bg-surface-elevated px-3 py-1.5 text-xs text-text-secondary transition-colors hover:bg-surface-highlight disabled:opacity-50"
                           >
                             {uploadingFor === milestone.id ? (
-                              <Clock className="size-3.5 animate-spin" />
+                              <Icon name="Clock" size="xs" animate="spin" />
                             ) : (
-                              <ImageIcon className="size-3.5" />
+                              <Icon name="Image" size="xs" />
                             )}
                             {uploadingFor === milestone.id ? '上传中...' : '上传证书/截图'}
                           </button>
@@ -340,7 +329,7 @@ export default function MilestonesPage() {
           className="border-warning/20 bg-warning/5 rounded-2xl border p-6"
         >
           <div className="flex items-start gap-3">
-            <AlertCircle className="mt-0.5 size-5 shrink-0 text-warning" />
+            <Icon name="CircleAlert" size="md" className="mt-0.5 shrink-0 text-warning" />
             <div>
               <h3 className="mb-1 font-semibold text-warning">暂无里程碑</h3>
               <p className="text-sm text-text-tertiary">

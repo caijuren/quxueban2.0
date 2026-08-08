@@ -1,7 +1,8 @@
 'use client';
+import { Icon } from '@/components/ui/icon';
 
 import { motion } from 'framer-motion';
-import { Grid3X3, Target, Clock, AlertTriangle, RotateCcw } from 'lucide-react';
+
 import type { RouteMatrixRow } from '@/lib/plans';
 
 interface RouteMatrixProps {
@@ -71,20 +72,20 @@ export default function RouteMatrix({
       <div className="mb-6">
         <div className="mb-2 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <h2 className="flex items-center gap-2 font-display text-xl font-bold">
-            <Grid3X3 className="size-5 text-primary" />
+            <Icon name="Grid3X3" size="md" className="text-primary" />
             三公备考时间轴与成果矩阵
           </h2>
           <div className="flex items-center gap-3 text-xs">
             <span className="bg-error/10 border-error/30 flex items-center gap-1.5 rounded-lg border px-2 py-1 text-error">
-              <Target className="size-3" />
+              <Icon name="Target" size="xs" />
               必须
             </span>
             <span className="bg-warning/10 border-warning/30 flex items-center gap-1.5 rounded-lg border px-2 py-1 text-warning">
-              <Clock className="size-3" />
+              <Icon name="Clock" size="xs" />
               建议
             </span>
             <span className="bg-text-muted/10 border-text-muted/30 flex items-center gap-1.5 rounded-lg border px-2 py-1 text-text-tertiary">
-              <RotateCcw className="size-3" />
+              <Icon name="RotateCcw" size="xs" />
               可选
             </span>
           </div>
@@ -127,7 +128,6 @@ export default function RouteMatrix({
           {/* Rows */}
           <div className="space-y-2">
             {rows.map((row, rowIndex) => {
-              const Icon = row.icon;
               return (
                 <motion.div
                   key={row.id}
@@ -141,7 +141,7 @@ export default function RouteMatrix({
                     <div
                       className={`size-9 rounded-lg bg-gradient-to-br ${row.color} flex shrink-0 items-center justify-center`}
                     >
-                      <Icon className="size-4 text-text-primary" />
+                      <Icon name={row.icon} size="sm" className="size-4 text-text-primary" />
                     </div>
                     <span className="text-sm font-bold text-text-secondary">{row.category}</span>
                   </div>
@@ -182,7 +182,7 @@ export default function RouteMatrix({
                             </span>
                             {cell.repeatable && (
                               <span title="可多次参加">
-                                <RotateCcw className="size-3 text-text-muted" />
+                                <Icon name="RotateCcw" size="xs" className="text-text-muted" />
                               </span>
                             )}
                           </div>
@@ -195,7 +195,7 @@ export default function RouteMatrix({
                         <div className="mt-2 border-t border-border-subtle pt-2 opacity-60 transition-opacity group-hover:opacity-100">
                           {cell.fallback !== '—' && (
                             <p className="flex items-start gap-1 text-2xs text-text-muted">
-                              <AlertTriangle className="mt-0.5 size-3 shrink-0" />
+                              <Icon name="AlertTriangle" size="xs" className="mt-0.5 shrink-0" />
                               {cell.fallback}
                             </p>
                           )}

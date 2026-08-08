@@ -1,24 +1,9 @@
 'use client';
+import { Icon, type IconName } from '@/components/ui/icon';
 
 import { useEffect, useMemo, useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
-import {
-  ArrowLeft,
-  Save,
-  RotateCcw,
-  AlertCircle,
-  Check,
-  Loader2,
-  Plus,
-  Trash2,
-  GripVertical,
-  Route,
-  Clock,
-  MapPin,
-  Target,
-  Award,
-  X,
-} from 'lucide-react';
+
 import Link from 'next/link';
 import { useSubjectPlan, useUpdateSubjectPlan } from '@/lib/hooks/useSubjectPlan';
 import {
@@ -34,11 +19,11 @@ import { subjectPlanConfigDataSchema } from '@/lib/validation';
 import { ZodError } from 'zod';
 
 const TABS = [
-  { id: 'tracks', label: '线路管理', icon: Route },
-  { id: 'timeAxis', label: '时间轴', icon: Clock },
-  { id: 'nodes', label: '地图节点', icon: MapPin },
-  { id: 'keyAchievements', label: '阶段目标矩阵', icon: Target },
-  { id: 'examTimeline', label: '赛事时间轴', icon: Award },
+  { id: 'tracks', label: '线路管理', icon: 'Route' },
+  { id: 'timeAxis', label: '时间轴', icon: 'Clock' },
+  { id: 'nodes', label: '地图节点', icon: 'MapPin' },
+  { id: 'keyAchievements', label: '阶段目标矩阵', icon: 'Target' },
+  { id: 'examTimeline', label: '赛事时间轴', icon: 'Award' },
 ] as const;
 
 type TabId = (typeof TABS)[number]['id'];
@@ -53,7 +38,7 @@ interface SubjectPlanConfigEditorProps {
   subtitle: string;
   backHref: string;
   backLabel: string;
-  headerIcon?: React.ComponentType<{ className?: string }>;
+  headerIcon?: IconName;
   description?: React.ReactNode;
   childId?: string;
 }
@@ -64,7 +49,7 @@ export default function SubjectPlanConfigEditor({
   subtitle,
   backHref,
   backLabel,
-  headerIcon: HeaderIcon = Target,
+  headerIcon = 'Target',
   description,
   childId,
 }: SubjectPlanConfigEditorProps) {
@@ -357,7 +342,7 @@ export default function SubjectPlanConfigEditor({
         href={backHref}
         className="mb-2 inline-flex items-center gap-1 text-sm text-text-tertiary transition-colors hover:text-primary"
       >
-        <ArrowLeft className="size-4" />
+        <Icon name="ArrowLeft" size="sm" />
         {backLabel}
       </Link>
 
@@ -369,7 +354,7 @@ export default function SubjectPlanConfigEditor({
       >
         <div className="flex items-center gap-3">
           <div className="bg-secondary/10 border-secondary/20 flex size-10 items-center justify-center rounded-xl border">
-            <HeaderIcon className="size-5 text-secondary" />
+            <Icon name={headerIcon} size="md" className="size-5 text-secondary" />
           </div>
           <div>
             <h1 className="font-display text-2xl font-bold sm:text-3xl">{title}</h1>
@@ -383,7 +368,7 @@ export default function SubjectPlanConfigEditor({
             disabled={isLoading || !draft}
             className="inline-flex items-center gap-2 rounded-lg border border-border-subtle bg-surface-elevated px-4 py-2 text-sm font-medium text-text-secondary transition-colors hover:bg-surface-hover hover:text-text-primary disabled:opacity-50"
           >
-            <RotateCcw className="size-4" />
+            <Icon name="RotateCcw" size="sm" />
             重置
           </button>
           <button
@@ -392,11 +377,11 @@ export default function SubjectPlanConfigEditor({
             className="hover:bg-primary/90 inline-flex items-center gap-2 rounded-lg bg-primary px-5 py-2 text-sm font-semibold text-text-primary transition-colors disabled:opacity-50"
           >
             {updateConfig.isPending ? (
-              <Loader2 className="size-4 animate-spin" />
+              <Icon name="Loader2" size="sm" animate="spin" />
             ) : saveSuccess ? (
-              <Check className="size-4" />
+              <Icon name="Check" size="sm" />
             ) : (
-              <Save className="size-4" />
+              <Icon name="Save" size="sm" />
             )}
             {updateConfig.isPending ? '保存中' : saveSuccess ? '已保存' : '保存'}
           </button>
@@ -405,7 +390,7 @@ export default function SubjectPlanConfigEditor({
 
       {isLoading && (
         <div className="flex h-[40vh] items-center justify-center">
-          <Loader2 className="size-8 animate-spin text-primary" />
+          <Icon name="Loader2" size="xl" animate="spin" className="text-primary" />
         </div>
       )}
 
@@ -425,7 +410,7 @@ export default function SubjectPlanConfigEditor({
           {parseError && (
             <div className="border-error/20 bg-error/10 whitespace-pre-wrap rounded-xl border p-4 text-sm text-error">
               <div className="mb-1 flex items-center gap-2">
-                <AlertCircle className="size-4" />
+                <Icon name="AlertCircle" size="sm" />
                 <span className="font-medium">配置有误</span>
               </div>
               {parseError}
@@ -434,14 +419,14 @@ export default function SubjectPlanConfigEditor({
 
           {saveSuccess && (
             <div className="border-success/20 bg-success/10 flex items-center gap-2 rounded-xl border p-4 text-sm text-success">
-              <Check className="size-4" />
+              <Icon name="Check" size="sm" />
               <span className="font-medium">配置已保存</span>
             </div>
           )}
 
           {config?.isSystem && (
             <div className="border-secondary/20 bg-secondary/10 flex items-center gap-2 rounded-xl border p-4 text-sm text-secondary">
-              <AlertCircle className="size-4" />
+              <Icon name="AlertCircle" size="sm" />
               <span className="font-medium">当前使用系统默认配置</span>
               <span className="text-text-tertiary">保存后会复制为个人配置</span>
             </div>
@@ -454,7 +439,7 @@ export default function SubjectPlanConfigEditor({
               transition={{ duration: 0.4 }}
               className="bg-primary/5 border-primary/20 flex items-start gap-3 rounded-xl border p-4"
             >
-              <AlertCircle className="mt-0.5 size-5 shrink-0 text-primary" />
+              <Icon name="AlertCircle" size="md" className="mt-0.5 shrink-0 text-primary" />
               <div className="text-sm">{description}</div>
             </motion.div>
           )}
@@ -462,7 +447,6 @@ export default function SubjectPlanConfigEditor({
           {/* Tabs */}
           <div className="flex flex-wrap gap-2">
             {TABS.map((tab) => {
-              const Icon = tab.icon;
               const isActive = activeTab === tab.id;
               return (
                 <button
@@ -474,7 +458,7 @@ export default function SubjectPlanConfigEditor({
                       : 'border border-border-subtle bg-surface-elevated text-text-secondary hover:bg-surface-hover hover:text-text-primary'
                   }`}
                 >
-                  <Icon className="size-4" />
+                  <Icon name={tab.icon} size="sm" className="size-4" />
                   {tab.label}
                 </button>
               );
@@ -544,7 +528,7 @@ export default function SubjectPlanConfigEditor({
                           className="hover:bg-error/10 rounded-lg p-2 text-text-tertiary transition-colors hover:text-error"
                           title="删除"
                         >
-                          <Trash2 className="size-4" />
+                          <Icon name="Trash2" size="sm" />
                         </button>
                       </div>
                     </div>
@@ -554,7 +538,7 @@ export default function SubjectPlanConfigEditor({
                   onClick={addTrack}
                   className="hover:border-primary/40 hover:bg-primary/5 flex w-full items-center justify-center gap-2 rounded-lg border border-dashed border-border-default py-3 text-sm text-text-tertiary transition-colors hover:text-primary"
                 >
-                  <Plus className="size-4" />
+                  <Icon name="Plus" size="sm" />
                   添加线路
                 </button>
               </div>
@@ -570,7 +554,7 @@ export default function SubjectPlanConfigEditor({
                     key={`${item.label}-${index}`}
                     className="flex items-center gap-4 rounded-xl border border-border-subtle bg-surface-elevated p-4"
                   >
-                    <GripVertical className="size-4 text-text-muted" />
+                    <Icon name="GripVertical" size="sm" className="text-text-muted" />
                     <div className="grid flex-1 grid-cols-1 gap-4 md:grid-cols-2">
                       <div>
                         <label className="mb-1.5 block text-xs text-text-tertiary">标签</label>
@@ -602,7 +586,7 @@ export default function SubjectPlanConfigEditor({
                       className="hover:bg-error/10 rounded-lg p-2 text-text-tertiary transition-colors hover:text-error"
                       title="删除"
                     >
-                      <Trash2 className="size-4" />
+                      <Icon name="Trash2" size="sm" />
                     </button>
                   </div>
                 ))}
@@ -610,7 +594,7 @@ export default function SubjectPlanConfigEditor({
                   onClick={addTimeAxisItem}
                   className="hover:border-primary/40 hover:bg-primary/5 flex w-full items-center justify-center gap-2 rounded-lg border border-dashed border-border-default py-3 text-sm text-text-tertiary transition-colors hover:text-primary"
                 >
-                  <Plus className="size-4" />
+                  <Icon name="Plus" size="sm" />
                   添加时间轴节点
                 </button>
               </div>
@@ -688,7 +672,7 @@ export default function SubjectPlanConfigEditor({
                           className="hover:bg-error/10 rounded-lg p-2 text-text-tertiary transition-colors hover:text-error"
                           title="删除"
                         >
-                          <Trash2 className="size-4" />
+                          <Icon name="Trash2" size="sm" />
                         </button>
                       </div>
                     </div>
@@ -698,7 +682,7 @@ export default function SubjectPlanConfigEditor({
                   onClick={addNode}
                   className="hover:border-primary/40 hover:bg-primary/5 flex w-full items-center justify-center gap-2 rounded-lg border border-dashed border-border-default py-3 text-sm text-text-tertiary transition-colors hover:text-primary"
                 >
-                  <Plus className="size-4" />
+                  <Icon name="Plus" size="sm" />
                   添加节点
                 </button>
               </div>
@@ -783,7 +767,7 @@ export default function SubjectPlanConfigEditor({
                                   className="hover:bg-error/10 rounded-lg p-2 text-text-tertiary transition-colors hover:text-error"
                                   title="删除"
                                 >
-                                  <Trash2 className="size-4" />
+                                  <Icon name="Trash2" size="sm" />
                                 </button>
                               </div>
                             </div>
@@ -795,7 +779,7 @@ export default function SubjectPlanConfigEditor({
                                   onClick={() => addMilestone(track.id, index)}
                                   className="hover:text-primary/80 inline-flex items-center gap-1 text-xs text-primary"
                                 >
-                                  <Plus className="size-3" />
+                                  <Icon name="Plus" size="xs" />
                                   添加
                                 </button>
                               </div>
@@ -817,7 +801,7 @@ export default function SubjectPlanConfigEditor({
                                       onClick={() => removeMilestone(track.id, index, mi)}
                                       className="text-secondary/70 hover:text-secondary"
                                     >
-                                      <X className="size-3" />
+                                      <Icon name="X" size="xs" />
                                     </button>
                                   </div>
                                 ))}
@@ -834,7 +818,7 @@ export default function SubjectPlanConfigEditor({
                         onClick={() => addAchievement(track.id)}
                         className="hover:border-primary/40 hover:bg-primary/5 mt-3 flex w-full items-center justify-center gap-2 rounded-lg border border-dashed border-border-default py-2.5 text-sm text-text-tertiary transition-colors hover:text-primary"
                       >
-                        <Plus className="size-4" />
+                        <Icon name="Plus" size="sm" />
                         添加 {track.name} 目标
                       </button>
                     </div>
@@ -911,7 +895,7 @@ export default function SubjectPlanConfigEditor({
                           className="hover:bg-error/10 rounded-lg p-2 text-text-tertiary transition-colors hover:text-error"
                           title="删除"
                         >
-                          <Trash2 className="size-4" />
+                          <Icon name="Trash2" size="sm" />
                         </button>
                       </div>
                     </div>
@@ -930,7 +914,7 @@ export default function SubjectPlanConfigEditor({
                   onClick={addExamEvent}
                   className="hover:border-primary/40 hover:bg-primary/5 flex w-full items-center justify-center gap-2 rounded-lg border border-dashed border-border-default py-3 text-sm text-text-tertiary transition-colors hover:text-primary"
                 >
-                  <Plus className="size-4" />
+                  <Icon name="Plus" size="sm" />
                   添加赛事节点
                 </button>
               </div>

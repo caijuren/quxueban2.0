@@ -1,9 +1,9 @@
 'use client';
 
-import { LucideIcon, TrendingUp, TrendingDown, Minus } from 'lucide-react';
+import { Icon, type IconName } from '@/components/ui/icon';
 
 interface InsightRowProps {
-  icon: LucideIcon;
+  icon: IconName;
   label: string;
   value: string;
   trend?: string;
@@ -12,15 +12,15 @@ interface InsightRowProps {
 }
 
 export default function InsightRow({
-  icon: Icon,
+  icon,
   label,
   value,
   trend,
   trendDirection = 'flat',
   description,
 }: InsightRowProps) {
-  const TrendIcon =
-    trendDirection === 'up' ? TrendingUp : trendDirection === 'down' ? TrendingDown : Minus;
+  const trendIconName: IconName =
+    trendDirection === 'up' ? 'TrendingUp' : trendDirection === 'down' ? 'TrendingDown' : 'Minus';
   const trendColor =
     trendDirection === 'up'
       ? 'text-success'
@@ -28,11 +28,13 @@ export default function InsightRow({
         ? 'text-warning'
         : 'text-text-muted';
 
+  const iconNode = <Icon name={icon} size="sm" className="text-text-tertiary" />;
+
   return (
     <div className="flex items-center justify-between rounded-xl px-4 py-3.5 transition-colors hover:bg-white/[0.02]">
       <div className="flex items-center gap-3">
         <div className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-surface-hover">
-          <Icon className="size-4 text-text-tertiary" />
+          {iconNode}
         </div>
         <div>
           <p className="text-sm font-medium text-text-secondary">{label}</p>
@@ -43,7 +45,7 @@ export default function InsightRow({
         <p className="text-base font-bold text-text-primary">{value}</p>
         {trend && (
           <p className={`flex items-center justify-end gap-0.5 text-xs ${trendColor}`}>
-            <TrendIcon className="size-3" />
+            <Icon name={trendIconName} size="xs" />
             {trend}
           </p>
         )}

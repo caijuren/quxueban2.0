@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { CheckCircle2, Circle, Flame, Calendar, Trophy } from 'lucide-react';
+import { Icon } from '@/components/ui/icon';
 
 export interface CheckInTask {
   id: string;
@@ -119,7 +119,7 @@ export default function SubjectCheckIn({
       <div className="mb-6 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div className="flex size-10 items-center justify-center rounded-xl bg-gradient-to-br from-success to-accent">
-            <CheckCircle2 className="size-5 text-text-primary" />
+            <Icon name="CheckCircle2" size="md" className="text-text-primary" />
           </div>
           <div>
             <h2 className="font-display text-xl font-bold">{title}</h2>
@@ -130,7 +130,7 @@ export default function SubjectCheckIn({
           <div className="text-right">
             <p className="text-xs text-text-muted">连续打卡</p>
             <p className="flex items-center justify-end gap-1 text-lg font-bold text-orange-400">
-              <Flame className="size-4" />
+              <Icon name="Flame" size="sm" className="text-orange-400" />
               {streak} 天
             </p>
           </div>
@@ -167,9 +167,9 @@ export default function SubjectCheckIn({
               >
                 <div className="flex items-center gap-3">
                   {isDone ? (
-                    <CheckCircle2 className="size-5 text-success" />
+                    <Icon name="CheckCircle2" size="md" className="text-success" />
                   ) : (
-                    <Circle className="size-5 text-text-muted" />
+                    <Icon name="Circle" size="md" className="text-text-muted" />
                   )}
                   <span
                     className={`text-sm ${isDone ? 'text-success line-through' : 'text-text-secondary'}`}
@@ -190,7 +190,7 @@ export default function SubjectCheckIn({
           animate={{ opacity: 1, scale: 1 }}
           className="from-success/20 border-success/20 mt-5 flex items-center gap-3 rounded-xl border bg-gradient-to-r to-accent/10 p-4"
         >
-          <Trophy className="size-5 text-success" />
+          <Icon name="Trophy" size="md" className="text-success" />
           <p className="text-sm text-success">今日任务全部完成！继续保持。</p>
         </motion.div>
       )}

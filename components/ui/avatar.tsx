@@ -1,8 +1,8 @@
 'use client';
 
 import * as React from 'react';
-import { User } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { Icon } from '@/components/ui/icon';
 
 export interface AvatarProps extends React.HTMLAttributes<HTMLDivElement> {
   src?: string | null;
@@ -18,6 +18,14 @@ const sizeMap = {
   lg: 'size-12 text-lg',
   xl: 'size-16 text-xl',
 };
+
+const fallbackIconSizeMap = {
+  xs: 'xs',
+  sm: 'sm',
+  md: 'md',
+  lg: 'lg',
+  xl: 'xl',
+} as const;
 
 const Avatar = React.forwardRef<HTMLDivElement, AvatarProps>(
   ({ className, src, name, size = 'md', shape = 'circle', ...props }, ref) => {
@@ -44,7 +52,7 @@ const Avatar = React.forwardRef<HTMLDivElement, AvatarProps>(
         ) : initial ? (
           <span>{initial}</span>
         ) : (
-          <User className="size-1/2" />
+          <Icon name="User" size={fallbackIconSizeMap[size]} />
         )}
       </div>
     );

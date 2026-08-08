@@ -2,19 +2,7 @@
 
 import { useMemo } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
-import {
-  Sprout,
-  CheckCircle2,
-  Trophy,
-  ScrollText,
-  Award,
-  Star,
-  TrendingUp,
-  Image as ImageIcon,
-  Mic,
-  Loader2,
-  AlertCircle,
-} from 'lucide-react';
+import { Icon, type IconName } from '@/components/ui/icon';
 import { useChildren } from '@/components/dashboard/ChildrenContext';
 import ChildAvatar from '@/components/dashboard/ChildAvatar';
 import ChildEmptyState from '@/components/dashboard/ChildEmptyState';
@@ -32,13 +20,13 @@ import {
 
 const typeMeta: Record<
   GrowthTimelineItem['type'],
-  { icon: typeof CheckCircle2; label: string; color: string }
+  { icon: IconName; label: string; color: string }
 > = {
-  task: { icon: CheckCircle2, label: '任务打卡', color: 'text-success' },
-  milestone: { icon: Trophy, label: '里程碑', color: 'text-secondary' },
-  parentLog: { icon: ScrollText, label: '家长记录', color: 'text-ai' },
-  badge: { icon: Award, label: '徽章', color: 'text-warning' },
-  pointLog: { icon: Star, label: '积分', color: 'text-primary' },
+  task: { icon: 'CheckCircle2', label: '任务打卡', color: 'text-success' },
+  milestone: { icon: 'Trophy', label: '里程碑', color: 'text-secondary' },
+  parentLog: { icon: 'ScrollText', label: '家长记录', color: 'text-ai' },
+  badge: { icon: 'Award', label: '徽章', color: 'text-warning' },
+  pointLog: { icon: 'Star', label: '积分', color: 'text-primary' },
 };
 
 function shiftWeekId(weekId: string, delta: number): string {
@@ -97,7 +85,7 @@ export default function GrowthPage() {
         >
           <div className="flex items-center gap-3">
             <div className="bg-primary/10 border-primary/20 flex size-10 items-center justify-center rounded-xl border">
-              <Sprout className="size-5 text-primary" />
+              <Icon name="Sprout" size="md" className="text-primary" />
             </div>
             <div>
               <h1 className="font-display text-2xl font-bold sm:text-3xl">成长档案</h1>
@@ -120,7 +108,7 @@ export default function GrowthPage() {
       >
         <div className="flex items-center gap-3">
           <div className="bg-primary/10 border-primary/20 flex size-10 items-center justify-center rounded-xl border">
-            <Sprout className="size-5 text-primary" />
+            <Icon name="Sprout" size="md" className="text-primary" />
           </div>
           <div>
             <h1 className="font-display text-2xl font-bold sm:text-3xl">成长档案</h1>
@@ -162,19 +150,19 @@ export default function GrowthPage() {
         >
           <CommandCard className="h-full p-5">
             <div className="mb-5 flex items-center gap-2">
-              <TrendingUp className="size-5 text-primary" />
+              <Icon name="TrendingUp" size="md" className="text-primary" />
               <h2 className="text-lg font-bold text-text-secondary">成长时间线</h2>
             </div>
 
             {timelineLoading && (
               <div className="flex h-[40vh] items-center justify-center">
-                <Loader2 className="size-8 animate-spin text-primary" />
+                <Icon name="Loader" size="xl" animate="spin" className="text-primary" />
               </div>
             )}
 
             {timelineError && (
               <div className="border-error/20 bg-error/10 flex items-center gap-2 rounded-xl border p-4 text-sm text-error">
-                <AlertCircle className="size-4" />
+                <Icon name="CircleAlert" size="sm" />
                 {timelineError instanceof Error ? timelineError.message : '加载失败'}
               </div>
             )}
@@ -183,7 +171,7 @@ export default function GrowthPage() {
               <div className="space-y-4">
                 {(timelineData?.items.length ?? 0) === 0 ? (
                   <EmptyState
-                    icon={Sprout}
+                    icon="Sprout"
                     title="暂无时间线记录"
                     description="完成任务、获得徽章或记录家长日志后会自动汇总"
                   />
@@ -211,13 +199,13 @@ export default function GrowthPage() {
           >
             <CommandCard className="p-5">
               <div className="mb-4 flex items-center gap-2">
-                <TrendingUp className="size-5 text-ai" />
+                <Icon name="TrendingUp" size="md" className="text-ai" />
                 <h2 className="text-base font-bold text-text-secondary">近四周完成率</h2>
               </div>
 
               {weeklyRates.length === 0 ? (
                 <EmptyState
-                  icon={TrendingUp}
+                  icon="TrendingUp"
                   title="暂无周计划"
                   description="发布周计划后会显示完成趋势"
                 />
@@ -256,19 +244,19 @@ export default function GrowthPage() {
           >
             <CommandCard className="p-5">
               <div className="mb-4 flex items-center gap-2">
-                <ImageIcon className="size-5 text-secondary" />
+                <Icon name="Image" size="md" className="text-secondary" />
                 <h2 className="text-base font-bold text-text-secondary">证据库</h2>
               </div>
 
               {evidenceLoading && (
                 <div className="flex h-32 items-center justify-center">
-                  <Loader2 className="size-6 animate-spin text-primary" />
+                  <Icon name="Loader" size="lg" animate="spin" className="text-primary" />
                 </div>
               )}
 
               {evidenceError && (
                 <div className="border-error/20 bg-error/10 flex items-center gap-2 rounded-xl border p-4 text-sm text-error">
-                  <AlertCircle className="size-4" />
+                  <Icon name="CircleAlert" size="sm" />
                   {evidenceError instanceof Error ? evidenceError.message : '加载失败'}
                 </div>
               )}
@@ -277,7 +265,7 @@ export default function GrowthPage() {
                 <div className="max-h-[60vh] space-y-3 overflow-y-auto pr-1">
                   {(evidenceData?.items.length ?? 0) === 0 ? (
                     <EmptyState
-                      icon={Mic}
+                      icon="Mic"
                       title="暂无照片/音频"
                       description="在任务打卡中上传照片或音频后会出现在这里"
                     />
@@ -347,7 +335,6 @@ export default function GrowthPage() {
 
 function TimelineRow({ item, index }: { item: GrowthTimelineItem; index: number }) {
   const meta = typeMeta[item.type];
-  const Icon = meta.icon;
 
   return (
     <motion.div
@@ -360,7 +347,7 @@ function TimelineRow({ item, index }: { item: GrowthTimelineItem; index: number 
         <div
           className={`flex size-8 items-center justify-center rounded-lg border border-border-subtle bg-surface-elevated ${meta.color}`}
         >
-          <Icon className="size-4" />
+          <Icon name={meta.icon} size="sm" />
         </div>
         <div className="min-h-[16px] w-px flex-1 bg-border-subtle" />
       </div>

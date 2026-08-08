@@ -1,15 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import {
-  HelpCircle,
-  MessageSquare,
-  FileText,
-  ChevronDown,
-  ChevronUp,
-  Send,
-  Loader2,
-} from 'lucide-react';
+import { Icon } from '@/components/ui/icon';
 import packageInfo from '@/package.json';
 import SettingsSection from './SettingsSection';
 
@@ -67,11 +59,11 @@ export default function HelpSection() {
                   className="flex w-full items-center justify-between p-4 text-left transition-colors hover:bg-surface-elevated"
                 >
                   <span className="text-sm font-medium text-text-secondary">{item.q}</span>
-                  {isOpen ? (
-                    <ChevronUp className="size-4 text-text-muted" />
-                  ) : (
-                    <ChevronDown className="size-4 text-text-muted" />
-                  )}
+                  <Icon
+                    name={isOpen ? 'ChevronUp' : 'ChevronDown'}
+                    size="sm"
+                    className="text-text-muted"
+                  />
                 </button>
                 {isOpen && (
                   <div className="px-4 pb-4 text-sm leading-relaxed text-text-tertiary">
@@ -112,9 +104,9 @@ export default function HelpSection() {
               className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-text-primary transition-all hover:opacity-90 disabled:opacity-70"
             >
               {submitting ? (
-                <Loader2 className="size-4 animate-spin" />
+                <Icon name="Loader2" size="sm" animate="spin" />
               ) : (
-                <Send className="size-4" />
+                <Icon name="Send" size="sm" />
               )}
               提交反馈
             </button>
@@ -129,7 +121,7 @@ export default function HelpSection() {
             target="_blank"
             className="flex items-center gap-3 rounded-xl border border-border-subtle bg-surface-elevated p-4 transition-colors hover:bg-surface-elevated"
           >
-            <FileText className="size-5 text-primary" />
+            <Icon name="FileText" size="md" className="text-primary" />
             <span className="text-sm text-text-secondary">用户协议</span>
           </a>
           <a
@@ -137,7 +129,7 @@ export default function HelpSection() {
             target="_blank"
             className="flex items-center gap-3 rounded-xl border border-border-subtle bg-surface-elevated p-4 transition-colors hover:bg-surface-elevated"
           >
-            <FileText className="size-5 text-secondary" />
+            <Icon name="FileText" size="md" className="text-secondary" />
             <span className="text-sm text-text-secondary">隐私政策</span>
           </a>
         </div>

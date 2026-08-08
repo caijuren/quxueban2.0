@@ -4,38 +4,7 @@
 
 import React, { Suspense, useEffect, useMemo, useRef, useState } from 'react';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
-import {
-  Calendar,
-  CheckCircle2,
-  ChevronLeft,
-  ChevronRight,
-  Clock,
-  Target,
-  Sparkles,
-  RotateCcw,
-  Send,
-  BookOpen,
-  X,
-  Trophy,
-  Plus,
-  Trash2,
-  Pencil,
-  Library,
-  GraduationCap,
-  Backpack,
-  Dumbbell,
-  Palette,
-  ChevronDown,
-  Copy,
-  AlertTriangle,
-  Pause,
-  Share2,
-  Loader2,
-  Save,
-  LayoutTemplate,
-  History,
-  Star,
-} from 'lucide-react';
+import { Icon } from '@/components/ui/icon';
 import Modal from '@/components/ui/Modal';
 import { useChildren } from '@/components/dashboard/ChildrenContext';
 import EmptyState from '@/components/ui/EmptyState';
@@ -98,13 +67,13 @@ import {
 import { useCopyWeeklyPlan, useWeeklyPlans } from '@/lib/hooks/useWeeklyPlans';
 import { detectConflicts, WeeklyPlanConflict } from '@/lib/weeklyPlanConflicts';
 
-const categoryIcons: Record<TaskCategory, typeof BookOpen> = {
-  school: Backpack,
-  reading: BookOpen,
-  sport: Dumbbell,
-  interest: Palette,
-  ability: Trophy,
-  other: GraduationCap,
+const categoryIcons: Record<TaskCategory, IconName> = {
+  school: 'Backpack',
+  reading: 'BookOpen',
+  sport: 'Dumbbell',
+  interest: 'Palette',
+  ability: 'Trophy',
+  other: 'GraduationCap',
 };
 
 const DIFFICULTY_LABELS: Record<string, string> = {
@@ -432,7 +401,7 @@ function EditPlanModal({ plan, onClose, onSave }: EditPlanModalProps) {
         onClose={handleClose}
         title="编辑周计划"
         subtitle="管理任务安排与本周目标"
-        icon={Pencil}
+        icon="Pencil"
         iconClassName="bg-accent"
         size="lg"
         footer={
@@ -447,7 +416,7 @@ function EditPlanModal({ plan, onClose, onSave }: EditPlanModalProps) {
               onClick={handleSave}
               className="flex items-center gap-2 rounded-lg bg-accent px-6 py-2 font-semibold text-text-primary transition-all"
             >
-              <Send className="size-4" />
+              <Icon name="Send" size="sm" />
               保存
             </button>
           </div>
@@ -514,10 +483,12 @@ function EditPlanModal({ plan, onClose, onSave }: EditPlanModalProps) {
                           className="rounded-lg p-1.5 text-text-tertiary transition-colors hover:bg-surface-hover hover:text-text-secondary"
                           aria-label={`${day}添加任务`}
                         >
-                          <Plus className="size-4" />
+                          <Icon name="Plus" size="sm" />
                         </button>
-                        <ChevronDown
-                          className={`size-4 text-text-muted transition-transform ${
+                        <Icon
+                          name="ChevronDown"
+                          size="sm"
+                          className={`text-text-muted transition-transform ${
                             isCollapsed ? '-rotate-90' : ''
                           }`}
                         />
@@ -576,14 +547,14 @@ function EditPlanModal({ plan, onClose, onSave }: EditPlanModalProps) {
                   onClick={addGoal}
                   className="flex items-center gap-1.5 rounded-lg bg-primary px-3 py-1.5 text-xs font-medium text-text-primary"
                 >
-                  <Plus className="size-3.5" />
+                  <Icon name="Plus" size="xs" />
                   新建目标
                 </button>
               </div>
 
               {goals.length === 0 && (
                 <div className="rounded-2xl border border-border-subtle bg-surface-hover py-10 text-center">
-                  <Target className="mx-auto mb-2 size-8 text-text-muted" />
+                  <Icon name="Target" size="xl" className="mx-auto mb-2 text-text-muted" />
                   <p className="text-sm text-text-muted">还没有目标，点击上方添加</p>
                 </div>
               )}
@@ -675,7 +646,7 @@ function EditPlanModal({ plan, onClose, onSave }: EditPlanModalProps) {
                               onClick={() => deleteGoalChecklistItem(goal.id, item.id)}
                               className="hover:bg-error/10 rounded-lg p-1.5 text-text-muted transition-colors hover:text-error"
                             >
-                              <Trash2 className="size-3.5" />
+                              <Icon name="Trash2" size="xs" />
                             </button>
                           </div>
                         ))}
@@ -691,7 +662,7 @@ function EditPlanModal({ plan, onClose, onSave }: EditPlanModalProps) {
                         onClick={() => deleteGoal(goal.id)}
                         className="hover:text-error/80 flex items-center gap-1 text-xs text-error"
                       >
-                        <Trash2 className="size-3" />
+                        <Icon name="Trash2" size="xs" />
                         删除目标
                       </button>
                     </div>
@@ -741,7 +712,7 @@ function TaskEditRow({
 }: TaskEditRowProps) {
   const [selectedDays, setSelectedDays] = useState<Set<DayOfWeek>>(new Set());
   const [materialInput, setMaterialInput] = useState('');
-  const CategoryIcon = categoryIcons[task.category];
+  const categoryIcon = categoryIcons[task.category];
 
   const toggleDay = (day: DayOfWeek) => {
     setSelectedDays((prev) => {
@@ -764,7 +735,11 @@ function TaskEditRow({
         <div className="col-span-6 sm:col-span-2">
           <label className="mb-1 block text-2xs text-text-muted">分类</label>
           <div className="relative">
-            <CategoryIcon className="pointer-events-none absolute left-2 top-1/2 size-3.5 -translate-y-1/2 text-text-tertiary" />
+            <Icon
+              name={categoryIcon}
+              size="xs"
+              className="pointer-events-none absolute left-2 top-1/2 -translate-y-1/2 text-text-tertiary"
+            />
             <select
               value={task.category}
               onChange={(e) =>
@@ -847,14 +822,14 @@ function TaskEditRow({
             aria-label="复制到其它日期"
             title="复制到其它日期"
           >
-            <Copy className="size-4" />
+            <Icon name="Copy" size="sm" />
           </button>
           <button
             onClick={() => onDelete(task.id)}
             className="hover:bg-error/10 focus-ring rounded-lg p-1.5 text-text-muted transition-colors hover:text-error"
             aria-label="删除任务"
           >
-            <Trash2 className="size-4" />
+            <Icon name="Trash2" size="sm" />
           </button>
         </div>
       </div>
@@ -897,7 +872,7 @@ function TaskEditRow({
                 className="hover:text-error"
                 aria-label={`删除 ${m}`}
               >
-                <X className="size-3" />
+                <Icon name="X" size="xs" />
               </button>
             </span>
           ))}
@@ -1015,7 +990,7 @@ function UnsavedPrompt({ onCancel, onConfirm }: UnsavedPromptProps) {
       onClose={onCancel}
       title="有未保存的更改"
       subtitle="关闭后将丢失本次编辑内容"
-      icon={AlertTriangle}
+      icon="AlertTriangle"
       iconClassName="bg-warning"
       size="sm"
       showClose={false}
@@ -1184,7 +1159,7 @@ function TaskLibraryModal({
       onClose={onClose}
       title="从任务库选择"
       subtitle={`勾选常用任务一键添加到${selectedDay}`}
-      icon={Library}
+      icon="Library"
       iconClassName="bg-secondary"
       size="xl"
       colorScheme="violet"
@@ -1205,17 +1180,17 @@ function TaskLibraryModal({
             >
               {assess.isPending ? (
                 <>
-                  <Loader2 className="size-4 animate-spin" />
+                  <Icon name="Loader" size="sm" animate="spin" />
                   评估中...
                 </>
               ) : assessments ? (
                 <>
-                  <CheckCircle2 className="size-4" />
+                  <Icon name="CircleCheck" size="sm" />
                   确认添加
                 </>
               ) : (
                 <>
-                  <Sparkles className="size-4" />
+                  <Icon name="Sparkles" size="sm" animate="pulse" />
                   AI 评估并添加
                 </>
               )}
@@ -1261,7 +1236,9 @@ function TaskLibraryModal({
                 allFilteredSelected ? 'border-primary bg-primary' : 'border-border-default'
               }`}
             >
-              {allFilteredSelected && <CheckCircle2 className="size-3 text-text-primary" />}
+              {allFilteredSelected && (
+                <Icon name="CircleCheck" size="xs" className="text-text-primary" />
+              )}
             </div>
             全选
           </button>
@@ -1288,7 +1265,7 @@ function TaskLibraryModal({
         <div className="mb-6 grid max-h-[50vh] grid-cols-1 gap-3 overflow-y-auto pr-1 sm:grid-cols-2">
           {filteredTemplates.map((tpl) => {
             const selected = selectedTemplateIds.has(tpl.id);
-            const CategoryIcon = categoryIcons[tpl.category];
+            const categoryIcon = categoryIcons[tpl.category];
             const alignment = tpl.alignment;
             const difficultyColor = tpl.difficulty ? DIFFICULTY_COLORS[tpl.difficulty] : '';
             return (
@@ -1305,11 +1282,13 @@ function TaskLibraryModal({
                   <div
                     className={`mt-0.5 flex size-5 items-center justify-center rounded border ${selected ? 'border-primary bg-primary' : 'border-border-default'}`}
                   >
-                    {selected && <CheckCircle2 className="size-3.5 text-text-primary" />}
+                    {selected && (
+                      <Icon name="CircleCheck" size="xs" className="text-text-primary" />
+                    )}
                   </div>
                   <div className="min-w-0 flex-1">
                     <div className="mb-1 flex flex-wrap items-center gap-1.5">
-                      <CategoryIcon className="size-3.5 text-text-tertiary" />
+                      <Icon name={categoryIcon} size="xs" className="text-text-tertiary" />
                       <span className="text-2xs text-text-tertiary">
                         {TASK_CATEGORY_LABELS[tpl.category]}
                       </span>
@@ -1434,7 +1413,11 @@ function MoreActions({ children }: { children: React.ReactNode }) {
         className="inline-flex items-center gap-1.5 rounded-[14px] border border-border-default bg-surface px-3.5 py-2 text-sm font-medium text-text-secondary transition-colors hover:bg-surface-hover hover:text-text-primary"
       >
         更多
-        <ChevronDown className={`size-3.5 transition-transform ${open ? 'rotate-180' : ''}`} />
+        <Icon
+          name="ChevronDown"
+          size="xs"
+          className={`transition-transform ${open ? 'rotate-180' : ''}`}
+        />
       </button>
       <AnimatePresence>
         {open && (
@@ -1623,7 +1606,7 @@ function WeeklyTasksContent() {
         >
           <div className="flex items-center gap-3">
             <div className="bg-primary/10 border-primary/20 flex size-10 items-center justify-center rounded-xl border">
-              <Calendar className="size-5 text-primary" />
+              <Icon name="Calendar" size="md" className="text-primary" />
             </div>
             <div>
               <h1 className="font-display text-2xl font-bold sm:text-3xl">周计划</h1>
@@ -1740,7 +1723,7 @@ function WeeklyTasksContent() {
         {/* Header */}
         <div className="flex items-center gap-3">
           <div className="bg-primary/10 border-primary/20 flex size-10 items-center justify-center rounded-[14px] border">
-            <Calendar className="size-5 text-primary" />
+            <Icon name="Calendar" size="md" className="text-primary" />
           </div>
           <div>
             <div className="flex items-center gap-2">
@@ -1769,7 +1752,7 @@ function WeeklyTasksContent() {
               className="flex size-8 items-center justify-center rounded-[14px] border border-border-default bg-surface text-text-secondary transition-colors hover:bg-surface-hover"
               aria-label="上一周"
             >
-              <ChevronLeft className="size-4" />
+              <Icon name="ChevronLeft" size="sm" />
             </button>
             <div className="relative">
               <select
@@ -1784,14 +1767,18 @@ function WeeklyTasksContent() {
                   </option>
                 ))}
               </select>
-              <ChevronDown className="pointer-events-none absolute right-2.5 top-1/2 size-4 -translate-y-1/2 text-text-tertiary" />
+              <Icon
+                name="ChevronDown"
+                size="sm"
+                className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-text-tertiary"
+              />
             </div>
             <button
               onClick={() => setWeekId((w) => shiftWeekId(w, 1))}
               className="flex size-8 items-center justify-center rounded-[14px] border border-border-default bg-surface text-text-secondary transition-colors hover:bg-surface-hover"
               aria-label="下一周"
             >
-              <ChevronRight className="size-4" />
+              <Icon name="ChevronRight" size="sm" />
             </button>
           </div>
         </div>
@@ -1803,18 +1790,18 @@ function WeeklyTasksContent() {
               {!displayPlan && (
                 <button
                   onClick={handleGenerate}
-                  className="inline-flex items-center gap-1.5 rounded-[14px] bg-primary px-3.5 py-2 text-sm font-medium text-inverse shadow-[0_0_16px_rgba(244,63,122,0.25)] transition-all hover:bg-primary/90"
+                  className="hover:bg-primary/90 inline-flex items-center gap-1.5 rounded-[14px] bg-primary px-3.5 py-2 text-sm font-medium text-inverse shadow-[0_0_16px_rgba(244,63,122,0.25)] transition-all"
                 >
-                  <Target className="size-3.5" />
+                  <Icon name="Target" size="xs" />
                   生成本周计划
                 </button>
               )}
               {displayPlan && !isDraft && (
                 <button
                   onClick={() => setEditOpen(true)}
-                  className="inline-flex items-center gap-1.5 rounded-[14px] bg-primary px-3.5 py-2 text-sm font-medium text-inverse shadow-[0_0_16px_rgba(244,63,122,0.25)] transition-all hover:bg-primary/90"
+                  className="hover:bg-primary/90 inline-flex items-center gap-1.5 rounded-[14px] bg-primary px-3.5 py-2 text-sm font-medium text-inverse shadow-[0_0_16px_rgba(244,63,122,0.25)] transition-all"
                 >
-                  <Pencil className="size-3.5" />
+                  <Icon name="Pencil" size="xs" />
                   编辑周计划
                 </button>
               )}
@@ -1822,16 +1809,16 @@ function WeeklyTasksContent() {
                 <>
                   <button
                     onClick={handlePublish}
-                    className="inline-flex items-center gap-1.5 rounded-[14px] bg-primary px-3.5 py-2 text-sm font-medium text-inverse shadow-[0_0_16px_rgba(244,63,122,0.25)] transition-all hover:bg-primary/90"
+                    className="hover:bg-primary/90 inline-flex items-center gap-1.5 rounded-[14px] bg-primary px-3.5 py-2 text-sm font-medium text-inverse shadow-[0_0_16px_rgba(244,63,122,0.25)] transition-all"
                   >
-                    <Send className="size-3.5" />
+                    <Icon name="Send" size="xs" />
                     发布
                   </button>
                   <button
                     onClick={handleCancelDraft}
                     className="inline-flex items-center gap-1.5 rounded-[14px] border border-border-default bg-surface px-3.5 py-2 text-sm font-medium text-text-secondary transition-colors hover:bg-surface-hover"
                   >
-                    <X className="size-3.5" />
+                    <Icon name="X" size="xs" />
                     取消
                   </button>
                 </>
@@ -1844,7 +1831,7 @@ function WeeklyTasksContent() {
                   onClick={handleOpenReview}
                   className="inline-flex items-center gap-1.5 rounded-[14px] border border-border-default bg-surface px-3.5 py-2 text-sm font-medium text-text-secondary transition-colors hover:bg-surface-hover hover:text-text-primary"
                 >
-                  <Sparkles className="size-3.5" />
+                  <Icon name="Sparkles" size="xs" animate="pulse" />
                   {plan?.reviewedAt ? '查看复盘' : '本周复盘'}
                 </button>
               )}
@@ -1854,7 +1841,7 @@ function WeeklyTasksContent() {
                     onClick={() => setLibraryOpen(true)}
                     className="inline-flex items-center gap-1.5 rounded-[14px] border border-border-default bg-surface px-3.5 py-2 text-sm font-medium text-text-secondary transition-colors hover:bg-surface-hover hover:text-text-primary"
                   >
-                    <Library className="size-3.5" />
+                    <Icon name="Library" size="xs" />
                     从任务库选择
                   </button>
                   <MoreActions>
@@ -1862,21 +1849,21 @@ function WeeklyTasksContent() {
                       onClick={() => setSaveTemplateOpen(true)}
                       className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-text-secondary transition-colors hover:bg-surface-hover hover:text-text-primary"
                     >
-                      <Save className="size-4" />
+                      <Icon name="Save" size="sm" />
                       保存为模板
                     </button>
                     <button
                       onClick={() => setApplyTemplateOpen(true)}
                       className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-text-secondary transition-colors hover:bg-surface-hover hover:text-text-primary"
                     >
-                      <LayoutTemplate className="size-4" />
+                      <Icon name="LayoutTemplate" size="sm" />
                       套用模板
                     </button>
                     <button
                       onClick={() => setCopyHistoryOpen(true)}
                       className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-text-secondary transition-colors hover:bg-surface-hover hover:text-text-primary"
                     >
-                      <History className="size-4" />
+                      <Icon name="History" size="sm" />
                       复制历史周
                     </button>
                     {isPublished && !isDraft && stats && (
@@ -1884,7 +1871,7 @@ function WeeklyTasksContent() {
                         onClick={() => setReportOpen(true)}
                         className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-text-secondary transition-colors hover:bg-surface-hover hover:text-text-primary"
                       >
-                        <Share2 className="size-4" />
+                        <Icon name="Share2" size="sm" />
                         导出周计划
                       </button>
                     )}
@@ -1904,7 +1891,7 @@ function WeeklyTasksContent() {
           className="border-warning/20 bg-warning/[0.06] rounded-2xl border p-4"
         >
           <div className="flex items-start gap-3">
-            <AlertTriangle className="mt-0.5 size-5 shrink-0 text-warning" />
+            <Icon name="TriangleAlert" size="md" className="mt-0.5 shrink-0 text-warning" />
             <div className="min-w-0 flex-1">
               <div className="flex items-center justify-between gap-3">
                 <p className="text-sm font-medium text-text-secondary">
@@ -1915,8 +1902,10 @@ function WeeklyTasksContent() {
                   className="inline-flex items-center gap-1 text-xs text-text-muted transition-colors hover:text-text-secondary"
                 >
                   {conflictsExpanded ? '收起' : '查看详情'}
-                  <ChevronDown
-                    className={`size-3.5 transition-transform ${conflictsExpanded ? 'rotate-180' : ''}`}
+                  <Icon
+                    name="ChevronDown"
+                    size="xs"
+                    className={`transition-transform ${conflictsExpanded ? 'rotate-180' : ''}`}
                   />
                 </button>
               </div>
@@ -2014,7 +2003,7 @@ function WeeklyTasksContent() {
                 </p>
                 <button className="mt-2.5 inline-flex items-center gap-1 text-xs text-primary transition-colors hover:text-primary-glow">
                   查看详情
-                  <ChevronRight className="size-3.5" />
+                  <Icon name="ChevronRight" size="xs" />
                 </button>
               </div>
 
@@ -2023,7 +2012,7 @@ function WeeklyTasksContent() {
                 <div className="flex items-center gap-3 lg:gap-4">
                   <div className="flex items-center gap-2">
                     <div className="bg-success/10 border-success/20 flex size-8 items-center justify-center rounded-full border">
-                      <CheckCircle2 className="size-4 text-success" />
+                      <Icon name="CircleCheck" size="sm" className="text-success" />
                     </div>
                     <div>
                       <p className="text-xs font-bold tabular-nums leading-tight text-text-primary">
@@ -2035,7 +2024,7 @@ function WeeklyTasksContent() {
                   </div>
                   <div className="flex items-center gap-2">
                     <div className="bg-secondary/10 border-secondary/20 flex size-8 items-center justify-center rounded-full border">
-                      <Clock className="size-4 text-secondary" />
+                      <Icon name="Clock" size="sm" className="text-secondary" />
                     </div>
                     <div>
                       <p className="text-xs font-bold tabular-nums leading-tight text-text-primary">
@@ -2051,7 +2040,7 @@ function WeeklyTasksContent() {
                   </div>
                   <div className="flex items-center gap-2">
                     <div className="bg-warning/10 border-warning/20 flex size-8 items-center justify-center rounded-full border">
-                      <Pause className="size-4 text-warning" />
+                      <Icon name="Pause" size="sm" className="text-warning" />
                     </div>
                     <div>
                       <p className="text-xs font-bold tabular-nums leading-tight text-text-primary">
@@ -2095,7 +2084,7 @@ function WeeklyTasksContent() {
             className="rounded-2xl bg-surface-elevated p-12 text-center"
           >
             <div className="mx-auto mb-4 flex size-16 items-center justify-center rounded-2xl border border-border-default bg-surface-elevated">
-              <Calendar className="size-8 text-primary" />
+              <Icon name="Calendar" size="xl" className="text-primary" />
             </div>
             <h3 className="mb-2 font-display text-xl font-bold">本周计划尚未发布</h3>
             <p className="mx-auto mb-6 max-w-md text-sm text-text-tertiary">
@@ -2138,7 +2127,7 @@ function WeeklyTasksContent() {
                 onClick={handleSaveReview}
                 className="flex items-center gap-2 rounded-lg bg-accent px-6 py-2 font-semibold text-text-primary transition-all"
               >
-                <RotateCcw className="size-4" />
+                <Icon name="RotateCcw" size="sm" />
                 保存复盘
               </button>
             </div>
@@ -2217,7 +2206,7 @@ function WeeklyTasksContent() {
                   .map((cat) => {
                     const s = stats.byCategory[cat];
                     const rate = s.total === 0 ? 0 : Math.round((s.done / s.total) * 100);
-                    const CategoryIcon = categoryIcons[cat];
+                    const categoryIcon = categoryIcons[cat];
                     return (
                       <div
                         key={cat}
@@ -2228,7 +2217,7 @@ function WeeklyTasksContent() {
                             cat
                           )}`}
                         >
-                          <CategoryIcon className="size-4" />
+                          <Icon name={categoryIcon} size="sm" />
                         </div>
                         <div className="min-w-0 flex-1">
                           <div className="mb-1 flex items-center justify-between">
@@ -2259,7 +2248,7 @@ function WeeklyTasksContent() {
             {/* AI review */}
             <div className="rounded-xl border border-accent/15 bg-accent/[0.06] p-4">
               <div className="mb-2 flex items-center gap-2">
-                <Sparkles className="size-4 text-accent" />
+                <Icon name="Sparkles" size="sm" animate="pulse" className="text-accent" />
                 <p className="text-sm font-semibold text-text-secondary">AI 点评</p>
               </div>
               <p className="text-sm leading-relaxed text-text-tertiary">
@@ -2363,7 +2352,7 @@ function SaveTemplateModal({
       onClose={onClose}
       title="保存为周计划模板"
       subtitle="将当前周计划保存为可复用的模板"
-      icon={Save}
+      icon="Save"
       size="md"
       footer={
         <div className="flex items-center justify-end gap-3">
@@ -2378,7 +2367,11 @@ function SaveTemplateModal({
             disabled={saving || !name.trim()}
             className="flex items-center gap-2 rounded-xl bg-secondary px-5 py-2 font-semibold text-text-primary transition-all hover:shadow-[0_0_30px_rgba(139,92,246,0.4)] disabled:opacity-50"
           >
-            {saving ? <Loader2 className="size-4 animate-spin" /> : <Save className="size-4" />}
+            {saving ? (
+              <Icon name="Loader" size="sm" animate="spin" />
+            ) : (
+              <Icon name="Save" size="sm" />
+            )}
             保存
           </button>
         </div>
@@ -2428,7 +2421,7 @@ function ApplyTemplateModal({
       onClose={onClose}
       title="套用周计划模板"
       subtitle="选择已有模板应用到当前周计划"
-      icon={LayoutTemplate}
+      icon="LayoutTemplate"
       size="lg"
       footer={
         <div className="flex items-center justify-end gap-3">
@@ -2488,7 +2481,9 @@ function ApplyTemplateModal({
               >
                 <div className="flex items-center justify-between">
                   <span className="text-sm font-medium text-text-secondary">{tpl.name}</span>
-                  {selectedId === tpl.id && <CheckCircle2 className="size-4 text-secondary" />}
+                  {selectedId === tpl.id && (
+                    <Icon name="CircleCheck" size="sm" className="text-secondary" />
+                  )}
                 </div>
                 {tpl.description && (
                   <p className="mt-1 line-clamp-2 text-xs text-text-muted">{tpl.description}</p>
@@ -2529,13 +2524,13 @@ function CopyHistoryModal({
       onClose={onClose}
       title="复制历史周计划"
       subtitle="选择历史周计划复制到当前周"
-      icon={History}
+      icon="History"
       size="lg"
     >
       <div className="max-h-[60vh] space-y-2 overflow-y-auto">
         {isLoading ? (
           <div className="py-8 text-center text-sm text-text-muted">
-            <Loader2 className="mx-auto mb-2 size-5 animate-spin" />
+            <Icon name="Loader" size="md" animate="spin" className="mx-auto mb-2" />
             加载历史周计划...
           </div>
         ) : history.length === 0 ? (
@@ -2559,7 +2554,7 @@ function CopyHistoryModal({
                 onClick={() => onCopy(plan.weekId)}
                 className="bg-secondary/10 hover:bg-secondary/20 flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium text-secondary transition-colors"
               >
-                <Copy className="size-3.5" />
+                <Icon name="Copy" size="xs" />
                 复制
               </button>
             </div>

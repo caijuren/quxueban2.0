@@ -1,6 +1,6 @@
 'use client';
 
-import { ArrowRight } from 'lucide-react';
+import { Icon } from '@/components/ui/icon';
 import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
@@ -32,7 +32,7 @@ export default function PageLayout({ children, ctaText = '免费开始规划' }:
               className="hover:bg-primary/90 inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-text-primary transition-colors"
             >
               {ctaText}
-              <ArrowRight className="size-4" />
+              <Icon name="ArrowRight" size="sm" />
             </Link>
           </MotionSection>
         </div>

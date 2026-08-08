@@ -1,8 +1,8 @@
 'use client';
 
 import * as React from 'react';
-import { X, AlertCircle, CheckCircle, AlertTriangle, Info } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { Icon, type IconName } from '@/components/ui/icon';
 import Card from './card';
 
 export interface AlertProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -12,11 +12,11 @@ export interface AlertProps extends React.HTMLAttributes<HTMLDivElement> {
   onClose?: () => void;
 }
 
-const iconMap = {
-  success: CheckCircle,
-  error: AlertCircle,
-  warning: AlertTriangle,
-  info: Info,
+const iconMap: Record<AlertProps['type'], IconName> = {
+  success: 'CheckCircle',
+  error: 'AlertCircle',
+  warning: 'AlertTriangle',
+  info: 'Info',
 };
 
 const variantMap = {
@@ -28,7 +28,7 @@ const variantMap = {
 
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(
   ({ className, type, title, description, onClose, children, ...props }, ref) => {
-    const Icon = iconMap[type];
+    const iconName = iconMap[type];
 
     return (
       <Card
@@ -39,7 +39,7 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(
         {...props}
       >
         <div className="flex items-start gap-3">
-          <Icon className="mt-0.5 size-5 shrink-0" />
+          <Icon name={iconName} size="md" className="mt-0.5 shrink-0" />
           <div className="min-w-0 flex-1">
             {title && <h4 className="text-sm font-semibold text-text-primary">{title}</h4>}
             {description && <p className="mt-0.5 text-sm text-text-secondary">{description}</p>}
@@ -52,7 +52,7 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(
               className="shrink-0 text-text-muted transition-colors hover:text-text-secondary"
               aria-label="关闭"
             >
-              <X className="size-4" />
+              <Icon name="X" size="sm" />
             </button>
           )}
         </div>

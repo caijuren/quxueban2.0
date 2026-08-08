@@ -1,6 +1,6 @@
 'use client';
+import { Icon } from '@/components/ui/icon';
 
-import { BookOpen, Star } from 'lucide-react';
 import CommandCard from '@/components/ui/CommandCard';
 import type { Book } from '@/lib/types';
 
@@ -13,11 +13,11 @@ function DifficultyStars({ difficulty }: { difficulty: number }) {
   return (
     <div className="flex items-center gap-0.5">
       {Array.from({ length: 5 }).map((_, i) => (
-        <Star
+        <Icon
+          name="Star"
+          size="md"
           key={i}
-          className={`size-3 ${
-            i < difficulty ? 'fill-warning text-warning' : 'text-text-muted/30'
-          }`}
+          className={`size-3 ${i < difficulty ? 'fill-warning text-warning' : 'text-text-muted/30'}`}
         />
       ))}
     </div>
@@ -34,7 +34,7 @@ export default function BookCard({ book, onClick }: BookCardProps) {
     >
       <div className="flex items-start gap-3">
         <div className="bg-primary/10 border-primary/15 flex size-11 shrink-0 items-center justify-center rounded-xl border">
-          <BookOpen className="size-5 text-primary" />
+          <Icon name="BookOpen" size="md" className="text-primary" />
         </div>
         <div className="min-w-0 flex-1">
           <h3 className="line-clamp-2 font-display text-sm font-bold leading-snug text-text-primary transition-colors group-hover:text-text-primary">

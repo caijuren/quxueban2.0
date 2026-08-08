@@ -1,8 +1,9 @@
 'use client';
+import { Icon } from '@/components/ui/icon';
 
 import { useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
-import { Sparkles, ArrowLeft, Mail, CheckCircle2 } from 'lucide-react';
+
 import Link from 'next/link';
 
 export default function ForgotPasswordPage() {
@@ -34,7 +35,7 @@ export default function ForgotPasswordPage() {
         >
           <div className="mb-10 flex items-center gap-3">
             <div className="flex size-10 items-center justify-center rounded-module bg-primary">
-              <Sparkles className="size-5 text-text-primary" />
+              <Icon name="Sparkles" size="md" className="text-text-primary" />
             </div>
             <span className="font-display text-2xl font-bold text-primary">趣学伴</span>
           </div>
@@ -64,14 +65,14 @@ export default function ForgotPasswordPage() {
             {submitted ? (
               <div className="space-y-4 text-center">
                 <div className="bg-success/10 border-success/20 mx-auto flex size-12 items-center justify-center rounded-module border">
-                  <CheckCircle2 className="size-6 text-success" />
+                  <Icon name="CheckCircle2" size="lg" className="text-success" />
                 </div>
                 <p className="text-sm text-text-secondary">如果该邮箱已注册，重置链接已发送。</p>
                 <Link
                   href="/login"
                   className="inline-flex items-center gap-1.5 text-sm text-primary transition-colors hover:text-primary-glow"
                 >
-                  <ArrowLeft className="size-4" /> 返回登录
+                  <Icon name="ArrowLeft" size="sm" /> 返回登录
                 </Link>
               </div>
             ) : (
@@ -84,7 +85,11 @@ export default function ForgotPasswordPage() {
                     邮箱
                   </label>
                   <div className="relative">
-                    <Mail className="absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-text-muted" />
+                    <Icon
+                      name="Mail"
+                      size="sm"
+                      className="absolute left-3.5 top-1/2 -translate-y-1/2 text-text-muted"
+                    />
                     <input
                       id="email"
                       name="email"
@@ -102,7 +107,7 @@ export default function ForgotPasswordPage() {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="inline-flex w-full items-center justify-center gap-2 rounded-module bg-primary px-4 py-2 text-sm font-medium text-inverse transition-colors hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50"
+                  className="hover:bg-primary/90 inline-flex w-full items-center justify-center gap-2 rounded-module bg-primary px-4 py-2 text-sm font-medium text-inverse transition-colors disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   {loading ? '发送中...' : '发送重置链接'}
                 </button>

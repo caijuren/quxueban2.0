@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Bell, Clock, Moon, Save } from 'lucide-react';
+import { Icon } from '@/components/ui/icon';
 import { UserSettings, NOTIFICATION_OPTIONS, mergeNotificationPrefs } from '@/lib/settings';
 import SettingsSection from './SettingsSection';
 import Switch from '@/components/ui/switch';
@@ -93,7 +93,7 @@ export default function NotificationSection({ settings, onUpdate }: Notification
         <div className="space-y-3">
           <div className="flex items-center gap-2.5">
             <div className="bg-primary/10 flex size-8 items-center justify-center rounded-lg">
-              <Clock className="size-4 text-primary" />
+              <Icon name="Clock" size="sm" className="text-primary" />
             </div>
             <div className="flex-1">
               <p className="text-xs font-medium text-text-secondary">每日提醒时间</p>
@@ -109,7 +109,7 @@ export default function NotificationSection({ settings, onUpdate }: Notification
 
           <div className="flex items-center gap-2.5">
             <div className="bg-secondary/10 flex size-8 items-center justify-center rounded-lg">
-              <Moon className="size-4 text-secondary" />
+              <Icon name="Moon" size="sm" className="text-secondary" />
             </div>
             <div className="flex-1">
               <p className="text-xs font-medium text-text-secondary">免打扰模式</p>
@@ -154,7 +154,7 @@ export default function NotificationSection({ settings, onUpdate }: Notification
           onClick={handleSave}
           isLoading={saving}
           size="sm"
-          leftIcon={<Save className="size-4" />}
+          leftIcon={<Icon name="Save" size="sm" />}
         >
           保存通知设置
         </Button>

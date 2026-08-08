@@ -1,6 +1,6 @@
 'use client';
 
-import { Loader2, Lock } from 'lucide-react';
+import { Icon } from '@/components/ui/icon';
 import ConsolePageShell from '@/components/console/core/ConsolePageShell';
 import { useConsoleSettings } from '@/components/console/core/useConsoleSettings';
 import AiConfigSection from '@/components/settings/AiConfigSection';
@@ -11,7 +11,7 @@ export default function AiConfigPage() {
   if (isLoading) {
     return (
       <div className="flex h-[60vh] items-center justify-center">
-        <Loader2 className="size-8 animate-spin text-primary" />
+        <Icon name="Loader2" size="xl" animate="spin" className="text-primary" />
       </div>
     );
   }
@@ -34,7 +34,7 @@ export default function AiConfigPage() {
         <div className="rounded-2xl border border-border-default bg-surface p-6">
           <div className="flex items-start gap-4">
             <div className="bg-primary/10 flex size-10 shrink-0 items-center justify-center rounded-xl">
-              <Lock className="size-5 text-primary" />
+              <Icon name="Lock" size="md" className="text-primary" />
             </div>
             <div>
               <h3 className="mb-1 text-base font-bold text-text-primary">请联系管理员</h3>

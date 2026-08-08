@@ -1,8 +1,8 @@
 'use client';
 
 import * as React from 'react';
-import { ChevronUp, ChevronDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { Icon } from '@/components/ui/icon';
 import Card from './card';
 import Button from './button';
 import Skeleton from './skeleton';
@@ -110,17 +110,20 @@ export default function DataTable<T>({
                     {column.title}
                     {column.sorter && (
                       <span className="inline-flex flex-col">
-                        <ChevronUp
+                        <Icon
+                          name="ChevronUp"
+                          size="xs"
                           className={cn(
-                            '-mb-1 size-3',
+                            '-mb-1',
                             sort?.key === column.key && sort.direction === 'asc'
                               ? 'text-text-primary'
                               : 'text-text-disabled'
                           )}
                         />
-                        <ChevronDown
+                        <Icon
+                          name="ChevronDown"
+                          size="xs"
                           className={cn(
-                            'size-3',
                             sort?.key === column.key && sort.direction === 'desc'
                               ? 'text-text-primary'
                               : 'text-text-disabled'

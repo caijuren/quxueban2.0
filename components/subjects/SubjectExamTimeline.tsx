@@ -1,7 +1,8 @@
 'use client';
+import { Icon } from '@/components/ui/icon';
 
 import { motion } from 'framer-motion';
-import { Award, Calendar, AlertTriangle } from 'lucide-react';
+
 import { SubjectPlanConfig } from '@/lib/subjects/subjectPlan';
 
 interface SubjectExamTimelineProps {
@@ -26,7 +27,7 @@ export default function SubjectExamTimeline({
     >
       <div className="mb-6 flex items-center gap-3">
         <div className="to-warning/70 flex size-10 items-center justify-center rounded-xl bg-gradient-to-br from-warning">
-          <Award className="size-5 text-text-primary" />
+          <Icon name="Award" size="md" className="text-text-primary" />
         </div>
         <div>
           <h2 className="font-display text-xl font-bold">{title}</h2>
@@ -67,7 +68,7 @@ export default function SubjectExamTimeline({
                   </div>
                   {exam.registerBefore && (
                     <div className="flex items-center gap-1.5 text-xs text-text-muted">
-                      <Calendar className="size-3.5" />
+                      <Icon name="Calendar" size="xs" />
                       报名截止：{exam.registerBefore}
                     </div>
                   )}
@@ -75,7 +76,7 @@ export default function SubjectExamTimeline({
 
                 {exam.notes && (
                   <div className="bg-warning/5 border-warning/10 flex items-start gap-2 rounded-lg border p-3">
-                    <AlertTriangle className="mt-0.5 size-4 shrink-0 text-warning" />
+                    <Icon name="AlertTriangle" size="sm" className="mt-0.5 shrink-0 text-warning" />
                     <p className="text-xs text-text-tertiary">{exam.notes}</p>
                   </div>
                 )}

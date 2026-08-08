@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Type, Layout, Eye, Home, Users, Save, Sun, Moon, Monitor } from 'lucide-react';
+import { Icon, type IconName } from '@/components/ui/icon';
 import { UserSettings, applySettingsToDocument, THEME_COLORS } from '@/lib/settings';
 import type { Theme } from '@/lib/theme';
 import SettingsSection from './SettingsSection';
@@ -17,10 +17,10 @@ interface AppearanceSectionProps {
 
 type Variant = Exclude<UserSettings['theme'], 'light'>;
 
-const APPEARANCES: { id: Theme; label: string; icon: typeof Sun }[] = [
-  { id: 'light', label: '浅色', icon: Sun },
-  { id: 'dark', label: '深色', icon: Moon },
-  { id: 'system', label: '跟随系统', icon: Monitor },
+const APPEARANCES: { id: Theme; label: string; icon: IconName }[] = [
+  { id: 'light', label: '浅色', icon: 'Sun' },
+  { id: 'dark', label: '深色', icon: 'Moon' },
+  { id: 'system', label: '跟随系统', icon: 'Monitor' },
 ];
 
 const VARIANTS = Object.entries(THEME_COLORS).map(([id, colors]) => ({
@@ -42,9 +42,9 @@ const DENSITIES = [
 ];
 
 const LANDING_PAGES = [
-  { id: 'dashboard', label: '升学规划中心', icon: Home },
-  { id: 'weekly', label: '周计划', icon: Layout },
-  { id: 'alerts', label: '提醒中心', icon: Eye },
+  { id: 'dashboard', label: '升学规划中心', icon: 'Home' as IconName },
+  { id: 'weekly', label: '周计划', icon: 'Layout' as IconName },
+  { id: 'alerts', label: '提醒中心', icon: 'Eye' as IconName },
 ];
 
 const CHILD_MODES = [
@@ -105,13 +105,13 @@ export default function AppearanceSection({ settings, onUpdate }: AppearanceSect
         <div className="space-y-4">
           <FormField label="外观主题">
             <div className="grid grid-cols-3 gap-2">
-              {APPEARANCES.map(({ id, label, icon: Icon }) => (
+              {APPEARANCES.map(({ id, label, icon }) => (
                 <Button
                   key={id}
                   size="sm"
                   variant={appearance === id ? 'primary' : 'secondary'}
                   onClick={() => setAppearance(id)}
-                  leftIcon={<Icon className="size-4" />}
+                  leftIcon={<Icon name={icon} size="sm" />}
                 >
                   {label}
                 </Button>
@@ -149,7 +149,7 @@ export default function AppearanceSection({ settings, onUpdate }: AppearanceSect
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div>
               <div className="mb-2 flex items-center gap-2">
-                <Type className="size-3.5 text-primary" />
+                <Icon name="Type" size="xs" className="text-primary" />
                 <p className="text-xs font-medium text-text-secondary">字体大小</p>
               </div>
               <div className="flex gap-1.5">
@@ -171,7 +171,7 @@ export default function AppearanceSection({ settings, onUpdate }: AppearanceSect
 
             <div>
               <div className="mb-2 flex items-center gap-2">
-                <Layout className="size-3.5 text-secondary" />
+                <Icon name="Layout" size="xs" className="text-secondary" />
                 <p className="text-xs font-medium text-text-secondary">信息密度</p>
               </div>
               <div className="flex gap-1.5">
@@ -194,7 +194,7 @@ export default function AppearanceSection({ settings, onUpdate }: AppearanceSect
 
           <div className="flex items-center justify-between py-1">
             <div className="flex items-center gap-2">
-              <Eye className="size-3.5 text-accent" />
+              <Icon name="Eye" size="xs" className="text-accent" />
               <p className="text-xs font-medium text-text-secondary">减少动效</p>
             </div>
             <Switch checked={reducedMotion} onCheckedChange={setReducedMotion} size="sm" />
@@ -204,7 +204,7 @@ export default function AppearanceSection({ settings, onUpdate }: AppearanceSect
 
           <div>
             <div className="mb-2 flex items-center gap-2">
-              <Home className="size-3.5 text-primary" />
+              <Icon name="Home" size="xs" className="text-primary" />
               <p className="text-xs font-medium text-text-secondary">登录后默认进入</p>
             </div>
             <div className="grid grid-cols-3 gap-1.5">
@@ -218,7 +218,7 @@ export default function AppearanceSection({ settings, onUpdate }: AppearanceSect
                       : 'border border-border-subtle bg-surface-elevated text-text-tertiary hover:bg-surface-highlight'
                   }`}
                 >
-                  <page.icon className="size-3.5" />
+                  <Icon name={page.icon} size="xs" />
                   <span className="truncate">{page.label}</span>
                 </button>
               ))}
@@ -227,7 +227,7 @@ export default function AppearanceSection({ settings, onUpdate }: AppearanceSect
 
           <div>
             <div className="mb-2 flex items-center gap-2">
-              <Users className="size-3.5 text-secondary" />
+              <Icon name="Users" size="xs" className="text-secondary" />
               <p className="text-xs font-medium text-text-secondary">默认孩子选择</p>
             </div>
             <div className="flex gap-1.5">
@@ -260,7 +260,7 @@ export default function AppearanceSection({ settings, onUpdate }: AppearanceSect
           onClick={handleSave}
           isLoading={saving}
           size="sm"
-          leftIcon={<Save className="size-4" />}
+          leftIcon={<Icon name="Save" size="sm" />}
         >
           保存界面偏好
         </Button>

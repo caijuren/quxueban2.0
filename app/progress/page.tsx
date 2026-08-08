@@ -1,9 +1,9 @@
+import { Icon } from '@/components/ui/icon';
 import { Metadata } from 'next';
 import PageLayout from '@/components/marketing/PageLayout';
 import MarketingHero from '@/components/marketing/MarketingHero';
 import DashboardVisual from '@/components/marketing/DashboardVisual';
 import CommandCard from '@/components/ui/CommandCard';
-import { LineChart, AlertTriangle, Gauge } from 'lucide-react';
 
 export const metadata: Metadata = {
   title: '进度追踪 - 趣学伴',
@@ -46,15 +46,17 @@ export default function ProgressMarketingPage() {
         description="不知道孩子准备得怎么样？趣学伴用可视化仪表盘展示各科能力进度，哪里超前、哪里落后，一眼就能看清楚。"
         tags={[
           {
-            icon: <LineChart className="size-3.5 text-primary" aria-hidden="true" />,
+            icon: <Icon name="LineChart" size="xs" className="text-primary" aria-hidden="true" />,
             text: '可视化仪表盘',
           },
           {
-            icon: <Gauge className="size-3.5 text-secondary" aria-hidden="true" />,
+            icon: <Icon name="Gauge" size="xs" className="text-secondary" aria-hidden="true" />,
             text: '健康度评分',
           },
           {
-            icon: <AlertTriangle className="size-3.5 text-warning" aria-hidden="true" />,
+            icon: (
+              <Icon name="AlertTriangle" size="xs" className="text-warning" aria-hidden="true" />
+            ),
             text: '风险提醒',
           },
         ]}

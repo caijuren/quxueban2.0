@@ -1,8 +1,9 @@
 'use client';
+import { Icon } from '@/components/ui/icon';
 
 import { useState } from 'react';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
-import { Plus, Pencil, Trash2, X, Save, Loader2, Sparkles } from 'lucide-react';
+
 import { Capability } from '@/lib/storage.types';
 import {
   useCapabilities,
@@ -113,7 +114,7 @@ export default function CapabilitySection() {
     >
       {isLoading ? (
         <div className="py-12 text-center text-sm text-text-muted">
-          <Loader2 className="mx-auto mb-2 size-5 animate-spin" />
+          <Icon name="Loader2" size="md" animate="spin" className="mx-auto mb-2" />
           加载能力模型...
         </div>
       ) : queryError ? (
@@ -156,7 +157,7 @@ export default function CapabilitySection() {
                             onClick={() => handleEdit(cap)}
                             className="rounded-lg p-1 text-text-tertiary hover:bg-surface-highlight"
                           >
-                            <Pencil className="size-3" />
+                            <Icon name="Pencil" size="xs" />
                           </button>
                           <button
                             onClick={() => handleDelete(cap.id)}
@@ -164,9 +165,9 @@ export default function CapabilitySection() {
                             className="rounded-lg p-1 text-error hover:bg-surface-highlight disabled:opacity-50"
                           >
                             {deletingId === cap.id ? (
-                              <Loader2 className="size-3 animate-spin" />
+                              <Icon name="Loader2" size="xs" animate="spin" />
                             ) : (
-                              <Trash2 className="size-3" />
+                              <Icon name="Trash2" size="xs" />
                             )}
                           </button>
                         </div>
@@ -187,7 +188,7 @@ export default function CapabilitySection() {
         onClick={handleAdd}
         className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl border border-dashed border-white/[0.12] py-2.5 text-sm text-text-tertiary transition-all hover:border-border-default hover:bg-surface-elevated hover:text-text-secondary"
       >
-        <Plus className="size-4" />
+        <Icon name="Plus" size="sm" />
         添加自定义能力
       </button>
 
@@ -211,9 +212,9 @@ export default function CapabilitySection() {
                 <div className="flex items-center gap-3">
                   <div className="flex size-10 items-center justify-center rounded-xl bg-secondary">
                     {editing ? (
-                      <Pencil className="size-5 text-text-primary" />
+                      <Icon name="Pencil" size="md" className="text-text-primary" />
                     ) : (
-                      <Plus className="size-5 text-text-primary" />
+                      <Icon name="Plus" size="md" className="text-text-primary" />
                     )}
                   </div>
                   <h2 className="font-display text-xl font-bold">
@@ -224,7 +225,7 @@ export default function CapabilitySection() {
                   onClick={() => setModalOpen(false)}
                   className="rounded-lg p-2 text-text-tertiary hover:bg-surface-elevated"
                 >
-                  <X className="size-5" />
+                  <Icon name="X" size="md" />
                 </button>
               </div>
 
@@ -288,9 +289,9 @@ export default function CapabilitySection() {
                     className="flex items-center gap-2 rounded-xl bg-secondary px-6 py-2 font-semibold text-text-primary transition-all hover:shadow-[0_0_30px_rgba(139,92,246,0.4)] disabled:opacity-50"
                   >
                     {isSaving ? (
-                      <Loader2 className="size-4 animate-spin" />
+                      <Icon name="Loader2" size="sm" animate="spin" />
                     ) : (
-                      <Save className="size-4" />
+                      <Icon name="Save" size="sm" />
                     )}
                     保存
                   </button>
@@ -303,7 +304,7 @@ export default function CapabilitySection() {
 
       <div className="mt-6 rounded-xl border border-dashed border-border-default bg-surface-elevated p-4">
         <div className="flex items-start gap-2">
-          <Sparkles className="mt-0.5 size-4 text-secondary" />
+          <Icon name="Sparkles" size="sm" className="mt-0.5 text-secondary" />
           <div>
             <p className="mb-1 text-sm font-medium text-text-secondary">AI 分析基础</p>
             <p className="text-xs leading-relaxed text-text-muted">

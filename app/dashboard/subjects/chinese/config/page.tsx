@@ -1,6 +1,5 @@
 'use client';
 
-import { BookOpen } from 'lucide-react';
 import SubjectPlanConfigEditor from '@/components/subjects/SubjectPlanConfigEditor';
 import { useChildren } from '@/components/dashboard/ChildrenContext';
 
@@ -14,7 +13,7 @@ export default function ChinesePlanConfigPage() {
       subtitle="通过表单调整 6 条线、节点、阶段目标和赛事"
       backHref="/dashboard/subjects/chinese"
       backLabel="返回语文学科路径"
-      headerIcon={BookOpen}
+      headerIcon="BookOpen"
       childId={currentChild?.id}
       description={
         <div>

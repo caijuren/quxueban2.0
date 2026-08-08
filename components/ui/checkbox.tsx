@@ -1,8 +1,8 @@
 'use client';
 
 import * as React from 'react';
-import { Minus, Check } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { Icon } from '@/components/ui/icon';
 
 export interface CheckboxProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string;
@@ -33,7 +33,7 @@ const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
             {...props}
           />
           <span className="pointer-events-none absolute inset-0 flex items-center justify-center text-text-primary opacity-0 peer-checked:opacity-100 peer-indeterminate:opacity-100">
-            {indeterminate ? <Minus className="size-3" /> : <Check className="size-3" />}
+            {indeterminate ? <Icon name="Minus" size="xs" /> : <Icon name="Check" size="xs" />}
           </span>
         </span>
         {label && <span className="text-sm text-text-secondary">{label}</span>}

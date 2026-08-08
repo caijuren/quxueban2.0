@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { BookOpen, CheckCircle2, Circle } from 'lucide-react';
+import { Icon } from '@/components/ui/icon';
 import { od1Schedule } from '@/lib/subjects/english';
 
 export default function OD1Schedule({ currentUnit = 7 }: { currentUnit?: number }) {
@@ -14,7 +14,7 @@ export default function OD1Schedule({ currentUnit = 7 }: { currentUnit?: number 
     >
       <div className="mb-4 flex items-center gap-3">
         <div className="flex size-10 items-center justify-center rounded-xl bg-gradient-to-br from-secondary to-violet-400">
-          <BookOpen className="size-5 text-text-primary" />
+          <Icon name="BookOpen" size="md" className="text-text-primary" />
         </div>
         <div>
           <h2 className="font-display text-xl font-bold">OD1 Unit 7-18 进度表</h2>
@@ -66,11 +66,11 @@ export default function OD1Schedule({ currentUnit = 7 }: { currentUnit?: number 
               <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
                 <div className="flex shrink-0 items-center gap-3 sm:w-32">
                   {isPast ? (
-                    <CheckCircle2 className="size-5 shrink-0 text-success" />
+                    <Icon name="CheckCircle2" size="md" className="shrink-0 text-success" />
                   ) : isCurrent ? (
                     <div className="size-5 shrink-0 rounded-full border-2 border-primary" />
                   ) : (
-                    <Circle className="size-5 shrink-0 text-text-muted" />
+                    <Icon name="Circle" size="md" className="shrink-0 text-text-muted" />
                   )}
                   <div>
                     <p

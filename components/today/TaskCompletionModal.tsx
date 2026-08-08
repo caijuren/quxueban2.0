@@ -1,25 +1,10 @@
 // @ts-nocheck
 // FIXME: 本组件包含大量未完成的 state/useMemo 引用，需要后续补齐目标关联打卡逻辑
 'use client';
+import { Icon, type IconName } from '@/components/ui/icon';
 
 import { useEffect, useMemo, useState } from 'react';
-import {
-  CheckCircle2,
-  Circle,
-  Clock,
-  MessageSquare,
-  Image as ImageIcon,
-  Award,
-  AlertCircle,
-  RotateCcw,
-  Play,
-  Minus,
-  X,
-  Target,
-  ListChecks,
-  Mic,
-  FileText,
-} from 'lucide-react';
+
 import {
   TaskStatus,
   TaskCompletionQuality,
@@ -33,41 +18,41 @@ import Modal from '@/components/ui/Modal';
 
 const statusConfig: Record<
   TaskStatus,
-  { label: string; icon: typeof Circle; color: string; bg: string }
+  { label: string; icon: IconName; color: string; bg: string }
 > = {
   pending: {
     label: '未完成',
-    icon: Circle,
+    icon: 'Circle',
     color: 'text-text-muted',
     bg: 'bg-surface-light border-border-default',
   },
   in_progress: {
     label: '进行中',
-    icon: Play,
+    icon: 'Play',
     color: 'text-blue-400',
     bg: 'bg-blue-500/10 border-blue-500/30',
   },
   partially_done: {
     label: '部分完成',
-    icon: Minus,
+    icon: 'Minus',
     color: 'text-warning',
     bg: 'bg-warning/10 border-warning/30',
   },
   done: {
     label: '已完成',
-    icon: CheckCircle2,
+    icon: 'CheckCircle2',
     color: 'text-success',
     bg: 'bg-success/10 border-success/30',
   },
   skipped: {
     label: '跳过',
-    icon: AlertCircle,
+    icon: 'AlertCircle',
     color: 'text-text-tertiary',
     bg: 'bg-surface/10 border-border-default/30',
   },
   rescheduled: {
     label: '改期',
-    icon: RotateCcw,
+    icon: 'RotateCcw',
     color: 'text-purple-400',
     bg: 'bg-purple-500/10 border-purple-500/30',
   },
@@ -229,7 +214,7 @@ export default function TaskCompletionModal({
       onClose={onClose}
       title="记录完成情况"
       subtitle={task?.focus}
-      icon={CheckCircle2}
+      icon="CheckCircle2"
       iconClassName="bg-accent"
       colorScheme="accent"
       size="md"
@@ -245,7 +230,7 @@ export default function TaskCompletionModal({
           <button
             onClick={handleSubmit}
             disabled={submitting}
-            className="flex-1 rounded-xl bg-primary py-3 text-sm font-medium text-inverse transition-colors hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-60"
+            className="hover:bg-primary/90 flex-1 rounded-xl bg-primary py-3 text-sm font-medium text-inverse transition-colors disabled:cursor-not-allowed disabled:opacity-60"
           >
             {submitting ? '保存中...' : '保存记录'}
           </button>
@@ -256,7 +241,7 @@ export default function TaskCompletionModal({
         {/* Status selector */}
         <div className="space-y-2">
           <label className="flex items-center gap-1.5 text-xs font-medium text-text-secondary">
-            <AlertCircle className="size-3.5" />
+            <Icon name="AlertCircle" size="xs" />
             完成状态
           </label>
           <div className="grid grid-cols-3 gap-2">
@@ -310,7 +295,7 @@ export default function TaskCompletionModal({
         <div className="grid grid-cols-2 gap-4">
           <div className="space-y-2">
             <label className="flex items-center gap-1.5 text-xs font-medium text-text-secondary">
-              <Clock className="size-3.5" />
+              <Icon name="Clock" size="xs" />
               实际耗时（分钟）
             </label>
             <input
@@ -325,7 +310,7 @@ export default function TaskCompletionModal({
 
           <div className="space-y-2">
             <label className="flex items-center gap-1.5 text-xs font-medium text-text-secondary">
-              <Award className="size-3.5" />
+              <Icon name="Award" size="xs" />
               完成质量
             </label>
             <select
@@ -346,7 +331,7 @@ export default function TaskCompletionModal({
         {/* Note */}
         <div className="space-y-2">
           <label className="flex items-center gap-1.5 text-xs font-medium text-text-secondary">
-            <MessageSquare className="size-3.5" />
+            <Icon name="MessageSquare" size="xs" />
             备注 / 反思
           </label>
           <textarea
@@ -361,7 +346,7 @@ export default function TaskCompletionModal({
         {/* Images */}
         <div className="space-y-2">
           <label className="flex items-center gap-1.5 text-xs font-medium text-text-secondary">
-            <ImageIcon className="size-3.5" />
+            <Icon name="Image" size="xs" />
             佐证图片
           </label>
           <label
@@ -386,14 +371,14 @@ export default function TaskCompletionModal({
               </>
             ) : (
               <>
-                <ImageIcon className="size-4" />
+                <Icon name="Image" size="sm" />
                 <span className="text-sm">点击上传照片</span>
               </>
             )}
           </label>
           {uploadError && (
             <p className="flex items-center gap-1 text-xs text-error">
-              <AlertCircle className="size-3" />
+              <Icon name="AlertCircle" size="xs" />
               {uploadError}
             </p>
           )}
@@ -409,7 +394,7 @@ export default function TaskCompletionModal({
                     onClick={() => handleRemoveImage(url)}
                     className="bg-surface/80 absolute right-0.5 top-0.5 rounded p-0.5 text-text-muted transition-colors hover:text-error"
                   >
-                    <X className="size-3" />
+                    <Icon name="X" size="xs" />
                   </button>
                 </div>
               ))}
@@ -421,7 +406,7 @@ export default function TaskCompletionModal({
         {audioUrls.length > 0 && (
           <div className="space-y-2">
             <label className="flex items-center gap-1.5 text-xs font-medium text-text-secondary">
-              <Mic className="size-3.5" />
+              <Icon name="Mic" size="xs" />
               语音记录
             </label>
             <div className="flex flex-wrap gap-2">
@@ -435,7 +420,7 @@ export default function TaskCompletionModal({
                     onClick={() => handleRemoveAudio(url)}
                     className="hover:bg-error/10 rounded p-0.5 text-text-muted transition-colors hover:text-error"
                   >
-                    <X className="size-3" />
+                    <Icon name="X" size="xs" />
                   </button>
                 </div>
               ))}
@@ -447,7 +432,7 @@ export default function TaskCompletionModal({
         {audioTranscript && (
           <div className="space-y-2">
             <label className="flex items-center gap-1.5 text-xs font-medium text-text-secondary">
-              <FileText className="size-3.5" />
+              <Icon name="FileText" size="xs" />
               语音转文字
             </label>
             <div className="rounded-xl border border-border-default bg-surface px-3 py-2.5 text-xs leading-relaxed text-text-tertiary">

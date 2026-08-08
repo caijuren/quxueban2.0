@@ -2,7 +2,7 @@
 
 import { useMemo } from 'react';
 import { motion } from 'framer-motion';
-import { CheckCircle2, CircleDot, Pause, XCircle } from 'lucide-react';
+import { Icon } from '@/components/ui/icon';
 import { type WeeklyTaskItem, type TaskCategory, type DayOfWeek } from '@/lib/storage.types';
 import { TASK_CATEGORY_LABELS } from '@/lib/taskTemplates';
 import { categoryIcons } from '@/lib/taskIcons';
@@ -61,7 +61,7 @@ function StatusCell({
         onClick={onClick}
         className="inline-flex w-full flex-col items-center justify-center gap-1 rounded-[14px] py-2.5 transition-colors hover:bg-surface-hover"
       >
-        <CheckCircle2 className="size-5 text-success" />
+        <Icon name="CheckCircle2" size="md" className="text-success" />
         <span className="text-[10px] text-text-tertiary">{durationText}</span>
       </button>
     );
@@ -74,7 +74,7 @@ function StatusCell({
         onClick={onClick}
         className="inline-flex w-full flex-col items-center justify-center gap-1 rounded-[14px] py-2.5 transition-colors hover:bg-surface-hover"
       >
-        <CircleDot className="size-5 text-secondary" />
+        <Icon name="CircleDot" size="md" className="text-secondary" />
         <span className="text-[10px] text-text-tertiary">{durationText}</span>
       </button>
     );
@@ -87,7 +87,7 @@ function StatusCell({
         onClick={onClick}
         className="inline-flex w-full flex-col items-center justify-center gap-1 rounded-[14px] py-2.5 transition-colors hover:bg-surface-hover"
       >
-        <XCircle className="size-5 text-error" />
+        <Icon name="XCircle" size="md" className="text-error" />
         <span className="text-[10px] text-text-tertiary">未完成</span>
       </button>
     );
@@ -99,7 +99,7 @@ function StatusCell({
       onClick={onClick}
       className="inline-flex w-full flex-col items-center justify-center gap-1 rounded-[14px] py-2.5 transition-colors hover:bg-surface-hover"
     >
-      <Pause className="size-4 text-warning" />
+      <Icon name="Pause" size="sm" className="text-warning" />
       <span className="text-[10px] text-text-tertiary">待开始</span>
     </button>
   );
@@ -249,19 +249,19 @@ export default function WeeklyTaskChecklistMatrix({
       <div className="flex flex-wrap items-center justify-between gap-3 border-t border-border-default bg-surface px-5 py-3.5">
         <div className="flex flex-wrap items-center gap-4">
           <div className="flex items-center gap-1.5 text-xs text-text-tertiary">
-            <CheckCircle2 className="size-3.5 text-success" />
+            <Icon name="CheckCircle2" size="xs" className="text-success" />
             <span>已完成</span>
           </div>
           <div className="flex items-center gap-1.5 text-xs text-text-tertiary">
-            <CircleDot className="size-3.5 text-secondary" />
+            <Icon name="CircleDot" size="xs" className="text-secondary" />
             <span>进行中</span>
           </div>
           <div className="flex items-center gap-1.5 text-xs text-text-tertiary">
-            <Pause className="size-3 text-warning" />
+            <Icon name="Pause" size="xs" className="text-warning" />
             <span>未开始</span>
           </div>
           <div className="flex items-center gap-1.5 text-xs text-text-tertiary">
-            <XCircle className="size-3.5 text-error" />
+            <Icon name="XCircle" size="xs" className="text-error" />
             <span>未完成</span>
           </div>
           <div className="flex items-center gap-1.5 text-xs text-text-tertiary">

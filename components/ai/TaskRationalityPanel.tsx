@@ -1,7 +1,8 @@
 'use client';
+import { Icon, type IconName } from '@/components/ui/icon';
 
 import { motion } from 'framer-motion';
-import { AlertTriangle, CheckCircle2, Lightbulb, ChevronDown, ChevronUp } from 'lucide-react';
+
 import { useState } from 'react';
 import { TaskRationalityAssessment, AssessmentVerdict } from '@/lib/ai/taskAssessment';
 
@@ -13,28 +14,28 @@ interface TaskRationalityPanelProps {
 
 const verdictConfig: Record<
   AssessmentVerdict,
-  { label: string; color: string; bg: string; border: string; icon: typeof CheckCircle2 }
+  { label: string; color: string; bg: string; border: string; icon: IconName }
 > = {
   good: {
     label: '匹配良好',
     color: 'text-success',
     bg: 'bg-success/10',
     border: 'border-success/20',
-    icon: CheckCircle2,
+    icon: 'CheckCircle2',
   },
   caution: {
     label: '建议留意',
     color: 'text-warning',
     bg: 'bg-warning/10',
     border: 'border-warning/20',
-    icon: AlertTriangle,
+    icon: 'AlertTriangle',
   },
   risk: {
     label: '存在风险',
     color: 'text-error',
     bg: 'bg-error/10',
     border: 'border-error/20',
-    icon: AlertTriangle,
+    icon: 'AlertTriangle',
   },
 };
 
@@ -56,7 +57,6 @@ export default function TaskRationalityPanel({
   }, 'good');
 
   const config = verdictConfig[worstVerdict];
-  const Icon = config.icon;
 
   return (
     <motion.div
@@ -72,7 +72,7 @@ export default function TaskRationalityPanel({
           <div
             className={`size-9 rounded-lg ${config.bg} border ${config.border} flex items-center justify-center`}
           >
-            <Icon className={`size-4 ${config.color}`} />
+            <Icon name={config.icon} size="sm" className={`size-4 ${config.color}`} />
           </div>
           <div>
             <div className="flex items-center gap-2">
@@ -89,9 +89,9 @@ export default function TaskRationalityPanel({
           </div>
         </div>
         {expanded ? (
-          <ChevronUp className="size-4 text-text-muted" />
+          <Icon name="ChevronUp" size="sm" className="text-text-muted" />
         ) : (
-          <ChevronDown className="size-4 text-text-muted" />
+          <Icon name="ChevronDown" size="sm" className="text-text-muted" />
         )}
       </button>
 
@@ -100,12 +100,11 @@ export default function TaskRationalityPanel({
           {assessments.map((assessment, index) => {
             const title = taskTitles?.[index] ?? `任务 ${index + 1}`;
             const c = verdictConfig[assessment.verdict];
-            const TaskIcon = c.icon;
             return (
               <div key={index} className="rounded-lg border border-border-subtle bg-surface p-3">
                 <div className="mb-2 flex items-center justify-between">
                   <div className="flex min-w-0 items-center gap-2">
-                    <TaskIcon className={`size-3.5 ${c.color} shrink-0`} />
+                    <Icon name={c.icon} size="xs" className={`size-3.5 ${c.color} shrink-0`} />
                     <span className="truncate text-xs font-semibold text-text-secondary">
                       {title}
                     </span>
@@ -142,7 +141,7 @@ export default function TaskRationalityPanel({
 
                 {assessment.suggestions.length > 0 && (
                   <div className="flex items-start gap-1.5 text-[11px] text-text-tertiary">
-                    <Lightbulb className="mt-0.5 size-3 shrink-0 text-warning" />
+                    <Icon name="Lightbulb" size="xs" className="mt-0.5 shrink-0 text-warning" />
                     <ul className="space-y-0.5">
                       {assessment.suggestions.map((s, i) => (
                         <li key={i}>{s}</li>

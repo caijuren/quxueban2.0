@@ -1,6 +1,6 @@
 'use client';
 
-import { School, GraduationCap, Trophy, ChevronRight } from 'lucide-react';
+import { Icon, type IconName } from '@/components/ui/icon';
 import CommandCard from '@/components/ui/CommandCard';
 import DataBadge from '@/components/ui/DataBadge';
 import MotionSection from '@/components/ui/MotionSection';
@@ -14,7 +14,7 @@ interface Stage {
   id: string;
   title: string;
   subtitle: string;
-  icon: React.ElementType;
+  icon: IconName;
   timeRange: string;
   routes: RouteOption[];
 }
@@ -24,7 +24,7 @@ const stages: Stage[] = [
     id: 'primary',
     title: '小升初',
     subtitle: '一升二 · 路线选择窗口期',
-    icon: School,
+    icon: 'School',
     timeRange: '现在 - 五年级',
     routes: [
       { name: '三公冲刺', status: 'active' },
@@ -36,7 +36,7 @@ const stages: Stage[] = [
     id: 'middle',
     title: '中考',
     subtitle: '初中三年 · 关键分水岭',
-    icon: GraduationCap,
+    icon: 'GraduationCap',
     timeRange: '六年级 - 初三',
     routes: [
       { name: '名额分配到区', status: 'optional' },
@@ -49,7 +49,7 @@ const stages: Stage[] = [
     id: 'high',
     title: '高考',
     subtitle: '高中三年 · 冲刺目标大学',
-    icon: Trophy,
+    icon: 'Trophy',
     timeRange: '高一 - 高三',
     routes: [
       { name: '强基计划', status: 'optional' },
@@ -90,7 +90,12 @@ export default function StrategyMap() {
                 <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:gap-10">
                   <div className="flex shrink-0 items-center gap-4 lg:w-64">
                     <div className="bg-primary/10 flex size-11 shrink-0 items-center justify-center rounded-xl">
-                      <stage.icon className="size-5 text-primary" aria-hidden="true" />
+                      <Icon
+                        name={stage.icon}
+                        size="md"
+                        className="text-primary"
+                        aria-hidden="true"
+                      />
                     </div>
                     <div>
                       <h3 className="font-display text-lg font-bold">{stage.title}</h3>
@@ -114,7 +119,7 @@ export default function StrategyMap() {
                   </div>
 
                   <div className="hidden items-center text-text-muted transition-colors group-hover:text-primary lg:flex">
-                    <ChevronRight className="size-4" aria-hidden="true" />
+                    <Icon name="ChevronRight" size="sm" aria-hidden="true" />
                   </div>
                 </div>
               </CommandCard>

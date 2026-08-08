@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { BookOpen, BarChart3, Award } from 'lucide-react';
+import { Icon } from '@/components/ui/icon';
 import { lexileReference } from '@/lib/subjects/english';
 
 export default function LexileReference() {
@@ -14,7 +14,7 @@ export default function LexileReference() {
     >
       <div className="mb-6 flex items-center gap-3">
         <div className="flex size-10 items-center justify-center rounded-xl bg-gradient-to-br from-success to-accent">
-          <BarChart3 className="size-5 text-text-primary" />
+          <Icon name="BarChart3" size="md" className="text-text-primary" />
         </div>
         <div>
           <h2 className="font-display text-xl font-bold">RAZ / 蓝思 / 证书对应参考</h2>
@@ -56,7 +56,7 @@ export default function LexileReference() {
       </div>
 
       <div className="mt-4 flex items-start gap-3 border-t border-border-subtle pt-4">
-        <BookOpen className="mt-0.5 size-4 shrink-0 text-success" />
+        <Icon name="BookOpen" size="sm" className="mt-0.5 shrink-0 text-success" />
         <p className="text-xs text-text-muted">
           RAZ 到 K/L 后，阅读能力已足够支撑小托福 850+。后续重点是学术听力、语法和考试题型适应。
         </p>

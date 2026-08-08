@@ -1,7 +1,8 @@
 'use client';
+import { Icon } from '@/components/ui/icon';
 
 import { useRouter } from 'next/navigation';
-import { Users, Baby, Map, CalendarCheck, ArrowRight } from 'lucide-react';
+
 import { useAdminStats, useAdminUsers } from '@/lib/hooks/useAdmin';
 import PageHeader from '@/components/layout/page-header';
 import ContentGrid from '@/components/layout/content-grid';
@@ -14,13 +15,13 @@ import Button from '@/components/ui/button';
 import Badge from '@/components/ui/badge';
 
 const statCards = [
-  { key: 'userCount' as const, label: '注册用户', icon: Users, color: 'primary' as const },
-  { key: 'childCount' as const, label: '孩子档案', icon: Baby, color: 'secondary' as const },
-  { key: 'planCount' as const, label: '升学计划', icon: Map, color: 'info' as const },
+  { key: 'userCount' as const, label: '注册用户', icon: 'Users', color: 'primary' as const },
+  { key: 'childCount' as const, label: '孩子档案', icon: 'Baby', color: 'secondary' as const },
+  { key: 'planCount' as const, label: '升学计划', icon: 'Map', color: 'info' as const },
   {
     key: 'weeklyPlanCount' as const,
     label: '周计划',
-    icon: CalendarCheck,
+    icon: 'CalendarCheck',
     color: 'success' as const,
   },
 ];
@@ -79,7 +80,7 @@ export default function AdminPage() {
           <Button
             variant="ghost"
             size="sm"
-            rightIcon={<ArrowRight className="size-4" />}
+            rightIcon={<Icon name="ArrowRight" size="sm" />}
             onClick={() => router.push('/admin/users')}
           >
             查看全部

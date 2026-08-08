@@ -3,7 +3,7 @@
 import { ReactNode, useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { createPortal } from 'react-dom';
-import { X, LucideIcon } from 'lucide-react';
+import { Icon, type IconName } from '@/components/ui/icon';
 
 export type ModalColorScheme = 'rose' | 'violet' | 'green' | 'error' | 'accent' | 'gold';
 
@@ -12,7 +12,7 @@ export interface ModalProps {
   onClose: () => void;
   title: string;
   subtitle?: string;
-  icon?: LucideIcon;
+  icon?: IconName;
   iconClassName?: string;
   children: ReactNode;
   footer?: ReactNode;
@@ -70,7 +70,7 @@ export default function Modal({
   onClose,
   title,
   subtitle,
-  icon: Icon,
+  icon,
   iconClassName,
   children,
   footer,
@@ -134,13 +134,13 @@ export default function Modal({
             />
             <div className="relative z-10 flex shrink-0 items-center justify-between border-b border-border-default p-6 pb-4">
               <div className="flex items-center gap-3">
-                {Icon && (
+                {icon && (
                   <div
                     className={`flex size-10 items-center justify-center rounded-module ${
                       iconClassName || 'bg-gradient-to-br from-primary to-primary-glow'
                     }`}
                   >
-                    <Icon className="size-5 text-text-primary" />
+                    <Icon name={icon} size="md" className="text-text-primary" />
                   </div>
                 )}
                 <div>
@@ -154,7 +154,7 @@ export default function Modal({
                   className="flex size-8 items-center justify-center rounded-module bg-surface-hover text-text-tertiary transition-all hover:bg-surface-highlight hover:text-text-primary"
                   aria-label="关闭"
                 >
-                  <X className="size-4" />
+                  <Icon name="X" size="sm" className="text-text-tertiary" />
                 </button>
               )}
             </div>

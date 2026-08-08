@@ -1,6 +1,6 @@
 'use client';
 
-import { ChevronDown, Home } from 'lucide-react';
+import { Icon } from '@/components/ui/icon';
 import { motion } from 'framer-motion';
 import { Child } from '@/lib/children';
 import ChildAvatar from '@/components/dashboard/ChildAvatar';
@@ -35,7 +35,7 @@ export default function ConsoleHero({
       <div className="relative">
         {/* Breadcrumb / title */}
         <div className="mb-4 flex items-center gap-2 text-xs text-text-muted">
-          <Home className="size-3.5" />
+          <Icon name="Home" size="sm" />
           <span>家庭学习控制台</span>
           <span>/</span>
           <span className="text-text-secondary">成长概览</span>
@@ -58,7 +58,11 @@ export default function ConsoleHero({
                   : '请选择孩子'}
               </p>
             </div>
-            <ChevronDown className="size-4 text-text-muted transition-colors group-hover:text-primary" />
+            <Icon
+              name="ChevronDown"
+              size="sm"
+              className="text-text-muted transition-colors group-hover:text-primary"
+            />
           </button>
 
           <div className="flex items-center gap-3 sm:gap-4">

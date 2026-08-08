@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Brain, Sparkles, Loader2, AlertCircle, TrendingUp } from 'lucide-react';
+import { Icon } from '@/components/ui/icon';
 import { useAiDiagnosis } from '@/lib/hooks/useAiDiagnosis';
 import { cn } from '@/lib/utils';
 
@@ -57,10 +57,10 @@ export default function AIDiagnosisCard({
           <div className="w-full">
             <div className="mb-3 flex items-center gap-2">
               <div className="flex size-10 items-center justify-center rounded-xl bg-gradient-to-br from-secondary to-secondary-glow">
-                <Brain className="size-5 text-text-primary" />
+                <Icon name="Brain" size="md" className="text-text-primary" />
               </div>
               <div className="bg-secondary/10 border-secondary/20 flex items-center gap-1 rounded-md border px-2 py-0.5 text-xs text-secondary">
-                <Sparkles className="size-3" />
+                <Icon name="Sparkles" size="xs" animate="pulse" />
                 AI 智能诊断
               </div>
             </div>
@@ -74,12 +74,12 @@ export default function AIDiagnosisCard({
 
             {!childId || isLoading ? (
               <div className="flex items-center gap-2 py-4 text-sm text-text-tertiary">
-                <Loader2 className="size-4 animate-spin" />
+                <Icon name="Loader2" size="sm" animate="spin" />
                 正在分析 {subjectLabels[subject]} 学科整体进度…
               </div>
             ) : error ? (
               <div className="flex items-start gap-2 py-2 text-sm text-error">
-                <AlertCircle className="mt-0.5 size-4 shrink-0" />
+                <Icon name="AlertCircle" size="sm" className="mt-0.5 shrink-0" />
                 <span>诊断失败：{error.message}</span>
               </div>
             ) : !diagnosis ? null : (
@@ -133,7 +133,7 @@ export default function AIDiagnosisCard({
                 {diagnosis.risks && diagnosis.risks.length > 0 && (
                   <div className="space-y-2">
                     <h3 className="flex items-center gap-1.5 text-xs font-medium text-text-muted">
-                      <TrendingUp className="size-3.5" />
+                      <Icon name="TrendingUp" size="xs" />
                       重点关注
                     </h3>
                     <div className="flex flex-wrap gap-2">

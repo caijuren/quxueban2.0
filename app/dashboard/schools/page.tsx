@@ -1,7 +1,8 @@
 'use client';
+import { Icon } from '@/components/ui/icon';
 
 import { motion, useReducedMotion } from 'framer-motion';
-import { School, MapPin, Trophy, Plus, Search } from 'lucide-react';
+
 import { Suspense, useMemo, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
@@ -88,7 +89,7 @@ function SchoolsPageContent() {
       >
         <div className="flex items-center gap-3">
           <div className="bg-secondary/10 border-secondary/20 flex size-10 items-center justify-center rounded-xl border">
-            <School className="size-5 text-secondary" />
+            <Icon name="School" size="md" className="text-secondary" />
           </div>
           <div>
             <h1 className="font-display text-2xl font-bold sm:text-3xl">
@@ -99,9 +100,9 @@ function SchoolsPageContent() {
         <div className="flex items-center gap-2">
           <button
             onClick={() => setShowAddModal(true)}
-            className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-inverse transition-colors hover:bg-primary/90"
+            className="hover:bg-primary/90 inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-inverse transition-colors"
           >
-            <Plus className="size-4" />
+            <Icon name="Plus" size="sm" />
             添加学校
           </button>
         </div>
@@ -124,14 +125,14 @@ function SchoolsPageContent() {
                 <div className="mb-4 flex items-start justify-between">
                   <div className="flex items-start gap-4">
                     <div className="flex size-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-secondary to-secondary-glow">
-                      <School className="size-6 text-text-primary" />
+                      <Icon name="School" size="lg" className="text-text-primary" />
                     </div>
                     <div>
                       <h2 className="font-display text-lg font-bold transition-colors group-hover:text-text-primary">
                         {school.name}
                       </h2>
                       <div className="mt-1 flex items-center gap-2 text-sm text-text-tertiary">
-                        <MapPin className="size-3.5" />
+                        <Icon name="MapPin" size="xs" />
                         {school.area}
                         <span className="text-text-muted">·</span>
                         {school.type}
@@ -158,7 +159,7 @@ function SchoolsPageContent() {
 
                 <div className="flex items-center justify-between border-t border-border-subtle pt-4">
                   <div className="flex items-center gap-2 text-sm text-text-tertiary">
-                    <Trophy className="size-4 text-warning" />
+                    <Icon name="Trophy" size="sm" className="text-warning" />
                     录取概率
                   </div>
                   <div className="flex items-center gap-2">
@@ -185,7 +186,7 @@ function SchoolsPageContent() {
 
       {filteredSchools.length === 0 && (
         <EmptyState
-          icon={Search}
+          icon="Search"
           title={`没有找到与 "${query}" 匹配的学校`}
           description="试试搜索学校名称、类型或区域"
           action={{
@@ -201,7 +202,7 @@ function SchoolsPageContent() {
         isOpen={showAddModal}
         onClose={() => setShowAddModal(false)}
         title="添加学校"
-        icon={School}
+        icon="School"
         iconClassName="bg-secondary"
         colorScheme="violet"
         size="sm"

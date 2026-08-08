@@ -107,15 +107,40 @@ const config: Config = {
         'glow-primary': '0 0 24px var(--shadow-primary)',
         'glow-secondary': '0 0 24px var(--shadow-secondary)',
         'glow-accent': '0 0 20px rgba(6, 182, 212, 0.18)',
-        'glass-subtle': 'inset 0 1px 0 0 var(--glass-highlight), 0 4px 12px -2px var(--glass-shadow-color)',
-        'glass': 'inset 0 1px 0 0 var(--glass-highlight), 0 8px 24px -4px var(--glass-shadow-color)',
-        'glass-strong': 'inset 0 1px 0 0 var(--glass-highlight), 0 16px 40px -8px var(--glass-shadow-color)',
-        'glass-hover': 'inset 0 1px 0 0 var(--glass-highlight), 0 24px 48px -8px var(--glass-shadow-color)',
+        'glass-subtle':
+          'inset 0 1px 0 0 var(--glass-highlight), 0 4px 12px -2px var(--glass-shadow-color)',
+        glass: 'inset 0 1px 0 0 var(--glass-highlight), 0 8px 24px -4px var(--glass-shadow-color)',
+        'glass-strong':
+          'inset 0 1px 0 0 var(--glass-highlight), 0 16px 40px -8px var(--glass-shadow-color)',
+        'glass-hover':
+          'inset 0 1px 0 0 var(--glass-highlight), 0 24px 48px -8px var(--glass-shadow-color)',
       },
       fontFamily: {
-        display: ['var(--font-display)', 'PingFang SC', 'Microsoft YaHei', 'sans-serif'],
-        body: ['var(--font-body)', 'PingFang SC', 'Microsoft YaHei', 'sans-serif'],
-        mono: ['var(--font-mono)', 'SF Mono', 'monospace'],
+        display: [
+          'var(--font-display)',
+          'PingFang SC',
+          'HarmonyOS Sans SC',
+          'Hiragino Sans GB',
+          'Microsoft YaHei',
+          'sans-serif',
+        ],
+        body: [
+          'var(--font-body)',
+          'PingFang SC',
+          'HarmonyOS Sans SC',
+          'Hiragino Sans GB',
+          'Microsoft YaHei',
+          'sans-serif',
+        ],
+        mono: [
+          'var(--font-mono)',
+          'SF Mono',
+          'SFMono-Regular',
+          'Menlo',
+          'Monaco',
+          'Consolas',
+          'monospace',
+        ],
       },
       transitionDuration: {
         micro: 'var(--duration-micro)',
@@ -133,17 +158,17 @@ const config: Config = {
       },
       backdropBlur: {
         'glass-subtle': 'var(--glass-blur-subtle)',
-        'glass': 'var(--glass-blur-default)',
+        glass: 'var(--glass-blur-default)',
         'glass-strong': 'var(--glass-blur-strong)',
       },
       backgroundColor: {
         'glass-subtle': 'var(--glass-bg-subtle)',
-        'glass': 'var(--glass-bg-default)',
+        glass: 'var(--glass-bg-default)',
         'glass-strong': 'var(--glass-bg-strong)',
       },
       borderColor: {
         'glass-subtle': 'var(--glass-border-subtle)',
-        'glass': 'var(--glass-border-default)',
+        glass: 'var(--glass-border-default)',
         'glass-strong': 'var(--glass-border-strong)',
       },
       zIndex: {
@@ -170,8 +195,7 @@ const config: Config = {
         glow: {
           '0%': { boxShadow: '0 0 16px var(--shadow-primary)' },
           '100%': {
-            boxShadow:
-              '0 0 32px color-mix(in srgb, var(--color-primary) 30%, transparent)',
+            boxShadow: '0 0 32px color-mix(in srgb, var(--color-primary) 30%, transparent)',
           },
         },
         lineFlow: {

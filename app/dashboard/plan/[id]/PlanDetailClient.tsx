@@ -1,16 +1,8 @@
 'use client';
+import { Icon, type IconName } from '@/components/ui/icon';
 
 import { motion, useReducedMotion } from 'framer-motion';
-import {
-  Clock,
-  ChevronLeft,
-  BookOpen,
-  ArrowRight,
-  Lightbulb,
-  FileText,
-  Calendar,
-  Route,
-} from 'lucide-react';
+
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import {
@@ -249,42 +241,42 @@ const detailTasks: Record<string, { title: string; items: string[] }[]> = {
   ],
 };
 
-const resources: Record<string, { title: string; desc: string; icon: typeof BookOpen }[]> = {
+const resources: Record<string, { title: string; desc: string; icon: IconName }[]> = {
   sg: [
-    { title: 'AMC8 历年真题', desc: '2015-2024年真题及解析', icon: FileText },
-    { title: '小托福备考资料', desc: '词汇、听力、阅读专项训练', icon: BookOpen },
-    { title: '三公面谈题库', desc: '历年面谈真题模拟', icon: Lightbulb },
-    { title: '奥数体系课程', desc: '三年级至五年级系统课程', icon: Calendar },
+    { title: 'AMC8 历年真题', desc: '2015-2024年真题及解析', icon: 'FileText' },
+    { title: '小托福备考资料', desc: '词汇、听力、阅读专项训练', icon: 'BookOpen' },
+    { title: '三公面谈题库', desc: '历年面谈真题模拟', icon: 'Lightbulb' },
+    { title: '奥数体系课程', desc: '三年级至五年级系统课程', icon: 'Calendar' },
   ],
   yaohao: [
-    { title: '嘉定民办初中对比', desc: '华曜、怀少、桃李园详细对比', icon: FileText },
-    { title: '摇号政策解读', desc: '2025年民办摇号最新政策', icon: BookOpen },
-    { title: '志愿填报指南', desc: '冲稳保策略与风险提示', icon: Lightbulb },
-    { title: '入学准备清单', desc: '录取后需要办理的事项', icon: Calendar },
+    { title: '嘉定民办初中对比', desc: '华曜、怀少、桃李园详细对比', icon: 'FileText' },
+    { title: '摇号政策解读', desc: '2025年民办摇号最新政策', icon: 'BookOpen' },
+    { title: '志愿填报指南', desc: '冲稳保策略与风险提示', icon: 'Lightbulb' },
+    { title: '入学准备清单', desc: '录取后需要办理的事项', icon: 'Calendar' },
   ],
   gongban: [
-    { title: '对口学校查询', desc: '嘉定区公办对口范围查询', icon: FileText },
-    { title: '一贯制直升政策', desc: '直升条件与流程说明', icon: BookOpen },
-    { title: '特色班信息', desc: '各校特色班选拔要求', icon: Lightbulb },
-    { title: '小升初衔接课', desc: '暑假预习计划与资源', icon: Calendar },
+    { title: '对口学校查询', desc: '嘉定区公办对口范围查询', icon: 'FileText' },
+    { title: '一贯制直升政策', desc: '直升条件与流程说明', icon: 'BookOpen' },
+    { title: '特色班信息', desc: '各校特色班选拔要求', icon: 'Lightbulb' },
+    { title: '小升初衔接课', desc: '暑假预习计划与资源', icon: 'Calendar' },
   ],
   sizhong: [
-    { title: '四校自招真题', desc: '近年自主招生笔试与面试题', icon: FileText },
-    { title: '竞赛培优路径', desc: '数学/物理/信息学竞赛规划', icon: BookOpen },
-    { title: '综评面试指南', desc: '综合素质评价与面试技巧', icon: Lightbulb },
-    { title: '四校分数线', desc: '名额分配到区与平行志愿数据', icon: Calendar },
+    { title: '四校自招真题', desc: '近年自主招生笔试与面试题', icon: 'FileText' },
+    { title: '竞赛培优路径', desc: '数学/物理/信息学竞赛规划', icon: 'BookOpen' },
+    { title: '综评面试指南', desc: '综合素质评价与面试技巧', icon: 'Lightbulb' },
+    { title: '四校分数线', desc: '名额分配到区与平行志愿数据', icon: 'Calendar' },
   ],
   shizhong: [
-    { title: '嘉定市重点分数线', desc: '交附嘉定、嘉一中等近年投档线', icon: FileText },
-    { title: '名额分配政策', desc: '到区/到校志愿填报策略', icon: BookOpen },
-    { title: '一模二模资料', desc: '嘉定区历年模考试卷与解析', icon: Lightbulb },
-    { title: '中考志愿填报', desc: '平行志愿与名额分配组合策略', icon: Calendar },
+    { title: '嘉定市重点分数线', desc: '交附嘉定、嘉一中等近年投档线', icon: 'FileText' },
+    { title: '名额分配政策', desc: '到区/到校志愿填报策略', icon: 'BookOpen' },
+    { title: '一模二模资料', desc: '嘉定区历年模考试卷与解析', icon: 'Lightbulb' },
+    { title: '中考志愿填报', desc: '平行志愿与名额分配组合策略', icon: 'Calendar' },
   ],
   quzhong: [
-    { title: '区重点特色项目', desc: '嘉定二中、安亭高中等特色招生', icon: FileText },
-    { title: '保底志愿策略', desc: '防止滑档的填报技巧', icon: BookOpen },
-    { title: '中考基础题训练', desc: '稳拿基础分，避免失误', icon: Lightbulb },
-    { title: '提分计划', desc: '针对薄弱科目的快速提分方案', icon: Calendar },
+    { title: '区重点特色项目', desc: '嘉定二中、安亭高中等特色招生', icon: 'FileText' },
+    { title: '保底志愿策略', desc: '防止滑档的填报技巧', icon: 'BookOpen' },
+    { title: '中考基础题训练', desc: '稳拿基础分，避免失误', icon: 'Lightbulb' },
+    { title: '提分计划', desc: '针对薄弱科目的快速提分方案', icon: 'Calendar' },
   ],
 };
 
@@ -302,7 +294,7 @@ export default function PlanDetailClient({ id }: { id: string }) {
       <div className="flex min-h-[60vh] flex-col items-center justify-center text-center">
         <div className="mb-2 flex items-center justify-center gap-3">
           <div className="bg-primary/10 border-primary/20 flex size-10 items-center justify-center rounded-xl border">
-            <Route className="size-5 text-primary" />
+            <Icon name="Route" size="md" className="text-primary" />
           </div>
           <div>
             <h1 className="font-display text-2xl font-bold sm:text-3xl">方案未找到</h1>
@@ -330,7 +322,7 @@ export default function PlanDetailClient({ id }: { id: string }) {
         href="/dashboard/plan"
         className="mb-2 inline-flex items-center gap-1 text-sm text-text-tertiary transition-colors hover:text-primary"
       >
-        <ChevronLeft className="size-4" />
+        <Icon name="ChevronLeft" size="sm" />
         返回路线方案
       </Link>
 
@@ -343,7 +335,7 @@ export default function PlanDetailClient({ id }: { id: string }) {
       >
         <div className="flex items-center gap-3">
           <div className="bg-primary/10 border-primary/20 flex size-10 items-center justify-center rounded-xl border">
-            <Route className="size-5 text-primary" />
+            <Icon name="Route" size="md" className="text-primary" />
           </div>
           <div>
             <h1 className="font-display text-2xl font-bold sm:text-3xl">{plan.name} · 完整方案</h1>
@@ -356,7 +348,7 @@ export default function PlanDetailClient({ id }: { id: string }) {
             {type.label}
           </span>
           <span className={`flex items-center gap-1 text-sm font-medium ${status.color}`}>
-            <status.icon className="size-4" />
+            <Icon name={status.icon} size="sm" className="size-4" />
             {status.label}
           </span>
         </div>
@@ -451,7 +443,7 @@ export default function PlanDetailClient({ id }: { id: string }) {
                   <div
                     className={`size-12 rounded-xl bg-gradient-to-br ${school.color} flex shrink-0 items-center justify-center`}
                   >
-                    <school.icon className="size-6 text-text-primary" />
+                    <Icon name={school.icon} size="md" className="size-6 text-text-primary" />
                   </div>
                   <div>
                     <h4 className="font-display font-bold transition-colors group-hover:text-text-primary">
@@ -461,7 +453,7 @@ export default function PlanDetailClient({ id }: { id: string }) {
                   </div>
                 </div>
                 <p className="flex items-center gap-1 text-sm text-primary transition-colors group-hover:text-primary-glow">
-                  查看学校详情 <ChevronLeft className="size-3 rotate-180" />
+                  查看学校详情 <Icon name="ChevronLeft" size="xs" className="rotate-180" />
                 </p>
               </motion.div>
             </Link>
@@ -477,7 +469,7 @@ export default function PlanDetailClient({ id }: { id: string }) {
         className="rounded-2xl border border-border-subtle bg-surface-elevated p-6"
       >
         <h2 className="mb-6 flex items-center gap-2 font-display text-xl font-bold">
-          <BookOpen className="size-5 text-accent" />
+          <Icon name="BookOpen" size="md" className="text-accent" />
           备考资源推荐
         </h2>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -490,7 +482,7 @@ export default function PlanDetailClient({ id }: { id: string }) {
               className="hover:border-primary/30 group cursor-pointer rounded-xl border border-border-subtle bg-surface-elevated p-4 transition-all hover:bg-surface-highlight"
             >
               <div className="bg-primary/10 group-hover:bg-primary/20 mb-3 flex size-10 items-center justify-center rounded-lg transition-colors">
-                <resource.icon className="size-5 text-primary" />
+                <Icon name={resource.icon} size="md" className="size-5 text-primary" />
               </div>
               <h4 className="mb-1 font-medium text-text-secondary">{resource.title}</h4>
               <p className="text-xs text-text-muted">{resource.desc}</p>
@@ -507,12 +499,12 @@ export default function PlanDetailClient({ id }: { id: string }) {
         className="flex items-center justify-between rounded-2xl border border-border-subtle bg-surface-elevated p-6"
       >
         <div className="flex items-center gap-2 text-sm text-text-muted">
-          <Clock className="size-4" />
+          <Icon name="Clock" size="sm" />
           最近更新：2 天前
         </div>
         <button className="flex items-center gap-2 rounded-xl bg-primary px-5 py-2.5 font-semibold text-text-primary transition-all">
           制定提升计划
-          <ArrowRight className="size-4" />
+          <Icon name="ArrowRight" size="sm" />
         </button>
       </motion.div>
     </div>

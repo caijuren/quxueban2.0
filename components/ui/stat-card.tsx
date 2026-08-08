@@ -1,8 +1,8 @@
 'use client';
 
 import * as React from 'react';
-import { LucideIcon, TrendingUp, TrendingDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { Icon, type IconName } from '@/components/ui/icon';
 import Card from './card';
 import Badge from './badge';
 import Skeleton from './skeleton';
@@ -10,7 +10,7 @@ import Skeleton from './skeleton';
 export interface StatCardProps {
   title: string;
   value: string | number;
-  icon?: LucideIcon;
+  icon?: IconName;
   trend?: {
     value: number;
     isPositive: boolean;
@@ -22,7 +22,7 @@ export interface StatCardProps {
 export default function StatCard({
   title,
   value,
-  icon: Icon,
+  icon,
   trend,
   loading = false,
   className,
@@ -40,17 +40,17 @@ export default function StatCard({
           {!loading && trend && (
             <Badge variant={trend.isPositive ? 'success' : 'error'} size="sm" className="mt-2">
               {trend.isPositive ? (
-                <TrendingUp className="mr-0.5 size-3" />
+                <Icon name="TrendingUp" size="xs" className="mr-0.5" />
               ) : (
-                <TrendingDown className="mr-0.5 size-3" />
+                <Icon name="TrendingDown" size="xs" className="mr-0.5" />
               )}
               {trend.value}%
             </Badge>
           )}
         </div>
-        {Icon && (
+        {icon && (
           <div className="bg-primary/10 shrink-0 rounded-lg p-2 text-primary">
-            <Icon className="size-5" />
+            <Icon name={icon} size="md" />
           </div>
         )}
       </div>

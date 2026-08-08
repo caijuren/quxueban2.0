@@ -2,7 +2,7 @@
 
 import { useMemo } from 'react';
 import { motion } from 'framer-motion';
-import { CheckSquare, Square, Target, TrendingUp, ListChecks, Settings2 } from 'lucide-react';
+import { Icon } from '@/components/ui/icon';
 import { type WeeklyGoal, type WeeklyTaskItem, type TaskCategory } from '@/lib/storage.types';
 import { TASK_CATEGORY_LABELS } from '@/lib/taskTemplates';
 import { categoryIcons } from '@/lib/taskIcons';
@@ -56,7 +56,7 @@ export default function WeeklyGoalsPanel({
         <div className="flex items-start justify-between gap-4">
           <div className="flex items-center gap-3">
             <div className="bg-primary/10 flex size-10 items-center justify-center rounded-lg">
-              <Target className="size-5 text-primary" />
+              <Icon name="Target" size="md" className="text-primary" />
             </div>
             <div>
               <h2 className="text-base font-bold text-text-primary">本周目标</h2>
@@ -69,9 +69,9 @@ export default function WeeklyGoalsPanel({
             <button
               type="button"
               onClick={onConfigure}
-              className="flex shrink-0 items-center gap-1.5 rounded-lg bg-primary px-3 py-1.5 text-xs font-medium text-inverse transition-colors hover:bg-primary/90"
+              className="hover:bg-primary/90 flex shrink-0 items-center gap-1.5 rounded-lg bg-primary px-3 py-1.5 text-xs font-medium text-inverse transition-colors"
             >
-              <Settings2 className="size-4" />
+              <Icon name="Settings2" size="sm" />
               去配置
             </button>
           )}
@@ -88,7 +88,7 @@ export default function WeeklyGoalsPanel({
     >
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <Target className="size-5 text-primary" />
+          <Icon name="Target" size="md" className="text-primary" />
           <h2 className="text-base font-bold text-text-primary">本周目标</h2>
         </div>
         <span className="text-xs text-text-muted">共 {goals.length} 个目标</span>
@@ -149,7 +149,7 @@ export default function WeeklyGoalsPanel({
                   </div>
                   <div className="mt-1.5 flex items-center justify-between">
                     <span className="flex items-center gap-1 text-2xs text-text-muted">
-                      <TrendingUp className="size-4" />
+                      <Icon name="TrendingUp" size="sm" />
                       完成率 {rate}%
                     </span>
                     {effectiveDone >= target && target > 0 && (
@@ -162,7 +162,7 @@ export default function WeeklyGoalsPanel({
               {checklist.length > 0 && (
                 <div className="space-y-2">
                   <div className="flex items-center gap-1.5 text-2xs text-text-muted">
-                    <ListChecks className="size-4" />
+                    <Icon name="ListChecks" size="sm" />
                     明细清单
                     <span className="text-text-tertiary">
                       ({checklistDone}/{checklist.length})
@@ -179,9 +179,17 @@ export default function WeeklyGoalsPanel({
                         }`}
                       >
                         {item.done ? (
-                          <CheckSquare className="mt-0.5 size-4 shrink-0 text-success" />
+                          <Icon
+                            name="CheckSquare"
+                            size="sm"
+                            className="mt-0.5 shrink-0 text-success"
+                          />
                         ) : (
-                          <Square className="mt-0.5 size-4 shrink-0 text-text-tertiary" />
+                          <Icon
+                            name="Square"
+                            size="sm"
+                            className="mt-0.5 shrink-0 text-text-tertiary"
+                          />
                         )}
                         <span
                           className={`text-xs leading-relaxed ${

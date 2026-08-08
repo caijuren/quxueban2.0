@@ -2,16 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { SlideUp, StaggerContainer, StaggerItem } from '@/components/motion';
-import {
-  Sparkles,
-  RefreshCw,
-  AlertTriangle,
-  CheckCircle2,
-  Lightbulb,
-  Calendar,
-  User,
-  Loader2,
-} from 'lucide-react';
+import { Icon } from '@/components/ui/icon';
 import { useChildren } from '@/components/dashboard/ChildrenContext';
 import { gradeLabel } from '@/lib/children';
 import EmptyState from '@/components/ui/EmptyState';
@@ -21,22 +12,22 @@ import type { DiagnosisResult } from '@/lib/aiDiagnosis';
 const sectionConfig = {
   subjectHealth: {
     title: '进度诊断',
-    icon: CheckCircle2,
+    icon: 'CheckCircle2' as const,
     color: 'text-success',
   },
   risks: {
     title: '风险预警',
-    icon: AlertTriangle,
+    icon: 'AlertTriangle' as const,
     color: 'text-warning',
   },
   suggestions: {
     title: '调整建议',
-    icon: Lightbulb,
+    icon: 'Lightbulb' as const,
     color: 'text-secondary',
   },
   monthlyFocus: {
     title: '下月重点',
-    icon: Calendar,
+    icon: 'Calendar' as const,
     color: 'text-accent',
   },
 };
@@ -116,21 +107,25 @@ export default function AIPage() {
           disabled={!currentChild || loading}
           className="flex items-center gap-2 rounded-module bg-gradient-to-r from-secondary to-secondary-glow px-5 py-2.5 font-semibold text-inverse transition-all duration-300 hover:shadow-glow-secondary disabled:cursor-not-allowed disabled:opacity-50"
         >
-          {loading ? <Loader2 className="size-4 animate-spin" /> : <RefreshCw className="size-4" />}
+          {loading ? (
+            <Icon name="Loader2" size="sm" animate="spin" />
+          ) : (
+            <Icon name="RefreshCw" size="sm" />
+          )}
           {loading ? '生成中...' : '重新生成'}
         </button>
       </SlideUp>
 
       {!currentChild && (
         <EmptyState
-          icon={User}
+          icon="User"
           title="还没有孩子档案"
           description="请先在右上角添加孩子，系统会根据年级生成对应的 AI 诊断建议"
         />
       )}
 
       {error && (
-        <SlideUp className="rounded-2xl border border-error/30 bg-error/10 p-6">
+        <SlideUp className="border-error/30 bg-error/10 rounded-2xl border p-6">
           <p className="text-error">生成失败：{error}</p>
         </SlideUp>
       )}
@@ -139,64 +134,63 @@ export default function AIPage() {
         <>
           <SlideUp>
             <GlassCard strength="strong" glow="ai" className="p-6">
-            <div className="flex items-start gap-4">
-              <div className="flex size-12 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-secondary to-secondary-glow">
-                <Sparkles className="size-6 text-text-primary" />
-              </div>
-              <div className="flex-1">
-                <div className="mb-2 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-                  <h2 className="font-display text-xl font-bold">AI 综合评估</h2>
-                  <div className="flex items-center gap-3">
-                    <span className="text-sm text-text-tertiary">路线匹配度</span>
-                    <span className="text-2xl font-bold text-secondary">
-                      {diagnosis.overallScore}%
+              <div className="flex items-start gap-4">
+                <div className="flex size-12 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-secondary to-secondary-glow">
+                  <Icon name="Sparkles" size="lg" animate="pulse" className="text-text-primary" />
+                </div>
+                <div className="flex-1">
+                  <div className="mb-2 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                    <h2 className="font-display text-xl font-bold">AI 综合评估</h2>
+                    <div className="flex items-center gap-3">
+                      <span className="text-sm text-text-tertiary">路线匹配度</span>
+                      <span className="text-2xl font-bold text-secondary">
+                        {diagnosis.overallScore}%
+                      </span>
+                    </div>
+                  </div>
+                  <p className="leading-relaxed text-text-secondary">{diagnosis.summary}</p>
+                  <div className="mt-4 flex items-center gap-2 text-sm">
+                    <span className="text-text-tertiary">匹配等级：</span>
+                    <span className="bg-secondary/20 rounded-full px-2.5 py-0.5 font-medium text-secondary">
+                      {diagnosis.routeMatch.level}
                     </span>
+                    <span className="text-text-muted">· {diagnosis.routeMatch.reason}</span>
                   </div>
                 </div>
-                <p className="leading-relaxed text-text-secondary">{diagnosis.summary}</p>
-                <div className="mt-4 flex items-center gap-2 text-sm">
-                  <span className="text-text-tertiary">匹配等级：</span>
-                  <span className="bg-secondary/20 rounded-full px-2.5 py-0.5 font-medium text-secondary">
-                    {diagnosis.routeMatch.level}
-                  </span>
-                  <span className="text-text-muted">· {diagnosis.routeMatch.reason}</span>
-                </div>
               </div>
-            </div>
-          </GlassCard>
+            </GlassCard>
           </SlideUp>
 
           <StaggerContainer className="grid grid-cols-1 gap-6 md:grid-cols-2">
-            {(Object.keys(sectionConfig) as Array<keyof typeof sectionConfig>).map((key, index) => {
+            {(Object.keys(sectionConfig) as Array<keyof typeof sectionConfig>).map((key) => {
               const section = sectionConfig[key];
               const items = diagnosis[key] as unknown[];
-              const Icon = section.icon;
 
               return (
                 <StaggerItem key={key}>
                   <GlassCard className="h-full p-6">
-                  <div className="mb-5 flex items-center gap-3">
-                    <Icon className={`size-6 ${section.color}`} />
-                    <h2 className="font-display text-lg font-bold">{section.title}</h2>
-                  </div>
-                  <ul className="space-y-3">
-                    {items.length === 0 ? (
-                      <li className="text-sm text-text-muted">暂无数据</li>
-                    ) : (
-                      items.map((item, itemIndex) => (
-                        <li
-                          key={itemIndex}
-                          className="flex items-start gap-3 text-sm leading-relaxed text-text-secondary"
-                        >
-                          <span
-                            className={`size-1.5 rounded-full ${section.color.replace('text-', 'bg-')} mt-2 shrink-0`}
-                          />
-                          {getItemText(key, item)}
-                        </li>
-                      ))
-                    )}
-                  </ul>
-                </GlassCard>
+                    <div className="mb-5 flex items-center gap-3">
+                      <Icon name={section.icon} size="lg" className={section.color} />
+                      <h2 className="font-display text-lg font-bold">{section.title}</h2>
+                    </div>
+                    <ul className="space-y-3">
+                      {items.length === 0 ? (
+                        <li className="text-sm text-text-muted">暂无数据</li>
+                      ) : (
+                        items.map((item, itemIndex) => (
+                          <li
+                            key={itemIndex}
+                            className="flex items-start gap-3 text-sm leading-relaxed text-text-secondary"
+                          >
+                            <span
+                              className={`size-1.5 rounded-full ${section.color.replace('text-', 'bg-')} mt-2 shrink-0`}
+                            />
+                            {getItemText(key, item)}
+                          </li>
+                        ))
+                      )}
+                    </ul>
+                  </GlassCard>
                 </StaggerItem>
               );
             })}
@@ -206,7 +200,7 @@ export default function AIPage() {
 
       {!diagnosis && !loading && currentChild && !error && (
         <GlassCard className="p-12 text-center">
-          <Sparkles className="mx-auto mb-4 size-12 text-secondary" />
+          <Icon name="Sparkles" size="xl" animate="pulse" className="mx-auto mb-4 text-secondary" />
           <p className="text-text-secondary">点击右上角「重新生成」获取 AI 诊断报告</p>
         </GlassCard>
       )}

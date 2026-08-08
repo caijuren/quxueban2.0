@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Plus, Minus } from 'lucide-react';
+import { Icon } from '@/components/ui/icon';
 import MotionSection from '@/components/ui/MotionSection';
 
 const faqs = [
@@ -72,7 +72,7 @@ export default function FAQ() {
                     }`}
                     aria-hidden="true"
                   >
-                    {isOpen ? <Minus className="size-4" /> : <Plus className="size-4" />}
+                    {isOpen ? <Icon name="Minus" size="sm" /> : <Icon name="Plus" size="sm" />}
                   </span>
                 </button>
                 <AnimatePresence initial={false}>

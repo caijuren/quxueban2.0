@@ -1,9 +1,9 @@
+import { Icon } from '@/components/ui/icon';
 import { Metadata } from 'next';
 import PageLayout from '@/components/marketing/PageLayout';
 import MarketingHero from '@/components/marketing/MarketingHero';
 import AIReportVisual from '@/components/marketing/AIReportVisual';
 import CommandCard from '@/components/ui/CommandCard';
-import { Target, AlertTriangle, TrendingUp } from 'lucide-react';
 
 export const metadata: Metadata = {
   title: 'AI 诊断 - 趣学伴',
@@ -48,15 +48,17 @@ export default function AIMarketingPage() {
         description="输入孩子当前进度，AI 帮你判断路线是否合理、哪些任务需要加强、是否需要启动备选方案。"
         tags={[
           {
-            icon: <Target className="size-3.5 text-secondary" aria-hidden="true" />,
+            icon: <Icon name="Target" size="xs" className="text-secondary" aria-hidden="true" />,
             text: '路线匹配度',
           },
           {
-            icon: <TrendingUp className="size-3.5 text-accent" aria-hidden="true" />,
+            icon: <Icon name="TrendingUp" size="xs" className="text-accent" aria-hidden="true" />,
             text: '健康度诊断',
           },
           {
-            icon: <AlertTriangle className="size-3.5 text-warning" aria-hidden="true" />,
+            icon: (
+              <Icon name="AlertTriangle" size="xs" className="text-warning" aria-hidden="true" />
+            ),
             text: '风险预警',
           },
         ]}

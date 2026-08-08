@@ -3,13 +3,13 @@
 import * as React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Menu, X, LucideIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { Icon, type IconName } from '@/components/ui/icon';
 import PageContainer from './page-container';
 
 export interface NavItem {
   href: string;
-  icon: LucideIcon;
+  icon: IconName;
   label: string;
 }
 
@@ -36,7 +36,7 @@ function NavLink({ item, onClick }: { item: NavItem; onClick?: () => void }) {
           : 'text-text-secondary hover:bg-surface-hover hover:text-text-primary'
       )}
     >
-      <item.icon className="size-5 shrink-0" />
+      <Icon name={item.icon} size="md" className="shrink-0" />
       {item.label}
     </Link>
   );
@@ -69,7 +69,7 @@ export default function AppShell({ children, navItems, logo, title, userMenu }: 
             className="rounded-lg p-2 text-text-secondary hover:bg-surface-hover lg:hidden"
             aria-label="打开菜单"
           >
-            <Menu className="size-5" />
+            <Icon name="Menu" size="md" />
           </button>
           {!title && logo}
         </div>
@@ -95,7 +95,7 @@ export default function AppShell({ children, navItems, logo, title, userMenu }: 
                 className="rounded-lg p-2 text-text-secondary hover:bg-surface-hover"
                 aria-label="关闭菜单"
               >
-                <X className="size-5" />
+                <Icon name="X" size="md" />
               </button>
             </div>
             <nav className="space-y-1 p-4">

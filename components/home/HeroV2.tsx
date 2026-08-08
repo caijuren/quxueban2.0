@@ -1,7 +1,7 @@
 'use client';
 
 import { motion, useReducedMotion } from 'framer-motion';
-import { ArrowRight, Target } from 'lucide-react';
+import { Icon } from '@/components/ui/icon';
 import Link from 'next/link';
 
 const containerVariants = {
@@ -125,7 +125,7 @@ export default function HeroV2() {
                 className="hover:bg-primary/90 inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-text-primary transition-colors"
               >
                 免费绘制升学地图
-                <ArrowRight className="size-4" />
+                <Icon name="ArrowRight" size="sm" />
               </Link>
             </motion.div>
 
@@ -153,7 +153,7 @@ export default function HeroV2() {
             <div className="relative overflow-hidden rounded-2xl border border-border-subtle bg-surface-elevated p-5">
               <div className="mb-5 flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <Target className="size-4 text-primary" aria-hidden="true" />
+                  <Icon name="Target" size="sm" className="text-primary" aria-hidden="true" />
                   <span className="font-mono text-[11px] uppercase tracking-wider text-text-tertiary">
                     升学规划图 · 2025-2030
                   </span>

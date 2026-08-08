@@ -2,8 +2,8 @@
 
 import * as React from 'react';
 import Link from 'next/link';
-import { ChevronRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { Icon } from '@/components/ui/icon';
 
 export interface BreadcrumbItem {
   label: string;
@@ -24,7 +24,7 @@ function Breadcrumb({ items }: { items: BreadcrumbItem[] }) {
       <ol className="flex flex-wrap items-center gap-1 text-sm text-text-muted">
         {items.map((item, index) => (
           <li key={index} className="flex items-center">
-            {index > 0 && <ChevronRight className="mx-1 size-4" />}
+            {index > 0 && <Icon name="ChevronRight" size="sm" className="mx-1" />}
             {item.href ? (
               <Link href={item.href} className="transition-colors hover:text-text-secondary">
                 {item.label}

@@ -2,17 +2,7 @@
 
 import { useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
-import {
-  BookHeart,
-  Calendar,
-  Loader2,
-  Save,
-  Trash2,
-  Edit2,
-  X,
-  Tag,
-  Image as ImageIcon,
-} from 'lucide-react';
+import { Icon } from '@/components/ui/icon';
 import { useChildren } from '@/components/dashboard/ChildrenContext';
 import EmptyState from '@/components/ui/EmptyState';
 import ConsolePageShell from '@/components/console/core/ConsolePageShell';
@@ -120,7 +110,7 @@ export default function ParentLogSettingsPage() {
             <div>
               <label className="mb-1 block text-xs text-text-muted">日期</label>
               <div className="flex items-center gap-2 rounded-lg border border-border-default bg-surface px-3 py-2">
-                <Calendar className="size-4 text-text-muted" />
+                <Icon name="Calendar" size="sm" className="text-text-muted" />
                 <input
                   type="date"
                   value={date}
@@ -145,7 +135,7 @@ export default function ParentLogSettingsPage() {
 
             <div>
               <label className="mb-1 block text-xs text-text-muted">
-                <Tag className="mr-1 inline size-3" />
+                <Icon name="Tag" size="xs" className="mr-1 inline" />
                 标签（用空格或逗号分隔）
               </label>
               <input
@@ -159,7 +149,7 @@ export default function ParentLogSettingsPage() {
 
             <div>
               <label className="mb-1 block text-xs text-text-muted">
-                <ImageIcon className="mr-1 inline size-3" />
+                <Icon name="Image" size="xs" className="mr-1 inline" />
                 图片链接（每行一个）
               </label>
               <textarea
@@ -178,9 +168,9 @@ export default function ParentLogSettingsPage() {
                 className="flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-text-primary transition-all hover:opacity-90 disabled:opacity-60"
               >
                 {createLog.isPending || updateLog.isPending ? (
-                  <Loader2 className="size-4 animate-spin" />
+                  <Icon name="Loader2" size="sm" animate="spin" />
                 ) : (
-                  <Save className="size-4" />
+                  <Icon name="Save" size="sm" />
                 )}
                 {editingId ? '保存修改' : '保存记录'}
               </button>
@@ -190,7 +180,7 @@ export default function ParentLogSettingsPage() {
                   onClick={resetForm}
                   className="rounded-lg border border-border-default bg-surface px-4 py-2 text-sm text-text-secondary transition-colors hover:bg-surface-highlight"
                 >
-                  <X className="size-4" />
+                  <Icon name="X" size="sm" />
                 </button>
               )}
             </div>
@@ -225,11 +215,11 @@ export default function ParentLogSettingsPage() {
 
           {isLoading ? (
             <div className="flex items-center justify-center py-16">
-              <Loader2 className="size-6 animate-spin text-primary" />
+              <Icon name="Loader2" size="lg" animate="spin" className="text-primary" />
             </div>
           ) : logs.length === 0 ? (
             <EmptyState
-              icon={BookHeart}
+              icon="BookHeart"
               title="还没有家长日志"
               description="在左侧写下第一条观察记录，开始追踪孩子的成长"
             />
@@ -330,14 +320,14 @@ function LogCard({
             className="flex size-7 items-center justify-center rounded-md bg-surface-hover text-text-muted transition-colors hover:text-primary"
             title="编辑"
           >
-            <Edit2 className="size-3.5" />
+            <Icon name="Edit2" size="xs" />
           </button>
           <button
             onClick={onDelete}
             className="flex size-7 items-center justify-center rounded-md bg-surface-hover text-text-muted transition-colors hover:text-error"
             title="删除"
           >
-            <Trash2 className="size-3.5" />
+            <Icon name="Trash2" size="xs" />
           </button>
         </div>
       </div>

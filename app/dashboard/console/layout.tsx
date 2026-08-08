@@ -3,48 +3,43 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import {
-  User,
-  Bell,
-  Users,
-  UserCog,
-  Sparkles,
-  Database,
-  Palette,
-  HelpCircle,
-  ChevronLeft,
-  Settings,
-} from 'lucide-react';
+import { Icon, type IconName } from '@/components/ui/icon';
 import { motion } from 'framer-motion';
 
-const consoleNav = [
+interface NavItem {
+  name: string;
+  href: string;
+  icon: IconName;
+}
+
+const consoleNav: { title: string; items: NavItem[] }[] = [
   {
     title: '账户',
     items: [
-      { name: '我的账户', href: '/dashboard/console/account', icon: User },
-      { name: '消息通知', href: '/dashboard/console/notifications', icon: Bell },
+      { name: '我的账户', href: '/dashboard/console/account', icon: 'User' },
+      { name: '消息通知', href: '/dashboard/console/notifications', icon: 'Bell' },
     ],
   },
   {
     title: '家庭',
     items: [
-      { name: '我的孩子', href: '/dashboard/console/children', icon: Users },
-      { name: '家庭成员与权限', href: '/dashboard/console/family', icon: UserCog },
+      { name: '我的孩子', href: '/dashboard/console/children', icon: 'Users' },
+      { name: '家庭成员与权限', href: '/dashboard/console/family', icon: 'UserCog' },
     ],
   },
   {
     title: 'AI 助手',
-    items: [{ name: 'AI 配置', href: '/dashboard/console/ai', icon: Sparkles }],
+    items: [{ name: 'AI 配置', href: '/dashboard/console/ai', icon: 'Sparkles' }],
   },
   {
     title: '数据资产',
-    items: [{ name: '数据与隐私', href: '/dashboard/console/data', icon: Database }],
+    items: [{ name: '数据与隐私', href: '/dashboard/console/data', icon: 'Database' }],
   },
   {
     title: '系统',
     items: [
-      { name: '外观与体验', href: '/dashboard/console/appearance', icon: Palette },
-      { name: '帮助中心', href: '/dashboard/console/help', icon: HelpCircle },
+      { name: '外观与体验', href: '/dashboard/console/appearance', icon: 'Palette' },
+      { name: '帮助中心', href: '/dashboard/console/help', icon: 'HelpCircle' },
     ],
   },
 ];
@@ -63,7 +58,7 @@ export default function ConsoleLayout({ children }: { children: React.ReactNode 
         className={`shrink-0 transition-all duration-300 ${collapsed ? 'lg:w-16' : 'lg:w-56'}`}
       >
         <div className="mb-3 flex items-center gap-2 px-1">
-          <Settings className="size-4 text-primary" />
+          <Icon name="Settings" size="sm" className="text-primary" />
           {!collapsed && (
             <h1 className="font-display text-base font-bold text-text-primary">设置</h1>
           )}
@@ -94,7 +89,7 @@ export default function ConsoleLayout({ children }: { children: React.ReactNode 
                       }`}
                       title={collapsed ? item.name : undefined}
                     >
-                      <item.icon className="size-4 shrink-0" />
+                      <Icon name={item.icon} size="sm" className="shrink-0" />
                       {!collapsed && <span className="text-xs">{item.name}</span>}
                     </Link>
                   );
@@ -109,7 +104,11 @@ export default function ConsoleLayout({ children }: { children: React.ReactNode 
           className="mt-4 hidden size-8 items-center justify-center rounded-lg bg-surface-hover text-text-muted transition-colors hover:text-text-secondary lg:flex"
           title={collapsed ? '展开' : '收起'}
         >
-          <ChevronLeft className={`size-4 transition-transform ${collapsed ? 'rotate-180' : ''}`} />
+          <Icon
+            name="ChevronLeft"
+            size="sm"
+            className={`transition-transform ${collapsed ? 'rotate-180' : ''}`}
+          />
         </button>
       </motion.aside>
 

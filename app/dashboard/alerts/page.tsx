@@ -2,17 +2,7 @@
 
 import { useMemo } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
-import {
-  AlertTriangle,
-  Info,
-  CheckCircle2,
-  ArrowRight,
-  Calendar,
-  TrendingDown,
-  Clock,
-  Target,
-  Bell,
-} from 'lucide-react';
+import { Icon, type IconName } from '@/components/ui/icon';
 import { useRouter } from 'next/navigation';
 import { useChildren } from '@/components/dashboard/ChildrenContext';
 import { generateAlerts, Alert, AlertLevel, AlertType } from '@/lib/alerts';
@@ -36,45 +26,40 @@ const itemVariants = {
   },
 };
 
-const levelMeta: Record<
-  AlertLevel,
-  { icon: typeof AlertTriangle; color: string; bg: string; label: string }
-> = {
-  urgent: {
-    icon: AlertTriangle,
-    color: 'text-error',
-    bg: 'bg-error/10',
-    label: '紧急',
-  },
-  warning: {
-    icon: AlertTriangle,
-    color: 'text-warning',
-    bg: 'bg-warning/10',
-    label: '提醒',
-  },
-  info: {
-    icon: Info,
-    color: 'text-secondary',
-    bg: 'bg-secondary/10',
-    label: '提示',
-  },
-};
+const levelMeta: Record<AlertLevel, { icon: IconName; color: string; bg: string; label: string }> =
+  {
+    urgent: {
+      icon: 'AlertTriangle',
+      color: 'text-error',
+      bg: 'bg-error/10',
+      label: '紧急',
+    },
+    warning: {
+      icon: 'AlertTriangle',
+      color: 'text-warning',
+      bg: 'bg-warning/10',
+      label: '提醒',
+    },
+    info: {
+      icon: 'Info',
+      color: 'text-secondary',
+      bg: 'bg-secondary/10',
+      label: '提示',
+    },
+  };
 
-const typeMeta: Record<AlertType, { icon: typeof Calendar; label: string }> = {
-  today_pending: { icon: Clock, label: '今日任务' },
-  missed_yesterday: { icon: Calendar, label: '昨日遗漏' },
-  category_gap: { icon: Target, label: '节奏断层' },
-  low_completion: { icon: TrendingDown, label: '完成偏低' },
-  milestone_deadline: { icon: Target, label: '节点临近' },
+const typeMeta: Record<AlertType, { icon: IconName; label: string }> = {
+  today_pending: { icon: 'Clock', label: '今日任务' },
+  missed_yesterday: { icon: 'Calendar', label: '昨日遗漏' },
+  category_gap: { icon: 'Target', label: '节奏断层' },
+  low_completion: { icon: 'TrendingDown', label: '完成偏低' },
+  milestone_deadline: { icon: 'Target', label: '节点临近' },
 };
 
 function AlertCard({ alert }: { alert: Alert }) {
   const router = useRouter();
   const meta = levelMeta[alert.level];
   const type = typeMeta[alert.type];
-  const Icon = meta.icon;
-  const TypeIcon = type.icon;
-
   return (
     <motion.div variants={itemVariants}>
       <CommandCard className="overflow-hidden p-4">
@@ -82,7 +67,7 @@ function AlertCard({ alert }: { alert: Alert }) {
           <div
             className={`size-10 rounded-lg ${meta.bg} flex shrink-0 items-center justify-center`}
           >
-            <Icon className={`size-5 ${meta.color}`} />
+            <Icon name={meta.icon} size="md" className={meta.color} />
           </div>
           <div className="min-w-0 flex-1">
             <div className="mb-1 flex flex-wrap items-center gap-2">
@@ -92,7 +77,7 @@ function AlertCard({ alert }: { alert: Alert }) {
                 {meta.label}
               </span>
               <span className="flex items-center gap-1 rounded-full bg-surface-hover px-1.5 py-0.5 text-[10px] text-text-tertiary">
-                <TypeIcon className="size-3" />
+                <Icon name={type.icon} size="xs" />
                 {type.label}
               </span>
             </div>
@@ -104,7 +89,7 @@ function AlertCard({ alert }: { alert: Alert }) {
                 className="inline-flex items-center gap-1 text-xs font-medium text-primary transition-colors hover:text-primary-glow"
               >
                 {alert.action.label}
-                <ArrowRight className="size-3" />
+                <Icon name="ArrowRight" size="xs" />
               </button>
             )}
           </div>
@@ -134,7 +119,7 @@ export default function AlertsPage() {
       >
         <div className="flex items-center gap-3">
           <div className="bg-error/10 border-error/20 flex size-10 items-center justify-center rounded-lg border">
-            <Bell className="size-5 text-error" />
+            <Icon name="Bell" size="md" className="text-error" />
           </div>
           <div>
             <h1 className="font-display text-2xl font-bold sm:text-3xl">提醒中心</h1>
@@ -163,7 +148,7 @@ export default function AlertsPage() {
           transition={{ duration: 0.5 }}
         >
           <EmptyState
-            icon={CheckCircle2}
+            icon="CheckCircle2"
             title="一切正常"
             description="今日任务已完成，本周节奏稳定，继续保持。"
             action={{

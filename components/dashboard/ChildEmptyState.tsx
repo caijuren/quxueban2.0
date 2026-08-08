@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import { User, Plus } from 'lucide-react';
 import EmptyState from '@/components/ui/EmptyState';
 import ChildModal from '@/components/dashboard/ChildModal';
 
@@ -17,7 +16,7 @@ export default function ChildEmptyState({
   return (
     <>
       <EmptyState
-        icon={User}
+        icon="User"
         title="还没有孩子档案"
         description={description}
         action={{

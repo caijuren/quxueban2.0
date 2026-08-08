@@ -1,23 +1,10 @@
 'use client';
+import { Icon } from '@/components/ui/icon';
 
 import { motion, useReducedMotion } from 'framer-motion';
 import { useEffect, useRef, useState, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
-import {
-  Route,
-  Target,
-  Shield,
-  AlertTriangle,
-  Clock,
-  ChevronRight,
-  ChevronDown,
-  Plus,
-  Edit3,
-  School,
-  GraduationCap,
-  Home,
-  ChevronUp,
-} from 'lucide-react';
+
 import PlanRoadmap from '@/components/dashboard/PlanRoadmap';
 import MiddleSchoolMatrix from '@/components/dashboard/MiddleSchoolMatrix';
 import {
@@ -163,7 +150,7 @@ function PlanPageContent() {
       >
         <div className="flex items-center gap-3">
           <div className="bg-primary/10 border-primary/20 flex size-10 items-center justify-center rounded-xl border">
-            <Route className="size-5 text-primary" />
+            <Icon name="Route" size="md" className="text-primary" />
           </div>
           <div>
             <h1 className="font-display text-2xl font-bold sm:text-3xl">
@@ -181,10 +168,10 @@ function PlanPageContent() {
             >
               <span className="text-text-muted">阶段</span>
               <span className="font-semibold text-primary">{activeStage}</span>
-              <ChevronDown
-                className={`size-3.5 text-text-tertiary transition-transform duration-200 ${
-                  stageDropdownOpen ? 'rotate-180' : ''
-                }`}
+              <Icon
+                name="ChevronDown"
+                size="md"
+                className={`size-3.5 text-text-tertiary transition-transform duration-200 ${stageDropdownOpen ? 'rotate-180' : ''}`}
               />
             </button>
             {stageDropdownOpen && (
@@ -219,9 +206,9 @@ function PlanPageContent() {
           </div>
           <button
             onClick={() => setShowNewPlanModal(true)}
-            className="focus-ring flex items-center gap-1.5 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-inverse transition-all duration-200 hover:bg-primary/90"
+            className="focus-ring hover:bg-primary/90 flex items-center gap-1.5 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-inverse transition-all duration-200"
           >
-            <Plus className="size-4" />
+            <Icon name="Plus" size="sm" />
             新建方案
           </button>
         </div>
@@ -269,9 +256,9 @@ function PlanPageContent() {
                         }}
                       >
                         {plan.type === 'primary' ? (
-                          <Target className={`size-5 ${type.color}`} />
+                          <Icon name="Target" size="md" className={`size-5 ${type.color}`} />
                         ) : (
-                          <Shield className={`size-5 ${type.color}`} />
+                          <Icon name="Shield" size="md" className={`size-5 ${type.color}`} />
                         )}
                       </div>
                       <div>
@@ -285,7 +272,7 @@ function PlanPageContent() {
                           <span
                             className={`flex items-center gap-1 text-2xs font-medium ${status.color}`}
                           >
-                            <status.icon className="size-3" />
+                            <Icon name={status.icon} size="xs" className="size-3" />
                             {status.label}
                           </span>
                         </div>
@@ -327,14 +314,14 @@ function PlanPageContent() {
                           className="hover:bg-primary/10 focus-ring flex size-8 cursor-pointer items-center justify-center rounded-lg bg-surface-elevated text-text-tertiary transition-colors hover:text-primary"
                           aria-label="编辑匹配度"
                         >
-                          <Edit3 className="size-3.5" />
+                          <Icon name="Edit3" size="xs" />
                         </div>
                       )}
                       <div className="text-text-muted">
                         {isExpanded ? (
-                          <ChevronUp className="size-4" />
+                          <Icon name="ChevronUp" size="sm" />
                         ) : (
-                          <ChevronDown className="size-4" />
+                          <Icon name="ChevronDown" size="sm" />
                         )}
                       </div>
                     </div>
@@ -355,7 +342,7 @@ function PlanPageContent() {
                         {/* Requirements */}
                         <div>
                           <h3 className="mb-2.5 flex items-center gap-1.5 text-xs font-semibold text-text-tertiary">
-                            <AlertTriangle className="size-3.5 text-warning" />
+                            <Icon name="AlertTriangle" size="xs" className="text-warning" />
                             关键要求
                           </h3>
                           <div className="flex flex-wrap gap-1.5">
@@ -373,7 +360,7 @@ function PlanPageContent() {
                         {/* Milestones */}
                         <div>
                           <h3 className="mb-2.5 flex items-center gap-1.5 text-xs font-semibold text-text-tertiary">
-                            <Route className="size-3.5 text-secondary" />
+                            <Icon name="Route" size="xs" className="text-secondary" />
                             关键里程碑
                           </h3>
                           <div className="space-y-1">
@@ -395,22 +382,22 @@ function PlanPageContent() {
                         <h3 className="mb-2.5 flex items-center gap-1.5 text-xs font-semibold text-text-tertiary">
                           {activeStage === '中考' ? (
                             <>
-                              <GraduationCap className="size-3.5 text-primary" />
+                              <Icon name="GraduationCap" size="xs" className="text-primary" />
                               目标高中
                             </>
                           ) : plan.id === 'sg' ? (
                             <>
-                              <School className="size-3.5 text-primary" />
+                              <Icon name="School" size="xs" className="text-primary" />
                               目标学校
                             </>
                           ) : plan.id === 'yaohao' ? (
                             <>
-                              <GraduationCap className="size-3.5 text-secondary" />
+                              <Icon name="GraduationCap" size="xs" className="text-secondary" />
                               目标民办
                             </>
                           ) : (
                             <>
-                              <Home className="size-3.5 text-accent" />
+                              <Icon name="Home" size="xs" className="text-accent" />
                               保底选项
                             </>
                           )}
@@ -426,7 +413,11 @@ function PlanPageContent() {
                                 <div
                                   className={`size-8 rounded-lg bg-gradient-to-br ${school.color} flex shrink-0 items-center justify-center`}
                                 >
-                                  <school.icon className="size-4 text-text-primary" />
+                                  <Icon
+                                    name={school.icon}
+                                    size="sm"
+                                    className="size-4 text-text-primary"
+                                  />
                                 </div>
                                 <div className="min-w-0">
                                   <h4 className="truncate text-sm font-semibold text-text-secondary transition-colors group-hover:text-text-primary">
@@ -443,7 +434,7 @@ function PlanPageContent() {
                       {/* Footer */}
                       <div className="mt-4 flex items-center justify-between border-t border-border-subtle pt-3">
                         <div className="flex items-center gap-1.5 text-xs text-text-muted">
-                          <Clock className="size-3.5" />
+                          <Icon name="Clock" size="xs" />
                           最近更新：2 天前
                         </div>
                         <button
@@ -451,7 +442,11 @@ function PlanPageContent() {
                           className="group/btn focus-ring flex items-center gap-1 rounded-md px-1.5 py-1 text-xs text-primary transition-colors hover:text-primary-glow"
                         >
                           查看完整方案{' '}
-                          <ChevronRight className="size-3.5 transition-transform group-hover/btn:translate-x-0.5" />
+                          <Icon
+                            name="ChevronRight"
+                            size="xs"
+                            className="transition-transform group-hover/btn:translate-x-0.5"
+                          />
                         </button>
                       </div>
                     </div>

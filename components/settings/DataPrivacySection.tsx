@@ -1,7 +1,8 @@
 'use client';
+import { Icon } from '@/components/ui/icon';
 
 import { useState } from 'react';
-import { Download, Trash2, FileJson, Loader2, AlertTriangle } from 'lucide-react';
+
 import { useExportUserData, useDeleteAccount } from '@/lib/hooks/useUser';
 import SettingsSection from './SettingsSection';
 
@@ -44,7 +45,7 @@ export default function DataPrivacySection() {
         <div className="flex flex-col justify-between gap-4 rounded-xl border border-border-subtle bg-surface-elevated p-4 sm:flex-row sm:items-center">
           <div className="flex items-center gap-3">
             <div className="flex size-10 items-center justify-center rounded-xl bg-accent/10">
-              <FileJson className="size-5 text-accent" />
+              <Icon name="FileJson" size="md" className="text-accent" />
             </div>
             <div>
               <p className="text-sm font-medium text-text-secondary">导出全部数据</p>
@@ -57,9 +58,9 @@ export default function DataPrivacySection() {
             className="inline-flex items-center gap-1.5 rounded-lg bg-surface-elevated px-4 py-2 text-sm text-text-secondary transition-colors hover:bg-surface-highlight disabled:opacity-70"
           >
             {exportData.isPending ? (
-              <Loader2 className="size-4 animate-spin" />
+              <Icon name="Loader2" size="sm" animate="spin" />
             ) : (
-              <Download className="size-4" />
+              <Icon name="Download" size="sm" />
             )}
             导出 JSON
           </button>
@@ -70,7 +71,7 @@ export default function DataPrivacySection() {
         <div className="bg-error/5 border-error/10 flex flex-col justify-between gap-4 rounded-xl border p-4 sm:flex-row sm:items-center">
           <div className="flex items-center gap-3">
             <div className="bg-error/10 flex size-10 items-center justify-center rounded-xl">
-              <Trash2 className="size-5 text-error" />
+              <Icon name="Trash2" size="md" className="text-error" />
             </div>
             <div>
               <p className="text-sm font-medium text-text-secondary">注销账号</p>
@@ -81,7 +82,7 @@ export default function DataPrivacySection() {
             onClick={() => setShowDeleteConfirm(true)}
             className="bg-error/10 hover:bg-error/20 inline-flex items-center gap-1.5 rounded-lg px-4 py-2 text-sm font-medium text-error transition-colors"
           >
-            <Trash2 className="size-4" />
+            <Icon name="Trash2" size="sm" />
             注销账号
           </button>
         </div>
@@ -96,7 +97,7 @@ export default function DataPrivacySection() {
           <div className="relative w-full max-w-md rounded-2xl border border-border-default bg-bg-secondary p-6 shadow-2xl">
             <div className="mb-4 flex items-center gap-3">
               <div className="bg-error/10 flex size-10 items-center justify-center rounded-full">
-                <AlertTriangle className="size-5 text-error" />
+                <Icon name="AlertTriangle" size="md" className="text-error" />
               </div>
               <div>
                 <h4 className="text-base font-bold text-text-secondary">确认注销账号？</h4>
@@ -126,7 +127,7 @@ export default function DataPrivacySection() {
                 disabled={deleteAccount.isPending || !deletePassword}
                 className="hover:bg-error/90 inline-flex items-center gap-2 rounded-lg bg-error px-4 py-2 text-sm font-medium text-text-primary transition-colors disabled:opacity-70"
               >
-                {deleteAccount.isPending && <Loader2 className="size-4 animate-spin" />}
+                {deleteAccount.isPending && <Icon name="Loader2" size="sm" animate="spin" />}
                 确认注销
               </button>
             </div>

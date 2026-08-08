@@ -1,6 +1,6 @@
 'use client';
 
-import { LucideIcon } from 'lucide-react';
+import { Icon, type IconName } from '@/components/ui/icon';
 
 interface Action {
   label: string;
@@ -9,19 +9,21 @@ interface Action {
 }
 
 interface ActionCardProps {
-  icon?: LucideIcon;
+  icon?: IconName;
   title: string;
   description?: string;
   actions?: Action[];
 }
 
-export default function ActionCard({ icon: Icon, title, description, actions }: ActionCardProps) {
+export default function ActionCard({ icon, title, description, actions }: ActionCardProps) {
+  const iconNode = icon ? <Icon name={icon} size="sm" className="text-ai" /> : null;
+
   return (
     <div className="rounded-xl border border-border-subtle bg-surface-hover p-4">
       <div className="flex items-start gap-3">
-        {Icon && (
+        {iconNode && (
           <div className="bg-ai/10 flex size-9 shrink-0 items-center justify-center rounded-xl">
-            <Icon className="size-4 text-ai" />
+            {iconNode}
           </div>
         )}
         <div className="min-w-0 flex-1">

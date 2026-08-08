@@ -1,8 +1,9 @@
 'use client';
+import { Icon } from '@/components/ui/icon';
 
 import { useMemo } from 'react';
 import Image from 'next/image';
-import { Trophy, Send, Image as ImageIcon, Mic, FileText } from 'lucide-react';
+
 import Modal from '@/components/ui/Modal';
 import { WeeklyTaskItem, TaskCompletionQuality } from '@/lib/storage.types';
 
@@ -99,7 +100,7 @@ export default function DailyVictoryModal({
       onClose={onClose}
       title={isAllDone ? '今日任务全部完成' : '今日学习简报'}
       subtitle={`${childName} · ${date}`}
-      icon={Trophy}
+      icon="Trophy"
       iconClassName="bg-gradient-to-br from-amber-400 to-orange-500"
       colorScheme="gold"
       size="md"
@@ -115,7 +116,7 @@ export default function DailyVictoryModal({
           <button
             onClick={onPush}
             disabled={pushing || pushed}
-            className="inline-flex flex-1 items-center justify-center gap-2 rounded-xl bg-primary py-3 text-sm font-medium text-inverse transition-colors hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-60"
+            className="hover:bg-primary/90 inline-flex flex-1 items-center justify-center gap-2 rounded-xl bg-primary py-3 text-sm font-medium text-inverse transition-colors disabled:cursor-not-allowed disabled:opacity-60"
           >
             {pushing ? (
               '推送中...'
@@ -123,7 +124,7 @@ export default function DailyVictoryModal({
               '已推送'
             ) : (
               <>
-                <Send className="size-4" />
+                <Icon name="Send" size="sm" />
                 推送到钉钉
               </>
             )}
@@ -135,7 +136,7 @@ export default function DailyVictoryModal({
         {/* Hero badge */}
         <div className="flex flex-col items-center py-4">
           <div className="mb-4 flex size-20 items-center justify-center rounded-full border-2 border-amber-400/30 bg-gradient-to-br from-amber-400/20 to-orange-500/20">
-            <Trophy className="size-10 text-amber-400" />
+            <Icon name="Trophy" size="xl" className="text-amber-400" />
           </div>
           <p className="text-lg font-bold text-text-primary">
             {isAllDone ? '太棒了！' : '今日学习简报'}
@@ -171,7 +172,7 @@ export default function DailyVictoryModal({
         {stats.imageUrls.length > 0 && (
           <div className="space-y-2">
             <p className="flex items-center gap-1.5 text-xs font-medium text-text-secondary">
-              <ImageIcon className="size-3.5" />
+              <Icon name="Image" size="xs" />
               今日打卡照片
             </p>
             <div className="flex gap-2 overflow-x-auto pb-1">
@@ -198,7 +199,7 @@ export default function DailyVictoryModal({
         {stats.audioUrls.length > 0 && (
           <div className="space-y-2">
             <p className="flex items-center gap-1.5 text-xs font-medium text-text-secondary">
-              <Mic className="size-3.5" />
+              <Icon name="Mic" size="xs" />
               今日语音记录
             </p>
             <div className="flex flex-col gap-2">
@@ -213,7 +214,7 @@ export default function DailyVictoryModal({
         {stats.audioTranscript && (
           <div className="space-y-2">
             <p className="flex items-center gap-1.5 text-xs font-medium text-text-secondary">
-              <FileText className="size-3.5" />
+              <Icon name="FileText" size="xs" />
               语音转文字
             </p>
             <div className="whitespace-pre-line rounded-lg border border-border-default bg-surface p-3 text-xs leading-relaxed text-text-tertiary">

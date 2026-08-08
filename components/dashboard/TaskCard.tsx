@@ -1,6 +1,6 @@
 'use client';
 
-import { CheckCircle2, Circle, Clock } from 'lucide-react';
+import { Icon } from '@/components/ui/icon';
 import { WeeklyTaskItem } from '@/lib/storage.types';
 import { TASK_CATEGORY_LABELS } from '@/lib/taskTemplates';
 import { getCategoryColorClass } from '@/lib/taskAlignment';
@@ -58,9 +58,13 @@ export default function TaskCard({
           aria-label={isDone ? '标记为未完成' : '标记为完成'}
         >
           {isDone ? (
-            <CheckCircle2 className="size-6 text-primary" />
+            <Icon name="CheckCircle2" size="lg" className="text-primary" />
           ) : (
-            <Circle className="size-6 text-text-muted transition-colors group-hover:text-primary" />
+            <Icon
+              name="Circle"
+              size="lg"
+              className="text-text-muted transition-colors group-hover:text-primary"
+            />
           )}
         </button>
 
@@ -82,7 +86,7 @@ export default function TaskCard({
             </span>
 
             <span className="ml-auto flex items-center gap-1 rounded-full border border-border-subtle bg-surface-elevated px-2 py-0.5 text-2xs text-text-tertiary">
-              <Clock className="size-4" />
+              <Icon name="Clock" size="sm" />
               <span className="tabular-nums">{task.duration}</span>
             </span>
           </div>

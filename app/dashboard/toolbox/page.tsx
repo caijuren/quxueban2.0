@@ -1,23 +1,8 @@
 'use client';
+import { Icon, type IconName } from '@/components/ui/icon';
 
 import { motion, useReducedMotion } from 'framer-motion';
-import {
-  BookOpen,
-  School,
-  Award,
-  CalendarClock,
-  Calculator,
-  Map,
-  FileText,
-  BarChart3,
-  Sparkles,
-  ArrowRight,
-  Clock,
-  Wrench,
-  Route,
-  Languages,
-  GraduationCap,
-} from 'lucide-react';
+
 import Link from 'next/link';
 import CommandCard from '@/components/ui/CommandCard';
 
@@ -26,7 +11,7 @@ interface ToolItem {
   name: string;
   description: string;
   href: string;
-  icon: typeof BookOpen;
+  icon: IconName;
   tags: string[];
   status: 'active' | 'coming';
   color: 'primary' | 'secondary' | 'accent' | 'warning';
@@ -48,7 +33,7 @@ const toolGroups: ToolGroup[] = [
         name: '教辅资料',
         description: '按学科、年级、能力分层整理的优质教辅推荐与使用指南',
         href: '/dashboard/toolbox/teaching-aids',
-        icon: BookOpen,
+        icon: 'BookOpen',
         tags: ['数学', '英语', '语文'],
         status: 'active',
         color: 'primary',
@@ -58,7 +43,7 @@ const toolGroups: ToolGroup[] = [
         name: '阅读书单',
         description: '名校推荐、分年级阅读能力提升书单与蓝思值参考',
         href: '/dashboard/toolbox/reading-list',
-        icon: FileText,
+        icon: 'FileText',
         tags: ['语文', '英语'],
         status: 'active',
         color: 'secondary',
@@ -74,7 +59,7 @@ const toolGroups: ToolGroup[] = [
         name: '英语学科',
         description: '英语能力地图、考试规划、原版阅读与听说写训练路径',
         href: '/dashboard/subjects/english',
-        icon: Languages,
+        icon: 'Languages',
         tags: ['能力地图', '标化'],
         status: 'active',
         color: 'secondary',
@@ -84,7 +69,7 @@ const toolGroups: ToolGroup[] = [
         name: '数学学科',
         description: '数学思维培养、竞赛路线、奥数年轮与阶段性诊断',
         href: '/dashboard/subjects/math',
-        icon: Calculator,
+        icon: 'Calculator',
         tags: ['奥数', '竞赛'],
         status: 'active',
         color: 'accent',
@@ -94,7 +79,7 @@ const toolGroups: ToolGroup[] = [
         name: '语文学科',
         description: '语文素养积累、阅读写作、古诗文与考试能力规划',
         href: '/dashboard/subjects/chinese',
-        icon: GraduationCap,
+        icon: 'GraduationCap',
         tags: ['阅读', '写作'],
         status: 'active',
         color: 'primary',
@@ -110,7 +95,7 @@ const toolGroups: ToolGroup[] = [
         name: '学校库',
         description: '三公、民办、市重点、区重点等学校招生信息与录取要求',
         href: '/dashboard/schools',
-        icon: School,
+        icon: 'School',
         tags: ['小升初', '中考'],
         status: 'active',
         color: 'accent',
@@ -120,7 +105,7 @@ const toolGroups: ToolGroup[] = [
         name: '标化考试',
         description: 'AMC8、TOEFL Junior、PET 等考试日历与备考路线图',
         href: '/dashboard/toolbox/exam-calendar',
-        icon: Award,
+        icon: 'Award',
         tags: ['竞赛', '英语'],
         status: 'active',
         color: 'warning',
@@ -136,7 +121,7 @@ const toolGroups: ToolGroup[] = [
         name: '路线方案',
         description: '三公、公办对口、中考等升学路线的方案管理与关键节点',
         href: '/dashboard/plan',
-        icon: Route,
+        icon: 'Route',
         tags: ['小升初', '中考'],
         status: 'active',
         color: 'primary',
@@ -146,7 +131,7 @@ const toolGroups: ToolGroup[] = [
         name: '升学时间线',
         description: '按当前年级自动生成的关键节点、报名截止与备考节奏',
         href: '/dashboard/milestones',
-        icon: CalendarClock,
+        icon: 'CalendarClock',
         tags: ['全局', '提醒'],
         status: 'active',
         color: 'secondary',
@@ -156,7 +141,7 @@ const toolGroups: ToolGroup[] = [
         name: '名额到校计算器',
         description: '根据学籍、户籍与连续就读年限判断是否具备名额分配资格',
         href: '/dashboard/toolbox/admission-calculator',
-        icon: Calculator,
+        icon: 'Calculator',
         tags: ['中考', '资格'],
         status: 'active',
         color: 'primary',
@@ -166,7 +151,7 @@ const toolGroups: ToolGroup[] = [
         name: '能力地图',
         description: '可视化对比当前能力与目标学校录取要求之间的差距',
         href: '/dashboard/toolbox/ability-map',
-        icon: Map,
+        icon: 'Map',
         tags: ['诊断', '定位'],
         status: 'coming',
         color: 'accent',
@@ -232,7 +217,7 @@ export default function ToolboxPage() {
       >
         <div className="flex items-center gap-3">
           <div className="bg-secondary/10 border-secondary/20 flex size-10 items-center justify-center rounded-xl border">
-            <Wrench className="size-5 text-secondary" />
+            <Icon name="Wrench" size="md" className="text-secondary" />
           </div>
           <div>
             <h1 className="font-display text-2xl font-bold sm:text-3xl">规划工具</h1>
@@ -241,7 +226,7 @@ export default function ToolboxPage() {
 
         <div className="flex items-center gap-2">
           <div className="flex items-center gap-2 rounded-xl border border-border-default bg-surface px-3 py-1.5 text-xs text-text-tertiary">
-            <Sparkles className="size-3.5 text-secondary" />
+            <Icon name="Sparkles" size="xs" className="text-secondary" />
             <span>按升学阶段智能推荐工具</span>
           </div>
         </div>
@@ -257,7 +242,7 @@ export default function ToolboxPage() {
         <div className="bg-primary/5 pointer-events-none absolute right-0 top-0 size-64 -translate-y-1/2 translate-x-1/3 rounded-full blur-3xl" />
         <div className="relative">
           <div className="mb-4 flex items-center gap-2">
-            <Clock className="size-4 text-primary" />
+            <Icon name="Clock" size="sm" className="text-primary" />
             <h2 className="font-display text-base font-bold">常用工具</h2>
           </div>
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
@@ -269,7 +254,7 @@ export default function ToolboxPage() {
                   href={tool.href}
                   className={`group flex flex-col items-center gap-2 rounded-xl p-4 ${colors.bg} border ${colors.border} transition-all duration-200`}
                 >
-                  <tool.icon className={`size-6 ${colors.text}`} />
+                  <Icon name={tool.icon} size="md" className={`size-6 ${colors.text}`} />
                   <span className="text-sm font-medium text-text-secondary transition-colors group-hover:text-text-primary">
                     {tool.name}
                   </span>
@@ -319,7 +304,7 @@ export default function ToolboxPage() {
                         <div
                           className={`size-11 rounded-xl ${colors.bg} border ${colors.border} flex shrink-0 items-center justify-center`}
                         >
-                          <tool.icon className={`size-5 ${colors.text}`} />
+                          <Icon name={tool.icon} size="md" className={`size-5 ${colors.text}`} />
                         </div>
                         {isComing ? (
                           <span className="rounded-full border border-border-default bg-surface-elevated px-2 py-1 text-2xs text-text-muted">
@@ -327,7 +312,7 @@ export default function ToolboxPage() {
                           </span>
                         ) : (
                           <div className="flex size-7 items-center justify-center rounded-lg border border-border-default bg-surface text-text-muted transition-colors group-hover:border-border-strong group-hover:text-text-primary">
-                            <ArrowRight className="size-3.5" />
+                            <Icon name="ArrowRight" size="xs" />
                           </div>
                         )}
                       </div>

@@ -1,22 +1,4 @@
-import {
-  Target,
-  Shield,
-  School,
-  Globe,
-  Scale,
-  GraduationCap,
-  Layers,
-  Home,
-  Clock,
-  CheckCircle2,
-  Calculator,
-  BookOpen,
-  Languages,
-  Award,
-  Lightbulb,
-  Palette,
-  FileText,
-} from 'lucide-react';
+import type { IconName } from '@/components/ui/icon';
 
 export interface RoutePlan {
   id: string;
@@ -31,7 +13,7 @@ export interface RoutePlan {
     slug: string;
     name: string;
     tag: string;
-    icon: typeof Target;
+    icon: IconName;
     color: string;
     shadow: string;
   }[];
@@ -55,7 +37,7 @@ export interface SubjectPathPhase {
 export interface SubjectPath {
   id: string;
   name: string;
-  icon: typeof Target;
+  icon: IconName;
   color: string;
   startTime: string;
   phases: SubjectPathPhase[];
@@ -74,7 +56,7 @@ export interface RouteMatrixCell {
 export interface RouteMatrixRow {
   id: string;
   category: string;
-  icon: typeof Target;
+  icon: IconName;
   color: string;
   cells: RouteMatrixCell[];
 }
@@ -85,7 +67,7 @@ export const sgRouteMatrix: RouteMatrixRow[] = [
   {
     id: 'english',
     category: '英语证书',
-    icon: Languages,
+    icon: 'Languages',
     color: 'from-secondary to-violet-400',
     cells: [
       {
@@ -136,7 +118,7 @@ export const sgRouteMatrix: RouteMatrixRow[] = [
   {
     id: 'math',
     category: '数学竞赛',
-    icon: Calculator,
+    icon: 'Calculator',
     color: 'from-primary to-rose-400',
     cells: [
       {
@@ -185,7 +167,7 @@ export const sgRouteMatrix: RouteMatrixRow[] = [
   {
     id: 'chinese',
     category: '语文竞赛',
-    icon: BookOpen,
+    icon: 'BookOpen',
     color: 'from-accent to-cyan-400',
     cells: [
       {
@@ -235,7 +217,7 @@ export const sgRouteMatrix: RouteMatrixRow[] = [
   {
     id: 'honor',
     category: '综合荣誉',
-    icon: Award,
+    icon: 'Award',
     color: 'from-warning to-amber-400',
     cells: [
       {
@@ -283,7 +265,7 @@ export const sgRouteMatrix: RouteMatrixRow[] = [
   {
     id: 'science',
     category: '科创',
-    icon: Lightbulb,
+    icon: 'Lightbulb',
     color: 'from-emerald-500 to-teal-400',
     cells: [
       {
@@ -331,7 +313,7 @@ export const sgRouteMatrix: RouteMatrixRow[] = [
   {
     id: 'art',
     category: '艺术（绘画）',
-    icon: Palette,
+    icon: 'Palette',
     color: 'from-fuchsia-500 to-pink-400',
     cells: [
       {
@@ -379,7 +361,7 @@ export const sgRouteMatrix: RouteMatrixRow[] = [
   {
     id: 'application',
     category: '申请流程',
-    icon: FileText,
+    icon: 'FileText',
     color: 'from-slate-500 to-slate-400',
     cells: [
       {
@@ -481,7 +463,7 @@ export const sgSubjectPaths: SubjectPath[] = [
   {
     id: 'math',
     name: '数学',
-    icon: Calculator,
+    icon: 'Calculator',
     color: 'from-primary to-rose-400',
     startTime: '二年级下',
     phases: [
@@ -514,7 +496,7 @@ export const sgSubjectPaths: SubjectPath[] = [
   {
     id: 'english',
     name: '英语',
-    icon: Languages,
+    icon: 'Languages',
     color: 'from-secondary to-violet-400',
     startTime: '二年级上',
     phases: [
@@ -547,7 +529,7 @@ export const sgSubjectPaths: SubjectPath[] = [
   {
     id: 'chinese',
     name: '语文',
-    icon: BookOpen,
+    icon: 'BookOpen',
     color: 'from-accent to-cyan-400',
     startTime: '二年级上',
     phases: [
@@ -580,7 +562,7 @@ export const sgSubjectPaths: SubjectPath[] = [
   {
     id: 'honor',
     name: '荣誉 / 综合',
-    icon: Award,
+    icon: 'Award',
     color: 'from-warning to-amber-400',
     startTime: '二年级上',
     phases: [
@@ -633,7 +615,7 @@ export const plans: RoutePlan[] = [
         slug: 'shishi',
         name: '上实',
         tag: '十年一贯·理科',
-        icon: School,
+        icon: 'School',
         color: 'from-primary to-primary-glow',
         shadow: 'hover:shadow-[0_0_30px_rgba(244,63,94,0.35)]',
       },
@@ -641,7 +623,7 @@ export const plans: RoutePlan[] = [
         slug: 'shangwai',
         name: '上外附中',
         tag: '七年一贯·英语',
-        icon: Globe,
+        icon: 'Globe',
         color: 'from-secondary to-secondary-glow',
         shadow: 'hover:shadow-[0_0_30px_rgba(139,92,246,0.35)]',
       },
@@ -649,7 +631,7 @@ export const plans: RoutePlan[] = [
         slug: 'puwai',
         name: '浦外',
         tag: '七年一贯·外语',
-        icon: Scale,
+        icon: 'Scale',
         color: 'from-accent to-accent-glow',
         shadow: 'hover:shadow-[0_0_30px_rgba(6,182,212,0.35)]',
       },
@@ -675,7 +657,7 @@ export const plans: RoutePlan[] = [
         slug: 'huayao-jiading',
         name: '华曜嘉定',
         tag: '原华二·四校强校',
-        icon: GraduationCap,
+        icon: 'GraduationCap',
         color: 'from-secondary to-purple-400',
         shadow: 'hover:shadow-[0_0_30px_rgba(139,92,246,0.35)]',
       },
@@ -683,7 +665,7 @@ export const plans: RoutePlan[] = [
         slug: 'huaishao',
         name: '华盛怀少',
         tag: '南翔一贯制·稳进',
-        icon: Layers,
+        icon: 'Layers',
         color: 'from-indigo-500 to-purple-500',
         shadow: 'hover:shadow-[0_0_30px_rgba(99,102,241,0.35)]',
       },
@@ -691,7 +673,7 @@ export const plans: RoutePlan[] = [
         slug: 'taoliyuan',
         name: '桃李园',
         tag: '嘉定第二·稳定强校',
-        icon: School,
+        icon: 'School',
         color: 'from-violet-500 to-fuchsia-500',
         shadow: 'hover:shadow-[0_0_30px_rgba(168,85,247,0.35)]',
       },
@@ -717,7 +699,7 @@ export const plans: RoutePlan[] = [
         slug: 'nanxiang-zhongxue',
         name: '南翔中学',
         tag: '对口公办',
-        icon: Home,
+        icon: 'Home',
         color: 'from-accent to-cyan-400',
         shadow: 'hover:shadow-[0_0_30px_rgba(6,182,212,0.35)]',
       },
@@ -725,7 +707,7 @@ export const plans: RoutePlan[] = [
         slug: 'yiguanzhi',
         name: '一贯制直升',
         tag: '稳定升学',
-        icon: Layers,
+        icon: 'Layers',
         color: 'from-teal-500 to-emerald-500',
         shadow: 'hover:shadow-[0_0_30px_rgba(20,184,166,0.35)]',
       },
@@ -733,7 +715,7 @@ export const plans: RoutePlan[] = [
         slug: 'gongbanzhong',
         name: '优质公办',
         tag: '特色班',
-        icon: School,
+        icon: 'School',
         color: 'from-sky-500 to-blue-500',
         shadow: 'hover:shadow-[0_0_30px_rgba(14,165,233,0.35)]',
       },
@@ -762,7 +744,7 @@ export const middleSchoolPlans: RoutePlan[] = [
         slug: 'shangzhong',
         name: '上海中学',
         tag: '四校之首',
-        icon: GraduationCap,
+        icon: 'GraduationCap',
         color: 'from-primary to-primary-glow',
         shadow: 'hover:shadow-[0_0_30px_rgba(244,63,94,0.35)]',
       },
@@ -770,7 +752,7 @@ export const middleSchoolPlans: RoutePlan[] = [
         slug: 'huaer',
         name: '华师大二附中',
         tag: '理科竞赛强校',
-        icon: School,
+        icon: 'School',
         color: 'from-secondary to-secondary-glow',
         shadow: 'hover:shadow-[0_0_30px_rgba(139,92,246,0.35)]',
       },
@@ -778,7 +760,7 @@ export const middleSchoolPlans: RoutePlan[] = [
         slug: 'fufu',
         name: '复旦附中',
         tag: '人文理科均衡',
-        icon: Layers,
+        icon: 'Layers',
         color: 'from-accent to-accent-glow',
         shadow: 'hover:shadow-[0_0_30px_rgba(6,182,212,0.35)]',
       },
@@ -804,7 +786,7 @@ export const middleSchoolPlans: RoutePlan[] = [
         slug: 'jiaofu-jiading',
         name: '交大附中嘉定分校',
         tag: '四校分校·市重点',
-        icon: GraduationCap,
+        icon: 'GraduationCap',
         color: 'from-secondary to-purple-400',
         shadow: 'hover:shadow-[0_0_30px_rgba(139,92,246,0.35)]',
       },
@@ -812,7 +794,7 @@ export const middleSchoolPlans: RoutePlan[] = [
         slug: 'jiading-yizhong',
         name: '嘉定一中',
         tag: '区属市重点',
-        icon: School,
+        icon: 'School',
         color: 'from-violet-500 to-fuchsia-500',
         shadow: 'hover:shadow-[0_0_30px_rgba(168,85,247,0.35)]',
       },
@@ -820,7 +802,7 @@ export const middleSchoolPlans: RoutePlan[] = [
         slug: 'shida-jiading',
         name: '上师大附属嘉定高中',
         tag: '新增市重点',
-        icon: Layers,
+        icon: 'Layers',
         color: 'from-indigo-500 to-purple-500',
         shadow: 'hover:shadow-[0_0_30px_rgba(99,102,241,0.35)]',
       },
@@ -851,7 +833,7 @@ export const middleSchoolPlans: RoutePlan[] = [
         slug: 'jiading-shiyan',
         name: '嘉一实验高级中学',
         tag: '区实验性示范',
-        icon: GraduationCap,
+        icon: 'GraduationCap',
         color: 'from-teal-500 to-emerald-500',
         shadow: 'hover:shadow-[0_0_30px_rgba(20,184,166,0.35)]',
       },
@@ -859,7 +841,7 @@ export const middleSchoolPlans: RoutePlan[] = [
         slug: 'jiading-erzhong',
         name: '嘉定二中',
         tag: '市特色高中',
-        icon: School,
+        icon: 'School',
         color: 'from-sky-500 to-blue-500',
         shadow: 'hover:shadow-[0_0_30px_rgba(14,165,233,0.35)]',
       },
@@ -867,7 +849,7 @@ export const middleSchoolPlans: RoutePlan[] = [
         slug: 'anting-gaozhong',
         name: '安亭高级中学',
         tag: '区重点',
-        icon: Home,
+        icon: 'Home',
         color: 'from-rose-500 to-pink-500',
         shadow: 'hover:shadow-[0_0_30px_rgba(244,63,94,0.35)]',
       },
@@ -891,9 +873,9 @@ export const typeConfig = {
 };
 
 export const statusConfig = {
-  active: { label: '执行中', icon: Target, color: 'text-success' },
-  standby: { label: '待命', icon: Clock, color: 'text-text-muted' },
-  completed: { label: '已完成', icon: CheckCircle2, color: 'text-success' },
+  active: { label: '执行中', icon: 'Target', color: 'text-success' },
+  standby: { label: '待命', icon: 'Clock', color: 'text-text-muted' },
+  completed: { label: '已完成', icon: 'CheckCircle2', color: 'text-success' },
 };
 
 export function getRoutesByStage(stage: '小升初' | '中考' | '高考'): RoutePlan[] {

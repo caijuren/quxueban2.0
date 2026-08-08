@@ -1,9 +1,9 @@
+import { Icon } from '@/components/ui/icon';
 import { Metadata } from 'next';
 import PageLayout from '@/components/marketing/PageLayout';
 import MarketingHero from '@/components/marketing/MarketingHero';
 import TimelineVisual from '@/components/marketing/TimelineVisual';
 import CommandCard from '@/components/ui/CommandCard';
-import { Bell, Layers, CheckCircle2 } from 'lucide-react';
 
 export const metadata: Metadata = {
   title: '里程碑 - 趣学伴',
@@ -48,15 +48,15 @@ export default function MilestonesMarketingPage() {
         description="升学不是一蹴而就。趣学伴将长远目标拆分为年级目标、学期目标、月度任务和周计划，让每一步都有明确的截止时间。"
         tags={[
           {
-            icon: <Layers className="size-3.5 text-primary" aria-hidden="true" />,
+            icon: <Icon name="Layers" size="xs" className="text-primary" aria-hidden="true" />,
             text: '层级拆解',
           },
           {
-            icon: <Bell className="size-3.5 text-secondary" aria-hidden="true" />,
+            icon: <Icon name="Bell" size="xs" className="text-secondary" aria-hidden="true" />,
             text: '节点提醒',
           },
           {
-            icon: <CheckCircle2 className="size-3.5 text-accent" aria-hidden="true" />,
+            icon: <Icon name="CheckCircle2" size="xs" className="text-accent" aria-hidden="true" />,
             text: '进度可视化',
           },
         ]}

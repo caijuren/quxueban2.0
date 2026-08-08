@@ -1,8 +1,8 @@
 'use client';
 
 import * as React from 'react';
-import { X, CheckCircle, AlertCircle, AlertTriangle, Info } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { Icon, type IconName } from '@/components/ui/icon';
 
 export type ToastType = 'success' | 'error' | 'warning' | 'info';
 
@@ -15,11 +15,11 @@ export interface ToastProps {
   onClose: (id: string) => void;
 }
 
-const iconMap = {
-  success: CheckCircle,
-  error: AlertCircle,
-  warning: AlertTriangle,
-  info: Info,
+const iconMap: Record<ToastType, IconName> = {
+  success: 'CheckCircle',
+  error: 'AlertCircle',
+  warning: 'AlertTriangle',
+  info: 'Info',
 };
 
 const variantMap = {
@@ -44,7 +44,7 @@ export default function Toast({
   duration = 3000,
   onClose,
 }: ToastProps) {
-  const Icon = iconMap[type];
+  const iconName = iconMap[type];
 
   React.useEffect(() => {
     const timer = setTimeout(() => onClose(id), duration);
@@ -60,7 +60,7 @@ export default function Toast({
       )}
       role="alert"
     >
-      <Icon className={cn('mt-0.5 size-5 shrink-0', iconColorMap[type])} />
+      <Icon name={iconName} size="md" className={cn('mt-0.5 shrink-0', iconColorMap[type])} />
       <div className="min-w-0 flex-1">
         <p className="text-sm font-medium text-text-primary">{title}</p>
         {description && <p className="mt-0.5 text-xs text-text-secondary">{description}</p>}
@@ -71,7 +71,7 @@ export default function Toast({
         className="shrink-0 text-text-muted transition-colors hover:text-text-secondary"
         aria-label="关闭"
       >
-        <X className="size-4" />
+        <Icon name="X" size="sm" />
       </button>
     </div>
   );

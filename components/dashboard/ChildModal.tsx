@@ -4,23 +4,7 @@ import Image from 'next/image';
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { createPortal } from 'react-dom';
-import {
-  X,
-  Plus,
-  User,
-  Pencil,
-  Upload,
-  Trash2,
-  AlertCircle,
-  Calendar,
-  School,
-  Target,
-  FileText,
-  Loader2,
-  Check,
-  Send,
-  Lock,
-} from 'lucide-react';
+import { Icon } from '@/components/ui/icon';
 import { useChildren } from '@/components/dashboard/ChildrenContext';
 import {
   Child,
@@ -299,7 +283,7 @@ export default function ChildModal({ isOpen, onClose, child }: ChildModalProps) 
         </span>
       );
     }
-    return <User className="text-text-primary/80 size-8" />;
+    return <Icon name="User" size="xl" className="text-text-primary/80" />;
   };
 
   if (!mounted) return null;
@@ -332,9 +316,9 @@ export default function ChildModal({ isOpen, onClose, child }: ChildModalProps) 
               <div className="flex items-center gap-3">
                 <div className="flex size-10 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-secondary">
                   {isEdit ? (
-                    <Pencil className="size-5 text-text-primary" />
+                    <Icon name="Pencil" size="md" className="text-text-primary" />
                   ) : (
-                    <Plus className="size-5 text-text-primary" />
+                    <Icon name="Plus" size="md" className="text-text-primary" />
                   )}
                 </div>
                 <div>
@@ -352,7 +336,7 @@ export default function ChildModal({ isOpen, onClose, child }: ChildModalProps) 
                 className="flex size-8 items-center justify-center rounded-lg bg-surface-hover text-text-tertiary transition-all hover:bg-surface-highlight hover:text-text-primary disabled:opacity-50"
                 aria-label="关闭"
               >
-                <X className="size-4" />
+                <Icon name="X" size="sm" />
               </button>
             </div>
 
@@ -362,7 +346,7 @@ export default function ChildModal({ isOpen, onClose, child }: ChildModalProps) 
             >
               {error && (
                 <div className="bg-error/[0.08] border-error/[0.15] mb-4 flex items-start gap-2 rounded-xl border p-3 text-sm text-error">
-                  <AlertCircle className="mt-0.5 size-4 shrink-0" />
+                  <Icon name="AlertCircle" size="sm" className="mt-0.5 shrink-0" />
                   <span>{error}</span>
                 </div>
               )}
@@ -388,9 +372,9 @@ export default function ChildModal({ isOpen, onClose, child }: ChildModalProps) 
                       className="inline-flex items-center gap-1.5 rounded-lg bg-surface-hover px-3 py-1.5 text-xs text-text-secondary transition-colors hover:bg-surface-highlight disabled:opacity-50"
                     >
                       {uploadingAvatar ? (
-                        <Loader2 className="size-3.5 animate-spin" />
+                        <Icon name="Loader2" size="sm" animate="spin" />
                       ) : (
-                        <Upload className="size-3.5" />
+                        <Icon name="Upload" size="sm" />
                       )}
                       {uploadingAvatar ? '上传中...' : '上传头像'}
                     </button>
@@ -400,7 +384,7 @@ export default function ChildModal({ isOpen, onClose, child }: ChildModalProps) 
                         onClick={handleClearAvatar}
                         className="inline-flex items-center gap-1.5 rounded-lg bg-surface-hover px-3 py-1.5 text-xs text-text-tertiary transition-colors hover:bg-surface-highlight"
                       >
-                        <X className="size-3.5" />
+                        <Icon name="X" size="sm" className="size-3.5" />
                         清除
                       </button>
                     )}
@@ -533,7 +517,11 @@ export default function ChildModal({ isOpen, onClose, child }: ChildModalProps) 
                   <div>
                     <label className="mb-1.5 block text-xs text-text-tertiary">生日</label>
                     <div className="relative">
-                      <Calendar className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-text-muted" />
+                      <Icon
+                        name="Calendar"
+                        size="sm"
+                        className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted"
+                      />
                       <input
                         type="date"
                         value={birthday}
@@ -549,7 +537,11 @@ export default function ChildModal({ isOpen, onClose, child }: ChildModalProps) 
                   <div>
                     <label className="mb-1.5 block text-xs text-text-tertiary">当前学校</label>
                     <div className="relative">
-                      <School className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-text-muted" />
+                      <Icon
+                        name="School"
+                        size="sm"
+                        className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted"
+                      />
                       <input
                         type="text"
                         value={currentSchool}
@@ -563,7 +555,11 @@ export default function ChildModal({ isOpen, onClose, child }: ChildModalProps) 
                   <div>
                     <label className="mb-1.5 block text-xs text-text-tertiary">目标学校</label>
                     <div className="relative">
-                      <Target className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-text-muted" />
+                      <Icon
+                        name="Target"
+                        size="sm"
+                        className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted"
+                      />
                       <input
                         type="text"
                         value={targetSchool}
@@ -600,7 +596,11 @@ export default function ChildModal({ isOpen, onClose, child }: ChildModalProps) 
                 <div>
                   <label className="mb-1.5 block text-xs text-text-tertiary">备注</label>
                   <div className="relative">
-                    <FileText className="absolute left-3 top-3 size-4 text-text-muted" />
+                    <Icon
+                      name="FileText"
+                      size="sm"
+                      className="absolute left-3 top-3 text-text-muted"
+                    />
                     <textarea
                       value={notes}
                       onChange={(e) => setNotes(e.target.value)}
@@ -614,7 +614,7 @@ export default function ChildModal({ isOpen, onClose, child }: ChildModalProps) 
                 {/* DingTalk */}
                 <div className="space-y-4 rounded-2xl border border-border-subtle bg-surface-hover p-4">
                   <div className="mb-1 flex items-center gap-2">
-                    <Send className="size-4 text-primary" />
+                    <Icon name="Send" size="sm" className="size-4 text-primary" />
                     <h4 className="text-sm font-semibold text-text-secondary">钉钉日报推送</h4>
                   </div>
                   <p className="-mt-2 text-xs text-text-muted">
@@ -624,7 +624,11 @@ export default function ChildModal({ isOpen, onClose, child }: ChildModalProps) 
                   <div>
                     <label className="mb-1.5 block text-xs text-text-tertiary">Webhook 地址</label>
                     <div className="relative">
-                      <Send className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-text-muted" />
+                      <Icon
+                        name="Send"
+                        size="sm"
+                        className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-text-muted"
+                      />
                       <input
                         type="url"
                         value={dingTalkWebhook}
@@ -640,7 +644,11 @@ export default function ChildModal({ isOpen, onClose, child }: ChildModalProps) 
                       加签密钥（可选）
                     </label>
                     <div className="relative">
-                      <Lock className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-text-muted" />
+                      <Icon
+                        name="Lock"
+                        size="sm"
+                        className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-text-muted"
+                      />
                       <input
                         type="text"
                         value={dingTalkSecret}
@@ -653,7 +661,7 @@ export default function ChildModal({ isOpen, onClose, child }: ChildModalProps) 
 
                   {dingTalkWebhook && (
                     <div className="flex items-center gap-2 text-xs text-success">
-                      <Check className="size-3.5" />
+                      <Icon name="Check" size="sm" className="size-3.5" />
                       已启用钉钉推送
                     </div>
                   )}
@@ -668,7 +676,7 @@ export default function ChildModal({ isOpen, onClose, child }: ChildModalProps) 
                     disabled={saving}
                     className="bg-error/[0.08] hover:bg-error/[0.12] inline-flex items-center gap-1.5 rounded-lg px-4 py-2 text-sm text-error transition-all disabled:opacity-50"
                   >
-                    <Trash2 className="size-4" />
+                    <Icon name="Trash2" size="sm" className="size-4" />
                     删除
                   </button>
                 ) : (
@@ -691,7 +699,9 @@ export default function ChildModal({ isOpen, onClose, child }: ChildModalProps) 
                     disabled={saving || uploadingAvatar}
                     className="inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-primary to-secondary px-4 py-2 text-sm font-medium text-text-primary transition-all disabled:opacity-70"
                   >
-                    {(saving || uploadingAvatar) && <Loader2 className="size-4 animate-spin" />}
+                    {(saving || uploadingAvatar) && (
+                      <Icon name="Loader2" size="sm" className="size-4 animate-spin" />
+                    )}
                     {isEdit ? '保存修改' : '添加孩子'}
                   </button>
                 </div>
@@ -715,7 +725,7 @@ export default function ChildModal({ isOpen, onClose, child }: ChildModalProps) 
                   >
                     <div className="mb-4 flex items-center gap-3">
                       <div className="bg-error/[0.08] flex size-10 items-center justify-center rounded-full">
-                        <Trash2 className="size-5 text-error" />
+                        <Icon name="Trash2" size="md" className="size-5 text-error" />
                       </div>
                       <div>
                         <h4 className="text-base font-bold text-text-secondary">确认删除？</h4>
@@ -739,7 +749,9 @@ export default function ChildModal({ isOpen, onClose, child }: ChildModalProps) 
                         disabled={saving}
                         className="hover:bg-error/90 inline-flex items-center gap-2 rounded-lg bg-error px-4 py-2 text-sm font-medium text-text-primary transition-all disabled:opacity-70"
                       >
-                        {saving && <Loader2 className="size-4 animate-spin" />}
+                        {saving && (
+                          <Icon name="Loader2" size="sm" className="size-4 animate-spin" />
+                        )}
                         确认删除
                       </button>
                     </div>
@@ -780,7 +792,7 @@ function RouteOption({
             selected ? 'border-primary bg-primary' : 'border-border-default bg-transparent'
           }`}
         >
-          {selected && <Check className="size-3 text-text-primary" />}
+          {selected && <Icon name="Check" size="xs" className="size-3 text-text-primary" />}
         </div>
         <div className="min-w-0 flex-1">
           <div className="mb-1 flex items-center gap-2">

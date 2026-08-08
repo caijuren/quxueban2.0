@@ -1,6 +1,6 @@
 'use client';
 
-import { ArrowRight } from 'lucide-react';
+import { Icon } from '@/components/ui/icon';
 import Link from 'next/link';
 import MotionSection from '@/components/ui/MotionSection';
 
@@ -30,7 +30,7 @@ export default function FinalCTA() {
           className="hover:bg-primary/90 inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-text-primary transition-colors"
         >
           免费开始规划
-          <ArrowRight className="size-4" />
+          <Icon name="ArrowRight" size="sm" />
         </Link>
       </MotionSection>
     </section>

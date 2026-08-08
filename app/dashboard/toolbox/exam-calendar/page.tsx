@@ -1,8 +1,9 @@
 'use client';
+import { Icon } from '@/components/ui/icon';
 
 import { useMemo } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
-import { Award, Calendar, Clock, AlertCircle } from 'lucide-react';
+
 import { useQuery } from '@tanstack/react-query';
 import { apiGet } from '@/lib/apiClient';
 import EmptyState from '@/components/ui/EmptyState';
@@ -59,7 +60,7 @@ export default function ExamCalendarPage() {
       >
         <div className="flex items-center gap-3">
           <div className="bg-warning/10 border-warning/20 flex size-10 items-center justify-center rounded-xl border">
-            <Award className="size-5 text-warning" />
+            <Icon name="Award" size="md" className="text-warning" />
           </div>
           <div>
             <h1 className="font-display text-2xl font-bold text-text-primary sm:text-3xl">
@@ -77,7 +78,7 @@ export default function ExamCalendarPage() {
       >
         <div className="bg-warning/5 pointer-events-none absolute right-0 top-0 size-64 -translate-y-1/2 translate-x-1/3 rounded-full blur-3xl" />
         <div className="relative flex items-start gap-3">
-          <AlertCircle className="mt-0.5 size-5 shrink-0 text-warning" />
+          <Icon name="AlertCircle" size="md" className="mt-0.5 shrink-0 text-warning" />
           <div>
             <p className="text-sm text-text-secondary">
               以下考试时间为参考日期，具体报名与考试安排请以官方通知为准。
@@ -92,7 +93,7 @@ export default function ExamCalendarPage() {
         </div>
       ) : error ? (
         <EmptyState
-          icon={Award}
+          icon="Award"
           title="加载失败"
           description={error instanceof Error ? error.message : '无法加载考试日历'}
         />
@@ -105,12 +106,12 @@ export default function ExamCalendarPage() {
         >
           <section>
             <h2 className="mb-4 flex items-center gap-2 font-display text-base font-bold text-text-secondary">
-              <Clock className="size-4 text-primary" />
+              <Icon name="Clock" size="sm" className="text-primary" />
               即将开始
             </h2>
             {upcoming.length === 0 ? (
               <EmptyState
-                icon={Calendar}
+                icon="Calendar"
                 title="暂无 upcoming 考试"
                 description="所有考试已结束或暂未发布"
               />
@@ -181,7 +182,7 @@ export default function ExamCalendarPage() {
           {past.length > 0 && (
             <section>
               <h2 className="mb-4 flex items-center gap-2 font-display text-base font-bold text-text-secondary">
-                <Calendar className="size-4 text-text-muted" />
+                <Icon name="Calendar" size="sm" className="text-text-muted" />
                 已结束
               </h2>
               <div className="space-y-3 opacity-60">

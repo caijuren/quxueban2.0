@@ -1,8 +1,9 @@
 'use client';
+import { Icon } from '@/components/ui/icon';
 
 import { useState, useEffect } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
-import { Sparkles, User, Lock, ArrowRight, Loader2 } from 'lucide-react';
+
 import { signIn } from 'next-auth/react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
@@ -114,7 +115,7 @@ function LoginForm() {
         >
           <div className="mb-10 flex items-center gap-3">
             <div className="flex size-10 items-center justify-center rounded-module bg-primary">
-              <Sparkles className="size-5 text-text-primary" />
+              <Icon name="Sparkles" size="md" className="text-text-primary" />
             </div>
             <span className="font-display text-2xl font-bold text-primary">趣学伴</span>
           </div>
@@ -171,7 +172,11 @@ function LoginForm() {
                   用户名
                 </label>
                 <div className="relative">
-                  <User className="absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-text-muted" />
+                  <Icon
+                    name="User"
+                    size="sm"
+                    className="absolute left-3.5 top-1/2 -translate-y-1/2 text-text-muted"
+                  />
                   <input
                     id="username"
                     name="username"
@@ -194,7 +199,11 @@ function LoginForm() {
                   密码
                 </label>
                 <div className="relative">
-                  <Lock className="absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-text-muted" />
+                  <Icon
+                    name="Lock"
+                    size="sm"
+                    className="absolute left-3.5 top-1/2 -translate-y-1/2 text-text-muted"
+                  />
                   <input
                     id="password"
                     name="password"
@@ -242,13 +251,13 @@ function LoginForm() {
               <button
                 type="submit"
                 disabled={loading}
-                className="inline-flex w-full items-center justify-center gap-2 rounded-module bg-primary px-4 py-2 text-sm font-medium text-inverse transition-colors hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50"
+                className="hover:bg-primary/90 inline-flex w-full items-center justify-center gap-2 rounded-module bg-primary px-4 py-2 text-sm font-medium text-inverse transition-colors disabled:cursor-not-allowed disabled:opacity-50"
               >
                 {loading ? (
-                  <Loader2 className="size-4 animate-spin" />
+                  <Icon name="Loader2" size="sm" animate="spin" />
                 ) : (
                   <>
-                    登录 <ArrowRight className="size-4" />
+                    登录 <Icon name="ArrowRight" size="sm" />
                   </>
                 )}
               </button>

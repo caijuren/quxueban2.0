@@ -1,7 +1,7 @@
 'use client';
 
 import { motion, useReducedMotion } from 'framer-motion';
-import { Calculator, ArrowLeft, AlertCircle, Settings, Loader2 } from 'lucide-react';
+import { Icon } from '@/components/ui/icon';
 import Link from 'next/link';
 import { useChildren } from '@/components/dashboard/ChildrenContext';
 import ChildEmptyState from '@/components/dashboard/ChildEmptyState';
@@ -31,7 +31,7 @@ export default function MathSubjectPage() {
         >
           <div className="flex items-center gap-3">
             <div className="bg-secondary/10 border-secondary/20 flex size-10 items-center justify-center rounded-xl border">
-              <Calculator className="size-5 text-secondary" />
+              <Icon name="Calculator" size="md" className="text-secondary" />
             </div>
             <div>
               <h1 className="font-display text-2xl font-bold sm:text-3xl">数学学科路径</h1>
@@ -58,7 +58,7 @@ export default function MathSubjectPage() {
         href="/dashboard"
         className="mb-2 inline-flex items-center gap-1 text-sm text-text-tertiary transition-colors hover:text-primary"
       >
-        <ArrowLeft className="size-4" />
+        <Icon name="ArrowLeft" size="sm" />
         返回总览
       </Link>
 
@@ -71,7 +71,7 @@ export default function MathSubjectPage() {
       >
         <div className="flex items-center gap-3">
           <div className="bg-secondary/10 border-secondary/20 flex size-10 items-center justify-center rounded-xl border">
-            <Calculator className="size-5 text-secondary" />
+            <Icon name="Calculator" size="md" className="text-secondary" />
           </div>
           <div>
             <h1 className="font-display text-2xl font-bold sm:text-3xl">数学学科路径</h1>
@@ -85,7 +85,7 @@ export default function MathSubjectPage() {
           href="/dashboard/subjects/math/config"
           className="inline-flex items-center gap-2 rounded-lg border border-border-subtle bg-surface-elevated px-4 py-2 text-sm font-medium text-text-secondary transition-colors hover:bg-surface-hover hover:text-text-primary"
         >
-          <Settings className="size-4" />
+          <Icon name="Settings" size="sm" />
           编辑规划
         </Link>
       </motion.div>
@@ -117,7 +117,7 @@ export default function MathSubjectPage() {
 
       {isLoading && (
         <div className="flex h-[40vh] items-center justify-center">
-          <Loader2 className="size-8 animate-spin text-primary" />
+          <Icon name="Loader2" size="xl" animate="spin" className="text-primary" />
         </div>
       )}
 
@@ -156,7 +156,7 @@ export default function MathSubjectPage() {
         transition={{ duration: 0.5, delay: 0.5 }}
         className="bg-primary/5 border-primary/20 flex items-start gap-3 rounded-xl border p-4"
       >
-        <AlertCircle className="mt-0.5 size-5 shrink-0 text-primary" />
+        <Icon name="AlertCircle" size="md" className="mt-0.5 shrink-0 text-primary" />
         <div>
           <p className="mb-1 font-medium text-text-secondary">
             本路径服务于三公冲刺路线的 AMC8 硬通货

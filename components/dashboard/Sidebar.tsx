@@ -1,19 +1,6 @@
 'use client';
 
-import {
-  LayoutDashboard,
-  Brain,
-  Sparkles,
-  Calendar,
-  Bell,
-  Target,
-  Settings,
-  Wrench,
-  X,
-  Library,
-  MessageSquare,
-  BarChart3,
-} from 'lucide-react';
+import { Icon } from '@/components/ui/icon';
 import packageInfo from '@/package.json';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -21,37 +8,37 @@ import { usePathname } from 'next/navigation';
 const menuGroups = [
   {
     title: '概览',
-    items: [{ name: '总览', href: '/dashboard', icon: LayoutDashboard }],
+    items: [{ name: '总览', href: '/dashboard', icon: 'LayoutDashboard' }],
   },
   {
     title: '任务',
     items: [
-      { name: '今日任务', href: '/dashboard/today', icon: Target },
-      { name: '周计划', href: '/dashboard/weekly', icon: Calendar },
-      { name: '任务库', href: '/dashboard/task-library', icon: Library },
-      { name: '提醒中心', href: '/dashboard/alerts', icon: Bell },
+      { name: '今日任务', href: '/dashboard/today', icon: 'Target' },
+      { name: '周计划', href: '/dashboard/weekly', icon: 'Calendar' },
+      { name: '任务库', href: '/dashboard/task-library', icon: 'Library' },
+      { name: '提醒中心', href: '/dashboard/alerts', icon: 'Bell' },
     ],
   },
   {
     title: '报告',
-    items: [{ name: '成长报告', href: '/dashboard/reports', icon: BarChart3 }],
+    items: [{ name: '成长报告', href: '/dashboard/reports', icon: 'BarChart3' }],
   },
   {
     title: 'AI 助手',
     items: [
-      { name: 'AI 诊断', href: '/dashboard/ai', icon: Brain },
-      { name: 'AI 学习助手', href: '/dashboard/ai-assistant', icon: MessageSquare },
+      { name: 'AI 诊断', href: '/dashboard/ai', icon: 'Brain' },
+      { name: 'AI 学习助手', href: '/dashboard/ai-assistant', icon: 'MessageSquare' },
     ],
   },
   {
     title: '规划工具',
-    items: [{ name: '规划工具', href: '/dashboard/toolbox', icon: Wrench }],
+    items: [{ name: '规划工具', href: '/dashboard/toolbox', icon: 'Wrench' }],
   },
   {
     title: '系统',
-    items: [{ name: '设置', href: '/dashboard/settings', icon: Settings }],
+    items: [{ name: '设置', href: '/dashboard/settings', icon: 'Settings' }],
   },
-];
+] as const;
 
 interface SidebarProps {
   mobileMenuOpen?: boolean;
@@ -74,7 +61,7 @@ export default function Sidebar({ mobileMenuOpen, onLinkClick }: SidebarProps) {
         <div className="flex items-center justify-between">
           <Link href="/" className="flex items-center gap-3" onClick={onLinkClick}>
             <div className="flex size-10 items-center justify-center rounded-module border border-border-default bg-surface">
-              <Sparkles className="size-5 text-primary" />
+              <Icon name="Sparkles" size="md" className="text-primary" />
             </div>
             <div>
               <span className="font-display text-xl font-black tracking-tight text-text-primary">
@@ -88,7 +75,7 @@ export default function Sidebar({ mobileMenuOpen, onLinkClick }: SidebarProps) {
             className="flex size-9 items-center justify-center rounded-module bg-surface text-text-secondary transition-colors hover:bg-surface-highlight hover:text-text-primary lg:hidden"
             aria-label="关闭菜单"
           >
-            <X className="size-5" />
+            <Icon name="X" size="md" />
           </button>
         </div>
       </div>
@@ -121,8 +108,10 @@ export default function Sidebar({ mobileMenuOpen, onLinkClick }: SidebarProps) {
                     {isActive && (
                       <div className="absolute left-0 top-1/2 h-5 w-[3px] -translate-y-1/2 rounded-r-full bg-primary" />
                     )}
-                    <item.icon
-                      className={`size-5 transition-colors ${isActive ? 'text-primary' : 'text-text-muted group-hover:text-text-secondary'}`}
+                    <Icon
+                      name={item.icon}
+                      size="md"
+                      className={`transition-colors ${isActive ? 'text-primary' : 'text-text-muted group-hover:text-text-secondary'}`}
                     />
                     <span className="text-sm font-medium">{item.name}</span>
                   </Link>

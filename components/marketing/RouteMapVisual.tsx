@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Target } from 'lucide-react';
+import { Icon } from '@/components/ui/icon';
 
 const routes = [
   { id: 'sg', name: '三公冲刺', color: 'primary', y: 60, active: true },
@@ -40,7 +40,7 @@ export default function RouteMapVisual() {
     <div className="rounded-2xl border border-border-subtle bg-surface-elevated p-5">
       <div className="mb-4 flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <Target className="size-4 text-primary" aria-hidden="true" />
+          <Icon name="Target" size="sm" className="text-primary" aria-hidden="true" />
           <span className="font-mono text-[11px] uppercase tracking-wider text-text-tertiary">
             路线矩阵 · 多路线并行评估
           </span>

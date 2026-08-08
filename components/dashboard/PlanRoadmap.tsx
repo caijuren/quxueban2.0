@@ -2,17 +2,7 @@
 
 import { motion } from 'framer-motion';
 import { useEffect, useMemo, useState } from 'react';
-import {
-  AlertTriangle,
-  CheckCircle2,
-  Clock,
-  Target,
-  School,
-  ChevronRight,
-  Zap,
-  Trophy,
-  Plus,
-} from 'lucide-react';
+import { Icon, type IconName } from '@/components/ui/icon';
 
 interface Checkpoint {
   id: string;
@@ -258,10 +248,10 @@ const volunteers: VolunteerOption[] = [
 ];
 
 const checkpointConfig = {
-  soft: { icon: Clock, color: '#f59e0b', label: '软检查点' },
-  hard: { icon: AlertTriangle, color: '#ef4444', label: '硬熔断点' },
-  event: { icon: Trophy, color: '#22c55e', label: '关键事件' },
-  current: { icon: Target, color: '#f43f5e', label: '当前位置' },
+  soft: { icon: 'Clock' as IconName, color: '#f59e0b', label: '软检查点' },
+  hard: { icon: 'AlertTriangle' as IconName, color: '#ef4444', label: '硬熔断点' },
+  event: { icon: 'Trophy' as IconName, color: '#22c55e', label: '关键事件' },
+  current: { icon: 'Target' as IconName, color: '#f43f5e', label: '当前位置' },
 };
 
 const statusConfig = {
@@ -382,8 +372,10 @@ export default function PlanRoadmap({
               boxShadow: '0 0 20px rgba(244,63,94,0.3)',
             }}
           >
-            <Zap
-              className="size-6 text-warning"
+            <Icon
+              name="Zap"
+              size="lg"
+              className="text-warning"
               style={{ filter: 'drop-shadow(0 0 8px rgba(244,63,94,0.8))' }}
             />
           </div>
@@ -1037,7 +1029,7 @@ export default function PlanRoadmap({
                   <div className="mb-2 flex items-center gap-2">
                     {(() => {
                       const config = checkpointConfig[selectedCheckpoint.type];
-                      return <config.icon className="size-5" style={{ color: config.color }} />;
+                      return <Icon name={config.icon} size="md" style={{ color: config.color }} />;
                     })()}
                     <h3 className="font-display text-lg font-bold">{selectedCheckpoint.name}</h3>
                     {(() => {
@@ -1136,7 +1128,7 @@ export default function PlanRoadmap({
       >
         <div className="flex items-center gap-3">
           <div className="flex size-10 items-center justify-center rounded-xl bg-surface-hover">
-            <Plus className="size-5 text-text-tertiary" />
+            <Icon name="Plus" size="md" className="text-text-tertiary" />
           </div>
           <div>
             <p className="text-sm font-medium text-text-primary">自定义熔断点</p>

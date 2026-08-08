@@ -2,22 +2,8 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
-import { useReducedMotion } from '@/components/motion';
 import { SlideUp, StaggerContainer, StaggerItem } from '@/components/motion';
-import {
-  BarChart3,
-  Calendar,
-  ChevronDown,
-  ChevronLeft,
-  ChevronRight,
-  Clock,
-  Loader2,
-  RotateCw,
-  Share2,
-  Sparkles,
-  Target,
-  TrendingUp,
-} from 'lucide-react';
+import { Icon } from '@/components/ui/icon';
 import { useChildren } from '@/components/dashboard/ChildrenContext';
 import ChildEmptyState from '@/components/dashboard/ChildEmptyState';
 import EmptyState from '@/components/ui/EmptyState';
@@ -178,7 +164,6 @@ function formatRecordDetail(record: TaskCompletionRecord): string {
 }
 
 export default function ReportsPage() {
-  const shouldReduceMotion = useReducedMotion();
   const { children, currentChild, getWeeklyPlan } = useChildren();
   const generateAiSummary = useGenerateAiSummary();
 
@@ -325,7 +310,7 @@ export default function ReportsPage() {
       <div className="space-y-8">
         <SlideUp className="flex items-center gap-3">
           <div className="bg-primary/10 border-primary/20 flex size-10 items-center justify-center rounded-xl border">
-            <BarChart3 className="size-5 text-primary" />
+            <Icon name="BarChart3" size="md" className="text-primary" />
           </div>
           <h1 className="font-display text-2xl font-bold sm:text-3xl">成长报告</h1>
         </SlideUp>
@@ -342,7 +327,7 @@ export default function ReportsPage() {
           <div className="flex flex-col gap-5">
             <div className="flex items-center gap-3">
               <div className="bg-primary/10 border-primary/20 flex size-10 items-center justify-center rounded-xl border">
-                <BarChart3 className="size-5 text-primary" />
+                <Icon name="BarChart3" size="md" className="text-primary" />
               </div>
               <h1 className="font-display text-2xl font-bold sm:text-3xl">成长报告</h1>
             </div>
@@ -354,7 +339,7 @@ export default function ReportsPage() {
                   className="flex size-8 items-center justify-center rounded-[14px] border border-border-default bg-surface text-text-secondary transition-colors hover:bg-surface-hover"
                   aria-label="上一周"
                 >
-                  <ChevronLeft className="size-4" />
+                  <Icon name="ChevronLeft" size="sm" />
                 </button>
                 <div className="relative">
                   <select
@@ -369,14 +354,18 @@ export default function ReportsPage() {
                       </option>
                     ))}
                   </select>
-                  <ChevronDown className="pointer-events-none absolute right-2.5 top-1/2 size-4 -translate-y-1/2 text-text-tertiary" />
+                  <Icon
+                    name="ChevronDown"
+                    size="sm"
+                    className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-text-tertiary"
+                  />
                 </div>
                 <button
                   onClick={() => setWeekId((w) => shiftWeekId(w, 1))}
                   className="flex size-8 items-center justify-center rounded-[14px] border border-border-default bg-surface text-text-secondary transition-colors hover:bg-surface-hover"
                   aria-label="下一周"
                 >
-                  <ChevronRight className="size-4" />
+                  <Icon name="ChevronRight" size="sm" />
                 </button>
               </div>
             )}
@@ -391,7 +380,7 @@ export default function ReportsPage() {
             <GlassCard strength="strong" glow="ai" className="p-5">
               <div className="mb-4 flex items-center justify-between gap-3">
                 <div className="flex items-center gap-2">
-                  <Sparkles className="size-5 text-ai" />
+                  <Icon name="Sparkles" size="md" animate="pulse" className="text-ai" />
                   <h2 className="text-lg font-bold text-text-secondary">AI 周报总结</h2>
                 </div>
                 <button
@@ -400,9 +389,9 @@ export default function ReportsPage() {
                   className="bg-ai/10 border-ai/20 hover:bg-ai/15 flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-xs font-medium text-ai transition-colors disabled:opacity-50"
                 >
                   {aiGenerating ? (
-                    <Loader2 className="size-3.5 animate-spin" />
+                    <Icon name="Loader2" size="xs" animate="spin" />
                   ) : (
-                    <RotateCw className="size-3.5" />
+                    <Icon name="RotateCw" size="xs" />
                   )}
                   {aiGenerating ? '生成中...' : '重新生成'}
                 </button>
@@ -426,7 +415,7 @@ export default function ReportsPage() {
           <StaggerItem className="grid grid-cols-2 gap-4 lg:grid-cols-4">
             <GlassCard className="p-4">
               <div className="mb-2 flex items-center gap-2">
-                <Target className="size-4 text-primary" />
+                <Icon name="Target" size="sm" className="text-primary" />
                 <span className="text-xs text-text-muted">计划任务</span>
               </div>
               <p className="font-display text-2xl font-bold text-text-primary">{stats.total}</p>
@@ -435,7 +424,7 @@ export default function ReportsPage() {
 
             <GlassCard className="p-4">
               <div className="mb-2 flex items-center gap-2">
-                <Clock className="size-4 text-secondary" />
+                <Icon name="Clock" size="sm" className="text-secondary" />
                 <span className="text-xs text-text-muted">学习时长</span>
               </div>
               <p className="font-display text-2xl font-bold text-text-primary">
@@ -448,7 +437,7 @@ export default function ReportsPage() {
 
             <GlassCard className="p-4">
               <div className="mb-2 flex items-center gap-2">
-                <Calendar className="size-4 text-accent" />
+                <Icon name="Calendar" size="sm" className="text-accent" />
                 <span className="text-xs text-text-muted">打卡天数</span>
               </div>
               <p className="font-display text-2xl font-bold text-text-primary">{checkedInDays}</p>
@@ -457,7 +446,7 @@ export default function ReportsPage() {
 
             <GlassCard className="p-4">
               <div className="mb-2 flex items-center gap-2">
-                <TrendingUp className="size-4 text-success" />
+                <Icon name="TrendingUp" size="sm" className="text-success" />
                 <span className="text-xs text-text-muted">完成率</span>
               </div>
               <p className="font-display text-2xl font-bold text-text-primary">
@@ -473,7 +462,7 @@ export default function ReportsPage() {
           <StaggerItem>
             <GlassCard className="p-5">
               <div className="mb-5 flex items-center gap-2">
-                <TrendingUp className="size-5 text-primary" />
+                <Icon name="TrendingUp" size="md" className="text-primary" />
                 <h2 className="text-lg font-bold text-text-secondary">整体目标推进分析</h2>
               </div>
 
@@ -532,17 +521,13 @@ export default function ReportsPage() {
           <StaggerItem>
             <GlassCard className="p-5">
               <div className="mb-5 flex items-center gap-2">
-                <Target className="size-5 text-secondary" />
+                <Icon name="Target" size="md" className="text-secondary" />
                 <h2 className="text-lg font-bold text-text-secondary">学科分析</h2>
               </div>
 
               <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
                 {subjectStats.map((subject) => (
-                  <GlassCard
-                    key={subject.subjectId}
-                    strength="subtle"
-                    className="space-y-4 p-4"
-                  >
+                  <GlassCard key={subject.subjectId} strength="subtle" className="space-y-4 p-4">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
                         <div
@@ -630,7 +615,7 @@ export default function ReportsPage() {
             <StaggerItem>
               <GlassCard className="p-5">
                 <div className="mb-5 flex items-center gap-2">
-                  <Calendar className="size-5 text-accent" />
+                  <Icon name="Calendar" size="md" className="text-accent" />
                   <h2 className="text-lg font-bold text-text-secondary">任务完成明细</h2>
                 </div>
 
@@ -670,7 +655,7 @@ export default function ReportsPage() {
           <StaggerItem>
             <GlassCard className="p-5">
               <div className="mb-5 flex items-center gap-2">
-                <BarChart3 className="size-5 text-secondary" />
+                <Icon name="BarChart3" size="md" className="text-secondary" />
                 <h2 className="text-lg font-bold text-text-secondary">各领域投入分析</h2>
               </div>
 
@@ -726,7 +711,7 @@ export default function ReportsPage() {
           <StaggerItem>
             <GlassCard className="p-5">
               <div className="mb-5 flex items-center gap-2">
-                <Calendar className="size-5 text-accent" />
+                <Icon name="Calendar" size="md" className="text-accent" />
                 <h2 className="text-lg font-bold text-text-secondary">每日完成趋势</h2>
               </div>
 
@@ -775,25 +760,21 @@ export default function ReportsPage() {
               onClick={() => alert('分享图功能将在后续迭代中提供')}
               className="hover:bg-primary/90 flex items-center gap-2 rounded-[14px] bg-primary px-5 py-2.5 text-sm font-medium text-text-primary shadow-[0_0_16px_rgba(244,63,122,0.25)] transition-all"
             >
-              <Share2 className="size-4" />
+              <Icon name="Share2" size="sm" />
               生成分享图
             </button>
-          </motion.div>
-        </>
+          </StaggerItem>
+        </StaggerContainer>
       )}
 
       {!plan && (
-        <motion.div
-          initial={shouldReduceMotion ? false : { opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4 }}
-        >
+        <SlideUp>
           <EmptyState
-            icon={Calendar}
+            icon="Calendar"
             title="本周暂无计划"
             description="去「周计划」页面发布本周计划后，这里会生成周报。"
           />
-        </motion.div>
+        </SlideUp>
       )}
     </div>
   );

@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Target, Clock, TrendingUp, AlertCircle } from 'lucide-react';
+import { Icon } from '@/components/ui/icon';
 import {
   getEnglishPlanByGrade,
   getEnglishStatusByGrade,
@@ -22,7 +22,7 @@ export default function CurrentPhaseCard({ grade }: { grade: number }) {
     >
       <div className="mb-6 flex items-center gap-3">
         <div className="flex size-10 items-center justify-center rounded-xl border border-border-default bg-surface-elevated">
-          <Target className="size-5 text-text-primary" />
+          <Icon name="Target" size="md" className="text-text-primary" />
         </div>
         <div>
           <h2 className="font-display text-xl font-bold">当前阶段：{plan.grade}</h2>
@@ -71,7 +71,7 @@ export default function CurrentPhaseCard({ grade }: { grade: number }) {
       {/* Targets */}
       <div className="mb-6 rounded-xl border border-border-subtle bg-surface-elevated p-4">
         <h3 className="mb-4 flex items-center gap-2 font-bold text-text-secondary">
-          <TrendingUp className="size-4 text-secondary" />
+          <Icon name="TrendingUp" size="sm" className="text-secondary" />
           阶段目标
         </h3>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -93,7 +93,7 @@ export default function CurrentPhaseCard({ grade }: { grade: number }) {
       {/* Weekly template */}
       <div className="rounded-xl border border-border-subtle bg-surface-elevated p-4">
         <h3 className="mb-4 flex items-center gap-2 font-bold text-text-secondary">
-          <Clock className="size-4 text-accent" />
+          <Icon name="Clock" size="sm" className="text-accent" />
           每周计划模板
         </h3>
         <div className="grid grid-cols-1 gap-2 lg:grid-cols-7">
@@ -120,7 +120,7 @@ export default function CurrentPhaseCard({ grade }: { grade: number }) {
       {/* Weak skills alert */}
       {plan.weakSkills && plan.weakSkills.length > 0 && (
         <div className="bg-warning/10 border-warning/20 mt-6 flex items-start gap-3 rounded-xl border p-4">
-          <AlertCircle className="mt-0.5 size-5 shrink-0 text-warning" />
+          <Icon name="AlertCircle" size="md" className="mt-0.5 shrink-0 text-warning" />
           <div>
             <p className="mb-1 font-medium text-text-secondary">
               {status.weakSkills.slice(0, 2).join('、')}是当前弱项

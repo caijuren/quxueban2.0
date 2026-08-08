@@ -3,21 +3,7 @@
 import { motion } from 'framer-motion';
 import { useState, type ElementType } from 'react';
 import Link from 'next/link';
-import {
-  Target,
-  MapPin,
-  School,
-  ClipboardList,
-  TrendingUp,
-  Shield,
-  Zap,
-  MapPinned,
-  ExternalLink,
-  Layers,
-  Camera,
-  Share2,
-  Bookmark,
-} from 'lucide-react';
+import { Icon, type IconName } from '@/components/ui/icon';
 
 type ChannelRole = 'primary' | 'optional' | 'partial' | 'none';
 
@@ -29,11 +15,11 @@ interface CellData {
 
 const channels = ['自招', '名额到区', '名额到校', '统招'];
 
-const channelIcons: Record<string, React.ElementType> = {
-  自招: Zap,
-  名额到区: MapPin,
-  名额到校: School,
-  统招: ClipboardList,
+const channelIcons: Record<string, IconName> = {
+  自招: 'Zap',
+  名额到区: 'MapPin',
+  名额到校: 'School',
+  统招: 'ClipboardList',
 };
 
 const tiers = [
@@ -212,7 +198,7 @@ interface MapTier {
 }
 
 interface StrategyItem {
-  icon: ElementType;
+  icon: IconName;
   title: string;
   value: string;
   desc: string;
@@ -291,21 +277,21 @@ const strategyByTier: Record<
 > = {
   sizhong: {
     focus: {
-      icon: Target,
+      icon: 'Target',
       title: '当前最该关注',
       value: '四校八大 · 自招/到区',
       desc: '准备竞赛奖项或保持全区前排名',
       accent: '#f43f5e',
     },
     high: {
-      icon: TrendingUp,
+      icon: 'TrendingUp',
       title: '冲高通道',
       value: '四校八大 · 自招',
       desc: '需要竞赛奖项或综评优秀',
       accent: '#f43f5e',
     },
     safe: {
-      icon: Shield,
+      icon: 'Shield',
       title: '保底通道',
       value: '本区市重点 · 名额到校',
       desc: '校内排名争取名额，降低风险',
@@ -314,21 +300,21 @@ const strategyByTier: Record<
   },
   benshi: {
     focus: {
-      icon: Target,
+      icon: 'Target',
       title: '当前最该关注',
       value: '本区市重点 · 名额到校',
       desc: '按就读初中的校内排名争取名额',
       accent: '#8b5cf6',
     },
     high: {
-      icon: TrendingUp,
+      icon: 'TrendingUp',
       title: '冲高通道',
       value: '四校八大 · 自招/到区',
       desc: '需要竞赛奖项或全区前排名',
       accent: '#f43f5e',
     },
     safe: {
-      icon: Shield,
+      icon: 'Shield',
       title: '保底通道',
       value: '本区区重点 / 中本贯通',
       desc: '名额到校、统招、提前批多层兜底',
@@ -337,21 +323,21 @@ const strategyByTier: Record<
   },
   benqu: {
     focus: {
-      icon: Target,
+      icon: 'Target',
       title: '当前最该关注',
       value: '本区区重点 · 名额到校',
       desc: '校内排名争取名额，到校为主',
       accent: '#06b6d4',
     },
     high: {
-      icon: TrendingUp,
+      icon: 'TrendingUp',
       title: '冲高通道',
       value: '本区市重点 · 名额到校/统招',
       desc: '校内排名靠前或裸分冲刺',
       accent: '#8b5cf6',
     },
     safe: {
-      icon: Shield,
+      icon: 'Shield',
       title: '保底通道',
       value: '本区普高 / 中本贯通',
       desc: '平行志愿、提前批录取兜底',
@@ -360,21 +346,21 @@ const strategyByTier: Record<
   },
   zhongben: {
     focus: {
-      icon: Target,
+      icon: 'Target',
       title: '当前最该关注',
       value: '中本贯通 · 提前批',
       desc: '关注招生简章与专业分数线',
       accent: '#10b981',
     },
     high: {
-      icon: TrendingUp,
+      icon: 'TrendingUp',
       title: '冲高通道',
       value: '本区市重点 · 统招',
       desc: '裸分够线可冲市重点',
       accent: '#8b5cf6',
     },
     safe: {
-      icon: Shield,
+      icon: 'Shield',
       title: '保底通道',
       value: '中高职贯通 / 五年一贯制',
       desc: '同批提前批，多层兜底',
@@ -383,21 +369,21 @@ const strategyByTier: Record<
   },
   benpu: {
     focus: {
-      icon: Target,
+      icon: 'Target',
       title: '当前最该关注',
       value: '本区普高 · 统招',
       desc: '达到控分线，平行志愿保底',
       accent: '#64748b',
     },
     high: {
-      icon: TrendingUp,
+      icon: 'TrendingUp',
       title: '冲高通道',
       value: '本区区重点 · 名额到校',
       desc: '校内排名争取名额',
       accent: '#06b6d4',
     },
     safe: {
-      icon: Shield,
+      icon: 'Shield',
       title: '保底通道',
       value: '中高职贯通 / 五年一贯制',
       desc: '中职提前批，确保有学上',
@@ -406,21 +392,21 @@ const strategyByTier: Record<
   },
   zhonggaozhi: {
     focus: {
-      icon: Target,
+      icon: 'Target',
       title: '当前最该关注',
       value: '中高职贯通 · 提前批',
       desc: '3+2 培养模式，关注专业',
       accent: '#14b8a6',
     },
     high: {
-      icon: TrendingUp,
+      icon: 'TrendingUp',
       title: '冲高通道',
       value: '中本贯通 · 提前批',
       desc: '需要达到更高分数线',
       accent: '#10b981',
     },
     safe: {
-      icon: Shield,
+      icon: 'Shield',
       title: '保底通道',
       value: '五年一贯制 / 普通中专',
       desc: '同批录取，多层兜底',
@@ -429,21 +415,21 @@ const strategyByTier: Record<
   },
   wunian: {
     focus: {
-      icon: Target,
+      icon: 'Target',
       title: '当前最该关注',
       value: '五年一贯制 · 提前批',
       desc: '5 年一贯培养，高职大专文凭',
       accent: '#0ea5e9',
     },
     high: {
-      icon: TrendingUp,
+      icon: 'TrendingUp',
       title: '冲高通道',
       value: '中高职贯通 · 提前批',
       desc: '专业选择更灵活',
       accent: '#14b8a6',
     },
     safe: {
-      icon: Shield,
+      icon: 'Shield',
       title: '保底通道',
       value: '普通中专 / 技校',
       desc: '确保录取，后续可升学',
@@ -511,14 +497,14 @@ export default function MiddleSchoolMatrix() {
                 onClick={() => console.log('导出图片')}
                 className="flex items-center gap-1.5 rounded-lg border border-border-subtle bg-surface-hover px-3 py-1.5 text-[11px] text-text-secondary transition-all hover:border-border-default hover:bg-surface-highlight"
               >
-                <Camera className="size-3.5" />
+                <Icon name="Camera" size="xs" />
                 导出
               </button>
               <button
                 onClick={() => console.log('分享')}
                 className="flex items-center gap-1.5 rounded-lg border border-border-subtle bg-surface-hover px-3 py-1.5 text-[11px] text-text-secondary transition-all hover:border-border-default hover:bg-surface-highlight"
               >
-                <Share2 className="size-3.5" />
+                <Icon name="Share2" size="xs" />
                 分享
               </button>
             </div>
@@ -537,13 +523,12 @@ export default function MiddleSchoolMatrix() {
           {/* Column headers */}
           <div className="mb-2.5 grid grid-cols-[220px_repeat(4,1fr)] gap-2.5">
             <div className="flex flex-col items-center justify-center gap-1.5 rounded-lg border border-border-subtle bg-surface-hover px-2 py-2.5">
-              <Layers className="size-4 text-text-muted" />
+              <Icon name="Layers" size="sm" className="text-text-muted" />
               <span className="text-[10px] font-semibold uppercase tracking-wider text-text-muted">
                 学校层级
               </span>
             </div>
             {channels.map((channel) => {
-              const Icon = channelIcons[channel];
               const isHovered = hoveredChannel === channel;
               return (
                 <motion.div
@@ -557,7 +542,9 @@ export default function MiddleSchoolMatrix() {
                   }`}
                 >
                   <Icon
-                    className={`size-4 ${isHovered ? 'text-text-primary' : 'text-text-muted'}`}
+                    name={channelIcons[channel]}
+                    size="sm"
+                    className={`${isHovered ? 'text-text-primary' : 'text-text-muted'}`}
                   />
                   <span
                     className={`text-xs font-semibold ${isHovered ? 'text-text-primary' : 'text-text-secondary'}`}
@@ -718,7 +705,7 @@ export default function MiddleSchoolMatrix() {
         >
           <div className="flex items-start gap-3">
             <div className="bg-warning/10 shrink-0 rounded-lg p-1.5">
-              <Shield className="size-4 text-warning" />
+              <Icon name="Shield" size="sm" className="text-warning" />
             </div>
             <div>
               <h4 className="mb-1 text-sm font-bold text-warning">名额到校资格门槛</h4>
@@ -741,7 +728,7 @@ export default function MiddleSchoolMatrix() {
       >
         <div className="mb-3 flex items-center gap-3">
           <div className="rounded-lg bg-rose-500/10 p-2">
-            <MapPinned className="size-4 text-rose-400" />
+            <Icon name="MapPinned" size="sm" className="text-rose-400" />
           </div>
           <div>
             <h3 className="font-display text-base font-bold">嘉定区高中地图</h3>
@@ -765,7 +752,11 @@ export default function MiddleSchoolMatrix() {
                     <div className="flex min-w-0 items-center gap-1">
                       <span className="truncate text-xs text-text-secondary">{school.name}</span>
                       {school.slug && (
-                        <ExternalLink className="size-2.5 shrink-0 text-text-muted transition-colors group-hover:text-text-primary" />
+                        <Icon
+                          name="ExternalLink"
+                          size="xs"
+                          className="shrink-0 text-text-muted transition-colors group-hover:text-text-primary"
+                        />
                       )}
                     </div>
                   );
@@ -808,7 +799,7 @@ export default function MiddleSchoolMatrix() {
             >
               <div className="mb-1.5 flex items-center gap-2.5">
                 <div className="rounded-lg p-1.5" style={{ backgroundColor: `${item.accent}15` }}>
-                  <item.icon className="size-3.5" style={{ color: item.accent }} />
+                  <Icon name={item.icon} size="xs" style={{ color: item.accent }} />
                 </div>
                 <span className="text-[11px] text-text-muted">{item.title}</span>
               </div>

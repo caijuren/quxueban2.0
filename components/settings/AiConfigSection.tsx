@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Sparkles, Save, Eye, EyeOff, RefreshCw } from 'lucide-react';
+import { Icon } from '@/components/ui/icon';
 import SettingsSection from './SettingsSection';
 import FormField from '@/components/ui/form-field';
 import Input from '@/components/ui/input';
@@ -223,14 +223,14 @@ export default function AiConfigSection() {
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-text-muted transition-colors hover:text-text-secondary"
                 aria-label={showKey ? '隐藏 API Key' : '显示 API Key'}
               >
-                {showKey ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
+                {showKey ? <Icon name="EyeOff" size="sm" /> : <Icon name="Eye" size="sm" />}
               </button>
             </div>
           </FormField>
 
           <div className="flex items-center justify-between py-1">
             <div className="flex items-center gap-2">
-              <Sparkles className="size-4 text-secondary" />
+              <Icon name="Sparkles" size="sm" animate="pulse" className="text-secondary" />
               <span className="text-sm font-medium text-text-secondary">启用 AI 检视</span>
             </div>
             <Switch
@@ -252,7 +252,7 @@ export default function AiConfigSection() {
         <Button
           variant="secondary"
           size="sm"
-          leftIcon={<RefreshCw className="size-4" />}
+          leftIcon={<Icon name="RefreshCw" size="sm" />}
           onClick={handleTest}
           isLoading={testing}
           disabled={!config}
@@ -261,7 +261,7 @@ export default function AiConfigSection() {
         </Button>
         <Button
           size="sm"
-          leftIcon={<Save className="size-4" />}
+          leftIcon={<Icon name="Save" size="sm" />}
           onClick={handleSave}
           isLoading={saving}
           disabled={!form.apiKey}

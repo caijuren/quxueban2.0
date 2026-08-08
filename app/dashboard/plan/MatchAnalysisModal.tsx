@@ -1,19 +1,9 @@
 'use client';
+import { Icon, type IconName } from '@/components/ui/icon';
 
 import { useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
-import {
-  Sparkles,
-  TrendingUp,
-  TrendingDown,
-  Minus,
-  Target,
-  Globe,
-  Trophy,
-  Pencil,
-  Save,
-  RotateCcw,
-} from 'lucide-react';
+
 import Modal from '@/components/ui/Modal';
 import { RoutePlan } from '@/lib/plans';
 
@@ -22,7 +12,7 @@ interface Metric {
   score: number;
   target: number;
   color: string;
-  icon: typeof Target;
+  icon: IconName;
   trend: 'up' | 'down' | 'stable';
   weight: number;
 }
@@ -33,7 +23,7 @@ const defaultMetrics: Metric[] = [
     score: 35,
     target: 80,
     color: 'primary',
-    icon: Target,
+    icon: 'Target',
     trend: 'up',
     weight: 1,
   },
@@ -42,7 +32,7 @@ const defaultMetrics: Metric[] = [
     score: 40,
     target: 85,
     color: 'secondary',
-    icon: Globe,
+    icon: 'Globe',
     trend: 'up',
     weight: 1,
   },
@@ -51,7 +41,7 @@ const defaultMetrics: Metric[] = [
     score: 15,
     target: 70,
     color: 'warning',
-    icon: Trophy,
+    icon: 'Trophy',
     trend: 'up',
     weight: 1,
   },
@@ -60,7 +50,7 @@ const defaultMetrics: Metric[] = [
     score: 25,
     target: 60,
     color: 'accent',
-    icon: Sparkles,
+    icon: 'Sparkles',
     trend: 'stable',
     weight: 1,
   },
@@ -143,7 +133,7 @@ export default function MatchAnalysisModal({
       onClose={onClose}
       title="路线匹配度分析"
       subtitle={`${plan.name} · 当前匹配度 ${match}%`}
-      icon={Sparkles}
+      icon="Sparkles"
       iconClassName="bg-secondary"
       size="lg"
       colorScheme="rose"
@@ -161,11 +151,11 @@ export default function MatchAnalysisModal({
           >
             {isEditing ? (
               <>
-                <Save className="size-3.5" /> 完成
+                <Icon name="Save" size="xs" /> 完成
               </>
             ) : (
               <>
-                <Pencil className="size-3.5" /> 编辑
+                <Icon name="Pencil" size="xs" /> 编辑
               </>
             )}
           </button>
@@ -175,12 +165,12 @@ export default function MatchAnalysisModal({
               onClick={reset}
               className="flex items-center gap-1.5 rounded-lg bg-surface-elevated px-3 py-2 text-sm text-text-tertiary transition-all hover:bg-surface-highlight"
             >
-              <RotateCcw className="size-3.5" />
+              <Icon name="RotateCcw" size="xs" />
               重置
             </button>
             <button
               type="button"
-              className="rounded-lg bg-primary px-4 py-2 text-sm font-medium text-inverse transition-all hover:bg-primary/90"
+              className="hover:bg-primary/90 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-inverse transition-all"
             >
               制定提升计划
             </button>
@@ -259,7 +249,7 @@ export default function MatchAnalysisModal({
                     <div
                       className={`flex size-8 items-center justify-center rounded-lg ${metricStyle.bg}`}
                     >
-                      <metric.icon className={`size-4 ${metricStyle.text}`} />
+                      <Icon name={metric.icon} size="sm" className={`size-4 ${metricStyle.text}`} />
                     </div>
                     <div>
                       <p className="text-sm font-medium text-text-secondary">{metric.name}</p>
@@ -268,11 +258,11 @@ export default function MatchAnalysisModal({
                   </div>
                   <div className="flex items-center gap-1">
                     {metric.trend === 'up' ? (
-                      <TrendingUp className="size-4 text-success" />
+                      <Icon name="TrendingUp" size="sm" className="text-success" />
                     ) : metric.trend === 'down' ? (
-                      <TrendingDown className="size-4 text-warning" />
+                      <Icon name="TrendingDown" size="sm" className="text-warning" />
                     ) : (
-                      <Minus className="size-4 text-text-muted" />
+                      <Icon name="Minus" size="sm" className="text-text-muted" />
                     )}
                     {isEditing ? (
                       <input

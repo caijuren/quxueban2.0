@@ -2,8 +2,8 @@
 
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { Bell, Search, Menu, Check, LogOut, Settings, User, ChevronDown } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
+import { Icon } from '@/components/ui/icon';
 import { useRouter } from 'next/navigation';
 import { signOut, useSession } from 'next-auth/react';
 import { useChildren } from '@/components/dashboard/ChildrenContext';
@@ -144,11 +144,15 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
           className="bg-surface-elevated/60 focus-ring flex size-10 items-center justify-center rounded-module text-text-secondary transition-all hover:bg-surface-highlight hover:text-text-primary lg:hidden"
           aria-label="打开菜单"
         >
-          <Menu className="size-5" />
+          <Icon name="Menu" size="md" />
         </button>
 
         <div className="relative hidden sm:block">
-          <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-text-muted" />
+          <Icon
+            name="Search"
+            size="sm"
+            className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted"
+          />
           <input
             type="text"
             placeholder="搜索路线、任务、学校…"
@@ -167,7 +171,7 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
             className="bg-surface-elevated/60 focus-ring relative flex size-10 items-center justify-center rounded-module text-text-secondary transition-all hover:bg-surface-highlight hover:text-text-primary"
             aria-label="通知"
           >
-            <Bell className="size-5" />
+            <Icon name="Bell" size="md" />
             {unreadCount > 0 && (
               <span className="absolute right-2 top-2 flex h-4 min-w-[16px] items-center justify-center rounded-full bg-primary px-1 text-2xs font-bold tabular-nums text-text-primary">
                 {unreadCount > 9 ? '9+' : unreadCount}
@@ -192,7 +196,7 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
               <div className="max-h-80 overflow-y-auto">
                 {loadingNotifications ? (
                   <div className="flex items-center justify-center py-8">
-                    <div className="size-4 animate-spin rounded-full border-2 border-primary border-t-transparent" />
+                    <Icon name="Loader2" size="sm" animate="spin" className="text-primary" />
                   </div>
                 ) : notifications.length === 0 ? (
                   <div className="py-8 text-center text-sm text-text-tertiary">暂无通知</div>
@@ -251,7 +255,7 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
                 {currentUser.name.slice(0, 1).toUpperCase()}
               </span>
             ) : (
-              <User className="size-5 text-text-secondary" />
+              <Icon name="User" size="md" className="text-text-secondary" />
             )}
           </button>
 
@@ -274,7 +278,7 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
                   onClick={handleGoToSettings}
                   className="flex w-full items-center gap-2.5 rounded-module px-3 py-2 text-left text-sm text-text-secondary transition-colors hover:bg-surface-elevated"
                 >
-                  <Settings className="size-4" />
+                  <Icon name="Settings" size="sm" />
                   设置
                 </button>
                 <button
@@ -282,7 +286,7 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
                   onClick={handleLogout}
                   className="hover:bg-error/[0.08] flex w-full items-center gap-2.5 rounded-module px-3 py-2 text-left text-sm text-error transition-colors"
                 >
-                  <LogOut className="size-4" />
+                  <Icon name="LogOut" size="sm" />
                   退出登录
                 </button>
               </div>
@@ -310,8 +314,10 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
                   : '请选择孩子'}
               </p>
             </div>
-            <ChevronDown
-              className={`hidden size-4 text-text-muted transition-transform duration-200 sm:block ${
+            <Icon
+              name="ChevronDown"
+              size="sm"
+              className={`hidden text-text-muted transition-transform duration-200 sm:block ${
                 childDropdownOpen ? 'rotate-180' : ''
               }`}
             />
@@ -355,7 +361,9 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
                           {gradeLabel(child.grade, child.educationSystem)}
                         </p>
                       </div>
-                      {isActive && <Check className="size-4 shrink-0 text-primary" />}
+                      {isActive && (
+                        <Icon name="Check" size="sm" className="shrink-0 text-primary" />
+                      )}
                     </button>
                   );
                 })}

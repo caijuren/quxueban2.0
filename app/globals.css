@@ -3,10 +3,10 @@
 @tailwind utilities;
 
 :root {
-  /* Typography */
-  --font-display: 'Syne', 'PingFang SC', 'Microsoft YaHei', sans-serif;
-  --font-body: 'Manrope', 'PingFang SC', 'Microsoft YaHei', sans-serif;
-  --font-mono: 'JetBrains Mono', 'SF Mono', monospace;
+  /* Typography v2.8.3 */
+  --font-display: 'Syne', 'PingFang SC', 'HarmonyOS Sans SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+  --font-body: 'Manrope', 'PingFang SC', 'HarmonyOS Sans SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+  --font-mono: 'JetBrains Mono', 'SF Mono', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', monospace;
 
   /* Font sizes */
   --text-xs: 0.75rem;

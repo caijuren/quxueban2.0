@@ -1,9 +1,9 @@
+import { Icon } from '@/components/ui/icon';
 import { Metadata } from 'next';
 import PageLayout from '@/components/marketing/PageLayout';
 import MarketingHero from '@/components/marketing/MarketingHero';
 import RouteMapVisual from '@/components/marketing/RouteMapVisual';
 import CommandCard from '@/components/ui/CommandCard';
-import { Route, GitBranch, Target } from 'lucide-react';
 
 export const metadata: Metadata = {
   title: '路线方案 - 趣学伴',
@@ -46,15 +46,15 @@ export default function PlanMarketingPage() {
         description="三公、摇号、对口、直升……上海升学路径复杂多变。趣学伴帮助你评估多条路线的可行性，制定主路线与备选方案。"
         tags={[
           {
-            icon: <Route className="size-3.5 text-primary" aria-hidden="true" />,
+            icon: <Icon name="Route" size="xs" className="text-primary" aria-hidden="true" />,
             text: '多路线并行',
           },
           {
-            icon: <GitBranch className="size-3.5 text-secondary" aria-hidden="true" />,
+            icon: <Icon name="GitBranch" size="xs" className="text-secondary" aria-hidden="true" />,
             text: '主备切换',
           },
           {
-            icon: <Target className="size-3.5 text-accent" aria-hidden="true" />,
+            icon: <Icon name="Target" size="xs" className="text-accent" aria-hidden="true" />,
             text: '目标匹配',
           },
         ]}

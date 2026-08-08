@@ -1,27 +1,26 @@
 'use client';
 
-import { AlertTriangle, TrendingDown, Lightbulb } from 'lucide-react';
 import Section from '@/components/console/core/Section';
 import SettingRow from '@/components/console/core/SettingRow';
 
 const alerts = [
   {
     id: '1',
-    icon: AlertTriangle,
+    icon: 'AlertTriangle',
     label: '数学连续 2 天未完成任务',
     value: '查看详情',
     variant: 'warning' as const,
   },
   {
     id: '2',
-    icon: TrendingDown,
+    icon: 'TrendingDown',
     label: '阅读时间较上周下降 20%',
     value: '查看详情',
     variant: 'warning' as const,
   },
   {
     id: '3',
-    icon: Lightbulb,
+    icon: 'Lightbulb',
     label: 'AI 发现英语听力提升机会',
     value: '查看详情',
     variant: 'default' as const,

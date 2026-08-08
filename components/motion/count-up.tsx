@@ -1,6 +1,7 @@
 'use client';
 
 import * as React from 'react';
+import { cn } from '@/lib/utils';
 import { useReducedMotion } from './use-reduced-motion';
 
 interface CountUpProps {
@@ -57,7 +58,7 @@ export function CountUp({
   const formatted = decimals > 0 ? displayValue.toFixed(decimals) : Math.round(displayValue);
 
   return (
-    <span className={className}>
+    <span className={cn('tabular-nums', className)}>
       {prefix}
       {formatted}
       {suffix}

@@ -1,50 +1,50 @@
 'use client';
 
-import { Target, TrendingUp, AlertTriangle, Sparkles } from 'lucide-react';
+import { Icon } from '@/components/ui/icon';
 import CommandCard from '@/components/ui/CommandCard';
 import MotionSection from '@/components/ui/MotionSection';
 
 const insights = [
   {
-    icon: Target,
+    icon: 'Target',
     title: '路线适配度分析',
     description: '基于孩子当前年级、能力、目标学校，评估三公 / 摇号 / 直升等路线的匹配程度',
   },
   {
-    icon: TrendingUp,
+    icon: 'TrendingUp',
     title: '进度健康度诊断',
     description: '对比同龄孩子平均准备节奏，识别超前、正常或落后的能力项',
   },
   {
-    icon: AlertTriangle,
+    icon: 'TriangleAlert',
     title: '风险预警与调整',
     description: '当关键任务逾期或路线概率下降时，主动提醒并建议切换到备选方案',
   },
-];
+] as const;
 
 const reportItems = [
   {
-    icon: Target,
+    icon: 'Target',
     title: '路线匹配度 78%',
     status: '良好',
     variant: 'success' as const,
     description: '当前主路线与目标学校匹配良好，建议继续保持节奏',
   },
   {
-    icon: AlertTriangle,
+    icon: 'TriangleAlert',
     title: '需关注：奥数尚未启动',
     status: '风险',
     variant: 'warning' as const,
     description: '建议根据三公路线要求，提前布局关键能力项',
   },
   {
-    icon: TrendingUp,
+    icon: 'TrendingUp',
     title: '本月重点任务',
     status: '建议',
     variant: 'accent' as const,
     description: '确定数学学习形式，建立每周稳定的学习节奏',
   },
-];
+] as const;
 
 const reportVariantStyles = {
   success: {
@@ -78,7 +78,13 @@ export default function AISection() {
                 <div className="flex items-center justify-between border-b border-border-subtle pb-4">
                   <div className="flex items-center gap-3">
                     <div className="bg-secondary/10 flex size-9 items-center justify-center rounded-lg">
-                      <Sparkles className="size-4 text-secondary" aria-hidden="true" />
+                      <Icon
+                        name="Sparkles"
+                        size="sm"
+                        animate="pulse"
+                        className="text-secondary"
+                        aria-hidden="true"
+                      />
                     </div>
                     <div>
                       <h3 className="font-display text-base font-bold">AI 诊断报告</h3>
@@ -96,8 +102,10 @@ export default function AISection() {
                       className={`rounded-lg border p-4 ${style.bg} ${style.border}`}
                     >
                       <div className="flex items-start gap-3">
-                        <item.icon
-                          className={`mt-0.5 size-4 shrink-0 ${style.text}`}
+                        <Icon
+                          name={item.icon}
+                          size="sm"
+                          className={`mt-0.5 shrink-0 ${style.text}`}
                           aria-hidden="true"
                         />
                         <div className="flex-1">
@@ -153,7 +161,12 @@ export default function AISection() {
                   className="flex gap-4"
                 >
                   <div className="bg-secondary/10 flex size-9 shrink-0 items-center justify-center rounded-lg">
-                    <insight.icon className="size-4 text-secondary" aria-hidden="true" />
+                    <Icon
+                      name={insight.icon}
+                      size="sm"
+                      className="text-secondary"
+                      aria-hidden="true"
+                    />
                   </div>
                   <div>
                     <h3 className="mb-1 font-display text-sm font-bold">{insight.title}</h3>

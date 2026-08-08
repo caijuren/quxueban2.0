@@ -1,8 +1,8 @@
 'use client';
 
 import * as React from 'react';
-import { ChevronDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { Icon } from '@/components/ui/icon';
 
 export interface SelectOption {
   value: string;
@@ -54,7 +54,11 @@ const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
           ))}
           {children}
         </select>
-        <ChevronDown className="pointer-events-none absolute right-3 top-1/2 size-4 -translate-y-1/2 text-text-muted" />
+        <Icon
+          name="ChevronDown"
+          size="sm"
+          className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-text-muted"
+        />
       </div>
     );
   }

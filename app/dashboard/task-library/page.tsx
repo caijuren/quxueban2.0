@@ -1,7 +1,7 @@
 'use client';
 
 import { motion, useReducedMotion } from 'framer-motion';
-import { Library } from 'lucide-react';
+import { Icon } from '@/components/ui/icon';
 import TaskLibrarySection from '@/components/settings/TaskLibrarySection';
 
 export default function TaskLibraryPage() {
@@ -17,7 +17,7 @@ export default function TaskLibraryPage() {
       >
         <div className="flex items-center gap-3">
           <div className="bg-secondary/10 border-secondary/20 flex size-10 items-center justify-center rounded-xl border">
-            <Library className="size-5 text-secondary" />
+            <Icon name="Library" size="md" className="text-secondary" />
           </div>
           <div>
             <h1 className="font-display text-2xl font-bold sm:text-3xl">任务库</h1>

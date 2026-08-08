@@ -1,6 +1,6 @@
 'use client';
 
-import { Quote } from 'lucide-react';
+import { Icon } from '@/components/ui/icon';
 import CommandCard from '@/components/ui/CommandCard';
 import MotionSection from '@/components/ui/MotionSection';
 
@@ -53,8 +53,10 @@ export default function TrustProof() {
           {testimonials.map((item, index) => (
             <MotionSection key={index} direction="up" delay={index * 0.1}>
               <CommandCard className="relative h-full p-5">
-                <Quote
-                  className="text-primary/20 absolute right-5 top-5 size-5"
+                <Icon
+                  name="Quote"
+                  size="md"
+                  className="text-primary/20 absolute right-5 top-5"
                   aria-hidden="true"
                 />
                 <p className="mb-4 pr-6 text-sm leading-relaxed text-text-secondary">

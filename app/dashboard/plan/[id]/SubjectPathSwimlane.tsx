@@ -1,7 +1,8 @@
 'use client';
+import { Icon } from '@/components/ui/icon';
 
 import { motion } from 'framer-motion';
-import { Route, Target } from 'lucide-react';
+
 import type { SubjectPath } from '@/lib/plans';
 
 interface SubjectPathSwimlaneProps {
@@ -17,14 +18,12 @@ export default function SubjectPathSwimlane({ paths }: SubjectPathSwimlaneProps)
       className="rounded-2xl border border-border-subtle bg-surface-elevated p-6"
     >
       <h2 className="mb-6 flex items-center gap-2 font-display text-xl font-bold">
-        <Route className="size-5 text-secondary" />
+        <Icon name="Route" size="md" className="text-secondary" />
         学科路径泳道图
       </h2>
 
       <div className="space-y-4">
         {paths.map((path, pathIndex) => {
-          const Icon = path.icon;
-
           return (
             <motion.div
               key={path.id}
@@ -38,7 +37,7 @@ export default function SubjectPathSwimlane({ paths }: SubjectPathSwimlaneProps)
                 <div
                   className={`size-10 rounded-lg bg-gradient-to-br ${path.color} flex shrink-0 items-center justify-center`}
                 >
-                  <Icon className="size-5 text-text-primary" />
+                  <Icon name={path.icon} size="md" className="size-5 text-text-primary" />
                 </div>
                 <div>
                   <h3 className="font-bold text-text-secondary">{path.name}</h3>
@@ -62,7 +61,7 @@ export default function SubjectPathSwimlane({ paths }: SubjectPathSwimlaneProps)
                       {phase.content}
                     </p>
                     <div className="flex items-start gap-1.5 border-t border-border-subtle pt-2">
-                      <Target className="mt-0.5 size-3 shrink-0 text-warning" />
+                      <Icon name="Target" size="xs" className="mt-0.5 shrink-0 text-warning" />
                       <p className="text-xs text-text-muted">{phase.milestone}</p>
                     </div>
                   </motion.div>

@@ -3,17 +3,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
-import {
-  Check,
-  X,
-  ChevronRight,
-  CalendarCheck,
-  Clock,
-  Target,
-  Sparkles,
-  Send,
-  Trophy,
-} from 'lucide-react';
+import { Icon } from '@/components/ui/icon';
 import { useChildren } from '@/components/dashboard/ChildrenContext';
 import EmptyState from '@/components/ui/EmptyState';
 import ChildEmptyState from '@/components/dashboard/ChildEmptyState';
@@ -275,7 +265,7 @@ export default function TodayPage() {
       >
         <div className="flex items-center gap-3">
           <div className="bg-primary/10 border-primary/20 flex size-10 items-center justify-center rounded-xl border">
-            <CalendarCheck className="size-5 text-primary" />
+            <Icon name="CalendarCheck" size="md" className="text-primary" />
           </div>
           <div>
             <h1 className="font-display text-2xl font-bold text-text-primary sm:text-3xl">
@@ -289,7 +279,7 @@ export default function TodayPage() {
               onClick={() => setVictoryOpen(true)}
               className="bg-success/10 border-success/20 hover:bg-success/20 inline-flex items-center gap-1.5 rounded-lg border px-3 py-2 text-xs font-medium text-success transition-colors"
             >
-              <Trophy className="size-3.5" />
+              <Icon name="Trophy" size="xs" />
               今日胜利
             </button>
           )}
@@ -335,7 +325,7 @@ export default function TodayPage() {
                   onClick={() => setVictoryOpen(true)}
                   className="hover:bg-primary/90 hidden items-center gap-2 rounded-xl bg-primary px-5 py-3 text-sm font-bold text-white shadow-[0_0_20px_rgba(244,63,122,0.25)] transition-all sm:inline-flex"
                 >
-                  <Send className="size-5" />
+                  <Icon name="Send" size="md" />
                   推送简报
                 </button>
               </div>
@@ -352,7 +342,7 @@ export default function TodayPage() {
           transition={{ duration: 0.5 }}
         >
           <EmptyState
-            icon={Sparkles}
+            icon="Sparkles"
             title="今日无任务"
             description="当前孩子今天没有安排任务，去周计划页面添加吧。"
             action={{
@@ -428,8 +418,8 @@ export default function TodayPage() {
                                 : 'border-text-muted group-hover:border-text-tertiary'
                           }`}
                         >
-                          {isDone && <Check className="size-3 text-text-primary" />}
-                          {isPending && <X className="size-3 text-white" />}
+                          {isDone && <Icon name="Check" size="xs" className="text-text-primary" />}
+                          {isPending && <Icon name="X" size="xs" className="text-white" />}
                         </div>
 
                         {/* Done indicator line */}
@@ -456,7 +446,7 @@ export default function TodayPage() {
 
                           <div className="mt-2 flex flex-wrap items-center gap-1.5">
                             <span className="inline-flex items-center gap-1 rounded-full border border-border-subtle bg-surface-elevated px-1.5 py-0.5 text-[10px] text-text-tertiary">
-                              <Clock className="size-3" />
+                              <Icon name="Clock" size="xs" />
                               {task.duration}
                             </span>
                             <span className="rounded-full border border-border-subtle bg-surface-elevated px-1.5 py-0.5 text-[10px] text-text-tertiary">
@@ -515,9 +505,9 @@ export default function TodayPage() {
             onClick={() => router.push('/dashboard/weekly')}
             className="flex w-full items-center justify-center gap-2 rounded-xl border border-dashed border-border-default py-3 text-sm text-text-tertiary transition-all hover:border-border-strong hover:bg-surface-hover hover:text-text-secondary"
           >
-            <Target className="size-4" />
+            <Icon name="Target" size="sm" />
             查看完整周计划
-            <ChevronRight className="size-4" />
+            <Icon name="ChevronRight" size="sm" />
           </button>
         </motion.div>
       )}

@@ -1,8 +1,9 @@
 'use client';
+import { Icon } from '@/components/ui/icon';
 
 import { useState, Suspense } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
-import { Sparkles, User, Lock, ArrowRight, Loader2, UserCircle } from 'lucide-react';
+
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { useRegister } from '@/lib/hooks/useAuth';
@@ -59,7 +60,7 @@ function RegisterPageContent() {
         >
           <div className="mb-10 flex items-center gap-3">
             <div className="flex size-10 items-center justify-center rounded-module bg-primary">
-              <Sparkles className="size-5 text-text-primary" />
+              <Icon name="Sparkles" size="md" className="text-text-primary" />
             </div>
             <span className="font-display text-2xl font-bold text-primary">趣学伴</span>
           </div>
@@ -114,7 +115,11 @@ function RegisterPageContent() {
                   用户名
                 </label>
                 <div className="relative">
-                  <User className="absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-text-muted" />
+                  <Icon
+                    name="User"
+                    size="sm"
+                    className="absolute left-3.5 top-1/2 -translate-y-1/2 text-text-muted"
+                  />
                   <input
                     id="username"
                     name="username"
@@ -139,7 +144,11 @@ function RegisterPageContent() {
                   昵称（选填）
                 </label>
                 <div className="relative">
-                  <UserCircle className="absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-text-muted" />
+                  <Icon
+                    name="UserCircle"
+                    size="sm"
+                    className="absolute left-3.5 top-1/2 -translate-y-1/2 text-text-muted"
+                  />
                   <input
                     id="name"
                     name="name"
@@ -161,7 +170,11 @@ function RegisterPageContent() {
                   密码
                 </label>
                 <div className="relative">
-                  <Lock className="absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-text-muted" />
+                  <Icon
+                    name="Lock"
+                    size="sm"
+                    className="absolute left-3.5 top-1/2 -translate-y-1/2 text-text-muted"
+                  />
                   <input
                     id="password"
                     name="password"
@@ -186,7 +199,11 @@ function RegisterPageContent() {
                   确认密码
                 </label>
                 <div className="relative">
-                  <Lock className="absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-text-muted" />
+                  <Icon
+                    name="Lock"
+                    size="sm"
+                    className="absolute left-3.5 top-1/2 -translate-y-1/2 text-text-muted"
+                  />
                   <input
                     id="confirmPassword"
                     name="confirmPassword"
@@ -211,13 +228,13 @@ function RegisterPageContent() {
               <button
                 type="submit"
                 disabled={register.isPending}
-                className="inline-flex w-full items-center justify-center gap-2 rounded-module bg-primary px-4 py-2 text-sm font-medium text-inverse transition-colors hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50"
+                className="hover:bg-primary/90 inline-flex w-full items-center justify-center gap-2 rounded-module bg-primary px-4 py-2 text-sm font-medium text-inverse transition-colors disabled:cursor-not-allowed disabled:opacity-50"
               >
                 {register.isPending ? (
-                  <Loader2 className="size-4 animate-spin" />
+                  <Icon name="Loader2" size="sm" animate="spin" />
                 ) : (
                   <>
-                    注册 <ArrowRight className="size-4" />
+                    注册 <Icon name="ArrowRight" size="sm" />
                   </>
                 )}
               </button>
@@ -252,7 +269,7 @@ export default function RegisterPage() {
     <Suspense
       fallback={
         <div className="flex min-h-screen items-center justify-center bg-background p-4">
-          <Loader2 className="size-5 animate-spin text-text-muted" />
+          <Icon name="Loader2" size="md" animate="spin" className="text-text-muted" />
         </div>
       }
     >

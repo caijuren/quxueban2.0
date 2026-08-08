@@ -1,6 +1,6 @@
 'use client';
 
-import { Brain } from 'lucide-react';
+import { Icon } from '@/components/ui/icon';
 import Link from 'next/link';
 
 const footerLinks = [
@@ -20,7 +20,7 @@ export default function Footer() {
         <div className="flex flex-col items-center justify-between gap-5 md:flex-row">
           <Link href="/" className="group flex items-center gap-2" aria-label="趣学伴首页">
             <div className="flex size-7 items-center justify-center rounded-lg bg-primary">
-              <Brain className="size-3.5 text-text-primary" aria-hidden="true" />
+              <Icon name="Brain" size="xs" className="text-text-primary" aria-hidden="true" />
             </div>
             <span className="font-display text-base font-bold text-text-primary">趣学伴</span>
           </Link>

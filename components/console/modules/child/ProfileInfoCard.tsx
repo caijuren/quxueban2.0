@@ -1,6 +1,6 @@
 'use client';
 
-import { Calendar, School, Target, FileText } from 'lucide-react';
+import { Icon, type IconName } from '@/components/ui/icon';
 import { Child, educationSystemLabel, gradeLabel, gradeToStage } from '@/lib/children';
 import Section from '@/components/console/core/Section';
 import ChildAvatar from '@/components/dashboard/ChildAvatar';
@@ -20,34 +20,34 @@ export default function ProfileInfoCard({ child }: ProfileInfoCardProps) {
 
   const stage = gradeToStage(child.grade, child.educationSystem);
 
-  const infoItems = [
+  const infoItems: { icon: IconName; label: string; value: string }[] = [
     {
-      icon: School,
+      icon: 'School',
       label: '当前学段',
       value: gradeLabel(child.grade, child.educationSystem),
     },
     {
-      icon: Calendar,
+      icon: 'Calendar',
       label: '学制',
       value: educationSystemLabel(child.educationSystem),
     },
     {
-      icon: Target,
+      icon: 'Target',
       label: '目标学校',
       value: child.targetSchool || '未设置',
     },
     {
-      icon: School,
+      icon: 'School',
       label: '当前学校',
       value: child.currentSchool || '未设置',
     },
     {
-      icon: Calendar,
+      icon: 'Calendar',
       label: '生日',
       value: child.birthday || '未设置',
     },
     {
-      icon: FileText,
+      icon: 'FileText',
       label: '备注',
       value: child.notes || '无',
     },
@@ -82,7 +82,7 @@ export default function ProfileInfoCard({ child }: ProfileInfoCardProps) {
             className="flex items-center gap-3 rounded-xl px-4 py-3 transition-colors hover:bg-white/[0.02]"
           >
             <div className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-surface-hover">
-              <item.icon className="size-4 text-text-tertiary" />
+              <Icon name={item.icon} size="sm" className="text-text-tertiary" />
             </div>
             <div className="min-w-0">
               <p className="text-2xs text-text-muted">{item.label}</p>

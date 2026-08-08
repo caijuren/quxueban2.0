@@ -1,22 +1,9 @@
 'use client';
+import { Icon } from '@/components/ui/icon';
 
 import Image from 'next/image';
 import { useState, useRef, useEffect } from 'react';
-import {
-  User,
-  Upload,
-  X,
-  Save,
-  Loader2,
-  Lock,
-  Eye,
-  EyeOff,
-  MessageCircle,
-  Trash2,
-  AlertTriangle,
-  ChevronDown,
-  ChevronUp,
-} from 'lucide-react';
+
 import { UserWithSettings } from '@/lib/settings';
 import { useChangePassword, useDeleteAccount } from '@/lib/hooks/useUser';
 import SettingsSection from './SettingsSection';
@@ -168,7 +155,7 @@ export default function AccountSection({ user, onUpdate }: AccountSectionProps) 
         </span>
       );
     }
-    return <User className="text-text-primary/80 size-7" />;
+    return <Icon name="User" size="lg" className="text-text-primary/80" />;
   };
 
   return (
@@ -191,7 +178,7 @@ export default function AccountSection({ user, onUpdate }: AccountSectionProps) 
                 onClick={() => fileInputRef.current?.click()}
                 className="inline-flex items-center gap-1 rounded-md bg-surface-elevated px-2 py-1 text-xs text-text-secondary transition-colors hover:bg-surface-highlight"
               >
-                <Upload className="size-3" />
+                <Icon name="Upload" size="xs" />
                 上传
               </button>
               {avatarUrl && (
@@ -200,7 +187,7 @@ export default function AccountSection({ user, onUpdate }: AccountSectionProps) 
                   onClick={() => setAvatarUrl(null)}
                   className="inline-flex items-center gap-1 rounded-md bg-surface-elevated px-2 py-1 text-xs text-text-tertiary transition-colors hover:bg-surface-highlight"
                 >
-                  <X className="size-3" />
+                  <Icon name="X" size="xs" />
                   清除
                 </button>
               )}
@@ -276,9 +263,9 @@ export default function AccountSection({ user, onUpdate }: AccountSectionProps) 
                 className="inline-flex items-center gap-1.5 rounded-lg bg-primary px-3 py-1.5 text-xs font-medium text-text-primary transition-all hover:opacity-90 disabled:opacity-70"
               >
                 {savingProfile ? (
-                  <Loader2 className="size-3.5 animate-spin" />
+                  <Icon name="Loader2" size="xs" animate="spin" />
                 ) : (
-                  <Save className="size-3.5" />
+                  <Icon name="Save" size="xs" />
                 )}
                 保存
               </button>
@@ -295,7 +282,7 @@ export default function AccountSection({ user, onUpdate }: AccountSectionProps) 
           >
             <div className="flex items-center gap-3">
               <div className="flex size-9 items-center justify-center rounded-lg bg-wechat/10">
-                <MessageCircle className="size-4 text-wechat" />
+                <Icon name="MessageCircle" size="sm" className="text-wechat" />
               </div>
               <div>
                 <p className="text-sm font-medium text-text-secondary">微信绑定</p>
@@ -307,9 +294,9 @@ export default function AccountSection({ user, onUpdate }: AccountSectionProps) 
                 {user.wechatOpenId ? '管理' : '去绑定'}
               </span>
               {expandedSecurity === 'wechat' ? (
-                <ChevronUp className="size-4 text-text-muted" />
+                <Icon name="ChevronUp" size="sm" className="text-text-muted" />
               ) : (
-                <ChevronDown className="size-4 text-text-muted" />
+                <Icon name="ChevronDown" size="sm" className="text-text-muted" />
               )}
             </div>
           </button>
@@ -334,7 +321,7 @@ export default function AccountSection({ user, onUpdate }: AccountSectionProps) 
           >
             <div className="flex items-center gap-3">
               <div className="bg-primary/10 flex size-9 items-center justify-center rounded-lg">
-                <Lock className="size-4 text-primary" />
+                <Icon name="Lock" size="sm" className="text-primary" />
               </div>
               <div>
                 <p className="text-sm font-medium text-text-secondary">修改密码</p>
@@ -342,9 +329,9 @@ export default function AccountSection({ user, onUpdate }: AccountSectionProps) 
               </div>
             </div>
             {expandedSecurity === 'password' ? (
-              <ChevronUp className="size-4 text-text-muted" />
+              <Icon name="ChevronUp" size="sm" className="text-text-muted" />
             ) : (
-              <ChevronDown className="size-4 text-text-muted" />
+              <Icon name="ChevronDown" size="sm" className="text-text-muted" />
             )}
           </button>
 
@@ -364,7 +351,7 @@ export default function AccountSection({ user, onUpdate }: AccountSectionProps) 
                     onClick={() => setShowPassword((v) => !v)}
                     className="absolute right-3 top-[26px] text-text-muted hover:text-text-secondary"
                   >
-                    {showPassword ? <EyeOff className="size-3.5" /> : <Eye className="size-3.5" />}
+                    {showPassword ? <Icon name="EyeOff" size="xs" /> : <Icon name="Eye" size="xs" />}
                   </button>
                 </div>
                 <div>
@@ -406,9 +393,9 @@ export default function AccountSection({ user, onUpdate }: AccountSectionProps) 
                   className="inline-flex items-center gap-1.5 rounded-lg border border-border-default bg-surface-elevated px-3 py-1.5 text-xs font-medium text-text-secondary transition-all hover:bg-surface-highlight disabled:opacity-70"
                 >
                   {changePassword.isPending ? (
-                    <Loader2 className="size-3.5 animate-spin" />
+                    <Icon name="Loader2" size="xs" animate="spin" />
                   ) : (
-                    <Lock className="size-3.5" />
+                    <Icon name="Lock" size="xs" />
                   )}
                   修改密码
                 </button>
@@ -422,7 +409,7 @@ export default function AccountSection({ user, onUpdate }: AccountSectionProps) 
           >
             <div className="flex items-center gap-3">
               <div className="bg-error/10 flex size-9 items-center justify-center rounded-lg">
-                <Trash2 className="size-4 text-error" />
+                <Icon name="Trash2" size="sm" className="text-error" />
               </div>
               <div>
                 <p className="text-sm font-medium text-text-secondary">注销账号</p>
@@ -430,9 +417,9 @@ export default function AccountSection({ user, onUpdate }: AccountSectionProps) 
               </div>
             </div>
             {expandedSecurity === 'error' ? (
-              <ChevronUp className="size-4 text-text-muted" />
+              <Icon name="ChevronUp" size="sm" className="text-text-muted" />
             ) : (
-              <ChevronDown className="size-4 text-text-muted" />
+              <Icon name="ChevronDown" size="sm" className="text-text-muted" />
             )}
           </button>
 
@@ -446,7 +433,7 @@ export default function AccountSection({ user, onUpdate }: AccountSectionProps) 
                   onClick={() => setShowDeleteConfirm(true)}
                   className="bg-error/10 hover:bg-error/20 inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium text-error transition-colors"
                 >
-                  <Trash2 className="size-3.5" />
+                  <Icon name="Trash2" size="xs" />
                   注销账号
                 </button>
               </div>
@@ -470,7 +457,7 @@ export default function AccountSection({ user, onUpdate }: AccountSectionProps) 
           <div className="relative w-full max-w-md rounded-2xl border border-border-default bg-bg-secondary p-5 shadow-2xl">
             <div className="mb-3 flex items-center gap-3">
               <div className="bg-error/10 flex size-9 items-center justify-center rounded-full">
-                <AlertTriangle className="size-4 text-error" />
+                <Icon name="AlertTriangle" size="sm" className="text-error" />
               </div>
               <div>
                 <h4 className="text-sm font-bold text-text-secondary">确认注销账号？</h4>
@@ -500,7 +487,7 @@ export default function AccountSection({ user, onUpdate }: AccountSectionProps) 
                 disabled={deleteAccount.isPending || !deletePassword}
                 className="hover:bg-error/90 inline-flex items-center gap-1.5 rounded-lg bg-error px-3 py-1.5 text-xs font-medium text-text-primary transition-colors disabled:opacity-70"
               >
-                {deleteAccount.isPending && <Loader2 className="size-3.5 animate-spin" />}
+                {deleteAccount.isPending && <Icon name="Loader2" size="xs" animate="spin" />}
                 确认注销
               </button>
             </div>

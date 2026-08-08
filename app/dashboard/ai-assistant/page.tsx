@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { MessageSquare, Plus, Send, Loader2, Bot, User, Clock, ChevronLeft } from 'lucide-react';
+import { Icon } from '@/components/ui/icon';
 import { useChildren } from '@/components/dashboard/ChildrenContext';
 import EmptyState from '@/components/ui/EmptyState';
 import GlassCard from '@/components/ui/glass-card';
@@ -73,9 +73,9 @@ export default function AIAssistantPage() {
             className="flex items-center gap-1.5 rounded-lg bg-primary px-3 py-1.5 text-xs font-medium text-text-primary transition-all hover:opacity-90 disabled:opacity-60"
           >
             {createSession.isPending ? (
-              <Loader2 className="size-3.5 animate-spin" />
+              <Icon name="Loader" size="xs" animate="spin" />
             ) : (
-              <Plus className="size-3.5" />
+              <Icon name="Plus" size="xs" />
             )}
             新对话
           </button>
@@ -84,12 +84,12 @@ export default function AIAssistantPage() {
         <GlassCard strength="subtle" className="flex-1 space-y-1 overflow-y-auto p-2">
           {sessionsLoading ? (
             <div className="flex items-center justify-center py-12">
-              <Loader2 className="size-6 animate-spin text-primary" />
+              <Icon name="Loader" size="lg" animate="spin" className="text-primary" />
             </div>
           ) : sessions.length === 0 ? (
             <div className="py-8">
               <EmptyState
-                icon={MessageSquare}
+                icon="MessageSquare"
                 title="还没有对话"
                 description="点击右上角开始一个新的学习咨询"
               />
@@ -106,10 +106,12 @@ export default function AIAssistantPage() {
                 }`}
               >
                 <div className="mb-1 flex items-center gap-2">
-                  <MessageSquare
-                    className={`size-4 ${
+                  <Icon
+                    name="MessageSquare"
+                    size="sm"
+                    className={
                       selectedSessionId === session.id ? 'text-primary' : 'text-text-muted'
-                    }`}
+                    }
                   />
                   <p className="truncate text-sm font-medium text-text-primary">
                     {session.title || '未命名对话'}
@@ -117,7 +119,7 @@ export default function AIAssistantPage() {
                 </div>
                 <div className="flex items-center justify-between text-2xs text-text-muted">
                   <span className="flex items-center gap-1">
-                    <Clock className="size-3" />
+                    <Icon name="Clock" size="xs" />
                     {new Date(session.updatedAt).toLocaleDateString('zh-CN')}
                   </span>
                   <span>{session._count?.messages ?? 0} 条消息</span>
@@ -141,10 +143,10 @@ export default function AIAssistantPage() {
             onClick={() => setIsMobileListVisible(true)}
             className="flex size-8 items-center justify-center rounded-lg bg-surface-hover text-text-secondary lg:hidden"
           >
-            <ChevronLeft className="size-4" />
+            <Icon name="ChevronLeft" size="sm" />
           </button>
           <div className="flex size-9 items-center justify-center rounded-lg bg-gradient-to-br from-secondary to-secondary-glow">
-            <Bot className="size-5 text-text-primary" />
+            <Icon name="Bot" size="md" className="text-text-primary" />
           </div>
           <div className="min-w-0">
             <p className="truncate text-sm font-semibold text-text-primary">
@@ -161,19 +163,19 @@ export default function AIAssistantPage() {
           {!selectedSessionId ? (
             <div className="flex h-full items-center justify-center">
               <EmptyState
-                icon={Bot}
+                icon="Bot"
                 title="开始一次学习咨询"
                 description="选择左侧对话或点击「新对话」向 AI 学习助手提问"
               />
             </div>
           ) : messagesLoading ? (
             <div className="flex h-full items-center justify-center">
-              <Loader2 className="size-6 animate-spin text-primary" />
+              <Icon name="Loader" size="lg" animate="spin" className="text-primary" />
             </div>
           ) : messages.length === 0 ? (
             <div className="flex h-full items-center justify-center">
               <EmptyState
-                icon={Bot}
+                icon="Bot"
                 title="发送第一条消息"
                 description="向 AI 学习助手提问关于学习规划、学科提升或习惯养成的问题"
               />
@@ -195,9 +197,9 @@ export default function AIAssistantPage() {
                     }`}
                   >
                     {message.role === 'user' ? (
-                      <User className="size-4 text-primary" />
+                      <Icon name="User" size="sm" className="text-primary" />
                     ) : (
-                      <Bot className="size-4 text-text-primary" />
+                      <Icon name="Bot" size="sm" className="text-text-primary" />
                     )}
                   </div>
                   {message.role === 'user' ? (
@@ -205,7 +207,10 @@ export default function AIAssistantPage() {
                       {message.content}
                     </div>
                   ) : (
-                    <GlassCard strength="subtle" className="max-w-[80%] rounded-2xl rounded-tl-none px-4 py-2.5 text-sm leading-relaxed text-text-secondary">
+                    <GlassCard
+                      strength="subtle"
+                      className="max-w-[80%] rounded-2xl rounded-tl-none px-4 py-2.5 text-sm leading-relaxed text-text-secondary"
+                    >
                       {message.content}
                     </GlassCard>
                   )}
@@ -218,10 +223,13 @@ export default function AIAssistantPage() {
                   className="flex gap-3"
                 >
                   <div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-secondary to-secondary-glow">
-                    <Bot className="size-4 text-text-primary" />
+                    <Icon name="Bot" size="sm" className="text-text-primary" />
                   </div>
-                  <GlassCard strength="subtle" className="flex items-center gap-2 rounded-2xl rounded-tl-none px-4 py-2.5">
-                    <Loader2 className="size-4 animate-spin text-secondary" />
+                  <GlassCard
+                    strength="subtle"
+                    className="flex items-center gap-2 rounded-2xl rounded-tl-none px-4 py-2.5"
+                  >
+                    <Icon name="Loader" size="sm" animate="spin" className="text-secondary" />
                     <span className="text-sm text-text-muted">AI 正在思考…</span>
                   </GlassCard>
                 </motion.div>
@@ -252,9 +260,9 @@ export default function AIAssistantPage() {
               className="flex size-9 items-center justify-center rounded-xl bg-primary text-inverse transition-all hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
             >
               {sendMessage.isPending ? (
-                <Loader2 className="size-4 animate-spin" />
+                <Icon name="Loader" size="sm" animate="spin" />
               ) : (
-                <Send className="size-4" />
+                <Icon name="Send" size="sm" />
               )}
             </button>
           </div>

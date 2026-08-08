@@ -1,9 +1,9 @@
 'use client';
+import { Icon } from '@/components/ui/icon';
 
 import { useEffect, useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
-import { Users, Loader2, AlertCircle, CheckCircle } from 'lucide-react';
 
 interface InviteInfo {
   family: { id: string; name: string };
@@ -55,7 +55,7 @@ function InvitePageContent() {
       <div className="w-full max-w-md rounded-card border border-border-default bg-surface p-6 shadow-card sm:p-8">
         <div className="mb-6 text-center">
           <div className="mx-auto mb-3 flex size-12 items-center justify-center rounded-module bg-primary-dim">
-            <Users className="size-6 text-primary" />
+            <Icon name="Users" size="lg" className="text-primary" />
           </div>
           <h1 className="font-display text-xl font-bold text-text-primary">家庭邀请</h1>
           <p className="mt-1 text-sm text-text-muted">趣学伴 · 家庭学习规划</p>
@@ -63,14 +63,14 @@ function InvitePageContent() {
 
         {loading && (
           <div className="flex items-center justify-center py-8 text-text-muted">
-            <Loader2 className="mr-2 size-5 animate-spin" />
+            <Icon name="Loader2" size="md" animate="spin" className="mr-2" />
             加载邀请信息...
           </div>
         )}
 
         {!loading && error && (
           <div className="bg-error/10 border-error/20 rounded-module border p-4 text-center">
-            <AlertCircle className="mx-auto mb-2 size-6 text-error" />
+            <Icon name="AlertCircle" size="lg" className="mx-auto mb-2 text-error" />
             <p className="text-sm text-error">{error}</p>
             <Link
               href="/login"
@@ -92,7 +92,7 @@ function InvitePageContent() {
             </div>
 
             <div className="bg-success/10 border-success/20 flex items-start gap-3 rounded-module border p-3 text-xs text-text-muted">
-              <CheckCircle className="mt-0.5 size-4 shrink-0 text-success" />
+              <Icon name="CheckCircle" size="sm" className="mt-0.5 shrink-0 text-success" />
               <p>
                 点击下方按钮登录或注册账号，接受邀请后即可共同管理孩子的学习。
                 <br />
@@ -127,7 +127,7 @@ export default function InvitePage() {
       fallback={
         <div className="flex min-h-screen items-center justify-center bg-background p-4">
           <div className="w-full max-w-md rounded-card border border-border-default bg-surface p-6 text-center shadow-card">
-            <Loader2 className="mx-auto size-5 animate-spin text-text-muted" />
+            <Icon name="Loader2" size="md" animate="spin" className="mx-auto text-text-muted" />
             <p className="mt-2 text-sm text-text-muted">加载中...</p>
           </div>
         </div>

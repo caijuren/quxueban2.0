@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
-import { Target, Flag } from 'lucide-react';
+import { Icon } from '@/components/ui/icon';
 import {
   SubjectPlanConfig,
   SubjectPlanTrack,
@@ -86,7 +86,7 @@ export default function ChineseYearlyMatrix({ config, currentGrade }: ChineseYea
       >
         <div className="mb-6 flex items-center gap-3">
           <div className="flex size-10 items-center justify-center rounded-xl bg-gradient-to-br from-violet-500 to-fuchsia-500">
-            <Target className="size-5 text-text-primary" />
+            <Icon name="Target" size="md" className="text-text-primary" />
           </div>
           <div>
             <h2 className="font-display text-xl font-bold">关键时间点成果矩阵</h2>
@@ -217,7 +217,7 @@ export default function ChineseYearlyMatrix({ config, currentGrade }: ChineseYea
           onClose={() => setSelectedCell(null)}
           title={selectedCell.achievement.keyword}
           subtitle={`${selectedCell.achievement.time} · ${selectedCell.track.name}`}
-          icon={Flag}
+          icon="Flag"
           iconClassName="bg-gradient-to-br from-violet-500 to-fuchsia-500"
           size="md"
           colorScheme="violet"

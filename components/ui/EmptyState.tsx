@@ -1,12 +1,12 @@
 'use client';
 
-import { LucideIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import Card from './card';
 import Button from './button';
+import { Icon, type IconName } from './icon';
 
 export interface EmptyStateProps {
-  icon?: LucideIcon;
+  icon?: IconName;
   title: string;
   description?: string;
   action?: {
@@ -18,20 +18,22 @@ export interface EmptyStateProps {
 }
 
 export default function EmptyState({
-  icon: Icon,
+  icon,
   title,
   description,
   action,
   compact = false,
   className,
 }: EmptyStateProps) {
+  const iconNode = icon ? (
+    <Icon name={icon} size={compact ? 'md' : 'lg'} className="text-text-tertiary" />
+  ) : null;
+
   if (compact) {
     return (
       <div className={cn('flex flex-col items-center justify-center py-8 text-center', className)}>
-        {Icon && (
-          <div className="rounded-full bg-surface-hover p-2.5 text-text-tertiary">
-            <Icon className="size-5" />
-          </div>
+        {iconNode && (
+          <div className="rounded-full bg-surface-hover p-2.5 text-text-tertiary">{iconNode}</div>
         )}
         <p className="mt-3 text-sm font-medium text-text-secondary">{title}</p>
         {description && <p className="mt-1 text-xs text-text-muted">{description}</p>}
@@ -46,9 +48,9 @@ export default function EmptyState({
 
   return (
     <Card padding="lg" className={cn('text-center', className)}>
-      {Icon && (
+      {iconNode && (
         <div className="mx-auto mb-4 flex size-12 items-center justify-center rounded-full bg-surface-hover">
-          <Icon className="size-6 text-text-tertiary" />
+          {iconNode}
         </div>
       )}
       <p className="mb-1 font-medium text-text-secondary">{title}</p>

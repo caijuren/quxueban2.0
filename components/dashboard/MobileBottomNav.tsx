@@ -3,15 +3,15 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { Target, Calendar, Bell, Wrench, Settings } from 'lucide-react';
+import { Icon } from '@/components/ui/icon';
 
 const navItems = [
-  { name: '今日任务', href: '/dashboard/today', icon: Target },
-  { name: '周计划', href: '/dashboard/weekly', icon: Calendar },
-  { name: '提醒中心', href: '/dashboard/alerts', icon: Bell },
-  { name: '规划工具', href: '/dashboard/toolbox', icon: Wrench },
-  { name: '设置', href: '/dashboard/settings', icon: Settings },
-];
+  { name: '今日任务', href: '/dashboard/today', icon: 'Target' },
+  { name: '周计划', href: '/dashboard/weekly', icon: 'Calendar' },
+  { name: '提醒中心', href: '/dashboard/alerts', icon: 'Bell' },
+  { name: '规划工具', href: '/dashboard/toolbox', icon: 'Wrench' },
+  { name: '设置', href: '/dashboard/settings', icon: 'Settings' },
+] as const;
 
 export default function MobileBottomNav() {
   const pathname = usePathname();
@@ -21,10 +21,7 @@ export default function MobileBottomNav() {
       <div className="bg-surface-elevated/95 pb-safe border-t border-border-subtle px-2 backdrop-blur-md">
         <div className="flex h-[60px] items-center justify-around">
           {navItems.map((item) => {
-            const isActive =
-              item.href === '/dashboard'
-                ? pathname === '/dashboard'
-                : pathname === item.href || pathname.startsWith(`${item.href}/`);
+            const isActive = pathname === item.href || pathname.startsWith(`${item.href}/`);
             return (
               <Link
                 key={item.name}
@@ -39,10 +36,10 @@ export default function MobileBottomNav() {
                     transition={{ type: 'spring', stiffness: 500, damping: 30 }}
                   />
                 )}
-                <item.icon
-                  className={`size-5 transition-colors ${
-                    isActive ? 'text-primary' : 'text-text-muted'
-                  }`}
+                <Icon
+                  name={item.icon}
+                  size="md"
+                  className={`transition-colors ${isActive ? 'text-primary' : 'text-text-muted'}`}
                 />
                 <span
                   className={`mt-1 text-2xs font-medium transition-colors ${

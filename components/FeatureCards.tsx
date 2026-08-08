@@ -1,31 +1,31 @@
 'use client';
 
-import { Route, ListChecks, LineChart, Bot } from 'lucide-react';
+import { Icon } from '@/components/ui/icon';
 import CommandCard from '@/components/ui/CommandCard';
 import MotionSection from '@/components/ui/MotionSection';
 
 const features = [
   {
-    icon: Route,
+    icon: 'Route',
     title: '多路线并行规划',
     description: '三公、摇号、对口、直升同步评估，主路线失败自动切换到备选方案',
   },
   {
-    icon: ListChecks,
+    icon: 'ListChecks',
     title: '任务拆解到每周',
     description: '从年级目标拆到学期、月度、周计划，知道这周该做什么、做到什么程度',
   },
   {
-    icon: LineChart,
+    icon: 'LineChart',
     title: '进度一目了然',
     description: '可视化总览实时掌握各科准备度，哪里超前、哪里落后，一眼看清',
   },
   {
-    icon: Bot,
+    icon: 'Bot',
     title: 'AI 主动预警',
     description: '智能诊断路线匹配度，关键任务逾期、概率下降时主动提醒调整',
   },
-];
+] as const;
 
 export default function FeatureCards() {
   return (
@@ -48,7 +48,12 @@ export default function FeatureCards() {
               <CommandCard className="group h-full p-5" corner={index === 0}>
                 <div className="flex items-start gap-4">
                   <div className="bg-primary/10 group-hover:bg-primary/20 flex size-10 shrink-0 items-center justify-center rounded-xl transition-colors duration-200">
-                    <feature.icon className="size-5 text-primary" aria-hidden="true" />
+                    <Icon
+                      name={feature.icon}
+                      size="md"
+                      className="text-primary"
+                      aria-hidden="true"
+                    />
                   </div>
                   <div>
                     <h3 className="mb-1.5 font-display text-base font-bold text-text-primary transition-colors duration-200 group-hover:text-primary">

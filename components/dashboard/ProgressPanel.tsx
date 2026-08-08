@@ -1,7 +1,7 @@
 'use client';
 
 import { motion, useReducedMotion } from 'framer-motion';
-import { BarChart3, TrendingUp, TrendingDown, Minus } from 'lucide-react';
+import { Icon, type IconName } from '@/components/ui/icon';
 import { Child, gradeLabel } from '@/lib/children';
 import CommandCard from '@/components/ui/CommandCard';
 
@@ -13,10 +13,10 @@ const abilities = [
   { name: '竞赛经历', current: 10, target: 70, average: 15, trend: 'minus' },
 ];
 
-const trendConfig: Record<string, { icon: typeof TrendingUp; color: string; label: string }> = {
-  up: { icon: TrendingUp, color: 'text-success', label: '超前' },
-  down: { icon: TrendingDown, color: 'text-error', label: '落后' },
-  minus: { icon: Minus, color: 'text-text-muted', label: '持平' },
+const trendConfig: Record<string, { icon: IconName; color: string; label: string }> = {
+  up: { icon: 'TrendingUp', color: 'text-success', label: '超前' },
+  down: { icon: 'TrendingDown', color: 'text-error', label: '落后' },
+  minus: { icon: 'Minus', color: 'text-text-muted', label: '持平' },
 };
 
 interface ProgressPanelProps {
@@ -37,7 +37,7 @@ export default function ProgressPanel({ child }: ProgressPanelProps) {
       >
         <CommandCard className="h-full p-6">
           <div className="mb-5 flex items-center gap-2">
-            <BarChart3 className="size-5 text-primary" />
+            <Icon name="BarChart3" size="md" className="text-primary" />
             <h2 className="font-display text-base font-bold">能力准备度</h2>
             <span className="ml-auto text-xs text-text-muted">
               {gradeLabel(child.grade, child.educationSystem)} · 对比目标与同龄平均
@@ -60,7 +60,7 @@ export default function ProgressPanel({ child }: ProgressPanelProps) {
                         {ability.name}
                       </span>
                       <span className={`flex items-center gap-1 text-[10px] ${trend.color}`}>
-                        <trend.icon className="size-3" />
+                        <Icon name={trend.icon} size="xs" className={trend.color} />
                         {trend.label}
                       </span>
                     </div>
