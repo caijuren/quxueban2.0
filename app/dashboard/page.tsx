@@ -41,10 +41,10 @@ import {
 } from '@/lib/dashboard';
 import ChildAvatar from '@/components/dashboard/ChildAvatar';
 import ChildEmptyState from '@/components/dashboard/ChildEmptyState';
-import CommandCard from '@/components/ui/CommandCard';
 import DataBadge from '@/components/ui/DataBadge';
 import EmptyState from '@/components/ui/EmptyState';
 import GaugeChart from '@/components/ui/GaugeChart';
+import GlassCard from '@/components/ui/glass-card';
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -136,7 +136,7 @@ function IdentityCard({ child, completionRate }: { child: Child; completionRate:
   ];
 
   return (
-    <CommandCard active className="p-5 sm:p-6">
+    <GlassCard strength="strong" glow="primary" hover className="p-5 sm:p-6">
       <div className="flex flex-col gap-6 xl:flex-row xl:items-stretch">
         {/* Left column: header + metrics + footer */}
         <div className="flex min-w-0 flex-1 flex-col">
@@ -236,7 +236,7 @@ function IdentityCard({ child, completionRate }: { child: Child; completionRate:
           </p>
         </div>
       </div>
-    </CommandCard>
+    </GlassCard>
   );
 }
 
@@ -329,22 +329,22 @@ function TimelineSection({ child }: { child: Child }) {
 
   if (timeline.length === 0) {
     return (
-      <CommandCard className="h-full p-6">
-        <div className="mb-4 flex items-center gap-2">
-          <TrendingUp className="size-5 text-primary" />
-          <h2 className="font-display text-base font-bold">升学时间轴</h2>
-        </div>
-        <EmptyState
-          icon={CalendarDays}
-          title="暂无时间轴数据"
-          description="当前阶段还没有配置详细的升学里程碑"
-        />
-      </CommandCard>
-    );
+    <GlassCard className="h-full p-6">
+      <div className="mb-4 flex items-center gap-2">
+        <TrendingUp className="size-5 text-primary" />
+        <h2 className="font-display text-base font-bold">升学时间轴</h2>
+      </div>
+      <EmptyState
+        icon={CalendarDays}
+        title="暂无时间轴数据"
+        description="当前阶段还没有配置详细的升学里程碑"
+      />
+    </GlassCard>
+  );
   }
 
   return (
-    <CommandCard className="h-full p-5 sm:p-6">
+    <GlassCard className="h-full p-5 sm:p-6">
       <div className="mb-6 flex items-center gap-2">
         <TrendingUp className="size-5 text-primary" />
         <h2 className="font-display text-base font-bold">升学时间轴</h2>
@@ -359,7 +359,7 @@ function TimelineSection({ child }: { child: Child }) {
           <TimelineNode key={item.id} item={item} isLast={index === timeline.length - 1} />
         ))}
       </div>
-    </CommandCard>
+    </GlassCard>
   );
 }
 
@@ -385,7 +385,7 @@ function UpcomingMilestonesCard({ child }: { child: Child }) {
   const milestones = getUpcomingMilestones(child, 3);
 
   return (
-    <CommandCard className="h-full p-5 sm:p-6">
+    <GlassCard className="h-full p-5 sm:p-6">
       <div className="mb-4 flex items-center gap-2">
         <AlertCircle className="size-5 text-warning" />
         <h2 className="font-display text-base font-bold">关键节点预警</h2>
@@ -430,7 +430,7 @@ function UpcomingMilestonesCard({ child }: { child: Child }) {
           })}
         </div>
       )}
-    </CommandCard>
+    </GlassCard>
   );
 }
 
@@ -451,7 +451,7 @@ function AIStrategyCard({
   );
 
   return (
-    <CommandCard className="h-full p-5 sm:p-6">
+    <GlassCard strength="subtle" className="h-full p-5 sm:p-6">
       <div className="mb-4 flex items-center justify-between gap-2">
         <div className="flex items-center gap-2">
           <Sparkles className="size-5 text-secondary" />
@@ -501,7 +501,7 @@ function AIStrategyCard({
           </ul>
         </div>
       </div>
-    </CommandCard>
+    </GlassCard>
   );
 }
 
@@ -521,7 +521,7 @@ function OverviewChildCard({
   const advice = generateStrategicAdvice(child);
 
   return (
-    <CommandCard hover onClick={onSelect} className="h-full p-6">
+    <GlassCard hover onClick={onSelect} className="h-full p-6">
       <div className="mb-4 flex items-start gap-4">
         <ChildAvatar child={child} size="xl" shape="rounded" />
         <div className="min-w-0 flex-1">
@@ -596,7 +596,7 @@ function OverviewChildCard({
           周计划
         </button>
       </div>
-    </CommandCard>
+    </GlassCard>
   );
 }
 

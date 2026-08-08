@@ -19,6 +19,7 @@ import {
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useUser } from '@/lib/hooks/useUser';
+import GlassCard from '@/components/ui/glass-card';
 
 interface NavItem {
   name: string;
@@ -96,37 +97,42 @@ export default function SettingsLayout({ children }: { children: React.ReactNode
           )}
         </div>
 
-        <nav className="flex gap-4 overflow-x-auto pb-2 lg:flex-col lg:overflow-visible lg:pb-0">
-          {visibleNav.map((group) => (
-            <div key={group.title} className={collapsed ? 'hidden lg:block' : ''}>
-              {!collapsed && (
-                <p className="mb-1.5 px-3 text-2xs font-semibold uppercase tracking-wider text-text-muted">
-                  {group.title}
-                </p>
-              )}
-              <div className="flex gap-0.5 lg:flex-col">
-                {group.items.map((item) => {
-                  const isActive = pathname === item.href || pathname.startsWith(`${item.href}/`);
-                  return (
-                    <Link
-                      key={item.name}
-                      href={item.href}
-                      className={`flex items-center gap-2 whitespace-nowrap rounded-xl px-3 py-2 text-left transition-colors ${
-                        isActive
-                          ? 'bg-primary/[0.08] font-medium text-primary'
-                          : 'text-text-tertiary hover:bg-surface-hover hover:text-text-secondary'
-                      }`}
-                      title={collapsed ? item.name : undefined}
-                    >
-                      <item.icon className="size-4 shrink-0" />
-                      {!collapsed && <span className="text-xs">{item.name}</span>}
-                    </Link>
-                  );
-                })}
+        <GlassCard strength="subtle" className="p-2">
+          <nav className="flex gap-4 overflow-x-auto pb-2 lg:flex-col lg:overflow-visible lg:pb-0">
+            {visibleNav.map((group) => (
+              <div key={group.title} className={collapsed ? 'hidden lg:block' : ''}>
+                {!collapsed && (
+                  <p className="mb-1.5 px-3 text-2xs font-semibold uppercase tracking-wider text-text-muted">
+                    {group.title}
+                  </p>
+                )}
+                <div className="flex gap-0.5 lg:flex-col">
+                  {group.items.map((item) => {
+                    const isActive = pathname === item.href || pathname.startsWith(`${item.href}/`);
+                    return (
+                      <Link
+                        key={item.name}
+                        href={item.href}
+                        className={`relative flex items-center gap-2 whitespace-nowrap rounded-xl px-3 py-2 text-left transition-colors ${
+                          isActive
+                            ? 'glass-subtle font-medium text-primary'
+                            : 'text-text-tertiary hover:bg-surface-hover hover:text-text-secondary'
+                        }`}
+                        title={collapsed ? item.name : undefined}
+                      >
+                        {isActive && (
+                          <span className="absolute left-0 top-1/2 h-4 w-[3px] -translate-y-1/2 rounded-r-full bg-primary" />
+                        )}
+                        <item.icon className="size-4 shrink-0" />
+                        {!collapsed && <span className="text-xs">{item.name}</span>}
+                      </Link>
+                    );
+                  })}
+                </div>
               </div>
-            </div>
-          ))}
-        </nav>
+            ))}
+          </nav>
+        </GlassCard>
 
         <button
           onClick={() => setCollapsed(!collapsed)}

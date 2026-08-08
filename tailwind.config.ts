@@ -107,6 +107,10 @@ const config: Config = {
         'glow-primary': '0 0 24px var(--shadow-primary)',
         'glow-secondary': '0 0 24px var(--shadow-secondary)',
         'glow-accent': '0 0 20px rgba(6, 182, 212, 0.18)',
+        'glass-subtle': 'inset 0 1px 0 0 var(--glass-highlight), 0 4px 12px -2px var(--glass-shadow-color)',
+        'glass': 'inset 0 1px 0 0 var(--glass-highlight), 0 8px 24px -4px var(--glass-shadow-color)',
+        'glass-strong': 'inset 0 1px 0 0 var(--glass-highlight), 0 16px 40px -8px var(--glass-shadow-color)',
+        'glass-hover': 'inset 0 1px 0 0 var(--glass-highlight), 0 24px 48px -8px var(--glass-shadow-color)',
       },
       fontFamily: {
         display: ['var(--font-display)', 'PingFang SC', 'Microsoft YaHei', 'sans-serif'],
@@ -117,6 +121,21 @@ const config: Config = {
         fast: 'var(--duration-fast)',
         normal: 'var(--duration-normal)',
         slow: 'var(--duration-slow)',
+      },
+      backdropBlur: {
+        'glass-subtle': 'var(--glass-blur-subtle)',
+        'glass': 'var(--glass-blur-default)',
+        'glass-strong': 'var(--glass-blur-strong)',
+      },
+      backgroundColor: {
+        'glass-subtle': 'var(--glass-bg-subtle)',
+        'glass': 'var(--glass-bg-default)',
+        'glass-strong': 'var(--glass-bg-strong)',
+      },
+      borderColor: {
+        'glass-subtle': 'var(--glass-border-subtle)',
+        'glass': 'var(--glass-border-default)',
+        'glass-strong': 'var(--glass-border-strong)',
       },
       zIndex: {
         dropdown: 'var(--z-dropdown)',

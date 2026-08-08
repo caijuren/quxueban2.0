@@ -1,6 +1,6 @@
 'use client';
 
-import CommandCard from '@/components/ui/CommandCard';
+import GlassCard from '@/components/ui/glass-card';
 
 interface SettingsSectionProps {
   title: string;
@@ -16,7 +16,7 @@ export default function SettingsSection({
   compact = true,
 }: SettingsSectionProps) {
   return (
-    <CommandCard className={compact ? 'p-3 sm:p-4' : 'p-4 sm:p-5'}>
+    <GlassCard className={compact ? 'p-3 sm:p-4' : 'p-4 sm:p-5'}>
       <div className={compact ? 'mb-2' : 'mb-3'}>
         <h2 className="font-display text-sm font-bold text-text-primary">{title}</h2>
         {description && (
@@ -24,6 +24,6 @@ export default function SettingsSection({
         )}
       </div>
       {children}
-    </CommandCard>
+    </GlassCard>
   );
 }

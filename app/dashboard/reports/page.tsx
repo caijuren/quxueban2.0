@@ -18,8 +18,8 @@ import {
 } from 'lucide-react';
 import { useChildren } from '@/components/dashboard/ChildrenContext';
 import ChildEmptyState from '@/components/dashboard/ChildEmptyState';
-import CommandCard from '@/components/ui/CommandCard';
 import EmptyState from '@/components/ui/EmptyState';
+import GlassCard from '@/components/ui/glass-card';
 import { categoryIcons } from '@/lib/taskIcons';
 import { TASK_CATEGORY_LABELS, TASK_CATEGORY_COLORS } from '@/lib/taskTemplates';
 import {
@@ -344,61 +344,62 @@ export default function ReportsPage() {
         initial={shouldReduceMotion ? false : { opacity: 0, y: -8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4 }}
-        className="flex items-center gap-3"
       >
-        <div className="bg-primary/10 border-primary/20 flex size-10 items-center justify-center rounded-xl border">
-          <BarChart3 className="size-5 text-primary" />
-        </div>
-        <h1 className="font-display text-2xl font-bold sm:text-3xl">成长报告</h1>
+        <GlassCard strength="strong" glow="secondary" className="p-5 sm:p-6">
+          <div className="flex flex-col gap-5">
+            <div className="flex items-center gap-3">
+              <div className="bg-primary/10 border-primary/20 flex size-10 items-center justify-center rounded-xl border">
+                <BarChart3 className="size-5 text-primary" />
+              </div>
+              <h1 className="font-display text-2xl font-bold sm:text-3xl">成长报告</h1>
+            </div>
+
+            {plan && stats && (
+              <div className="flex items-center justify-end gap-2">
+                <button
+                  onClick={() => setWeekId((w) => shiftWeekId(w, -1))}
+                  className="flex size-8 items-center justify-center rounded-[14px] border border-border-default bg-surface text-text-secondary transition-colors hover:bg-surface-hover"
+                  aria-label="上一周"
+                >
+                  <ChevronLeft className="size-4" />
+                </button>
+                <div className="relative">
+                  <select
+                    value={weekId}
+                    onChange={(e) => setWeekId(e.target.value)}
+                    className="focus:border-primary/50 focus:ring-primary/10 min-w-[180px] cursor-pointer appearance-none rounded-[14px] border border-border-default bg-surface py-1.5 pl-3 pr-9 text-sm font-medium text-text-primary transition-colors focus:outline-none focus:ring-2"
+                    aria-label="选择周"
+                  >
+                    {weekOptions.map((opt) => (
+                      <option key={opt.value} value={opt.value}>
+                        {opt.label}
+                      </option>
+                    ))}
+                  </select>
+                  <ChevronDown className="pointer-events-none absolute right-2.5 top-1/2 size-4 -translate-y-1/2 text-text-tertiary" />
+                </div>
+                <button
+                  onClick={() => setWeekId((w) => shiftWeekId(w, 1))}
+                  className="flex size-8 items-center justify-center rounded-[14px] border border-border-default bg-surface text-text-secondary transition-colors hover:bg-surface-hover"
+                  aria-label="下一周"
+                >
+                  <ChevronRight className="size-4" />
+                </button>
+              </div>
+            )}
+          </div>
+        </GlassCard>
       </motion.div>
 
       {plan && stats && (
         <>
-          {/* Week selector */}
-          <motion.div
-            initial={shouldReduceMotion ? false : { opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, delay: 0.05 }}
-            className="flex items-center justify-end gap-2"
-          >
-            <button
-              onClick={() => setWeekId((w) => shiftWeekId(w, -1))}
-              className="flex size-8 items-center justify-center rounded-[14px] border border-border-default bg-surface text-text-secondary transition-colors hover:bg-surface-hover"
-              aria-label="上一周"
-            >
-              <ChevronLeft className="size-4" />
-            </button>
-            <div className="relative">
-              <select
-                value={weekId}
-                onChange={(e) => setWeekId(e.target.value)}
-                className="focus:border-primary/50 focus:ring-primary/10 min-w-[180px] cursor-pointer appearance-none rounded-[14px] border border-border-default bg-surface py-1.5 pl-3 pr-9 text-sm font-medium text-text-primary transition-colors focus:outline-none focus:ring-2"
-                aria-label="选择周"
-              >
-                {weekOptions.map((opt) => (
-                  <option key={opt.value} value={opt.value}>
-                    {opt.label}
-                  </option>
-                ))}
-              </select>
-              <ChevronDown className="pointer-events-none absolute right-2.5 top-1/2 size-4 -translate-y-1/2 text-text-tertiary" />
-            </div>
-            <button
-              onClick={() => setWeekId((w) => shiftWeekId(w, 1))}
-              className="flex size-8 items-center justify-center rounded-[14px] border border-border-default bg-surface text-text-secondary transition-colors hover:bg-surface-hover"
-              aria-label="下一周"
-            >
-              <ChevronRight className="size-4" />
-            </button>
-          </motion.div>
-
           {/* AI weekly summary */}
           <motion.div
             initial={shouldReduceMotion ? false : { opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, delay: 0.1 }}
           >
-            <CommandCard className="p-5">
+            <GlassCard strength="strong" glow="ai" className="p-5">
               <div className="mb-4 flex items-center justify-between gap-3">
                 <div className="flex items-center gap-2">
                   <Sparkles className="size-5 text-ai" />
@@ -429,7 +430,7 @@ export default function ReportsPage() {
                   </p>
                 </div>
               )}
-            </CommandCard>
+            </GlassCard>
           </motion.div>
 
           {/* Overview cards */}
@@ -439,16 +440,16 @@ export default function ReportsPage() {
             transition={{ duration: 0.4, delay: 0.15 }}
             className="grid grid-cols-2 gap-4 lg:grid-cols-4"
           >
-            <CommandCard className="p-4">
+            <GlassCard className="p-4">
               <div className="mb-2 flex items-center gap-2">
                 <Target className="size-4 text-primary" />
                 <span className="text-xs text-text-muted">计划任务</span>
               </div>
               <p className="font-display text-2xl font-bold text-text-primary">{stats.total}</p>
               <p className="mt-0.5 text-xs text-text-tertiary">已完成 {stats.done} 项</p>
-            </CommandCard>
+            </GlassCard>
 
-            <CommandCard className="p-4">
+            <GlassCard className="p-4">
               <div className="mb-2 flex items-center gap-2">
                 <Clock className="size-4 text-secondary" />
                 <span className="text-xs text-text-muted">学习时长</span>
@@ -459,18 +460,18 @@ export default function ReportsPage() {
               <p className="mt-0.5 text-xs text-text-tertiary">
                 计划 {formatMinutes(totalMinutes)}
               </p>
-            </CommandCard>
+            </GlassCard>
 
-            <CommandCard className="p-4">
+            <GlassCard className="p-4">
               <div className="mb-2 flex items-center gap-2">
                 <Calendar className="size-4 text-accent" />
                 <span className="text-xs text-text-muted">打卡天数</span>
               </div>
               <p className="font-display text-2xl font-bold text-text-primary">{checkedInDays}</p>
               <p className="mt-0.5 text-xs text-text-tertiary">本周有打卡</p>
-            </CommandCard>
+            </GlassCard>
 
-            <CommandCard className="p-4">
+            <GlassCard className="p-4">
               <div className="mb-2 flex items-center gap-2">
                 <TrendingUp className="size-4 text-success" />
                 <span className="text-xs text-text-muted">完成率</span>
@@ -481,7 +482,7 @@ export default function ReportsPage() {
               <p className="mt-0.5 text-xs text-text-tertiary">
                 {stats.pending > 0 ? `${stats.pending} 项待完成` : '全部完成'}
               </p>
-            </CommandCard>
+            </GlassCard>
           </motion.div>
 
           {/* Progress analysis */}
@@ -490,7 +491,7 @@ export default function ReportsPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, delay: 0.2 }}
           >
-            <CommandCard className="p-5">
+            <GlassCard className="p-5">
               <div className="mb-5 flex items-center gap-2">
                 <TrendingUp className="size-5 text-primary" />
                 <h2 className="text-lg font-bold text-text-secondary">整体目标推进分析</h2>
@@ -533,7 +534,7 @@ export default function ReportsPage() {
                   </p>
                 </div>
 
-                <div className="rounded-xl border border-border-subtle bg-surface-elevated p-4">
+                <GlassCard strength="subtle" className="p-4">
                   <div className="mb-2 flex items-center gap-2">
                     <span className={`text-sm font-bold ${progressStatus.color}`}>
                       {progressStatus.label}
@@ -542,9 +543,9 @@ export default function ReportsPage() {
                   <p className="text-sm leading-relaxed text-text-tertiary">
                     {progressStatus.message}
                   </p>
-                </div>
+                </GlassCard>
               </div>
-            </CommandCard>
+            </GlassCard>
           </motion.div>
 
           {/* Subject analysis */}
@@ -553,7 +554,7 @@ export default function ReportsPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, delay: 0.25 }}
           >
-            <CommandCard className="p-5">
+            <GlassCard className="p-5">
               <div className="mb-5 flex items-center gap-2">
                 <Target className="size-5 text-secondary" />
                 <h2 className="text-lg font-bold text-text-secondary">学科分析</h2>
@@ -561,9 +562,10 @@ export default function ReportsPage() {
 
               <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
                 {subjectStats.map((subject) => (
-                  <div
+                  <GlassCard
                     key={subject.subjectId}
-                    className="space-y-4 rounded-xl border border-border-subtle bg-surface-elevated p-4"
+                    strength="subtle"
+                    className="space-y-4 p-4"
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
@@ -641,10 +643,10 @@ export default function ReportsPage() {
                         </div>
                       </div>
                     )}
-                  </div>
+                  </GlassCard>
                 ))}
               </div>
-            </CommandCard>
+            </GlassCard>
           </motion.div>
 
           {/* High-frequency task details */}
@@ -654,7 +656,7 @@ export default function ReportsPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4, delay: 0.3 }}
             >
-              <CommandCard className="p-5">
+              <GlassCard className="p-5">
                 <div className="mb-5 flex items-center gap-2">
                   <Calendar className="size-5 text-accent" />
                   <h2 className="text-lg font-bold text-text-secondary">任务完成明细</h2>
@@ -688,7 +690,7 @@ export default function ReportsPage() {
                     );
                   })}
                 </div>
-              </CommandCard>
+              </GlassCard>
             </motion.div>
           )}
 
@@ -698,7 +700,7 @@ export default function ReportsPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, delay: 0.35 }}
           >
-            <CommandCard className="p-5">
+            <GlassCard className="p-5">
               <div className="mb-5 flex items-center gap-2">
                 <BarChart3 className="size-5 text-secondary" />
                 <h2 className="text-lg font-bold text-text-secondary">各领域投入分析</h2>
@@ -749,7 +751,7 @@ export default function ReportsPage() {
                   })}
                 </div>
               )}
-            </CommandCard>
+            </GlassCard>
           </motion.div>
 
           {/* Daily trend */}
@@ -758,7 +760,7 @@ export default function ReportsPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, delay: 0.4 }}
           >
-            <CommandCard className="p-5">
+            <GlassCard className="p-5">
               <div className="mb-5 flex items-center gap-2">
                 <Calendar className="size-5 text-accent" />
                 <h2 className="text-lg font-bold text-text-secondary">每日完成趋势</h2>
@@ -800,7 +802,7 @@ export default function ReportsPage() {
                   );
                 })}
               </div>
-            </CommandCard>
+            </GlassCard>
           </motion.div>
 
           {/* Share action */}

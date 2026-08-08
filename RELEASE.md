@@ -234,6 +234,44 @@ docker image prune -f
 
 # 发版记录
 
+## v2.8.1（2026-08-09）
+
+**主题：Liquid Glass 核心页面视觉升级**
+
+本版本在 v2.8.0 建立的 Glass 能力基础上，将液态玻璃设计语言落地到 4 个核心页面，显著提升界面高级感与科技感。
+
+- Liquid Glass Foundation 延续
+  - 扩展 `app/globals.css` Glass Token：`glass-bg-*`、`glass-border-*`、`glass-highlight`、`glass-shadow-color`、`glass-blur-*`
+  - 新增 `.glass` / `.glass-subtle` / `.glass-strong` / `.glass-hover` / glow 工具类
+  - 扩展 `tailwind.config.ts`：`backdropBlur`、`backgroundColor`、`borderColor`、`boxShadow` 的 glass 系列
+  - 新增 `GlassCard` 组件（`components/ui/glass-card.tsx`），支持 `strength` / `hover` / `glow` / `as`
+
+- 首页 `/dashboard`
+  - IdentityCard 使用 `GlassCard strong + glow="primary"`
+  - 升学时间轴、关键节点预警、AI 战略建议、概览孩子卡统一使用 `GlassCard default/subtle + hover`
+
+- 成长报告 `/dashboard/reports`
+  - 报告头部改造为 `GlassCard strong + glow="secondary"` Hero 区域，整合标题与周选择器
+  - AI 周报总结卡片使用 `GlassCard strong + glow="ai"`
+  - 计划任务 / 学习时长 / 打卡天数 / 完成率概览卡使用 `GlassCard default`
+  - 整体目标推进分析、学科分析、任务完成明细、各领域投入分析、每日完成趋势统一使用 `GlassCard`
+  - 学科分析内层学科卡片使用 `GlassCard subtle`
+
+- AI 模块
+  - `/dashboard/ai` 综合评估卡使用 `GlassCard strong + glow="ai"`，替换硬编码紫色阴影
+  - 四个分析板块与空状态使用 `GlassCard default`
+  - `/dashboard/ai-assistant` 左侧会话列表面板、右侧聊天区、AI 消息气泡、思考中提示统一使用 `GlassCard`
+
+- 设置中心 `/dashboard/settings/*`
+  - 左侧导航容器使用 `GlassCard subtle`
+  - 导航激活项使用 `glass-subtle` 背景 + 左侧 primary 光条
+  - `SettingsSection` 组件统一使用 `GlassCard default`
+
+- 质量验证
+  - `npm run type-check` 通过
+  - `npm run lint` 通过
+  - `npm run build` 通过
+
 ## v2.7.5（2026-08-08）
 
 **主题：Design System 2.0 与浅色主题上线**

@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { MessageSquare, Plus, Send, Loader2, Bot, User, Clock, ChevronLeft } from 'lucide-react';
 import { useChildren } from '@/components/dashboard/ChildrenContext';
 import EmptyState from '@/components/ui/EmptyState';
+import GlassCard from '@/components/ui/glass-card';
 import {
   useChatSessions,
   useCreateChatSession,
@@ -80,7 +81,7 @@ export default function AIAssistantPage() {
           </button>
         </div>
 
-        <div className="flex-1 space-y-1 overflow-y-auto rounded-card border border-border-default bg-surface-elevated p-2">
+        <GlassCard strength="subtle" className="flex-1 space-y-1 overflow-y-auto p-2">
           {sessionsLoading ? (
             <div className="flex items-center justify-center py-12">
               <Loader2 className="size-6 animate-spin text-primary" />
@@ -124,14 +125,13 @@ export default function AIAssistantPage() {
               </button>
             ))
           )}
-        </div>
+        </GlassCard>
       </motion.aside>
 
       {/* Chat area */}
-      <motion.div
-        initial={{ opacity: 0, y: 12 }}
-        animate={{ opacity: 1, y: 0 }}
-        className={`flex flex-1 flex-col overflow-hidden rounded-card border border-border-default bg-surface-elevated ${
+      <GlassCard
+        strength="default"
+        className={`flex flex-1 flex-col overflow-hidden ${
           isMobileListVisible ? 'hidden lg:flex' : 'flex'
         }`}
       >
@@ -200,15 +200,15 @@ export default function AIAssistantPage() {
                       <Bot className="size-4 text-text-primary" />
                     )}
                   </div>
-                  <div
-                    className={`max-w-[80%] rounded-2xl px-4 py-2.5 text-sm leading-relaxed ${
-                      message.role === 'user'
-                        ? 'rounded-tr-none bg-primary text-text-primary'
-                        : 'rounded-tl-none border border-border-default bg-surface text-text-secondary'
-                    }`}
-                  >
-                    {message.content}
-                  </div>
+                  {message.role === 'user' ? (
+                    <div className="max-w-[80%] rounded-2xl rounded-tr-none bg-primary px-4 py-2.5 text-sm leading-relaxed text-text-primary">
+                      {message.content}
+                    </div>
+                  ) : (
+                    <GlassCard strength="subtle" className="max-w-[80%] rounded-2xl rounded-tl-none px-4 py-2.5 text-sm leading-relaxed text-text-secondary">
+                      {message.content}
+                    </GlassCard>
+                  )}
                 </motion.div>
               ))}
               {sendMessage.isPending && (
@@ -220,10 +220,10 @@ export default function AIAssistantPage() {
                   <div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-secondary to-secondary-glow">
                     <Bot className="size-4 text-text-primary" />
                   </div>
-                  <div className="flex items-center gap-2 rounded-2xl rounded-tl-none border border-border-default bg-surface px-4 py-2.5">
+                  <GlassCard strength="subtle" className="flex items-center gap-2 rounded-2xl rounded-tl-none px-4 py-2.5">
                     <Loader2 className="size-4 animate-spin text-secondary" />
                     <span className="text-sm text-text-muted">AI 正在思考…</span>
-                  </div>
+                  </GlassCard>
                 </motion.div>
               )}
             </AnimatePresence>
@@ -259,7 +259,7 @@ export default function AIAssistantPage() {
             </button>
           </div>
         </form>
-      </motion.div>
+      </GlassCard>
     </div>
   );
 }

@@ -15,6 +15,7 @@ import {
 import { useChildren } from '@/components/dashboard/ChildrenContext';
 import { gradeLabel } from '@/lib/children';
 import EmptyState from '@/components/ui/EmptyState';
+import GlassCard from '@/components/ui/glass-card';
 import type { DiagnosisResult } from '@/lib/aiDiagnosis';
 
 const sectionConfig = {
@@ -145,12 +146,10 @@ export default function AIPage() {
 
       {diagnosis && (
         <>
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-            className="border-secondary/20 rounded-2xl border bg-surface-elevated p-6"
-            style={{ boxShadow: '0 0 60px rgba(139, 92, 246, 0.1)' }}
+          <GlassCard
+            strength="strong"
+            glow="ai"
+            className="p-6"
           >
             <div className="flex items-start gap-4">
               <div className="flex size-12 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-secondary to-secondary-glow">
@@ -176,7 +175,7 @@ export default function AIPage() {
                 </div>
               </div>
             </div>
-          </motion.div>
+          </GlassCard>
 
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
             {(Object.keys(sectionConfig) as Array<keyof typeof sectionConfig>).map((key, index) => {
@@ -185,12 +184,9 @@ export default function AIPage() {
               const Icon = section.icon;
 
               return (
-                <motion.div
+                <GlassCard
                   key={key}
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.2 + index * 0.1 }}
-                  className="rounded-2xl bg-surface-elevated p-6"
+                  className="p-6"
                 >
                   <div className="mb-5 flex items-center gap-3">
                     <Icon className={`size-6 ${section.color}`} />
@@ -213,7 +209,7 @@ export default function AIPage() {
                       ))
                     )}
                   </ul>
-                </motion.div>
+                </GlassCard>
               );
             })}
           </div>
@@ -221,10 +217,10 @@ export default function AIPage() {
       )}
 
       {!diagnosis && !loading && currentChild && !error && (
-        <div className="rounded-2xl bg-surface-elevated p-12 text-center">
+        <GlassCard className="p-12 text-center">
           <Sparkles className="mx-auto mb-4 size-12 text-secondary" />
           <p className="text-text-secondary">点击右上角「重新生成」获取 AI 诊断报告</p>
-        </div>
+        </GlassCard>
       )}
     </div>
   );
