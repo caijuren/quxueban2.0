@@ -538,11 +538,7 @@ export default function ReportsPage() {
 
               <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
                 {subjectStats.map((subject) => (
-                  <GlassCard
-                    key={subject.subjectId}
-                    strength="subtle"
-                    className="space-y-4 p-4"
-                  >
+                  <GlassCard key={subject.subjectId} strength="subtle" className="space-y-4 p-4">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
                         <div
@@ -778,8 +774,8 @@ export default function ReportsPage() {
               <Share2 className="size-4" />
               生成分享图
             </button>
-          </motion.div>
-        </>
+          </StaggerItem>
+        </StaggerContainer>
       )}
 
       {!plan && (
