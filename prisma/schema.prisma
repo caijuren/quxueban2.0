@@ -350,17 +350,19 @@ model TaskCapabilityLink {
 }
 
 model WeeklyPlan {
-  id             String    @id @default(uuid())
-  userId         String
-  childId        String
-  weekId         String
-  tasks          Json      @default("[]")
-  goals          Json?     @default("[]")
-  publishedAt    DateTime?
-  reviewedAt     DateTime?
-  parentComment  String?
-  createdAt      DateTime  @default(now())
-  updatedAt      DateTime  @updatedAt
+  id                   String    @id @default(uuid())
+  userId               String
+  childId              String
+  weekId               String
+  tasks                Json      @default("[]")
+  goals                Json?     @default("[]")
+  publishedAt          DateTime?
+  reviewedAt           DateTime?
+  parentComment        String?
+  aiSummary            String?   @db.Text
+  aiSummaryGeneratedAt DateTime?
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime  @updatedAt
 
   user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
   child Child @relation(fields: [childId], references: [id], onDelete: Cascade)

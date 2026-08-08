@@ -10,11 +10,13 @@ function buildKey(childId?: string) {
 }
 
 function normalizeWeeklyPlan(
-  plan: WeeklyPlan & { parentComment?: string | null }
+  plan: WeeklyPlan & { parentComment?: string | null; aiSummary?: string | null; aiSummaryGeneratedAt?: string | null }
 ): WeeklyPlan {
   return {
     ...plan,
     reviewComment: plan.reviewComment ?? plan.parentComment ?? undefined,
+    aiSummary: plan.aiSummary ?? undefined,
+    aiSummaryGeneratedAt: plan.aiSummaryGeneratedAt ?? undefined,
   };
 }
 
@@ -23,7 +25,7 @@ export function useWeeklyPlans(childId?: string) {
     queryKey: buildKey(childId),
     queryFn: async () => {
       const qs = childId ? `?childId=${encodeURIComponent(childId)}` : '';
-      const data = await apiGet<(WeeklyPlan & { parentComment?: string | null })[]>(
+      const data = await apiGet<(WeeklyPlan & { parentComment?: string | null; aiSummary?: string | null; aiSummaryGeneratedAt?: string | null })[]>(
         `/api/weekly-plans${qs}`
       );
       return data.map(normalizeWeeklyPlan);
@@ -46,6 +48,20 @@ export function useSaveWeeklyPlan() {
   });
 }
 
+export function useGenerateAiSummary() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (planId: string) =>
+      apiPost<{ aiSummary: string; aiSummaryGeneratedAt: string }>(
+        `/api/weekly-plans/${planId}/ai-summary`,
+        {}
+      ),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['weekly-plans'] });
+    },
+  });
+}
+
 export function useDeleteWeeklyPlan() {
   const queryClient = useQueryClient();
   return useMutation({
@@ -56,7 +72,6 @@ export function useDeleteWeeklyPlan() {
   });
 }
 
-
 export function useCompleteTask() {
   const queryClient = useQueryClient();
   return useMutation({
@@ -65,9 +80,12 @@ export function useCompleteTask() {
       taskId: string;
       input: TaskCompletionInput;
     }) =>
-      apiPost<WeeklyPlan>("/api/weekly-plans/" + data.planId + "/tasks/" + data.taskId + "/complete", data.input),
+      apiPost<WeeklyPlan>(
+        `/api/weekly-plans/${data.planId}/tasks/${data.taskId}/complete`,
+        data.input
+      ),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["weekly-plans"] });
+      queryClient.invalidateQueries({ queryKey: ['weekly-plans'] });
     },
   });
 }

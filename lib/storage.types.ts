@@ -32,6 +32,17 @@ export type TaskSource = 'auto' | 'library' | 'manual';
 
 export type TaskAlignment = 'ahead' | 'ontrack' | 'behind' | 'optional' | 'unrelated';
 
+export interface TaskCompletionMetadata {
+  bookTitle?: string;
+  pageStart?: number;
+  pageEnd?: number;
+  workbookTitle?: string;
+  problemRange?: string;
+  wrongCount?: number;
+  quantityIncrement?: number;
+  quantityUnit?: string;
+}
+
 export interface TaskCompletionRecord {
   id: string;
   date: string;
@@ -46,6 +57,7 @@ export interface TaskCompletionRecord {
   capabilityProgress: TaskCapabilityProgress[];
   quantityIncrement: number;
   checklistProgress: string[];
+  metadata?: TaskCompletionMetadata;
   dingtalkPushedAt?: string;
   createdAt: string;
   updatedAt: string;
@@ -104,6 +116,8 @@ export interface WeeklyPlan {
   publishedAt?: string;
   reviewedAt?: string;
   reviewComment?: string;
+  aiSummary?: string;
+  aiSummaryGeneratedAt?: string;
   tasks: WeeklyTaskItem[];
   goals?: WeeklyGoal[];
 }

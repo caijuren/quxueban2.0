@@ -73,6 +73,7 @@ export async function POST(req: Request, { params }: Params) {
     capabilityProgress: body.capabilityProgress,
     quantityIncrement: body.quantityIncrement,
     checklistProgress: body.checklistProgress,
+    metadata: body.metadata,
     createdAt: now,
     updatedAt: now,
   };

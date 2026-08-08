@@ -149,6 +149,8 @@ export function ChildrenProvider({ children: childNodes }: { children: ReactNode
       publishedAt: plan.publishedAt ?? new Date().toISOString(),
       reviewedAt: plan.reviewedAt,
       parentComment: plan.reviewComment,
+      aiSummary: plan.aiSummary,
+      aiSummaryGeneratedAt: plan.aiSummaryGeneratedAt,
     });
   };
 
@@ -193,6 +195,8 @@ export function ChildrenProvider({ children: childNodes }: { children: ReactNode
       publishedAt: plan.publishedAt,
       reviewedAt: plan.reviewedAt,
       parentComment: plan.reviewComment,
+      aiSummary: plan.aiSummary,
+      aiSummaryGeneratedAt: plan.aiSummaryGeneratedAt,
     });
   };
 
@@ -208,6 +212,8 @@ export function ChildrenProvider({ children: childNodes }: { children: ReactNode
       publishedAt: plan.publishedAt,
       reviewedAt: new Date().toISOString(),
       parentComment: comment,
+      aiSummary: plan.aiSummary,
+      aiSummaryGeneratedAt: plan.aiSummaryGeneratedAt,
     });
   };
 

@@ -175,6 +175,17 @@ export const taskCapabilityProgressSchema = z.object({
   progressDelta: z.number().min(-100).max(100),
 });
 
+export const taskCompletionMetadataSchema = z.object({
+  bookTitle: z.string().max(200).optional(),
+  pageStart: z.number().int().min(0).optional(),
+  pageEnd: z.number().int().min(0).optional(),
+  workbookTitle: z.string().max(200).optional(),
+  problemRange: z.string().max(100).optional(),
+  wrongCount: z.number().int().min(0).optional(),
+  quantityIncrement: z.number().min(0).optional(),
+  quantityUnit: z.string().max(50).optional(),
+});
+
 export const taskCompletionRecordSchema = z.object({
   id: z.string().min(1),
   date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, '日期格式不正确'),
@@ -189,6 +200,7 @@ export const taskCompletionRecordSchema = z.object({
   capabilityProgress: z.array(taskCapabilityProgressSchema).default([]),
   quantityIncrement: z.number().int().min(0).default(0),
   checklistProgress: z.array(z.string().min(1)).default([]),
+  metadata: taskCompletionMetadataSchema.optional(),
   dingtalkPushedAt: z.string().datetime().optional(),
   createdAt: z.string().datetime(),
   updatedAt: z.string().datetime(),
@@ -209,6 +221,7 @@ export const taskCompletionInputSchema = z.object({
   capabilityProgress: z.array(taskCapabilityProgressSchema).default([]),
   quantityIncrement: z.number().int().min(0).default(0),
   checklistProgress: z.array(z.string()).default([]),
+  metadata: taskCompletionMetadataSchema.optional(),
 });
 
 export const dingTalkPushSchema = z.object({
@@ -269,6 +282,8 @@ export const weeklyPlanCreateSchema = z.object({
   publishedAt: z.string().datetime().nullable().optional(),
   reviewedAt: z.string().datetime().nullable().optional(),
   parentComment: z.string().max(1000).nullable().optional(),
+  aiSummary: z.string().max(5000).nullable().optional(),
+  aiSummaryGeneratedAt: z.string().datetime().nullable().optional(),
 });
 
 export const weeklyPlanUpdateSchema = z.object({
@@ -277,6 +292,8 @@ export const weeklyPlanUpdateSchema = z.object({
   publishedAt: z.string().datetime().nullable().optional(),
   reviewedAt: z.string().datetime().nullable().optional(),
   parentComment: z.string().max(1000).nullable().optional(),
+  aiSummary: z.string().max(5000).nullable().optional(),
+  aiSummaryGeneratedAt: z.string().datetime().nullable().optional(),
 });
 
 export const weeklyPlanTemplateCreateSchema = z.object({

@@ -59,6 +59,12 @@ export async function PATCH(req: Request, { params }: Params) {
     data.reviewedAt = body.reviewedAt ? new Date(body.reviewedAt) : null;
   }
   if (body.parentComment !== undefined) data.parentComment = body.parentComment;
+  if (body.aiSummary !== undefined) data.aiSummary = body.aiSummary;
+  if (body.aiSummaryGeneratedAt !== undefined) {
+    data.aiSummaryGeneratedAt = body.aiSummaryGeneratedAt
+      ? new Date(body.aiSummaryGeneratedAt)
+      : null;
+  }
 
   const updated = await prisma.weeklyPlan.update({
     where: { id: params.id },

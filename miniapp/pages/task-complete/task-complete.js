@@ -52,6 +52,7 @@ Page({
       actualDurationMinutes: 0,
       quality: 'good',
       note: '',
+      metadata: {},
     },
     imageUrls: [],
     audioUrl: '',
@@ -88,6 +89,11 @@ Page({
     const evidence = task.evidence || { images: [], audios: [], transcript: '' };
     const existingNote = task.note || (evidence.transcript ? '' : '');
     const defaultNote = existingNote || (activeRole === 'parent' ? '家长代打卡' : '孩子自己打卡');
+    const metadataFields = this.getMetadataFields(task);
+    const metadata = {};
+    metadataFields.forEach((field) => {
+      metadata[field.key] = '';
+    });
 
     this.setData({
       task,
@@ -95,6 +101,7 @@ Page({
       taskFocus: task.focus || '未命名任务',
       taskDurationText: task.duration || '未设置',
       taskDifficulty: difficultyLabels[task.difficulty] || '',
+      metadataFields,
       imageUrls: evidence.images || [],
       audioUrl: evidence.audios && evidence.audios[0] ? evidence.audios[0] : '',
       recordingTranscript: evidence.transcript || '',
@@ -104,6 +111,7 @@ Page({
         actualDurationMinutes: duration,
         quality: 'good',
         note: defaultNote,
+        metadata,
       },
     });
   },
@@ -111,6 +119,37 @@ Page({
   parseDuration(duration) {
     const match = String(duration || '').match(/(\d+)/);
     return match ? parseInt(match[1], 10) : 0;
+  },
+
+  getMetadataFields(task) {
+    if (!task) return [];
+    const category = task.category || 'other';
+    const subjectId = task.subjectId || '';
+
+    if (category === 'reading' || subjectId === 'chinese') {
+      return [
+        { key: 'bookTitle', label: '书名', placeholder: '如：夏洛的网', type: 'text' },
+        { key: 'pageStart', label: '开始页码', placeholder: '0', type: 'number' },
+        { key: 'pageEnd', label: '结束页码', placeholder: '0', type: 'number' },
+      ];
+    }
+
+    if (['school', 'ability'].includes(category) || ['math', 'english'].includes(subjectId)) {
+      return [
+        { key: 'workbookTitle', label: '练习册/材料', placeholder: '如：高思导引', type: 'text' },
+        { key: 'problemRange', label: '页码/题号范围', placeholder: '如：P12-P15', type: 'text' },
+        { key: 'wrongCount', label: '错题数', placeholder: '0', type: 'number' },
+      ];
+    }
+
+    if (category === 'sport' || category === 'habit') {
+      return [
+        { key: 'quantityIncrement', label: '完成数量', placeholder: '0', type: 'number' },
+        { key: 'quantityUnit', label: '单位', placeholder: '如：分钟、次、米', type: 'text' },
+      ];
+    }
+
+    return [];
   },
 
   onStatusChange(e) {
@@ -140,6 +179,12 @@ Page({
 
   onNoteInput(e) {
     this.setData({ 'form.note': e.detail.value });
+  },
+
+  onMetadataInput(e) {
+    const key = e.currentTarget.dataset.key;
+    const value = e.detail.value;
+    this.setData({ [`form.metadata.${key}`]: value });
   },
 
   chooseImage() {
@@ -314,6 +359,23 @@ Page({
     const { task, form, imageUrls, audioUrl } = this.data;
     if (!task) return;
 
+    const metadata = {};
+    if (form.metadata) {
+      Object.keys(form.metadata).forEach((key) => {
+        const value = form.metadata[key];
+        if (value === '' || value === null || value === undefined) return;
+        if (['pageStart', 'pageEnd', 'wrongCount'].includes(key)) {
+          const num = parseInt(value, 10);
+          if (!isNaN(num)) metadata[key] = num;
+        } else if (key === 'quantityIncrement') {
+          const num = parseFloat(value);
+          if (!isNaN(num)) metadata[key] = num;
+        } else {
+          metadata[key] = value;
+        }
+      });
+    }
+
     const payload = {
       status: form.status,
       progress: form.progress,
@@ -323,6 +385,7 @@ Page({
       imageUrls,
       audioUrls: audioUrl ? [audioUrl] : [],
       audioTranscript: this.data.recordingTranscript || undefined,
+      metadata: Object.keys(metadata).length > 0 ? metadata : undefined,
     };
 
     this.setData({ submitting: true });

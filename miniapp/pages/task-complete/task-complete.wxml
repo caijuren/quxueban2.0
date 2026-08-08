@@ -73,6 +73,28 @@
       </view>
     </view>
 
+    <view wx:if="{{metadataFields.length > 0}}" class="form-card">
+      <view class="section-title">完成详情</view>
+      <view class="metadata-list">
+        <view
+          wx:for="{{metadataFields}}"
+          wx:key="key"
+          class="metadata-item"
+        >
+          <text class="metadata-label">{{item.label}}</text>
+          <input
+            class="metadata-input"
+            type="{{item.type}}"
+            value="{{form.metadata[item.key]}}"
+            placeholder="{{item.placeholder}}"
+            placeholder-class="input-placeholder"
+            data-key="{{item.key}}"
+            bindinput="onMetadataInput"
+          />
+        </view>
+      </view>
+    </view>
+
     <view class="form-card">
       <view class="section-header">
         <view class="section-title">文字备注</view>

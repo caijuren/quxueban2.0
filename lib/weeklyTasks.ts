@@ -1,7 +1,7 @@
 import { Child } from './children';
-import { getChinesePlanByGrade } from './subjects/chinese';
-import { getMathPlanByGrade } from './subjects/math';
-import { getEnglishPlanByGrade } from './subjects/english';
+import { getChinesePlanByGrade, getChineseStatusByGrade } from './subjects/chinese';
+import { getMathPlanByGrade, getMathStatusByGrade } from './subjects/math';
+import { getEnglishPlanByGrade, getEnglishStatusByGrade } from './subjects/english';
 import {
   type WeeklyPlan,
   type WeeklyTaskItem,
@@ -451,6 +451,89 @@ export function getPlanStats(plan: WeeklyPlan): PlanStats {
     byCategory,
     byDay,
   };
+}
+
+export interface SubjectStat {
+  subjectId: SubjectId;
+  name: string;
+  color: string;
+  total: number;
+  done: number;
+  skipped: number;
+  rate: number;
+  plannedMinutes: number;
+  actualMinutes: number;
+  currentTopic: string;
+  dailyTime: string;
+  weakSkills: string[];
+  focusList: string[];
+}
+
+const reportSubjectMeta: Record<
+  SubjectId,
+  { getStatus: (grade: number) => { currentTopic: string; dailyTime: string; weakSkills: string[] } }
+> = {
+  chinese: {
+    getStatus: (grade) => {
+      const s = getChineseStatusByGrade(grade);
+      return { currentTopic: s.currentTopic, dailyTime: s.dailyChineseTime, weakSkills: s.weakSkills };
+    },
+  },
+  math: {
+    getStatus: (grade) => {
+      const s = getMathStatusByGrade(grade);
+      return { currentTopic: s.currentTopic, dailyTime: s.dailyMathTime, weakSkills: s.weakSkills };
+    },
+  },
+  english: {
+    getStatus: (grade) => {
+      const s = getEnglishStatusByGrade(grade);
+      return {
+        currentTopic: `${s.gradeLabel} · RAZ ${s.razLevel} · OD ${s.odUnit}/${s.odTotal}`,
+        dailyTime: s.dailyEnglishTime,
+        weakSkills: s.weakSkills,
+      };
+    },
+  },
+};
+
+export function getSubjectStats(plan: WeeklyPlan, grade: number): SubjectStat[] {
+  const subjects: SubjectId[] = ['chinese', 'math', 'english'];
+
+  return subjects.map((subjectId) => {
+    const tasks = plan.tasks.filter((t) => t.subjectId === subjectId);
+    const total = tasks.length;
+    const done = tasks.filter((t) => t.status === 'done').length;
+    const skipped = tasks.filter((t) => t.status === 'skipped').length;
+    const rate = total === 0 ? 0 : Math.round((done / total) * 100);
+    const plannedMinutes = tasks.reduce((sum, t) => sum + parseDurationMinutes(t.duration), 0);
+    const actualMinutes = tasks.reduce((sum, t) => {
+      const lastRecord = t.completionRecords?.[t.completionRecords.length - 1];
+      return sum + (lastRecord?.actualDurationMinutes ?? 0);
+    }, 0);
+    const focusList = tasks
+      .filter((t) => t.status === 'done')
+      .map((t) => t.focus)
+      .slice(0, 3);
+
+    const status = reportSubjectMeta[subjectId].getStatus(grade);
+
+    return {
+      subjectId,
+      name: subjectMeta[subjectId].name,
+      color: subjectMeta[subjectId].color,
+      total,
+      done,
+      skipped,
+      rate,
+      plannedMinutes,
+      actualMinutes,
+      currentTopic: status.currentTopic,
+      dailyTime: status.dailyTime,
+      weakSkills: status.weakSkills,
+      focusList,
+    };
+  });
 }
 
 export function generateAiReview(plan: WeeklyPlan, childName: string): string {

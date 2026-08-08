@@ -70,6 +70,7 @@ function normalizeCompletionRecord(
     capabilityProgress: record.capabilityProgress ?? [],
     quantityIncrement: record.quantityIncrement ?? 0,
     checklistProgress: record.checklistProgress ?? [],
+    metadata: record.metadata,
     dingtalkPushedAt: record.dingtalkPushedAt,
     createdAt: record.createdAt ?? new Date().toISOString(),
     updatedAt: record.updatedAt ?? new Date().toISOString(),

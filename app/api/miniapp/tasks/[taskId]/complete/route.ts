@@ -97,6 +97,7 @@ export async function POST(
     capabilityProgress: body.capabilityProgress || [],
     quantityIncrement: body.quantityIncrement || 0,
     checklistProgress: body.checklistProgress || [],
+    metadata: body.metadata,
     createdAt: now,
     updatedAt: now,
   };

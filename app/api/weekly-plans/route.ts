@@ -84,6 +84,10 @@ export async function POST(req: Request) {
         publishedAt: body.publishedAt ? new Date(body.publishedAt) : null,
         reviewedAt: body.reviewedAt ? new Date(body.reviewedAt) : null,
         parentComment: body.parentComment,
+        aiSummary: body.aiSummary,
+        aiSummaryGeneratedAt: body.aiSummaryGeneratedAt
+          ? new Date(body.aiSummaryGeneratedAt)
+          : null,
       },
       create: {
         userId: session.user.id,
@@ -94,6 +98,10 @@ export async function POST(req: Request) {
         publishedAt: body.publishedAt ? new Date(body.publishedAt) : null,
         reviewedAt: body.reviewedAt ? new Date(body.reviewedAt) : null,
         parentComment: body.parentComment,
+        aiSummary: body.aiSummary,
+        aiSummaryGeneratedAt: body.aiSummaryGeneratedAt
+          ? new Date(body.aiSummaryGeneratedAt)
+          : null,
       },
     });
 
