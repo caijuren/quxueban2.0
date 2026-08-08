@@ -121,14 +121,14 @@ export default function NewPlanModal({ isOpen, onClose, onCreate }: NewPlanModal
           <button
             type="button"
             onClick={onClose}
-            className="px-4 py-2 rounded-lg bg-surface-elevated text-text-tertiary text-sm hover:bg-surface-highlight transition-all"
+            className="rounded-lg bg-surface-elevated px-4 py-2 text-sm text-text-tertiary transition-all hover:bg-surface-highlight"
           >
             取消
           </button>
           <button
             type="button"
             onClick={handleSubmit}
-            className="px-4 py-2 rounded-lg bg-primary text-text-primary text-sm font-medium transition-all"
+            className="rounded-lg bg-primary px-4 py-2 text-sm font-medium text-text-primary transition-all"
           >
             创建方案
           </button>
@@ -137,27 +137,27 @@ export default function NewPlanModal({ isOpen, onClose, onCreate }: NewPlanModal
     >
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label className="block text-sm text-text-tertiary mb-1">方案名称</label>
+          <label className="mb-1 block text-sm text-text-tertiary">方案名称</label>
           <input
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder="例如：三公冲刺二期"
-            className="w-full px-4 py-2.5 rounded-xl bg-surface-elevated border border-border-default text-sm text-text-secondary placeholder-slate-500 focus:outline-none focus:border-primary transition-all"
+            className="w-full rounded-xl border border-border-default bg-surface-elevated px-4 py-2.5 text-sm text-text-secondary placeholder-slate-500 transition-all focus:border-primary focus:outline-none"
             required
           />
         </div>
 
         <div>
-          <label className="block text-sm text-text-tertiary mb-1">方案类型</label>
+          <label className="mb-1 block text-sm text-text-tertiary">方案类型</label>
           <div className="flex gap-2">
             <button
               type="button"
               onClick={() => setType('primary')}
-              className={`flex-1 px-4 py-2 rounded-xl text-sm font-medium border transition-all ${
+              className={`flex-1 rounded-xl border px-4 py-2 text-sm font-medium transition-all ${
                 type === 'primary'
                   ? 'bg-primary/10 border-primary/40 text-primary'
-                  : 'bg-surface-elevated border-border-default text-text-tertiary hover:bg-surface-highlight'
+                  : 'border-border-default bg-surface-elevated text-text-tertiary hover:bg-surface-highlight'
               }`}
             >
               主路线
@@ -165,10 +165,10 @@ export default function NewPlanModal({ isOpen, onClose, onCreate }: NewPlanModal
             <button
               type="button"
               onClick={() => setType('backup')}
-              className={`flex-1 px-4 py-2 rounded-xl text-sm font-medium border transition-all ${
+              className={`flex-1 rounded-xl border px-4 py-2 text-sm font-medium transition-all ${
                 type === 'backup'
                   ? 'bg-secondary/10 border-secondary/40 text-secondary'
-                  : 'bg-surface-elevated border-border-default text-text-tertiary hover:bg-surface-highlight'
+                  : 'border-border-default bg-surface-elevated text-text-tertiary hover:bg-surface-highlight'
               }`}
             >
               备选路线
@@ -177,62 +177,66 @@ export default function NewPlanModal({ isOpen, onClose, onCreate }: NewPlanModal
         </div>
 
         <div>
-          <label className="block text-sm text-text-tertiary mb-1">方案说明</label>
+          <label className="mb-1 block text-sm text-text-tertiary">方案说明</label>
           <textarea
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             placeholder="简要说明该路线的目标与策略"
             rows={3}
-            className="w-full px-4 py-2.5 rounded-xl bg-surface-elevated border border-border-default text-sm text-text-secondary placeholder-slate-500 focus:outline-none focus:border-primary transition-all resize-none"
+            className="w-full resize-none rounded-xl border border-border-default bg-surface-elevated px-4 py-2.5 text-sm text-text-secondary placeholder-slate-500 transition-all focus:border-primary focus:outline-none"
           />
         </div>
 
         <div>
-          <label className="block text-sm text-text-tertiary mb-1">关键要求（用逗号或换行分隔）</label>
+          <label className="mb-1 block text-sm text-text-tertiary">
+            关键要求（用逗号或换行分隔）
+          </label>
           <textarea
             value={requirements}
             onChange={(e) => setRequirements(e.target.value)}
             placeholder="例如：AMC8 20分+, 小托福 850+"
             rows={3}
-            className="w-full px-4 py-2.5 rounded-xl bg-surface-elevated border border-border-default text-sm text-text-secondary placeholder-slate-500 focus:outline-none focus:border-primary transition-all resize-none"
+            className="w-full resize-none rounded-xl border border-border-default bg-surface-elevated px-4 py-2.5 text-sm text-text-secondary placeholder-slate-500 transition-all focus:border-primary focus:outline-none"
           />
         </div>
 
         <div>
-          <label className="block text-sm text-text-tertiary mb-1">
+          <label className="mb-1 block text-sm text-text-tertiary">
             关键里程碑（每行一个，格式：时间 | 任务）
           </label>
           <textarea
             value={milestonesText}
             onChange={(e) => setMilestonesText(e.target.value)}
-            placeholder={"例如：五年级上 | AMC8 二次冲刺\n五年级下 4 月 | 三公报名 + 面谈评估"}
+            placeholder={'例如：五年级上 | AMC8 二次冲刺\n五年级下 4 月 | 三公报名 + 面谈评估'}
             rows={3}
-            className="w-full px-4 py-2.5 rounded-xl bg-surface-elevated border border-border-default text-sm text-text-secondary placeholder-slate-500 focus:outline-none focus:border-primary transition-all resize-none"
+            className="w-full resize-none rounded-xl border border-border-default bg-surface-elevated px-4 py-2.5 text-sm text-text-secondary placeholder-slate-500 transition-all focus:border-primary focus:outline-none"
           />
         </div>
 
         <div>
-          <label className="block text-sm text-text-tertiary mb-1">
+          <label className="mb-1 block text-sm text-text-tertiary">
             目标选项（每行一个，格式：名称 | 标签）
           </label>
           <textarea
             value={targetsText}
             onChange={(e) => setTargetsText(e.target.value)}
-            placeholder={"例如：南翔中学 | 对口公办\n华曜嘉定 | 民办强校"}
+            placeholder={'例如：南翔中学 | 对口公办\n华曜嘉定 | 民办强校'}
             rows={3}
-            className="w-full px-4 py-2.5 rounded-xl bg-surface-elevated border border-border-default text-sm text-text-secondary placeholder-slate-500 focus:outline-none focus:border-primary transition-all resize-none"
+            className="w-full resize-none rounded-xl border border-border-default bg-surface-elevated px-4 py-2.5 text-sm text-text-secondary placeholder-slate-500 transition-all focus:border-primary focus:outline-none"
           />
         </div>
 
         <div>
-          <label className="block text-sm text-text-tertiary mb-1">路线匹配度：{probability}%</label>
+          <label className="mb-1 block text-sm text-text-tertiary">
+            路线匹配度：{probability}%
+          </label>
           <input
             type="range"
             min={0}
             max={100}
             value={probability}
             onChange={(e) => setProbability(Number(e.target.value))}
-            className="w-full h-2 rounded-full bg-surface-highlight appearance-none cursor-pointer accent-primary"
+            className="h-2 w-full cursor-pointer appearance-none rounded-full bg-surface-highlight accent-primary"
           />
         </div>
       </form>

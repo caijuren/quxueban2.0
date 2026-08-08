@@ -67,21 +67,16 @@ export default function DailyVictoryModal({
         average: 2,
         needs_work: 1,
       };
-      const avg =
-        qualities.reduce((sum, q) => sum + scoreMap[q], 0) / qualities.length;
+      const avg = qualities.reduce((sum, q) => sum + scoreMap[q], 0) / qualities.length;
       if (avg >= 3.5) avgQuality = '优秀';
       else if (avg >= 2.5) avgQuality = '良好';
       else if (avg >= 1.5) avgQuality = '一般';
       else avgQuality = '需努力';
     }
 
-    const imageUrls = doneTasks.flatMap(
-      (t) => getTodayRecord(t, targetDate)?.imageUrls || []
-    );
+    const imageUrls = doneTasks.flatMap((t) => getTodayRecord(t, targetDate)?.imageUrls || []);
 
-    const audioUrls = doneTasks.flatMap(
-      (t) => getTodayRecord(t, targetDate)?.audioUrls || []
-    );
+    const audioUrls = doneTasks.flatMap((t) => getTodayRecord(t, targetDate)?.audioUrls || []);
 
     const audioTranscript = doneTasks
       .map((t) => getTodayRecord(t, targetDate)?.audioTranscript)
@@ -113,14 +108,14 @@ export default function DailyVictoryModal({
         <div className="flex gap-3">
           <button
             onClick={onClose}
-            className="flex-1 py-3 rounded-xl border border-border-default text-sm font-medium text-text-secondary hover:bg-surface-light transition-colors"
+            className="hover:bg-surface-light flex-1 rounded-xl border border-border-default py-3 text-sm font-medium text-text-secondary transition-colors"
           >
             关闭
           </button>
           <button
             onClick={onPush}
             disabled={pushing || pushed}
-            className="flex-1 py-3 rounded-xl bg-primary text-text-primary text-sm font-medium hover:bg-primary/90 disabled:opacity-60 disabled:cursor-not-allowed transition-colors inline-flex items-center justify-center gap-2"
+            className="inline-flex flex-1 items-center justify-center gap-2 rounded-xl bg-primary py-3 text-sm font-medium text-inverse transition-colors hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-60"
           >
             {pushing ? (
               '推送中...'
@@ -128,7 +123,7 @@ export default function DailyVictoryModal({
               '已推送'
             ) : (
               <>
-                <Send className="w-4 h-4" />
+                <Send className="size-4" />
                 推送到钉钉
               </>
             )}
@@ -139,53 +134,51 @@ export default function DailyVictoryModal({
       <div className="space-y-6">
         {/* Hero badge */}
         <div className="flex flex-col items-center py-4">
-          <div className="w-20 h-20 rounded-full bg-gradient-to-br from-amber-400/20 to-orange-500/20 border-2 border-amber-400/30 flex items-center justify-center mb-4">
-            <Trophy className="w-10 h-10 text-amber-400" />
+          <div className="mb-4 flex size-20 items-center justify-center rounded-full border-2 border-amber-400/30 bg-gradient-to-br from-amber-400/20 to-orange-500/20">
+            <Trophy className="size-10 text-amber-400" />
           </div>
           <p className="text-lg font-bold text-text-primary">
             {isAllDone ? '太棒了！' : '今日学习简报'}
           </p>
           <p className="text-sm text-text-tertiary">
-            {isAllDone
-              ? '所有任务都已打卡完成'
-              : `已完成 ${stats.doneCount} 项任务，继续加油`}
+            {isAllDone ? '所有任务都已打卡完成' : `已完成 ${stats.doneCount} 项任务，继续加油`}
           </p>
         </div>
 
         {/* Stats grid */}
         <div className="grid grid-cols-3 gap-3">
-          <div className="text-center p-4 rounded-xl bg-surface border border-border-default">
-            <p className="text-2xl font-bold font-display text-primary tabular-nums">
+          <div className="rounded-xl border border-border-default bg-surface p-4 text-center">
+            <p className="font-display text-2xl font-bold tabular-nums text-primary">
               {stats.doneCount}
             </p>
-            <p className="text-xs text-text-tertiary mt-1">完成任务</p>
+            <p className="mt-1 text-xs text-text-tertiary">完成任务</p>
           </div>
-          <div className="text-center p-4 rounded-xl bg-surface border border-border-default">
-            <p className="text-2xl font-bold font-display text-primary tabular-nums">
+          <div className="rounded-xl border border-border-default bg-surface p-4 text-center">
+            <p className="font-display text-2xl font-bold tabular-nums text-primary">
               {stats.totalMinutes}
             </p>
-            <p className="text-xs text-text-tertiary mt-1">总投入分钟</p>
+            <p className="mt-1 text-xs text-text-tertiary">总投入分钟</p>
           </div>
-          <div className="text-center p-4 rounded-xl bg-surface border border-border-default">
-            <p className="text-2xl font-bold font-display text-primary tabular-nums">
+          <div className="rounded-xl border border-border-default bg-surface p-4 text-center">
+            <p className="font-display text-2xl font-bold tabular-nums text-primary">
               {stats.avgQuality}
             </p>
-            <p className="text-xs text-text-tertiary mt-1">平均质量</p>
+            <p className="mt-1 text-xs text-text-tertiary">平均质量</p>
           </div>
         </div>
 
         {/* Photos */}
         {stats.imageUrls.length > 0 && (
           <div className="space-y-2">
-            <p className="text-xs font-medium text-text-secondary flex items-center gap-1.5">
-              <ImageIcon className="w-3.5 h-3.5" />
+            <p className="flex items-center gap-1.5 text-xs font-medium text-text-secondary">
+              <ImageIcon className="size-3.5" />
               今日打卡照片
             </p>
             <div className="flex gap-2 overflow-x-auto pb-1">
               {stats.imageUrls.map((url, idx) => (
                 <div
                   key={`${url}-${idx}`}
-                  className="relative shrink-0 w-16 h-16 rounded-lg bg-surface border border-border-default overflow-hidden"
+                  className="relative size-16 shrink-0 overflow-hidden rounded-lg border border-border-default bg-surface"
                 >
                   <Image
                     src={url}
@@ -204,18 +197,13 @@ export default function DailyVictoryModal({
         {/* Audio recordings */}
         {stats.audioUrls.length > 0 && (
           <div className="space-y-2">
-            <p className="text-xs font-medium text-text-secondary flex items-center gap-1.5">
-              <Mic className="w-3.5 h-3.5" />
+            <p className="flex items-center gap-1.5 text-xs font-medium text-text-secondary">
+              <Mic className="size-3.5" />
               今日语音记录
             </p>
             <div className="flex flex-col gap-2">
               {stats.audioUrls.map((url, idx) => (
-                <audio
-                  key={`${url}-${idx}`}
-                  src={url}
-                  controls
-                  className="w-full h-8"
-                />
+                <audio key={`${url}-${idx}`} src={url} controls className="h-8 w-full" />
               ))}
             </div>
           </div>
@@ -224,21 +212,17 @@ export default function DailyVictoryModal({
         {/* Voice transcript */}
         {stats.audioTranscript && (
           <div className="space-y-2">
-            <p className="text-xs font-medium text-text-secondary flex items-center gap-1.5">
-              <FileText className="w-3.5 h-3.5" />
+            <p className="flex items-center gap-1.5 text-xs font-medium text-text-secondary">
+              <FileText className="size-3.5" />
               语音转文字
             </p>
-            <div className="p-3 rounded-lg bg-surface border border-border-default text-xs text-text-tertiary leading-relaxed whitespace-pre-line">
+            <div className="whitespace-pre-line rounded-lg border border-border-default bg-surface p-3 text-xs leading-relaxed text-text-tertiary">
               {stats.audioTranscript}
             </div>
           </div>
         )}
 
-        {pushed && (
-          <p className="text-xs text-center text-success">
-            今日简报已成功推送到钉钉
-          </p>
-        )}
+        {pushed && <p className="text-center text-xs text-success">今日简报已成功推送到钉钉</p>}
       </div>
     </Modal>
   );

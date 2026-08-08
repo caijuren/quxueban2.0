@@ -2,10 +2,7 @@ import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
-import {
-  weeklyPlanTemplateUpdateSchema,
-  validateBody,
-} from '@/lib/validation';
+import { weeklyPlanTemplateUpdateSchema, validateBody } from '@/lib/validation';
 import { canManageChild, canViewChild } from '@/lib/family';
 import type { WeeklyTaskItem } from '@/lib/storage.types';
 

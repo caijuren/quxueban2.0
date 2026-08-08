@@ -103,10 +103,10 @@ export default function AIPage() {
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
+        className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
       >
         <div>
-          <h1 className="text-3xl font-bold font-display mb-2">
+          <h1 className="mb-2 font-display text-3xl font-bold">
             {currentChild ? `${currentChild.name}的 AI 检视` : 'AI 检视'}
           </h1>
           <p className="text-text-tertiary">
@@ -118,9 +118,9 @@ export default function AIPage() {
         <button
           onClick={generateDiagnosis}
           disabled={!currentChild || loading}
-          className="flex items-center gap-2 px-5 py-2.5 rounded-module bg-gradient-to-r from-secondary to-secondary-glow text-text-primary font-semibold hover:shadow-glow-secondary transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="flex items-center gap-2 rounded-module bg-gradient-to-r from-secondary to-secondary-glow px-5 py-2.5 font-semibold text-inverse transition-all duration-300 hover:shadow-glow-secondary disabled:cursor-not-allowed disabled:opacity-50"
         >
-          {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <RefreshCw className="w-4 h-4" />}
+          {loading ? <Loader2 className="size-4 animate-spin" /> : <RefreshCw className="size-4" />}
           {loading ? '生成中...' : '重新生成'}
         </button>
       </motion.div>
@@ -137,7 +137,7 @@ export default function AIPage() {
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="rounded-2xl bg-surface-elevated p-6 border border-error/30 bg-error/10"
+          className="border-error/30 bg-error/10 rounded-2xl border p-6"
         >
           <p className="text-error">生成失败：{error}</p>
         </motion.div>
@@ -149,25 +149,27 @@ export default function AIPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}
-            className="rounded-2xl bg-surface-elevated p-6 border border-secondary/20"
+            className="border-secondary/20 rounded-2xl border bg-surface-elevated p-6"
             style={{ boxShadow: '0 0 60px rgba(139, 92, 246, 0.1)' }}
           >
             <div className="flex items-start gap-4">
-              <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-secondary to-secondary-glow flex items-center justify-center shrink-0">
-                <Sparkles className="w-6 h-6 text-text-primary" />
+              <div className="flex size-12 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-secondary to-secondary-glow">
+                <Sparkles className="size-6 text-text-primary" />
               </div>
               <div className="flex-1">
-                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-2">
-                  <h2 className="text-xl font-bold font-display">AI 综合评估</h2>
+                <div className="mb-2 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                  <h2 className="font-display text-xl font-bold">AI 综合评估</h2>
                   <div className="flex items-center gap-3">
                     <span className="text-sm text-text-tertiary">路线匹配度</span>
-                    <span className="text-2xl font-bold text-secondary">{diagnosis.overallScore}%</span>
+                    <span className="text-2xl font-bold text-secondary">
+                      {diagnosis.overallScore}%
+                    </span>
                   </div>
                 </div>
-                <p className="text-text-secondary leading-relaxed">{diagnosis.summary}</p>
+                <p className="leading-relaxed text-text-secondary">{diagnosis.summary}</p>
                 <div className="mt-4 flex items-center gap-2 text-sm">
                   <span className="text-text-tertiary">匹配等级：</span>
-                  <span className="px-2.5 py-0.5 rounded-full bg-secondary/20 text-secondary font-medium">
+                  <span className="bg-secondary/20 rounded-full px-2.5 py-0.5 font-medium text-secondary">
                     {diagnosis.routeMatch.level}
                   </span>
                   <span className="text-text-muted">· {diagnosis.routeMatch.reason}</span>
@@ -176,7 +178,7 @@ export default function AIPage() {
             </div>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
             {(Object.keys(sectionConfig) as Array<keyof typeof sectionConfig>).map((key, index) => {
               const section = sectionConfig[key];
               const items = diagnosis[key] as unknown[];
@@ -190,9 +192,9 @@ export default function AIPage() {
                   transition={{ duration: 0.5, delay: 0.2 + index * 0.1 }}
                   className="rounded-2xl bg-surface-elevated p-6"
                 >
-                  <div className="flex items-center gap-3 mb-5">
-                    <Icon className={`w-6 h-6 ${section.color}`} />
-                    <h2 className="text-lg font-bold font-display">{section.title}</h2>
+                  <div className="mb-5 flex items-center gap-3">
+                    <Icon className={`size-6 ${section.color}`} />
+                    <h2 className="font-display text-lg font-bold">{section.title}</h2>
                   </div>
                   <ul className="space-y-3">
                     {items.length === 0 ? (
@@ -201,10 +203,10 @@ export default function AIPage() {
                       items.map((item, itemIndex) => (
                         <li
                           key={itemIndex}
-                          className="flex items-start gap-3 text-sm text-text-secondary leading-relaxed"
+                          className="flex items-start gap-3 text-sm leading-relaxed text-text-secondary"
                         >
                           <span
-                            className={`w-1.5 h-1.5 rounded-full ${section.color.replace('text-', 'bg-')} mt-2 shrink-0`}
+                            className={`size-1.5 rounded-full ${section.color.replace('text-', 'bg-')} mt-2 shrink-0`}
                           />
                           {getItemText(key, item)}
                         </li>
@@ -220,7 +222,7 @@ export default function AIPage() {
 
       {!diagnosis && !loading && currentChild && !error && (
         <div className="rounded-2xl bg-surface-elevated p-12 text-center">
-          <Sparkles className="w-12 h-12 text-secondary mx-auto mb-4" />
+          <Sparkles className="mx-auto mb-4 size-12 text-secondary" />
           <p className="text-text-secondary">点击右上角「重新生成」获取 AI 诊断报告</p>
         </div>
       )}

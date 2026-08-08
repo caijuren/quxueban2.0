@@ -177,13 +177,23 @@ const cells: Record<string, Record<string, CellData>> = {
 };
 
 const outcomes = {
-  sizhong: { label: '冲', prob: 12, name: '四校八大', color: '#f43f5e' },
-  benshi: { label: '稳', prob: 55, name: '本区市重点', color: '#8b5cf6' },
-  benqu: { label: '保', prob: 85, name: '本区区重点/特色', color: '#06b6d4' },
-  benpu: { label: '底', prob: 95, name: '本区普高', color: '#64748b' },
-  zhongben: { label: '本', prob: 75, name: '中本贯通', color: '#10b981' },
-  zhonggaozhi: { label: '专', prob: 88, name: '中高职贯通', color: '#14b8a6' },
-  wunian: { label: '专', prob: 90, name: '五年一贯制', color: '#0ea5e9' },
+  sizhong: { label: '冲', prob: 12, name: '四校八大', color: 'var(--color-primary)' },
+  benshi: { label: '稳', prob: 55, name: '本区市重点', color: 'var(--color-secondary)' },
+  benqu: { label: '保', prob: 85, name: '本区区重点/特色', color: 'var(--accent)' },
+  benpu: { label: '底', prob: 95, name: '本区普高', color: 'var(--text-muted)' },
+  zhongben: { label: '本', prob: 75, name: '中本贯通', color: 'var(--success)' },
+  zhonggaozhi: { label: '专', prob: 88, name: '中高职贯通', color: 'var(--info)' },
+  wunian: { label: '专', prob: 90, name: '五年一贯制', color: 'var(--info)' },
+};
+
+const tierColorMap: Record<string, string> = {
+  rose: 'var(--color-primary)',
+  violet: 'var(--color-secondary)',
+  cyan: 'var(--accent)',
+  emerald: 'var(--success)',
+  teal: 'var(--info)',
+  sky: 'var(--info)',
+  slate: 'var(--text-disabled)',
 };
 
 interface MapSchool {
@@ -275,41 +285,170 @@ const jiadingMap: MapTier[] = [
   },
 ];
 
-const strategyByTier: Record<string, { focus: StrategyItem; high: StrategyItem; safe: StrategyItem }> = {
+const strategyByTier: Record<
+  string,
+  { focus: StrategyItem; high: StrategyItem; safe: StrategyItem }
+> = {
   sizhong: {
-    focus: { icon: Target, title: '当前最该关注', value: '四校八大 · 自招/到区', desc: '准备竞赛奖项或保持全区前排名', accent: '#f43f5e' },
-    high: { icon: TrendingUp, title: '冲高通道', value: '四校八大 · 自招', desc: '需要竞赛奖项或综评优秀', accent: '#f43f5e' },
-    safe: { icon: Shield, title: '保底通道', value: '本区市重点 · 名额到校', desc: '校内排名争取名额，降低风险', accent: '#8b5cf6' },
+    focus: {
+      icon: Target,
+      title: '当前最该关注',
+      value: '四校八大 · 自招/到区',
+      desc: '准备竞赛奖项或保持全区前排名',
+      accent: '#f43f5e',
+    },
+    high: {
+      icon: TrendingUp,
+      title: '冲高通道',
+      value: '四校八大 · 自招',
+      desc: '需要竞赛奖项或综评优秀',
+      accent: '#f43f5e',
+    },
+    safe: {
+      icon: Shield,
+      title: '保底通道',
+      value: '本区市重点 · 名额到校',
+      desc: '校内排名争取名额，降低风险',
+      accent: '#8b5cf6',
+    },
   },
   benshi: {
-    focus: { icon: Target, title: '当前最该关注', value: '本区市重点 · 名额到校', desc: '按就读初中的校内排名争取名额', accent: '#8b5cf6' },
-    high: { icon: TrendingUp, title: '冲高通道', value: '四校八大 · 自招/到区', desc: '需要竞赛奖项或全区前排名', accent: '#f43f5e' },
-    safe: { icon: Shield, title: '保底通道', value: '本区区重点 / 中本贯通', desc: '名额到校、统招、提前批多层兜底', accent: '#06b6d4' },
+    focus: {
+      icon: Target,
+      title: '当前最该关注',
+      value: '本区市重点 · 名额到校',
+      desc: '按就读初中的校内排名争取名额',
+      accent: '#8b5cf6',
+    },
+    high: {
+      icon: TrendingUp,
+      title: '冲高通道',
+      value: '四校八大 · 自招/到区',
+      desc: '需要竞赛奖项或全区前排名',
+      accent: '#f43f5e',
+    },
+    safe: {
+      icon: Shield,
+      title: '保底通道',
+      value: '本区区重点 / 中本贯通',
+      desc: '名额到校、统招、提前批多层兜底',
+      accent: '#06b6d4',
+    },
   },
   benqu: {
-    focus: { icon: Target, title: '当前最该关注', value: '本区区重点 · 名额到校', desc: '校内排名争取名额，到校为主', accent: '#06b6d4' },
-    high: { icon: TrendingUp, title: '冲高通道', value: '本区市重点 · 名额到校/统招', desc: '校内排名靠前或裸分冲刺', accent: '#8b5cf6' },
-    safe: { icon: Shield, title: '保底通道', value: '本区普高 / 中本贯通', desc: '平行志愿、提前批录取兜底', accent: '#64748b' },
+    focus: {
+      icon: Target,
+      title: '当前最该关注',
+      value: '本区区重点 · 名额到校',
+      desc: '校内排名争取名额，到校为主',
+      accent: '#06b6d4',
+    },
+    high: {
+      icon: TrendingUp,
+      title: '冲高通道',
+      value: '本区市重点 · 名额到校/统招',
+      desc: '校内排名靠前或裸分冲刺',
+      accent: '#8b5cf6',
+    },
+    safe: {
+      icon: Shield,
+      title: '保底通道',
+      value: '本区普高 / 中本贯通',
+      desc: '平行志愿、提前批录取兜底',
+      accent: '#64748b',
+    },
   },
   zhongben: {
-    focus: { icon: Target, title: '当前最该关注', value: '中本贯通 · 提前批', desc: '关注招生简章与专业分数线', accent: '#10b981' },
-    high: { icon: TrendingUp, title: '冲高通道', value: '本区市重点 · 统招', desc: '裸分够线可冲市重点', accent: '#8b5cf6' },
-    safe: { icon: Shield, title: '保底通道', value: '中高职贯通 / 五年一贯制', desc: '同批提前批，多层兜底', accent: '#14b8a6' },
+    focus: {
+      icon: Target,
+      title: '当前最该关注',
+      value: '中本贯通 · 提前批',
+      desc: '关注招生简章与专业分数线',
+      accent: '#10b981',
+    },
+    high: {
+      icon: TrendingUp,
+      title: '冲高通道',
+      value: '本区市重点 · 统招',
+      desc: '裸分够线可冲市重点',
+      accent: '#8b5cf6',
+    },
+    safe: {
+      icon: Shield,
+      title: '保底通道',
+      value: '中高职贯通 / 五年一贯制',
+      desc: '同批提前批，多层兜底',
+      accent: '#14b8a6',
+    },
   },
   benpu: {
-    focus: { icon: Target, title: '当前最该关注', value: '本区普高 · 统招', desc: '达到控分线，平行志愿保底', accent: '#64748b' },
-    high: { icon: TrendingUp, title: '冲高通道', value: '本区区重点 · 名额到校', desc: '校内排名争取名额', accent: '#06b6d4' },
-    safe: { icon: Shield, title: '保底通道', value: '中高职贯通 / 五年一贯制', desc: '中职提前批，确保有学上', accent: '#14b8a6' },
+    focus: {
+      icon: Target,
+      title: '当前最该关注',
+      value: '本区普高 · 统招',
+      desc: '达到控分线，平行志愿保底',
+      accent: '#64748b',
+    },
+    high: {
+      icon: TrendingUp,
+      title: '冲高通道',
+      value: '本区区重点 · 名额到校',
+      desc: '校内排名争取名额',
+      accent: '#06b6d4',
+    },
+    safe: {
+      icon: Shield,
+      title: '保底通道',
+      value: '中高职贯通 / 五年一贯制',
+      desc: '中职提前批，确保有学上',
+      accent: '#14b8a6',
+    },
   },
   zhonggaozhi: {
-    focus: { icon: Target, title: '当前最该关注', value: '中高职贯通 · 提前批', desc: '3+2 培养模式，关注专业', accent: '#14b8a6' },
-    high: { icon: TrendingUp, title: '冲高通道', value: '中本贯通 · 提前批', desc: '需要达到更高分数线', accent: '#10b981' },
-    safe: { icon: Shield, title: '保底通道', value: '五年一贯制 / 普通中专', desc: '同批录取，多层兜底', accent: '#0ea5e9' },
+    focus: {
+      icon: Target,
+      title: '当前最该关注',
+      value: '中高职贯通 · 提前批',
+      desc: '3+2 培养模式，关注专业',
+      accent: '#14b8a6',
+    },
+    high: {
+      icon: TrendingUp,
+      title: '冲高通道',
+      value: '中本贯通 · 提前批',
+      desc: '需要达到更高分数线',
+      accent: '#10b981',
+    },
+    safe: {
+      icon: Shield,
+      title: '保底通道',
+      value: '五年一贯制 / 普通中专',
+      desc: '同批录取，多层兜底',
+      accent: '#0ea5e9',
+    },
   },
   wunian: {
-    focus: { icon: Target, title: '当前最该关注', value: '五年一贯制 · 提前批', desc: '5 年一贯培养，高职大专文凭', accent: '#0ea5e9' },
-    high: { icon: TrendingUp, title: '冲高通道', value: '中高职贯通 · 提前批', desc: '专业选择更灵活', accent: '#14b8a6' },
-    safe: { icon: Shield, title: '保底通道', value: '普通中专 / 技校', desc: '确保录取，后续可升学', accent: '#64748b' },
+    focus: {
+      icon: Target,
+      title: '当前最该关注',
+      value: '五年一贯制 · 提前批',
+      desc: '5 年一贯培养，高职大专文凭',
+      accent: '#0ea5e9',
+    },
+    high: {
+      icon: TrendingUp,
+      title: '冲高通道',
+      value: '中高职贯通 · 提前批',
+      desc: '专业选择更灵活',
+      accent: '#14b8a6',
+    },
+    safe: {
+      icon: Shield,
+      title: '保底通道',
+      value: '普通中专 / 技校',
+      desc: '确保录取，后续可升学',
+      accent: '#64748b',
+    },
   },
 };
 
@@ -338,48 +477,48 @@ export default function MiddleSchoolMatrix() {
       <motion.div
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
-        className="rounded-2xl bg-surface-elevated p-5 border border-border-subtle relative overflow-hidden"
+        className="relative overflow-hidden rounded-2xl border border-border-subtle bg-surface-elevated p-5"
       >
-        <div className="absolute top-0 right-0 w-80 h-80 bg-gradient-to-br from-violet-500/10 to-cyan-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none" />
-        <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+        <div className="pointer-events-none absolute right-0 top-0 size-80 -translate-y-1/2 translate-x-1/2 rounded-full bg-gradient-to-br from-violet-500/10 to-cyan-500/10 blur-3xl" />
+        <div className="relative z-10 flex flex-col justify-between gap-4 lg:flex-row lg:items-center">
           <div>
-            <h2 className="text-xl font-bold font-display mb-1">中考升学路径矩阵</h2>
+            <h2 className="mb-1 font-display text-xl font-bold">中考升学路径矩阵</h2>
             <p className="text-xs text-text-muted">
               纵向 = 目标学校层级（本区为主），横向 = 录取通道
             </p>
           </div>
           <div className="flex flex-wrap items-center gap-3">
             <div className="flex flex-wrap items-center gap-2 text-[11px] text-text-muted">
-              <span className="flex items-center gap-1.5 px-2 py-1 rounded-full bg-surface-hover border border-border-subtle">
-                <span className="w-2 h-2 rounded-full bg-violet-500 shadow-[0_0_6px_rgba(139,92,246,0.8)]" />
+              <span className="flex items-center gap-1.5 rounded-full border border-border-subtle bg-surface-hover px-2 py-1">
+                <span className="size-2 rounded-full bg-violet-500 shadow-[0_0_6px_rgba(139,92,246,0.8)]" />
                 主通道
               </span>
-              <span className="flex items-center gap-1.5 px-2 py-1 rounded-full bg-surface-hover border border-border-subtle">
-                <span className="w-2 h-2 rounded-full bg-cyan-500 shadow-[0_0_6px_rgba(6,182,212,0.8)]" />
+              <span className="flex items-center gap-1.5 rounded-full border border-border-subtle bg-surface-hover px-2 py-1">
+                <span className="size-2 rounded-full bg-cyan-500 shadow-[0_0_6px_rgba(6,182,212,0.8)]" />
                 可选
               </span>
-              <span className="flex items-center gap-1.5 px-2 py-1 rounded-full bg-surface-hover border border-border-subtle">
-                <span className="w-2 h-2 rounded-full bg-warning shadow-[0_0_6px_rgba(245,158,11,0.8)]" />
+              <span className="flex items-center gap-1.5 rounded-full border border-border-subtle bg-surface-hover px-2 py-1">
+                <span className="size-2 rounded-full bg-warning shadow-[0_0_6px_rgba(245,158,11,0.8)]" />
                 部分有
               </span>
-              <span className="flex items-center gap-1.5 px-2 py-1 rounded-full bg-surface-hover border border-border-subtle">
-                <span className="w-2 h-2 rounded-full bg-slate-600" />
+              <span className="flex items-center gap-1.5 rounded-full border border-border-subtle bg-surface-hover px-2 py-1">
+                <span className="size-2 rounded-full bg-slate-600" />
                 不适用
               </span>
             </div>
             <div className="flex items-center gap-2">
               <button
                 onClick={() => console.log('导出图片')}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-hover border border-border-subtle text-[11px] text-text-secondary hover:bg-surface-highlight hover:border-border-default transition-all"
+                className="flex items-center gap-1.5 rounded-lg border border-border-subtle bg-surface-hover px-3 py-1.5 text-[11px] text-text-secondary transition-all hover:border-border-default hover:bg-surface-highlight"
               >
-                <Camera className="w-3.5 h-3.5" />
+                <Camera className="size-3.5" />
                 导出
               </button>
               <button
                 onClick={() => console.log('分享')}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-hover border border-border-subtle text-[11px] text-text-secondary hover:bg-surface-highlight hover:border-border-default transition-all"
+                className="flex items-center gap-1.5 rounded-lg border border-border-subtle bg-surface-hover px-3 py-1.5 text-[11px] text-text-secondary transition-all hover:border-border-default hover:bg-surface-highlight"
               >
-                <Share2 className="w-3.5 h-3.5" />
+                <Share2 className="size-3.5" />
                 分享
               </button>
             </div>
@@ -392,14 +531,14 @@ export default function MiddleSchoolMatrix() {
         initial={{ opacity: 0, scale: 0.98 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.5, delay: 0.1 }}
-        className="rounded-2xl bg-surface-elevated p-4 border border-border-subtle overflow-x-auto"
+        className="overflow-x-auto rounded-2xl border border-border-subtle bg-surface-elevated p-4"
       >
         <div className="min-w-[800px]">
           {/* Column headers */}
-          <div className="grid grid-cols-[220px_repeat(4,1fr)] gap-2.5 mb-2.5">
-            <div className="flex flex-col items-center justify-center gap-1.5 py-2.5 px-2 rounded-lg border bg-surface-hover border-border-subtle">
-              <Layers className="w-4 h-4 text-text-muted" />
-              <span className="text-[10px] font-semibold text-text-muted uppercase tracking-wider">
+          <div className="mb-2.5 grid grid-cols-[220px_repeat(4,1fr)] gap-2.5">
+            <div className="flex flex-col items-center justify-center gap-1.5 rounded-lg border border-border-subtle bg-surface-hover px-2 py-2.5">
+              <Layers className="size-4 text-text-muted" />
+              <span className="text-[10px] font-semibold uppercase tracking-wider text-text-muted">
                 学校层级
               </span>
             </div>
@@ -411,12 +550,18 @@ export default function MiddleSchoolMatrix() {
                   key={channel}
                   onMouseEnter={() => setHoveredChannel(channel)}
                   onMouseLeave={() => setHoveredChannel(null)}
-                  className={`flex flex-col items-center justify-center gap-1.5 py-2.5 px-2 rounded-lg border transition-all duration-300 ${
-                    isHovered ? 'bg-surface-highlight border-border-default' : 'bg-surface-hover border-border-subtle'
+                  className={`flex flex-col items-center justify-center gap-1.5 rounded-lg border px-2 py-2.5 transition-all duration-300 ${
+                    isHovered
+                      ? 'border-border-default bg-surface-highlight'
+                      : 'border-border-subtle bg-surface-hover'
                   }`}
                 >
-                  <Icon className={`w-4 h-4 ${isHovered ? 'text-text-primary' : 'text-text-muted'}`} />
-                  <span className={`text-xs font-semibold ${isHovered ? 'text-text-primary' : 'text-text-secondary'}`}>
+                  <Icon
+                    className={`size-4 ${isHovered ? 'text-text-primary' : 'text-text-muted'}`}
+                  />
+                  <span
+                    className={`text-xs font-semibold ${isHovered ? 'text-text-primary' : 'text-text-secondary'}`}
+                  >
                     {channel}
                   </span>
                 </motion.div>
@@ -436,7 +581,7 @@ export default function MiddleSchoolMatrix() {
                 variants={rowVariants}
                 initial="hidden"
                 animate="visible"
-                className={`grid grid-cols-[220px_repeat(4,1fr)] gap-2.5 mb-2.5 rounded-lg ${
+                className={`mb-2.5 grid grid-cols-[220px_repeat(4,1fr)] gap-2.5 rounded-lg ${
                   isCurrentTier ? 'shadow-[0_0_30px_rgba(244,63,94,0.12)]' : ''
                 }`}
                 onMouseEnter={() => setHoveredTier(tier.id)}
@@ -444,57 +589,32 @@ export default function MiddleSchoolMatrix() {
               >
                 {/* Row header */}
                 <div
-                  className={`group relative flex flex-col justify-center gap-2 p-2.5 rounded-lg border transition-all duration-300 ${
+                  className={`group relative flex flex-col justify-center gap-2 rounded-lg border p-2.5 transition-all duration-300 ${
                     isTierHovered
-                      ? 'bg-surface-highlight border-border-default'
+                      ? 'border-border-default bg-surface-highlight'
                       : isCurrentTier
-                      ? 'bg-primary/5 border-primary/30'
-                      : 'bg-surface-hover border-border-subtle'
+                        ? 'bg-primary/5 border-primary/30'
+                        : 'border-border-subtle bg-surface-hover'
                   }`}
                 >
                   <div className="flex items-center justify-between gap-2">
-                    <div className="flex items-center gap-2 min-w-0">
+                    <div className="flex min-w-0 items-center gap-2">
                       <div
-                        className="w-2 h-2 rounded-full shrink-0"
+                        className="size-2 shrink-0 rounded-full"
                         style={{
-                          backgroundColor:
-                            tier.color === 'rose'
-                              ? '#f43f5e'
-                              : tier.color === 'violet'
-                              ? '#8b5cf6'
-                              : tier.color === 'cyan'
-                              ? '#06b6d4'
-                              : tier.color === 'emerald'
-                              ? '#10b981'
-                              : tier.color === 'teal'
-                              ? '#14b8a6'
-                              : tier.color === 'sky'
-                              ? '#0ea5e9'
-                              : '#475569',
-                          boxShadow: `0 0 8px ${
-                            tier.color === 'rose'
-                              ? '#f43f5e'
-                              : tier.color === 'violet'
-                              ? '#8b5cf6'
-                              : tier.color === 'cyan'
-                              ? '#06b6d4'
-                              : tier.color === 'emerald'
-                              ? '#10b981'
-                              : tier.color === 'teal'
-                              ? '#14b8a6'
-                              : tier.color === 'sky'
-                              ? '#0ea5e9'
-                              : '#475569'
-                          }`,
+                          backgroundColor: tierColorMap[tier.color] ?? tierColorMap.slate,
+                          boxShadow: `0 0 8px ${tierColorMap[tier.color] ?? tierColorMap.slate}`,
                         }}
                       />
-                      <span className="text-sm font-bold text-text-secondary whitespace-nowrap">{tier.name}</span>
+                      <span className="whitespace-nowrap text-sm font-bold text-text-secondary">
+                        {tier.name}
+                      </span>
                     </div>
                     {outcome && (
-                      <div className="flex items-center gap-1.5 shrink-0 pl-2 ml-1 border-l border-border-subtle">
+                      <div className="ml-1 flex shrink-0 items-center gap-1.5 border-l border-border-subtle pl-2">
                         <span
-                          className="px-1.5 py-0.5 rounded text-[10px] font-bold"
-                          style={{ backgroundColor: outcome.color, color: '#0f172a' }}
+                          className="rounded px-1.5 py-0.5 text-[10px] font-bold"
+                          style={{ backgroundColor: outcome.color, color: 'var(--text-inverse)' }}
                         >
                           {outcome.label}
                         </span>
@@ -507,11 +627,15 @@ export default function MiddleSchoolMatrix() {
 
                   {/* Probability micro bar */}
                   {outcome && (
-                    <div className="w-full h-1 rounded-full bg-surface-hover overflow-hidden">
+                    <div className="h-1 w-full overflow-hidden rounded-full bg-surface-hover">
                       <motion.div
                         initial={{ width: 0 }}
                         animate={{ width: `${outcome.prob}%` }}
-                        transition={{ duration: 0.8, delay: 0.3 + tierIndex * 0.06, ease: 'easeOut' }}
+                        transition={{
+                          duration: 0.8,
+                          delay: 0.3 + tierIndex * 0.06,
+                          ease: 'easeOut',
+                        }}
                         className="h-full rounded-full"
                         style={{ backgroundColor: outcome.color }}
                       />
@@ -520,15 +644,15 @@ export default function MiddleSchoolMatrix() {
 
                   {/* Current tier badge */}
                   {isCurrentTier && (
-                    <div className="absolute -top-2 -right-2 px-2 py-0.5 rounded-full bg-primary text-text-primary text-[10px] font-bold shadow-[0_0_15px_rgba(244,63,94,0.5)]">
+                    <div className="absolute -right-2 -top-2 rounded-full bg-primary px-2 py-0.5 text-[10px] font-bold text-text-primary shadow-[0_0_15px_rgba(244,63,94,0.5)]">
                       当前目标
                     </div>
                   )}
 
                   {/* Row header hover tooltip */}
-                  <div className="pointer-events-none absolute left-0 right-0 top-full z-30 mt-2 hidden group-hover:block">
-                    <div className="rounded-lg bg-surface-elevated border border-border-subtle p-2.5 shadow-xl">
-                      <p className="text-[11px] text-text-secondary leading-relaxed">{tier.note}</p>
+                  <div className="pointer-events-none absolute inset-x-0 top-full z-30 mt-2 hidden group-hover:block">
+                    <div className="rounded-lg border border-border-subtle bg-surface-elevated p-2.5 shadow-xl">
+                      <p className="text-[11px] leading-relaxed text-text-secondary">{tier.note}</p>
                     </div>
                   </div>
                 </div>
@@ -548,31 +672,31 @@ export default function MiddleSchoolMatrix() {
                       onMouseEnter={() => setHoveredChannel(channel)}
                       onMouseLeave={() => setHoveredChannel(null)}
                       whileHover={{ scale: 1.03, y: -2 }}
-                      className={`group relative p-2.5 rounded-lg border transition-all duration-300 ${config.bg} ${config.border} ${config.glow} ${
+                      className={`group relative rounded-lg border p-2.5 transition-all duration-300 ${config.bg} ${config.border} ${config.glow} ${
                         dimmed ? 'opacity-35' : 'opacity-100'
                       } ${
-                        isHighlighted
-                          ? 'border-border-default'
-                          : ''
-                      } ${isCurrentTier ? 'ring-1 ring-primary/20' : ''}`}
+                        isHighlighted ? 'border-border-default' : ''
+                      } ${isCurrentTier ? 'ring-primary/20 ring-1' : ''}`}
                     >
-                      <div className="flex items-center gap-2 h-full">
+                      <div className="flex h-full items-center gap-2">
                         <span
-                          className={`shrink-0 min-w-[52px] text-center px-1.5 py-0.5 rounded-full text-[10px] font-bold ${config.color} ${config.pillBg}`}
+                          className={`min-w-[52px] shrink-0 rounded-full px-1.5 py-0.5 text-center text-[10px] font-bold ${config.color} ${config.pillBg}`}
                         >
                           {config.label}
                         </span>
                         {cell.role !== 'none' && (
-                          <span className="text-xs font-medium truncate text-text-secondary">
+                          <span className="truncate text-xs font-medium text-text-secondary">
                             {cell.short}
                           </span>
                         )}
                       </div>
 
                       {/* Hover tooltip */}
-                      <div className="pointer-events-none absolute left-0 right-0 top-full z-30 mt-2 hidden group-hover:block">
-                        <div className="rounded-lg bg-surface-elevated border border-border-subtle p-2.5 shadow-xl">
-                          <p className="text-[11px] text-text-secondary leading-relaxed">{cell.note}</p>
+                      <div className="pointer-events-none absolute inset-x-0 top-full z-30 mt-2 hidden group-hover:block">
+                        <div className="rounded-lg border border-border-subtle bg-surface-elevated p-2.5 shadow-xl">
+                          <p className="text-[11px] leading-relaxed text-text-secondary">
+                            {cell.note}
+                          </p>
                         </div>
                       </div>
                     </motion.div>
@@ -590,16 +714,17 @@ export default function MiddleSchoolMatrix() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, delay: 0.35 }}
-          className="rounded-xl border border-warning/20 bg-warning/5 p-4"
+          className="border-warning/20 bg-warning/5 rounded-xl border p-4"
         >
           <div className="flex items-start gap-3">
-            <div className="p-1.5 rounded-lg bg-warning/10 shrink-0">
-              <Shield className="w-4 h-4 text-warning" />
+            <div className="bg-warning/10 shrink-0 rounded-lg p-1.5">
+              <Shield className="size-4 text-warning" />
             </div>
             <div>
-              <h4 className="text-sm font-bold text-warning mb-1">名额到校资格门槛</h4>
-              <p className="text-xs text-text-muted leading-relaxed">
-                嘉定区名额到校主要面向不择生源的初中。学生需在<strong>同一所初中连续就读满 3 年</strong>
+              <h4 className="mb-1 text-sm font-bold text-warning">名额到校资格门槛</h4>
+              <p className="text-xs leading-relaxed text-text-muted">
+                嘉定区名额到校主要面向不择生源的初中。学生需在
+                <strong>同一所初中连续就读满 3 年</strong>
                 （含学籍与就读），民办初中是否具备名额到校资格以当年政策为准。提前转学、人户分离等情况可能影响资格。
               </p>
             </div>
@@ -612,32 +737,35 @@ export default function MiddleSchoolMatrix() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.45 }}
-        className="rounded-2xl bg-surface-elevated p-4 border border-border-subtle"
+        className="rounded-2xl border border-border-subtle bg-surface-elevated p-4"
       >
-        <div className="flex items-center gap-3 mb-3">
-          <div className="p-2 rounded-lg bg-rose-500/10">
-            <MapPinned className="w-4 h-4 text-rose-400" />
+        <div className="mb-3 flex items-center gap-3">
+          <div className="rounded-lg bg-rose-500/10 p-2">
+            <MapPinned className="size-4 text-rose-400" />
           </div>
           <div>
-            <h3 className="text-base font-bold font-display">嘉定区高中地图</h3>
+            <h3 className="font-display text-base font-bold">嘉定区高中地图</h3>
             <p className="text-[11px] text-text-muted">本区高中层级 + 外区可冲学校</p>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-3 items-stretch">
+        <div className="grid grid-cols-1 items-stretch gap-3 md:grid-cols-2 xl:grid-cols-5">
           {jiadingMap.map((tier) => (
-            <div key={tier.id} className={`rounded-xl ${tier.bg} border border-border-subtle p-3 flex flex-col`}>
-              <div className="flex items-center justify-between mb-1">
-                <h4 className={`text-sm font-bold font-display ${tier.color}`}>{tier.name}</h4>
+            <div
+              key={tier.id}
+              className={`rounded-xl ${tier.bg} flex flex-col border border-border-subtle p-3`}
+            >
+              <div className="mb-1 flex items-center justify-between">
+                <h4 className={`font-display text-sm font-bold ${tier.color}`}>{tier.name}</h4>
               </div>
-              <p className="text-[10px] text-text-muted mb-2">{tier.channel}</p>
-              <div className="flex flex-wrap content-start gap-1.5 flex-1">
+              <p className="mb-2 text-[10px] text-text-muted">{tier.channel}</p>
+              <div className="flex flex-1 flex-wrap content-start gap-1.5">
                 {tier.schools.map((school) => {
                   const chip = (
-                    <div className="flex items-center gap-1 min-w-0">
-                      <span className="text-xs text-text-secondary truncate">{school.name}</span>
+                    <div className="flex min-w-0 items-center gap-1">
+                      <span className="truncate text-xs text-text-secondary">{school.name}</span>
                       {school.slug && (
-                        <ExternalLink className="w-2.5 h-2.5 text-text-muted group-hover:text-text-primary transition-colors shrink-0" />
+                        <ExternalLink className="size-2.5 shrink-0 text-text-muted transition-colors group-hover:text-text-primary" />
                       )}
                     </div>
                   );
@@ -645,14 +773,14 @@ export default function MiddleSchoolMatrix() {
                     <Link
                       key={school.name}
                       href={`/dashboard/schools/${school.slug}`}
-                      className="group flex items-center gap-1 px-2 py-1 rounded-md bg-surface-elevated hover:bg-surface-highlight border border-border-subtle transition-colors"
+                      className="group flex items-center gap-1 rounded-md border border-border-subtle bg-surface-elevated px-2 py-1 transition-colors hover:bg-surface-highlight"
                     >
                       {chip}
                     </Link>
                   ) : (
                     <div
                       key={school.name}
-                      className="flex items-center gap-1 px-2 py-1 rounded-md bg-surface-hover border border-border-subtle"
+                      className="flex items-center gap-1 rounded-md border border-border-subtle bg-surface-hover px-2 py-1"
                     >
                       {chip}
                     </div>
@@ -669,26 +797,26 @@ export default function MiddleSchoolMatrix() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.55 }}
-        className="grid grid-cols-1 md:grid-cols-3 gap-3"
+        className="grid grid-cols-1 gap-3 md:grid-cols-3"
       >
         {(() => {
           const strategy = strategyByTier[currentTier] || strategyByTier.benshi;
           return [strategy.focus, strategy.high, strategy.safe].map((item) => (
-          <div
-            key={item.title}
-            className="rounded-xl bg-surface-elevated p-3 border border-border-subtle hover:border-border-subtle transition-colors"
-          >
-            <div className="flex items-center gap-2.5 mb-1.5">
-              <div className="p-1.5 rounded-lg" style={{ backgroundColor: `${item.accent}15` }}>
-                <item.icon className="w-3.5 h-3.5" style={{ color: item.accent }} />
+            <div
+              key={item.title}
+              className="rounded-xl border border-border-subtle bg-surface-elevated p-3 transition-colors hover:border-border-subtle"
+            >
+              <div className="mb-1.5 flex items-center gap-2.5">
+                <div className="rounded-lg p-1.5" style={{ backgroundColor: `${item.accent}15` }}>
+                  <item.icon className="size-3.5" style={{ color: item.accent }} />
+                </div>
+                <span className="text-[11px] text-text-muted">{item.title}</span>
               </div>
-              <span className="text-[11px] text-text-muted">{item.title}</span>
+              <p className="mb-0.5 font-display text-sm font-bold">{item.value}</p>
+              <p className="text-[10px] text-text-muted">{item.desc}</p>
             </div>
-            <p className="text-sm font-bold font-display mb-0.5">{item.value}</p>
-            <p className="text-[10px] text-text-muted">{item.desc}</p>
-          </div>
-        ));
-      })()}
+          ));
+        })()}
       </motion.div>
     </div>
   );

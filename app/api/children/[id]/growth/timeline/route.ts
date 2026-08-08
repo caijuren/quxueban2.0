@@ -37,7 +37,16 @@ export async function GET(_req: Request, { params }: Params) {
     }),
     prisma.badge.findMany({
       where: { childId: params.id },
-      select: { id: true, key: true, name: true, description: true, icon: true, color: true, level: true, unlockedAt: true },
+      select: {
+        id: true,
+        key: true,
+        name: true,
+        description: true,
+        icon: true,
+        color: true,
+        level: true,
+        unlockedAt: true,
+      },
     }),
     prisma.pointLog.findMany({
       where: { childId: params.id },

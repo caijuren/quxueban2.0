@@ -61,8 +61,7 @@ export const schoolsData: Record<string, SchoolData> = {
     name: '上海市实验学校',
     shortName: '上实',
     title: '理科王者',
-    oneLiner:
-      '沪上“神仙学校”之一，十年一贯制、理科见长，以创新素养与综合潜能选拔拔尖生源。',
+    oneLiner: '沪上“神仙学校”之一，十年一贯制、理科见长，以创新素养与综合潜能选拔拔尖生源。',
     tags: ['十年一贯制', '理科强校', '面谈录取', '全市招生'],
     location: '浦东新区',
     nature: '公办',
@@ -93,13 +92,7 @@ export const schoolsData: Record<string, SchoolData> = {
         desc: '公布录取名单，确认入学意向并办理相关手续。',
       },
     ],
-    preferences: [
-      '数理逻辑思维',
-      '创新探究能力',
-      '英语基础扎实',
-      '综合素质突出',
-      '表达沟通清晰',
-    ],
+    preferences: ['数理逻辑思维', '创新探究能力', '英语基础扎实', '综合素质突出', '表达沟通清晰'],
     checklist: [
       {
         grade: '一升二 / 二年级',
@@ -134,12 +127,7 @@ export const schoolsData: Record<string, SchoolData> = {
       {
         grade: '五年级',
         sub: '报名冲刺与面谈训练',
-        tasks: [
-          '三公报名材料准备',
-          '高频面谈题型训练',
-          '模拟机考与时间管理',
-          '调整心态，稳定发挥',
-        ],
+        tasks: ['三公报名材料准备', '高频面谈题型训练', '模拟机考与时间管理', '调整心态，稳定发挥'],
       },
     ],
     certificates: [
@@ -373,9 +361,21 @@ export const schoolsData: Record<string, SchoolData> = {
     glow: 'rgba(139,92,246,0.35)',
     gradient: 'from-secondary to-purple-400',
     timeline: [
-      { step: '关注招生简章', time: '五年级下 3-4月', desc: '留意学校官网和区教育局发布的招生简章，确认走读/住宿计划数。' },
-      { step: '网上报名', time: '五年级下 4月', desc: '登录上海市义务教育入学报名系统填报志愿，可选择走读或住宿。' },
-      { step: '电脑摇号', time: '五年级下 5月', desc: '报名人数超过计划数则进行电脑随机录取，关注摇号结果。' },
+      {
+        step: '关注招生简章',
+        time: '五年级下 3-4月',
+        desc: '留意学校官网和区教育局发布的招生简章，确认走读/住宿计划数。',
+      },
+      {
+        step: '网上报名',
+        time: '五年级下 4月',
+        desc: '登录上海市义务教育入学报名系统填报志愿，可选择走读或住宿。',
+      },
+      {
+        step: '电脑摇号',
+        time: '五年级下 5月',
+        desc: '报名人数超过计划数则进行电脑随机录取，关注摇号结果。',
+      },
       { step: '录取确认', time: '5月底', desc: '中签后按学校要求完成缴费注册，准备分班考与入学。' },
     ],
     preferences: ['数理思维强', '校内成绩优秀', '竞赛经历丰富', '学习习惯良好', '抗压能力强'],
@@ -383,12 +383,22 @@ export const schoolsData: Record<string, SchoolData> = {
       {
         grade: '五年级上',
         sub: '信息调研与定位',
-        tasks: ['关注华曜嘉定招生简章', '评估走读/住宿与通勤', '准备户籍/居住证材料', '参加学校开放日'],
+        tasks: [
+          '关注华曜嘉定招生简章',
+          '评估走读/住宿与通勤',
+          '准备户籍/居住证材料',
+          '参加学校开放日',
+        ],
       },
       {
         grade: '五年级下',
         sub: '报名与摇号',
-        tasks: ['完成民办初中网上报名', '合理填报一至两个志愿', '查询摇号结果并确认录取', '准备分班考'],
+        tasks: [
+          '完成民办初中网上报名',
+          '合理填报一至两个志愿',
+          '查询摇号结果并确认录取',
+          '准备分班考',
+        ],
       },
       {
         grade: '六年级暑假',
@@ -401,7 +411,13 @@ export const schoolsData: Record<string, SchoolData> = {
         tasks: ['保持校内排名前列', '积极参加理科竞赛', '争取四校八大自招机会', '综合素质全面发展'],
       },
     ],
-    certificates: ['AMC8 奖项', '数学大王 / 思维100 奖项', '小托福 / PET 证书', '校内三好学生', '科技/艺术特长证书'],
+    certificates: [
+      'AMC8 奖项',
+      '数学大王 / 思维100 奖项',
+      '小托福 / PET 证书',
+      '校内三好学生',
+      '科技/艺术特长证书',
+    ],
     interviewFormat: ['摇号录取，无面谈', '部分年份或有分班摸底测试', '入学后注重理科分层教学'],
   },
   huaishao: {
@@ -420,12 +436,26 @@ export const schoolsData: Record<string, SchoolData> = {
     glow: 'rgba(99,102,241,0.35)',
     gradient: 'from-indigo-500 to-purple-500',
     timeline: [
-      { step: '直升确认', time: '五年级', desc: '九年一贯制学校通常可校内直升，确认直升资格与流程。' },
-      { step: '报名登记', time: '五年级下 4月', desc: '如选择直升，按学校要求完成校内直升确认或网上报名。' },
+      {
+        step: '直升确认',
+        time: '五年级',
+        desc: '九年一贯制学校通常可校内直升，确认直升资格与流程。',
+      },
+      {
+        step: '报名登记',
+        time: '五年级下 4月',
+        desc: '如选择直升，按学校要求完成校内直升确认或网上报名。',
+      },
       { step: '录取注册', time: '五年级下 5-6月', desc: '直升学生一般直接录取，办理相关手续。' },
       { step: '入学准备', time: '六年级', desc: '参加学校入学教育，适应初中学习节奏。' },
     ],
-    preferences: ['居住南翔附近', '倾向稳定升学', '英语/创新素养较好', '喜欢小班化教学', 'WLSA 国际资源需求'],
+    preferences: [
+      '居住南翔附近',
+      '倾向稳定升学',
+      '英语/创新素养较好',
+      '喜欢小班化教学',
+      'WLSA 国际资源需求',
+    ],
     checklist: [
       {
         grade: '小学段',
@@ -448,7 +478,13 @@ export const schoolsData: Record<string, SchoolData> = {
         tasks: ['保持年级前列', '参加英语/科创类活动', '中考目标市重点', '综合素质持续发展'],
       },
     ],
-    certificates: ['小托福 / PET 证书', '英语演讲/辩论奖项', '科技创新类奖项', '校内综合荣誉', '艺术/体育特长证书'],
+    certificates: [
+      '小托福 / PET 证书',
+      '英语演讲/辩论奖项',
+      '科技创新类奖项',
+      '校内综合荣誉',
+      '艺术/体育特长证书',
+    ],
     interviewFormat: ['直升为主，无面谈', '或有校内评估测试', '注重英语与创新素养'],
   },
   taoliyuan: {
@@ -456,8 +492,7 @@ export const schoolsData: Record<string, SchoolData> = {
     name: '上海市民办桃李园实验学校',
     shortName: '桃李园',
     title: '嘉定第二强校',
-    oneLiner:
-      '嘉定区老牌民办初中，市重点率稳定，本区招生为主，是嘉定家庭摇号的重要目标校之一。',
+    oneLiner: '嘉定区老牌民办初中，市重点率稳定，本区招生为主，是嘉定家庭摇号的重要目标校之一。',
     tags: ['民办', '本区招生', '市重点率高', '老牌强校'],
     location: '嘉定区',
     nature: '民办',
@@ -467,12 +502,22 @@ export const schoolsData: Record<string, SchoolData> = {
     glow: 'rgba(168,85,247,0.35)',
     gradient: 'from-violet-500 to-fuchsia-500',
     timeline: [
-      { step: '关注简章', time: '五年级下 3-4月', desc: '关注桃李园招生简章，确认本区招生计划与走读安排。' },
+      {
+        step: '关注简章',
+        time: '五年级下 3-4月',
+        desc: '关注桃李园招生简章，确认本区招生计划与走读安排。',
+      },
       { step: '网上报名', time: '五年级下 4月', desc: '仅限嘉定区户籍/居住证学生填报，选择志愿。' },
       { step: '电脑摇号', time: '五年级下 5月', desc: '超额则电脑随机录取，查询摇号结果。' },
       { step: '录取入学', time: '5月底-6月', desc: '中签后完成缴费注册，准备分班考与入学。' },
     ],
-    preferences: ['嘉定区户籍/居住证', '校内成绩优良', '综合素质全面', '学习习惯稳定', '目标市重点高中'],
+    preferences: [
+      '嘉定区户籍/居住证',
+      '校内成绩优良',
+      '综合素质全面',
+      '学习习惯稳定',
+      '目标市重点高中',
+    ],
     checklist: [
       {
         grade: '五年级上',
@@ -495,7 +540,13 @@ export const schoolsData: Record<string, SchoolData> = {
         tasks: ['保持年级排名', '积极参加学科竞赛', '目标市重点高中', '全面发展综合素质'],
       },
     ],
-    certificates: ['校内三好学生', '学科竞赛奖项', '英语等级证书', '语文/数学竞赛奖项', '综合素质荣誉'],
+    certificates: [
+      '校内三好学生',
+      '学科竞赛奖项',
+      '英语等级证书',
+      '语文/数学竞赛奖项',
+      '综合素质荣誉',
+    ],
     interviewFormat: ['摇号录取，无面谈', '或有分班摸底测试', '注重学科基础与学习习惯'],
   },
   duikou: {
@@ -514,9 +565,17 @@ export const schoolsData: Record<string, SchoolData> = {
     glow: 'rgba(6,182,212,0.35)',
     gradient: 'from-accent to-cyan-400',
     timeline: [
-      { step: '确认对口', time: '五年级', desc: '根据户籍/房产确认对口公办初中，了解学校办学特色。' },
+      {
+        step: '确认对口',
+        time: '五年级',
+        desc: '根据户籍/房产确认对口公办初中，了解学校办学特色。',
+      },
       { step: '信息登记', time: '五年级下 4月', desc: '完成义务教育入学信息登记，核对对口学校。' },
-      { step: '验证材料', time: '五年级下 5月', desc: '按学校或教育部门要求提交户籍、房产等验证材料。' },
+      {
+        step: '验证材料',
+        time: '五年级下 5月',
+        desc: '按学校或教育部门要求提交户籍、房产等验证材料。',
+      },
       { step: '录取入学', time: '6-8月', desc: '领取录取通知书，准备小升初衔接。' },
     ],
     preferences: ['户籍/房产在对口范围', '追求稳定入学', '重视通勤便利', '公办教育为主'],
@@ -561,9 +620,21 @@ export const schoolsData: Record<string, SchoolData> = {
     glow: 'rgba(6,182,212,0.35)',
     gradient: 'from-accent to-cyan-400',
     timeline: [
-      { step: '确认对口', time: '五年级', desc: '确认户籍/房产在南翔中学对口范围（南翔小学为主），了解学校办学特色。' },
-      { step: '信息登记', time: '五年级下 4月', desc: '完成义务教育入学信息登记，核对南翔中学为对口学校。' },
-      { step: '验证材料', time: '五年级下 5月', desc: '按学校或教育部门要求提交户籍、房产等验证材料。' },
+      {
+        step: '确认对口',
+        time: '五年级',
+        desc: '确认户籍/房产在南翔中学对口范围（南翔小学为主），了解学校办学特色。',
+      },
+      {
+        step: '信息登记',
+        time: '五年级下 4月',
+        desc: '完成义务教育入学信息登记，核对南翔中学为对口学校。',
+      },
+      {
+        step: '验证材料',
+        time: '五年级下 5月',
+        desc: '按学校或教育部门要求提交户籍、房产等验证材料。',
+      },
       { step: '录取入学', time: '6-8月', desc: '领取南翔中学录取通知书，准备小升初衔接。' },
     ],
     preferences: ['南翔小学对口', '人户一致优先', '追求稳定入学', '重视通勤便利', '公办教育为主'],
@@ -571,7 +642,12 @@ export const schoolsData: Record<string, SchoolData> = {
       {
         grade: '五年级',
         sub: '确认对口',
-        tasks: ['查询当年南翔中学对口范围', '确认户籍/房产符合条件', '了解南翔中学特色班', '准备入学材料'],
+        tasks: [
+          '查询当年南翔中学对口范围',
+          '确认户籍/房产符合条件',
+          '了解南翔中学特色班',
+          '准备入学材料',
+        ],
       },
       {
         grade: '五年级下',
@@ -657,7 +733,11 @@ export const schoolsData: Record<string, SchoolData> = {
     timeline: [
       { step: '了解学校', time: '五年级', desc: '关注本区优质公办初中及其特色班信息。' },
       { step: '入学登记', time: '五年级下 4月', desc: '完成义务教育入学信息登记。' },
-      { step: '材料验证', time: '五年级下 5月', desc: '提交户籍/房产等材料，等待统筹安排或对口录取。' },
+      {
+        step: '材料验证',
+        time: '五年级下 5月',
+        desc: '提交户籍/房产等材料，等待统筹安排或对口录取。',
+      },
       { step: '特色班选拔', time: '六年级开学前后', desc: '部分学校组织特色班分班考或选拔。' },
     ],
     preferences: ['对口或统筹可进', '综合素质良好', '某学科有特长', '追求优质公办资源'],
@@ -702,10 +782,18 @@ export const schoolsData: Record<string, SchoolData> = {
     glow: 'rgba(244,63,94,0.35)',
     gradient: 'from-primary to-primary-glow',
     timeline: [
-      { step: '校园开放日', time: '初三上 3-5月', desc: '参加上海中学校园开放日，了解自招与培养方向。' },
+      {
+        step: '校园开放日',
+        time: '初三上 3-5月',
+        desc: '参加上海中学校园开放日，了解自招与培养方向。',
+      },
       { step: '自主招生', time: '初三下 5-6月', desc: '提交自招报名，参加笔试与面试选拔。' },
       { step: '名额分配', time: '初三下 5月', desc: '通过名额分配到区/到校填报志愿，竞争录取。' },
-      { step: '统一招生', time: '初三下 6-7月', desc: '中考后按平行志愿投档，分数线通常全市最高。' },
+      {
+        step: '统一招生',
+        time: '初三下 6-7月',
+        desc: '中考后按平行志愿投档，分数线通常全市最高。',
+      },
     ],
     preferences: ['校内成绩顶尖', '理科竞赛特长', '综合素质突出', '自招/综评能力强'],
     checklist: [
@@ -717,12 +805,22 @@ export const schoolsData: Record<string, SchoolData> = {
       {
         grade: '八年级',
         sub: '竞赛锁定门票',
-        tasks: ['参加数学/物理/信息学竞赛', '争取省级及以上奖项', '完成研究性学习课题', '关注四校开放日'],
+        tasks: [
+          '参加数学/物理/信息学竞赛',
+          '争取省级及以上奖项',
+          '完成研究性学习课题',
+          '关注四校开放日',
+        ],
       },
       {
         grade: '初三上',
         sub: '自招准备',
-        tasks: ['整理竞赛证书与综合素质档案', '针对性训练自招笔试', '模拟面试与表达训练', '一模争取全区前列'],
+        tasks: [
+          '整理竞赛证书与综合素质档案',
+          '针对性训练自招笔试',
+          '模拟面试与表达训练',
+          '一模争取全区前列',
+        ],
       },
       {
         grade: '初三下',
@@ -730,8 +828,17 @@ export const schoolsData: Record<string, SchoolData> = {
         tasks: ['填报名额分配志愿', '稳定中考发挥', '参加自招测试', '调整心态，查漏补缺'],
       },
     ],
-    certificates: ['数学/物理/信息学竞赛省一或国奖', '校内三好学生/全优记录', '科创/研究性学习成果', '英语/语文市级以上奖项'],
-    interviewFormat: ['自招笔试：数学 + 英语 + 综合能力', '面试：学科思维 + 兴趣特长 + 学习规划', '名额分配综评：综合素质档案 + 现场表现'],
+    certificates: [
+      '数学/物理/信息学竞赛省一或国奖',
+      '校内三好学生/全优记录',
+      '科创/研究性学习成果',
+      '英语/语文市级以上奖项',
+    ],
+    interviewFormat: [
+      '自招笔试：数学 + 英语 + 综合能力',
+      '面试：学科思维 + 兴趣特长 + 学习规划',
+      '名额分配综评：综合素质档案 + 现场表现',
+    ],
   },
   huaer: {
     id: 'huaer',
@@ -749,10 +856,18 @@ export const schoolsData: Record<string, SchoolData> = {
     glow: 'rgba(139,92,246,0.35)',
     gradient: 'from-secondary to-secondary-glow',
     timeline: [
-      { step: '开放日/自招', time: '初三上 3-5月', desc: '关注华二校园开放日，准备自招材料与竞赛证书。' },
+      {
+        step: '开放日/自招',
+        time: '初三上 3-5月',
+        desc: '关注华二校园开放日，准备自招材料与竞赛证书。',
+      },
       { step: '自招选拔', time: '初三下 5-6月', desc: '参加自招笔试与面试，重点考察理科思维。' },
       { step: '名额分配', time: '初三下 5月', desc: '通过名额分配到区/到校争取录取机会。' },
-      { step: '统一招生', time: '初三下 6-7月', desc: '中考后按平行志愿投档，分数线常年全市前列。' },
+      {
+        step: '统一招生',
+        time: '初三下 6-7月',
+        desc: '中考后按平行志愿投档，分数线常年全市前列。',
+      },
     ],
     preferences: ['理科思维极强', '竞赛经历丰富', '科创成果突出', '自主学习能力强'],
     checklist: [
@@ -764,7 +879,12 @@ export const schoolsData: Record<string, SchoolData> = {
       {
         grade: '八年级',
         sub: '竞赛成果',
-        tasks: ['数学/物理/信息学竞赛拿奖', '完成科创项目或论文', '保持校内排名前 3%', '关注四校自招政策'],
+        tasks: [
+          '数学/物理/信息学竞赛拿奖',
+          '完成科创项目或论文',
+          '保持校内排名前 3%',
+          '关注四校自招政策',
+        ],
       },
       {
         grade: '初三上',
@@ -777,8 +897,17 @@ export const schoolsData: Record<string, SchoolData> = {
         tasks: ['填报名额分配志愿', '参加自招测试', '中考稳定发挥', '确认录取'],
       },
     ],
-    certificates: ['数学/物理/信息学竞赛奖项', '青少年科创大赛奖项', '校内三好/全优记录', '英语/语文市级奖项'],
-    interviewFormat: ['自招笔试：理科综合 + 数学 + 英语', '面试：学科思维 + 科创经历 + 团队协作', '综评：研究性学习/社会实践档案'],
+    certificates: [
+      '数学/物理/信息学竞赛奖项',
+      '青少年科创大赛奖项',
+      '校内三好/全优记录',
+      '英语/语文市级奖项',
+    ],
+    interviewFormat: [
+      '自招笔试：理科综合 + 数学 + 英语',
+      '面试：学科思维 + 科创经历 + 团队协作',
+      '综评：研究性学习/社会实践档案',
+    ],
   },
   fufu: {
     id: 'fufu',
@@ -797,7 +926,11 @@ export const schoolsData: Record<string, SchoolData> = {
     gradient: 'from-accent to-accent-glow',
     timeline: [
       { step: '开放日/自招', time: '初三上 3-5月', desc: '参加复旦附中校园开放日，准备自招材料。' },
-      { step: '自招选拔', time: '初三下 5-6月', desc: '参加自招笔试与面试，关注人文素养与理科基础。' },
+      {
+        step: '自招选拔',
+        time: '初三下 5-6月',
+        desc: '参加自招笔试与面试，关注人文素养与理科基础。',
+      },
       { step: '名额分配', time: '初三下 5月', desc: '通过名额分配到区/到校填报志愿。' },
       { step: '统一招生', time: '初三下 6-7月', desc: '中考后按平行志愿投档，分数线常年高位。' },
     ],
@@ -811,7 +944,12 @@ export const schoolsData: Record<string, SchoolData> = {
       {
         grade: '八年级',
         sub: '文理深化',
-        tasks: ['数学/物理竞赛或培优', '语文阅读与作文提升', '参加人文/英语类竞赛', '社会实践与研究性学习'],
+        tasks: [
+          '数学/物理竞赛或培优',
+          '语文阅读与作文提升',
+          '参加人文/英语类竞赛',
+          '社会实践与研究性学习',
+        ],
       },
       {
         grade: '初三上',
@@ -824,8 +962,17 @@ export const schoolsData: Record<string, SchoolData> = {
         tasks: ['填报名额分配志愿', '参加自招与综评', '中考稳定发挥', '确认录取意向'],
       },
     ],
-    certificates: ['语文/英语市级以上奖项', '数学/物理竞赛奖项', '研究性学习/社会实践成果', '校内三好/全优记录'],
-    interviewFormat: ['自招笔试：文理综合 + 英语 + 数学', '面试：人文素养 + 逻辑思维 + 表达能力', '综评：综合素质档案 + 现场问答'],
+    certificates: [
+      '语文/英语市级以上奖项',
+      '数学/物理竞赛奖项',
+      '研究性学习/社会实践成果',
+      '校内三好/全优记录',
+    ],
+    interviewFormat: [
+      '自招笔试：文理综合 + 英语 + 数学',
+      '面试：人文素养 + 逻辑思维 + 表达能力',
+      '综评：综合素质档案 + 现场问答',
+    ],
   },
   'jiaofu-jiading': {
     id: 'jiaofu-jiading',
@@ -843,7 +990,11 @@ export const schoolsData: Record<string, SchoolData> = {
     glow: 'rgba(139,92,246,0.35)',
     gradient: 'from-secondary to-purple-400',
     timeline: [
-      { step: '开放日/自招', time: '初三上 3-5月', desc: '参加交附嘉定开放日，了解自招与名额分配计划。' },
+      {
+        step: '开放日/自招',
+        time: '初三上 3-5月',
+        desc: '参加交附嘉定开放日，了解自招与名额分配计划。',
+      },
       { step: '自主招生', time: '初三下 5-6月', desc: '提交自招报名，参加选拔测试。' },
       { step: '名额分配', time: '初三下 5月', desc: '嘉定区名额分配到区/到校志愿填报。' },
       { step: '统一招生', time: '初三下 6-7月', desc: '中考后按平行志愿投档，分数线居嘉定首位。' },
@@ -872,7 +1023,11 @@ export const schoolsData: Record<string, SchoolData> = {
       },
     ],
     certificates: ['数学/物理竞赛奖项', '信息学/科创奖项', '校内三好/全优记录', '综合素质评价优秀'],
-    interviewFormat: ['自招笔试：数学 + 英语 + 理科综合', '面试：学科思维 + 竞赛经历 + 学习规划', '综评：综合素质档案 + 现场表现'],
+    interviewFormat: [
+      '自招笔试：数学 + 英语 + 理科综合',
+      '面试：学科思维 + 竞赛经历 + 学习规划',
+      '综评：综合素质档案 + 现场表现',
+    ],
   },
   'jiading-yizhong': {
     id: 'jiading-yizhong',
@@ -890,9 +1045,17 @@ export const schoolsData: Record<string, SchoolData> = {
     glow: 'rgba(168,85,247,0.35)',
     gradient: 'from-violet-500 to-fuchsia-500',
     timeline: [
-      { step: '开放日', time: '初三上 3-5月', desc: '参加嘉定一中校园开放日，了解特色班与招生方式。' },
+      {
+        step: '开放日',
+        time: '初三上 3-5月',
+        desc: '参加嘉定一中校园开放日，了解特色班与招生方式。',
+      },
       { step: '名额分配', time: '初三下 5月', desc: '通过名额分配到区/到校填报志愿。' },
-      { step: '统一招生', time: '初三下 6-7月', desc: '中考后按平行志愿投档，分数线约 670-680 分区间。' },
+      {
+        step: '统一招生',
+        time: '初三下 6-7月',
+        desc: '中考后按平行志愿投档，分数线约 670-680 分区间。',
+      },
       { step: '录取入学', time: '7-8月', desc: '确认录取，准备高中入学与分班。' },
     ],
     preferences: ['嘉定区学生', '校内成绩优秀', '综合素质良好', '目标市重点'],
@@ -937,7 +1100,11 @@ export const schoolsData: Record<string, SchoolData> = {
     glow: 'rgba(99,102,241,0.35)',
     gradient: 'from-indigo-500 to-purple-500',
     timeline: [
-      { step: '开放日', time: '初三上 3-5月', desc: '参加上师嘉分开放日，了解办学特色与招生计划。' },
+      {
+        step: '开放日',
+        time: '初三上 3-5月',
+        desc: '参加上师嘉分开放日，了解办学特色与招生计划。',
+      },
       { step: '名额分配', time: '初三下 5月', desc: '通过名额分配到区/到校填报志愿。' },
       { step: '统一招生', time: '初三下 6-7月', desc: '中考后按平行志愿投档。' },
       { step: '录取入学', time: '7-8月', desc: '确认录取，准备入学。' },
@@ -986,7 +1153,11 @@ export const schoolsData: Record<string, SchoolData> = {
     timeline: [
       { step: '开放日', time: '初三上 3-5月', desc: '参加嘉一实验开放日，了解特色培养方向。' },
       { step: '名额分配', time: '初三下 5月', desc: '通过名额分配到校填报志愿。' },
-      { step: '统一招生', time: '初三下 6-7月', desc: '中考后按平行志愿投档，分数线约 660-670 分。' },
+      {
+        step: '统一招生',
+        time: '初三下 6-7月',
+        desc: '中考后按平行志愿投档，分数线约 660-670 分。',
+      },
       { step: '录取入学', time: '7-8月', desc: '确认录取，准备高中学习。' },
     ],
     preferences: ['嘉定区学生', '校内成绩中上', '有优势学科', '目标本科以上'],
@@ -1033,7 +1204,11 @@ export const schoolsData: Record<string, SchoolData> = {
     timeline: [
       { step: '开放日', time: '初三上 3-5月', desc: '参加嘉定二中开放日，了解海洋/工程特色项目。' },
       { step: '名额分配', time: '初三下 5月', desc: '通过名额分配到校填报志愿。' },
-      { step: '统一招生', time: '初三下 6-7月', desc: '中考后按平行志愿投档，分数线约 650-660 分。' },
+      {
+        step: '统一招生',
+        time: '初三下 6-7月',
+        desc: '中考后按平行志愿投档，分数线约 650-660 分。',
+      },
       { step: '录取入学', time: '7-8月', desc: '确认录取，准备特色项目学习。' },
     ],
     preferences: ['嘉定区学生', '校内成绩中游以上', '对海洋/工程感兴趣', '目标本科'],
@@ -1080,7 +1255,11 @@ export const schoolsData: Record<string, SchoolData> = {
     timeline: [
       { step: '开放日', time: '初三上 3-5月', desc: '参加安亭高中开放日，了解办学特色。' },
       { step: '名额分配', time: '初三下 5月', desc: '通过名额分配到校填报志愿。' },
-      { step: '统一招生', time: '初三下 6-7月', desc: '中考后按平行志愿投档，分数线约 630-640 分。' },
+      {
+        step: '统一招生',
+        time: '初三下 6-7月',
+        desc: '中考后按平行志愿投档，分数线约 630-640 分。',
+      },
       { step: '录取入学', time: '7-8月', desc: '确认录取，准备高中学习。' },
     ],
     preferences: ['嘉定区学生', '校内成绩中游', '追求稳定入学', '目标本科'],
@@ -1130,21 +1309,21 @@ export default function SchoolDetail({ school }: { school: string }) {
 
   if (!data) {
     return (
-      <div className="min-h-[60vh] flex flex-col items-center justify-center text-center space-y-6">
-        <div className="flex items-center justify-center gap-3 mb-2">
-          <div className="w-10 h-10 rounded-xl bg-secondary/10 border border-secondary/20 flex items-center justify-center">
-            <School className="w-5 h-5 text-secondary" />
+      <div className="flex min-h-[60vh] flex-col items-center justify-center space-y-6 text-center">
+        <div className="mb-2 flex items-center justify-center gap-3">
+          <div className="bg-secondary/10 border-secondary/20 flex size-10 items-center justify-center rounded-xl border">
+            <School className="size-5 text-secondary" />
           </div>
           <div>
-            <h1 className="text-2xl sm:text-3xl font-bold font-display">未找到学校</h1>
+            <h1 className="font-display text-2xl font-bold sm:text-3xl">未找到学校</h1>
           </div>
         </div>
         <p className="text-text-tertiary">当前链接对应的目标学校不存在。</p>
         <Link
           href="/dashboard/plan"
-          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-surface-hover text-text-primary hover:bg-surface-hover transition-all"
+          className="inline-flex items-center gap-2 rounded-lg bg-surface-hover px-5 py-2.5 text-text-primary transition-all hover:bg-surface-hover"
         >
-          <ArrowLeft className="w-4 h-4" />
+          <ArrowLeft className="size-4" />
           返回路线方案
         </Link>
       </div>
@@ -1162,39 +1341,39 @@ export default function SchoolDetail({ school }: { school: string }) {
       <motion.div variants={itemVariants} className="space-y-6">
         <Link
           href="/dashboard/plan"
-          className="inline-flex items-center gap-2 text-sm text-text-tertiary hover:text-text-primary transition-colors"
+          className="inline-flex items-center gap-2 text-sm text-text-tertiary transition-colors hover:text-text-primary"
         >
-          <ArrowLeft className="w-4 h-4" />
+          <ArrowLeft className="size-4" />
           返回路线方案
         </Link>
 
-        <div className="relative rounded-3xl bg-surface-elevated p-8 border border-border-subtle overflow-hidden">
+        <div className="relative overflow-hidden rounded-3xl border border-border-subtle bg-surface-elevated p-8">
           <div
-            className="absolute top-0 right-0 w-96 h-96 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 pointer-events-none"
+            className="pointer-events-none absolute right-0 top-0 size-96 -translate-y-1/2 translate-x-1/3 rounded-full blur-3xl"
             style={{ backgroundColor: data.glow.replace('0.35', '0.12') }}
           />
-          <div className="relative z-10 flex flex-col lg:flex-row lg:items-end justify-between gap-6">
+          <div className="relative z-10 flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
             <div>
-              <div className="flex flex-wrap items-center gap-3 mb-4">
+              <div className="mb-4 flex flex-wrap items-center gap-3">
                 <span
-                  className={`px-3 py-1 rounded-full text-xs font-bold bg-gradient-to-r ${data.gradient} text-text-primary`}
+                  className={`rounded-full bg-gradient-to-r px-3 py-1 text-xs font-bold ${data.gradient} text-text-primary`}
                 >
                   {data.title}
                 </span>
                 <span className="flex items-center gap-1.5 text-xs text-text-tertiary">
-                  <MapPin className="w-3.5 h-3.5" />
+                  <MapPin className="size-3.5" />
                   {data.location}
                 </span>
                 <span className="flex items-center gap-1.5 text-xs text-text-tertiary">
-                  <GraduationCap className="w-3.5 h-3.5" />
+                  <GraduationCap className="size-3.5" />
                   {data.nature}
                 </span>
                 <span className="flex items-center gap-1.5 text-xs text-text-tertiary">
-                  <Trophy className="w-3.5 h-3.5" />
+                  <Trophy className="size-3.5" />
                   {data.ranking}
                 </span>
                 <span className="flex items-center gap-1.5 text-xs text-text-tertiary">
-                  <Banknote className="w-3.5 h-3.5" />
+                  <Banknote className="size-3.5" />
                   {data.fees}
                 </span>
               </div>
@@ -1202,24 +1381,22 @@ export default function SchoolDetail({ school }: { school: string }) {
                 initial={shouldReduceMotion ? false : { opacity: 0, y: -8 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.4 }}
-                className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
+                className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
               >
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-secondary/10 border border-secondary/20 flex items-center justify-center">
-                    <School className="w-5 h-5 text-secondary" />
+                  <div className="bg-secondary/10 border-secondary/20 flex size-10 items-center justify-center rounded-xl border">
+                    <School className="size-5 text-secondary" />
                   </div>
                   <div>
-                    <h1 className="text-2xl sm:text-3xl font-bold font-display">
-                      {data.name}
-                    </h1>
+                    <h1 className="font-display text-2xl font-bold sm:text-3xl">{data.name}</h1>
                   </div>
                 </div>
               </motion.div>
-              <div className="flex flex-wrap gap-2 mt-5">
+              <div className="mt-5 flex flex-wrap gap-2">
                 {data.tags.map((tag) => (
                   <span
                     key={tag}
-                    className="px-3 py-1 rounded-lg bg-surface-hover text-sm text-text-secondary border border-border-subtle"
+                    className="rounded-lg border border-border-subtle bg-surface-hover px-3 py-1 text-sm text-text-secondary"
                   >
                     {tag}
                   </span>
@@ -1233,21 +1410,21 @@ export default function SchoolDetail({ school }: { school: string }) {
       {/* Timeline */}
       <motion.div variants={itemVariants} className="space-y-4">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-surface-hover flex items-center justify-center">
-            <Calendar className="w-5 h-5 text-primary" />
+          <div className="flex size-10 items-center justify-center rounded-xl bg-surface-hover">
+            <Calendar className="size-5 text-primary" />
           </div>
-          <h2 className="text-xl font-bold font-display">招生时间轴</h2>
+          <h2 className="font-display text-xl font-bold">招生时间轴</h2>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {data.timeline.map((item, index) => (
             <motion.div
               key={item.step}
               variants={itemVariants}
-              className="relative rounded-2xl bg-surface-elevated p-5 border border-border-subtle"
+              className="relative rounded-2xl border border-border-subtle bg-surface-elevated p-5"
             >
-              <div className="flex items-center gap-3 mb-3">
+              <div className="mb-3 flex items-center gap-3">
                 <div
-                  className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold"
+                  className="flex size-8 items-center justify-center rounded-full text-sm font-bold"
                   style={{
                     backgroundColor: `${data.accent}18`,
                     color: data.accent,
@@ -1261,28 +1438,28 @@ export default function SchoolDetail({ school }: { school: string }) {
                   <p className="text-xs text-text-tertiary">{item.time}</p>
                 </div>
               </div>
-              <p className="text-sm text-text-secondary leading-relaxed">{item.desc}</p>
+              <p className="text-sm leading-relaxed text-text-secondary">{item.desc}</p>
             </motion.div>
           ))}
         </div>
       </motion.div>
 
       {/* Preferences + Interview */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
         <motion.div variants={itemVariants} className="space-y-4">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-surface-hover flex items-center justify-center">
-              <Target className="w-5 h-5 text-secondary" />
+            <div className="flex size-10 items-center justify-center rounded-xl bg-surface-hover">
+              <Target className="size-5 text-secondary" />
             </div>
-            <h2 className="text-xl font-bold font-display">录取偏好</h2>
+            <h2 className="font-display text-xl font-bold">录取偏好</h2>
           </div>
-          <div className="rounded-2xl bg-surface-elevated p-6 border border-border-subtle">
-            <p className="text-sm text-text-tertiary mb-4">学校最看重的能力与素养</p>
+          <div className="rounded-2xl border border-border-subtle bg-surface-elevated p-6">
+            <p className="mb-4 text-sm text-text-tertiary">学校最看重的能力与素养</p>
             <div className="flex flex-wrap gap-2">
               {data.preferences.map((pref) => (
                 <span
                   key={pref}
-                  className="px-3 py-1.5 rounded-lg text-sm text-text-primary border border-border-subtle"
+                  className="rounded-lg border border-border-subtle px-3 py-1.5 text-sm text-text-primary"
                   style={{
                     backgroundColor: `${data.accent}12`,
                   }}
@@ -1296,22 +1473,22 @@ export default function SchoolDetail({ school }: { school: string }) {
 
         <motion.div variants={itemVariants} className="space-y-4">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-surface-hover flex items-center justify-center">
-              <MessageSquare className="w-5 h-5 text-accent" />
+            <div className="flex size-10 items-center justify-center rounded-xl bg-surface-hover">
+              <MessageSquare className="size-5 text-accent" />
             </div>
-            <h2 className="text-xl font-bold font-display">面谈形式</h2>
+            <h2 className="font-display text-xl font-bold">面谈形式</h2>
           </div>
-          <div className="rounded-2xl bg-surface-elevated p-6 border border-border-subtle space-y-4">
+          <div className="space-y-4 rounded-2xl border border-border-subtle bg-surface-elevated p-6">
             {data.interviewFormat.map((item) => (
               <div key={item} className="flex items-start gap-3">
                 {item.includes('机考') ? (
-                  <Monitor className="w-4 h-4 text-text-tertiary mt-1 shrink-0" />
+                  <Monitor className="mt-1 size-4 shrink-0 text-text-tertiary" />
                 ) : item.includes('小组') ? (
-                  <Users className="w-4 h-4 text-text-tertiary mt-1 shrink-0" />
+                  <Users className="mt-1 size-4 shrink-0 text-text-tertiary" />
                 ) : (
-                  <MessageSquare className="w-4 h-4 text-text-tertiary mt-1 shrink-0" />
+                  <MessageSquare className="mt-1 size-4 shrink-0 text-text-tertiary" />
                 )}
-                <p className="text-sm text-text-secondary leading-relaxed">{item}</p>
+                <p className="text-sm leading-relaxed text-text-secondary">{item}</p>
               </div>
             ))}
           </div>
@@ -1321,20 +1498,20 @@ export default function SchoolDetail({ school }: { school: string }) {
       {/* Checklist */}
       <motion.div variants={itemVariants} className="space-y-4">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-surface-hover flex items-center justify-center">
-            <CheckCircle2 className="w-5 h-5 text-success" />
+          <div className="flex size-10 items-center justify-center rounded-xl bg-surface-hover">
+            <CheckCircle2 className="size-5 text-success" />
           </div>
-          <h2 className="text-xl font-bold font-display">准备清单</h2>
+          <h2 className="font-display text-xl font-bold">准备清单</h2>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           {data.checklist.map((group) => (
             <motion.div
               key={group.grade}
               variants={itemVariants}
-              className="rounded-2xl bg-surface-elevated p-6 border border-border-subtle"
+              className="rounded-2xl border border-border-subtle bg-surface-elevated p-6"
             >
-              <div className="flex items-center gap-3 mb-4">
-                <Clock className="w-4 h-4" style={{ color: data.accent }} />
+              <div className="mb-4 flex items-center gap-3">
+                <Clock className="size-4" style={{ color: data.accent }} />
                 <div>
                   <h3 className="font-bold">{group.grade}</h3>
                   <p className="text-xs text-text-tertiary">{group.sub}</p>
@@ -1344,7 +1521,7 @@ export default function SchoolDetail({ school }: { school: string }) {
                 {group.tasks.map((task) => (
                   <li key={task} className="flex items-start gap-3 text-sm text-text-secondary">
                     <span
-                      className="w-1.5 h-1.5 rounded-full mt-2 shrink-0"
+                      className="mt-2 size-1.5 shrink-0 rounded-full"
                       style={{ backgroundColor: data.accent }}
                     />
                     {task}
@@ -1359,19 +1536,19 @@ export default function SchoolDetail({ school }: { school: string }) {
       {/* Certificates */}
       <motion.div variants={itemVariants} className="space-y-4">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-surface-hover flex items-center justify-center">
-            <Award className="w-5 h-5 text-warning" />
+          <div className="flex size-10 items-center justify-center rounded-xl bg-surface-hover">
+            <Award className="size-5 text-warning" />
           </div>
-          <h2 className="text-xl font-bold font-display">关键证书 / 竞赛</h2>
+          <h2 className="font-display text-xl font-bold">关键证书 / 竞赛</h2>
         </div>
-        <div className="rounded-2xl bg-surface-elevated p-6 border border-border-subtle">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="rounded-2xl border border-border-subtle bg-surface-elevated p-6">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {data.certificates.map((cert) => (
               <div
                 key={cert}
-                className="flex items-center gap-3 p-4 rounded-xl bg-surface-hover border border-border-subtle"
+                className="flex items-center gap-3 rounded-xl border border-border-subtle bg-surface-hover p-4"
               >
-                <Sparkles className="w-4 h-4 text-warning shrink-0" />
+                <Sparkles className="size-4 shrink-0 text-warning" />
                 <span className="text-sm text-text-primary">{cert}</span>
               </div>
             ))}
@@ -1382,11 +1559,11 @@ export default function SchoolDetail({ school }: { school: string }) {
       {/* Bottom CTA */}
       <motion.div
         variants={itemVariants}
-        className="flex flex-col sm:flex-row items-center justify-between gap-4 rounded-2xl bg-surface-elevated p-6 border border-border-subtle"
+        className="flex flex-col items-center justify-between gap-4 rounded-2xl border border-border-subtle bg-surface-elevated p-6 sm:flex-row"
       >
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-surface-hover flex items-center justify-center">
-            <BookOpen className="w-5 h-5 text-text-tertiary" />
+          <div className="flex size-10 items-center justify-center rounded-xl bg-surface-hover">
+            <BookOpen className="size-5 text-text-tertiary" />
           </div>
           <div>
             <p className="font-medium text-text-primary">继续规划升学路线</p>
@@ -1395,9 +1572,9 @@ export default function SchoolDetail({ school }: { school: string }) {
         </div>
         <Link
           href="/dashboard/plan"
-          className="inline-flex items-center gap-2 px-6 py-2.5 rounded-lg bg-gradient-to-r from-primary to-secondary text-text-primary font-semibold hover:shadow-[0_0_30px_rgba(244,63,94,0.5)] transition-all duration-300"
+          className="inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-primary to-secondary px-6 py-2.5 font-semibold text-text-primary transition-all duration-300 hover:shadow-[0_0_30px_rgba(244,63,94,0.5)]"
         >
-          <FileText className="w-4 h-4" />
+          <FileText className="size-4" />
           返回路线方案页
         </Link>
       </motion.div>

@@ -109,19 +109,19 @@ export default function ReadingListPage() {
   const hasActiveFilters = grade || subject || keyword;
 
   return (
-    <div className="space-y-6 min-h-[calc(100vh-8rem)]">
+    <div className="min-h-[calc(100vh-8rem)] space-y-6">
       <motion.div
         initial={shouldReduceMotion ? false : { opacity: 0, y: -8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4 }}
-        className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
+        className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
       >
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-secondary/10 border border-secondary/20 flex items-center justify-center">
-            <Library className="w-5 h-5 text-secondary" />
+          <div className="bg-secondary/10 border-secondary/20 flex size-10 items-center justify-center rounded-xl border">
+            <Library className="size-5 text-secondary" />
           </div>
           <div>
-            <h1 className="text-2xl sm:text-3xl font-bold font-display text-text-primary">
+            <h1 className="font-display text-2xl font-bold text-text-primary sm:text-3xl">
               阅读书单
             </h1>
           </div>
@@ -129,10 +129,10 @@ export default function ReadingListPage() {
 
         <div className="flex items-center gap-2">
           {data && (
-            <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-surface border border-border-default text-xs text-text-tertiary">
-              <BookOpen className="w-3.5 h-3.5 text-secondary" />
+            <div className="flex items-center gap-2 rounded-xl border border-border-default bg-surface px-3 py-1.5 text-xs text-text-tertiary">
+              <BookOpen className="size-3.5 text-secondary" />
               <span>
-                共 <span className="text-text-secondary font-medium">{data.total}</span> 本
+                共 <span className="font-medium text-text-secondary">{data.total}</span> 本
               </span>
             </div>
           )}
@@ -143,17 +143,17 @@ export default function ReadingListPage() {
         initial={shouldReduceMotion ? false : { opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4, delay: 0.05 }}
-        className="rounded-2xl border border-border-default bg-surface-elevated p-4 sm:p-5 space-y-4"
+        className="space-y-4 rounded-2xl border border-border-default bg-surface-elevated p-4 sm:p-5"
       >
-        <div className="flex flex-col sm:flex-row gap-3">
+        <div className="flex flex-col gap-3 sm:flex-row">
           <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted" />
+            <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-text-muted" />
             <input
               type="text"
               value={keyword}
               onChange={(e) => setKeyword(e.target.value)}
               placeholder="搜索书名、作者..."
-              className="w-full h-10 pl-9 pr-9 rounded-xl bg-surface border border-border-default text-sm text-text-secondary placeholder:text-text-muted focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/20 transition-all"
+              className="focus:border-primary/50 focus:ring-primary/20 h-10 w-full rounded-xl border border-border-default bg-surface px-9 text-sm text-text-secondary transition-all placeholder:text-text-muted focus:outline-none focus:ring-1"
             />
             {keyword && (
               <button
@@ -161,7 +161,7 @@ export default function ReadingListPage() {
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-text-muted hover:text-text-secondary"
                 aria-label="清空搜索"
               >
-                <X className="w-4 h-4" />
+                <X className="size-4" />
               </button>
             )}
           </div>
@@ -169,18 +169,18 @@ export default function ReadingListPage() {
           {hasActiveFilters && (
             <button
               onClick={clearFilters}
-              className="flex items-center justify-center gap-1.5 h-10 px-4 rounded-xl border border-border-default text-sm text-text-tertiary hover:text-text-secondary hover:border-border-strong hover:bg-surface transition-all shrink-0"
+              className="flex h-10 shrink-0 items-center justify-center gap-1.5 rounded-xl border border-border-default px-4 text-sm text-text-tertiary transition-all hover:border-border-strong hover:bg-surface hover:text-text-secondary"
             >
               清除筛选
             </button>
           )}
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
           <select
             value={grade}
             onChange={(e) => setGrade(e.target.value)}
-            className="h-10 px-3 rounded-xl bg-surface border border-border-default text-sm text-text-secondary focus:outline-none focus:border-primary/50"
+            className="focus:border-primary/50 h-10 rounded-xl border border-border-default bg-surface px-3 text-sm text-text-secondary focus:outline-none"
           >
             <option value="">全部年级</option>
             {(data?.grades || []).map((g) => (
@@ -193,7 +193,7 @@ export default function ReadingListPage() {
           <select
             value={subject}
             onChange={(e) => setSubject(e.target.value)}
-            className="h-10 px-3 rounded-xl bg-surface border border-border-default text-sm text-text-secondary focus:outline-none focus:border-primary/50"
+            className="focus:border-primary/50 h-10 rounded-xl border border-border-default bg-surface px-3 text-sm text-text-secondary focus:outline-none"
           >
             <option value="">全部学科</option>
             {(data?.subjects || []).map((s) => (
@@ -207,7 +207,7 @@ export default function ReadingListPage() {
 
       {isLoading ? (
         <div className="flex items-center justify-center py-20">
-          <div className="w-10 h-10 border-2 border-primary/30 border-t-primary rounded-full animate-spin" />
+          <div className="border-primary/30 size-10 animate-spin rounded-full border-2 border-t-primary" />
         </div>
       ) : error ? (
         <EmptyState
@@ -230,7 +230,7 @@ export default function ReadingListPage() {
           initial={shouldReduceMotion ? false : { opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.4 }}
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"
+          className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
         >
           {filteredBooks.map((book, index) => {
             const isRead = readIds.has(book.id);
@@ -240,60 +240,62 @@ export default function ReadingListPage() {
                 initial={shouldReduceMotion ? false : { opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3, delay: Math.min(index * 0.03, 0.5) }}
-                className={`rounded-2xl border ${isRead ? 'border-success/20' : 'border-border-default'} bg-surface p-5 hover:border-border-strong transition-colors group`}
+                className={`rounded-2xl border ${isRead ? 'border-success/20' : 'border-border-default'} group bg-surface p-5 transition-colors hover:border-border-strong`}
               >
-                <div className="flex items-start justify-between mb-3">
-                  <span className="text-2xs px-2 py-1 rounded-full bg-secondary/10 text-secondary border border-secondary/20">
+                <div className="mb-3 flex items-start justify-between">
+                  <span className="bg-secondary/10 border-secondary/20 rounded-full border px-2 py-1 text-2xs text-secondary">
                     {book.grade}
                   </span>
                   <button
                     onClick={() => toggleRead(book.id)}
-                    className={`w-8 h-8 rounded-full flex items-center justify-center transition-colors ${
+                    className={`flex size-8 items-center justify-center rounded-full transition-colors ${
                       isRead
                         ? 'bg-success/15 text-success'
                         : 'bg-surface-elevated text-text-muted hover:text-text-secondary'
                     }`}
                     aria-label={isRead ? '标记为未读' : '标记为已读'}
                   >
-                    <Check className={`w-4 h-4 ${isRead ? 'opacity-100' : 'opacity-50'}`} />
+                    <Check className={`size-4 ${isRead ? 'opacity-100' : 'opacity-50'}`} />
                   </button>
                 </div>
 
-                <h3 className="text-base font-bold font-display mb-1.5 text-text-primary line-clamp-2">
+                <h3 className="mb-1.5 line-clamp-2 font-display text-base font-bold text-text-primary">
                   {book.title}
                 </h3>
-                <p className="text-sm text-text-tertiary mb-3">
+                <p className="mb-3 text-sm text-text-tertiary">
                   {book.author || book.publisher.name}
                 </p>
 
-                <div className="flex flex-wrap gap-1.5 mb-4">
-                  <span className="text-2xs px-1.5 py-0.5 rounded-md bg-surface-elevated text-text-muted border border-border-subtle">
+                <div className="mb-4 flex flex-wrap gap-1.5">
+                  <span className="rounded-md border border-border-subtle bg-surface-elevated px-1.5 py-0.5 text-2xs text-text-muted">
                     {book.subject}
                   </span>
-                  <span className="text-2xs px-1.5 py-0.5 rounded-md bg-surface-elevated text-text-muted border border-border-subtle">
+                  <span className="rounded-md border border-border-subtle bg-surface-elevated px-1.5 py-0.5 text-2xs text-text-muted">
                     {book.contentType.name}
                   </span>
                   {book.isNewTextbook === '是' && (
-                    <span className="text-2xs px-1.5 py-0.5 rounded-md bg-primary/10 text-primary border border-primary/20">
+                    <span className="bg-primary/10 border-primary/20 rounded-md border px-1.5 py-0.5 text-2xs text-primary">
                       新教材
                     </span>
                   )}
                 </div>
 
-                <div className="flex items-center justify-between pt-3 border-t border-border-subtle">
+                <div className="flex items-center justify-between border-t border-border-subtle pt-3">
                   <div>
                     <p className="text-2xs text-text-muted">蓝思参考</p>
                     <p className="text-sm font-semibold text-text-secondary">{book.lexile}</p>
                   </div>
                   <div className="text-right">
                     <p className="text-2xs text-text-muted">难度</p>
-                    <p className="text-sm font-semibold text-text-secondary">{'★'.repeat(book.difficulty)}</p>
+                    <p className="text-sm font-semibold text-text-secondary">
+                      {'★'.repeat(book.difficulty)}
+                    </p>
                   </div>
                 </div>
 
                 {isRead && (
-                  <div className="mt-3 text-xs text-success flex items-center gap-1">
-                    <Check className="w-3.5 h-3.5" />
+                  <div className="mt-3 flex items-center gap-1 text-xs text-success">
+                    <Check className="size-3.5" />
                     已读
                   </div>
                 )}

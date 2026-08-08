@@ -29,36 +29,34 @@ const features = [
 
 export default function FeatureCards() {
   return (
-    <section className="py-14 px-4 sm:px-6 lg:px-8 border-y border-border-subtle">
-      <div className="max-w-6xl mx-auto">
+    <section className="border-y border-border-subtle px-4 py-14 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-6xl">
         <MotionSection direction="up" duration={0.6} className="mb-12">
-          <span className="text-[11px] font-mono text-primary uppercase tracking-widest mb-3 block">
+          <span className="mb-3 block font-mono text-[11px] uppercase tracking-widest text-primary">
             Capabilities
           </span>
-          <h2 className="text-3xl sm:text-4xl font-bold font-display leading-tight">
+          <h2 className="font-display text-3xl font-bold leading-tight sm:text-4xl">
             不只是记录工具
             <br />
             <span className="text-text-muted">更是一套升学战略系统</span>
           </h2>
         </MotionSection>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           {features.map((feature, index) => (
-            <MotionSection
-              key={feature.title}
-              direction="up"
-              delay={index * 0.08}
-            >
-              <CommandCard className="h-full p-5 group" corner={index === 0}>
+            <MotionSection key={feature.title} direction="up" delay={index * 0.08}>
+              <CommandCard className="group h-full p-5" corner={index === 0}>
                 <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center shrink-0 group-hover:bg-primary/20 transition-colors duration-200">
-                    <feature.icon className="w-5 h-5 text-primary" aria-hidden="true" />
+                  <div className="bg-primary/10 group-hover:bg-primary/20 flex size-10 shrink-0 items-center justify-center rounded-xl transition-colors duration-200">
+                    <feature.icon className="size-5 text-primary" aria-hidden="true" />
                   </div>
                   <div>
-                    <h3 className="text-base font-bold font-display mb-1.5 text-text-primary group-hover:text-primary transition-colors duration-200">
+                    <h3 className="mb-1.5 font-display text-base font-bold text-text-primary transition-colors duration-200 group-hover:text-primary">
                       {feature.title}
                     </h3>
-                    <p className="text-sm text-text-tertiary leading-relaxed">{feature.description}</p>
+                    <p className="text-sm leading-relaxed text-text-tertiary">
+                      {feature.description}
+                    </p>
                   </div>
                 </div>
               </CommandCard>

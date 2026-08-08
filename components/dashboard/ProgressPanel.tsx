@@ -27,7 +27,7 @@ export default function ProgressPanel({ child }: ProgressPanelProps) {
   const shouldReduceMotion = useReducedMotion();
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+    <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
       {/* Ability bars */}
       <motion.div
         initial={shouldReduceMotion ? false : { opacity: 0, y: 12 }}
@@ -35,11 +35,11 @@ export default function ProgressPanel({ child }: ProgressPanelProps) {
         transition={{ duration: 0.5 }}
         className="lg:col-span-2"
       >
-        <CommandCard className="p-6 h-full">
-          <div className="flex items-center gap-2 mb-5">
-            <BarChart3 className="w-5 h-5 text-primary" />
-            <h2 className="text-base font-bold font-display">能力准备度</h2>
-            <span className="text-xs text-text-muted ml-auto">
+        <CommandCard className="h-full p-6">
+          <div className="mb-5 flex items-center gap-2">
+            <BarChart3 className="size-5 text-primary" />
+            <h2 className="font-display text-base font-bold">能力准备度</h2>
+            <span className="ml-auto text-xs text-text-muted">
               {gradeLabel(child.grade, child.educationSystem)} · 对比目标与同龄平均
             </span>
           </div>
@@ -54,21 +54,23 @@ export default function ProgressPanel({ child }: ProgressPanelProps) {
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.1 + index * 0.06 }}
                 >
-                  <div className="flex items-center justify-between mb-2">
+                  <div className="mb-2 flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <span className="font-medium text-sm text-text-secondary">{ability.name}</span>
+                      <span className="text-sm font-medium text-text-secondary">
+                        {ability.name}
+                      </span>
                       <span className={`flex items-center gap-1 text-[10px] ${trend.color}`}>
-                        <trend.icon className="w-3 h-3" />
+                        <trend.icon className="size-3" />
                         {trend.label}
                       </span>
                     </div>
                     <div className="text-xs text-text-muted">
-                      <span className="text-text-primary font-semibold">{ability.current}%</span>
+                      <span className="font-semibold text-text-primary">{ability.current}%</span>
                       {' / '}
                       目标 {ability.target}%
                     </div>
                   </div>
-                  <div className="relative h-2 rounded-full bg-surface-elevated overflow-hidden">
+                  <div className="relative h-2 overflow-hidden rounded-full bg-surface-elevated">
                     <motion.div
                       initial={shouldReduceMotion ? false : { width: 0 }}
                       animate={{ width: `${ability.current}%` }}
@@ -84,7 +86,7 @@ export default function ProgressPanel({ child }: ProgressPanelProps) {
                       style={{ left: `${ability.average}%` }}
                     />
                   </div>
-                  <div className="flex items-center justify-between mt-1 text-[10px] text-text-muted">
+                  <div className="mt-1 flex items-center justify-between text-[10px] text-text-muted">
                     <span>同龄平均 {ability.average}%</span>
                     <span>目标 {ability.target}%</span>
                   </div>
@@ -101,13 +103,21 @@ export default function ProgressPanel({ child }: ProgressPanelProps) {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.1 }}
       >
-        <CommandCard className="p-6 h-full border-secondary/10">
-          <h2 className="text-base font-bold font-display mb-4">总体评估</h2>
+        <CommandCard className="border-secondary/10 h-full p-6">
+          <h2 className="mb-4 font-display text-base font-bold">总体评估</h2>
 
-          <div className="text-center mb-5">
-            <div className="relative inline-flex items-center justify-center w-28 h-28">
-              <svg className="w-full h-full -rotate-90">
-                <circle cx="56" cy="56" r="48" className="text-border-subtle" stroke="currentColor" strokeWidth="10" fill="none" />
+          <div className="mb-5 text-center">
+            <div className="relative inline-flex size-28 items-center justify-center">
+              <svg className="size-full -rotate-90">
+                <circle
+                  cx="56"
+                  cy="56"
+                  r="48"
+                  className="text-border-subtle"
+                  stroke="currentColor"
+                  strokeWidth="10"
+                  fill="none"
+                />
                 <circle
                   cx="56"
                   cy="56"
@@ -127,19 +137,19 @@ export default function ProgressPanel({ child }: ProgressPanelProps) {
                 </defs>
               </svg>
               <div className="absolute inset-0 flex flex-col items-center justify-center">
-                <span className="text-2xl font-bold font-display">32%</span>
+                <span className="font-display text-2xl font-bold">32%</span>
                 <span className="text-[10px] text-text-muted">总体准备度</span>
               </div>
             </div>
           </div>
 
           <div className="space-y-3">
-            <div className="p-3 rounded-xl bg-success/10 border border-success/20">
-              <p className="text-xs text-success font-semibold mb-0.5">优势项</p>
+            <div className="bg-success/10 border-success/20 rounded-xl border p-3">
+              <p className="mb-0.5 text-xs font-semibold text-success">优势项</p>
               <p className="text-xs text-text-secondary">英语基础较好，已超前同龄平均水平</p>
             </div>
-            <div className="p-3 rounded-xl bg-warning/10 border border-warning/20">
-              <p className="text-xs text-warning font-semibold mb-0.5">短板项</p>
+            <div className="bg-warning/10 border-warning/20 rounded-xl border p-3">
+              <p className="mb-0.5 text-xs font-semibold text-warning">短板项</p>
               <p className="text-xs text-text-secondary">奥数思维和竞赛经历尚未启动，需尽快规划</p>
             </div>
           </div>

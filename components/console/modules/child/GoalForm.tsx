@@ -52,60 +52,69 @@ export default function GoalForm({ initial, onSubmit, onCancel, isLoading }: Goa
     onSubmit(form);
   };
 
-  const update = <K extends keyof LearningGoalCreateInput>(key: K, value: LearningGoalCreateInput[K]) => {
+  const update = <K extends keyof LearningGoalCreateInput>(
+    key: K,
+    value: LearningGoalCreateInput[K]
+  ) => {
     setForm((prev) => ({ ...prev, [key]: value }));
   };
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-      <div className="w-full max-w-md rounded-[20px] bg-surface border border-border-default shadow-2xl overflow-hidden max-h-[85vh] overflow-y-auto">
-        <div className="flex items-center justify-between px-5 py-4 border-b border-border-subtle">
+    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm">
+      <div className="max-h-[85vh] w-full max-w-md overflow-hidden overflow-y-auto rounded-[20px] border border-border-default bg-surface shadow-2xl">
+        <div className="flex items-center justify-between border-b border-border-subtle px-5 py-4">
           <h3 className="text-base font-bold text-text-primary">
             {initial ? '编辑目标' : '新增目标'}
           </h3>
           <button
             onClick={onCancel}
-            className="w-8 h-8 rounded-lg bg-surface-hover flex items-center justify-center text-text-muted hover:text-text-secondary transition-colors"
+            className="flex size-8 items-center justify-center rounded-lg bg-surface-hover text-text-muted transition-colors hover:text-text-secondary"
           >
-            <X className="w-4 h-4" />
+            <X className="size-4" />
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="p-5 space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4 p-5">
           <div>
-            <label className="block text-xs text-text-muted mb-1.5">目标标题</label>
+            <label className="mb-1.5 block text-xs text-text-muted">目标标题</label>
             <input
               type="text"
               value={form.title}
               onChange={(e) => update('title', e.target.value)}
               placeholder="例如：一年阅读 100 本书"
-              className="w-full px-3 py-2.5 rounded-xl bg-surface-hover border border-border-default text-sm text-text-secondary placeholder:text-text-muted focus:outline-none focus:border-primary/50"
+              className="focus:border-primary/50 w-full rounded-xl border border-border-default bg-surface-hover px-3 py-2.5 text-sm text-text-secondary placeholder:text-text-muted focus:outline-none"
               required
             />
           </div>
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs text-text-muted mb-1.5">学科</label>
+              <label className="mb-1.5 block text-xs text-text-muted">学科</label>
               <select
                 value={form.subject}
-                onChange={(e) => update('subject', e.target.value as LearningGoalCreateInput['subject'])}
-                className="w-full px-3 py-2.5 rounded-xl bg-surface-hover border border-border-default text-sm text-text-secondary focus:outline-none focus:border-primary/50"
+                onChange={(e) =>
+                  update('subject', e.target.value as LearningGoalCreateInput['subject'])
+                }
+                className="focus:border-primary/50 w-full rounded-xl border border-border-default bg-surface-hover px-3 py-2.5 text-sm text-text-secondary focus:outline-none"
               >
                 {subjects.map((s) => (
-                  <option key={s.value} value={s.value}>{s.label}</option>
+                  <option key={s.value} value={s.value}>
+                    {s.label}
+                  </option>
                 ))}
               </select>
             </div>
             <div>
-              <label className="block text-xs text-text-muted mb-1.5">目标周期</label>
+              <label className="mb-1.5 block text-xs text-text-muted">目标周期</label>
               <select
                 value={form.period}
                 onChange={(e) => update('period', e.target.value)}
-                className="w-full px-3 py-2.5 rounded-xl bg-surface-hover border border-border-default text-sm text-text-secondary focus:outline-none focus:border-primary/50"
+                className="focus:border-primary/50 w-full rounded-xl border border-border-default bg-surface-hover px-3 py-2.5 text-sm text-text-secondary focus:outline-none"
               >
                 {periods.map((p) => (
-                  <option key={p} value={p}>{p}</option>
+                  <option key={p} value={p}>
+                    {p}
+                  </option>
                 ))}
               </select>
             </div>
@@ -113,39 +122,47 @@ export default function GoalForm({ initial, onSubmit, onCancel, isLoading }: Goa
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs text-text-muted mb-1.5">目标类型</label>
+              <label className="mb-1.5 block text-xs text-text-muted">目标类型</label>
               <select
                 value={form.goalType}
-                onChange={(e) => update('goalType', e.target.value as LearningGoalCreateInput['goalType'])}
-                className="w-full px-3 py-2.5 rounded-xl bg-surface-hover border border-border-default text-sm text-text-secondary focus:outline-none focus:border-primary/50"
+                onChange={(e) =>
+                  update('goalType', e.target.value as LearningGoalCreateInput['goalType'])
+                }
+                className="focus:border-primary/50 w-full rounded-xl border border-border-default bg-surface-hover px-3 py-2.5 text-sm text-text-secondary focus:outline-none"
               >
                 {goalTypes.map((t) => (
-                  <option key={t.value} value={t.value}>{t.label}</option>
+                  <option key={t.value} value={t.value}>
+                    {t.label}
+                  </option>
                 ))}
               </select>
             </div>
             <div>
-              <label className="block text-xs text-text-muted mb-1.5">评价指标</label>
+              <label className="mb-1.5 block text-xs text-text-muted">评价指标</label>
               <select
                 value={form.metricType}
-                onChange={(e) => update('metricType', e.target.value as LearningGoalCreateInput['metricType'])}
-                className="w-full px-3 py-2.5 rounded-xl bg-surface-hover border border-border-default text-sm text-text-secondary focus:outline-none focus:border-primary/50"
+                onChange={(e) =>
+                  update('metricType', e.target.value as LearningGoalCreateInput['metricType'])
+                }
+                className="focus:border-primary/50 w-full rounded-xl border border-border-default bg-surface-hover px-3 py-2.5 text-sm text-text-secondary focus:outline-none"
               >
                 {metricTypes.map((m) => (
-                  <option key={m.value} value={m.value}>{m.label}</option>
+                  <option key={m.value} value={m.value}>
+                    {m.label}
+                  </option>
                 ))}
               </select>
             </div>
           </div>
 
           <div>
-            <label className="block text-xs text-text-muted mb-1.5">具体目标</label>
+            <label className="mb-1.5 block text-xs text-text-muted">具体目标</label>
             <input
               type="text"
               value={form.target ?? ''}
               onChange={(e) => update('target', e.target.value)}
               placeholder="例如：100本 / 90分 / 30分钟"
-              className="w-full px-3 py-2.5 rounded-xl bg-surface-hover border border-border-default text-sm text-text-secondary placeholder:text-text-muted focus:outline-none focus:border-primary/50"
+              className="focus:border-primary/50 w-full rounded-xl border border-border-default bg-surface-hover px-3 py-2.5 text-sm text-text-secondary placeholder:text-text-muted focus:outline-none"
             />
           </div>
 
@@ -153,14 +170,14 @@ export default function GoalForm({ initial, onSubmit, onCancel, isLoading }: Goa
             <button
               type="submit"
               disabled={isLoading || !form.title.trim()}
-              className="flex-1 py-2.5 rounded-xl bg-primary text-white text-sm font-medium hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
+              className="flex-1 rounded-xl bg-primary py-2.5 text-sm font-medium text-inverse transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
             >
               {isLoading ? '保存中...' : '保存目标'}
             </button>
             <button
               type="button"
               onClick={onCancel}
-              className="flex-1 py-2.5 rounded-xl bg-surface-hover text-text-secondary text-sm font-medium hover:bg-surface-hover transition-colors"
+              className="flex-1 rounded-xl bg-surface-hover py-2.5 text-sm font-medium text-text-secondary transition-colors hover:bg-surface-hover"
             >
               取消
             </button>

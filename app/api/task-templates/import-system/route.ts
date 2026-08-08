@@ -6,11 +6,7 @@ import { canManageChild } from '@/lib/family';
 import { Prisma } from '@/lib/generated/prisma';
 import { SYSTEM_TASK_TEMPLATES } from '@/lib/taskTemplates';
 import { seedSystemCapabilities } from '@/lib/seedCapabilities';
-import type {
-  TaskTemplate,
-  TaskCapabilityLink,
-  Capability,
-} from '@/lib/generated/prisma';
+import type { TaskTemplate, TaskCapabilityLink, Capability } from '@/lib/generated/prisma';
 
 const importSchema = {
   parse: (body: unknown) => {
@@ -84,10 +80,7 @@ export async function POST(req: Request) {
 
   const child = await prisma.child.findUnique({ where: { id: childId } });
   if (!child || !(await canManageChild(session.user.id, child))) {
-    return NextResponse.json(
-      { error: '孩子不存在或无权限' },
-      { status: 404 }
-    );
+    return NextResponse.json({ error: '孩子不存在或无权限' }, { status: 404 });
   }
 
   await seedSystemCapabilities(prisma);
@@ -132,7 +125,8 @@ export async function POST(req: Request) {
         frequency: (systemTpl.frequency ?? 'once').toUpperCase() as any,
         weeklySchedule: (systemTpl.weeklySchedule ?? 'auto').toUpperCase() as any,
         customScheduleDays: systemTpl.customScheduleDays ?? [],
-        assessmentCriteria: (systemTpl.assessmentCriteria ?? []) as unknown as Prisma.InputJsonValue,
+        assessmentCriteria: (systemTpl.assessmentCriteria ??
+          []) as unknown as Prisma.InputJsonValue,
         capabilityLinks: {
           create: (systemTpl.capabilityLinks
             ?.map((link) => {
@@ -144,7 +138,8 @@ export async function POST(req: Request) {
                 expectedProgress: link.expectedProgress,
               };
             })
-            .filter((link): link is NonNullable<typeof link> => link !== null) ?? []) as unknown as Prisma.TaskCapabilityLinkCreateWithoutTaskTemplateInput[],
+            .filter((link): link is NonNullable<typeof link> => link !== null) ??
+            []) as unknown as Prisma.TaskCapabilityLinkCreateWithoutTaskTemplateInput[],
         },
       },
       include: {

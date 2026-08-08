@@ -4,17 +4,9 @@ import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 import { seedSystemTaskTemplatesForChild } from '@/lib/seedTaskTemplates';
 import { seedSystemCapabilities } from '@/lib/seedCapabilities';
-import {
-  taskCategorySchema,
-  taskTemplateCreateSchema,
-  validateBody,
-} from '@/lib/validation';
+import { taskCategorySchema, taskTemplateCreateSchema, validateBody } from '@/lib/validation';
 import { canManageChild, canViewChild } from '@/lib/family';
-import type {
-  TaskTemplate,
-  TaskCapabilityLink,
-  Capability,
-} from '@/lib/generated/prisma';
+import type { TaskTemplate, TaskCapabilityLink, Capability } from '@/lib/generated/prisma';
 
 type TaskTemplateWithLinks = TaskTemplate & {
   capabilityLinks: (TaskCapabilityLink & { capability: Capability | null })[];
@@ -55,10 +47,7 @@ export async function GET(req: Request) {
     const childId = searchParams.get('childId');
 
     if (!childId) {
-      return NextResponse.json(
-        { error: '缺少 childId 参数' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: '缺少 childId 参数' }, { status: 400 });
     }
 
     // 验证当前用户是否可查看该孩子
@@ -66,10 +55,7 @@ export async function GET(req: Request) {
       where: { id: childId },
     });
     if (!child || !(await canViewChild(session.user.id, child))) {
-      return NextResponse.json(
-        { error: '孩子不存在或无权限' },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: '孩子不存在或无权限' }, { status: 404 });
     }
 
     // 同步系统预设（按孩子维度）
@@ -91,10 +77,7 @@ export async function GET(req: Request) {
     if (category) {
       const parsed = taskCategorySchema.safeParse(category);
       if (!parsed.success) {
-        return NextResponse.json(
-          { error: 'Invalid category' },
-          { status: 400 }
-        );
+        return NextResponse.json({ error: 'Invalid category' }, { status: 400 });
       }
       where.category = parsed.data.toUpperCase();
     }
@@ -142,10 +125,7 @@ export async function POST(req: Request) {
     where: { id: body.childId },
   });
   if (!child || !(await canManageChild(session.user.id, child))) {
-    return NextResponse.json(
-      { error: '孩子不存在或无权限' },
-      { status: 404 }
-    );
+    return NextResponse.json({ error: '孩子不存在或无权限' }, { status: 404 });
   }
 
   const template = await prisma.taskTemplate.create({

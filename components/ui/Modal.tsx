@@ -32,10 +32,7 @@ const sizeClasses: Record<string, string> = {
   full: 'max-w-full',
 };
 
-const schemeStyles: Record<
-  ModalColorScheme,
-  { border: string; shadow: string; glow: string }
-> = {
+const schemeStyles: Record<ModalColorScheme, { border: string; shadow: string; glow: string }> = {
   rose: {
     border: 'color-mix(in srgb, var(--color-primary) 45%, transparent)',
     shadow: 'var(--shadow-card)',
@@ -113,7 +110,7 @@ export default function Modal({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="absolute inset-0 bg-background/85 backdrop-blur-md"
+            className="bg-background/85 absolute inset-0 backdrop-blur-md"
             onClick={closeOnBackdrop ? onClose : undefined}
           />
           <motion.div
@@ -121,55 +118,51 @@ export default function Modal({
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
             transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-            className={`relative w-full ${sizeClasses[size]} max-h-[90vh] rounded-card bg-surface-elevated flex flex-col overflow-hidden pointer-events-auto shadow-card ${className}`}
+            className={`relative w-full ${sizeClasses[size]} pointer-events-auto flex max-h-[90vh] flex-col overflow-hidden rounded-card bg-surface-elevated shadow-card ${className}`}
             style={{
               border: `1px solid ${schemeStyles[colorScheme].border}`,
               boxShadow: schemeStyles[colorScheme].shadow,
             }}
           >
             <div
-              className="pointer-events-none absolute -top-20 -right-20 w-64 h-64 rounded-full blur-3xl"
+              className="pointer-events-none absolute -right-20 -top-20 size-64 rounded-full blur-3xl"
               style={{ background: schemeStyles[colorScheme].glow }}
             />
             <div
-              className="pointer-events-none absolute -bottom-16 -left-16 w-48 h-48 rounded-full blur-3xl"
+              className="pointer-events-none absolute -bottom-16 -left-16 size-48 rounded-full blur-3xl"
               style={{ background: schemeStyles[colorScheme].glow }}
             />
-            <div className="relative z-10 p-6 pb-4 border-b border-border-default flex items-center justify-between shrink-0">
+            <div className="relative z-10 flex shrink-0 items-center justify-between border-b border-border-default p-6 pb-4">
               <div className="flex items-center gap-3">
                 {Icon && (
                   <div
-                    className={`w-10 h-10 rounded-module flex items-center justify-center ${
+                    className={`flex size-10 items-center justify-center rounded-module ${
                       iconClassName || 'bg-gradient-to-br from-primary to-primary-glow'
                     }`}
                   >
-                    <Icon className="w-5 h-5 text-text-primary" />
+                    <Icon className="size-5 text-text-primary" />
                   </div>
                 )}
                 <div>
-                  <h3 className="text-lg font-bold font-display">{title}</h3>
-                  {subtitle && (
-                    <p className="text-xs text-text-tertiary">{subtitle}</p>
-                  )}
+                  <h3 className="font-display text-lg font-bold">{title}</h3>
+                  {subtitle && <p className="text-xs text-text-tertiary">{subtitle}</p>}
                 </div>
               </div>
               {showClose && (
                 <button
                   onClick={onClose}
-                  className="w-8 h-8 rounded-module bg-surface-hover flex items-center justify-center text-text-tertiary hover:text-text-primary hover:bg-surface-highlight transition-all"
+                  className="flex size-8 items-center justify-center rounded-module bg-surface-hover text-text-tertiary transition-all hover:bg-surface-highlight hover:text-text-primary"
                   aria-label="关闭"
                 >
-                  <X className="w-4 h-4" />
+                  <X className="size-4" />
                 </button>
               )}
             </div>
 
-            <div className="relative z-10 flex-1 overflow-y-auto p-6 modal-scroll">
-              {children}
-            </div>
+            <div className="modal-scroll relative z-10 flex-1 overflow-y-auto p-6">{children}</div>
 
             {footer && (
-              <div className="relative z-10 p-6 pt-4 border-t border-border-default shrink-0">
+              <div className="relative z-10 shrink-0 border-t border-border-default p-6 pt-4">
                 {footer}
               </div>
             )}

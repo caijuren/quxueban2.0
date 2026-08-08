@@ -13,11 +13,13 @@ export const metadata: Metadata = {
 const features = [
   {
     title: '可视化进度总览',
-    description: '数学、英语、语文、竞赛等能力项以图表形式展示，直观对比当前水平与目标要求之间的差距。',
+    description:
+      '数学、英语、语文、竞赛等能力项以图表形式展示，直观对比当前水平与目标要求之间的差距。',
   },
   {
     title: '健康度评分',
-    description: '基于任务完成情况和能力进度，自动生成整体健康度评分，快速判断当前准备状态是否在线。',
+    description:
+      '基于任务完成情况和能力进度，自动生成整体健康度评分，快速判断当前准备状态是否在线。',
   },
   {
     title: '风险项目高亮提醒',
@@ -43,25 +45,34 @@ export default function ProgressMarketingPage() {
         }
         description="不知道孩子准备得怎么样？趣学伴用可视化仪表盘展示各科能力进度，哪里超前、哪里落后，一眼就能看清楚。"
         tags={[
-          { icon: <LineChart className="w-3.5 h-3.5 text-primary" aria-hidden="true" />, text: '可视化仪表盘' },
-          { icon: <Gauge className="w-3.5 h-3.5 text-secondary" aria-hidden="true" />, text: '健康度评分' },
-          { icon: <AlertTriangle className="w-3.5 h-3.5 text-warning" aria-hidden="true" />, text: '风险提醒' },
+          {
+            icon: <LineChart className="size-3.5 text-primary" aria-hidden="true" />,
+            text: '可视化仪表盘',
+          },
+          {
+            icon: <Gauge className="size-3.5 text-secondary" aria-hidden="true" />,
+            text: '健康度评分',
+          },
+          {
+            icon: <AlertTriangle className="size-3.5 text-warning" aria-hidden="true" />,
+            text: '风险提醒',
+          },
         ]}
         visual={<DashboardVisual />}
       />
 
-      <section className="py-20 px-4 sm:px-6 lg:px-8 border-t border-white/5">
-        <div className="max-w-6xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <section className="border-t border-white/5 px-4 py-20 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-6xl">
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             {features.map((item, index) => (
-              <CommandCard key={item.title} className="p-5 h-full group" corner={index === 0}>
-                <span className="text-3xl font-mono text-text-muted font-bold block mb-3 group-hover:text-primary transition-colors">
+              <CommandCard key={item.title} className="group h-full p-5" corner={index === 0}>
+                <span className="mb-3 block font-mono text-3xl font-bold text-text-muted transition-colors group-hover:text-primary">
                   0{index + 1}
                 </span>
-                <h3 className="text-base font-bold font-display mb-2 text-text-primary group-hover:text-primary transition-colors">
+                <h3 className="mb-2 font-display text-base font-bold text-text-primary transition-colors group-hover:text-primary">
                   {item.title}
                 </h3>
-                <p className="text-sm text-text-tertiary leading-relaxed">{item.description}</p>
+                <p className="text-sm leading-relaxed text-text-tertiary">{item.description}</p>
               </CommandCard>
             ))}
           </div>

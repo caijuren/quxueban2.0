@@ -24,10 +24,6 @@ export function generateStaticParams() {
   ];
 }
 
-export default function SchoolPage({
-  params,
-}: {
-  params: { school: string };
-}) {
+export default function SchoolPage({ params }: { params: { school: string } }) {
   return <SchoolDetail school={params.school} />;
 }

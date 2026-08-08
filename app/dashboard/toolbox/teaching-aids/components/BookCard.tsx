@@ -15,10 +15,8 @@ function DifficultyStars({ difficulty }: { difficulty: number }) {
       {Array.from({ length: 5 }).map((_, i) => (
         <Star
           key={i}
-          className={`w-3 h-3 ${
-            i < difficulty
-              ? 'text-warning fill-warning'
-              : 'text-text-muted/30'
+          className={`size-3 ${
+            i < difficulty ? 'fill-warning text-warning' : 'text-text-muted/30'
           }`}
         />
       ))}
@@ -31,48 +29,44 @@ export default function BookCard({ book, onClick }: BookCardProps) {
     <CommandCard
       hover
       onClick={onClick}
-      className="h-full p-4 flex flex-col gap-3 cursor-pointer group"
+      className="group flex h-full cursor-pointer flex-col gap-3 p-4"
       aria-label={`${book.title}，点击进入详情`}
     >
       <div className="flex items-start gap-3">
-        <div className="w-11 h-11 rounded-xl bg-primary/10 border border-primary/15 flex items-center justify-center shrink-0">
-          <BookOpen className="w-5 h-5 text-primary" />
+        <div className="bg-primary/10 border-primary/15 flex size-11 shrink-0 items-center justify-center rounded-xl border">
+          <BookOpen className="size-5 text-primary" />
         </div>
-        <div className="flex-1 min-w-0">
-          <h3 className="text-sm font-bold font-display text-text-primary leading-snug line-clamp-2 group-hover:text-text-primary transition-colors">
+        <div className="min-w-0 flex-1">
+          <h3 className="line-clamp-2 font-display text-sm font-bold leading-snug text-text-primary transition-colors group-hover:text-text-primary">
             {book.title}
           </h3>
-          <p className="text-xs text-text-tertiary mt-0.5 truncate">
-            {book.publisher.name}
-          </p>
+          <p className="mt-0.5 truncate text-xs text-text-tertiary">{book.publisher.name}</p>
         </div>
       </div>
 
       <div className="flex flex-wrap gap-1.5">
-        <span className="text-2xs px-1.5 py-0.5 rounded-md bg-surface-elevated text-text-muted border border-border-subtle">
+        <span className="rounded-md border border-border-subtle bg-surface-elevated px-1.5 py-0.5 text-2xs text-text-muted">
           {book.subject}
         </span>
-        <span className="text-2xs px-1.5 py-0.5 rounded-md bg-surface-elevated text-text-muted border border-border-subtle">
+        <span className="rounded-md border border-border-subtle bg-surface-elevated px-1.5 py-0.5 text-2xs text-text-muted">
           {book.contentType.name}
         </span>
-        <span className="text-2xs px-1.5 py-0.5 rounded-md bg-surface-elevated text-text-muted border border-border-subtle">
+        <span className="rounded-md border border-border-subtle bg-surface-elevated px-1.5 py-0.5 text-2xs text-text-muted">
           {book.grade}
         </span>
       </div>
 
-      <div className="flex items-center justify-between mt-auto pt-1">
+      <div className="mt-auto flex items-center justify-between pt-1">
         <DifficultyStars difficulty={book.difficulty} />
         {book.price ? (
-          <span className="text-xs text-text-tertiary">
-            ¥{book.price.toFixed(2)}
-          </span>
+          <span className="text-xs text-text-tertiary">¥{book.price.toFixed(2)}</span>
         ) : (
           <span className="text-xs text-text-muted">暂无定价</span>
         )}
       </div>
 
       {book.sellingPoints && (
-        <p className="text-xs text-text-tertiary line-clamp-2 leading-relaxed">
+        <p className="line-clamp-2 text-xs leading-relaxed text-text-tertiary">
           {book.sellingPoints}
         </p>
       )}

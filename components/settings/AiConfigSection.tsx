@@ -1,8 +1,15 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Sparkles, Save, Loader2, Eye, EyeOff, RefreshCw, CheckCircle2, HelpCircle, AlertTriangle } from 'lucide-react';
+import { Sparkles, Save, Eye, EyeOff, RefreshCw } from 'lucide-react';
 import SettingsSection from './SettingsSection';
+import FormField from '@/components/ui/form-field';
+import Input from '@/components/ui/input';
+import Select from '@/components/ui/select';
+import Switch from '@/components/ui/switch';
+import Button from '@/components/ui/button';
+import Spinner from '@/components/ui/spinner';
+import Alert from '@/components/ui/alert';
 
 interface AiConfig {
   id?: string;
@@ -153,7 +160,7 @@ export default function AiConfigSection() {
     return (
       <SettingsSection title="AI 配置" description="配置 AI 检视功能调用的模型和 API Key">
         <div className="flex items-center justify-center py-8">
-          <Loader2 className="w-6 h-6 animate-spin text-primary" />
+          <Spinner size="md" color="primary" />
         </div>
       </SettingsSection>
     );
@@ -161,134 +168,106 @@ export default function AiConfigSection() {
 
   const providerInfo = PROVIDERS[form.provider];
   const modelInfo = MODEL_INFO[form.model];
-  const keyIsMasked = form.apiKey.includes('*');
 
   return (
     <div className="space-y-3">
       <SettingsSection title="AI 配置" description="配置 AI 检视功能调用的模型和 API Key">
-        <div className="space-y-3">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <div className="space-y-1.5">
-              <label className="text-xs text-text-tertiary">AI 提供商</label>
-              <select
+        <div className="space-y-4">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <FormField label="AI 提供商">
+              <Select
                 value={form.provider}
                 onChange={(e) => handleProviderChange(e.target.value)}
-                className="w-full rounded-lg bg-surface-elevated border border-border-default px-3 py-2 text-sm text-text-secondary focus:outline-none focus:border-primary transition-all"
-              >
-                {Object.entries(PROVIDERS).map(([value, p]) => (
-                  <option key={value} value={value}>
-                    {p.label}
-                  </option>
-                ))}
-              </select>
-            </div>
+                options={Object.entries(PROVIDERS).map(([value, p]) => ({
+                  value,
+                  label: p.label,
+                }))}
+              />
+            </FormField>
 
-            <div className="space-y-1.5">
-              <label className="text-xs text-text-tertiary">模型</label>
-              <select
+            <FormField label="模型" helper={modelInfo?.description}>
+              <Select
                 value={form.model}
                 onChange={(e) => setForm((prev) => ({ ...prev, model: e.target.value }))}
-                className="w-full rounded-lg bg-surface-elevated border border-border-default px-3 py-2 text-sm text-text-secondary focus:outline-none focus:border-primary transition-all"
-              >
-                {providerInfo?.models.map((m) => (
-                  <option key={m} value={m}>
-                    {MODEL_INFO[m]?.label || m}
-                  </option>
-                ))}
-              </select>
-              {modelInfo && (
-                <p className="text-[11px] text-text-muted leading-tight">{modelInfo.description}</p>
-              )}
-            </div>
+                options={
+                  providerInfo?.models.map((m) => ({
+                    value: m,
+                    label: MODEL_INFO[m]?.label || m,
+                  })) ?? []
+                }
+              />
+            </FormField>
           </div>
 
-          <div className="space-y-1.5">
-            <label className="text-xs text-text-tertiary">API URL</label>
-            <input
+          <FormField label="API URL">
+            <Input
               type="text"
               value={form.apiUrl}
               onChange={(e) => setForm((prev) => ({ ...prev, apiUrl: e.target.value }))}
-              className="w-full rounded-lg bg-surface-elevated border border-border-default px-3 py-2 text-sm text-text-secondary focus:outline-none focus:border-primary transition-all"
               placeholder="https://api.deepseek.com/v1/chat/completions"
             />
-          </div>
+          </FormField>
 
-          <div className="space-y-1.5">
-            <label className="text-xs text-text-tertiary">API Key</label>
+          <FormField label="API Key" helper="Key 加密存储在数据库，前端仅显示脱敏后的后 4 位">
             <div className="relative">
-              <input
+              <Input
                 type={showKey ? 'text' : 'password'}
                 value={form.apiKey}
                 onChange={(e) => setForm((prev) => ({ ...prev, apiKey: e.target.value }))}
-                className="w-full rounded-lg bg-surface-elevated border border-border-default px-3 py-2 pr-10 text-sm text-text-secondary focus:outline-none focus:border-primary transition-all"
                 placeholder="sk-..."
+                className="pr-10"
               />
               <button
                 type="button"
                 onClick={() => setShowKey((v) => !v)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-text-muted hover:text-text-secondary"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-text-muted transition-colors hover:text-text-secondary"
+                aria-label={showKey ? '隐藏 API Key' : '显示 API Key'}
               >
-                {showKey ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                {showKey ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
               </button>
             </div>
-            <p className="text-[11px] text-text-muted flex items-center gap-1">
-              <HelpCircle className="w-3 h-3" />
-              Key 加密存储在数据库，前端仅显示脱敏后的后 4 位
-            </p>
-          </div>
+          </FormField>
 
           <div className="flex items-center justify-between py-1">
             <div className="flex items-center gap-2">
-              <Sparkles className="w-3.5 h-3.5 text-secondary" />
-              <span className="text-xs font-medium text-text-secondary">启用 AI 检视</span>
+              <Sparkles className="size-4 text-secondary" />
+              <span className="text-sm font-medium text-text-secondary">启用 AI 检视</span>
             </div>
-            <button
-              onClick={() => setForm((prev) => ({ ...prev, isEnabled: !prev.isEnabled }))}
-              className={`relative w-9 h-5 rounded-full transition-colors ${
-                form.isEnabled ? 'bg-primary' : 'bg-surface-highlight'
-              }`}
-            >
-              <span
-                className={`absolute top-0.5 left-0.5 w-4 h-4 rounded-full bg-white transition-transform ${
-                  form.isEnabled ? 'translate-x-4' : ''
-                }`}
-              />
-            </button>
+            <Switch
+              checked={form.isEnabled}
+              onCheckedChange={(checked) => setForm((prev) => ({ ...prev, isEnabled: checked }))}
+              size="sm"
+            />
           </div>
         </div>
       </SettingsSection>
 
       {message && (
-        <div
-          className={`text-xs px-3 py-1.5 rounded-lg flex items-center gap-2 ${
-            message.type === 'success'
-              ? 'bg-success/10 text-success border border-success/20'
-              : 'bg-error/10 text-error border border-error/20'
-          }`}
-        >
-          {message.type === 'success' ? <CheckCircle2 className="w-3.5 h-3.5" /> : <AlertTriangle className="w-3.5 h-3.5" />}
+        <Alert type={message.type} title={message.type === 'success' ? '操作成功' : '操作失败'}>
           {message.text}
-        </div>
+        </Alert>
       )}
 
-      <div className="flex flex-wrap justify-end items-center gap-2">
-        <button
-          type="button"
+      <div className="flex flex-wrap items-center justify-end gap-2">
+        <Button
+          variant="secondary"
+          size="sm"
+          leftIcon={<RefreshCw className="size-4" />}
           onClick={handleTest}
-          disabled={testing || !config}
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-elevated border border-border-default text-text-secondary text-xs font-medium hover:bg-surface-highlight transition-all disabled:opacity-70"
+          isLoading={testing}
+          disabled={!config}
         >
-          {testing ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <RefreshCw className="w-3.5 h-3.5" />}
           测试连接
-        </button>
-        <button
+        </Button>
+        <Button
+          size="sm"
+          leftIcon={<Save className="size-4" />}
           onClick={handleSave}
-          disabled={saving || !form.apiKey}
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-primary text-text-primary text-xs font-medium hover:opacity-90 transition-all disabled:opacity-70"
+          isLoading={saving}
+          disabled={!form.apiKey}
         >
-          {saving ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Save className="w-3.5 h-3.5" />}
           保存配置
-        </button>
+        </Button>
       </div>
     </div>
   );

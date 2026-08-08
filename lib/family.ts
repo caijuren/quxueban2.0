@@ -21,10 +21,7 @@ export async function getViewableChildIdsForUser(userId: string): Promise<string
 
   const children = await prisma.child.findMany({
     where: {
-      OR: [
-        { userId },
-        ...(familyIds.length > 0 ? [{ familyId: { in: familyIds } }] : []),
-      ],
+      OR: [{ userId }, ...(familyIds.length > 0 ? [{ familyId: { in: familyIds } }] : [])],
     },
     select: { id: true },
   });
@@ -44,10 +41,7 @@ export async function getManageableChildIdsForUser(userId: string): Promise<stri
 
   const children = await prisma.child.findMany({
     where: {
-      OR: [
-        { userId },
-        ...(familyIds.length > 0 ? [{ familyId: { in: familyIds } }] : []),
-      ],
+      OR: [{ userId }, ...(familyIds.length > 0 ? [{ familyId: { in: familyIds } }] : [])],
     },
     select: { id: true },
   });

@@ -38,12 +38,11 @@ export default function CommandCard({
   return (
     <div
       className={cn(
-        'border transition-all duration-200 overflow-hidden',
-        active
-          ? 'command-panel-active'
-          : 'command-panel',
+        'overflow-hidden border transition-all duration-200',
+        active ? 'command-panel-active' : 'command-panel',
         hover && !active && 'hover:border-border-strong hover:bg-surface-hover',
-        isInteractive && 'cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-2 focus-visible:ring-offset-background',
+        isInteractive &&
+          'focus-visible:ring-primary/50 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-background',
         className
       )}
       onClick={onClick}

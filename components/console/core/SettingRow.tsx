@@ -24,24 +24,26 @@ export default function SettingRow({
 }: SettingRowProps) {
   const content = (
     <>
-      <div className="flex items-center gap-3 min-w-0">
+      <div className="flex min-w-0 items-center gap-3">
         {Icon && (
-          <div className="w-9 h-9 rounded-xl bg-surface-hover flex items-center justify-center shrink-0">
-            <Icon className={`w-4 h-4 ${variant === 'warning' ? 'text-warning' : 'text-text-tertiary'}`} />
+          <div className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-surface-hover">
+            <Icon
+              className={`size-4 ${variant === 'warning' ? 'text-warning' : 'text-text-tertiary'}`}
+            />
           </div>
         )}
         <div className="min-w-0">
-          <p className={`text-sm font-medium truncate ${variant === 'warning' ? 'text-warning' : 'text-text-secondary'}`}>
+          <p
+            className={`truncate text-sm font-medium ${variant === 'warning' ? 'text-warning' : 'text-text-secondary'}`}
+          >
             {label}
           </p>
-          {description && (
-            <p className="text-xs text-text-muted truncate">{description}</p>
-          )}
+          {description && <p className="truncate text-xs text-text-muted">{description}</p>}
         </div>
       </div>
-      <div className="flex items-center gap-2 shrink-0">
+      <div className="flex shrink-0 items-center gap-2">
         {value && <span className="text-xs text-text-tertiary">{value}</span>}
-        <ChevronRight className="w-4 h-4 text-text-muted" />
+        <ChevronRight className="size-4 text-text-muted" />
       </div>
     </>
   );

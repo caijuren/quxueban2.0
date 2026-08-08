@@ -131,7 +131,9 @@ async function upsertBooks(
   return { created, updated, skipped };
 }
 
-export async function seedBooks(prisma: PrismaClient): Promise<{ created: number; updated: number; skipped: number }> {
+export async function seedBooks(
+  prisma: PrismaClient
+): Promise<{ created: number; updated: number; skipped: number }> {
   console.log('开始导入出版社...');
   const publisherMap = await upsertPublishers(prisma);
   console.log(`出版社导入完成：${publisherMap.size} 条`);
@@ -142,7 +144,9 @@ export async function seedBooks(prisma: PrismaClient): Promise<{ created: number
 
   console.log('开始导入书目...');
   const stats = await upsertBooks(prisma, publisherMap, contentTypeMap);
-  console.log(`书目导入完成：新建 ${stats.created} 条，更新 ${stats.updated} 条，跳过 ${stats.skipped} 条`);
+  console.log(
+    `书目导入完成：新建 ${stats.created} 条，更新 ${stats.updated} 条，跳过 ${stats.skipped} 条`
+  );
 
   return stats;
 }

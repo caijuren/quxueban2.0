@@ -38,8 +38,7 @@ export function useChatSessions(childId?: string) {
 export function useCreateChatSession() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (data: ChatSessionCreateInput) =>
-      apiPost<ChatSession>('/api/chat/sessions', data),
+    mutationFn: (data: ChatSessionCreateInput) => apiPost<ChatSession>('/api/chat/sessions', data),
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({
         queryKey: [...sessionsKey, variables.childId ?? 'all'],

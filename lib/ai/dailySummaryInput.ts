@@ -49,8 +49,12 @@ export function buildDailySummaryInput(
 
   const doneCount = todayTasks.filter((t) => t.status === 'done').length;
   const partialCount = todayTasks.filter((t) => t.status === 'partially_done').length;
-  const pendingCount = todayTasks.filter((t) => t.status === 'pending' || t.status === 'in_progress').length;
-  const skippedCount = todayTasks.filter((t) => t.status === 'skipped' || t.status === 'rescheduled').length;
+  const pendingCount = todayTasks.filter(
+    (t) => t.status === 'pending' || t.status === 'in_progress'
+  ).length;
+  const skippedCount = todayTasks.filter(
+    (t) => t.status === 'skipped' || t.status === 'rescheduled'
+  ).length;
   const totalActualMinutes = todayTasks.reduce((sum, t) => {
     const record = t.completionRecords?.find((r) => r.date === date);
     return sum + (record?.actualDurationMinutes || 0);

@@ -6,31 +6,31 @@ import MotionSection from '@/components/ui/MotionSection';
 
 export default function FinalCTA() {
   return (
-    <section className="py-16 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary/5 to-transparent" />
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[400px] bg-primary/10 rounded-full blur-[140px] -z-10" />
+    <section className="relative overflow-hidden px-4 py-16 sm:px-6 lg:px-8">
+      <div className="via-primary/5 absolute inset-0 bg-gradient-to-b from-transparent to-transparent" />
+      <div className="bg-primary/10 absolute left-1/2 top-1/2 -z-10 h-[400px] w-[700px] -translate-x-1/2 -translate-y-1/2 rounded-full blur-[140px]" />
 
       <MotionSection
         direction="up"
         duration={0.7}
-        className="max-w-3xl mx-auto text-center relative z-10"
+        className="relative z-10 mx-auto max-w-3xl text-center"
       >
-        <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold font-display leading-tight mb-5">
+        <h2 className="mb-5 font-display text-3xl font-bold leading-tight sm:text-4xl lg:text-5xl">
           现在就为孩子绘制
           <br />
           <span className="text-text-muted">第一张升学规划图</span>
         </h2>
 
-        <p className="text-base text-text-tertiary max-w-lg mx-auto mb-8">
+        <p className="mx-auto mb-8 max-w-lg text-base text-text-tertiary">
           不需要复杂设置，5 分钟建立孩子档案，立刻看到当前阶段的关键任务和路线建议。
         </p>
 
         <Link
           href="/login"
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-primary text-text-primary text-sm font-medium hover:bg-primary/90 transition-colors"
+          className="hover:bg-primary/90 inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-text-primary transition-colors"
         >
           免费开始规划
-          <ArrowRight className="w-4 h-4" />
+          <ArrowRight className="size-4" />
         </Link>
       </MotionSection>
     </section>

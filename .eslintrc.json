@@ -1,3 +1,30 @@
 {
-  "extends": "next/core-web-vitals"
+  "extends": ["next/core-web-vitals", "plugin:tailwindcss/recommended"],
+  "plugins": ["tailwindcss"],
+  "rules": {
+    "tailwindcss/classnames-order": "off",
+    "tailwindcss/enforces-shorthand": "warn",
+    "tailwindcss/no-contradicting-classname": "error",
+    "tailwindcss/no-custom-classname": "off",
+    "tailwindcss/no-unnecessary-arbitrary-value": "warn",
+    "no-restricted-syntax": [
+      "warn",
+      {
+        "selector": "JSXAttribute[name.name='className'] Literal[value=/.*\\[#[0-9a-fA-F]{3,8}\\].*/]",
+        "message": "禁止在 className 任意值中硬编码颜色，请使用 Design Token。"
+      },
+      {
+        "selector": "JSXAttribute[name.name='style'] Property[key.name=/color/i] Literal[value=/^#[0-9a-fA-F]{3,8}$/]",
+        "message": "禁止在 style 颜色属性中硬编码颜色，请使用 Design Token。"
+      }
+    ]
+  },
+  "overrides": [
+    {
+      "files": ["**/*.css", "tailwind.config.ts", "postcss.config.*", "lib/settings.ts", "app/api/**/*.ts"],
+      "rules": {
+        "no-restricted-syntax": "off"
+      }
+    }
+  ]
 }

@@ -2,11 +2,7 @@
 
 import { motion } from 'framer-motion';
 import { useEffect, useMemo, useState } from 'react';
-import {
-  SubjectPlanConfig,
-  SubjectPlanNode,
-  SubjectPlanTrack,
-} from '@/lib/subjects/subjectPlan';
+import { SubjectPlanConfig, SubjectPlanNode, SubjectPlanTrack } from '@/lib/subjects/subjectPlan';
 
 interface ChineseTrackMapProps {
   config: SubjectPlanConfig;
@@ -37,10 +33,7 @@ function getCurrentTimeLabel(grade?: number): string | null {
   return `${gradeNames[grade]}${semester}`;
 }
 
-function getCurrentPosition(
-  grade?: number,
-  timeAxis?: { label: string; position: number }[]
-) {
+function getCurrentPosition(grade?: number, timeAxis?: { label: string; position: number }[]) {
   if (!timeAxis || timeAxis.length === 0) return VIEWBOX.startX;
 
   const label = getCurrentTimeLabel(grade);
@@ -62,7 +55,15 @@ function seededRandom(seed: number) {
 
 function hexToRgba(hex: string, alpha: number) {
   const clean = hex.replace('#', '');
-  const bigint = parseInt(clean.length === 3 ? clean.split('').map((c) => c + c).join('') : clean, 16);
+  const bigint = parseInt(
+    clean.length === 3
+      ? clean
+          .split('')
+          .map((c) => c + c)
+          .join('')
+      : clean,
+    16
+  );
   const r = (bigint >> 16) & 255;
   const g = (bigint >> 8) & 255;
   const b = bigint & 255;
@@ -80,7 +81,9 @@ export default function ChineseTrackMap({ config, currentGrade }: ChineseTrackMa
   }, []);
 
   const viewBoxHeight = useMemo(() => {
-    return VIEWBOX.topPadding + (config.tracks.length - 1) * VIEWBOX.trackSpacing + VIEWBOX.bottomPadding;
+    return (
+      VIEWBOX.topPadding + (config.tracks.length - 1) * VIEWBOX.trackSpacing + VIEWBOX.bottomPadding
+    );
   }, [config.tracks.length]);
 
   const particles = useMemo(() => {
@@ -95,22 +98,28 @@ export default function ChineseTrackMap({ config, currentGrade }: ChineseTrackMa
   }, [viewBoxHeight]);
 
   const trackMeta = useMemo(() => {
-    return config.tracks.reduce((acc, track, index) => {
-      acc[track.id] = {
-        ...track,
-        y: VIEWBOX.topPadding + index * VIEWBOX.trackSpacing,
-        glowColor: hexToRgba(track.color, 0.5),
-      };
-      return acc;
-    }, {} as Record<string, SubjectPlanTrack & { y: number; glowColor: string }>);
+    return config.tracks.reduce(
+      (acc, track, index) => {
+        acc[track.id] = {
+          ...track,
+          y: VIEWBOX.topPadding + index * VIEWBOX.trackSpacing,
+          glowColor: hexToRgba(track.color, 0.5),
+        };
+        return acc;
+      },
+      {} as Record<string, SubjectPlanTrack & { y: number; glowColor: string }>
+    );
   }, [config.tracks]);
 
   const nodesByTrack = useMemo(() => {
-    return config.nodes.reduce((acc, node) => {
-      if (!acc[node.trackId]) acc[node.trackId] = [];
-      acc[node.trackId].push(node);
-      return acc;
-    }, {} as Record<string, SubjectPlanNode[]>);
+    return config.nodes.reduce(
+      (acc, node) => {
+        if (!acc[node.trackId]) acc[node.trackId] = [];
+        acc[node.trackId].push(node);
+        return acc;
+      },
+      {} as Record<string, SubjectPlanNode[]>
+    );
   }, [config.nodes]);
 
   const currentX = useMemo(
@@ -130,9 +139,7 @@ export default function ChineseTrackMap({ config, currentGrade }: ChineseTrackMa
     setHoveredNode(null);
   };
 
-  const hoveredData = hoveredNode
-    ? config.nodes.find((n) => n.id === hoveredNode)
-    : null;
+  const hoveredData = hoveredNode ? config.nodes.find((n) => n.id === hoveredNode) : null;
   const hoveredTrack = hoveredData ? trackMeta[hoveredData.trackId] : null;
 
   return (
@@ -140,7 +147,7 @@ export default function ChineseTrackMap({ config, currentGrade }: ChineseTrackMa
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.1 }}
-      className="rounded-3xl bg-surface-elevated p-6 border border-border-subtle relative overflow-hidden"
+      className="relative overflow-hidden rounded-3xl border border-border-subtle bg-surface-elevated p-6"
       style={{
         perspective: '1200px',
         transform: `rotateX(${tilt.rotateX}deg) rotateY(${tilt.rotateY}deg)`,
@@ -150,9 +157,9 @@ export default function ChineseTrackMap({ config, currentGrade }: ChineseTrackMa
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
     >
-      <div className="flex flex-col gap-4 mb-4">
+      <div className="mb-4 flex flex-col gap-4">
         <div>
-          <h2 className="text-xl font-bold font-display">语文六线规划地图</h2>
+          <h2 className="font-display text-xl font-bold">语文六线规划地图</h2>
         </div>
         {/* Bottom legend */}
         <div className="flex flex-wrap gap-3">
@@ -161,10 +168,10 @@ export default function ChineseTrackMap({ config, currentGrade }: ChineseTrackMa
             return (
               <div
                 key={track.id}
-                className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-surface-elevated border border-border-subtle"
+                className="flex items-center gap-1.5 rounded-lg border border-border-subtle bg-surface-elevated px-2.5 py-1.5"
               >
                 <div
-                  className="w-3 h-3 rounded-full"
+                  className="size-3 rounded-full"
                   style={{
                     backgroundColor: track.color,
                     boxShadow: `0 0 10px ${meta?.glowColor}`,
@@ -181,7 +188,7 @@ export default function ChineseTrackMap({ config, currentGrade }: ChineseTrackMa
       <div className="relative w-full overflow-x-auto">
         <svg
           viewBox={`0 0 ${VIEWBOX.width} ${viewBoxHeight}`}
-          className="w-full min-w-[900px] h-auto"
+          className="h-auto w-full min-w-[900px]"
           preserveAspectRatio="xMidYMid meet"
           onMouseMove={(e) => {
             const rect = e.currentTarget.getBoundingClientRect();
@@ -252,16 +259,42 @@ export default function ChineseTrackMap({ config, currentGrade }: ChineseTrackMa
                 </radialGradient>
               </defs>
               <ellipse cx={250} cy={VIEWBOX.topPadding} rx={220} ry={160} fill="url(#ambientGlow1)">
-                <animate attributeName="cx" values="250;300;250" dur="8s" repeatCount="indefinite" />
-                <animate attributeName="cy" values={`${VIEWBOX.topPadding};${VIEWBOX.topPadding + 30};${VIEWBOX.topPadding}`} dur="8s" repeatCount="indefinite" />
+                <animate
+                  attributeName="cx"
+                  values="250;300;250"
+                  dur="8s"
+                  repeatCount="indefinite"
+                />
+                <animate
+                  attributeName="cy"
+                  values={`${VIEWBOX.topPadding};${VIEWBOX.topPadding + 30};${VIEWBOX.topPadding}`}
+                  dur="8s"
+                  repeatCount="indefinite"
+                />
               </ellipse>
               <ellipse cx={800} cy={viewBoxHeight / 2} rx={200} ry={140} fill="url(#ambientGlow2)">
-                <animate attributeName="cx" values="800;750;800" dur="10s" repeatCount="indefinite" />
-                <animate attributeName="cy" values={`${viewBoxHeight / 2};${viewBoxHeight / 2 - 30};${viewBoxHeight / 2}`} dur="10s" repeatCount="indefinite" />
+                <animate
+                  attributeName="cx"
+                  values="800;750;800"
+                  dur="10s"
+                  repeatCount="indefinite"
+                />
+                <animate
+                  attributeName="cy"
+                  values={`${viewBoxHeight / 2};${viewBoxHeight / 2 - 30};${viewBoxHeight / 2}`}
+                  dur="10s"
+                  repeatCount="indefinite"
+                />
               </ellipse>
               <motion.g
-                initial={{ x: mousePos?.x ?? VIEWBOX.width / 2, y: mousePos?.y ?? viewBoxHeight / 2 }}
-                animate={{ x: mousePos?.x ?? VIEWBOX.width / 2, y: mousePos?.y ?? viewBoxHeight / 2 }}
+                initial={{
+                  x: mousePos?.x ?? VIEWBOX.width / 2,
+                  y: mousePos?.y ?? viewBoxHeight / 2,
+                }}
+                animate={{
+                  x: mousePos?.x ?? VIEWBOX.width / 2,
+                  y: mousePos?.y ?? viewBoxHeight / 2,
+                }}
                 transition={{ type: 'spring', stiffness: 150, damping: 30 }}
                 style={{ pointerEvents: 'none' }}
               >
@@ -305,7 +338,14 @@ export default function ChineseTrackMap({ config, currentGrade }: ChineseTrackMa
             const x = positionToX(t.position);
             return (
               <g key={t.position}>
-                <line x1={x} y1={46} x2={x} y2={54} stroke="rgba(255,255,255,0.3)" strokeWidth="2" />
+                <line
+                  x1={x}
+                  y1={46}
+                  x2={x}
+                  y2={54}
+                  stroke="rgba(255,255,255,0.3)"
+                  strokeWidth="2"
+                />
                 <text
                   x={x}
                   y={34}
@@ -448,7 +488,14 @@ export default function ChineseTrackMap({ config, currentGrade }: ChineseTrackMa
             fill="rgba(244,63,94,0.15)"
             stroke="rgba(244,63,94,0.4)"
           />
-          <text x={currentX} y={58} fill="#f43f5e" fontSize="10" fontWeight="600" textAnchor="middle">
+          <text
+            x={currentX}
+            y={58}
+            fill="#f43f5e"
+            fontSize="10"
+            fontWeight="600"
+            textAnchor="middle"
+          >
             当前位置
           </text>
         </svg>
@@ -459,11 +506,11 @@ export default function ChineseTrackMap({ config, currentGrade }: ChineseTrackMa
         <motion.div
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
-          className="absolute top-36 right-6 w-56 p-4 rounded-xl bg-surface/95 border border-border-default shadow-2xl z-20"
+          className="bg-surface/95 absolute right-6 top-36 z-20 w-56 rounded-xl border border-border-default p-4 shadow-2xl"
         >
-          <div className="flex items-center gap-2 mb-2">
+          <div className="mb-2 flex items-center gap-2">
             <div
-              className="w-3 h-3 rounded-full"
+              className="size-3 rounded-full"
               style={{
                 backgroundColor: hoveredTrack.color,
                 boxShadow: `0 0 10px ${hoveredTrack.glowColor}`,
@@ -471,11 +518,10 @@ export default function ChineseTrackMap({ config, currentGrade }: ChineseTrackMa
             />
             <p className="text-xs text-text-muted">{hoveredData.time}</p>
           </div>
-          <p className="text-sm font-bold text-text-secondary mb-1">{hoveredData.label}</p>
+          <p className="mb-1 text-sm font-bold text-text-secondary">{hoveredData.label}</p>
           <p className="text-xs text-text-tertiary">{hoveredData.detail}</p>
         </motion.div>
       )}
-
     </motion.div>
   );
 }

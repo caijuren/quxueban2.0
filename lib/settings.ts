@@ -1,3 +1,5 @@
+import { setTheme, type Theme } from './theme';
+
 export interface UserProfile {
   id: string;
   username: string;
@@ -10,7 +12,8 @@ export interface UserProfile {
 }
 
 export interface UserSettings {
-  theme: 'dark-tech' | 'rose-pink';
+  theme: 'dark-tech' | 'rose-pink' | 'light';
+  appearance?: 'light' | 'dark' | 'system';
   fontSize: 'normal' | 'large' | 'xlarge';
   density: 'comfortable' | 'compact';
   reducedMotion: boolean;
@@ -80,7 +83,7 @@ export function mergeNotificationPrefs(
 }
 
 export const THEME_COLORS: Record<
-  UserSettings['theme'],
+  Exclude<UserSettings['theme'], 'light'>,
   {
     '--color-primary': string;
     '--color-primary-glow': string;
@@ -111,17 +114,36 @@ export const THEME_COLORS: Record<
 export function applySettingsToDocument(settings: UserSettings | null) {
   if (typeof document === 'undefined') return;
 
+  const isAdmin = window.location.pathname.startsWith('/admin');
+
   const fontSize = settings?.fontSize ?? 'normal';
   document.documentElement.setAttribute('data-font-size', fontSize);
 
   const reducedMotion = settings?.reducedMotion ?? false;
-  document.documentElement.setAttribute(
-    'data-reduced-motion',
-    String(reducedMotion)
-  );
+  document.documentElement.setAttribute('data-reduced-motion', String(reducedMotion));
 
-  const theme = settings?.theme ?? 'dark-tech';
-  const colors = THEME_COLORS[theme] ?? THEME_COLORS['dark-tech'];
+  // Admin 后台强制使用浅色主题，避免用户外观设置覆盖。
+  if (isAdmin) {
+    document.documentElement.setAttribute('data-theme', 'light');
+    return;
+  }
+
+  // Appearance theme: light / dark / system
+  // Fallback to legacy theme values for backwards compatibility.
+  let appearance: Theme = 'dark';
+  if (settings?.appearance) {
+    appearance = settings.appearance;
+  } else if (settings?.theme === 'light') {
+    appearance = 'light';
+  }
+  setTheme(appearance);
+
+  // Brand color variant: only applies when in dark mode.
+  const variant =
+    settings?.theme === 'dark-tech' || settings?.theme === 'rose-pink'
+      ? settings.theme
+      : 'dark-tech';
+  const colors = THEME_COLORS[variant] ?? THEME_COLORS['dark-tech'];
   Object.entries(colors).forEach(([key, value]) => {
     document.documentElement.style.setProperty(key, value);
   });

@@ -46,8 +46,7 @@ export const BADGE_DEFINITIONS: BadgeDefinition[] = [
     icon: 'Star',
     color: '#f59e0b',
     points: 10,
-    condition: (context) =>
-      (context.completionRecords?.some((r) => r.status === 'done') ?? false),
+    condition: (context) => context.completionRecords?.some((r) => r.status === 'done') ?? false,
   },
   {
     key: 'week_perfect',
@@ -91,9 +90,7 @@ export const BADGE_DEFINITIONS: BadgeDefinition[] = [
 ];
 
 function getDoneDates(records: TaskCompletionRecord[]): string[] {
-  const doneSet = new Set(
-    records.filter((r) => r.status === 'done').map((r) => r.date)
-  );
+  const doneSet = new Set(records.filter((r) => r.status === 'done').map((r) => r.date));
   return Array.from(doneSet).sort();
 }
 
@@ -157,11 +154,8 @@ export async function getGamificationContext(
   const currentWeekId = getCurrentWeekId();
 
   for (const plan of plans) {
-    const rawTasks =
-      (plan.tasks as unknown as Partial<WeeklyTaskItem>[]) || [];
-    const tasks = rawTasks.map((task) =>
-      normalizeWeeklyTask(task as WeeklyTaskItem)
-    );
+    const rawTasks = (plan.tasks as unknown as Partial<WeeklyTaskItem>[]) || [];
+    const tasks = rawTasks.map((task) => normalizeWeeklyTask(task as WeeklyTaskItem));
 
     for (const task of tasks) {
       if (task.completionRecords) {
@@ -187,10 +181,7 @@ export async function getGamificationContext(
   };
 }
 
-async function getCurrentTotalPoints(
-  userId: string,
-  childId: string
-): Promise<number> {
+async function getCurrentTotalPoints(userId: string, childId: string): Promise<number> {
   const latest = await prisma.pointLog.findFirst({
     where: { userId, childId },
     orderBy: { createdAt: 'desc' },
@@ -211,10 +202,7 @@ export async function checkAndAwardBadges(
   });
   const existingKeys = existingBadges.map((b) => b.key);
 
-  const streaks = calculateStreak(
-    childId,
-    context.completionRecords ?? []
-  );
+  const streaks = calculateStreak(childId, context.completionRecords ?? []);
 
   const newBadges = BADGE_DEFINITIONS.filter((badge) => {
     if (existingKeys.includes(badge.key)) return false;

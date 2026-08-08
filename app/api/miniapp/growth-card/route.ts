@@ -118,9 +118,7 @@ export async function GET(req: NextRequest) {
 
   if (currentPlan) {
     const rawTasks = (currentPlan.tasks as unknown as Partial<WeeklyTaskItem>[]) || [];
-    const normalizedTasks = rawTasks.map((task) =>
-      normalizeWeeklyTask(task as WeeklyTaskItem)
-    );
+    const normalizedTasks = rawTasks.map((task) => normalizeWeeklyTask(task as WeeklyTaskItem));
     const stats = getPlanStats({
       tasks: normalizedTasks,
       weekId: currentPlan.weekId,
@@ -151,10 +149,7 @@ export async function GET(req: NextRequest) {
   });
 
   const todayDone = todayRecords.filter((r) => r.status === 'done').length;
-  const todayMinutes = todayRecords.reduce(
-    (sum, r) => sum + (r.actualDurationMinutes || 0),
-    0
-  );
+  const todayMinutes = todayRecords.reduce((sum, r) => sum + (r.actualDurationMinutes || 0), 0);
 
   return NextResponse.json({
     weeklyStats,

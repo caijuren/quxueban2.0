@@ -33,28 +33,28 @@ const colorClasses = {
 export default function AIReportVisual() {
   return (
     <div className="rounded-2xl border border-border-subtle bg-surface-elevated p-5">
-      <div className="flex items-center justify-between mb-5">
+      <div className="mb-5 flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <Sparkles className="w-4 h-4 text-secondary" aria-hidden="true" />
-          <span className="text-[11px] font-mono text-text-tertiary uppercase tracking-wider">
+          <Sparkles className="size-4 text-secondary" aria-hidden="true" />
+          <span className="font-mono text-[11px] uppercase tracking-wider text-text-tertiary">
             AI 智能检视
           </span>
         </div>
-        <span className="text-[11px] font-mono text-secondary">GENERATED</span>
+        <span className="font-mono text-[11px] text-secondary">GENERATED</span>
       </div>
 
-      <div className="rounded-xl bg-background border border-border-subtle p-4 space-y-3">
-        <div className="flex items-center justify-between pb-3 border-b border-border-subtle">
+      <div className="space-y-3 rounded-xl border border-border-subtle bg-background p-4">
+        <div className="flex items-center justify-between border-b border-border-subtle pb-3">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-lg bg-secondary/10 flex items-center justify-center">
-              <Sparkles className="w-4 h-4 text-secondary" aria-hidden="true" />
+            <div className="bg-secondary/10 flex size-9 items-center justify-center rounded-lg">
+              <Sparkles className="size-4 text-secondary" aria-hidden="true" />
             </div>
             <div>
-              <h3 className="text-base font-bold font-display text-text-primary">AI 诊断报告</h3>
+              <h3 className="font-display text-base font-bold text-text-primary">AI 诊断报告</h3>
               <p className="text-[11px] text-text-muted">基于当前进度生成 · 2025.07</p>
             </div>
           </div>
-          <span className="text-[11px] font-mono text-secondary">v2.4</span>
+          <span className="font-mono text-[11px] text-secondary">v2.4</span>
         </div>
 
         {insights.map((insight, index) => (
@@ -63,23 +63,21 @@ export default function AIReportVisual() {
             initial={{ opacity: 0, x: -16 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.3 + index * 0.12, duration: 0.4 }}
-            className={`p-3 rounded-lg ${colorClasses[insight.color]}`}
+            className={`rounded-lg p-3 ${colorClasses[insight.color]}`}
           >
             <div className="flex items-start gap-3">
-              <insight.icon className="w-4 h-4 shrink-0 mt-0.5" aria-hidden="true" />
+              <insight.icon className="mt-0.5 size-4 shrink-0" aria-hidden="true" />
               <div className="flex-1">
-                <div className="flex items-center justify-between mb-0.5">
+                <div className="mb-0.5 flex items-center justify-between">
                   <span className="text-sm font-semibold">{insight.title}</span>
-                  <span className="text-[10px] px-1.5 py-0.5 rounded">
-                    {insight.status}
-                  </span>
+                  <span className="rounded px-1.5 py-0.5 text-[10px]">{insight.status}</span>
                 </div>
-                <p className="text-xs text-text-tertiary leading-relaxed">
+                <p className="text-xs leading-relaxed text-text-tertiary">
                   {insight.title.includes('匹配度')
                     ? '当前主路线与目标学校匹配良好，建议继续保持节奏'
                     : insight.title.includes('奥数')
-                    ? '建议根据三公路线要求，提前布局关键能力项'
-                    : '确定数学学习形式，建立每周稳定的学习节奏'}
+                      ? '建议根据三公路线要求，提前布局关键能力项'
+                      : '确定数学学习形式，建立每周稳定的学习节奏'}
                 </p>
               </div>
             </div>
@@ -92,7 +90,7 @@ export default function AIReportVisual() {
           transition={{ delay: 0.9 }}
           className="pt-1"
         >
-          <div className="h-px bg-border-subtle mb-2" />
+          <div className="mb-2 h-px bg-border-subtle" />
           <div className="flex items-center justify-between text-[11px]">
             <span className="text-text-muted">AI 建议 action</span>
             <span className="font-mono text-primary">START MATH FOUNDATION</span>

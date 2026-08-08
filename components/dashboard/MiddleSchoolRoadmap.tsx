@@ -2,14 +2,7 @@
 
 import { motion } from 'framer-motion';
 import { useEffect, useMemo, useState } from 'react';
-import {
-  AlertTriangle,
-  Clock,
-  Target,
-  School,
-  Trophy,
-  Zap,
-} from 'lucide-react';
+import { AlertTriangle, Clock, Target, School, Trophy, Zap } from 'lucide-react';
 
 interface Checkpoint {
   id: string;
@@ -41,14 +34,78 @@ const routes: RoutePath[] = [
     y: 100,
     checkpoints: [
       { id: 'sg-cur', name: '当前位置', x: 0, type: 'current', grade: '二年级', status: 'current' },
-      { id: 'sg-1', name: '竞赛启蒙', x: 14, type: 'soft', grade: '三年级', requirement: '奥数/信息学入门', status: 'upcoming' },
-      { id: 'sg-2', name: '英语优势', x: 29, type: 'soft', grade: '四年级', requirement: '小托福/PET 优秀', status: 'upcoming' },
-      { id: 'sg-3', name: 'AMC8 冲奖', x: 43, type: 'hard', grade: '五年级', requirement: 'AMC8 20+', status: 'upcoming' },
-      { id: 'sg-4', name: '初中基础', x: 57, type: 'soft', grade: '六年级', requirement: '提前学完初一内容', status: 'upcoming' },
-      { id: 'sg-5', name: '竞赛拿奖', x: 71, type: 'hard', grade: '七年级', requirement: '数学/物理竞赛省级奖项', status: 'upcoming' },
-      { id: 'sg-6', name: '自招门票', x: 86, type: 'hard', grade: '八年级', requirement: '锁定自招/综评资格', status: 'upcoming' },
-      { id: 'sg-7', name: '自招报名', x: 94, type: 'event', grade: '初三上', requirement: '开放日 + 自招测试', status: 'upcoming' },
-      { id: 'sg-8', name: '中考录取', x: 100, type: 'event', grade: '初三下 6 月', requirement: '四校/统招录取', status: 'upcoming' },
+      {
+        id: 'sg-1',
+        name: '竞赛启蒙',
+        x: 14,
+        type: 'soft',
+        grade: '三年级',
+        requirement: '奥数/信息学入门',
+        status: 'upcoming',
+      },
+      {
+        id: 'sg-2',
+        name: '英语优势',
+        x: 29,
+        type: 'soft',
+        grade: '四年级',
+        requirement: '小托福/PET 优秀',
+        status: 'upcoming',
+      },
+      {
+        id: 'sg-3',
+        name: 'AMC8 冲奖',
+        x: 43,
+        type: 'hard',
+        grade: '五年级',
+        requirement: 'AMC8 20+',
+        status: 'upcoming',
+      },
+      {
+        id: 'sg-4',
+        name: '初中基础',
+        x: 57,
+        type: 'soft',
+        grade: '六年级',
+        requirement: '提前学完初一内容',
+        status: 'upcoming',
+      },
+      {
+        id: 'sg-5',
+        name: '竞赛拿奖',
+        x: 71,
+        type: 'hard',
+        grade: '七年级',
+        requirement: '数学/物理竞赛省级奖项',
+        status: 'upcoming',
+      },
+      {
+        id: 'sg-6',
+        name: '自招门票',
+        x: 86,
+        type: 'hard',
+        grade: '八年级',
+        requirement: '锁定自招/综评资格',
+        status: 'upcoming',
+      },
+      {
+        id: 'sg-7',
+        name: '自招报名',
+        x: 94,
+        type: 'event',
+        grade: '初三上',
+        requirement: '开放日 + 自招测试',
+        status: 'upcoming',
+      },
+      {
+        id: 'sg-8',
+        name: '中考录取',
+        x: 100,
+        type: 'event',
+        grade: '初三下 6 月',
+        requirement: '四校/统招录取',
+        status: 'upcoming',
+      },
     ],
   },
   {
@@ -60,14 +117,78 @@ const routes: RoutePath[] = [
     y: 180,
     checkpoints: [
       { id: 'sz-cur', name: '当前位置', x: 0, type: 'current', grade: '二年级', status: 'current' },
-      { id: 'sz-1', name: '文理均衡', x: 14, type: 'soft', grade: '三年级', requirement: '语数英无短板', status: 'upcoming' },
-      { id: 'sz-2', name: '优势学科', x: 29, type: 'soft', grade: '四年级', requirement: '数学/英语超前 1 年', status: 'upcoming' },
-      { id: 'sz-3', name: '小升初定位', x: 43, type: 'soft', grade: '五年级', requirement: '确定初中方向', status: 'upcoming' },
-      { id: 'sz-4', name: '初中习惯', x: 57, type: 'soft', grade: '六年级', requirement: '建立初中知识体系', status: 'upcoming' },
-      { id: 'sz-5', name: '理科分层', x: 71, type: 'hard', grade: '七年级', requirement: '数学/物理保持前列', status: 'upcoming' },
-      { id: 'sz-6', name: '一模前冲刺', x: 86, type: 'hard', grade: '八年级', requirement: '全区排名进入市重点区间', status: 'upcoming' },
-      { id: 'sz-7', name: '一模定位', x: 94, type: 'event', grade: '初三上', requirement: '名额分配志愿填报', status: 'upcoming' },
-      { id: 'sz-8', name: '中考录取', x: 100, type: 'event', grade: '初三下 6 月', requirement: '市重点录取', status: 'upcoming' },
+      {
+        id: 'sz-1',
+        name: '文理均衡',
+        x: 14,
+        type: 'soft',
+        grade: '三年级',
+        requirement: '语数英无短板',
+        status: 'upcoming',
+      },
+      {
+        id: 'sz-2',
+        name: '优势学科',
+        x: 29,
+        type: 'soft',
+        grade: '四年级',
+        requirement: '数学/英语超前 1 年',
+        status: 'upcoming',
+      },
+      {
+        id: 'sz-3',
+        name: '小升初定位',
+        x: 43,
+        type: 'soft',
+        grade: '五年级',
+        requirement: '确定初中方向',
+        status: 'upcoming',
+      },
+      {
+        id: 'sz-4',
+        name: '初中习惯',
+        x: 57,
+        type: 'soft',
+        grade: '六年级',
+        requirement: '建立初中知识体系',
+        status: 'upcoming',
+      },
+      {
+        id: 'sz-5',
+        name: '理科分层',
+        x: 71,
+        type: 'hard',
+        grade: '七年级',
+        requirement: '数学/物理保持前列',
+        status: 'upcoming',
+      },
+      {
+        id: 'sz-6',
+        name: '一模前冲刺',
+        x: 86,
+        type: 'hard',
+        grade: '八年级',
+        requirement: '全区排名进入市重点区间',
+        status: 'upcoming',
+      },
+      {
+        id: 'sz-7',
+        name: '一模定位',
+        x: 94,
+        type: 'event',
+        grade: '初三上',
+        requirement: '名额分配志愿填报',
+        status: 'upcoming',
+      },
+      {
+        id: 'sz-8',
+        name: '中考录取',
+        x: 100,
+        type: 'event',
+        grade: '初三下 6 月',
+        requirement: '市重点录取',
+        status: 'upcoming',
+      },
     ],
   },
   {
@@ -79,14 +200,78 @@ const routes: RoutePath[] = [
     y: 260,
     checkpoints: [
       { id: 'qz-cur', name: '当前位置', x: 0, type: 'current', grade: '二年级', status: 'current' },
-      { id: 'qz-1', name: '习惯养成', x: 14, type: 'soft', grade: '三年级', requirement: '自主学习 + 错题整理', status: 'upcoming' },
-      { id: 'qz-2', name: '基础巩固', x: 29, type: 'soft', grade: '四年级', requirement: '补齐薄弱学科', status: 'upcoming' },
-      { id: 'qz-3', name: '小升初准备', x: 43, type: 'soft', grade: '五年级', requirement: '对口/摇号准备', status: 'upcoming' },
-      { id: 'qz-4', name: '适应初中', x: 57, type: 'soft', grade: '六年级', requirement: '适应初中节奏', status: 'upcoming' },
-      { id: 'qz-5', name: '补齐薄弱', x: 71, type: 'soft', grade: '七年级', requirement: '至少 1-2 门优势学科', status: 'upcoming' },
-      { id: 'qz-6', name: '分水岭巩固', x: 86, type: 'hard', grade: '八年级', requirement: '理科不掉队', status: 'upcoming' },
-      { id: 'qz-7', name: '一模定位', x: 94, type: 'event', grade: '初三上', requirement: '锁定区重点区间', status: 'upcoming' },
-      { id: 'qz-8', name: '中考稳定', x: 100, type: 'event', grade: '初三下 6 月', requirement: '区重点/特色录取', status: 'upcoming' },
+      {
+        id: 'qz-1',
+        name: '习惯养成',
+        x: 14,
+        type: 'soft',
+        grade: '三年级',
+        requirement: '自主学习 + 错题整理',
+        status: 'upcoming',
+      },
+      {
+        id: 'qz-2',
+        name: '基础巩固',
+        x: 29,
+        type: 'soft',
+        grade: '四年级',
+        requirement: '补齐薄弱学科',
+        status: 'upcoming',
+      },
+      {
+        id: 'qz-3',
+        name: '小升初准备',
+        x: 43,
+        type: 'soft',
+        grade: '五年级',
+        requirement: '对口/摇号准备',
+        status: 'upcoming',
+      },
+      {
+        id: 'qz-4',
+        name: '适应初中',
+        x: 57,
+        type: 'soft',
+        grade: '六年级',
+        requirement: '适应初中节奏',
+        status: 'upcoming',
+      },
+      {
+        id: 'qz-5',
+        name: '补齐薄弱',
+        x: 71,
+        type: 'soft',
+        grade: '七年级',
+        requirement: '至少 1-2 门优势学科',
+        status: 'upcoming',
+      },
+      {
+        id: 'qz-6',
+        name: '分水岭巩固',
+        x: 86,
+        type: 'hard',
+        grade: '八年级',
+        requirement: '理科不掉队',
+        status: 'upcoming',
+      },
+      {
+        id: 'qz-7',
+        name: '一模定位',
+        x: 94,
+        type: 'event',
+        grade: '初三上',
+        requirement: '锁定区重点区间',
+        status: 'upcoming',
+      },
+      {
+        id: 'qz-8',
+        name: '中考稳定',
+        x: 100,
+        type: 'event',
+        grade: '初三下 6 月',
+        requirement: '区重点/特色录取',
+        status: 'upcoming',
+      },
     ],
   },
 ];
@@ -145,7 +330,9 @@ export default function MiddleSchoolRoadmap() {
   const [selectedCheckpoint, setSelectedCheckpoint] = useState<Checkpoint | null>(null);
   const [activeRoute, setActiveRoute] = useState<string>('sizhong');
   const [daysLeft, setDaysLeft] = useState<number>(400);
-  const [explosions, setExplosions] = useState<{ id: number; x: number; y: number; color: string }[]>([]);
+  const [explosions, setExplosions] = useState<
+    { id: number; x: number; y: number; color: string }[]
+  >([]);
 
   useEffect(() => {
     setMounted(true);
@@ -156,7 +343,9 @@ export default function MiddleSchoolRoadmap() {
 
   const particles = useMemo(() => createParticles(), []);
   const effectiveRoute = hoveredRoute || activeRoute;
-  const nextCheckpoint = routes[0].checkpoints.find((c) => c.status === 'current') || routes[0].checkpoints.find((c) => c.status === 'upcoming');
+  const nextCheckpoint =
+    routes[0].checkpoints.find((c) => c.status === 'current') ||
+    routes[0].checkpoints.find((c) => c.status === 'upcoming');
 
   return (
     <div className="space-y-6">
@@ -164,46 +353,52 @@ export default function MiddleSchoolRoadmap() {
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="relative rounded-2xl p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 overflow-hidden"
+        className="relative flex flex-col justify-between gap-4 overflow-hidden rounded-2xl p-5 sm:flex-row sm:items-center"
         style={{
-          background: 'linear-gradient(135deg, rgba(139,92,246,0.08) 0%, rgba(6,182,212,0.08) 100%)',
+          background:
+            'linear-gradient(135deg, rgba(139,92,246,0.08) 0%, rgba(6,182,212,0.08) 100%)',
           border: '1px solid rgba(139,92,246,0.35)',
           boxShadow: '0 0 30px rgba(139,92,246,0.15), inset 0 0 20px rgba(139,92,246,0.05)',
         }}
       >
         <motion.div
-          className="absolute inset-0 rounded-2xl pointer-events-none"
+          className="pointer-events-none absolute inset-0 rounded-2xl"
           style={{
-            background: 'linear-gradient(90deg, transparent, rgba(139,92,246,0.4), rgba(6,182,212,0.4), transparent)',
+            background:
+              'linear-gradient(90deg, transparent, rgba(139,92,246,0.4), rgba(6,182,212,0.4), transparent)',
             backgroundSize: '200% 100%',
           }}
           animate={{ backgroundPosition: ['200% 0', '-200% 0'] }}
           transition={{ duration: 3, repeat: Infinity, ease: 'linear' }}
         />
-        <div className="absolute inset-[1px] rounded-2xl bg-background/80 pointer-events-none" />
+        <div className="bg-background/80 pointer-events-none absolute inset-px rounded-2xl" />
 
-        <div className="relative flex items-start gap-4 z-10">
+        <div className="relative z-10 flex items-start gap-4">
           <div
-            className="w-12 h-12 rounded-xl flex items-center justify-center shrink-0"
+            className="flex size-12 shrink-0 items-center justify-center rounded-xl"
             style={{
-              background: 'rgba(139,92,246,0.15)',
-              boxShadow: '0 0 20px rgba(139,92,246,0.3)',
+              background: 'var(--color-secondary-dim)',
+              boxShadow: '0 0 20px var(--shadow-secondary)',
             }}
           >
-            <Zap className="w-6 h-6 text-[#8b5cf6]" style={{ filter: 'drop-shadow(0 0 8px rgba(139,92,246,0.8))' }} />
+            <Zap
+              className="size-6 text-secondary"
+              style={{ filter: 'drop-shadow(0 0 8px var(--shadow-secondary))' }}
+            />
           </div>
           <div>
-            <p className="text-sm text-text-tertiary mb-1">
+            <p className="mb-1 text-sm text-text-tertiary">
               距离下一个熔断点（{nextCheckpoint?.grade} · {nextCheckpoint?.name}）
             </p>
-            <p className="text-2xl font-bold font-display">
+            <p className="font-display text-2xl font-bold">
               还有{' '}
               <motion.span
-                className="inline-block text-transparent bg-clip-text font-black"
+                className="inline-block bg-clip-text font-black text-transparent"
                 style={{
-                  backgroundImage: 'linear-gradient(90deg, #8b5cf6, #22d3ee, #8b5cf6)',
+                  backgroundImage:
+                    'linear-gradient(90deg, var(--color-secondary), var(--accent-glow), var(--color-secondary))',
                   backgroundSize: '200% 100%',
-                  textShadow: '0 0 30px rgba(139,92,246,0.5)',
+                  textShadow: '0 0 30px var(--shadow-secondary)',
                 }}
                 animate={{ backgroundPosition: ['0% 0', '200% 0'] }}
                 transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
@@ -220,11 +415,11 @@ export default function MiddleSchoolRoadmap() {
         initial={{ opacity: 0, scale: 0.98 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.6, delay: 0.1 }}
-        className="rounded-3xl bg-surface-elevated p-6 border border-border-subtle relative overflow-hidden"
+        className="relative overflow-hidden rounded-3xl border border-border-subtle bg-surface-elevated p-6"
       >
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-6">
+        <div className="mb-6 flex flex-col justify-between gap-4 lg:flex-row lg:items-center">
           <div>
-            <h2 className="text-xl font-bold font-display">初中全景看板</h2>
+            <h2 className="font-display text-xl font-bold">初中全景看板</h2>
             <p className="text-sm text-text-tertiary">2026-2033 · 三条中考路线的熔断点与关键节点</p>
             <div className="mt-2 flex items-center gap-2">
               <span className="text-xs text-text-muted">当前执行路线：</span>
@@ -233,7 +428,7 @@ export default function MiddleSchoolRoadmap() {
                 if (!route) return null;
                 return (
                   <span
-                    className="px-2 py-0.5 rounded-full text-xs font-bold"
+                    className="rounded-full px-2 py-0.5 text-xs font-bold"
                     style={{
                       color: route.color,
                       backgroundColor: `${route.color}20`,
@@ -255,13 +450,18 @@ export default function MiddleSchoolRoadmap() {
                   onMouseEnter={() => setHoveredRoute(route.id)}
                   onMouseLeave={() => setHoveredRoute(null)}
                   onClick={() => setActiveRoute(route.id)}
-                  className={`flex items-center gap-2 px-2 py-1 rounded-lg transition-colors ${
-                    isActive ? 'text-text-primary bg-surface-hover' : 'text-text-tertiary hover:text-text-primary hover:bg-surface-hover'
+                  className={`flex items-center gap-2 rounded-lg px-2 py-1 transition-colors ${
+                    isActive
+                      ? 'bg-surface-hover text-text-primary'
+                      : 'text-text-tertiary hover:bg-surface-hover hover:text-text-primary'
                   }`}
                 >
                   <span
-                    className="w-3 h-3 rounded-full"
-                    style={{ backgroundColor: route.color, boxShadow: `0 0 10px ${route.glowColor}` }}
+                    className="size-3 rounded-full"
+                    style={{
+                      backgroundColor: route.color,
+                      boxShadow: `0 0 10px ${route.glowColor}`,
+                    }}
                   />
                   {route.name}
                 </button>
@@ -273,7 +473,7 @@ export default function MiddleSchoolRoadmap() {
         <div className="relative w-full overflow-x-auto">
           <svg
             viewBox="0 0 1100 460"
-            className="w-full min-w-[1000px] h-auto"
+            className="h-auto w-full min-w-[1000px]"
             preserveAspectRatio="xMidYMid meet"
           >
             <defs>
@@ -323,13 +523,7 @@ export default function MiddleSchoolRoadmap() {
                     <stop offset="100%" stopColor="#06b6d4" stopOpacity="0" />
                   </radialGradient>
                 </defs>
-                <ellipse
-                  cx={300}
-                  cy={150}
-                  rx={250}
-                  ry={180}
-                  fill="url(#msGlow1)"
-                >
+                <ellipse cx={300} cy={150} rx={250} ry={180} fill="url(#msGlow1)">
                   <animate
                     attributeName="cx"
                     values="300;350;300"
@@ -343,13 +537,7 @@ export default function MiddleSchoolRoadmap() {
                     repeatCount="indefinite"
                   />
                 </ellipse>
-                <ellipse
-                  cx={700}
-                  cy={280}
-                  rx={200}
-                  ry={150}
-                  fill="url(#msGlow2)"
-                >
+                <ellipse cx={700} cy={280} rx={200} ry={150} fill="url(#msGlow2)">
                   <animate
                     attributeName="cx"
                     values="700;650;700"
@@ -461,7 +649,7 @@ export default function MiddleSchoolRoadmap() {
                   <foreignObject x={950} y={route.y - 22} width="130" height="44">
                     <div
                       onClick={() => setActiveRoute(route.id)}
-                      className="h-full flex items-center rounded-full px-1 py-1 pr-3 gap-2 cursor-pointer transition-all"
+                      className="flex h-full cursor-pointer items-center gap-2 rounded-full p-1 pr-3 transition-all"
                       style={{
                         backgroundColor: isActive ? `${route.color}22` : `${route.color}12`,
                         border: `1px solid ${isActive ? route.color : `${route.color}35`}`,
@@ -473,8 +661,8 @@ export default function MiddleSchoolRoadmap() {
                       }}
                     >
                       <span
-                        className="px-2 py-0.5 rounded-full text-xs font-bold"
-                        style={{ backgroundColor: route.color, color: '#0f172a' }}
+                        className="rounded-full px-2 py-0.5 text-xs font-bold"
+                        style={{ backgroundColor: route.color, color: 'var(--text-inverse)' }}
                       >
                         {outcome.label}
                       </span>
@@ -486,7 +674,7 @@ export default function MiddleSchoolRoadmap() {
                       </div>
                       {isActive && (
                         <span
-                          className="ml-auto px-1.5 py-0.5 rounded text-[9px] font-bold"
+                          className="ml-auto rounded px-1.5 py-0.5 text-[9px] font-bold"
                           style={{ color: route.color, backgroundColor: `${route.color}25` }}
                         >
                           主
@@ -630,9 +818,23 @@ export default function MiddleSchoolRoadmap() {
             ))}
 
             {/* Fallback arrows */}
-            <g opacity={hoveredRoute && hoveredRoute !== 'sizhong' && hoveredRoute !== 'shizhong' ? 0.2 : 0.45}>
+            <g
+              opacity={
+                hoveredRoute && hoveredRoute !== 'sizhong' && hoveredRoute !== 'shizhong'
+                  ? 0.2
+                  : 0.45
+              }
+            >
               <defs>
-                <marker id="ms-fallback-arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto" markerUnits="strokeWidth">
+                <marker
+                  id="ms-fallback-arrow"
+                  markerWidth="8"
+                  markerHeight="8"
+                  refX="6"
+                  refY="3"
+                  orient="auto"
+                  markerUnits="strokeWidth"
+                >
                   <path d="M0,0 L0,6 L7,3 z" fill="#94a3b8" opacity="0.7" />
                 </marker>
               </defs>
@@ -658,8 +860,12 @@ export default function MiddleSchoolRoadmap() {
                 animate={{ pathLength: 1 }}
                 transition={{ duration: 1, delay: 1.4 }}
               />
-              <text x={975} y={158} fill="#64748b" fontSize="9" textAnchor="middle">未录取</text>
-              <text x={975} y={238} fill="#64748b" fontSize="9" textAnchor="middle">未录取</text>
+              <text x={975} y={158} fill="#64748b" fontSize="9" textAnchor="middle">
+                未录取
+              </text>
+              <text x={975} y={238} fill="#64748b" fontSize="9" textAnchor="middle">
+                未录取
+              </text>
             </g>
 
             {/* Current time indicator */}
@@ -691,7 +897,13 @@ export default function MiddleSchoolRoadmap() {
               return (
                 <g key={year.year}>
                   {isCurrent && (
-                    <circle cx={x} cy={400} r={24} fill="rgba(244,63,94,0.1)" style={{ filter: 'drop-shadow(0 0 16px rgba(244,63,94,0.4))' }} />
+                    <circle
+                      cx={x}
+                      cy={400}
+                      r={24}
+                      fill="rgba(244,63,94,0.1)"
+                      style={{ filter: 'drop-shadow(0 0 16px rgba(244,63,94,0.4))' }}
+                    />
                   )}
                   <text
                     x={x}
@@ -700,11 +912,21 @@ export default function MiddleSchoolRoadmap() {
                     fontSize="12"
                     fontWeight={isCurrent ? '700' : '400'}
                     textAnchor="middle"
-                    style={isCurrent ? { filter: 'drop-shadow(0 0 10px rgba(244,63,94,0.6))' } : undefined}
+                    style={
+                      isCurrent
+                        ? { filter: 'drop-shadow(0 0 10px rgba(244,63,94,0.6))' }
+                        : undefined
+                    }
                   >
                     {year.year}
                   </text>
-                  <text x={x} y={410} fill={isCurrent ? '#fda4af' : '#64748b'} fontSize="11" textAnchor="middle">
+                  <text
+                    x={x}
+                    y={410}
+                    fill={isCurrent ? '#fda4af' : '#64748b'}
+                    fontSize="11"
+                    textAnchor="middle"
+                  >
                     {year.grade}
                   </text>
                 </g>
@@ -718,21 +940,21 @@ export default function MiddleSchoolRoadmap() {
           <motion.div
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
-            className="mt-6 p-5 rounded-2xl bg-surface border border-border-subtle"
+            className="mt-6 rounded-2xl border border-border-subtle bg-surface p-5"
           >
             <div className="flex items-start justify-between gap-4">
               <div>
-                <div className="flex items-center gap-2 mb-2">
+                <div className="mb-2 flex items-center gap-2">
                   {(() => {
                     const config = checkpointConfig[selectedCheckpoint.type];
-                    return <config.icon className="w-5 h-5" style={{ color: config.color }} />;
+                    return <config.icon className="size-5" style={{ color: config.color }} />;
                   })()}
-                  <h3 className="text-lg font-bold font-display">{selectedCheckpoint.name}</h3>
+                  <h3 className="font-display text-lg font-bold">{selectedCheckpoint.name}</h3>
                   {(() => {
                     const status = statusConfig[selectedCheckpoint.status];
                     return (
                       <span
-                        className="px-2.5 py-0.5 rounded-full text-xs font-medium"
+                        className="rounded-full px-2.5 py-0.5 text-xs font-medium"
                         style={{ color: status.color, backgroundColor: status.bg }}
                       >
                         {status.label}
@@ -740,7 +962,7 @@ export default function MiddleSchoolRoadmap() {
                     );
                   })()}
                 </div>
-                <p className="text-sm text-text-tertiary mb-2">
+                <p className="mb-2 text-sm text-text-tertiary">
                   {selectedCheckpoint.grade}
                   {selectedCheckpoint.requirement && ` · ${selectedCheckpoint.requirement}`}
                 </p>
@@ -748,15 +970,15 @@ export default function MiddleSchoolRoadmap() {
                   {selectedCheckpoint.type === 'hard'
                     ? '硬熔断点：未达标建议切换主路线到备选方案，系统会提醒家长评估。'
                     : selectedCheckpoint.type === 'soft'
-                    ? '软检查点：未达标会发出预警，建议加强准备，暂不需要切换路线。'
-                    : selectedCheckpoint.type === 'current'
-                    ? '当前所处位置，可在此录入最新进度数据。'
-                    : '关键事件节点，需要提前规划和准备相关材料。'}
+                      ? '软检查点：未达标会发出预警，建议加强准备，暂不需要切换路线。'
+                      : selectedCheckpoint.type === 'current'
+                        ? '当前所处位置，可在此录入最新进度数据。'
+                        : '关键事件节点，需要提前规划和准备相关材料。'}
                 </p>
               </div>
               <button
                 onClick={() => setSelectedCheckpoint(null)}
-                className="px-4 py-2 rounded-lg text-text-muted hover:text-text-primary text-sm shrink-0"
+                className="shrink-0 rounded-lg px-4 py-2 text-sm text-text-muted hover:text-text-primary"
               >
                 关闭
               </button>

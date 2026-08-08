@@ -64,10 +64,16 @@ export default function GrowthPage() {
   const { children, currentChild, currentChildId, setCurrentChildId, weeklyPlans } = useChildren();
 
   const childId = currentChild?.id;
-  const { data: timelineData, isLoading: timelineLoading, error: timelineError } =
-    useGrowthTimeline(childId);
-  const { data: evidenceData, isLoading: evidenceLoading, error: evidenceError } =
-    useGrowthEvidence(childId);
+  const {
+    data: timelineData,
+    isLoading: timelineLoading,
+    error: timelineError,
+  } = useGrowthTimeline(childId);
+  const {
+    data: evidenceData,
+    isLoading: evidenceLoading,
+    error: evidenceError,
+  } = useGrowthEvidence(childId);
 
   const weeklyRates = useMemo(() => {
     if (!childId) return [];
@@ -87,14 +93,14 @@ export default function GrowthPage() {
           initial={shouldReduceMotion ? false : { opacity: 0, y: -8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4 }}
-          className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
+          className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
         >
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center">
-              <Sprout className="w-5 h-5 text-primary" />
+            <div className="bg-primary/10 border-primary/20 flex size-10 items-center justify-center rounded-xl border">
+              <Sprout className="size-5 text-primary" />
             </div>
             <div>
-              <h1 className="text-2xl sm:text-3xl font-bold font-display">成长档案</h1>
+              <h1 className="font-display text-2xl font-bold sm:text-3xl">成长档案</h1>
             </div>
           </div>
         </motion.div>
@@ -110,15 +116,15 @@ export default function GrowthPage() {
         initial={shouldReduceMotion ? false : { opacity: 0, y: -8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4 }}
-        className="flex flex-col lg:flex-row lg:items-center justify-between gap-4"
+        className="flex flex-col justify-between gap-4 lg:flex-row lg:items-center"
       >
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center">
-            <Sprout className="w-5 h-5 text-primary" />
+          <div className="bg-primary/10 border-primary/20 flex size-10 items-center justify-center rounded-xl border">
+            <Sprout className="size-5 text-primary" />
           </div>
           <div>
-            <h1 className="text-2xl sm:text-3xl font-bold font-display">成长档案</h1>
-            <p className="text-sm text-text-tertiary mt-0.5">
+            <h1 className="font-display text-2xl font-bold sm:text-3xl">成长档案</h1>
+            <p className="mt-0.5 text-sm text-text-tertiary">
               {currentChild.name} · {gradeLabel(currentChild.grade, currentChild.educationSystem)}
             </p>
           </div>
@@ -132,10 +138,10 @@ export default function GrowthPage() {
               <button
                 key={child.id}
                 onClick={() => setCurrentChildId(child.id)}
-                className={`flex items-center gap-2 px-3 py-1.5 rounded-xl border text-sm transition-all ${
+                className={`flex items-center gap-2 rounded-xl border px-3 py-1.5 text-sm transition-all ${
                   active
                     ? 'bg-primary/[0.08] border-primary/30 text-primary'
-                    : 'bg-surface-elevated border-border-subtle text-text-secondary hover:bg-surface-hover hover:text-text-primary'
+                    : 'border-border-subtle bg-surface-elevated text-text-secondary hover:bg-surface-hover hover:text-text-primary'
                 }`}
               >
                 <ChildAvatar child={child} size="sm" shape="rounded" />
@@ -146,7 +152,7 @@ export default function GrowthPage() {
         </div>
       </motion.div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
         {/* Timeline */}
         <motion.div
           initial={shouldReduceMotion ? false : { opacity: 0, y: 12 }}
@@ -154,21 +160,21 @@ export default function GrowthPage() {
           transition={{ duration: 0.4, delay: 0.1 }}
           className="lg:col-span-2"
         >
-          <CommandCard className="p-5 h-full">
-            <div className="flex items-center gap-2 mb-5">
-              <TrendingUp className="w-5 h-5 text-primary" />
+          <CommandCard className="h-full p-5">
+            <div className="mb-5 flex items-center gap-2">
+              <TrendingUp className="size-5 text-primary" />
               <h2 className="text-lg font-bold text-text-secondary">成长时间线</h2>
             </div>
 
             {timelineLoading && (
               <div className="flex h-[40vh] items-center justify-center">
-                <Loader2 className="h-8 w-8 animate-spin text-primary" />
+                <Loader2 className="size-8 animate-spin text-primary" />
               </div>
             )}
 
             {timelineError && (
-              <div className="rounded-xl border border-error/20 bg-error/10 p-4 text-error text-sm flex items-center gap-2">
-                <AlertCircle className="w-4 h-4" />
+              <div className="border-error/20 bg-error/10 flex items-center gap-2 rounded-xl border p-4 text-sm text-error">
+                <AlertCircle className="size-4" />
                 {timelineError instanceof Error ? timelineError.message : '加载失败'}
               </div>
             )}
@@ -183,7 +189,11 @@ export default function GrowthPage() {
                   />
                 ) : (
                   timelineData!.items.map((item, index) => (
-                    <TimelineRow key={`${item.type}-${item.id}-${index}`} item={item} index={index} />
+                    <TimelineRow
+                      key={`${item.type}-${item.id}-${index}`}
+                      item={item}
+                      index={index}
+                    />
                   ))
                 )}
               </div>
@@ -200,8 +210,8 @@ export default function GrowthPage() {
             transition={{ duration: 0.4, delay: 0.2 }}
           >
             <CommandCard className="p-5">
-              <div className="flex items-center gap-2 mb-4">
-                <TrendingUp className="w-5 h-5 text-ai" />
+              <div className="mb-4 flex items-center gap-2">
+                <TrendingUp className="size-5 text-ai" />
                 <h2 className="text-base font-bold text-text-secondary">近四周完成率</h2>
               </div>
 
@@ -212,15 +222,15 @@ export default function GrowthPage() {
                   description="发布周计划后会显示完成趋势"
                 />
               ) : (
-                <div className="flex items-end justify-between gap-3 h-40">
+                <div className="flex h-40 items-end justify-between gap-3">
                   {weeklyRates.map((week) => (
-                    <div key={week.weekId} className="flex-1 flex flex-col items-center gap-2">
-                      <div className="relative w-full h-28 bg-surface rounded-xl overflow-hidden">
+                    <div key={week.weekId} className="flex flex-1 flex-col items-center gap-2">
+                      <div className="relative h-28 w-full overflow-hidden rounded-xl bg-surface">
                         <motion.div
                           initial={{ height: 0 }}
                           animate={{ height: `${week.rate}%` }}
                           transition={{ duration: 0.6, delay: 0.3 }}
-                          className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-primary to-primary/70 rounded-xl"
+                          className="to-primary/70 absolute inset-x-0 bottom-0 rounded-xl bg-gradient-to-t from-primary"
                         />
                         <div className="absolute inset-0 flex items-center justify-center">
                           <span className="text-xs font-bold text-text-primary drop-shadow">
@@ -228,7 +238,7 @@ export default function GrowthPage() {
                           </span>
                         </div>
                       </div>
-                      <span className="text-[10px] text-text-muted text-center leading-tight">
+                      <span className="text-center text-[10px] leading-tight text-text-muted">
                         {week.label.replace(' · ', '\n')}
                       </span>
                     </div>
@@ -245,26 +255,26 @@ export default function GrowthPage() {
             transition={{ duration: 0.4, delay: 0.3 }}
           >
             <CommandCard className="p-5">
-              <div className="flex items-center gap-2 mb-4">
-                <ImageIcon className="w-5 h-5 text-secondary" />
+              <div className="mb-4 flex items-center gap-2">
+                <ImageIcon className="size-5 text-secondary" />
                 <h2 className="text-base font-bold text-text-secondary">证据库</h2>
               </div>
 
               {evidenceLoading && (
                 <div className="flex h-32 items-center justify-center">
-                  <Loader2 className="h-6 w-6 animate-spin text-primary" />
+                  <Loader2 className="size-6 animate-spin text-primary" />
                 </div>
               )}
 
               {evidenceError && (
-                <div className="rounded-xl border border-error/20 bg-error/10 p-4 text-error text-sm flex items-center gap-2">
-                  <AlertCircle className="w-4 h-4" />
+                <div className="border-error/20 bg-error/10 flex items-center gap-2 rounded-xl border p-4 text-sm text-error">
+                  <AlertCircle className="size-4" />
                   {evidenceError instanceof Error ? evidenceError.message : '加载失败'}
                 </div>
               )}
 
               {!evidenceLoading && !evidenceError && (
-                <div className="space-y-3 max-h-[60vh] overflow-y-auto pr-1">
+                <div className="max-h-[60vh] space-y-3 overflow-y-auto pr-1">
                   {(evidenceData?.items.length ?? 0) === 0 ? (
                     <EmptyState
                       icon={Mic}
@@ -275,13 +285,13 @@ export default function GrowthPage() {
                     evidenceData!.items.map((item) => (
                       <div
                         key={item.id}
-                        className="rounded-xl bg-surface-elevated border border-border-subtle p-3 space-y-3"
+                        className="space-y-3 rounded-xl border border-border-subtle bg-surface-elevated p-3"
                       >
                         <div className="flex items-center justify-between">
-                          <p className="text-sm font-medium text-text-secondary truncate pr-2">
+                          <p className="truncate pr-2 text-sm font-medium text-text-secondary">
                             {item.taskTitle}
                           </p>
-                          <span className="text-[10px] text-text-muted shrink-0">
+                          <span className="shrink-0 text-[10px] text-text-muted">
                             {formatDate(item.date)}
                           </span>
                         </div>
@@ -294,12 +304,12 @@ export default function GrowthPage() {
                                 href={url}
                                 target="_blank"
                                 rel="noreferrer"
-                                className="aspect-square rounded-lg overflow-hidden border border-border-subtle bg-surface"
+                                className="aspect-square overflow-hidden rounded-lg border border-border-subtle bg-surface"
                               >
                                 <img
                                   src={url}
                                   alt={`证据 ${idx + 1}`}
-                                  className="w-full h-full object-cover hover:scale-105 transition-transform"
+                                  className="size-full object-cover transition-transform hover:scale-105"
                                 />
                               </a>
                             ))}
@@ -309,15 +319,10 @@ export default function GrowthPage() {
                         {item.audioUrls.length > 0 && (
                           <div className="space-y-2">
                             {item.audioUrls.map((url, idx) => (
-                              <audio
-                                key={idx}
-                                controls
-                                src={url}
-                                className="w-full h-8"
-                              />
+                              <audio key={idx} controls src={url} className="h-8 w-full" />
                             ))}
                             {item.audioTranscript && (
-                              <p className="text-xs text-text-tertiary bg-surface p-2 rounded-lg border border-border-subtle">
+                              <p className="rounded-lg border border-border-subtle bg-surface p-2 text-xs text-text-tertiary">
                                 {item.audioTranscript}
                               </p>
                             )}
@@ -325,7 +330,7 @@ export default function GrowthPage() {
                         )}
 
                         {item.note && (
-                          <p className="text-xs text-text-tertiary line-clamp-2">{item.note}</p>
+                          <p className="line-clamp-2 text-xs text-text-tertiary">{item.note}</p>
                         )}
                       </div>
                     ))
@@ -353,19 +358,19 @@ function TimelineRow({ item, index }: { item: GrowthTimelineItem; index: number 
     >
       <div className="flex flex-col items-center gap-1 pt-1">
         <div
-          className={`w-8 h-8 rounded-lg flex items-center justify-center border border-border-subtle bg-surface-elevated ${meta.color}`}
+          className={`flex size-8 items-center justify-center rounded-lg border border-border-subtle bg-surface-elevated ${meta.color}`}
         >
-          <Icon className="w-4 h-4" />
+          <Icon className="size-4" />
         </div>
-        <div className="w-px flex-1 bg-border-subtle min-h-[16px]" />
+        <div className="min-h-[16px] w-px flex-1 bg-border-subtle" />
       </div>
 
       <div className="flex-1 pb-4">
-        <div className="rounded-xl bg-surface-elevated border border-border-subtle p-3">
-          <div className="flex items-start justify-between gap-3 mb-1">
-            <div className="flex-1 min-w-0">
-              <p className="text-sm font-semibold text-text-secondary truncate">{item.title}</p>
-              <p className="text-[10px] text-text-muted mt-0.5">
+        <div className="rounded-xl border border-border-subtle bg-surface-elevated p-3">
+          <div className="mb-1 flex items-start justify-between gap-3">
+            <div className="min-w-0 flex-1">
+              <p className="truncate text-sm font-semibold text-text-secondary">{item.title}</p>
+              <p className="mt-0.5 text-[10px] text-text-muted">
                 {meta.label}
                 {' · '}
                 {formatDate(item.date)}
@@ -374,34 +379,34 @@ function TimelineRow({ item, index }: { item: GrowthTimelineItem; index: number 
           </div>
 
           {item.type === 'task' && (
-            <div className="flex flex-wrap gap-2 mt-2">
+            <div className="mt-2 flex flex-wrap gap-2">
               {item.subject && (
-                <span className="text-[10px] px-2 py-0.5 rounded-full bg-surface border border-border-subtle text-text-tertiary">
+                <span className="rounded-full border border-border-subtle bg-surface px-2 py-0.5 text-[10px] text-text-tertiary">
                   {item.subject === 'chinese' ? '语文' : item.subject === 'math' ? '数学' : '英语'}
                 </span>
               )}
-              <span className="text-[10px] px-2 py-0.5 rounded-full bg-surface border border-border-subtle text-text-tertiary">
+              <span className="rounded-full border border-border-subtle bg-surface px-2 py-0.5 text-[10px] text-text-tertiary">
                 状态：{item.status}
               </span>
               {item.note && (
-                <p className="w-full text-xs text-text-tertiary line-clamp-2">{item.note}</p>
+                <p className="line-clamp-2 w-full text-xs text-text-tertiary">{item.note}</p>
               )}
             </div>
           )}
 
           {item.type === 'milestone' && item.description && (
-            <p className="text-xs text-text-tertiary mt-2 line-clamp-2">{item.description}</p>
+            <p className="mt-2 line-clamp-2 text-xs text-text-tertiary">{item.description}</p>
           )}
 
           {item.type === 'parentLog' && (
             <div className="mt-2 space-y-2">
-              <p className="text-xs text-text-tertiary line-clamp-3">{item.content}</p>
+              <p className="line-clamp-3 text-xs text-text-tertiary">{item.content}</p>
               {item.tags.length > 0 && (
                 <div className="flex flex-wrap gap-1">
                   {item.tags.map((tag) => (
                     <span
                       key={tag}
-                      className="text-[10px] px-2 py-0.5 rounded-full bg-ai/10 text-ai border border-ai/20"
+                      className="bg-ai/10 border-ai/20 rounded-full border px-2 py-0.5 text-[10px] text-ai"
                     >
                       {tag}
                     </span>
@@ -416,17 +421,17 @@ function TimelineRow({ item, index }: { item: GrowthTimelineItem; index: number 
                       href={url}
                       target="_blank"
                       rel="noreferrer"
-                      className="w-12 h-12 rounded-lg overflow-hidden border border-border-subtle bg-surface"
+                      className="size-12 overflow-hidden rounded-lg border border-border-subtle bg-surface"
                     >
                       <img
                         src={url}
                         alt=""
-                        className="w-full h-full object-cover hover:scale-105 transition-transform"
+                        className="size-full object-cover transition-transform hover:scale-105"
                       />
                     </a>
                   ))}
                   {item.imageUrls.length > 3 && (
-                    <span className="w-12 h-12 rounded-lg bg-surface flex items-center justify-center text-[10px] text-text-muted">
+                    <span className="flex size-12 items-center justify-center rounded-lg bg-surface text-[10px] text-text-muted">
                       +{item.imageUrls.length - 3}
                     </span>
                   )}
@@ -436,12 +441,9 @@ function TimelineRow({ item, index }: { item: GrowthTimelineItem; index: number 
           )}
 
           {item.type === 'badge' && (
-            <div className="flex items-center gap-2 mt-2">
+            <div className="mt-2 flex items-center gap-2">
               {item.color && (
-                <span
-                  className="w-3 h-3 rounded-full"
-                  style={{ backgroundColor: item.color }}
-                />
+                <span className="size-3 rounded-full" style={{ backgroundColor: item.color }} />
               )}
               <span className="text-xs text-text-tertiary">
                 {item.description || `获得 Lv.${item.level} 徽章`}
@@ -450,7 +452,7 @@ function TimelineRow({ item, index }: { item: GrowthTimelineItem; index: number 
           )}
 
           {item.type === 'pointLog' && (
-            <p className="text-xs text-text-tertiary mt-2">
+            <p className="mt-2 text-xs text-text-tertiary">
               {item.points > 0 ? '+' : ''}
               {item.points} 积分 · 累计 {item.total}
             </p>

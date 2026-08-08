@@ -25,8 +25,11 @@ export default function MetricRing({
   const offset = circumference * (1 - safeRate / 100);
 
   return (
-    <div className={cn('relative inline-flex flex-col items-center', className)} style={{ width: size, height: size }}>
-      <svg className="w-full h-full -rotate-90" viewBox={`0 0 ${size} ${size}`}>
+    <div
+      className={cn('relative inline-flex flex-col items-center', className)}
+      style={{ width: size, height: size }}
+    >
+      <svg className="size-full -rotate-90" viewBox={`0 0 ${size} ${size}`}>
         <defs>
           <linearGradient id="metricRingGradient" x1="0%" y1="0%" x2="100%" y2="0%">
             <stop offset="0%" stopColor="var(--color-primary)" />
@@ -56,7 +59,7 @@ export default function MetricRing({
       </svg>
       {(label || sublabel) && (
         <div className="absolute inset-0 flex flex-col items-center justify-center">
-          {label && <span className="text-base font-bold font-display tabular-nums">{label}</span>}
+          {label && <span className="font-display text-base font-bold tabular-nums">{label}</span>}
           {sublabel && <span className="text-[10px] text-text-muted">{sublabel}</span>}
         </div>
       )}

@@ -16,11 +16,7 @@ import AIDiagnosisCard from '../AIDiagnosisCard';
 export default function ChineseSubjectPage() {
   const { currentChild } = useChildren();
   const shouldReduceMotion = useReducedMotion();
-  const {
-    data: config,
-    isLoading,
-    error: queryError,
-  } = useSubjectPlan('chinese');
+  const { data: config, isLoading, error: queryError } = useSubjectPlan('chinese');
 
   if (!currentChild) {
     return (
@@ -29,14 +25,14 @@ export default function ChineseSubjectPage() {
           initial={shouldReduceMotion ? false : { opacity: 0, y: -8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4 }}
-          className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
+          className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
         >
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-secondary/10 border border-secondary/20 flex items-center justify-center">
-              <BookOpen className="w-5 h-5 text-secondary" />
+            <div className="bg-secondary/10 border-secondary/20 flex size-10 items-center justify-center rounded-xl border">
+              <BookOpen className="size-5 text-secondary" />
             </div>
             <div>
-              <h1 className="text-2xl sm:text-3xl font-bold font-display">语文学科路径</h1>
+              <h1 className="font-display text-2xl font-bold sm:text-3xl">语文学科路径</h1>
             </div>
           </div>
         </motion.div>
@@ -49,9 +45,9 @@ export default function ChineseSubjectPage() {
     <div className="space-y-8">
       <Link
         href="/dashboard"
-        className="inline-flex items-center gap-1 text-sm text-text-tertiary hover:text-primary transition-colors mb-2"
+        className="mb-2 inline-flex items-center gap-1 text-sm text-text-tertiary transition-colors hover:text-primary"
       >
-        <ArrowLeft className="w-4 h-4" />
+        <ArrowLeft className="size-4" />
         返回总览
       </Link>
 
@@ -60,15 +56,15 @@ export default function ChineseSubjectPage() {
         initial={shouldReduceMotion ? false : { opacity: 0, y: -8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4 }}
-        className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
+        className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
       >
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-secondary/10 border border-secondary/20 flex items-center justify-center">
-            <BookOpen className="w-5 h-5 text-secondary" />
+          <div className="bg-secondary/10 border-secondary/20 flex size-10 items-center justify-center rounded-xl border">
+            <BookOpen className="size-5 text-secondary" />
           </div>
           <div>
-            <h1 className="text-2xl sm:text-3xl font-bold font-display">语文学科路径</h1>
-            <p className="text-sm text-text-tertiary mt-0.5">
+            <h1 className="font-display text-2xl font-bold sm:text-3xl">语文学科路径</h1>
+            <p className="mt-0.5 text-sm text-text-tertiary">
               {currentChild.name} · {gradeLabel(currentChild.grade)}
             </p>
           </div>
@@ -76,15 +72,15 @@ export default function ChineseSubjectPage() {
 
         <Link
           href="/dashboard/subjects/chinese/config"
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-surface-elevated border border-border-subtle text-sm font-medium text-text-secondary hover:text-text-primary hover:bg-surface-hover transition-colors"
+          className="inline-flex items-center gap-2 rounded-lg border border-border-subtle bg-surface-elevated px-4 py-2 text-sm font-medium text-text-secondary transition-colors hover:bg-surface-hover hover:text-text-primary"
         >
-          <Settings className="w-4 h-4" />
+          <Settings className="size-4" />
           编辑规划
         </Link>
       </motion.div>
 
       {currentChild && (
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
           <div className="lg:col-span-3">
             <AIDiagnosisCard
               subject="chinese"
@@ -97,12 +93,12 @@ export default function ChineseSubjectPage() {
 
       {isLoading && (
         <div className="flex h-[40vh] items-center justify-center">
-          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+          <Loader2 className="size-8 animate-spin text-primary" />
         </div>
       )}
 
       {queryError && (
-        <div className="rounded-2xl border border-error/20 bg-error/10 p-6 text-error">
+        <div className="border-error/20 bg-error/10 rounded-2xl border p-6 text-error">
           {queryError instanceof Error ? queryError.message : '加载失败'}
         </div>
       )}
@@ -114,20 +110,23 @@ export default function ChineseSubjectPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}
-            className="flex items-start gap-3 rounded-xl bg-primary/5 border border-primary/20 p-4"
+            className="bg-primary/5 border-primary/20 flex items-start gap-3 rounded-xl border p-4"
           >
-            <AlertCircle className="w-5 h-5 text-primary shrink-0 mt-0.5" />
+            <AlertCircle className="mt-0.5 size-5 shrink-0 text-primary" />
             <div>
-              <p className="font-medium text-text-secondary mb-1">本路径服务于三公冲刺路线的语文素养与综合荣誉</p>
-              <p className="text-sm text-text-tertiary leading-relaxed">
-              语文学科路径是小升初方案中「三公冲刺型」路线的人文素养与面谈表达支撑。核心目标：古诗文积累 120 首+、汉字小达人/古诗文大会荣誉、流畅自信的面谈表达。
-            </p>
-            <Link
-              href="/dashboard/plan"
-              className="inline-flex items-center gap-1 text-sm text-primary hover:underline mt-2"
-            >
-              查看完整小升初方案 →
-            </Link>
+              <p className="mb-1 font-medium text-text-secondary">
+                本路径服务于三公冲刺路线的语文素养与综合荣誉
+              </p>
+              <p className="text-sm leading-relaxed text-text-tertiary">
+                语文学科路径是小升初方案中「三公冲刺型」路线的人文素养与面谈表达支撑。核心目标：古诗文积累
+                120 首+、汉字小达人/古诗文大会荣誉、流畅自信的面谈表达。
+              </p>
+              <Link
+                href="/dashboard/plan"
+                className="mt-2 inline-flex items-center gap-1 text-sm text-primary hover:underline"
+              >
+                查看完整小升初方案 →
+              </Link>
             </div>
           </motion.div>
 

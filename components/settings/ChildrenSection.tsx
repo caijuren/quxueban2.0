@@ -31,47 +31,46 @@ export default function ChildrenSection() {
   return (
     <div className="space-y-4">
       <SettingsSection title="孩子管理" description="管理孩子的学习档案">
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           {children.map((child) => (
             <div
               key={child.id}
-              className="relative p-4 rounded-xl bg-surface-elevated border border-border-subtle hover:border-border-default transition-all"
+              className="relative rounded-xl border border-border-subtle bg-surface-elevated p-4 transition-all hover:border-border-default"
             >
               {currentChildId === child.id && (
-                <div className="absolute top-3 right-3 flex items-center gap-1 text-2xs text-primary bg-primary/10 px-2 py-0.5 rounded-full">
-                  <Star className="w-3 h-3" />
+                <div className="bg-primary/10 absolute right-3 top-3 flex items-center gap-1 rounded-full px-2 py-0.5 text-2xs text-primary">
+                  <Star className="size-3" />
                   默认
                 </div>
               )}
-              <div className="flex items-start gap-3 mb-4">
+              <div className="mb-4 flex items-start gap-3">
                 <ChildAvatar child={child} size="xl" shape="rounded" />
                 <div className="min-w-0">
-                  <h3 className="text-base font-bold font-display text-text-primary truncate">
+                  <h3 className="truncate font-display text-base font-bold text-text-primary">
                     {child.name}
                   </h3>
                   <p className="text-xs text-text-muted">
-                    {gradeLabel(child.grade, child.educationSystem)} · {gradeToStage(child.grade, child.educationSystem)} · {educationSystemLabel(child.educationSystem)}
+                    {gradeLabel(child.grade, child.educationSystem)} ·{' '}
+                    {gradeToStage(child.grade, child.educationSystem)} ·{' '}
+                    {educationSystemLabel(child.educationSystem)}
                   </p>
                 </div>
               </div>
 
-              <div className="space-y-2 mb-4">
+              <div className="mb-4 space-y-2">
                 <div className="flex items-center gap-2 text-xs text-text-tertiary">
-                  <School className="w-3.5 h-3.5 text-text-muted" />
-                  <span className="truncate">
-                    当前：{child.currentSchool || '未填写'}
-                  </span>
+                  <School className="size-3.5 text-text-muted" />
+                  <span className="truncate">当前：{child.currentSchool || '未填写'}</span>
                 </div>
                 <div className="flex items-center gap-2 text-xs text-text-tertiary">
-                  <Route className="w-3.5 h-3.5 text-text-muted" />
-                  <span className="truncate">
-                    目标：{child.targetSchool || '未填写'}
-                  </span>
+                  <Route className="size-3.5 text-text-muted" />
+                  <span className="truncate">目标：{child.targetSchool || '未填写'}</span>
                 </div>
                 <div className="flex items-center gap-2 text-xs text-text-tertiary">
-                  <Route className="w-3.5 h-3.5 text-text-muted" />
+                  <Route className="size-3.5 text-text-muted" />
                   <span className="truncate">
-                    路线：{child.routeId ? getRouteById(child.routeId)?.name || child.routeId : '未绑定'}
+                    路线：
+                    {child.routeId ? getRouteById(child.routeId)?.name || child.routeId : '未绑定'}
                   </span>
                 </div>
               </div>
@@ -79,15 +78,15 @@ export default function ChildrenSection() {
               <div className="flex items-center gap-2">
                 <button
                   onClick={() => handleEdit(child)}
-                  className="flex-1 flex items-center justify-center gap-1 px-3 py-2 rounded-lg bg-surface-elevated text-text-secondary text-xs hover:bg-surface-highlight transition-colors"
+                  className="flex flex-1 items-center justify-center gap-1 rounded-lg bg-surface-elevated px-3 py-2 text-xs text-text-secondary transition-colors hover:bg-surface-highlight"
                 >
-                  <Pencil className="w-3.5 h-3.5" />
+                  <Pencil className="size-3.5" />
                   编辑
                 </button>
                 {currentChildId !== child.id && (
                   <button
                     onClick={() => handleSetDefault(child.id)}
-                    className="flex-1 px-3 py-2 rounded-lg bg-primary/[0.08] text-primary text-xs hover:bg-primary/15 transition-colors"
+                    className="bg-primary/[0.08] hover:bg-primary/15 flex-1 rounded-lg px-3 py-2 text-xs text-primary transition-colors"
                   >
                     设为默认
                   </button>
@@ -98,21 +97,17 @@ export default function ChildrenSection() {
 
           <button
             onClick={handleAdd}
-            className="min-h-[180px] rounded-xl border border-dashed border-border-default bg-surface-elevated p-4 flex flex-col items-center justify-center gap-2 text-text-muted hover:text-text-secondary hover:bg-surface-elevated hover:border-border-default transition-all text-sm"
+            className="flex min-h-[180px] flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-border-default bg-surface-elevated p-4 text-sm text-text-muted transition-all hover:border-border-default hover:bg-surface-elevated hover:text-text-secondary"
           >
-            <div className="w-10 h-10 rounded-full bg-surface-elevated flex items-center justify-center">
-              <Plus className="w-5 h-5" />
+            <div className="flex size-10 items-center justify-center rounded-full bg-surface-elevated">
+              <Plus className="size-5" />
             </div>
             <span className="font-medium">添加孩子</span>
           </button>
         </div>
       </SettingsSection>
 
-      <ChildModal
-        isOpen={modalOpen}
-        onClose={() => setModalOpen(false)}
-        child={editingChild}
-      />
+      <ChildModal isOpen={modalOpen} onClose={() => setModalOpen(false)} child={editingChild} />
     </div>
   );
 }

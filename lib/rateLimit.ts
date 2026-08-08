@@ -5,10 +5,7 @@ interface RateLimitState {
   resetAt: number;
 }
 
-const createRateLimiter = (options: {
-  maxRequests: number;
-  windowMs: number;
-}) => {
+const createRateLimiter = (options: { maxRequests: number; windowMs: number }) => {
   const cache = new LRUCache<string, RateLimitState>({
     ttl: options.windowMs,
     ttlAutopurge: true,

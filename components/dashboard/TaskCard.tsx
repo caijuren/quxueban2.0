@@ -31,11 +31,11 @@ export default function TaskCard({
     <div
       onClick={onToggle}
       className={cn(
-        'group relative rounded-2xl border transition-all duration-200 cursor-pointer',
+        'group relative cursor-pointer rounded-2xl border transition-all duration-200',
         'bg-surface hover:bg-surface-elevated',
         isDone
-          ? 'border-l-2 border-l-primary/60 border-y-border-default border-r-border-default'
-          : 'border-l-2 border-l-transparent border-border-default hover:border-border-strong'
+          ? 'border-l-primary/60 border-l-2 border-y-border-default border-r-border-default'
+          : 'border-l-2 border-border-default border-l-transparent hover:border-border-strong'
       )}
       role="button"
       tabIndex={0}
@@ -54,45 +54,42 @@ export default function TaskCard({
             e.stopPropagation();
             onToggle();
           }}
-          className="shrink-0 mt-0.5 rounded-full focus-ring"
+          className="focus-ring mt-0.5 shrink-0 rounded-full"
           aria-label={isDone ? '标记为未完成' : '标记为完成'}
         >
           {isDone ? (
-            <CheckCircle2 className="w-6 h-6 text-primary" />
+            <CheckCircle2 className="size-6 text-primary" />
           ) : (
-            <Circle className="w-6 h-6 text-text-muted group-hover:text-primary transition-colors" />
+            <Circle className="size-6 text-text-muted transition-colors group-hover:text-primary" />
           )}
         </button>
 
-        <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2 mb-1.5 flex-wrap">
+        <div className="min-w-0 flex-1">
+          <div className="mb-1.5 flex flex-wrap items-center gap-2">
             <div
               className={cn(
                 'flex items-center justify-center rounded-lg border',
                 getCategoryColorClass(task.category),
-                compact ? 'w-7 h-7' : 'w-8 h-8'
+                compact ? 'h-7 w-7' : 'h-8 w-8'
               )}
             >
-              <CategoryIcon className="w-4 h-4" />
+              <CategoryIcon className="size-4" />
             </div>
             <span
-              className={cn(
-                'text-xs font-medium text-text-tertiary',
-                isDone && 'text-text-muted'
-              )}
+              className={cn('text-xs font-medium text-text-tertiary', isDone && 'text-text-muted')}
             >
               {TASK_CATEGORY_LABELS[task.category]}
             </span>
 
-            <span className="ml-auto text-2xs px-2 py-0.5 rounded-full bg-surface-elevated text-text-tertiary border border-border-subtle flex items-center gap-1">
-              <Clock className="w-4 h-4" />
+            <span className="ml-auto flex items-center gap-1 rounded-full border border-border-subtle bg-surface-elevated px-2 py-0.5 text-2xs text-text-tertiary">
+              <Clock className="size-4" />
               <span className="tabular-nums">{task.duration}</span>
             </span>
           </div>
 
           <p
             className={cn(
-              'font-semibold text-sm leading-snug',
+              'text-sm font-semibold leading-snug',
               isDone ? 'text-text-muted line-through' : 'text-text-primary'
             )}
           >
@@ -100,11 +97,11 @@ export default function TaskCard({
           </p>
 
           {task.materials.length > 0 && !compact && (
-            <div className="flex flex-wrap gap-1.5 mt-2">
+            <div className="mt-2 flex flex-wrap gap-1.5">
               {task.materials.map((m) => (
                 <span
                   key={m}
-                  className="text-2xs px-2 py-0.5 rounded-md bg-surface-elevated text-text-tertiary"
+                  className="rounded-md bg-surface-elevated px-2 py-0.5 text-2xs text-text-tertiary"
                 >
                   {m}
                 </span>
@@ -118,7 +115,7 @@ export default function TaskCard({
               onBlur={(e) => onNoteBlur(e.target.value)}
               placeholder="完成备注（正确率、感受等）"
               onClick={(e) => e.stopPropagation()}
-              className="w-full mt-3 text-xs bg-surface-highlight border border-border-default rounded-lg px-3 py-2 text-text-secondary placeholder:text-text-muted focus:outline-none focus:border-primary/40 focus:ring-1 focus:ring-primary/20 resize-none"
+              className="focus:border-primary/40 focus:ring-primary/20 mt-3 w-full resize-none rounded-lg border border-border-default bg-surface-highlight px-3 py-2 text-xs text-text-secondary placeholder:text-text-muted focus:outline-none focus:ring-1"
               rows={2}
             />
           )}

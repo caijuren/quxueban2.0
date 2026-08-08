@@ -1,29 +1,34 @@
 'use client';
 
-import { useState } from 'react';
-import { Palette, Type, Layout, Eye, Home, Users, Save, Loader2 } from 'lucide-react';
-import { UserSettings, applySettingsToDocument } from '@/lib/settings';
+import { useEffect, useState } from 'react';
+import { Type, Layout, Eye, Home, Users, Save, Sun, Moon, Monitor } from 'lucide-react';
+import { UserSettings, applySettingsToDocument, THEME_COLORS } from '@/lib/settings';
+import type { Theme } from '@/lib/theme';
 import SettingsSection from './SettingsSection';
+import Switch from '@/components/ui/switch';
+import Alert from '@/components/ui/alert';
+import Button from '@/components/ui/button';
+import FormField from '@/components/ui/form-field';
 
 interface AppearanceSectionProps {
   settings: UserSettings;
   onUpdate: (updates: Partial<UserSettings>) => Promise<void>;
 }
 
-const THEMES = [
-  {
-    id: 'dark-tech',
-    label: '暗黑科技',
-    primary: '#ff2d6a',
-    secondary: '#8b5cf6',
-  },
-  {
-    id: 'rose-pink',
-    label: '玫瑰粉',
-    primary: '#ec4899',
-    secondary: '#f43f5e',
-  },
+type Variant = Exclude<UserSettings['theme'], 'light'>;
+
+const APPEARANCES: { id: Theme; label: string; icon: typeof Sun }[] = [
+  { id: 'light', label: '浅色', icon: Sun },
+  { id: 'dark', label: '深色', icon: Moon },
+  { id: 'system', label: '跟随系统', icon: Monitor },
 ];
+
+const VARIANTS = Object.entries(THEME_COLORS).map(([id, colors]) => ({
+  id: id as Variant,
+  label: id === 'dark-tech' ? '暗黑科技' : '玫瑰粉',
+  primary: colors['--color-primary'],
+  secondary: colors['--color-secondary'],
+}));
 
 const FONT_SIZES = [
   { id: 'normal', label: '标准' },
@@ -47,11 +52,14 @@ const CHILD_MODES = [
   { id: 'ask', label: '每次手动选择' },
 ];
 
-export default function AppearanceSection({
-  settings,
-  onUpdate,
-}: AppearanceSectionProps) {
-  const [theme, setTheme] = useState(settings.theme);
+export default function AppearanceSection({ settings, onUpdate }: AppearanceSectionProps) {
+  const initialAppearance: Theme =
+    settings.appearance ?? (settings.theme === 'light' ? 'light' : 'dark');
+  const initialVariant: Variant =
+    settings.theme === 'dark-tech' || settings.theme === 'rose-pink' ? settings.theme : 'dark-tech';
+
+  const [appearance, setAppearance] = useState<Theme>(initialAppearance);
+  const [variant, setVariant] = useState<Variant>(initialVariant);
   const [fontSize, setFontSize] = useState(settings.fontSize);
   const [density, setDensity] = useState(settings.density);
   const [reducedMotion, setReducedMotion] = useState(settings.reducedMotion);
@@ -60,11 +68,17 @@ export default function AppearanceSection({
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
+  // Live preview while the user is choosing theme options.
+  useEffect(() => {
+    applySettingsToDocument({ ...settings, appearance, theme: variant });
+  }, [appearance, variant, settings]);
+
   const handleSave = async () => {
     setSaving(true);
     setMessage(null);
     const updates = {
-      theme,
+      appearance,
+      theme: variant,
       fontSize,
       density,
       reducedMotion,
@@ -88,44 +102,54 @@ export default function AppearanceSection({
   return (
     <div className="space-y-3">
       <SettingsSection title="界面偏好" description="主题、显示与默认行为">
-        <div className="space-y-3">
-          <div>
-            <div className="flex items-center gap-2 mb-2">
-              <Palette className="w-3.5 h-3.5 text-primary" />
-              <p className="text-xs font-medium text-text-secondary">主题风格</p>
-            </div>
-            <div className="grid grid-cols-2 gap-2">
-              {THEMES.map((t) => (
-                <button
-                  key={t.id}
-                  onClick={() => setTheme(t.id as typeof theme)}
-                  className={`relative flex items-center gap-2 p-2.5 rounded-lg border text-left transition-all ${
-                    theme === t.id
-                      ? 'bg-surface-elevated border-primary/40'
-                      : 'bg-surface-elevated border-border-subtle hover:bg-surface-elevated'
-                  }`}
+        <div className="space-y-4">
+          <FormField label="外观主题">
+            <div className="grid grid-cols-3 gap-2">
+              {APPEARANCES.map(({ id, label, icon: Icon }) => (
+                <Button
+                  key={id}
+                  size="sm"
+                  variant={appearance === id ? 'primary' : 'secondary'}
+                  onClick={() => setAppearance(id)}
+                  leftIcon={<Icon className="size-4" />}
                 >
-                  <div
-                    className="w-6 h-6 rounded-md shrink-0"
-                    style={{
-                      background: `linear-gradient(135deg, ${t.primary} 0%, ${t.secondary} 100%)`,
-                    }}
-                  />
-                  <p className="text-xs font-medium text-text-secondary">{t.label}</p>
-                  {theme === t.id && (
-                    <div className="absolute top-2 right-2 w-1.5 h-1.5 rounded-full bg-primary" />
-                  )}
-                </button>
+                  {label}
+                </Button>
               ))}
             </div>
-          </div>
+          </FormField>
 
-          <div className="h-px bg-surface-elevated" />
+          {appearance !== 'light' && (
+            <FormField label="深色风格">
+              <div className="grid grid-cols-2 gap-2">
+                {VARIANTS.map((v) => (
+                  <Button
+                    key={v.id}
+                    size="sm"
+                    variant={variant === v.id ? 'primary' : 'secondary'}
+                    onClick={() => setVariant(v.id)}
+                    leftIcon={
+                      <div
+                        className="size-4 rounded-sm"
+                        style={{
+                          background: `linear-gradient(135deg, ${v.primary} 0%, ${v.secondary} 100%)`,
+                        }}
+                      />
+                    }
+                  >
+                    {v.label}
+                  </Button>
+                ))}
+              </div>
+            </FormField>
+          )}
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="h-px bg-border-subtle" />
+
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div>
-              <div className="flex items-center gap-2 mb-2">
-                <Type className="w-3.5 h-3.5 text-primary" />
+              <div className="mb-2 flex items-center gap-2">
+                <Type className="size-3.5 text-primary" />
                 <p className="text-xs font-medium text-text-secondary">字体大小</p>
               </div>
               <div className="flex gap-1.5">
@@ -133,10 +157,10 @@ export default function AppearanceSection({
                   <button
                     key={fs.id}
                     onClick={() => setFontSize(fs.id as typeof fontSize)}
-                    className={`flex-1 py-1.5 rounded-md text-xs font-medium transition-colors ${
+                    className={`flex-1 rounded-md py-1.5 text-xs font-medium transition-colors ${
                       fontSize === fs.id
-                        ? 'bg-primary/[0.08] text-primary border border-primary/20'
-                        : 'bg-surface-elevated text-text-tertiary border border-border-subtle hover:bg-surface-highlight'
+                        ? 'border-primary/20 bg-primary/[0.08] border text-primary'
+                        : 'border border-border-subtle bg-surface-elevated text-text-tertiary hover:bg-surface-highlight'
                     }`}
                   >
                     {fs.label}
@@ -146,8 +170,8 @@ export default function AppearanceSection({
             </div>
 
             <div>
-              <div className="flex items-center gap-2 mb-2">
-                <Layout className="w-3.5 h-3.5 text-secondary" />
+              <div className="mb-2 flex items-center gap-2">
+                <Layout className="size-3.5 text-secondary" />
                 <p className="text-xs font-medium text-text-secondary">信息密度</p>
               </div>
               <div className="flex gap-1.5">
@@ -155,10 +179,10 @@ export default function AppearanceSection({
                   <button
                     key={d.id}
                     onClick={() => setDensity(d.id as typeof density)}
-                    className={`flex-1 py-1.5 rounded-md text-xs font-medium transition-colors ${
+                    className={`flex-1 rounded-md py-1.5 text-xs font-medium transition-colors ${
                       density === d.id
-                        ? 'bg-secondary/10 text-secondary border border-secondary/20'
-                        : 'bg-surface-elevated text-text-tertiary border border-border-subtle hover:bg-surface-highlight'
+                        ? 'border-secondary/20 bg-secondary/10 border text-secondary'
+                        : 'border border-border-subtle bg-surface-elevated text-text-tertiary hover:bg-surface-highlight'
                     }`}
                   >
                     {d.label}
@@ -170,28 +194,17 @@ export default function AppearanceSection({
 
           <div className="flex items-center justify-between py-1">
             <div className="flex items-center gap-2">
-              <Eye className="w-3.5 h-3.5 text-accent" />
+              <Eye className="size-3.5 text-accent" />
               <p className="text-xs font-medium text-text-secondary">减少动效</p>
             </div>
-            <button
-              onClick={() => setReducedMotion((v) => !v)}
-              className={`relative w-9 h-5 rounded-full transition-colors ${
-                reducedMotion ? 'bg-primary' : 'bg-surface-highlight'
-              }`}
-            >
-              <span
-                className={`absolute top-0.5 left-0.5 w-4 h-4 rounded-full bg-white transition-transform ${
-                  reducedMotion ? 'translate-x-4' : ''
-                }`}
-              />
-            </button>
+            <Switch checked={reducedMotion} onCheckedChange={setReducedMotion} size="sm" />
           </div>
 
-          <div className="h-px bg-surface-elevated" />
+          <div className="h-px bg-border-subtle" />
 
           <div>
-            <div className="flex items-center gap-2 mb-2">
-              <Home className="w-3.5 h-3.5 text-primary" />
+            <div className="mb-2 flex items-center gap-2">
+              <Home className="size-3.5 text-primary" />
               <p className="text-xs font-medium text-text-secondary">登录后默认进入</p>
             </div>
             <div className="grid grid-cols-3 gap-1.5">
@@ -199,13 +212,13 @@ export default function AppearanceSection({
                 <button
                   key={page.id}
                   onClick={() => setDefaultLandingPage(page.id as typeof defaultLandingPage)}
-                  className={`flex items-center justify-center gap-1 px-2 py-1.5 rounded-md text-xs transition-colors ${
+                  className={`flex items-center justify-center gap-1 rounded-md px-2 py-1.5 text-xs transition-colors ${
                     defaultLandingPage === page.id
-                      ? 'bg-primary/[0.08] text-primary border border-primary/20'
-                      : 'bg-surface-elevated text-text-tertiary border border-border-subtle hover:bg-surface-highlight'
+                      ? 'border-primary/20 bg-primary/[0.08] border text-primary'
+                      : 'border border-border-subtle bg-surface-elevated text-text-tertiary hover:bg-surface-highlight'
                   }`}
                 >
-                  <page.icon className="w-3.5 h-3.5" />
+                  <page.icon className="size-3.5" />
                   <span className="truncate">{page.label}</span>
                 </button>
               ))}
@@ -213,8 +226,8 @@ export default function AppearanceSection({
           </div>
 
           <div>
-            <div className="flex items-center gap-2 mb-2">
-              <Users className="w-3.5 h-3.5 text-secondary" />
+            <div className="mb-2 flex items-center gap-2">
+              <Users className="size-3.5 text-secondary" />
               <p className="text-xs font-medium text-text-secondary">默认孩子选择</p>
             </div>
             <div className="flex gap-1.5">
@@ -222,10 +235,10 @@ export default function AppearanceSection({
                 <button
                   key={mode.id}
                   onClick={() => setDefaultChildMode(mode.id as typeof defaultChildMode)}
-                  className={`flex-1 py-1.5 rounded-md text-xs font-medium transition-colors ${
+                  className={`flex-1 rounded-md py-1.5 text-xs font-medium transition-colors ${
                     defaultChildMode === mode.id
-                      ? 'bg-secondary/10 text-secondary border border-secondary/20'
-                      : 'bg-surface-elevated text-text-tertiary border border-border-subtle hover:bg-surface-highlight'
+                      ? 'border-secondary/20 bg-secondary/10 border text-secondary'
+                      : 'border border-border-subtle bg-surface-elevated text-text-tertiary hover:bg-surface-highlight'
                   }`}
                 >
                   {mode.label}
@@ -237,26 +250,20 @@ export default function AppearanceSection({
       </SettingsSection>
 
       {message && (
-        <div
-          className={`text-xs px-3 py-1.5 rounded-lg ${
-            message.type === 'success'
-              ? 'bg-success/10 text-success border border-success/20'
-              : 'bg-error/10 text-error border border-error/20'
-          }`}
-        >
+        <Alert type={message.type} title={message.type === 'success' ? '保存成功' : '保存失败'}>
           {message.text}
-        </div>
+        </Alert>
       )}
 
       <div className="flex justify-end">
-        <button
+        <Button
           onClick={handleSave}
-          disabled={saving}
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-primary text-text-primary text-xs font-medium hover:opacity-90 transition-all disabled:opacity-70"
+          isLoading={saving}
+          size="sm"
+          leftIcon={<Save className="size-4" />}
         >
-          {saving ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Save className="w-3.5 h-3.5" />}
           保存界面偏好
-        </button>
+        </Button>
       </div>
     </div>
   );

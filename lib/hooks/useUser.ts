@@ -3,10 +3,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { apiDelete, apiGet, apiPatch } from '@/lib/apiClient';
 import { UserWithSettings } from '@/lib/settings';
-import {
-  AccountDeleteInput,
-  PasswordChangeInput,
-} from '@/lib/validation';
+import { AccountDeleteInput, PasswordChangeInput } from '@/lib/validation';
 
 const queryKey = ['user'];
 

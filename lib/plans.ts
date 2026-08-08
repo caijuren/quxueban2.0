@@ -834,7 +834,12 @@ export const middleSchoolPlans: RoutePlan[] = [
     description:
       '以嘉一实验高级中学、嘉定二中、安亭高级中学等区重点或市特色高中为保底，确保本科升学路径稳定',
     probability: 85,
-    requirements: ['校内成绩稳定中游以上', '至少 1-2 门学科有优势', '中考志愿填报合理', '特色项目匹配'],
+    requirements: [
+      '校内成绩稳定中游以上',
+      '至少 1-2 门学科有优势',
+      '中考志愿填报合理',
+      '特色项目匹配',
+    ],
     milestones: [
       { time: '六年级-七年级', task: '补齐基础，培养优势学科' },
       { time: '八年级', task: '巩固优势，关注特色招生通道' },
@@ -871,8 +876,18 @@ export const middleSchoolPlans: RoutePlan[] = [
 ];
 
 export const typeConfig = {
-  primary: { label: '主路线', color: 'text-primary', bg: 'bg-primary/10', border: 'border-primary/30' },
-  backup: { label: '备选路线', color: 'text-secondary', bg: 'bg-secondary/10', border: 'border-secondary/30' },
+  primary: {
+    label: '主路线',
+    color: 'text-primary',
+    bg: 'bg-primary/10',
+    border: 'border-primary/30',
+  },
+  backup: {
+    label: '备选路线',
+    color: 'text-secondary',
+    bg: 'bg-secondary/10',
+    border: 'border-secondary/30',
+  },
 };
 
 export const statusConfig = {

@@ -57,17 +57,15 @@ function buildWeekOptions(centerWeekId: string) {
     const id = shiftWeekId(centerWeekId, delta);
     const { year, week } = parseWeekId(id);
     const start = getWeekRange(id).start;
-    const weeksFromCurrent = Math.round(
-      (start.getTime() - currentStart.getTime()) / oneWeek
-    );
+    const weeksFromCurrent = Math.round((start.getTime() - currentStart.getTime()) / oneWeek);
     const relationLabel =
       weeksFromCurrent === 0
         ? '本周'
         : weeksFromCurrent === 1
-        ? '下周'
-        : weeksFromCurrent === -1
-        ? '上周'
-        : `${year}年第${String(week).padStart(2, '0')}周`;
+          ? '下周'
+          : weeksFromCurrent === -1
+            ? '上周'
+            : `${year}年第${String(week).padStart(2, '0')}周`;
     return {
       value: id,
       label: `${relationLabel} · ${formatWeekLabel(id)}`,
@@ -137,18 +135,15 @@ function getCategoryMinutes(plan: WeeklyPlan, category: TaskCategory): number {
     .reduce((sum, t) => sum + parseDurationMinutes(t.duration), 0);
 }
 
-function getCompletedCategoryMinutes(
-  plan: WeeklyPlan,
-  category: TaskCategory
-): number {
+function getCompletedCategoryMinutes(plan: WeeklyPlan, category: TaskCategory): number {
   return plan.tasks
     .filter((t) => (t.category || 'other') === category && t.status === 'done')
     .reduce((sum, t) => sum + parseDurationMinutes(t.duration), 0);
 }
 
-function getLatestCompletionRecord(
-  task: { completionRecords?: TaskCompletionRecord[] }
-): TaskCompletionRecord | undefined {
+function getLatestCompletionRecord(task: {
+  completionRecords?: TaskCompletionRecord[];
+}): TaskCompletionRecord | undefined {
   const records = task.completionRecords || [];
   return records[records.length - 1];
 }
@@ -332,10 +327,10 @@ export default function ReportsPage() {
           transition={{ duration: 0.4 }}
           className="flex items-center gap-3"
         >
-          <div className="w-10 h-10 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center">
-            <BarChart3 className="w-5 h-5 text-primary" />
+          <div className="bg-primary/10 border-primary/20 flex size-10 items-center justify-center rounded-xl border">
+            <BarChart3 className="size-5 text-primary" />
           </div>
-          <h1 className="text-2xl sm:text-3xl font-bold font-display">成长报告</h1>
+          <h1 className="font-display text-2xl font-bold sm:text-3xl">成长报告</h1>
         </motion.div>
         <ChildEmptyState description="添加孩子后，即可查看日报与周报" />
       </div>
@@ -351,10 +346,10 @@ export default function ReportsPage() {
         transition={{ duration: 0.4 }}
         className="flex items-center gap-3"
       >
-        <div className="w-10 h-10 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center">
-          <BarChart3 className="w-5 h-5 text-primary" />
+        <div className="bg-primary/10 border-primary/20 flex size-10 items-center justify-center rounded-xl border">
+          <BarChart3 className="size-5 text-primary" />
         </div>
-        <h1 className="text-2xl sm:text-3xl font-bold font-display">成长报告</h1>
+        <h1 className="font-display text-2xl font-bold sm:text-3xl">成长报告</h1>
       </motion.div>
 
       {plan && stats && (
@@ -368,16 +363,16 @@ export default function ReportsPage() {
           >
             <button
               onClick={() => setWeekId((w) => shiftWeekId(w, -1))}
-              className="w-8 h-8 flex items-center justify-center rounded-[14px] bg-surface border border-border-default text-text-secondary hover:bg-surface-hover transition-colors"
+              className="flex size-8 items-center justify-center rounded-[14px] border border-border-default bg-surface text-text-secondary transition-colors hover:bg-surface-hover"
               aria-label="上一周"
             >
-              <ChevronLeft className="w-4 h-4" />
+              <ChevronLeft className="size-4" />
             </button>
             <div className="relative">
               <select
                 value={weekId}
                 onChange={(e) => setWeekId(e.target.value)}
-                className="appearance-none pl-3 pr-9 py-1.5 rounded-[14px] border border-border-default bg-surface text-sm font-medium text-text-primary min-w-[180px] focus:outline-none focus:border-primary/50 focus:ring-2 focus:ring-primary/10 transition-colors cursor-pointer"
+                className="focus:border-primary/50 focus:ring-primary/10 min-w-[180px] cursor-pointer appearance-none rounded-[14px] border border-border-default bg-surface py-1.5 pl-3 pr-9 text-sm font-medium text-text-primary transition-colors focus:outline-none focus:ring-2"
                 aria-label="选择周"
               >
                 {weekOptions.map((opt) => (
@@ -386,14 +381,14 @@ export default function ReportsPage() {
                   </option>
                 ))}
               </select>
-              <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-text-tertiary pointer-events-none" />
+              <ChevronDown className="pointer-events-none absolute right-2.5 top-1/2 size-4 -translate-y-1/2 text-text-tertiary" />
             </div>
             <button
               onClick={() => setWeekId((w) => shiftWeekId(w, 1))}
-              className="w-8 h-8 flex items-center justify-center rounded-[14px] bg-surface border border-border-default text-text-secondary hover:bg-surface-hover transition-colors"
+              className="flex size-8 items-center justify-center rounded-[14px] border border-border-default bg-surface text-text-secondary transition-colors hover:bg-surface-hover"
               aria-label="下一周"
             >
-              <ChevronRight className="w-4 h-4" />
+              <ChevronRight className="size-4" />
             </button>
           </motion.div>
 
@@ -404,31 +399,31 @@ export default function ReportsPage() {
             transition={{ duration: 0.4, delay: 0.1 }}
           >
             <CommandCard className="p-5">
-              <div className="flex items-center justify-between gap-3 mb-4">
+              <div className="mb-4 flex items-center justify-between gap-3">
                 <div className="flex items-center gap-2">
-                  <Sparkles className="w-5 h-5 text-ai" />
+                  <Sparkles className="size-5 text-ai" />
                   <h2 className="text-lg font-bold text-text-secondary">AI 周报总结</h2>
                 </div>
                 <button
                   onClick={handleRefreshAiSummary}
                   disabled={aiGenerating}
-                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-ai/10 border border-ai/20 text-ai text-xs font-medium hover:bg-ai/15 transition-colors disabled:opacity-50"
+                  className="bg-ai/10 border-ai/20 hover:bg-ai/15 flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-xs font-medium text-ai transition-colors disabled:opacity-50"
                 >
                   {aiGenerating ? (
-                    <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                    <Loader2 className="size-3.5 animate-spin" />
                   ) : (
-                    <RotateCw className="w-3.5 h-3.5" />
+                    <RotateCw className="size-3.5" />
                   )}
                   {aiGenerating ? '生成中...' : '重新生成'}
                 </button>
               </div>
 
               {plan.aiSummary ? (
-                <div className="rounded-xl bg-ai/[0.06] border border-ai/15 p-4">
-                  <p className="text-sm text-text-tertiary leading-relaxed">{plan.aiSummary}</p>
+                <div className="bg-ai/[0.06] border-ai/15 rounded-xl border p-4">
+                  <p className="text-sm leading-relaxed text-text-tertiary">{plan.aiSummary}</p>
                 </div>
               ) : (
-                <div className="rounded-xl bg-surface-elevated border border-border-subtle p-6 text-center">
+                <div className="rounded-xl border border-border-subtle bg-surface-elevated p-6 text-center">
                   <p className="text-sm text-text-muted">
                     {aiGenerating ? 'AI 正在分析本周数据...' : '点击上方按钮生成本周 AI 总结。'}
                   </p>
@@ -442,46 +437,48 @@ export default function ReportsPage() {
             initial={shouldReduceMotion ? false : { opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, delay: 0.15 }}
-            className="grid grid-cols-2 lg:grid-cols-4 gap-4"
+            className="grid grid-cols-2 gap-4 lg:grid-cols-4"
           >
             <CommandCard className="p-4">
-              <div className="flex items-center gap-2 mb-2">
-                <Target className="w-4 h-4 text-primary" />
+              <div className="mb-2 flex items-center gap-2">
+                <Target className="size-4 text-primary" />
                 <span className="text-xs text-text-muted">计划任务</span>
               </div>
-              <p className="text-2xl font-bold font-display text-text-primary">{stats.total}</p>
-              <p className="text-xs text-text-tertiary mt-0.5">已完成 {stats.done} 项</p>
+              <p className="font-display text-2xl font-bold text-text-primary">{stats.total}</p>
+              <p className="mt-0.5 text-xs text-text-tertiary">已完成 {stats.done} 项</p>
             </CommandCard>
 
             <CommandCard className="p-4">
-              <div className="flex items-center gap-2 mb-2">
-                <Clock className="w-4 h-4 text-secondary" />
+              <div className="mb-2 flex items-center gap-2">
+                <Clock className="size-4 text-secondary" />
                 <span className="text-xs text-text-muted">学习时长</span>
               </div>
-              <p className="text-2xl font-bold font-display text-text-primary">
+              <p className="font-display text-2xl font-bold text-text-primary">
                 {formatMinutes(actualMinutes)}
               </p>
-              <p className="text-xs text-text-tertiary mt-0.5">计划 {formatMinutes(totalMinutes)}</p>
+              <p className="mt-0.5 text-xs text-text-tertiary">
+                计划 {formatMinutes(totalMinutes)}
+              </p>
             </CommandCard>
 
             <CommandCard className="p-4">
-              <div className="flex items-center gap-2 mb-2">
-                <Calendar className="w-4 h-4 text-accent" />
+              <div className="mb-2 flex items-center gap-2">
+                <Calendar className="size-4 text-accent" />
                 <span className="text-xs text-text-muted">打卡天数</span>
               </div>
-              <p className="text-2xl font-bold font-display text-text-primary">{checkedInDays}</p>
-              <p className="text-xs text-text-tertiary mt-0.5">本周有打卡</p>
+              <p className="font-display text-2xl font-bold text-text-primary">{checkedInDays}</p>
+              <p className="mt-0.5 text-xs text-text-tertiary">本周有打卡</p>
             </CommandCard>
 
             <CommandCard className="p-4">
-              <div className="flex items-center gap-2 mb-2">
-                <TrendingUp className="w-4 h-4 text-success" />
+              <div className="mb-2 flex items-center gap-2">
+                <TrendingUp className="size-4 text-success" />
                 <span className="text-xs text-text-muted">完成率</span>
               </div>
-              <p className="text-2xl font-bold font-display text-text-primary">
+              <p className="font-display text-2xl font-bold text-text-primary">
                 {stats.completionRate}%
               </p>
-              <p className="text-xs text-text-tertiary mt-0.5">
+              <p className="mt-0.5 text-xs text-text-tertiary">
                 {stats.pending > 0 ? `${stats.pending} 项待完成` : '全部完成'}
               </p>
             </CommandCard>
@@ -494,18 +491,18 @@ export default function ReportsPage() {
             transition={{ duration: 0.4, delay: 0.2 }}
           >
             <CommandCard className="p-5">
-              <div className="flex items-center gap-2 mb-5">
-                <TrendingUp className="w-5 h-5 text-primary" />
+              <div className="mb-5 flex items-center gap-2">
+                <TrendingUp className="size-5 text-primary" />
                 <h2 className="text-lg font-bold text-text-secondary">整体目标推进分析</h2>
               </div>
 
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
                     <span className="text-sm text-text-secondary">时间进度</span>
                     <span className="text-sm font-bold text-text-primary">{timeProgress}%</span>
                   </div>
-                  <div className="h-2.5 w-full bg-surface rounded-full overflow-hidden">
+                  <div className="h-2.5 w-full overflow-hidden rounded-full bg-surface">
                     <motion.div
                       initial={{ width: 0 }}
                       animate={{ width: `${timeProgress}%` }}
@@ -523,7 +520,7 @@ export default function ReportsPage() {
                     <span className="text-sm text-text-secondary">任务进度</span>
                     <span className="text-sm font-bold text-text-primary">{taskProgress}%</span>
                   </div>
-                  <div className="h-2.5 w-full bg-surface rounded-full overflow-hidden">
+                  <div className="h-2.5 w-full overflow-hidden rounded-full bg-surface">
                     <motion.div
                       initial={{ width: 0 }}
                       animate={{ width: `${taskProgress}%` }}
@@ -536,13 +533,13 @@ export default function ReportsPage() {
                   </p>
                 </div>
 
-                <div className="rounded-xl bg-surface-elevated border border-border-subtle p-4">
-                  <div className="flex items-center gap-2 mb-2">
+                <div className="rounded-xl border border-border-subtle bg-surface-elevated p-4">
+                  <div className="mb-2 flex items-center gap-2">
                     <span className={`text-sm font-bold ${progressStatus.color}`}>
                       {progressStatus.label}
                     </span>
                   </div>
-                  <p className="text-sm text-text-tertiary leading-relaxed">
+                  <p className="text-sm leading-relaxed text-text-tertiary">
                     {progressStatus.message}
                   </p>
                 </div>
@@ -557,21 +554,21 @@ export default function ReportsPage() {
             transition={{ duration: 0.4, delay: 0.25 }}
           >
             <CommandCard className="p-5">
-              <div className="flex items-center gap-2 mb-5">
-                <Target className="w-5 h-5 text-secondary" />
+              <div className="mb-5 flex items-center gap-2">
+                <Target className="size-5 text-secondary" />
                 <h2 className="text-lg font-bold text-text-secondary">学科分析</h2>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
                 {subjectStats.map((subject) => (
                   <div
                     key={subject.subjectId}
-                    className="rounded-xl bg-surface-elevated border border-border-subtle p-4 space-y-4"
+                    className="space-y-4 rounded-xl border border-border-subtle bg-surface-elevated p-4"
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
                         <div
-                          className="w-10 h-10 rounded-xl flex items-center justify-center text-white font-bold text-sm"
+                          className="flex size-10 items-center justify-center rounded-xl text-sm font-bold text-white"
                           style={{ backgroundColor: subject.color }}
                         >
                           {subject.name.slice(0, 1)}
@@ -581,14 +578,16 @@ export default function ReportsPage() {
                             {subject.name}
                           </p>
                           <p className="text-xs text-text-muted">
-                            {subject.total > 0 ? `${subject.done}/${subject.total} 完成` : '本周无任务'}
+                            {subject.total > 0
+                              ? `${subject.done}/${subject.total} 完成`
+                              : '本周无任务'}
                           </p>
                         </div>
                       </div>
                       <span className="text-lg font-bold text-text-primary">{subject.rate}%</span>
                     </div>
 
-                    <div className="h-1.5 w-full bg-surface rounded-full overflow-hidden">
+                    <div className="h-1.5 w-full overflow-hidden rounded-full bg-surface">
                       <motion.div
                         initial={{ width: 0 }}
                         animate={{ width: `${subject.rate}%` }}
@@ -609,7 +608,8 @@ export default function ReportsPage() {
                       </p>
                       <p className="text-text-muted">
                         <span className="text-text-secondary">实际投入：</span>
-                        {formatMinutes(subject.actualMinutes)} / 计划 {formatMinutes(subject.plannedMinutes)}
+                        {formatMinutes(subject.actualMinutes)} / 计划{' '}
+                        {formatMinutes(subject.plannedMinutes)}
                       </p>
                     </div>
 
@@ -618,7 +618,7 @@ export default function ReportsPage() {
                         {subject.weakSkills.map((skill) => (
                           <span
                             key={skill}
-                            className="px-2 py-0.5 rounded-full text-[10px] bg-warning/10 text-warning border border-warning/20"
+                            className="bg-warning/10 border-warning/20 rounded-full border px-2 py-0.5 text-[10px] text-warning"
                           >
                             薄弱：{skill}
                           </span>
@@ -627,13 +627,13 @@ export default function ReportsPage() {
                     )}
 
                     {subject.focusList.length > 0 && (
-                      <div className="pt-2 border-t border-border-subtle">
-                        <p className="text-[10px] text-text-muted mb-1">本周完成重点</p>
+                      <div className="border-t border-border-subtle pt-2">
+                        <p className="mb-1 text-[10px] text-text-muted">本周完成重点</p>
                         <div className="flex flex-wrap gap-1">
                           {subject.focusList.map((focus, idx) => (
                             <span
                               key={idx}
-                              className="px-2 py-0.5 rounded-md text-[10px] bg-surface text-text-secondary border border-border-subtle"
+                              className="rounded-md border border-border-subtle bg-surface px-2 py-0.5 text-[10px] text-text-secondary"
                             >
                               {focus}
                             </span>
@@ -655,8 +655,8 @@ export default function ReportsPage() {
               transition={{ duration: 0.4, delay: 0.3 }}
             >
               <CommandCard className="p-5">
-                <div className="flex items-center gap-2 mb-5">
-                  <Calendar className="w-5 h-5 text-accent" />
+                <div className="mb-5 flex items-center gap-2">
+                  <Calendar className="size-5 text-accent" />
                   <h2 className="text-lg font-bold text-text-secondary">任务完成明细</h2>
                 </div>
 
@@ -666,10 +666,10 @@ export default function ReportsPage() {
                     return (
                       <div
                         key={task.id}
-                        className="flex items-start gap-3 p-3 rounded-xl bg-surface-elevated border border-border-subtle"
+                        className="flex items-start gap-3 rounded-xl border border-border-subtle bg-surface-elevated p-3"
                       >
                         <div
-                          className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] shrink-0 ${
+                          className={`flex size-6 shrink-0 items-center justify-center rounded-full text-[10px] ${
                             task.status === 'done'
                               ? 'bg-success/15 text-success'
                               : 'bg-warning/15 text-warning'
@@ -677,13 +677,13 @@ export default function ReportsPage() {
                         >
                           {task.status === 'done' ? '✓' : '◐'}
                         </div>
-                        <div className="flex-1 min-w-0">
+                        <div className="min-w-0 flex-1">
                           <p className="text-sm font-medium text-text-secondary">{task.focus}</p>
                           {detail && (
-                            <p className="text-xs text-text-muted mt-0.5 truncate">{detail}</p>
+                            <p className="mt-0.5 truncate text-xs text-text-muted">{detail}</p>
                           )}
                         </div>
-                        <span className="text-xs text-text-muted shrink-0">{task.day}</span>
+                        <span className="shrink-0 text-xs text-text-muted">{task.day}</span>
                       </div>
                     );
                   })}
@@ -699,30 +699,30 @@ export default function ReportsPage() {
             transition={{ duration: 0.4, delay: 0.35 }}
           >
             <CommandCard className="p-5">
-              <div className="flex items-center gap-2 mb-5">
-                <BarChart3 className="w-5 h-5 text-secondary" />
+              <div className="mb-5 flex items-center gap-2">
+                <BarChart3 className="size-5 text-secondary" />
                 <h2 className="text-lg font-bold text-text-secondary">各领域投入分析</h2>
               </div>
 
               {categoryStats.length === 0 ? (
-                <p className="text-sm text-text-muted text-center py-8">暂无分类数据</p>
+                <p className="py-8 text-center text-sm text-text-muted">暂无分类数据</p>
               ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
                   {categoryStats.map((cat) => {
                     const CategoryIcon = categoryIcons[cat.category];
                     return (
                       <div
                         key={cat.category}
-                        className="rounded-xl bg-surface-elevated border border-border-subtle p-4 space-y-3"
+                        className="space-y-3 rounded-xl border border-border-subtle bg-surface-elevated p-4"
                       >
                         <div className="flex items-center gap-3">
                           <div
-                            className={`w-9 h-9 rounded-lg flex items-center justify-center ${TASK_CATEGORY_COLORS[cat.category]}`}
+                            className={`flex size-9 items-center justify-center rounded-lg ${TASK_CATEGORY_COLORS[cat.category]}`}
                           >
-                            <CategoryIcon className="w-4 h-4" />
+                            <CategoryIcon className="size-4" />
                           </div>
-                          <div className="flex-1 min-w-0">
-                            <p className="text-sm font-semibold text-text-secondary truncate">
+                          <div className="min-w-0 flex-1">
+                            <p className="truncate text-sm font-semibold text-text-secondary">
                               {cat.label}
                             </p>
                             <p className="text-xs text-text-muted">
@@ -735,7 +735,7 @@ export default function ReportsPage() {
                             <span className="text-text-muted">完成率</span>
                             <span className="font-bold text-text-primary">{cat.rate}%</span>
                           </div>
-                          <div className="h-1.5 w-full bg-surface rounded-full overflow-hidden">
+                          <div className="h-1.5 w-full overflow-hidden rounded-full bg-surface">
                             <motion.div
                               initial={{ width: 0 }}
                               animate={{ width: `${cat.rate}%` }}
@@ -759,30 +759,30 @@ export default function ReportsPage() {
             transition={{ duration: 0.4, delay: 0.4 }}
           >
             <CommandCard className="p-5">
-              <div className="flex items-center gap-2 mb-5">
-                <Calendar className="w-5 h-5 text-accent" />
+              <div className="mb-5 flex items-center gap-2">
+                <Calendar className="size-5 text-accent" />
                 <h2 className="text-lg font-bold text-text-secondary">每日完成趋势</h2>
               </div>
 
-              <div className="flex items-end justify-between gap-2 h-44">
+              <div className="flex h-44 items-end justify-between gap-2">
                 {dailyTrend.map((day) => {
                   const maxTotal = Math.max(...dailyTrend.map((d) => d.total), 1);
                   const heightPercent = maxTotal > 0 ? (day.total / maxTotal) * 100 : 0;
                   const donePercent = day.total > 0 ? (day.done / day.total) * 100 : 0;
                   return (
-                    <div key={day.day} className="flex-1 flex flex-col items-center gap-2">
-                      <div className="relative w-full h-28 bg-surface rounded-xl overflow-hidden">
+                    <div key={day.day} className="flex flex-1 flex-col items-center gap-2">
+                      <div className="relative h-28 w-full overflow-hidden rounded-xl bg-surface">
                         <motion.div
                           initial={{ height: 0 }}
                           animate={{ height: `${heightPercent}%` }}
                           transition={{ duration: 0.5, delay: 0.35 }}
-                          className="absolute bottom-0 left-0 right-0 bg-surface-elevated"
+                          className="absolute inset-x-0 bottom-0 bg-surface-elevated"
                         />
                         <motion.div
                           initial={{ height: 0 }}
                           animate={{ height: `${heightPercent * (donePercent / 100)}%` }}
                           transition={{ duration: 0.5, delay: 0.4 }}
-                          className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-primary to-primary/70 rounded-xl"
+                          className="to-primary/70 absolute inset-x-0 bottom-0 rounded-xl bg-gradient-to-t from-primary"
                         />
                         {day.total > 0 && (
                           <div className="absolute inset-0 flex items-center justify-center">
@@ -812,9 +812,9 @@ export default function ReportsPage() {
           >
             <button
               onClick={() => alert('分享图功能将在后续迭代中提供')}
-              className="flex items-center gap-2 px-5 py-2.5 rounded-[14px] bg-primary text-text-primary text-sm font-medium hover:bg-primary/90 transition-all shadow-[0_0_16px_rgba(244,63,122,0.25)]"
+              className="hover:bg-primary/90 flex items-center gap-2 rounded-[14px] bg-primary px-5 py-2.5 text-sm font-medium text-text-primary shadow-[0_0_16px_rgba(244,63,122,0.25)] transition-all"
             >
-              <Share2 className="w-4 h-4" />
+              <Share2 className="size-4" />
               生成分享图
             </button>
           </motion.div>

@@ -1,10 +1,5 @@
 import { Child, gradeLabel, gradeToStage } from './children';
-import {
-  getRouteById,
-  getRoutesByStage,
-  sgKeyResults,
-  type RoutePlan,
-} from './plans';
+import { getRouteById, getRoutesByStage, sgKeyResults, type RoutePlan } from './plans';
 import { type PlanStats } from './weeklyTasks';
 
 export interface TimelineItem {
@@ -81,7 +76,10 @@ function extractGradeFromTime(time: string): number | null {
   return null;
 }
 
-function inferTimelineStatus(milestoneGrade: number | null, childGrade: number): TimelineItem['status'] {
+function inferTimelineStatus(
+  milestoneGrade: number | null,
+  childGrade: number
+): TimelineItem['status'] {
   if (milestoneGrade === null) return 'future';
   if (milestoneGrade < childGrade) return 'past';
   if (milestoneGrade === childGrade) return 'current';
@@ -93,15 +91,20 @@ function inferObjectives(stage: string, title: string, description: string): str
 
   if (stage === '小升初') {
     if (text.includes('基础')) return ['知识体系完整', '优势学科保持', '学习习惯优化'];
-    if (text.includes('证书') || text.includes('竞赛')) return ['竞赛奖项积累', '英语证书达标', '综合素质提升'];
-    if (text.includes('简历') || text.includes('面谈')) return ['简历素材整理', '面谈模拟训练', '目标学校锁定'];
+    if (text.includes('证书') || text.includes('竞赛'))
+      return ['竞赛奖项积累', '英语证书达标', '综合素质提升'];
+    if (text.includes('简历') || text.includes('面谈'))
+      return ['简历素材整理', '面谈模拟训练', '目标学校锁定'];
     return ['目标学校锁定', '简历素材整理', '面谈模拟训练'];
   }
 
   if (stage === '中考') {
-    if (text.includes('基础') || text.includes('知识体系')) return ['知识体系完整', '优势学科保持', '学习习惯优化'];
-    if (text.includes('分层') || text.includes('竞赛')) return ['理科能力提升', '竞赛初步突破', '综合能力增强'];
-    if (text.includes('一模') || text.includes('志愿')) return ['精准定位', '志愿策略优化', '心理调节'];
+    if (text.includes('基础') || text.includes('知识体系'))
+      return ['知识体系完整', '优势学科保持', '学习习惯优化'];
+    if (text.includes('分层') || text.includes('竞赛'))
+      return ['理科能力提升', '竞赛初步突破', '综合能力增强'];
+    if (text.includes('一模') || text.includes('志愿'))
+      return ['精准定位', '志愿策略优化', '心理调节'];
     if (text.includes('二模') || text.includes('中考')) return ['冲刺提分', '稳定发挥', '录取最优'];
     return ['知识体系完整', '优势学科保持', '学习习惯优化'];
   }
@@ -178,7 +181,11 @@ export function getStrategicTimeline(child: Child): TimelineItem[] {
         title: milestone.task.split('，')[0] || milestone.task,
         description: milestone.task,
         status,
-        objectives: inferObjectives(stage, milestone.task.split('，')[0] || milestone.task, milestone.task),
+        objectives: inferObjectives(
+          stage,
+          milestone.task.split('，')[0] || milestone.task,
+          milestone.task
+        ),
       };
     });
   }
@@ -191,7 +198,11 @@ export function getStrategicTimeline(child: Child): TimelineItem[] {
       title: milestone.task.split('，')[0] || milestone.task,
       description: milestone.task,
       status: 'future' as const,
-      objectives: inferObjectives(stage, milestone.task.split('，')[0] || milestone.task, milestone.task),
+      objectives: inferObjectives(
+        stage,
+        milestone.task.split('，')[0] || milestone.task,
+        milestone.task
+      ),
     }));
   }
 
@@ -353,7 +364,10 @@ export function getRouteSummary(child: Child): RouteSummary {
     };
   }
 
-  const defaults: Record<string, { name: string; description: string; direction: string; directionDetail: string }> = {
+  const defaults: Record<
+    string,
+    { name: string; description: string; direction: string; directionDetail: string }
+  > = {
     小升初: {
       name: '三公 / 民办摇号 / 公办对口',
       description: '上海市小升初三条主要通道，可根据准备情况动态切换。',
@@ -387,14 +401,20 @@ export function getRouteSummary(child: Child): RouteSummary {
 
 function inferRouteDirection(routeId: string, stage: string): { label: string; detail: string } {
   if (stage === '中考') {
-    if (routeId === 'sizhong') return { label: '重点高中 → 四校冲刺', detail: '通过自招和名额分配冲击顶尖高中' };
-    if (routeId === 'shizhong') return { label: '重点高中 → 四校分校', detail: '通过名额分配和平行志愿稳中求进' };
-    if (routeId === 'quzhong') return { label: '区重点 → 特色高中', detail: '以区重点或特色高中为保底，确保本科升学路径' };
+    if (routeId === 'sizhong')
+      return { label: '重点高中 → 四校冲刺', detail: '通过自招和名额分配冲击顶尖高中' };
+    if (routeId === 'shizhong')
+      return { label: '重点高中 → 四校分校', detail: '通过名额分配和平行志愿稳中求进' };
+    if (routeId === 'quzhong')
+      return { label: '区重点 → 特色高中', detail: '以区重点或特色高中为保底，确保本科升学路径' };
   }
   if (stage === '小升初') {
-    if (routeId === 'sg') return { label: '三公 → 提前批', detail: '冲刺上海实验、上外附中、浦外附中' };
-    if (routeId === 'yaohao') return { label: '民办摇号 → 公办备选', detail: '摇号为主，公办对口保底' };
-    if (routeId === 'gongban') return { label: '公办对口 → 稳妥升学', detail: '按学区入学，夯实基础' };
+    if (routeId === 'sg')
+      return { label: '三公 → 提前批', detail: '冲刺上海实验、上外附中、浦外附中' };
+    if (routeId === 'yaohao')
+      return { label: '民办摇号 → 公办备选', detail: '摇号为主，公办对口保底' };
+    if (routeId === 'gongban')
+      return { label: '公办对口 → 稳妥升学', detail: '按学区入学，夯实基础' };
   }
   return { label: '多元升学', detail: '根据孩子情况动态调整' };
 }

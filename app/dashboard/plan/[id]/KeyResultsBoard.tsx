@@ -49,15 +49,15 @@ export default function KeyResultsBoard({ nodes }: KeyResultsBoardProps) {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.15 }}
-      className="rounded-2xl bg-surface-elevated p-6 border border-border-subtle"
+      className="rounded-2xl border border-border-subtle bg-surface-elevated p-6"
     >
-      <h2 className="text-xl font-bold font-display mb-6 flex items-center gap-2">
-        <Flag className="w-5 h-5 text-primary" />
+      <h2 className="mb-6 flex items-center gap-2 font-display text-xl font-bold">
+        <Flag className="size-5 text-primary" />
         关键结果看板
       </h2>
 
       <div className="relative">
-        <div className="absolute left-[19px] top-3 bottom-3 w-0.5 bg-primary opacity-30" />
+        <div className="absolute inset-y-3 left-[19px] w-0.5 bg-primary opacity-30" />
         <div className="space-y-4">
           {nodes.map((node, index) => {
             const status = statusConfig[node.status];
@@ -70,26 +70,26 @@ export default function KeyResultsBoard({ nodes }: KeyResultsBoardProps) {
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.2 + index * 0.08 }}
-                className={`relative flex items-start gap-4 pl-12 rounded-xl p-4 border ${isFinal ? 'bg-primary/5 border-primary/30' : 'bg-surface-elevated border-border-subtle'}`}
+                className={`relative flex items-start gap-4 rounded-xl border p-4 pl-12 ${isFinal ? 'bg-primary/5 border-primary/30' : 'border-border-subtle bg-surface-elevated'}`}
               >
                 <div
-                  className={`absolute left-3 top-4 w-4 h-4 rounded-full ${status.dot} ring-4 ring-surface z-10`}
+                  className={`absolute left-3 top-4 size-4 rounded-full ${status.dot} z-10 ring-4 ring-surface`}
                 />
-                <div className="flex-1 min-w-0">
-                  <div className="flex flex-wrap items-center gap-2 mb-1">
-                    <span className="text-sm text-text-tertiary font-medium">{node.time}</span>
+                <div className="min-w-0 flex-1">
+                  <div className="mb-1 flex flex-wrap items-center gap-2">
+                    <span className="text-sm font-medium text-text-tertiary">{node.time}</span>
                     <span
-                      className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium ${status.bg} ${status.text} border ${status.border}`}
+                      className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium ${status.bg} ${status.text} border ${status.border}`}
                     >
-                      <StatusIcon className="w-3 h-3" />
+                      <StatusIcon className="size-3" />
                       {status.label}
                     </span>
                   </div>
-                  <h3 className="font-bold text-text-secondary mb-1">{node.title}</h3>
-                  <p className="text-sm text-text-secondary mb-2">{node.result}</p>
+                  <h3 className="mb-1 font-bold text-text-secondary">{node.title}</h3>
+                  <p className="mb-2 text-sm text-text-secondary">{node.result}</p>
                   {node.fallbackSignal && (
-                    <p className="text-xs text-text-muted flex items-start gap-1">
-                      <AlertTriangle className="w-3 h-3 text-warning shrink-0 mt-0.5" />
+                    <p className="flex items-start gap-1 text-xs text-text-muted">
+                      <AlertTriangle className="mt-0.5 size-3 shrink-0 text-warning" />
                       {node.fallbackSignal}
                     </p>
                   )}

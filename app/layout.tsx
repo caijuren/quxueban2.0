@@ -5,6 +5,7 @@ import { AuthProvider } from '@/components/providers/AuthProvider';
 import { MotionProvider } from '@/components/providers/MotionProvider';
 import { QueryProvider } from '@/components/providers/QueryProvider';
 import { SettingsApplier } from '@/components/providers/SettingsApplier';
+import { ToastProvider } from '@/components/providers/ToastProvider';
 
 const syne = Syne({
   subsets: ['latin'],
@@ -46,15 +47,37 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="zh-CN">
+    <html lang="zh-CN" suppressHydrationWarning data-theme="dark">
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                function getTheme() {
+                  if (window.location.pathname.startsWith('/admin')) return 'light';
+                  const saved = localStorage.getItem('theme');
+                  if (saved === 'light' || saved === 'dark') return saved;
+                  if (saved === 'system' || !saved) {
+                    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+                  }
+                  return 'dark';
+                }
+                document.documentElement.setAttribute('data-theme', getTheme());
+              })();
+            `,
+          }}
+        />
+      </head>
       <body
-        className={`min-h-screen animated-bg grid-pattern antialiased ${syne.variable} ${manrope.variable} ${jetbrainsMono.variable}`}
+        className={`animated-bg grid-pattern min-h-screen antialiased ${syne.variable} ${manrope.variable} ${jetbrainsMono.variable}`}
       >
         <MotionProvider>
           <AuthProvider>
             <QueryProvider>
-              <SettingsApplier />
-              {children}
+              <ToastProvider>
+                <SettingsApplier />
+                {children}
+              </ToastProvider>
             </QueryProvider>
           </AuthProvider>
         </MotionProvider>

@@ -5,7 +5,5 @@ import { ReactNode } from 'react';
 import { queryClient } from '@/lib/queryClient';
 
 export function QueryProvider({ children }: { children: ReactNode }) {
-  return (
-    <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
-  );
+  return <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>;
 }

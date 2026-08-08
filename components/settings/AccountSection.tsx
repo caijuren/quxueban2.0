@@ -40,13 +40,19 @@ export default function AccountSection({ user, onUpdate }: AccountSectionProps) 
   const [email, setEmail] = useState(user.email || '');
   const [avatarUrl, setAvatarUrl] = useState<string | null>(user.avatarUrl);
   const [savingProfile, setSavingProfile] = useState(false);
-  const [profileMessage, setProfileMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+  const [profileMessage, setProfileMessage] = useState<{
+    type: 'success' | 'error';
+    text: string;
+  } | null>(null);
 
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [passwordMessage, setPasswordMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+  const [passwordMessage, setPasswordMessage] = useState<{
+    type: 'success' | 'error';
+    text: string;
+  } | null>(null);
 
   const [showWechatModal, setShowWechatModal] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
@@ -149,14 +155,7 @@ export default function AccountSection({ user, onUpdate }: AccountSectionProps) 
   const renderAvatar = () => {
     if (avatarUrl?.startsWith('data:image')) {
       return (
-        <Image
-          src={avatarUrl}
-          alt="头像"
-          fill
-          sizes="80px"
-          unoptimized
-          className="object-cover"
-        />
+        <Image src={avatarUrl} alt="头像" fill sizes="80px" unoptimized className="object-cover" />
       );
     }
     if (avatarUrl) {
@@ -169,16 +168,16 @@ export default function AccountSection({ user, onUpdate }: AccountSectionProps) 
         </span>
       );
     }
-    return <User className="w-7 h-7 text-text-primary/80" />;
+    return <User className="text-text-primary/80 size-7" />;
   };
 
   return (
     <div className="space-y-4">
       <SettingsSection title="个人信息" description="管理头像、昵称和联系方式">
-        <div className="flex flex-col sm:flex-row gap-4 sm:gap-5">
-          <div className="flex flex-col items-center gap-2 shrink-0">
+        <div className="flex flex-col gap-4 sm:flex-row sm:gap-5">
+          <div className="flex shrink-0 flex-col items-center gap-2">
             <div
-              className="relative w-20 h-20 rounded-full flex items-center justify-center overflow-hidden ring-2 ring-border-default"
+              className="relative flex size-20 items-center justify-center overflow-hidden rounded-full ring-2 ring-border-default"
               style={{
                 background: 'linear-gradient(135deg, var(--color-primary), var(--color-secondary))',
                 boxShadow: '0 0 20px var(--shadow-primary)',
@@ -190,18 +189,18 @@ export default function AccountSection({ user, onUpdate }: AccountSectionProps) 
               <button
                 type="button"
                 onClick={() => fileInputRef.current?.click()}
-                className="inline-flex items-center gap-1 px-2 py-1 rounded-md bg-surface-elevated text-text-secondary text-xs hover:bg-surface-highlight transition-colors"
+                className="inline-flex items-center gap-1 rounded-md bg-surface-elevated px-2 py-1 text-xs text-text-secondary transition-colors hover:bg-surface-highlight"
               >
-                <Upload className="w-3 h-3" />
+                <Upload className="size-3" />
                 上传
               </button>
               {avatarUrl && (
                 <button
                   type="button"
                   onClick={() => setAvatarUrl(null)}
-                  className="inline-flex items-center gap-1 px-2 py-1 rounded-md bg-surface-elevated text-text-tertiary text-xs hover:bg-surface-highlight transition-colors"
+                  className="inline-flex items-center gap-1 rounded-md bg-surface-elevated px-2 py-1 text-xs text-text-tertiary transition-colors hover:bg-surface-highlight"
                 >
-                  <X className="w-3 h-3" />
+                  <X className="size-3" />
                   清除
                 </button>
               )}
@@ -215,55 +214,55 @@ export default function AccountSection({ user, onUpdate }: AccountSectionProps) 
             />
           </div>
 
-          <div className="flex-1 min-w-0">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div className="min-w-0 flex-1">
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
               <div>
-                <label className="block text-xs text-text-tertiary mb-1">用户名</label>
+                <label className="mb-1 block text-xs text-text-tertiary">用户名</label>
                 <input
                   type="text"
                   value={user.username}
                   disabled
-                  className="w-full px-3 py-2 rounded-lg bg-surface-elevated border border-border-default text-sm text-text-muted cursor-not-allowed"
+                  className="w-full cursor-not-allowed rounded-lg border border-border-default bg-surface-elevated px-3 py-2 text-sm text-text-muted"
                 />
               </div>
               <div>
-                <label className="block text-xs text-text-tertiary mb-1">显示名称</label>
+                <label className="mb-1 block text-xs text-text-tertiary">显示名称</label>
                 <input
                   type="text"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder="例如：宝妈"
-                  className="w-full px-3 py-2 rounded-lg bg-surface-elevated border border-border-default text-sm text-text-secondary placeholder:text-text-tertiary focus:outline-none focus:border-primary transition-all"
+                  className="w-full rounded-lg border border-border-default bg-surface-elevated px-3 py-2 text-sm text-text-secondary transition-all placeholder:text-text-tertiary focus:border-primary focus:outline-none"
                 />
               </div>
               <div>
-                <label className="block text-xs text-text-tertiary mb-1">手机号</label>
+                <label className="mb-1 block text-xs text-text-tertiary">手机号</label>
                 <input
                   type="tel"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
                   placeholder="接收短信提醒"
-                  className="w-full px-3 py-2 rounded-lg bg-surface-elevated border border-border-default text-sm text-text-secondary placeholder:text-text-tertiary focus:outline-none focus:border-primary transition-all"
+                  className="w-full rounded-lg border border-border-default bg-surface-elevated px-3 py-2 text-sm text-text-secondary transition-all placeholder:text-text-tertiary focus:border-primary focus:outline-none"
                 />
               </div>
               <div>
-                <label className="block text-xs text-text-tertiary mb-1">邮箱</label>
+                <label className="mb-1 block text-xs text-text-tertiary">邮箱</label>
                 <input
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="接收邮件通知"
-                  className="w-full px-3 py-2 rounded-lg bg-surface-elevated border border-border-default text-sm text-text-secondary placeholder:text-text-tertiary focus:outline-none focus:border-primary transition-all"
+                  className="w-full rounded-lg border border-border-default bg-surface-elevated px-3 py-2 text-sm text-text-secondary transition-all placeholder:text-text-tertiary focus:border-primary focus:outline-none"
                 />
               </div>
             </div>
 
             {profileMessage && (
               <div
-                className={`mt-3 text-xs px-3 py-1.5 rounded-lg ${
+                className={`mt-3 rounded-lg px-3 py-1.5 text-xs ${
                   profileMessage.type === 'success'
-                    ? 'bg-success/10 text-success border border-success/20'
-                    : 'bg-error/10 text-error border border-error/20'
+                    ? 'bg-success/10 border-success/20 border text-success'
+                    : 'bg-error/10 border-error/20 border text-error'
                 }`}
               >
                 {profileMessage.text}
@@ -274,9 +273,13 @@ export default function AccountSection({ user, onUpdate }: AccountSectionProps) 
               <button
                 onClick={handleSaveProfile}
                 disabled={savingProfile}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-primary text-text-primary text-xs font-medium hover:opacity-90 transition-all disabled:opacity-70"
+                className="inline-flex items-center gap-1.5 rounded-lg bg-primary px-3 py-1.5 text-xs font-medium text-text-primary transition-all hover:opacity-90 disabled:opacity-70"
               >
-                {savingProfile ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Save className="w-3.5 h-3.5" />}
+                {savingProfile ? (
+                  <Loader2 className="size-3.5 animate-spin" />
+                ) : (
+                  <Save className="size-3.5" />
+                )}
                 保存
               </button>
             </div>
@@ -288,17 +291,15 @@ export default function AccountSection({ user, onUpdate }: AccountSectionProps) 
         <div className="space-y-2">
           <button
             onClick={() => toggleSecurity('wechat')}
-            className="w-full flex items-center justify-between p-3 rounded-lg bg-surface-elevated border border-border-subtle hover:bg-surface-elevated transition-colors text-left"
+            className="flex w-full items-center justify-between rounded-lg border border-border-subtle bg-surface-elevated p-3 text-left transition-colors hover:bg-surface-elevated"
           >
             <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-lg bg-[#07C160]/10 flex items-center justify-center">
-                <MessageCircle className="w-4 h-4 text-[#07C160]" />
+              <div className="flex size-9 items-center justify-center rounded-lg bg-wechat/10">
+                <MessageCircle className="size-4 text-wechat" />
               </div>
               <div>
                 <p className="text-sm font-medium text-text-secondary">微信绑定</p>
-                <p className="text-xs text-text-muted">
-                  {user.wechatOpenId ? '已绑定' : '未绑定'}
-                </p>
+                <p className="text-xs text-text-muted">{user.wechatOpenId ? '已绑定' : '未绑定'}</p>
               </div>
             </div>
             <div className="flex items-center gap-2">
@@ -306,21 +307,21 @@ export default function AccountSection({ user, onUpdate }: AccountSectionProps) 
                 {user.wechatOpenId ? '管理' : '去绑定'}
               </span>
               {expandedSecurity === 'wechat' ? (
-                <ChevronUp className="w-4 h-4 text-text-muted" />
+                <ChevronUp className="size-4 text-text-muted" />
               ) : (
-                <ChevronDown className="w-4 h-4 text-text-muted" />
+                <ChevronDown className="size-4 text-text-muted" />
               )}
             </div>
           </button>
 
           {expandedSecurity === 'wechat' && (
-            <div className="p-3 rounded-lg bg-surface-elevated border border-border-subtle">
-              <p className="text-xs text-text-tertiary mb-2">
+            <div className="rounded-lg border border-border-subtle bg-surface-elevated p-3">
+              <p className="mb-2 text-xs text-text-tertiary">
                 绑定微信后可使用微信一键登录和接收微信提醒。
               </p>
               <button
                 onClick={() => setShowWechatModal(true)}
-                className="px-3 py-1.5 rounded-md bg-surface-elevated text-text-secondary text-xs hover:bg-surface-highlight transition-colors"
+                className="rounded-md bg-surface-elevated px-3 py-1.5 text-xs text-text-secondary transition-colors hover:bg-surface-highlight"
               >
                 {user.wechatOpenId ? '管理微信绑定' : '立即绑定微信'}
               </button>
@@ -329,11 +330,11 @@ export default function AccountSection({ user, onUpdate }: AccountSectionProps) 
 
           <button
             onClick={() => toggleSecurity('password')}
-            className="w-full flex items-center justify-between p-3 rounded-lg bg-surface-elevated border border-border-subtle hover:bg-surface-elevated transition-colors text-left"
+            className="flex w-full items-center justify-between rounded-lg border border-border-subtle bg-surface-elevated p-3 text-left transition-colors hover:bg-surface-elevated"
           >
             <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center">
-                <Lock className="w-4 h-4 text-primary" />
+              <div className="bg-primary/10 flex size-9 items-center justify-center rounded-lg">
+                <Lock className="size-4 text-primary" />
               </div>
               <div>
                 <p className="text-sm font-medium text-text-secondary">修改密码</p>
@@ -341,57 +342,57 @@ export default function AccountSection({ user, onUpdate }: AccountSectionProps) 
               </div>
             </div>
             {expandedSecurity === 'password' ? (
-              <ChevronUp className="w-4 h-4 text-text-muted" />
+              <ChevronUp className="size-4 text-text-muted" />
             ) : (
-              <ChevronDown className="w-4 h-4 text-text-muted" />
+              <ChevronDown className="size-4 text-text-muted" />
             )}
           </button>
 
           {expandedSecurity === 'password' && (
-            <div className="p-3 rounded-lg bg-surface-elevated border border-border-subtle space-y-3">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div className="space-y-3 rounded-lg border border-border-subtle bg-surface-elevated p-3">
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                 <div className="relative">
-                  <label className="block text-xs text-text-tertiary mb-1">当前密码</label>
+                  <label className="mb-1 block text-xs text-text-tertiary">当前密码</label>
                   <input
                     type={showPassword ? 'text' : 'password'}
                     value={currentPassword}
                     onChange={(e) => setCurrentPassword(e.target.value)}
-                    className="w-full px-3 py-2 rounded-lg bg-surface-elevated border border-border-default text-sm text-text-secondary focus:outline-none focus:border-primary transition-all"
+                    className="w-full rounded-lg border border-border-default bg-surface-elevated px-3 py-2 text-sm text-text-secondary transition-all focus:border-primary focus:outline-none"
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword((v) => !v)}
                     className="absolute right-3 top-[26px] text-text-muted hover:text-text-secondary"
                   >
-                    {showPassword ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
+                    {showPassword ? <EyeOff className="size-3.5" /> : <Eye className="size-3.5" />}
                   </button>
                 </div>
                 <div>
-                  <label className="block text-xs text-text-tertiary mb-1">新密码</label>
+                  <label className="mb-1 block text-xs text-text-tertiary">新密码</label>
                   <input
                     type="password"
                     value={newPassword}
                     onChange={(e) => setNewPassword(e.target.value)}
-                    className="w-full px-3 py-2 rounded-lg bg-surface-elevated border border-border-default text-sm text-text-secondary focus:outline-none focus:border-primary transition-all"
+                    className="w-full rounded-lg border border-border-default bg-surface-elevated px-3 py-2 text-sm text-text-secondary transition-all focus:border-primary focus:outline-none"
                   />
                 </div>
                 <div className="sm:col-span-2">
-                  <label className="block text-xs text-text-tertiary mb-1">确认新密码</label>
+                  <label className="mb-1 block text-xs text-text-tertiary">确认新密码</label>
                   <input
                     type="password"
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
-                    className="w-full px-3 py-2 rounded-lg bg-surface-elevated border border-border-default text-sm text-text-secondary focus:outline-none focus:border-primary transition-all"
+                    className="w-full rounded-lg border border-border-default bg-surface-elevated px-3 py-2 text-sm text-text-secondary transition-all focus:border-primary focus:outline-none"
                   />
                 </div>
               </div>
 
               {passwordMessage && (
                 <div
-                  className={`text-xs px-3 py-1.5 rounded-lg ${
+                  className={`rounded-lg px-3 py-1.5 text-xs ${
                     passwordMessage.type === 'success'
-                      ? 'bg-success/10 text-success border border-success/20'
-                      : 'bg-error/10 text-error border border-error/20'
+                      ? 'bg-success/10 border-success/20 border text-success'
+                      : 'bg-error/10 border-error/20 border text-error'
                   }`}
                 >
                   {passwordMessage.text}
@@ -402,9 +403,13 @@ export default function AccountSection({ user, onUpdate }: AccountSectionProps) 
                 <button
                   onClick={handleChangePassword}
                   disabled={changePassword.isPending}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-elevated border border-border-default text-text-secondary text-xs font-medium hover:bg-surface-highlight transition-all disabled:opacity-70"
+                  className="inline-flex items-center gap-1.5 rounded-lg border border-border-default bg-surface-elevated px-3 py-1.5 text-xs font-medium text-text-secondary transition-all hover:bg-surface-highlight disabled:opacity-70"
                 >
-                  {changePassword.isPending ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Lock className="w-3.5 h-3.5" />}
+                  {changePassword.isPending ? (
+                    <Loader2 className="size-3.5 animate-spin" />
+                  ) : (
+                    <Lock className="size-3.5" />
+                  )}
                   修改密码
                 </button>
               </div>
@@ -413,11 +418,11 @@ export default function AccountSection({ user, onUpdate }: AccountSectionProps) 
 
           <button
             onClick={() => toggleSecurity('error')}
-            className="w-full flex items-center justify-between p-3 rounded-lg bg-error/5 border border-error/10 hover:bg-error/[0.07] transition-colors text-left"
+            className="bg-error/5 border-error/10 hover:bg-error/[0.07] flex w-full items-center justify-between rounded-lg border p-3 text-left transition-colors"
           >
             <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-lg bg-error/10 flex items-center justify-center">
-                <Trash2 className="w-4 h-4 text-error" />
+              <div className="bg-error/10 flex size-9 items-center justify-center rounded-lg">
+                <Trash2 className="size-4 text-error" />
               </div>
               <div>
                 <p className="text-sm font-medium text-text-secondary">注销账号</p>
@@ -425,23 +430,23 @@ export default function AccountSection({ user, onUpdate }: AccountSectionProps) 
               </div>
             </div>
             {expandedSecurity === 'error' ? (
-              <ChevronUp className="w-4 h-4 text-text-muted" />
+              <ChevronUp className="size-4 text-text-muted" />
             ) : (
-              <ChevronDown className="w-4 h-4 text-text-muted" />
+              <ChevronDown className="size-4 text-text-muted" />
             )}
           </button>
 
           {expandedSecurity === 'error' && (
-            <div className="p-3 rounded-lg bg-error/5 border border-error/10 space-y-3">
+            <div className="bg-error/5 border-error/10 space-y-3 rounded-lg border p-3">
               <p className="text-xs text-text-tertiary">
                 注销后所有孩子、计划、任务数据将无法恢复，请谨慎操作。
               </p>
               <div className="flex justify-end">
                 <button
                   onClick={() => setShowDeleteConfirm(true)}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-error/10 text-error text-xs font-medium hover:bg-error/20 transition-colors"
+                  className="bg-error/10 hover:bg-error/20 inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium text-error transition-colors"
                 >
-                  <Trash2 className="w-3.5 h-3.5" />
+                  <Trash2 className="size-3.5" />
                   注销账号
                 </button>
               </div>
@@ -450,22 +455,29 @@ export default function AccountSection({ user, onUpdate }: AccountSectionProps) 
         </div>
       </SettingsSection>
 
-      <WechatBindModal isOpen={showWechatModal} onClose={() => setShowWechatModal(false)} user={user} />
+      <WechatBindModal
+        isOpen={showWechatModal}
+        onClose={() => setShowWechatModal(false)}
+        user={user}
+      />
 
       {showDeleteConfirm && (
         <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4">
-          <div className="absolute inset-0 bg-black/80 backdrop-blur-md" onClick={() => setShowDeleteConfirm(false)} />
-          <div className="relative w-full max-w-md rounded-2xl bg-[#0f172a] border border-border-default p-5 shadow-2xl">
-            <div className="flex items-center gap-3 mb-3">
-              <div className="w-9 h-9 rounded-full bg-error/10 flex items-center justify-center">
-                <AlertTriangle className="w-4 h-4 text-error" />
+          <div
+            className="absolute inset-0 bg-black/80 backdrop-blur-md"
+            onClick={() => setShowDeleteConfirm(false)}
+          />
+          <div className="relative w-full max-w-md rounded-2xl border border-border-default bg-bg-secondary p-5 shadow-2xl">
+            <div className="mb-3 flex items-center gap-3">
+              <div className="bg-error/10 flex size-9 items-center justify-center rounded-full">
+                <AlertTriangle className="size-4 text-error" />
               </div>
               <div>
                 <h4 className="text-sm font-bold text-text-secondary">确认注销账号？</h4>
                 <p className="text-xs text-text-muted">此操作不可恢复</p>
               </div>
             </div>
-            <p className="text-xs text-text-tertiary mb-3">
+            <p className="mb-3 text-xs text-text-tertiary">
               请输入当前密码以确认注销账号，注销后所有数据将被清除。
             </p>
             <input
@@ -473,22 +485,22 @@ export default function AccountSection({ user, onUpdate }: AccountSectionProps) 
               value={deletePassword}
               onChange={(e) => setDeletePassword(e.target.value)}
               placeholder="当前密码"
-              className="w-full px-3 py-2 rounded-lg bg-surface-elevated border border-border-default text-sm text-text-secondary placeholder:text-text-tertiary focus:outline-none focus:border-error transition-all mb-3"
+              className="mb-3 w-full rounded-lg border border-border-default bg-surface-elevated px-3 py-2 text-sm text-text-secondary transition-all placeholder:text-text-tertiary focus:border-error focus:outline-none"
             />
             <div className="flex justify-end gap-2">
               <button
                 onClick={() => setShowDeleteConfirm(false)}
                 disabled={deleteAccount.isPending}
-                className="px-3 py-1.5 rounded-lg bg-surface-elevated text-text-tertiary text-xs hover:bg-surface-highlight transition-colors disabled:opacity-50"
+                className="rounded-lg bg-surface-elevated px-3 py-1.5 text-xs text-text-tertiary transition-colors hover:bg-surface-highlight disabled:opacity-50"
               >
                 取消
               </button>
               <button
                 onClick={handleDeleteAccount}
                 disabled={deleteAccount.isPending || !deletePassword}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-error text-text-primary text-xs font-medium hover:bg-error/90 transition-colors disabled:opacity-70"
+                className="hover:bg-error/90 inline-flex items-center gap-1.5 rounded-lg bg-error px-3 py-1.5 text-xs font-medium text-text-primary transition-colors disabled:opacity-70"
               >
-                {deleteAccount.isPending && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
+                {deleteAccount.isPending && <Loader2 className="size-3.5 animate-spin" />}
                 确认注销
               </button>
             </div>

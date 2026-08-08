@@ -27,20 +27,19 @@ export default function GaugeChart({
   const rotation = 150; // start at 150 degrees (bottom-left)
 
   return (
-    <div className={cn('relative inline-flex items-center justify-center', className)} style={{ width: size, height: size }}>
-      <svg
-        width={size}
-        height={size}
-        viewBox={`0 0 ${size} ${size}`}
-        className="-rotate-[210deg]"
-      >
+    <div
+      className={cn('relative inline-flex items-center justify-center', className)}
+      style={{ width: size, height: size }}
+    >
+      <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} className="rotate-[-210deg]">
         {/* Background track */}
         <circle
           cx={size / 2}
           cy={size / 2}
           r={radius}
           fill="none"
-          stroke="rgba(255, 255, 255, 0.08)"
+          stroke="currentColor"
+          className="text-text-primary/10"
           strokeWidth={strokeWidth}
           strokeDasharray={`${arcLength} ${circumference - arcLength}`}
           strokeLinecap="round"
@@ -48,8 +47,8 @@ export default function GaugeChart({
         {/* Progress arc with gradient */}
         <defs>
           <linearGradient id="gaugeGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="#FB7185" />
-            <stop offset="100%" stopColor="#F43F7A" />
+            <stop offset="0%" stopColor="var(--color-primary-glow, #FB7185)" />
+            <stop offset="100%" stopColor="var(--color-primary, #F43F7A)" />
           </linearGradient>
         </defs>
         <circle
@@ -66,9 +65,14 @@ export default function GaugeChart({
         />
       </svg>
       <div className="absolute inset-0 flex flex-col items-center justify-center">
-        <span className={cn('text-3xl font-bold font-display tabular-nums text-text-primary', labelClassName)}>
+        <span
+          className={cn(
+            'font-display text-3xl font-bold tabular-nums text-text-primary',
+            labelClassName
+          )}
+        >
           {value}
-          <span className="text-lg text-text-tertiary ml-0.5">{suffix}</span>
+          <span className="ml-0.5 text-lg text-text-tertiary">{suffix}</span>
         </span>
       </div>
     </div>

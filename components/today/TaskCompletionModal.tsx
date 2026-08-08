@@ -73,10 +73,7 @@ const statusConfig: Record<
   },
 };
 
-const qualityConfig: Record<
-  TaskCompletionQuality,
-  { label: string; color: string }
-> = {
+const qualityConfig: Record<TaskCompletionQuality, { label: string; color: string }> = {
   excellent: { label: '优秀', color: 'text-success bg-success/10 border-success/30' },
   good: { label: '良好', color: 'text-blue-400 bg-blue-500/10 border-blue-500/30' },
   average: { label: '一般', color: 'text-warning bg-warning/10 border-warning/30' },
@@ -87,10 +84,7 @@ function getTodayStr() {
   return new Date().toISOString().split('T')[0];
 }
 
-function getLatestRecord(
-  task: WeeklyTaskItem,
-  date: string
-): TaskCompletionRecord | undefined {
+function getLatestRecord(task: WeeklyTaskItem, date: string): TaskCompletionRecord | undefined {
   return task.completionRecords?.find((r) => r.date === date);
 }
 
@@ -244,14 +238,14 @@ export default function TaskCompletionModal({
         <div className="flex gap-3">
           <button
             onClick={onClose}
-            className="flex-1 py-3 rounded-xl border border-border-default text-sm font-medium text-text-secondary hover:bg-surface-light transition-colors"
+            className="hover:bg-surface-light flex-1 rounded-xl border border-border-default py-3 text-sm font-medium text-text-secondary transition-colors"
           >
             取消
           </button>
           <button
             onClick={handleSubmit}
             disabled={submitting}
-            className="flex-1 py-3 rounded-xl bg-primary text-text-primary text-sm font-medium hover:bg-primary/90 disabled:opacity-60 disabled:cursor-not-allowed transition-colors"
+            className="flex-1 rounded-xl bg-primary py-3 text-sm font-medium text-inverse transition-colors hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-60"
           >
             {submitting ? '保存中...' : '保存记录'}
           </button>
@@ -261,12 +255,12 @@ export default function TaskCompletionModal({
       <div className="space-y-5">
         {/* Status selector */}
         <div className="space-y-2">
-          <label className="text-xs font-medium text-text-secondary flex items-center gap-1.5">
-            <AlertCircle className="w-3.5 h-3.5" />
+          <label className="flex items-center gap-1.5 text-xs font-medium text-text-secondary">
+            <AlertCircle className="size-3.5" />
             完成状态
           </label>
           <div className="grid grid-cols-3 gap-2">
-            {(["done", "partially_done", "pending"] as TaskStatus[]).map((s) => {
+            {(['done', 'partially_done', 'pending'] as TaskStatus[]).map((s) => {
               const config = statusConfig[s];
               const Icon = config.icon;
               const active = status === s;
@@ -274,13 +268,13 @@ export default function TaskCompletionModal({
                 <button
                   key={s}
                   onClick={() => setStatus(s)}
-                  className={`flex items-center justify-center gap-1.5 px-2 py-2.5 rounded-xl border text-xs font-medium transition-all ${
+                  className={`flex items-center justify-center gap-1.5 rounded-xl border px-2 py-2.5 text-xs font-medium transition-all ${
                     active
                       ? `${config.bg} ${config.color}`
-                      : 'bg-surface border-border-default text-text-tertiary hover:border-border-strong hover:bg-surface-light'
+                      : 'hover:bg-surface-light border-border-default bg-surface text-text-tertiary hover:border-border-strong'
                   }`}
                 >
-                  <Icon className="w-3.5 h-3.5" />
+                  <Icon className="size-3.5" />
                   {config.label}
                 </button>
               );
@@ -292,12 +286,8 @@ export default function TaskCompletionModal({
         {status === 'partially_done' ? (
           <div className="space-y-3">
             <div className="flex items-center justify-between">
-              <label className="text-xs font-medium text-text-secondary">
-                完成进度
-              </label>
-              <span className="text-sm font-bold text-text-primary tabular-nums">
-                {progress}%
-              </span>
+              <label className="text-xs font-medium text-text-secondary">完成进度</label>
+              <span className="text-sm font-bold tabular-nums text-text-primary">{progress}%</span>
             </div>
             <input
               type="range"
@@ -306,7 +296,7 @@ export default function TaskCompletionModal({
               step={5}
               value={progress}
               onChange={(e) => setProgress(parseInt(e.target.value, 10))}
-              className="w-full h-2 rounded-lg appearance-none cursor-pointer bg-surface-light accent-primary"
+              className="bg-surface-light h-2 w-full cursor-pointer appearance-none rounded-lg accent-primary"
             />
             <div className="flex justify-between text-[10px] text-text-tertiary">
               <span>0%</span>
@@ -319,33 +309,29 @@ export default function TaskCompletionModal({
         {/* Duration & Quality */}
         <div className="grid grid-cols-2 gap-4">
           <div className="space-y-2">
-            <label className="text-xs font-medium text-text-secondary flex items-center gap-1.5">
-              <Clock className="w-3.5 h-3.5" />
+            <label className="flex items-center gap-1.5 text-xs font-medium text-text-secondary">
+              <Clock className="size-3.5" />
               实际耗时（分钟）
             </label>
             <input
               type="number"
               min={0}
               value={actualDurationMinutes || ''}
-              onChange={(e) =>
-                setActualDurationMinutes(parseInt(e.target.value || '0', 10))
-              }
+              onChange={(e) => setActualDurationMinutes(parseInt(e.target.value || '0', 10))}
               placeholder="0"
-              className="w-full px-3 py-2.5 rounded-xl bg-surface border border-border-default text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-primary/50"
+              className="focus:border-primary/50 w-full rounded-xl border border-border-default bg-surface px-3 py-2.5 text-sm text-text-primary placeholder:text-text-muted focus:outline-none"
             />
           </div>
 
           <div className="space-y-2">
-            <label className="text-xs font-medium text-text-secondary flex items-center gap-1.5">
-              <Award className="w-3.5 h-3.5" />
+            <label className="flex items-center gap-1.5 text-xs font-medium text-text-secondary">
+              <Award className="size-3.5" />
               完成质量
             </label>
             <select
               value={quality ?? ''}
-              onChange={(e) =>
-                setQuality((e.target.value as TaskCompletionQuality) || null)
-              }
-              className="w-full px-3 py-2.5 rounded-xl bg-surface border border-border-default text-sm text-text-primary focus:outline-none focus:border-primary/50"
+              onChange={(e) => setQuality((e.target.value as TaskCompletionQuality) || null)}
+              className="focus:border-primary/50 w-full rounded-xl border border-border-default bg-surface px-3 py-2.5 text-sm text-text-primary focus:outline-none"
             >
               <option value="">不评价</option>
               {(Object.keys(qualityConfig) as TaskCompletionQuality[]).map((q) => (
@@ -359,8 +345,8 @@ export default function TaskCompletionModal({
 
         {/* Note */}
         <div className="space-y-2">
-          <label className="text-xs font-medium text-text-secondary flex items-center gap-1.5">
-            <MessageSquare className="w-3.5 h-3.5" />
+          <label className="flex items-center gap-1.5 text-xs font-medium text-text-secondary">
+            <MessageSquare className="size-3.5" />
             备注 / 反思
           </label>
           <textarea
@@ -368,21 +354,21 @@ export default function TaskCompletionModal({
             onChange={(e) => setNote(e.target.value)}
             placeholder="记录了什么？遇到了什么问题？"
             rows={3}
-            className="w-full px-3 py-2.5 rounded-xl bg-surface border border-border-default text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-primary/50 resize-none"
+            className="focus:border-primary/50 w-full resize-none rounded-xl border border-border-default bg-surface px-3 py-2.5 text-sm text-text-primary placeholder:text-text-muted focus:outline-none"
           />
         </div>
 
         {/* Images */}
         <div className="space-y-2">
-          <label className="text-xs font-medium text-text-secondary flex items-center gap-1.5">
-            <ImageIcon className="w-3.5 h-3.5" />
+          <label className="flex items-center gap-1.5 text-xs font-medium text-text-secondary">
+            <ImageIcon className="size-3.5" />
             佐证图片
           </label>
           <label
-            className={`flex items-center justify-center gap-2 px-4 py-3 rounded-xl border border-dashed transition-colors cursor-pointer ${
+            className={`flex cursor-pointer items-center justify-center gap-2 rounded-xl border border-dashed px-4 py-3 transition-colors ${
               uploading
-                ? 'border-border-default bg-surface/50 text-text-muted cursor-not-allowed'
-                : 'border-border-default bg-surface hover:border-primary/50 hover:bg-surface-light text-text-secondary'
+                ? 'bg-surface/50 cursor-not-allowed border-border-default text-text-muted'
+                : 'hover:border-primary/50 hover:bg-surface-light border-border-default bg-surface text-text-secondary'
             }`}
           >
             <input
@@ -395,19 +381,19 @@ export default function TaskCompletionModal({
             />
             {uploading ? (
               <>
-                <span className="w-4 h-4 border-2 border-primary/30 border-t-primary rounded-full animate-spin" />
+                <span className="border-primary/30 size-4 animate-spin rounded-full border-2 border-t-primary" />
                 <span className="text-sm">上传中...</span>
               </>
             ) : (
               <>
-                <ImageIcon className="w-4 h-4" />
+                <ImageIcon className="size-4" />
                 <span className="text-sm">点击上传照片</span>
               </>
             )}
           </label>
           {uploadError && (
-            <p className="text-xs text-error flex items-center gap-1">
-              <AlertCircle className="w-3 h-3" />
+            <p className="flex items-center gap-1 text-xs text-error">
+              <AlertCircle className="size-3" />
               {uploadError}
             </p>
           )}
@@ -416,18 +402,14 @@ export default function TaskCompletionModal({
               {imageUrls.map((url) => (
                 <div
                   key={url}
-                  className="group relative w-20 h-20 rounded-lg overflow-hidden border border-border-default bg-surface"
+                  className="group relative size-20 overflow-hidden rounded-lg border border-border-default bg-surface"
                 >
-                  <img
-                    src={url}
-                    alt="佐证图片"
-                    className="w-full h-full object-cover"
-                  />
+                  <img src={url} alt="佐证图片" className="size-full object-cover" />
                   <button
                     onClick={() => handleRemoveImage(url)}
-                    className="absolute top-0.5 right-0.5 p-0.5 rounded bg-surface/80 text-text-muted hover:text-error transition-colors"
+                    className="bg-surface/80 absolute right-0.5 top-0.5 rounded p-0.5 text-text-muted transition-colors hover:text-error"
                   >
-                    <X className="w-3 h-3" />
+                    <X className="size-3" />
                   </button>
                 </div>
               ))}
@@ -438,22 +420,22 @@ export default function TaskCompletionModal({
         {/* Audio evidence from miniapp */}
         {audioUrls.length > 0 && (
           <div className="space-y-2">
-            <label className="text-xs font-medium text-text-secondary flex items-center gap-1.5">
-              <Mic className="w-3.5 h-3.5" />
+            <label className="flex items-center gap-1.5 text-xs font-medium text-text-secondary">
+              <Mic className="size-3.5" />
               语音记录
             </label>
             <div className="flex flex-wrap gap-2">
               {audioUrls.map((url) => (
                 <div
                   key={url}
-                  className="group flex items-center gap-2 px-2.5 py-1.5 rounded-lg bg-surface border border-border-default text-xs text-text-tertiary max-w-full"
+                  className="group flex max-w-full items-center gap-2 rounded-lg border border-border-default bg-surface px-2.5 py-1.5 text-xs text-text-tertiary"
                 >
                   <audio src={url} controls className="h-6 max-w-[220px]" />
                   <button
                     onClick={() => handleRemoveAudio(url)}
-                    className="p-0.5 rounded hover:bg-error/10 text-text-muted hover:text-error transition-colors"
+                    className="hover:bg-error/10 rounded p-0.5 text-text-muted transition-colors hover:text-error"
                   >
-                    <X className="w-3 h-3" />
+                    <X className="size-3" />
                   </button>
                 </div>
               ))}
@@ -464,46 +446,42 @@ export default function TaskCompletionModal({
         {/* Voice transcript */}
         {audioTranscript && (
           <div className="space-y-2">
-            <label className="text-xs font-medium text-text-secondary flex items-center gap-1.5">
-              <FileText className="w-3.5 h-3.5" />
+            <label className="flex items-center gap-1.5 text-xs font-medium text-text-secondary">
+              <FileText className="size-3.5" />
               语音转文字
             </label>
-            <div className="px-3 py-2.5 rounded-xl bg-surface border border-border-default text-xs text-text-tertiary leading-relaxed">
+            <div className="rounded-xl border border-border-default bg-surface px-3 py-2.5 text-xs leading-relaxed text-text-tertiary">
               {audioTranscript}
             </div>
           </div>
         )}
 
         {/* Preview */}
-        <CommandCard className="p-3.5 bg-surface/50">
-          <p className="text-xs font-medium text-text-secondary mb-2">记录预览</p>
+        <CommandCard className="bg-surface/50 p-3.5">
+          <p className="mb-2 text-xs font-medium text-text-secondary">记录预览</p>
           <div className="flex flex-wrap gap-2 text-xs">
             <span
-              className={`px-2 py-1 rounded-lg border ${statusConfig[status].bg} ${statusConfig[status].color}`}
+              className={`rounded-lg border px-2 py-1 ${statusConfig[status].bg} ${statusConfig[status].color}`}
             >
               {statusConfig[status].label}
             </span>
             {status === 'partially_done' && (
-              <span className="px-2 py-1 rounded-lg bg-surface border border-border-default text-text-secondary">
+              <span className="rounded-lg border border-border-default bg-surface px-2 py-1 text-text-secondary">
                 进度 {progress}%
               </span>
             )}
             {actualDurationMinutes > 0 && (
-              <span className="px-2 py-1 rounded-lg bg-surface border border-border-default text-text-secondary">
+              <span className="rounded-lg border border-border-default bg-surface px-2 py-1 text-text-secondary">
                 {actualDurationMinutes} 分钟
               </span>
             )}
             {quality && (
-              <span
-                className={`px-2 py-1 rounded-lg border ${qualityConfig[quality].color}`}
-              >
+              <span className={`rounded-lg border px-2 py-1 ${qualityConfig[quality].color}`}>
                 {qualityConfig[quality].label}
               </span>
             )}
           </div>
-          {note && (
-            <p className="mt-2 text-xs text-text-tertiary line-clamp-2">{note}</p>
-          )}
+          {note && <p className="mt-2 line-clamp-2 text-xs text-text-tertiary">{note}</p>}
         </CommandCard>
       </div>
     </Modal>

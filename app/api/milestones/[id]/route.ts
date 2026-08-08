@@ -40,7 +40,8 @@ export async function PATCH(req: Request, { params }: { params: { id: string } }
     if (body.score !== undefined) updateData.score = body.score;
     if (body.notes !== undefined) updateData.notes = body.notes;
     if (body.certificateUrls !== undefined) updateData.certificateUrls = body.certificateUrls;
-    if (body.dueDate !== undefined) updateData.dueDate = body.dueDate ? new Date(body.dueDate) : null;
+    if (body.dueDate !== undefined)
+      updateData.dueDate = body.dueDate ? new Date(body.dueDate) : null;
 
     if (body.status === 'completed') {
       updateData.completedAt = new Date();

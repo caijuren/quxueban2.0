@@ -114,23 +114,23 @@ export default function SubjectCheckIn({
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.15 }}
-      className="rounded-2xl bg-surface-elevated p-6 border border-border-subtle"
+      className="rounded-2xl border border-border-subtle bg-surface-elevated p-6"
     >
-      <div className="flex items-center justify-between mb-6">
+      <div className="mb-6 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-success to-accent flex items-center justify-center">
-            <CheckCircle2 className="w-5 h-5 text-text-primary" />
+          <div className="flex size-10 items-center justify-center rounded-xl bg-gradient-to-br from-success to-accent">
+            <CheckCircle2 className="size-5 text-text-primary" />
           </div>
           <div>
-            <h2 className="text-xl font-bold font-display">{title}</h2>
+            <h2 className="font-display text-xl font-bold">{title}</h2>
             <p className="text-sm text-text-tertiary">{subtitle}</p>
           </div>
         </div>
         <div className="flex items-center gap-4">
           <div className="text-right">
             <p className="text-xs text-text-muted">连续打卡</p>
-            <p className="text-lg font-bold text-orange-400 flex items-center gap-1 justify-end">
-              <Flame className="w-4 h-4" />
+            <p className="flex items-center justify-end gap-1 text-lg font-bold text-orange-400">
+              <Flame className="size-4" />
               {streak} 天
             </p>
           </div>
@@ -141,7 +141,7 @@ export default function SubjectCheckIn({
         </div>
       </div>
 
-      <div className="h-2 rounded-full bg-surface-highlight overflow-hidden mb-5">
+      <div className="mb-5 h-2 overflow-hidden rounded-full bg-surface-highlight">
         <motion.div
           initial={{ width: 0 }}
           animate={{ width: `${progress}%` }}
@@ -159,25 +159,25 @@ export default function SubjectCheckIn({
                 key={task.id}
                 onClick={() => toggleTask(task.id)}
                 whileTap={{ scale: 0.98 }}
-                className={`w-full flex items-center justify-between p-4 rounded-xl border transition-all text-left ${
+                className={`flex w-full items-center justify-between rounded-xl border p-4 text-left transition-all ${
                   isDone
                     ? 'bg-success/10 border-success/30'
-                    : 'bg-surface-elevated border-border-subtle hover:bg-surface-elevated'
+                    : 'border-border-subtle bg-surface-elevated hover:bg-surface-elevated'
                 }`}
               >
                 <div className="flex items-center gap-3">
                   {isDone ? (
-                    <CheckCircle2 className="w-5 h-5 text-success" />
+                    <CheckCircle2 className="size-5 text-success" />
                   ) : (
-                    <Circle className="w-5 h-5 text-text-muted" />
+                    <Circle className="size-5 text-text-muted" />
                   )}
-                  <span className={`text-sm ${isDone ? 'text-success line-through' : 'text-text-secondary'}`}>
+                  <span
+                    className={`text-sm ${isDone ? 'text-success line-through' : 'text-text-secondary'}`}
+                  >
                     {task.label}
                   </span>
                 </div>
-                {task.duration && (
-                  <span className="text-xs text-text-muted">{task.duration}</span>
-                )}
+                {task.duration && <span className="text-xs text-text-muted">{task.duration}</span>}
               </motion.button>
             );
           })}
@@ -188,9 +188,9 @@ export default function SubjectCheckIn({
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="mt-5 flex items-center gap-3 rounded-xl bg-gradient-to-r from-success/20 to-accent/10 border border-success/20 p-4"
+          className="from-success/20 border-success/20 mt-5 flex items-center gap-3 rounded-xl border bg-gradient-to-r to-accent/10 p-4"
         >
-          <Trophy className="w-5 h-5 text-success" />
+          <Trophy className="size-5 text-success" />
           <p className="text-sm text-success">今日任务全部完成！继续保持。</p>
         </motion.div>
       )}

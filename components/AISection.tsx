@@ -69,27 +69,23 @@ const reportVariantStyles = {
 
 export default function AISection() {
   return (
-    <section className="py-14 px-4 sm:px-6 lg:px-8 border-y border-border-subtle">
-      <div className="max-w-6xl mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-          <MotionSection
-            direction="right"
-            duration={0.7}
-            className="order-2 lg:order-1"
-          >
+    <section className="border-y border-border-subtle px-4 py-14 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-6xl">
+        <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-2 lg:gap-16">
+          <MotionSection direction="right" duration={0.7} className="order-2 lg:order-1">
             <CommandCard corner className="p-1">
-              <div className="rounded-xl bg-background p-5 space-y-3">
-                <div className="flex items-center justify-between pb-4 border-b border-border-subtle">
+              <div className="space-y-3 rounded-xl bg-background p-5">
+                <div className="flex items-center justify-between border-b border-border-subtle pb-4">
                   <div className="flex items-center gap-3">
-                    <div className="w-9 h-9 rounded-lg bg-secondary/10 flex items-center justify-center">
-                      <Sparkles className="w-4 h-4 text-secondary" aria-hidden="true" />
+                    <div className="bg-secondary/10 flex size-9 items-center justify-center rounded-lg">
+                      <Sparkles className="size-4 text-secondary" aria-hidden="true" />
                     </div>
                     <div>
-                      <h3 className="text-base font-bold font-display">AI 诊断报告</h3>
+                      <h3 className="font-display text-base font-bold">AI 诊断报告</h3>
                       <p className="text-[11px] text-text-muted">基于当前进度生成</p>
                     </div>
                   </div>
-                  <span className="text-[11px] font-mono text-secondary">v2.4</span>
+                  <span className="font-mono text-[11px] text-secondary">v2.4</span>
                 </div>
 
                 {reportItems.map((item) => {
@@ -97,23 +93,27 @@ export default function AISection() {
                   return (
                     <div
                       key={item.title}
-                      className={`p-4 rounded-lg border ${style.bg} ${style.border}`}
+                      className={`rounded-lg border p-4 ${style.bg} ${style.border}`}
                     >
                       <div className="flex items-start gap-3">
                         <item.icon
-                          className={`w-4 h-4 shrink-0 mt-0.5 ${style.text}`}
+                          className={`mt-0.5 size-4 shrink-0 ${style.text}`}
                           aria-hidden="true"
                         />
                         <div className="flex-1">
-                          <div className="flex items-center justify-between mb-1">
+                          <div className="mb-1 flex items-center justify-between">
                             <span className={`text-sm font-semibold ${style.text}`}>
                               {item.title}
                             </span>
-                            <span className={`text-[10px] px-1.5 py-0.5 rounded ${style.pill} ${style.text}`}>
+                            <span
+                              className={`rounded px-1.5 py-0.5 text-[10px] ${style.pill} ${style.text}`}
+                            >
                               {item.status}
                             </span>
                           </div>
-                          <p className="text-xs text-text-tertiary leading-relaxed">{item.description}</p>
+                          <p className="text-xs leading-relaxed text-text-tertiary">
+                            {item.description}
+                          </p>
                         </div>
                       </div>
                     </div>
@@ -121,7 +121,7 @@ export default function AISection() {
                 })}
 
                 <div className="pt-2">
-                  <div className="h-px bg-border-subtle mb-3" />
+                  <div className="mb-3 h-px bg-border-subtle" />
                   <div className="flex items-center justify-between text-[11px]">
                     <span className="text-text-muted">AI 建议 action</span>
                     <span className="font-mono text-primary">START MATH FOUNDATION</span>
@@ -131,20 +131,16 @@ export default function AISection() {
             </CommandCard>
           </MotionSection>
 
-          <MotionSection
-            direction="left"
-            duration={0.7}
-            className="order-1 lg:order-2"
-          >
-            <span className="text-[11px] font-mono text-secondary uppercase tracking-widest mb-3 block">
+          <MotionSection direction="left" duration={0.7} className="order-1 lg:order-2">
+            <span className="mb-3 block font-mono text-[11px] uppercase tracking-widest text-secondary">
               AI Intelligence
             </span>
-            <h2 className="text-3xl sm:text-4xl font-bold font-display leading-tight mb-4">
+            <h2 className="mb-4 font-display text-3xl font-bold leading-tight sm:text-4xl">
               不仅规划
               <br />
               <span className="text-text-muted">更会主动提醒调整</span>
             </h2>
-            <p className="text-text-secondary text-base leading-relaxed mb-8">
+            <p className="mb-8 text-base leading-relaxed text-text-secondary">
               输入孩子当前进度，AI 帮你判断路线是否合理、哪些任务需要加强、是否需要启动备选方案。
             </p>
 
@@ -156,12 +152,14 @@ export default function AISection() {
                   delay={index * 0.1}
                   className="flex gap-4"
                 >
-                  <div className="w-9 h-9 rounded-lg bg-secondary/10 flex items-center justify-center shrink-0">
-                    <insight.icon className="w-4 h-4 text-secondary" aria-hidden="true" />
+                  <div className="bg-secondary/10 flex size-9 shrink-0 items-center justify-center rounded-lg">
+                    <insight.icon className="size-4 text-secondary" aria-hidden="true" />
                   </div>
                   <div>
-                    <h3 className="text-sm font-bold font-display mb-1">{insight.title}</h3>
-                    <p className="text-xs text-text-tertiary leading-relaxed">{insight.description}</p>
+                    <h3 className="mb-1 font-display text-sm font-bold">{insight.title}</h3>
+                    <p className="text-xs leading-relaxed text-text-tertiary">
+                      {insight.description}
+                    </p>
                   </div>
                 </MotionSection>
               ))}

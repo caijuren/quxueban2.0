@@ -10,7 +10,11 @@ function buildKey(childId?: string) {
 }
 
 function normalizeWeeklyPlan(
-  plan: WeeklyPlan & { parentComment?: string | null; aiSummary?: string | null; aiSummaryGeneratedAt?: string | null }
+  plan: WeeklyPlan & {
+    parentComment?: string | null;
+    aiSummary?: string | null;
+    aiSummaryGeneratedAt?: string | null;
+  }
 ): WeeklyPlan {
   return {
     ...plan,
@@ -25,9 +29,13 @@ export function useWeeklyPlans(childId?: string) {
     queryKey: buildKey(childId),
     queryFn: async () => {
       const qs = childId ? `?childId=${encodeURIComponent(childId)}` : '';
-      const data = await apiGet<(WeeklyPlan & { parentComment?: string | null; aiSummary?: string | null; aiSummaryGeneratedAt?: string | null })[]>(
-        `/api/weekly-plans${qs}`
-      );
+      const data = await apiGet<
+        (WeeklyPlan & {
+          parentComment?: string | null;
+          aiSummary?: string | null;
+          aiSummaryGeneratedAt?: string | null;
+        })[]
+      >(`/api/weekly-plans${qs}`);
       return data.map(normalizeWeeklyPlan);
     },
     enabled: !childId || childId.length > 0,
@@ -37,8 +45,7 @@ export function useWeeklyPlans(childId?: string) {
 export function useSaveWeeklyPlan() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (data: WeeklyPlanCreateInput) =>
-      apiPost<WeeklyPlan>('/api/weekly-plans', data),
+    mutationFn: (data: WeeklyPlanCreateInput) => apiPost<WeeklyPlan>('/api/weekly-plans', data),
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({
         queryKey: buildKey(variables.childId),
@@ -65,21 +72,15 @@ export function useGenerateAiSummary() {
 export function useDeleteWeeklyPlan() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (id: string) =>
-      apiDelete<{ success: boolean }>(`/api/weekly-plans/${id}`),
-    onSuccess: () =>
-      queryClient.invalidateQueries({ queryKey: ['weekly-plans'] }),
+    mutationFn: (id: string) => apiDelete<{ success: boolean }>(`/api/weekly-plans/${id}`),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['weekly-plans'] }),
   });
 }
 
 export function useCompleteTask() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (data: {
-      planId: string;
-      taskId: string;
-      input: TaskCompletionInput;
-    }) =>
+    mutationFn: (data: { planId: string; taskId: string; input: TaskCompletionInput }) =>
       apiPost<WeeklyPlan>(
         `/api/weekly-plans/${data.planId}/tasks/${data.taskId}/complete`,
         data.input
@@ -93,18 +94,11 @@ export function useCompleteTask() {
 export function useCopyWeeklyPlan() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (data: {
-      childId: string;
-      targetWeekId: string;
-      sourceWeekId: string;
-    }) =>
-      apiPost<WeeklyPlan>(
-        `/api/children/${data.childId}/weekly-plans/${data.targetWeekId}/copy`,
-        {
-          sourceWeekId: data.sourceWeekId,
-          targetWeekId: data.targetWeekId,
-        }
-      ),
+    mutationFn: (data: { childId: string; targetWeekId: string; sourceWeekId: string }) =>
+      apiPost<WeeklyPlan>(`/api/children/${data.childId}/weekly-plans/${data.targetWeekId}/copy`, {
+        sourceWeekId: data.sourceWeekId,
+        targetWeekId: data.targetWeekId,
+      }),
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({
         queryKey: buildKey(variables.childId),

@@ -139,7 +139,7 @@ function assessRouteFit(child: Child, task: AssessmentTaskInput): RationalityDim
 
 function assessCapabilityRelevance(child: Child, task: AssessmentTaskInput): RationalityDimension {
   const links = task.capabilityLinks ?? [];
-  const priorityCaps = child.routeId ? ROUTE_PRIORITY_CAPS[child.routeId] ?? [] : [];
+  const priorityCaps = child.routeId ? (ROUTE_PRIORITY_CAPS[child.routeId] ?? []) : [];
   if (links.length === 0) {
     const baseScore = priorityCaps.length > 0 ? 45 : 65;
     return {
@@ -238,7 +238,10 @@ function assessLoadRationality(
   };
 }
 
-function assessDifficultyRationality(child: Child, task: AssessmentTaskInput): RationalityDimension {
+function assessDifficultyRationality(
+  child: Child,
+  task: AssessmentTaskInput
+): RationalityDimension {
   const difficulty = task.difficulty ?? 'medium';
   const isSanchu = child.routeId?.startsWith('sanchu_');
   const isZhongkao = child.routeId?.startsWith('zhongkao_');
@@ -298,10 +301,9 @@ function assessRedundancy(
   const templates = context.existingTemplates ?? [];
   const taskTitle = task.title;
 
-  const matches = [
-    ...existing.map((t) => t.focus),
-    ...templates.map((t) => t.title),
-  ].filter((text) => textSimilarity(taskTitle, text) >= 0.7);
+  const matches = [...existing.map((t) => t.focus), ...templates.map((t) => t.title)].filter(
+    (text) => textSimilarity(taskTitle, text) >= 0.7
+  );
 
   if (matches.length === 0) {
     return {
@@ -364,7 +366,11 @@ function assessMilestoneProgress(
     };
   }
 
-  const routeKey = child.routeId?.startsWith('sanchu_') ? 'sanchu' : child.routeId?.startsWith('zhongkao_') ? 'zhongkao' : null;
+  const routeKey = child.routeId?.startsWith('sanchu_')
+    ? 'sanchu'
+    : child.routeId?.startsWith('zhongkao_')
+      ? 'zhongkao'
+      : null;
   if (!routeKey) {
     return {
       id: 'milestoneProgress',
@@ -439,7 +445,8 @@ export function assessTaskRationality(
     }
     if (d.label === 'caution') {
       if (d.id === 'capabilityRelevance') suggestions.push('补充与路线核心能力相关的标签。');
-      if (d.id === 'milestoneProgress') suggestions.push('核实现有里程碑任务进度，避免同时推进多个同类节点。');
+      if (d.id === 'milestoneProgress')
+        suggestions.push('核实现有里程碑任务进度，避免同时推进多个同类节点。');
     }
   });
 
@@ -451,8 +458,8 @@ export function assessTaskRationality(
     verdict === 'good'
       ? `综合评估 ${overallScore} 分，任务与孩子的路线和阶段匹配度较好。`
       : verdict === 'caution'
-      ? `综合评估 ${overallScore} 分，任务基本可行，但建议留意提示项。`
-      : `综合评估 ${overallScore} 分，任务可能存在明显偏差，建议调整后再加入。`;
+        ? `综合评估 ${overallScore} 分，任务基本可行，但建议留意提示项。`
+        : `综合评估 ${overallScore} 分，任务可能存在明显偏差，建议调整后再加入。`;
 
   return {
     overallScore,

@@ -5,11 +5,7 @@
 import { useMemo, useState, useRef } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { CheckCircle2, GripVertical } from 'lucide-react';
-import {
-  type WeeklyTaskItem,
-  type TaskCategory,
-  type DayOfWeek,
-} from '@/lib/storage.types';
+import { type WeeklyTaskItem, type TaskCategory, type DayOfWeek } from '@/lib/storage.types';
 import {
   type PlanStats,
   dayOrder,
@@ -53,7 +49,9 @@ export default function WeeklyMatrix({
   const [matrixDay, setMatrixDay] = useState<DayOfWeek>(today);
   const [draggingTaskId, setDraggingTaskId] = useState<string | null>(null);
   const [dragOverKey, setDragOverKey] = useState<string | null>(null);
-  const dragSourceRef = useRef<{ taskId: string; day: DayOfWeek; category: TaskCategory } | null>(null);
+  const dragSourceRef = useRef<{ taskId: string; day: DayOfWeek; category: TaskCategory } | null>(
+    null
+  );
   const clickIgnoreRef = useRef(false);
 
   const isCurrentWeek = weekId === getCurrentWeekId();
@@ -98,10 +96,7 @@ export default function WeeklyMatrix({
     [tasks]
   );
 
-  const handleDragStart = (
-    e: React.DragEvent,
-    task: WeeklyTaskItem
-  ) => {
+  const handleDragStart = (e: React.DragEvent, task: WeeklyTaskItem) => {
     e.dataTransfer.effectAllowed = 'move';
     e.dataTransfer.setData('text/plain', task.id);
     setDraggingTaskId(task.id);
@@ -134,11 +129,7 @@ export default function WeeklyMatrix({
     setDragOverKey(null);
   };
 
-  const handleCellDrop = (
-    e: React.DragEvent,
-    category: TaskCategory,
-    day: DayOfWeek
-  ) => {
+  const handleCellDrop = (e: React.DragEvent, category: TaskCategory, day: DayOfWeek) => {
     e.preventDefault();
     const taskId = e.dataTransfer.getData('text/plain') || dragSourceRef.current?.taskId;
     if (!taskId) return;
@@ -167,12 +158,12 @@ export default function WeeklyMatrix({
       initial={shouldReduceMotion ? false : { opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: -20 }}
-      className="rounded-2xl bg-surface-elevated border border-border-subtle p-5"
+      className="rounded-2xl border border-border-subtle bg-surface-elevated p-5"
     >
       {/* Desktop matrix */}
-      <div className="hidden lg:block overflow-x-auto">
+      <div className="hidden overflow-x-auto lg:block">
         <div className="min-w-[900px]">
-          <div className="grid grid-cols-8 gap-3 mb-3">
+          <div className="mb-3 grid grid-cols-8 gap-3">
             <div className="flex items-end px-3 pb-2 text-xs font-semibold text-text-muted">
               分类
             </div>
@@ -182,21 +173,19 @@ export default function WeeklyMatrix({
               return (
                 <div
                   key={day}
-                  className={`text-center px-2 py-2.5 rounded-xl border transition-colors ${
+                  className={`rounded-xl border px-2 py-2.5 text-center transition-colors ${
                     isToday
                       ? 'bg-primary/[0.08] border-primary/20 text-primary'
-                      : 'bg-surface-elevated border-border-subtle text-text-tertiary'
+                      : 'border-border-subtle bg-surface-elevated text-text-tertiary'
                   }`}
                 >
                   <div className="flex items-center justify-center gap-1.5">
                     <span className="text-xs font-bold">{day}</span>
-                    {isToday && (
-                      <span className="w-1.5 h-1.5 rounded-full bg-primary" />
-                    )}
+                    {isToday && <span className="size-1.5 rounded-full bg-primary" />}
                   </div>
-                  <div className="text-2xs text-text-muted mt-1 tabular-nums">{dayDates[i]}</div>
+                  <div className="mt-1 text-2xs tabular-nums text-text-muted">{dayDates[i]}</div>
                   {ds && ds.total > 0 && (
-                    <div className="text-2xs text-text-tertiary mt-0.5 tabular-nums">
+                    <div className="mt-0.5 text-2xs tabular-nums text-text-tertiary">
                       {ds.done}/{ds.total}
                     </div>
                   )}
@@ -208,14 +197,14 @@ export default function WeeklyMatrix({
           {activeCategories.map((category) => {
             const CategoryIcon = taskCategoryIcons[category];
             return (
-              <div key={category} className="grid grid-cols-8 gap-3 mb-3 group/row">
-                <div className="flex items-center gap-2.5 px-3 py-3 rounded-xl bg-surface-elevated border border-border-subtle">
+              <div key={category} className="group/row mb-3 grid grid-cols-8 gap-3">
+                <div className="flex items-center gap-2.5 rounded-xl border border-border-subtle bg-surface-elevated p-3">
                   <div
-                    className={`w-8 h-8 rounded-lg flex items-center justify-center ${getCategoryColorClass(
+                    className={`flex size-8 items-center justify-center rounded-lg ${getCategoryColorClass(
                       category
                     )}`}
                   >
-                    <CategoryIcon className="w-4 h-4" />
+                    <CategoryIcon className="size-4" />
                   </div>
                   <span className="text-sm font-semibold text-text-secondary">
                     {TASK_CATEGORY_LABELS[category]}
@@ -231,15 +220,15 @@ export default function WeeklyMatrix({
                       onDragOver={(e) => handleCellDragOver(e, key)}
                       onDragLeave={handleCellDragLeave}
                       onDrop={(e) => handleCellDrop(e, category, day)}
-                      className={`relative min-h-[96px] rounded-xl border transition-colors duration-200 p-2.5 space-y-2 ${
+                      className={`relative min-h-[96px] space-y-2 rounded-xl border p-2.5 transition-colors duration-200 ${
                         isOver
-                          ? 'bg-primary/[0.08] border-primary/30 ring-1 ring-primary/20'
-                          : 'bg-surface-elevated border-border-subtle hover:border-border-strong hover:bg-surface-hover/30'
+                          ? 'bg-primary/[0.08] border-primary/30 ring-primary/20 ring-1'
+                          : 'hover:bg-surface-hover/30 border-border-subtle bg-surface-elevated hover:border-border-strong'
                       }`}
                     >
                       {cellTasks.length === 0 ? (
-                        <div className="h-full min-h-[72px] flex items-center justify-center opacity-0 group-hover/row:opacity-100 transition-opacity">
-                          <span className="text-2xs text-text-tertiary/60">拖放到此处</span>
+                        <div className="flex h-full min-h-[72px] items-center justify-center opacity-0 transition-opacity group-hover/row:opacity-100">
+                          <span className="text-text-tertiary/60 text-2xs">拖放到此处</span>
                         </div>
                       ) : (
                         cellTasks.map((task) => (
@@ -264,7 +253,7 @@ export default function WeeklyMatrix({
       </div>
 
       {/* Mobile matrix */}
-      <div className="lg:hidden space-y-4">
+      <div className="space-y-4 lg:hidden">
         <div className="flex gap-2 overflow-x-auto pb-2">
           {dayOrder.map((day, i) => {
             const isToday = isCurrentWeek && day === today;
@@ -275,20 +264,22 @@ export default function WeeklyMatrix({
                 key={day}
                 onClick={() => setMatrixDay(day)}
                 aria-pressed={isSelected}
-                className={`flex-shrink-0 relative px-3 py-2 rounded-xl text-left min-w-[72px] transition-colors border focus-ring ${
+                className={`focus-ring relative min-w-[72px] flex-shrink-0 rounded-xl border px-3 py-2 text-left transition-colors ${
                   isSelected
-                    ? 'bg-surface-highlight border-primary/30'
-                    : 'bg-surface-elevated border-border-subtle hover:border-border-default'
+                    ? 'border-primary/30 bg-surface-highlight'
+                    : 'border-border-subtle bg-surface-elevated hover:border-border-default'
                 }`}
               >
                 {isToday && (
-                  <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-primary ring-2 ring-background" />
+                  <span className="absolute -right-1 -top-1 size-2 rounded-full bg-primary ring-2 ring-background" />
                 )}
-                <p className={`text-xs font-bold ${isSelected ? 'text-text-primary' : 'text-text-secondary'}`}>
+                <p
+                  className={`text-xs font-bold ${isSelected ? 'text-text-primary' : 'text-text-secondary'}`}
+                >
                   {day}
                 </p>
-                <p className="text-2xs text-text-muted mt-0.5 tabular-nums">{dayDates[i]}</p>
-                <p className="text-2xs text-text-tertiary mt-0.5 tabular-nums">
+                <p className="mt-0.5 text-2xs tabular-nums text-text-muted">{dayDates[i]}</p>
+                <p className="mt-0.5 text-2xs tabular-nums text-text-tertiary">
                   {ds && ds.total > 0 ? `${ds.done}/${ds.total}` : '无任务'}
                 </p>
               </button>
@@ -303,15 +294,15 @@ export default function WeeklyMatrix({
             return (
               <div
                 key={category}
-                className="rounded-2xl bg-surface-elevated border border-border-subtle p-3.5"
+                className="rounded-2xl border border-border-subtle bg-surface-elevated p-3.5"
               >
-                <div className="flex items-center gap-2.5 mb-3">
+                <div className="mb-3 flex items-center gap-2.5">
                   <div
-                    className={`w-8 h-8 rounded-lg flex items-center justify-center ${getCategoryColorClass(
+                    className={`flex size-8 items-center justify-center rounded-lg ${getCategoryColorClass(
                       category
                     )}`}
                   >
-                    <CategoryIcon className="w-4 h-4" />
+                    <CategoryIcon className="size-4" />
                   </div>
                   <span className="text-sm font-semibold text-text-secondary">
                     {TASK_CATEGORY_LABELS[category]}
@@ -319,7 +310,7 @@ export default function WeeklyMatrix({
                 </div>
                 <div className="space-y-2">
                   {dayTasks.length === 0 ? (
-                    <p className="text-xs text-text-muted py-2 text-center">当天无安排</p>
+                    <p className="py-2 text-center text-xs text-text-muted">当天无安排</p>
                   ) : (
                     dayTasks.map((task) => (
                       <MobileTaskRow
@@ -372,33 +363,37 @@ function MatrixTaskCard({
       aria-label={`${TASK_CATEGORY_LABELS[category]} ${task.day}：${task.focus}，${task.duration}，点击${
         done ? '取消完成' : '标记完成'
       }`}
-      className={`group relative flex items-start gap-2 px-2 py-2 rounded-xl border cursor-grab active:cursor-grabbing transition-colors duration-200 ${
+      className={`group relative flex cursor-grab items-start gap-2 rounded-xl border p-2 transition-colors duration-200 active:cursor-grabbing ${
         done
           ? 'bg-success/[0.08] border-success/20 opacity-80'
           : 'bg-surface-hover/40 border-border-subtle hover:border-border-strong'
-      } ${isDragging ? 'opacity-40 scale-[0.98]' : ''}`}
+      } ${isDragging ? 'scale-[0.98] opacity-40' : ''}`}
     >
       <div
-        className={`w-5 h-5 rounded-lg flex items-center justify-center shrink-0 ${getCategoryColorClass(
+        className={`flex size-5 shrink-0 items-center justify-center rounded-lg ${getCategoryColorClass(
           category
         )}`}
       >
-        <CategoryIcon className="w-4 h-4" />
+        <CategoryIcon className="size-4" />
       </div>
-      <div className="flex-1 min-w-0">
-        <div className="flex items-center justify-between gap-1 mb-1">
-          <div className="flex items-center gap-1 min-w-0">
-            <span className={`shrink-0 text-[9px] px-1.5 py-0.5 rounded whitespace-nowrap ${done ? 'bg-surface-elevated text-text-muted' : 'bg-primary/10 text-primary'} tabular-nums`}>
+      <div className="min-w-0 flex-1">
+        <div className="mb-1 flex items-center justify-between gap-1">
+          <div className="flex min-w-0 items-center gap-1">
+            <span
+              className={`shrink-0 whitespace-nowrap rounded px-1.5 py-0.5 text-[9px] ${done ? 'bg-surface-elevated text-text-muted' : 'bg-primary/10 text-primary'} tabular-nums`}
+            >
               {timeSlotLabel}
             </span>
-            <span className={`shrink-0 text-2xs ${done ? 'text-text-muted' : 'text-text-tertiary'}`}>
+            <span
+              className={`shrink-0 text-2xs ${done ? 'text-text-muted' : 'text-text-tertiary'}`}
+            >
               {task.duration}
             </span>
           </div>
-          {done && <CheckCircle2 className="w-3.5 h-3.5 text-success shrink-0" />}
+          {done && <CheckCircle2 className="size-3.5 shrink-0 text-success" />}
         </div>
         <p
-          className={`text-xs font-medium truncate ${
+          className={`truncate text-xs font-medium ${
             done ? 'text-text-muted line-through' : 'text-text-secondary'
           }`}
           title={task.focus}
@@ -406,25 +401,25 @@ function MatrixTaskCard({
           {task.focus}
         </p>
         {task.materials.length > 0 && (
-          <div className="flex flex-wrap gap-1 mt-1.5">
+          <div className="mt-1.5 flex flex-wrap gap-1">
             {task.materials.slice(0, 3).map((m) => (
               <span
                 key={m}
-                className="text-[9px] px-1.5 py-0.5 rounded bg-surface-elevated text-text-muted truncate max-w-[80px]"
+                className="max-w-[80px] truncate rounded bg-surface-elevated px-1.5 py-0.5 text-[9px] text-text-muted"
                 title={m}
               >
                 {m}
               </span>
             ))}
             {task.materials.length > 3 && (
-              <span className="text-[9px] px-1.5 py-0.5 rounded bg-surface-elevated text-text-muted">
+              <span className="rounded bg-surface-elevated px-1.5 py-0.5 text-[9px] text-text-muted">
                 +{task.materials.length - 3}
               </span>
             )}
           </div>
         )}
       </div>
-      <GripVertical className="w-4 h-4 text-text-tertiary/40 mt-0.5 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity" />
+      <GripVertical className="text-text-tertiary/40 mt-0.5 size-4 shrink-0 opacity-0 transition-opacity group-hover:opacity-100" />
     </div>
   );
 }
@@ -443,37 +438,39 @@ function MobileTaskRow({ task, onToggle }: MobileTaskRowProps) {
     <button
       type="button"
       onClick={onToggle}
-      className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl border transition-colors text-left ${
+      className={`flex w-full items-center gap-3 rounded-xl border px-3 py-2.5 text-left transition-colors ${
         done
           ? 'bg-success/[0.08] border-success/20'
           : 'bg-surface-hover/40 border-border-subtle hover:border-border-strong'
       }`}
     >
-      <div className="flex-1 min-w-0">
-        <div className="flex items-center justify-between mb-1">
+      <div className="min-w-0 flex-1">
+        <div className="mb-1 flex items-center justify-between">
           <p
-            className={`text-xs font-medium truncate ${
+            className={`truncate text-xs font-medium ${
               done ? 'text-text-muted line-through' : 'text-text-secondary'
             }`}
             title={task.focus}
           >
             {task.focus}
           </p>
-          <div className="flex items-center gap-1 shrink-0 ml-2">
-            <span className={`text-[9px] px-1.5 py-0.5 rounded whitespace-nowrap ${done ? 'bg-surface-elevated text-text-muted' : 'bg-primary/10 text-primary'} tabular-nums`}>
+          <div className="ml-2 flex shrink-0 items-center gap-1">
+            <span
+              className={`whitespace-nowrap rounded px-1.5 py-0.5 text-[9px] ${done ? 'bg-surface-elevated text-text-muted' : 'bg-primary/10 text-primary'} tabular-nums`}
+            >
               {timeSlotLabel}
             </span>
-            <span className="text-2xs px-1.5 py-0.5 rounded bg-surface-elevated text-text-tertiary whitespace-nowrap">
+            <span className="whitespace-nowrap rounded bg-surface-elevated px-1.5 py-0.5 text-2xs text-text-tertiary">
               {task.duration}
             </span>
           </div>
         </div>
         {task.materials.length > 0 && (
-          <div className="flex flex-wrap gap-1 mt-1">
+          <div className="mt-1 flex flex-wrap gap-1">
             {task.materials.slice(0, 3).map((m) => (
               <span
                 key={m}
-                className="text-2xs px-1.5 py-0.5 rounded bg-surface-elevated text-text-muted"
+                className="rounded bg-surface-elevated px-1.5 py-0.5 text-2xs text-text-muted"
               >
                 {m}
               </span>
@@ -481,7 +478,7 @@ function MobileTaskRow({ task, onToggle }: MobileTaskRowProps) {
           </div>
         )}
       </div>
-      {done && <CheckCircle2 className="w-5 h-5 text-success shrink-0" />}
+      {done && <CheckCircle2 className="size-5 shrink-0 text-success" />}
     </button>
   );
 }

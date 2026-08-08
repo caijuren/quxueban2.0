@@ -2,12 +2,7 @@
 
 import { useRef, useState, useMemo } from 'react';
 import { Download, Share2, Calendar, Clock, Printer, CheckCircle2, Target } from 'lucide-react';
-import {
-  WeeklyPlan,
-  TaskCategory,
-  DayOfWeek,
-  WeeklyTaskItem,
-} from '@/lib/storage.types';
+import { WeeklyPlan, TaskCategory, DayOfWeek, WeeklyTaskItem } from '@/lib/storage.types';
 import {
   getPlanStats,
   formatWeekLabel,
@@ -39,11 +34,7 @@ const CATEGORY_COLORS: Record<TaskCategory, { soft: string; solid: string }> = {
   other: { soft: 'bg-slate-200 text-slate-600', solid: 'bg-slate-500' },
 };
 
-export default function WeeklyReportExport({
-  plan,
-  childName,
-  onClose,
-}: WeeklyReportExportProps) {
+export default function WeeklyReportExport({ plan, childName, onClose }: WeeklyReportExportProps) {
   const cardRef = useRef<HTMLDivElement>(null);
   const [exporting, setExporting] = useState(false);
   const [exportedUrl, setExportedUrl] = useState<string | null>(null);
@@ -162,25 +153,25 @@ export default function WeeklyReportExport({
         <div
           ref={cardRef}
           style={{ width: A4_WIDTH, minHeight: A4_HEIGHT }}
-          className="bg-white text-neutral-800 p-8 flex flex-col"
+          className="flex flex-col bg-white p-8 text-neutral-800"
         >
           {/* Header */}
-          <div className="flex items-start justify-between border-b-2 border-neutral-900 pb-5 mb-5">
+          <div className="mb-5 flex items-start justify-between border-b-2 border-neutral-900 pb-5">
             <div>
-              <div className="flex items-center gap-2 text-xs text-neutral-500 mb-2">
-                <Calendar className="w-4 h-4" />
+              <div className="mb-2 flex items-center gap-2 text-xs text-neutral-500">
+                <Calendar className="size-4" />
                 <span>{formatWeekLabel(plan.weekId)}</span>
                 <span className="text-neutral-300">|</span>
                 <span>第 {plan.weekId.split('-W')[1]} 周</span>
               </div>
-              <h1 className="text-3xl font-bold text-neutral-900 tracking-tight">
+              <h1 className="text-3xl font-bold tracking-tight text-neutral-900">
                 {childName} 的周计划打卡表
               </h1>
-              <p className="text-sm text-neutral-500 mt-1">每日完成后在方框内打勾，坚持就是胜利</p>
+              <p className="mt-1 text-sm text-neutral-500">每日完成后在方框内打勾，坚持就是胜利</p>
             </div>
             <div className="text-right">
-              <div className="w-10 h-10 rounded-lg bg-primary flex items-center justify-center mb-2 ml-auto">
-                <Target className="w-5 h-5 text-text-primary" />
+              <div className="mb-2 ml-auto flex size-10 items-center justify-center rounded-lg bg-primary">
+                <Target className="size-5 text-text-primary" />
               </div>
               <p className="text-xs font-semibold text-neutral-700">趣学伴</p>
               <p className="text-xs text-neutral-400">周计划 · 可打印</p>
@@ -188,40 +179,37 @@ export default function WeeklyReportExport({
           </div>
 
           {/* Summary */}
-          <div className="grid grid-cols-4 gap-3 mb-6">
-            <div className="rounded-lg bg-neutral-50 border border-neutral-200 p-3 text-center">
-              <p className="text-xs text-neutral-500 mb-1">本周任务</p>
+          <div className="mb-6 grid grid-cols-4 gap-3">
+            <div className="rounded-lg border border-neutral-200 bg-neutral-50 p-3 text-center">
+              <p className="mb-1 text-xs text-neutral-500">本周任务</p>
               <p className="text-2xl font-bold text-neutral-900">{stats.total}</p>
             </div>
-            <div className="rounded-lg bg-neutral-50 border border-neutral-200 p-3 text-center">
-              <p className="text-xs text-neutral-500 mb-1">已完成</p>
+            <div className="rounded-lg border border-neutral-200 bg-neutral-50 p-3 text-center">
+              <p className="mb-1 text-xs text-neutral-500">已完成</p>
               <p className="text-2xl font-bold text-success">{stats.done}</p>
             </div>
-            <div className="rounded-lg bg-neutral-50 border border-neutral-200 p-3 text-center">
-              <p className="text-xs text-neutral-500 mb-1 flex items-center justify-center gap-1">
-                <Clock className="w-4 h-4" /> 总时长
+            <div className="rounded-lg border border-neutral-200 bg-neutral-50 p-3 text-center">
+              <p className="mb-1 flex items-center justify-center gap-1 text-xs text-neutral-500">
+                <Clock className="size-4" /> 总时长
               </p>
               <p className="text-2xl font-bold text-neutral-900">{estimatedHours}h</p>
             </div>
-            <div className="rounded-lg bg-neutral-50 border border-neutral-200 p-3 text-center">
-              <p className="text-xs text-neutral-500 mb-1">完成率</p>
+            <div className="rounded-lg border border-neutral-200 bg-neutral-50 p-3 text-center">
+              <p className="mb-1 text-xs text-neutral-500">完成率</p>
               <p className="text-2xl font-bold text-primary">{stats.completionRate}%</p>
             </div>
           </div>
 
           {/* Matrix */}
           <div className="flex-1">
-            <div
-              className="grid gap-2"
-              style={{ gridTemplateColumns: `100px repeat(7, 1fr)` }}
-            >
+            <div className="grid gap-2" style={{ gridTemplateColumns: `100px repeat(7, 1fr)` }}>
               <div className="flex items-end pb-2">
                 <span className="text-xs font-semibold text-neutral-500">分类</span>
               </div>
               {dayOrder.map((day, i) => (
-                <div key={day} className="text-center pb-2 border-b-2 border-neutral-200">
+                <div key={day} className="border-b-2 border-neutral-200 pb-2 text-center">
                   <p className="text-sm font-bold text-neutral-800">{day}</p>
-                  <p className="text-xs text-neutral-400 tabular-nums">{dayDates[i]}</p>
+                  <p className="text-xs tabular-nums text-neutral-400">{dayDates[i]}</p>
                 </div>
               ))}
 
@@ -230,11 +218,11 @@ export default function WeeklyReportExport({
                 const categoryColor = CATEGORY_COLORS[category];
                 return (
                   <div key={category} className="contents">
-                    <div className="flex items-center gap-2 py-3 border-b border-neutral-100">
+                    <div className="flex items-center gap-2 border-b border-neutral-100 py-3">
                       <div
-                        className={`w-7 h-7 rounded-lg flex items-center justify-center ${categoryColor.soft}`}
+                        className={`flex size-7 items-center justify-center rounded-lg ${categoryColor.soft}`}
                       >
-                        <CategoryIcon className="w-4 h-4" />
+                        <CategoryIcon className="size-4" />
                       </div>
                       <span className="text-xs font-semibold text-neutral-700">
                         {TASK_CATEGORY_LABELS[category]}
@@ -245,11 +233,11 @@ export default function WeeklyReportExport({
                       return (
                         <div
                           key={`${category}-${day}`}
-                          className="min-h-[108px] rounded-lg border border-neutral-200 p-2 bg-white"
+                          className="min-h-[108px] rounded-lg border border-neutral-200 bg-white p-2"
                         >
                           {cellTasks.length === 0 ? (
-                            <div className="w-full h-full min-h-[80px] flex items-center justify-center">
-                              <span className="text-neutral-300 text-xl">+</span>
+                            <div className="flex size-full min-h-[80px] items-center justify-center">
+                              <span className="text-xl text-neutral-300">+</span>
                             </div>
                           ) : (
                             <div className="space-y-2">
@@ -264,34 +252,36 @@ export default function WeeklyReportExport({
                                     className="flex items-start gap-1.5 text-[10px] leading-tight"
                                   >
                                     <div
-                                      className={`w-3.5 h-3.5 rounded border shrink-0 mt-0.5 flex items-center justify-center ${
-                                        done
-                                          ? 'bg-success border-success'
-                                          : 'border-neutral-400'
+                                      className={`mt-0.5 flex size-3.5 shrink-0 items-center justify-center rounded border ${
+                                        done ? 'border-success bg-success' : 'border-neutral-400'
                                       }`}
                                     >
-                                      {done && <CheckCircle2 className="w-3 h-3 text-text-primary" />}
+                                      {done && (
+                                        <CheckCircle2 className="size-3 text-text-primary" />
+                                      )}
                                     </div>
-                                    <div className="flex-1 min-w-0">
+                                    <div className="min-w-0 flex-1">
                                       <p
-                                        className={`font-medium truncate ${
-                                          done ? 'text-neutral-400 line-through' : 'text-neutral-700'
+                                        className={`truncate font-medium ${
+                                          done
+                                            ? 'text-neutral-400 line-through'
+                                            : 'text-neutral-700'
                                         }`}
                                       >
                                         {task.focus}
                                       </p>
-                                      <div className="flex flex-wrap items-center gap-1 mt-0.5">
+                                      <div className="mt-0.5 flex flex-wrap items-center gap-1">
                                         <span
-                                          className={`text-[9px] px-1 rounded text-text-primary ${categoryColor.solid}`}
+                                          className={`rounded px-1 text-[9px] text-text-primary ${categoryColor.solid}`}
                                         >
                                           {slotLabel}
                                         </span>
-                                        <span className="text-[9px] text-neutral-400 tabular-nums">
+                                        <span className="text-[9px] tabular-nums text-neutral-400">
                                           {task.duration}
                                         </span>
                                       </div>
                                       {task.materials.length > 0 && (
-                                        <p className="text-[9px] text-neutral-400 truncate mt-0.5">
+                                        <p className="mt-0.5 truncate text-[9px] text-neutral-400">
                                           {task.materials.slice(0, 2).join(' · ')}
                                         </p>
                                       )}
@@ -311,18 +301,18 @@ export default function WeeklyReportExport({
           </div>
 
           {/* Footer notes */}
-          <div className="mt-6 pt-5 border-t-2 border-neutral-200">
+          <div className="mt-6 border-t-2 border-neutral-200 pt-5">
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <p className="text-xs font-semibold text-neutral-700 mb-2">本周备注 / 家长签名</p>
+                <p className="mb-2 text-xs font-semibold text-neutral-700">本周备注 / 家长签名</p>
                 <div className="h-20 rounded-lg border border-neutral-200 bg-neutral-50" />
               </div>
               <div>
-                <p className="text-xs font-semibold text-neutral-700 mb-2">下周调整 / 老师寄语</p>
+                <p className="mb-2 text-xs font-semibold text-neutral-700">下周调整 / 老师寄语</p>
                 <div className="h-20 rounded-lg border border-neutral-200 bg-neutral-50" />
               </div>
             </div>
-            <p className="text-[10px] text-neutral-400 text-center mt-4">
+            <p className="mt-4 text-center text-[10px] text-neutral-400">
               趣学伴 · 让成长清晰可见 · {new Date().getFullYear()}
             </p>
           </div>
@@ -334,16 +324,16 @@ export default function WeeklyReportExport({
           <button
             onClick={handleExport}
             disabled={exporting}
-            className="w-full py-3 rounded-lg bg-primary text-text-primary font-medium hover:bg-primary/90 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+            className="hover:bg-primary/90 flex w-full items-center justify-center gap-2 rounded-lg bg-primary py-3 font-medium text-text-primary transition-colors disabled:opacity-50"
           >
             {exporting ? (
               <>
-                <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                <span className="size-4 animate-spin rounded-full border-2 border-white/30 border-t-white" />
                 生成中...
               </>
             ) : (
               <>
-                <Share2 className="w-5 h-5" />
+                <Share2 className="size-5" />
                 生成 A4 打卡表
               </>
             )}
@@ -352,16 +342,16 @@ export default function WeeklyReportExport({
           <div className="grid grid-cols-2 gap-3">
             <button
               onClick={handleDownload}
-              className="py-3 rounded-lg bg-success/10 border border-success/20 text-success font-medium hover:bg-success/20 transition-colors flex items-center justify-center gap-2"
+              className="bg-success/10 border-success/20 hover:bg-success/20 flex items-center justify-center gap-2 rounded-lg border py-3 font-medium text-success transition-colors"
             >
-              <Download className="w-5 h-5" />
+              <Download className="size-5" />
               下载图片
             </button>
             <button
               onClick={handlePrint}
-              className="py-3 rounded-lg bg-surface-elevated border border-border-default text-text-secondary font-medium hover:bg-surface-highlight transition-colors flex items-center justify-center gap-2"
+              className="flex items-center justify-center gap-2 rounded-lg border border-border-default bg-surface-elevated py-3 font-medium text-text-secondary transition-colors hover:bg-surface-highlight"
             >
-              <Printer className="w-5 h-5" />
+              <Printer className="size-5" />
               打印
             </button>
           </div>

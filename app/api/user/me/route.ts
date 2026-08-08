@@ -44,13 +44,13 @@ export async function GET() {
     role: user.role,
     settings: {
       theme: user.settings.theme,
+      appearance: user.settings.appearance ?? (user.settings.theme === 'light' ? 'light' : 'dark'),
       fontSize: user.settings.fontSize,
       density: user.settings.density,
       reducedMotion: user.settings.reducedMotion,
       defaultLandingPage: user.settings.defaultLandingPage,
       defaultChildMode: user.settings.defaultChildMode,
-      notificationPrefs:
-        (user.settings.notificationPrefs as Record<string, boolean>) || {},
+      notificationPrefs: (user.settings.notificationPrefs as Record<string, boolean>) || {},
       reminderTime: user.settings.reminderTime,
       doNotDisturb: user.settings.doNotDisturb,
       doNotDisturbStart: user.settings.doNotDisturbStart,
@@ -80,21 +80,22 @@ export async function PATCH(req: Request) {
 
   const settingData: Record<string, unknown> = {};
   if (body.theme !== undefined) settingData.theme = body.theme;
+  if (body.appearance !== undefined) settingData.appearance = body.appearance;
+  // Backwards compatibility: legacy clients that send theme='light' without appearance.
+  if (body.appearance === undefined && body.theme === 'light') {
+    settingData.appearance = 'light';
+  }
   if (body.fontSize !== undefined) settingData.fontSize = body.fontSize;
   if (body.density !== undefined) settingData.density = body.density;
   if (body.reducedMotion !== undefined) settingData.reducedMotion = body.reducedMotion;
   if (body.defaultLandingPage !== undefined)
     settingData.defaultLandingPage = body.defaultLandingPage;
-  if (body.defaultChildMode !== undefined)
-    settingData.defaultChildMode = body.defaultChildMode;
+  if (body.defaultChildMode !== undefined) settingData.defaultChildMode = body.defaultChildMode;
   if (body.reminderTime !== undefined) settingData.reminderTime = body.reminderTime;
   if (body.doNotDisturb !== undefined) settingData.doNotDisturb = body.doNotDisturb;
-  if (body.doNotDisturbStart !== undefined)
-    settingData.doNotDisturbStart = body.doNotDisturbStart;
-  if (body.doNotDisturbEnd !== undefined)
-    settingData.doNotDisturbEnd = body.doNotDisturbEnd;
-  if (body.notificationPrefs !== undefined)
-    settingData.notificationPrefs = body.notificationPrefs;
+  if (body.doNotDisturbStart !== undefined) settingData.doNotDisturbStart = body.doNotDisturbStart;
+  if (body.doNotDisturbEnd !== undefined) settingData.doNotDisturbEnd = body.doNotDisturbEnd;
+  if (body.notificationPrefs !== undefined) settingData.notificationPrefs = body.notificationPrefs;
 
   const updated = await prisma.user.update({
     where: { id: session.user.id },
@@ -104,19 +105,17 @@ export async function PATCH(req: Request) {
         upsert: {
           create: {
             theme: (settingData.theme as string) ?? 'dark-tech',
+            appearance: (settingData.appearance as string) ?? 'dark',
             fontSize: (settingData.fontSize as string) ?? 'normal',
             density: (settingData.density as string) ?? 'comfortable',
             reducedMotion: (settingData.reducedMotion as boolean) ?? false,
-            defaultLandingPage:
-              (settingData.defaultLandingPage as string) ?? 'alerts',
+            defaultLandingPage: (settingData.defaultLandingPage as string) ?? 'alerts',
             defaultChildMode: (settingData.defaultChildMode as string) ?? 'last',
             notificationPrefs: (settingData.notificationPrefs as object) ?? {},
             reminderTime: (settingData.reminderTime as string) ?? '08:00',
             doNotDisturb: (settingData.doNotDisturb as boolean) ?? false,
-            doNotDisturbStart:
-              (settingData.doNotDisturbStart as string | null) ?? null,
-            doNotDisturbEnd:
-              (settingData.doNotDisturbEnd as string | null) ?? null,
+            doNotDisturbStart: (settingData.doNotDisturbStart as string | null) ?? null,
+            doNotDisturbEnd: (settingData.doNotDisturbEnd as string | null) ?? null,
           },
           update: settingData,
         },
@@ -137,14 +136,14 @@ export async function PATCH(req: Request) {
     settings: updated.settings
       ? {
           theme: updated.settings.theme,
+          appearance:
+            updated.settings.appearance ?? (updated.settings.theme === 'light' ? 'light' : 'dark'),
           fontSize: updated.settings.fontSize,
           density: updated.settings.density,
           reducedMotion: updated.settings.reducedMotion,
           defaultLandingPage: updated.settings.defaultLandingPage,
           defaultChildMode: updated.settings.defaultChildMode,
-          notificationPrefs:
-            (updated.settings.notificationPrefs as Record<string, boolean>) ||
-            {},
+          notificationPrefs: (updated.settings.notificationPrefs as Record<string, boolean>) || {},
           reminderTime: updated.settings.reminderTime,
           doNotDisturb: updated.settings.doNotDisturb,
           doNotDisturbStart: updated.settings.doNotDisturbStart,

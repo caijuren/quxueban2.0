@@ -9,10 +9,7 @@ export async function POST(req: NextRequest) {
   const ip = getClientIp(req);
   const limit = authRateLimit(ip);
   if (!limit.allowed) {
-    return NextResponse.json(
-      { error: '请求过于频繁，请稍后再试' },
-      { status: 429 }
-    );
+    return NextResponse.json({ error: '请求过于频繁，请稍后再试' }, { status: 429 });
   }
 
   const validation = await validateBody(req, userRegisterSchema);
@@ -28,10 +25,7 @@ export async function POST(req: NextRequest) {
     });
 
     if (existingUser) {
-      return NextResponse.json(
-        { error: '用户名已被注册' },
-        { status: 409 }
-      );
+      return NextResponse.json({ error: '用户名已被注册' }, { status: 409 });
     }
 
     const passwordHash = await bcrypt.hash(body.password, 10);
@@ -77,9 +71,6 @@ export async function POST(req: NextRequest) {
     );
   } catch (error) {
     console.error('Registration error:', error);
-    return NextResponse.json(
-      { error: '注册失败，请稍后重试' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: '注册失败，请稍后重试' }, { status: 500 });
   }
 }

@@ -91,14 +91,15 @@ export default function GeneratePlanModal({
 
   const [step, setStep] = useState<Step>('week');
   const [weekId, setWeekId] = useState<string>(initialWeekId ?? getCurrentWeekId());
-  const { data: templates = [], isLoading: loadingTemplates } = useTaskTemplates(
-    currentChild?.id,
-    { status: 'active' }
-  );
+  const { data: templates = [], isLoading: loadingTemplates } = useTaskTemplates(currentChild?.id, {
+    status: 'active',
+  });
   const [selectedTemplateIds, setSelectedTemplateIds] = useState<Set<string>>(new Set());
   const [search, setSearch] = useState('');
   const [filterCategory, setFilterCategory] = useState<TaskCategory | 'all'>('all');
-  const [filterSchedule, setFilterSchedule] = useState<'all' | TaskTemplate['weeklySchedule']>('all');
+  const [filterSchedule, setFilterSchedule] = useState<'all' | TaskTemplate['weeklySchedule']>(
+    'all'
+  );
   const [previewTasks, setPreviewTasks] = useState<WeeklyTaskItem[]>([]);
   const [publishing, setPublishing] = useState(false);
 
@@ -132,7 +133,8 @@ export default function GeneratePlanModal({
   );
 
   const allFilteredSelected = useMemo(
-    () => filteredTemplates.length > 0 && filteredTemplates.every((t) => selectedTemplateIds.has(t.id)),
+    () =>
+      filteredTemplates.length > 0 && filteredTemplates.every((t) => selectedTemplateIds.has(t.id)),
     [filteredTemplates, selectedTemplateIds]
   );
 
@@ -197,11 +199,7 @@ export default function GeneratePlanModal({
       setStep('tasks');
     } else if (step === 'tasks') {
       if (!currentChild) return;
-      const plan = generateWeeklyPlanFromSelectedTemplates(
-        currentChild,
-        weekId,
-        selectedTemplates
-      );
+      const plan = generateWeeklyPlanFromSelectedTemplates(currentChild, weekId, selectedTemplates);
       setPreviewTasks(plan.tasks);
       setStep('preview');
     }
@@ -227,9 +225,7 @@ export default function GeneratePlanModal({
   };
 
   const moveTaskDay = (taskId: string, day: DayOfWeek) => {
-    setPreviewTasks((prev) =>
-      prev.map((t) => (t.id === taskId ? { ...t, day } : t))
-    );
+    setPreviewTasks((prev) => prev.map((t) => (t.id === taskId ? { ...t, day } : t)));
   };
 
   const removeTask = (taskId: string) => {
@@ -245,8 +241,8 @@ export default function GeneratePlanModal({
     step === 'week'
       ? '第 1 步：选择要发布的周'
       : step === 'tasks'
-      ? '第 2 步：从任务库选择任务'
-      : '第 3 步：预览并发布';
+        ? '第 2 步：从任务库选择任务'
+        : '第 3 步：预览并发布';
 
   return (
     <Modal
@@ -258,7 +254,7 @@ export default function GeneratePlanModal({
       iconClassName="bg-primary"
       size="xl"
       footer={
-        <div className="flex items-center justify-between w-full">
+        <div className="flex w-full items-center justify-between">
           <div className="text-xs text-text-muted">
             {step === 'tasks' && `已选 ${selectedTemplateIds.size} 项任务`}
             {step === 'preview' && `共 ${previewTasks.length} 个任务，约 ${estimatedMinutes} 分钟`}
@@ -267,9 +263,9 @@ export default function GeneratePlanModal({
             {step !== 'week' && (
               <button
                 onClick={handleBack}
-                className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-text-tertiary hover:text-text-secondary hover:bg-surface-hover transition-colors"
+                className="flex items-center gap-1.5 rounded-lg px-4 py-2 text-text-tertiary transition-colors hover:bg-surface-hover hover:text-text-secondary"
               >
-                <ChevronLeft className="w-5 h-5" />
+                <ChevronLeft className="size-5" />
                 上一步
               </button>
             )}
@@ -277,21 +273,21 @@ export default function GeneratePlanModal({
               <button
                 onClick={handleNext}
                 disabled={!canNext}
-                className="flex items-center gap-1.5 px-6 py-2 rounded-lg bg-primary text-text-primary font-medium disabled:opacity-50 disabled:cursor-not-allowed hover:bg-primary/90 transition-colors"
+                className="flex items-center gap-1.5 rounded-lg bg-primary px-6 py-2 font-medium text-inverse transition-colors hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50"
               >
                 下一步
-                <ChevronRight className="w-5 h-5" />
+                <ChevronRight className="size-5" />
               </button>
             ) : (
               <button
                 onClick={handlePublish}
                 disabled={publishing || previewTasks.length === 0}
-                className="flex items-center gap-1.5 px-6 py-2 rounded-lg bg-primary text-text-primary font-medium disabled:opacity-50 disabled:cursor-not-allowed hover:bg-primary/90 transition-colors"
+                className="flex items-center gap-1.5 rounded-lg bg-primary px-6 py-2 font-medium text-inverse transition-colors hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50"
               >
                 {publishing ? (
-                  <Loader2 className="w-5 h-5 animate-spin" />
+                  <Loader2 className="size-5 animate-spin" />
                 ) : (
-                  <Send className="w-5 h-5" />
+                  <Send className="size-5" />
                 )}
                 发布
               </button>
@@ -302,12 +298,7 @@ export default function GeneratePlanModal({
     >
       <AnimatePresence mode="wait">
         {step === 'week' && (
-          <StepWeek
-            key="week"
-            weekId={weekId}
-            setWeekId={setWeekId}
-            options={weekOptions}
-          />
+          <StepWeek key="week" weekId={weekId} setWeekId={setWeekId} options={weekOptions} />
         )}
         {step === 'tasks' && (
           <StepTasks
@@ -364,30 +355,30 @@ function StepWeek({ weekId, setWeekId, options }: StepWeekProps) {
       className="space-y-4"
     >
       <p className="text-sm text-text-muted">选择要生成计划的周，支持补发本周或提前安排下周。</p>
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
         {options.map((option) => {
           const selected = weekId === option.weekId;
           return (
             <button
               key={option.weekId}
               onClick={() => setWeekId(option.weekId)}
-              className={`text-left rounded-2xl border p-4 transition-colors ${
+              className={`rounded-2xl border p-4 text-left transition-colors ${
                 selected
-                  ? 'bg-surface-highlight border-primary/30'
-                  : 'bg-surface-elevated border-border-subtle hover:bg-surface-hover'
+                  ? 'border-primary/30 bg-surface-highlight'
+                  : 'border-border-subtle bg-surface-elevated hover:bg-surface-hover'
               }`}
             >
-              <div className="flex items-center gap-2 mb-2">
+              <div className="mb-2 flex items-center gap-2">
                 <div
-                  className={`w-4 h-4 rounded-full border flex items-center justify-center ${
+                  className={`flex size-4 items-center justify-center rounded-full border ${
                     selected ? 'border-primary bg-primary' : 'border-border-default'
                   }`}
                 >
-                  {selected && <div className="w-1.5 h-1.5 rounded-full bg-text-primary" />}
+                  {selected && <div className="size-1.5 rounded-full bg-text-primary" />}
                 </div>
                 <span className="text-sm font-bold text-text-secondary">{option.label}</span>
               </div>
-              <p className="text-xs text-text-muted ml-6">{option.range}</p>
+              <p className="ml-6 text-xs text-text-muted">{option.range}</p>
             </button>
           );
         })}
@@ -434,23 +425,23 @@ function StepTasks({
       exit={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, x: -20 }}
       className="space-y-4"
     >
-      <div className="flex flex-col sm:flex-row gap-3">
+      <div className="flex flex-col gap-3 sm:flex-row">
         <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted" />
+          <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-text-muted" />
           <input
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="搜索任务名称"
-            className="w-full pl-9 pr-3 py-2 text-sm bg-surface border border-border-default rounded-lg text-text-primary placeholder:text-text-tertiary focus:outline-none focus:border-primary"
+            className="w-full rounded-lg border border-border-default bg-surface py-2 pl-9 pr-3 text-sm text-text-primary placeholder:text-text-tertiary focus:border-primary focus:outline-none"
           />
         </div>
-        <div className="flex items-center gap-2 flex-wrap">
-          <Filter className="w-4 h-4 text-text-muted" />
+        <div className="flex flex-wrap items-center gap-2">
+          <Filter className="size-4 text-text-muted" />
           <select
             value={filterCategory}
             onChange={(e) => setFilterCategory(e.target.value as TaskCategory | 'all')}
-            className="text-xs bg-surface border border-border-default rounded-lg px-2 py-2 text-text-primary focus:outline-none focus:border-primary"
+            className="rounded-lg border border-border-default bg-surface p-2 text-xs text-text-primary focus:border-primary focus:outline-none"
           >
             <option value="all">全部分类</option>
             {allCategories.map((c) => (
@@ -464,7 +455,7 @@ function StepTasks({
             onChange={(e) =>
               setFilterSchedule(e.target.value as 'all' | TaskTemplate['weeklySchedule'])
             }
-            className="text-xs bg-surface border border-border-default rounded-lg px-2 py-2 text-text-primary focus:outline-none focus:border-primary"
+            className="rounded-lg border border-border-default bg-surface p-2 text-xs text-text-primary focus:border-primary focus:outline-none"
           >
             {scheduleFilterOptions.map((o) => (
               <option key={o.value} value={o.value}>
@@ -475,14 +466,14 @@ function StepTasks({
           <button
             onClick={toggleAllFiltered}
             disabled={templates.length === 0}
-            className="flex items-center gap-1.5 text-xs text-text-tertiary hover:text-text-secondary disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+            className="flex items-center gap-1.5 text-xs text-text-tertiary transition-colors hover:text-text-secondary disabled:cursor-not-allowed disabled:opacity-40"
           >
             <div
-              className={`w-4 h-4 rounded border flex items-center justify-center ${
-                allFilteredSelected ? 'bg-primary border-primary' : 'border-border-default'
+              className={`flex size-4 items-center justify-center rounded border ${
+                allFilteredSelected ? 'border-primary bg-primary' : 'border-border-default'
               }`}
             >
-              {allFilteredSelected && <CheckCircle2 className="w-3 h-3 text-text-primary" />}
+              {allFilteredSelected && <CheckCircle2 className="size-3 text-text-primary" />}
             </div>
             全选
           </button>
@@ -490,11 +481,11 @@ function StepTasks({
       </div>
 
       {loading ? (
-        <div className="py-12 text-center text-text-muted text-sm">加载任务库...</div>
+        <div className="py-12 text-center text-sm text-text-muted">加载任务库...</div>
       ) : templates.length === 0 ? (
-        <div className="py-12 text-center text-text-muted text-sm">没有匹配的任务</div>
+        <div className="py-12 text-center text-sm text-text-muted">没有匹配的任务</div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 max-h-[50vh] overflow-y-auto pr-1">
+        <div className="grid max-h-[50vh] grid-cols-1 gap-3 overflow-y-auto pr-1 sm:grid-cols-2 lg:grid-cols-3">
           {templates.map((tpl) => {
             const selected = selectedIds.has(tpl.id);
             const CategoryIcon = categoryIcons[tpl.category];
@@ -503,35 +494,35 @@ function StepTasks({
               <button
                 key={tpl.id}
                 onClick={() => toggleTemplate(tpl.id)}
-                className={`text-left rounded-2xl border p-3 transition-colors ${
+                className={`rounded-2xl border p-3 text-left transition-colors ${
                   selected
-                    ? 'bg-surface-highlight border-primary/30'
-                    : 'bg-surface-elevated border-border-subtle hover:bg-surface-hover'
+                    ? 'border-primary/30 bg-surface-highlight'
+                    : 'border-border-subtle bg-surface-elevated hover:bg-surface-hover'
                 }`}
               >
                 <div className="flex items-start gap-3">
                   <div
-                    className={`mt-0.5 w-5 h-5 rounded border flex items-center justify-center ${
-                      selected ? 'bg-primary border-primary' : 'border-border-default'
+                    className={`mt-0.5 flex size-5 items-center justify-center rounded border ${
+                      selected ? 'border-primary bg-primary' : 'border-border-default'
                     }`}
                   >
-                    {selected && <CheckCircle2 className="w-3.5 h-3.5 text-text-primary" />}
+                    {selected && <CheckCircle2 className="size-3.5 text-text-primary" />}
                   </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex flex-wrap items-center gap-1.5 mb-1">
-                      <CategoryIcon className="w-4 h-4 text-text-tertiary" />
+                  <div className="min-w-0 flex-1">
+                    <div className="mb-1 flex flex-wrap items-center gap-1.5">
+                      <CategoryIcon className="size-4 text-text-tertiary" />
                       <span className="text-[10px] text-text-muted">
                         {TASK_CATEGORY_LABELS[tpl.category]}
                       </span>
-                      <span className="text-[10px] px-1.5 py-0.5 rounded bg-surface text-text-secondary ml-auto">
+                      <span className="ml-auto rounded bg-surface px-1.5 py-0.5 text-[10px] text-text-secondary">
                         {tpl.duration}
                       </span>
                     </div>
-                    <p className="text-sm font-semibold text-text-secondary mb-1 truncate">
+                    <p className="mb-1 truncate text-sm font-semibold text-text-secondary">
                       {tpl.title}
                     </p>
                     {tpl.description && (
-                      <p className="text-[10px] text-text-muted line-clamp-2 mb-1">
+                      <p className="mb-1 line-clamp-2 text-[10px] text-text-muted">
                         {tpl.description}
                       </p>
                     )}
@@ -540,13 +531,13 @@ function StepTasks({
                         scheduleDays.map((d) => (
                           <span
                             key={d}
-                            className="text-[9px] px-1.5 py-0.5 rounded bg-primary/10 text-primary border border-primary/20"
+                            className="bg-primary/10 border-primary/20 rounded border px-1.5 py-0.5 text-[9px] text-primary"
                           >
                             {d}
                           </span>
                         ))
                       ) : (
-                        <span className="text-[9px] px-1.5 py-0.5 rounded bg-surface text-text-muted">
+                        <span className="rounded bg-surface px-1.5 py-0.5 text-[9px] text-text-muted">
                           自动分配
                         </span>
                       )}
@@ -588,17 +579,17 @@ function StepPreview({
       className="space-y-4"
     >
       {overloadedDays.length > 0 && (
-        <div className="rounded-2xl border border-warning/20 bg-warning/5 p-3 flex items-start gap-2">
-          <AlertTriangle className="w-4 h-4 text-warning shrink-0 mt-0.5" />
+        <div className="border-warning/20 bg-warning/5 flex items-start gap-2 rounded-2xl border p-3">
+          <AlertTriangle className="mt-0.5 size-4 shrink-0 text-warning" />
           <p className="text-xs text-text-secondary">
             {overloadedDays.join('、')} 任务量超过 3 小时，建议适当减少或调整。
           </p>
         </div>
       )}
 
-      <div className="hidden lg:block overflow-x-auto">
+      <div className="hidden overflow-x-auto lg:block">
         <div className="min-w-[900px]">
-          <div className="grid grid-cols-7 gap-2 mb-2">
+          <div className="mb-2 grid grid-cols-7 gap-2">
             {dayOrder.map((day) => (
               <div key={day} className="text-center">
                 <span className="text-xs font-bold text-text-secondary">{day}</span>
@@ -612,7 +603,7 @@ function StepPreview({
             {dayOrder.map((day) => (
               <div
                 key={day}
-                className="min-h-[200px] rounded-2xl bg-surface-elevated border border-border-subtle p-2 space-y-2"
+                className="min-h-[200px] space-y-2 rounded-2xl border border-border-subtle bg-surface-elevated p-2"
               >
                 {tasksByDay[day].map((task) => (
                   <PreviewTaskCard
@@ -628,10 +619,13 @@ function StepPreview({
         </div>
       </div>
 
-      <div className="lg:hidden space-y-4">
+      <div className="space-y-4 lg:hidden">
         {dayOrder.map((day) => (
-          <div key={day} className="rounded-2xl bg-surface-elevated border border-border-subtle p-3">
-            <div className="flex items-center justify-between mb-2">
+          <div
+            key={day}
+            className="rounded-2xl border border-border-subtle bg-surface-elevated p-3"
+          >
+            <div className="mb-2 flex items-center justify-between">
               <span className="text-sm font-bold text-text-secondary">{day}</span>
               <span className="text-[10px] text-text-muted">
                 {tasksByDay[day].length} 项 · {dailyMinutes[day]} 分钟
@@ -639,7 +633,7 @@ function StepPreview({
             </div>
             <div className="space-y-2">
               {tasksByDay[day].length === 0 && (
-                <p className="text-xs text-text-muted py-2">当天无任务</p>
+                <p className="py-2 text-xs text-text-muted">当天无任务</p>
               )}
               {tasksByDay[day].map((task) => (
                 <PreviewTaskCard
@@ -654,7 +648,7 @@ function StepPreview({
         ))}
       </div>
 
-      <div className="flex items-center justify-between text-xs text-text-muted pt-2">
+      <div className="flex items-center justify-between pt-2 text-xs text-text-muted">
         <span>总计约 {estimatedMinutes} 分钟</span>
         <span>可点击任务卡片调整日期或删除</span>
       </div>
@@ -671,28 +665,30 @@ interface PreviewTaskCardProps {
 function PreviewTaskCard({ task, onMove, onRemove }: PreviewTaskCardProps) {
   const CategoryIcon = categoryIcons[task.category];
   return (
-    <div className="group rounded-lg bg-surface-hover/40 border border-border-subtle p-2 hover:bg-surface-hover transition-colors">
+    <div className="bg-surface-hover/40 group rounded-lg border border-border-subtle p-2 transition-colors hover:bg-surface-hover">
       <div className="flex items-start gap-2">
-        <div className={`w-6 h-6 rounded-lg flex items-center justify-center shrink-0 ${getCategoryColorClass(task.category)}`}>
-          <CategoryIcon className="w-4 h-4" />
+        <div
+          className={`flex size-6 shrink-0 items-center justify-center rounded-lg ${getCategoryColorClass(task.category)}`}
+        >
+          <CategoryIcon className="size-4" />
         </div>
-        <div className="flex-1 min-w-0">
-          <p className="text-xs font-medium text-text-secondary truncate">{task.focus}</p>
+        <div className="min-w-0 flex-1">
+          <p className="truncate text-xs font-medium text-text-secondary">{task.focus}</p>
           <p className="text-[10px] text-text-muted">{task.duration}</p>
         </div>
         <button
           onClick={() => onRemove(task.id)}
-          className="p-1 rounded-lg hover:bg-error/10 text-text-tertiary hover:text-error opacity-0 group-hover:opacity-100 transition-opacity"
+          className="hover:bg-error/10 rounded-lg p-1 text-text-tertiary opacity-0 transition-opacity hover:text-error group-hover:opacity-100"
           aria-label="删除"
         >
-          <Trash2 className="w-4 h-4" />
+          <Trash2 className="size-4" />
         </button>
       </div>
       <div className="mt-2 flex items-center gap-2">
         <select
           value={task.day}
           onChange={(e) => onMove(task.id, e.target.value as DayOfWeek)}
-          className="text-[10px] bg-surface border border-border-default rounded-lg px-1.5 py-1 text-text-secondary focus:outline-none focus:border-primary"
+          className="rounded-lg border border-border-default bg-surface px-1.5 py-1 text-[10px] text-text-secondary focus:border-primary focus:outline-none"
         >
           {dayOrder.map((d) => (
             <option key={d} value={d}>

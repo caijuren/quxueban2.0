@@ -19,19 +19,20 @@ export default function InsightRow({
   trendDirection = 'flat',
   description,
 }: InsightRowProps) {
-  const TrendIcon = trendDirection === 'up' ? TrendingUp : trendDirection === 'down' ? TrendingDown : Minus;
+  const TrendIcon =
+    trendDirection === 'up' ? TrendingUp : trendDirection === 'down' ? TrendingDown : Minus;
   const trendColor =
     trendDirection === 'up'
       ? 'text-success'
       : trendDirection === 'down'
-      ? 'text-warning'
-      : 'text-text-muted';
+        ? 'text-warning'
+        : 'text-text-muted';
 
   return (
-    <div className="flex items-center justify-between px-4 py-3.5 rounded-xl hover:bg-white/[0.02] transition-colors">
+    <div className="flex items-center justify-between rounded-xl px-4 py-3.5 transition-colors hover:bg-white/[0.02]">
       <div className="flex items-center gap-3">
-        <div className="w-9 h-9 rounded-xl bg-surface-hover flex items-center justify-center shrink-0">
-          <Icon className="w-4 h-4 text-text-tertiary" />
+        <div className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-surface-hover">
+          <Icon className="size-4 text-text-tertiary" />
         </div>
         <div>
           <p className="text-sm font-medium text-text-secondary">{label}</p>
@@ -41,8 +42,8 @@ export default function InsightRow({
       <div className="text-right">
         <p className="text-base font-bold text-text-primary">{value}</p>
         {trend && (
-          <p className={`text-xs flex items-center justify-end gap-0.5 ${trendColor}`}>
-            <TrendIcon className="w-3 h-3" />
+          <p className={`flex items-center justify-end gap-0.5 text-xs ${trendColor}`}>
+            <TrendIcon className="size-3" />
             {trend}
           </p>
         )}

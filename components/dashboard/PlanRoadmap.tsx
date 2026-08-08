@@ -53,15 +53,87 @@ const routes: RoutePath[] = [
     description: '全市零志愿自主招生，AMC8+小托福+面谈',
     y: 100,
     checkpoints: [
-      { id: 'sg-1', name: '探测收官', x: 18, type: 'soft', grade: '一升二暑假', requirement: '数学思维≥40, 英语≥30', status: 'current' },
-      { id: 'sg-2', name: '基础检查', x: 30, type: 'soft', grade: '二年级末', requirement: 'RAZ 爬坡 + OD1 完成, 英语≥50', status: 'upcoming' },
-      { id: 'sg-3', name: '奥数启动', x: 42, type: 'hard', grade: '三年级初', requirement: '已启动系统奥数学习', status: 'upcoming' },
-      { id: 'sg-4', name: 'KET 卓越', x: 52, type: 'soft', grade: '三年级寒假', requirement: 'KET 卓越 140+', status: 'upcoming' },
-      { id: 'sg-5', name: 'PET 卓越', x: 62, type: 'soft', grade: '四年级寒假', requirement: 'PET 卓越 160+', status: 'upcoming' },
-      { id: 'sg-6', name: '小托福首考', x: 72, type: 'hard', grade: '四年级春季', requirement: '小托福 800+ / AMC8 首考', status: 'upcoming' },
-      { id: 'sg-7', name: '综合定位', x: 84, type: 'hard', grade: '五年级初', requirement: '奥数+英语+竞赛全面达标', status: 'upcoming' },
-      { id: 'sg-8', name: 'AMC8 冲刺', x: 92, type: 'soft', grade: '五年级上', requirement: 'AMC8 20+ / 小托福 850+', status: 'upcoming' },
-      { id: 'sg-9', name: '三公报名', x: 97, type: 'event', grade: '五年级下 4 月', requirement: '4月中旬报名，4月中下旬面谈评估', status: 'upcoming' },
+      {
+        id: 'sg-1',
+        name: '探测收官',
+        x: 18,
+        type: 'soft',
+        grade: '一升二暑假',
+        requirement: '数学思维≥40, 英语≥30',
+        status: 'current',
+      },
+      {
+        id: 'sg-2',
+        name: '基础检查',
+        x: 30,
+        type: 'soft',
+        grade: '二年级末',
+        requirement: 'RAZ 爬坡 + OD1 完成, 英语≥50',
+        status: 'upcoming',
+      },
+      {
+        id: 'sg-3',
+        name: '奥数启动',
+        x: 42,
+        type: 'hard',
+        grade: '三年级初',
+        requirement: '已启动系统奥数学习',
+        status: 'upcoming',
+      },
+      {
+        id: 'sg-4',
+        name: 'KET 卓越',
+        x: 52,
+        type: 'soft',
+        grade: '三年级寒假',
+        requirement: 'KET 卓越 140+',
+        status: 'upcoming',
+      },
+      {
+        id: 'sg-5',
+        name: 'PET 卓越',
+        x: 62,
+        type: 'soft',
+        grade: '四年级寒假',
+        requirement: 'PET 卓越 160+',
+        status: 'upcoming',
+      },
+      {
+        id: 'sg-6',
+        name: '小托福首考',
+        x: 72,
+        type: 'hard',
+        grade: '四年级春季',
+        requirement: '小托福 800+ / AMC8 首考',
+        status: 'upcoming',
+      },
+      {
+        id: 'sg-7',
+        name: '综合定位',
+        x: 84,
+        type: 'hard',
+        grade: '五年级初',
+        requirement: '奥数+英语+竞赛全面达标',
+        status: 'upcoming',
+      },
+      {
+        id: 'sg-8',
+        name: 'AMC8 冲刺',
+        x: 92,
+        type: 'soft',
+        grade: '五年级上',
+        requirement: 'AMC8 20+ / 小托福 850+',
+        status: 'upcoming',
+      },
+      {
+        id: 'sg-9',
+        name: '三公报名',
+        x: 97,
+        type: 'event',
+        grade: '五年级下 4 月',
+        requirement: '4月中旬报名，4月中下旬面谈评估',
+        status: 'upcoming',
+      },
     ],
   },
   {
@@ -72,11 +144,50 @@ const routes: RoutePath[] = [
     description: '文理兼顾，保留三公和嘉定民办摇号两种可能',
     y: 180,
     checkpoints: [
-      { id: 'dual-current', name: '当前位置', x: 18, type: 'current', grade: '一升二暑假', status: 'current' },
-      { id: 'dual-1', name: '文理平衡', x: 35, type: 'soft', grade: '二年级末', requirement: '语数英均衡发展', status: 'upcoming' },
-      { id: 'dual-2', name: '三公评估', x: 50, type: 'soft', grade: '三年级中', requirement: '数学思维≥70', status: 'upcoming' },
-      { id: 'dual-3', name: '方向选择', x: 72, type: 'hard', grade: '四年级末', requirement: '明确冲三公或稳摇号', status: 'upcoming' },
-      { id: 'dual-4', name: '最终定位', x: 90, type: 'hard', grade: '五年级初', requirement: '确定第一志愿', status: 'upcoming' },
+      {
+        id: 'dual-current',
+        name: '当前位置',
+        x: 18,
+        type: 'current',
+        grade: '一升二暑假',
+        status: 'current',
+      },
+      {
+        id: 'dual-1',
+        name: '文理平衡',
+        x: 35,
+        type: 'soft',
+        grade: '二年级末',
+        requirement: '语数英均衡发展',
+        status: 'upcoming',
+      },
+      {
+        id: 'dual-2',
+        name: '三公评估',
+        x: 50,
+        type: 'soft',
+        grade: '三年级中',
+        requirement: '数学思维≥70',
+        status: 'upcoming',
+      },
+      {
+        id: 'dual-3',
+        name: '方向选择',
+        x: 72,
+        type: 'hard',
+        grade: '四年级末',
+        requirement: '明确冲三公或稳摇号',
+        status: 'upcoming',
+      },
+      {
+        id: 'dual-4',
+        name: '最终定位',
+        x: 90,
+        type: 'hard',
+        grade: '五年级初',
+        requirement: '确定第一志愿',
+        status: 'upcoming',
+      },
     ],
   },
   {
@@ -87,9 +198,33 @@ const routes: RoutePath[] = [
     description: '保底路线，对口公办或一贯制直升',
     y: 260,
     checkpoints: [
-      { id: 'pub-1', name: '对口确认', x: 35, type: 'soft', grade: '二年级末', requirement: '确认对口学校范围', status: 'upcoming' },
-      { id: 'pub-2', name: '户籍房产', x: 62, type: 'soft', grade: '四年级中', requirement: '满足对口入学条件', status: 'upcoming' },
-      { id: 'pub-3', name: '直升确认', x: 90, type: 'hard', grade: '五年级初', requirement: '一贯制直升或对口录取', status: 'upcoming' },
+      {
+        id: 'pub-1',
+        name: '对口确认',
+        x: 35,
+        type: 'soft',
+        grade: '二年级末',
+        requirement: '确认对口学校范围',
+        status: 'upcoming',
+      },
+      {
+        id: 'pub-2',
+        name: '户籍房产',
+        x: 62,
+        type: 'soft',
+        grade: '四年级中',
+        requirement: '满足对口入学条件',
+        status: 'upcoming',
+      },
+      {
+        id: 'pub-3',
+        name: '直升确认',
+        x: 90,
+        type: 'hard',
+        grade: '五年级初',
+        requirement: '一贯制直升或对口录取',
+        status: 'upcoming',
+      },
     ],
   },
 ];
@@ -182,10 +317,14 @@ export default function PlanRoadmap({
   const [selectedCheckpoint, setSelectedCheckpoint] = useState<Checkpoint | null>(null);
   const [mousePos, setMousePos] = useState({ x: 550, y: 230 });
 
-  const nextCheckpoint = routes[0].checkpoints.find((c) => c.status === 'current') || routes[0].checkpoints.find((c) => c.status === 'upcoming');
+  const nextCheckpoint =
+    routes[0].checkpoints.find((c) => c.status === 'current') ||
+    routes[0].checkpoints.find((c) => c.status === 'upcoming');
 
   const [tilt, setTilt] = useState({ rotateX: 0, rotateY: 0 });
-  const [explosions, setExplosions] = useState<{ id: number; x: number; y: number; color: string }[]>([]);
+  const [explosions, setExplosions] = useState<
+    { id: number; x: number; y: number; color: string }[]
+  >([]);
   // TODO: default should come from user's current primary plan
   const [activeRoute, setActiveRoute] = useState<string>('sg');
 
@@ -214,43 +353,48 @@ export default function PlanRoadmap({
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="relative rounded-2xl p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 overflow-hidden"
+        className="relative flex flex-col justify-between gap-4 overflow-hidden rounded-2xl p-5 sm:flex-row sm:items-center"
         style={{
-          background: 'linear-gradient(135deg, rgba(244,63,94,0.08) 0%, rgba(139,92,246,0.08) 100%)',
+          background:
+            'linear-gradient(135deg, rgba(244,63,94,0.08) 0%, rgba(139,92,246,0.08) 100%)',
           border: '1px solid rgba(244,63,94,0.35)',
           boxShadow: '0 0 30px rgba(244,63,94,0.15), inset 0 0 20px rgba(244,63,94,0.05)',
         }}
       >
         {/* Animated border glow */}
         <motion.div
-          className="absolute inset-0 rounded-2xl pointer-events-none"
+          className="pointer-events-none absolute inset-0 rounded-2xl"
           style={{
-            background: 'linear-gradient(90deg, transparent, rgba(244,63,94,0.4), rgba(139,92,246,0.4), transparent)',
+            background:
+              'linear-gradient(90deg, transparent, rgba(244,63,94,0.4), rgba(139,92,246,0.4), transparent)',
             backgroundSize: '200% 100%',
           }}
           animate={{ backgroundPosition: ['200% 0', '-200% 0'] }}
           transition={{ duration: 3, repeat: Infinity, ease: 'linear' }}
         />
-        <div className="absolute inset-[1px] rounded-2xl bg-background/80 pointer-events-none" />
+        <div className="bg-background/80 pointer-events-none absolute inset-px rounded-2xl" />
 
-        <div className="relative flex items-start gap-4 z-10">
+        <div className="relative z-10 flex items-start gap-4">
           <div
-            className="w-12 h-12 rounded-xl flex items-center justify-center shrink-0"
+            className="flex size-12 shrink-0 items-center justify-center rounded-xl"
             style={{
               background: 'rgba(244,63,94,0.15)',
               boxShadow: '0 0 20px rgba(244,63,94,0.3)',
             }}
           >
-            <Zap className="w-6 h-6 text-warning" style={{ filter: 'drop-shadow(0 0 8px rgba(244,63,94,0.8))' }} />
+            <Zap
+              className="size-6 text-warning"
+              style={{ filter: 'drop-shadow(0 0 8px rgba(244,63,94,0.8))' }}
+            />
           </div>
           <div>
-            <p className="text-sm text-text-tertiary mb-1">
+            <p className="mb-1 text-sm text-text-tertiary">
               距离下一个熔断点（{nextCheckpoint?.grade} · {nextCheckpoint?.name}）
             </p>
-            <p className="text-2xl font-bold font-display">
+            <p className="font-display text-2xl font-bold">
               还有{' '}
               <motion.span
-                className="inline-block text-transparent bg-clip-text font-black"
+                className="inline-block bg-clip-text font-black text-transparent"
                 style={{
                   backgroundImage: 'linear-gradient(90deg, #f43f5e, #fbbf24, #f43f5e)',
                   backgroundSize: '200% 100%',
@@ -267,7 +411,7 @@ export default function PlanRoadmap({
         </div>
         <button
           onClick={onShowDiagnosis}
-          className="relative z-10 px-5 py-2.5 rounded-lg font-medium transition-all bg-primary/10 text-primary border border-primary/30 hover:bg-primary/20 hover:border-primary/50 hover:shadow-[0_0_30px_rgba(244,63,94,0.3)]"
+          className="bg-primary/10 border-primary/30 hover:bg-primary/20 hover:border-primary/50 relative z-10 rounded-lg border px-5 py-2.5 font-medium text-primary transition-all hover:shadow-[0_0_30px_rgba(244,63,94,0.3)]"
         >
           查看诊断
         </button>
@@ -279,16 +423,16 @@ export default function PlanRoadmap({
           initial={{ opacity: 0, scale: 0.98 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.6, delay: 0.1 }}
-          className="rounded-3xl bg-surface-elevated p-6 border border-border-subtle relative overflow-hidden"
+          className="relative overflow-hidden rounded-3xl border border-border-subtle bg-surface-elevated p-6"
           style={{
             transform: `rotateX(${tilt.rotateX}deg) rotateY(${tilt.rotateY}deg)`,
             transformStyle: 'preserve-3d',
             transition: 'transform 0.15s ease-out',
           }}
         >
-          <div className="flex items-center justify-between mb-6">
+          <div className="mb-6 flex items-center justify-between">
             <div>
-              <h2 className="text-xl font-bold font-display">小学全景看板</h2>
+              <h2 className="font-display text-xl font-bold">小学全景看板</h2>
               <p className="text-sm text-text-tertiary">2025-2030 · 三条路线的熔断点与关键节点</p>
               <div className="mt-2 flex items-center gap-2">
                 <span className="text-xs text-text-muted">当前执行路线：</span>
@@ -297,7 +441,7 @@ export default function PlanRoadmap({
                   if (!route) return null;
                   return (
                     <span
-                      className="px-2 py-0.5 rounded-full text-xs font-bold"
+                      className="rounded-full px-2 py-0.5 text-xs font-bold"
                       style={{
                         color: route.color,
                         backgroundColor: `${route.color}20`,
@@ -319,14 +463,19 @@ export default function PlanRoadmap({
                     onMouseEnter={() => setHoveredRoute(route.id)}
                     onMouseLeave={() => setHoveredRoute(null)}
                     onClick={() => setActiveRoute(route.id)}
-                    className={`flex items-center gap-2 px-2 py-1 rounded-lg transition-colors ${
-                      isActive ? 'text-text-primary bg-surface-hover' : 'text-text-tertiary hover:text-text-primary hover:bg-surface-hover'
+                    className={`flex items-center gap-2 rounded-lg px-2 py-1 transition-colors ${
+                      isActive
+                        ? 'bg-surface-hover text-text-primary'
+                        : 'text-text-tertiary hover:bg-surface-hover hover:text-text-primary'
                     }`}
                     aria-pressed={isActive}
                   >
                     <span
-                      className="w-3 h-3 rounded-full"
-                      style={{ backgroundColor: route.color, boxShadow: `0 0 10px ${route.glowColor}` }}
+                      className="size-3 rounded-full"
+                      style={{
+                        backgroundColor: route.color,
+                        boxShadow: `0 0 10px ${route.glowColor}`,
+                      }}
                     />
                     {route.name}
                   </button>
@@ -339,7 +488,7 @@ export default function PlanRoadmap({
           <div className="relative w-full overflow-x-auto">
             <svg
               viewBox="0 0 1100 460"
-              className="w-full min-w-[1000px] h-auto"
+              className="h-auto w-full min-w-[1000px]"
               preserveAspectRatio="xMidYMid meet"
               onMouseMove={(e) => {
                 const rect = e.currentTarget.getBoundingClientRect();
@@ -396,13 +545,7 @@ export default function PlanRoadmap({
                       <stop offset="100%" stopColor="#f43f5e" stopOpacity="0" />
                     </radialGradient>
                   </defs>
-                  <ellipse
-                    cx={300}
-                    cy={150}
-                    rx={250}
-                    ry={180}
-                    fill="url(#ambientGlow1)"
-                  >
+                  <ellipse cx={300} cy={150} rx={250} ry={180} fill="url(#ambientGlow1)">
                     <animate
                       attributeName="cx"
                       values="300;350;300"
@@ -416,13 +559,7 @@ export default function PlanRoadmap({
                       repeatCount="indefinite"
                     />
                   </ellipse>
-                  <ellipse
-                    cx={700}
-                    cy={280}
-                    rx={200}
-                    ry={150}
-                    fill="url(#ambientGlow2)"
-                  >
+                  <ellipse cx={700} cy={280} rx={200} ry={150} fill="url(#ambientGlow2)">
                     <animate
                       attributeName="cx"
                       values="700;650;700"
@@ -456,26 +593,19 @@ export default function PlanRoadmap({
                     transition={{ type: 'spring', stiffness: 150, damping: 30 }}
                     style={{ pointerEvents: 'none' }}
                   >
-                    <ellipse
-                      cx={0}
-                      cy={0}
-                      rx={180}
-                      ry={120}
-                      fill="url(#cursorGlow)"
-                    />
+                    <ellipse cx={0} cy={0} rx={180} ry={120} fill="url(#cursorGlow)" />
                   </motion.g>
 
                   {particles.map((p) => (
                     <motion.circle
                       key={p.id}
                       cx={p.x ?? 0}
-                      cy={p.y ?? 0}
                       r={p.size ?? 1}
                       fill="white"
-                      initial={{ opacity: 0.1 }}
+                      initial={{ opacity: 0.1, cy: p.y ?? 0 }}
                       animate={{
                         opacity: [0.1, 0.6, 0.1],
-                        cy: [p.y, p.y - 10, p.y],
+                        cy: [p.y ?? 0, (p.y ?? 0) - 10, p.y ?? 0],
                       }}
                       transition={{
                         duration: p.duration,
@@ -547,7 +677,11 @@ export default function PlanRoadmap({
               {/* Route outcome labels */}
               {routes.map((route) => {
                 const outcome =
-                  route.id === 'sg' ? { label: '冲', prob: 35, name: '三公学校' } : route.id === 'dual' ? { label: '摇', prob: 40, name: '民办摇号' } : { label: '保', prob: 92, name: '公办直升' };
+                  route.id === 'sg'
+                    ? { label: '冲', prob: 35, name: '三公学校' }
+                    : route.id === 'dual'
+                      ? { label: '摇', prob: 40, name: '民办摇号' }
+                      : { label: '保', prob: 92, name: '公办直升' };
                 const isDimmed = effectiveRoute && effectiveRoute !== route.id;
                 const isActive = activeRoute === route.id;
                 return (
@@ -566,7 +700,7 @@ export default function PlanRoadmap({
                     <foreignObject x={950} y={route.y - 22} width="130" height="44">
                       <div
                         onClick={() => setActiveRoute(route.id)}
-                        className="h-full flex items-center rounded-full px-1 py-1 pr-3 gap-2 cursor-pointer transition-all"
+                        className="flex h-full cursor-pointer items-center gap-2 rounded-full p-1 pr-3 transition-all"
                         style={{
                           backgroundColor: isActive ? `${route.color}22` : `${route.color}12`,
                           border: `1px solid ${isActive ? route.color : `${route.color}35`}`,
@@ -578,10 +712,10 @@ export default function PlanRoadmap({
                         }}
                       >
                         <span
-                          className="px-2 py-0.5 rounded-full text-xs font-bold"
+                          className="rounded-full px-2 py-0.5 text-xs font-bold"
                           style={{
                             backgroundColor: route.color,
-                            color: '#0f172a',
+                            color: 'var(--text-inverse)',
                           }}
                         >
                           {outcome.label}
@@ -594,7 +728,7 @@ export default function PlanRoadmap({
                         </div>
                         {isActive && (
                           <span
-                            className="ml-auto px-1.5 py-0.5 rounded text-[9px] font-bold"
+                            className="ml-auto rounded px-1.5 py-0.5 text-[9px] font-bold"
                             style={{ color: route.color, backgroundColor: `${route.color}25` }}
                           >
                             主
@@ -612,7 +746,8 @@ export default function PlanRoadmap({
                   const config = checkpointConfig[checkpoint.type];
                   const status = statusConfig[checkpoint.status];
                   const cx = 80 + (checkpoint.x / 100) * 840;
-                  const cy = checkpoint.type === 'current' && route.id !== 'dual' ? route.y - 25 : route.y;
+                  const cy =
+                    checkpoint.type === 'current' && route.id !== 'dual' ? route.y - 25 : route.y;
                   const isDimmed = effectiveRoute && effectiveRoute !== route.id;
 
                   return (
@@ -773,9 +908,21 @@ export default function PlanRoadmap({
               ))}
 
               {/* Fallback connection lines */}
-              <g opacity={hoveredRoute && hoveredRoute !== 'sg' && hoveredRoute !== 'dual' ? 0.2 : 0.45}>
+              <g
+                opacity={
+                  hoveredRoute && hoveredRoute !== 'sg' && hoveredRoute !== 'dual' ? 0.2 : 0.45
+                }
+              >
                 <defs>
-                  <marker id="fallback-arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto" markerUnits="strokeWidth">
+                  <marker
+                    id="fallback-arrow"
+                    markerWidth="8"
+                    markerHeight="8"
+                    refX="6"
+                    refY="3"
+                    orient="auto"
+                    markerUnits="strokeWidth"
+                  >
                     <path d="M0,0 L0,6 L7,3 z" fill="#94a3b8" opacity="0.7" />
                   </marker>
                 </defs>
@@ -840,7 +987,13 @@ export default function PlanRoadmap({
                 return (
                   <g key={year.year}>
                     {isCurrent && (
-                      <circle cx={x} cy={400} r={24} fill="rgba(244,63,94,0.1)" style={{ filter: 'drop-shadow(0 0 16px rgba(244,63,94,0.4))' }} />
+                      <circle
+                        cx={x}
+                        cy={400}
+                        r={24}
+                        fill="rgba(244,63,94,0.1)"
+                        style={{ filter: 'drop-shadow(0 0 16px rgba(244,63,94,0.4))' }}
+                      />
                     )}
                     <text
                       x={x}
@@ -849,11 +1002,21 @@ export default function PlanRoadmap({
                       fontSize="12"
                       fontWeight={isCurrent ? '700' : '400'}
                       textAnchor="middle"
-                      style={isCurrent ? { filter: 'drop-shadow(0 0 10px rgba(244,63,94,0.6))' } : undefined}
+                      style={
+                        isCurrent
+                          ? { filter: 'drop-shadow(0 0 10px rgba(244,63,94,0.6))' }
+                          : undefined
+                      }
                     >
                       {year.year}
                     </text>
-                    <text x={x} y={410} fill={isCurrent ? '#fda4af' : '#64748b'} fontSize="11" textAnchor="middle">
+                    <text
+                      x={x}
+                      y={410}
+                      fill={isCurrent ? '#fda4af' : '#64748b'}
+                      fontSize="11"
+                      textAnchor="middle"
+                    >
                       {year.grade}
                     </text>
                   </g>
@@ -867,21 +1030,21 @@ export default function PlanRoadmap({
             <motion.div
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: 'auto' }}
-              className="mt-6 p-5 rounded-2xl bg-surface border border-border-subtle"
+              className="mt-6 rounded-2xl border border-border-subtle bg-surface p-5"
             >
               <div className="flex items-start justify-between">
                 <div>
-                  <div className="flex items-center gap-2 mb-2">
+                  <div className="mb-2 flex items-center gap-2">
                     {(() => {
                       const config = checkpointConfig[selectedCheckpoint.type];
-                      return <config.icon className="w-5 h-5" style={{ color: config.color }} />;
+                      return <config.icon className="size-5" style={{ color: config.color }} />;
                     })()}
-                    <h3 className="text-lg font-bold font-display">{selectedCheckpoint.name}</h3>
+                    <h3 className="font-display text-lg font-bold">{selectedCheckpoint.name}</h3>
                     {(() => {
                       const status = statusConfig[selectedCheckpoint.status];
                       return (
                         <span
-                          className="px-2.5 py-0.5 rounded-full text-xs font-medium"
+                          className="rounded-full px-2.5 py-0.5 text-xs font-medium"
                           style={{ color: status.color, backgroundColor: status.bg }}
                         >
                           {status.label}
@@ -889,7 +1052,7 @@ export default function PlanRoadmap({
                       );
                     })()}
                   </div>
-                  <p className="text-sm text-text-tertiary mb-2">
+                  <p className="mb-2 text-sm text-text-tertiary">
                     {selectedCheckpoint.grade}
                     {selectedCheckpoint.requirement && ` · ${selectedCheckpoint.requirement}`}
                   </p>
@@ -897,23 +1060,23 @@ export default function PlanRoadmap({
                     {selectedCheckpoint.type === 'hard'
                       ? '硬熔断点：未达标建议切换主路线到备选方案，系统会提醒家长评估。'
                       : selectedCheckpoint.type === 'soft'
-                      ? '软检查点：未达标会发出预警，建议加强准备，暂不需要切换路线。'
-                      : selectedCheckpoint.type === 'current'
-                      ? '当前所处位置，可在此录入最新进度数据。'
-                      : '关键事件节点，需要提前规划和准备相关材料。'}
+                        ? '软检查点：未达标会发出预警，建议加强准备，暂不需要切换路线。'
+                        : selectedCheckpoint.type === 'current'
+                          ? '当前所处位置，可在此录入最新进度数据。'
+                          : '关键事件节点，需要提前规划和准备相关材料。'}
                   </p>
                 </div>
                 <div className="flex items-center gap-2">
                   <button
                     disabled
                     title="进度录入功能即将上线"
-                    className="px-4 py-2 rounded-lg bg-primary/10 text-primary text-sm font-medium opacity-60 cursor-not-allowed"
+                    className="bg-primary/10 cursor-not-allowed rounded-lg px-4 py-2 text-sm font-medium text-primary opacity-60"
                   >
                     录入进度（即将上线）
                   </button>
                   <button
                     onClick={() => setSelectedCheckpoint(null)}
-                    className="px-4 py-2 rounded-lg text-text-muted hover:text-text-primary text-sm"
+                    className="rounded-lg px-4 py-2 text-sm text-text-muted hover:text-text-primary"
                   >
                     关闭
                   </button>
@@ -929,24 +1092,24 @@ export default function PlanRoadmap({
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.4 }}
-        className="grid grid-cols-1 sm:grid-cols-3 gap-3"
+        className="grid grid-cols-1 gap-3 sm:grid-cols-3"
       >
         {volunteers.map((volunteer) => (
           <div
             key={volunteer.id}
-            className="rounded-xl bg-surface-elevated p-4 border border-border-subtle hover:border-border-subtle transition-all group"
+            className="group rounded-xl border border-border-subtle bg-surface-elevated p-4 transition-all hover:border-border-subtle"
           >
-            <div className="flex items-center justify-between mb-3">
+            <div className="mb-3 flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <span
-                  className="px-2 py-0.5 rounded-full text-xs font-bold"
-                  style={{ backgroundColor: volunteer.color, color: '#0f172a' }}
+                  className="rounded-full px-2 py-0.5 text-xs font-bold"
+                  style={{ backgroundColor: volunteer.color, color: 'var(--text-inverse)' }}
                 >
                   {volunteer.type.split('（')[1]?.replace('）', '') || volunteer.type}
                 </span>
-                <h4 className="font-bold font-display text-text-primary">{volunteer.name}</h4>
+                <h4 className="font-display font-bold text-text-primary">{volunteer.name}</h4>
               </div>
-              <span className="text-lg font-bold font-display" style={{ color: volunteer.color }}>
+              <span className="font-display text-lg font-bold" style={{ color: volunteer.color }}>
                 {volunteer.probability}%
               </span>
             </div>
@@ -954,7 +1117,7 @@ export default function PlanRoadmap({
               {volunteer.requirements.map((req) => (
                 <span
                   key={req}
-                  className="px-2 py-1 rounded-lg bg-surface-hover text-[11px] text-text-tertiary border border-border-subtle"
+                  className="rounded-lg border border-border-subtle bg-surface-hover px-2 py-1 text-[11px] text-text-tertiary"
                 >
                   {req}
                 </span>
@@ -969,20 +1132,22 @@ export default function PlanRoadmap({
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.5 }}
-        className="flex items-center justify-between p-4 rounded-2xl bg-surface-elevated border border-border-subtle"
+        className="flex items-center justify-between rounded-2xl border border-border-subtle bg-surface-elevated p-4"
       >
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-surface-hover flex items-center justify-center">
-            <Plus className="w-5 h-5 text-text-tertiary" />
+          <div className="flex size-10 items-center justify-center rounded-xl bg-surface-hover">
+            <Plus className="size-5 text-text-tertiary" />
           </div>
           <div>
             <p className="text-sm font-medium text-text-primary">自定义熔断点</p>
-            <p className="text-xs text-text-muted">系统已内置默认节点，你也可以添加、修改或删除自己的检查点</p>
+            <p className="text-xs text-text-muted">
+              系统已内置默认节点，你也可以添加、修改或删除自己的检查点
+            </p>
           </div>
         </div>
         <button
           onClick={onManageNodes}
-          className="px-4 py-2 rounded-lg bg-surface-hover text-text-secondary text-sm hover:bg-surface-hover transition-all"
+          className="rounded-lg bg-surface-hover px-4 py-2 text-sm text-text-secondary transition-all hover:bg-surface-hover"
         >
           管理节点
         </button>

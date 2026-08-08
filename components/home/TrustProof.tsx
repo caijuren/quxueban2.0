@@ -23,28 +23,24 @@ const testimonials = [
 
 export default function TrustProof() {
   return (
-    <section className="py-14 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-6xl mx-auto">
+    <section className="px-4 py-14 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-6xl">
         <MotionSection direction="up" duration={0.6} className="mb-12">
-          <span className="text-[11px] font-mono text-primary uppercase tracking-widest mb-3 block">
+          <span className="mb-3 block font-mono text-[11px] uppercase tracking-widest text-primary">
             Trust
           </span>
-          <h2 className="text-3xl sm:text-4xl font-bold font-display leading-tight">
+          <h2 className="font-display text-3xl font-bold leading-tight sm:text-4xl">
             已有家长把焦虑
             <br />
             <span className="text-text-muted">变成行动力</span>
           </h2>
         </MotionSection>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-8">
+        <div className="mb-8 grid grid-cols-1 gap-4 lg:grid-cols-3">
           {stats.map((stat, index) => (
-            <MotionSection
-              key={stat.label}
-              direction="up"
-              delay={index * 0.08}
-            >
-              <CommandCard className="p-5 h-full">
-                <div className="text-3xl sm:text-4xl font-bold font-display text-text-primary mb-1 tabular-nums">
+            <MotionSection key={stat.label} direction="up" delay={index * 0.08}>
+              <CommandCard className="h-full p-5">
+                <div className="mb-1 font-display text-3xl font-bold tabular-nums text-text-primary sm:text-4xl">
                   {stat.value}
                 </div>
                 <div className="text-xs text-text-muted">{stat.label}</div>
@@ -53,19 +49,18 @@ export default function TrustProof() {
           ))}
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           {testimonials.map((item, index) => (
-            <MotionSection
-              key={index}
-              direction="up"
-              delay={index * 0.1}
-            >
-              <CommandCard className="p-5 h-full relative">
-                <Quote className="absolute top-5 right-5 w-5 h-5 text-primary/20" aria-hidden="true" />
-                <p className="text-sm text-text-secondary leading-relaxed mb-4 pr-6">
+            <MotionSection key={index} direction="up" delay={index * 0.1}>
+              <CommandCard className="relative h-full p-5">
+                <Quote
+                  className="text-primary/20 absolute right-5 top-5 size-5"
+                  aria-hidden="true"
+                />
+                <p className="mb-4 pr-6 text-sm leading-relaxed text-text-secondary">
                   &ldquo;{item.content}&rdquo;
                 </p>
-                <p className="text-[11px] text-text-muted font-mono">{item.author}</p>
+                <p className="font-mono text-[11px] text-text-muted">{item.author}</p>
               </CommandCard>
             </MotionSection>
           ))}

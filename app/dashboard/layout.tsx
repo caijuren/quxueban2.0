@@ -6,11 +6,7 @@ import Topbar from '@/components/dashboard/Topbar';
 import MobileBottomNav from '@/components/dashboard/MobileBottomNav';
 import { ChildrenProvider } from '@/components/dashboard/ChildrenContext';
 
-export default function DashboardLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
@@ -29,29 +25,26 @@ export default function DashboardLayout({
 
   return (
     <ChildrenProvider>
-      <div className="min-h-screen bg-background relative overflow-x-hidden">
+      <div className="relative min-h-screen overflow-x-hidden bg-background">
         {/* Command center ambient background */}
-        <div className="fixed inset-0 pointer-events-none animated-bg grid-pattern opacity-60" />
+        <div className="animated-bg grid-pattern pointer-events-none fixed inset-0 opacity-60" />
 
         {/* Subtle top horizon line */}
-        <div className="fixed top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-border-strong to-transparent pointer-events-none z-50" />
+        <div className="pointer-events-none fixed inset-x-0 top-0 z-50 h-px bg-gradient-to-r from-transparent via-border-strong to-transparent" />
 
-        <Sidebar
-          mobileMenuOpen={mobileMenuOpen}
-          onLinkClick={() => setMobileMenuOpen(false)}
-        />
+        <Sidebar mobileMenuOpen={mobileMenuOpen} onLinkClick={() => setMobileMenuOpen(false)} />
         <Topbar onMenuClick={() => setMobileMenuOpen(!mobileMenuOpen)} />
 
         {/* Mobile sidebar overlay */}
         {mobileMenuOpen && (
           <div
-            className="fixed inset-0 bg-black/70 backdrop-blur-sm z-40 lg:hidden"
+            className="fixed inset-0 z-40 bg-black/70 backdrop-blur-sm lg:hidden"
             onClick={() => setMobileMenuOpen(false)}
           />
         )}
 
-        <main className="pt-16 lg:pl-56 min-h-screen relative z-0">
-          <div className="p-4 sm:p-6 lg:p-8 pb-28 lg:pb-8">{children}</div>
+        <main className="relative z-0 min-h-screen pt-16 lg:pl-56">
+          <div className="p-4 pb-28 sm:p-6 lg:p-8">{children}</div>
         </main>
 
         <MobileBottomNav />

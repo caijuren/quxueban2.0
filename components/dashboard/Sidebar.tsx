@@ -21,9 +21,7 @@ import { usePathname } from 'next/navigation';
 const menuGroups = [
   {
     title: '概览',
-    items: [
-      { name: '总览', href: '/dashboard', icon: LayoutDashboard },
-    ],
+    items: [{ name: '总览', href: '/dashboard', icon: LayoutDashboard }],
   },
   {
     title: '任务',
@@ -65,60 +63,67 @@ export default function Sidebar({ mobileMenuOpen, onLinkClick }: SidebarProps) {
 
   return (
     <aside
-      className={`fixed left-0 top-0 h-full w-56 bg-surface-elevated/95 backdrop-blur-md border-r border-border-default z-50 flex flex-col transition-transform duration-300 ${
-        mobileMenuOpen ? 'translate-x-0 lg:translate-x-0' : '-translate-x-full lg:translate-x-0 lg:flex hidden'
+      className={`bg-surface-elevated/95 fixed left-0 top-0 z-50 flex h-full w-56 flex-col border-r border-border-default backdrop-blur-md transition-transform duration-300 ${
+        mobileMenuOpen
+          ? 'translate-x-0 lg:translate-x-0'
+          : 'hidden -translate-x-full lg:flex lg:translate-x-0'
       }`}
     >
       {/* Logo */}
-      <div className="p-5 border-b border-border-default">
+      <div className="border-b border-border-default p-5">
         <div className="flex items-center justify-between">
           <Link href="/" className="flex items-center gap-3" onClick={onLinkClick}>
-            <div className="w-10 h-10 rounded-module bg-surface border border-border-default flex items-center justify-center">
-              <Sparkles className="w-5 h-5 text-primary" />
+            <div className="flex size-10 items-center justify-center rounded-module border border-border-default bg-surface">
+              <Sparkles className="size-5 text-primary" />
             </div>
             <div>
-              <span className="text-xl font-black font-display text-text-primary tracking-tight">趣学伴</span>
-              <p className="text-2xs text-text-muted leading-tight tracking-wide">升学规划中心</p>
+              <span className="font-display text-xl font-black tracking-tight text-text-primary">
+                趣学伴
+              </span>
+              <p className="text-2xs leading-tight tracking-wide text-text-muted">升学规划中心</p>
             </div>
           </Link>
           <button
             onClick={onLinkClick}
-            className="lg:hidden w-9 h-9 rounded-module bg-surface flex items-center justify-center text-text-secondary hover:text-text-primary hover:bg-surface-highlight transition-colors"
+            className="flex size-9 items-center justify-center rounded-module bg-surface text-text-secondary transition-colors hover:bg-surface-highlight hover:text-text-primary lg:hidden"
             aria-label="关闭菜单"
           >
-            <X className="w-5 h-5" />
+            <X className="size-5" />
           </button>
         </div>
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 p-3 space-y-5 overflow-y-auto">
+      <nav className="flex-1 space-y-5 overflow-y-auto p-3">
         {menuGroups.map((group) => (
           <div key={group.title}>
-            <p className="px-3 mb-2 text-2xs font-semibold text-text-muted uppercase tracking-wider">
+            <p className="mb-2 px-3 text-2xs font-semibold uppercase tracking-wider text-text-muted">
               {group.title}
             </p>
             <div className="space-y-0.5">
               {group.items.map((item) => {
-                const isActive = item.href === '/dashboard'
-                  ? pathname === '/dashboard'
-                  : pathname === item.href || pathname.startsWith(`${item.href}/`);
+                const isActive =
+                  item.href === '/dashboard'
+                    ? pathname === '/dashboard'
+                    : pathname === item.href || pathname.startsWith(`${item.href}/`);
                 return (
                   <Link
                     key={item.name}
                     href={item.href}
                     onClick={onLinkClick}
                     aria-current={isActive ? 'page' : undefined}
-                    className={`group relative flex items-center gap-3 px-3 py-2.5 rounded-module transition-all duration-200 ${
+                    className={`group relative flex items-center gap-3 rounded-module px-3 py-2.5 transition-all duration-200 ${
                       isActive
                         ? 'bg-primary/[0.08] text-text-primary'
-                        : 'text-text-tertiary hover:text-text-primary hover:bg-surface-elevated'
+                        : 'text-text-tertiary hover:bg-surface-elevated hover:text-text-primary'
                     }`}
                   >
                     {isActive && (
-                      <div className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-5 rounded-r-full bg-primary" />
+                      <div className="absolute left-0 top-1/2 h-5 w-[3px] -translate-y-1/2 rounded-r-full bg-primary" />
                     )}
-                    <item.icon className={`w-5 h-5 transition-colors ${isActive ? 'text-primary' : 'text-text-muted group-hover:text-text-secondary'}`} />
+                    <item.icon
+                      className={`size-5 transition-colors ${isActive ? 'text-primary' : 'text-text-muted group-hover:text-text-secondary'}`}
+                    />
                     <span className="text-sm font-medium">{item.name}</span>
                   </Link>
                 );
@@ -129,10 +134,8 @@ export default function Sidebar({ mobileMenuOpen, onLinkClick }: SidebarProps) {
       </nav>
 
       {/* Version */}
-      <div className="p-4 border-t border-border-default">
-        <p className="px-3 text-2xs text-text-muted tabular-nums">
-          趣学伴 v{packageInfo.version}
-        </p>
+      <div className="border-t border-border-default p-4">
+        <p className="px-3 text-2xs tabular-nums text-text-muted">趣学伴 v{packageInfo.version}</p>
       </div>
     </aside>
   );

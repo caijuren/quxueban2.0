@@ -54,10 +54,7 @@ export function gradeToStage(
   return '高考';
 }
 
-export function gradeLabel(
-  grade: number,
-  educationSystem: EducationSystem = 'six-three'
-): string {
+export function gradeLabel(grade: number, educationSystem: EducationSystem = 'six-three'): string {
   const primaryEnd = educationSystem === 'five-four' ? 5 : 6;
   if (grade <= primaryEnd) return `小学${grade}年级`;
   if (grade <= primaryEnd + 3) return `初中${grade}年级`;

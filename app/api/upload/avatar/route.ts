@@ -56,10 +56,7 @@ export async function POST(req: Request) {
     }
 
     if (file.size > MAX_SIZE) {
-      return NextResponse.json(
-        { error: '图片大小不能超过 2MB' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: '图片大小不能超过 2MB' }, { status: 400 });
     }
 
     const ext = MIME_TO_EXT[mimeType];
@@ -76,7 +73,9 @@ export async function POST(req: Request) {
 
     const avatarUrl = `/api/uploads/avatars/${filename}`;
 
-    console.log(`[avatar upload] success: user=${session.user.id}, url=${avatarUrl}, size=${file.size}, type=${mimeType}`);
+    console.log(
+      `[avatar upload] success: user=${session.user.id}, url=${avatarUrl}, size=${file.size}, type=${mimeType}`
+    );
 
     return NextResponse.json({ avatarUrl });
   } catch (error) {

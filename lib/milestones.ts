@@ -92,7 +92,10 @@ export const defaultMilestoneTemplates: MilestoneTemplate[] = [
   },
 ];
 
-export function getMilestonesForChild(routeId: string | null | undefined, grade: number): MilestoneTemplate[] {
+export function getMilestonesForChild(
+  routeId: string | null | undefined,
+  grade: number
+): MilestoneTemplate[] {
   return defaultMilestoneTemplates.filter((t) => {
     if (t.targetGrade !== grade) return false;
     if (!t.routeIds || t.routeIds.length === 0) return true;

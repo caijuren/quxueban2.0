@@ -15,16 +15,16 @@ const footerLinks = [
 
 export default function Footer() {
   return (
-    <footer className="py-10 px-4 sm:px-6 lg:px-8 border-t border-border-subtle">
-      <div className="max-w-7xl mx-auto">
-        <div className="flex flex-col md:flex-row items-center justify-between gap-5">
-          <Link href="/" className="flex items-center gap-2 group" aria-label="趣学伴首页">
-            <div className="w-7 h-7 rounded-lg bg-primary flex items-center justify-center">
-              <Brain className="w-3.5 h-3.5 text-text-primary" aria-hidden="true" />
+    <footer className="border-t border-border-subtle px-4 py-10 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl">
+        <div className="flex flex-col items-center justify-between gap-5 md:flex-row">
+          <Link href="/" className="group flex items-center gap-2" aria-label="趣学伴首页">
+            <div className="flex size-7 items-center justify-center rounded-lg bg-primary">
+              <Brain className="size-3.5 text-text-primary" aria-hidden="true" />
             </div>
-            <span className="text-base font-bold font-display text-text-primary">趣学伴</span>
+            <span className="font-display text-base font-bold text-text-primary">趣学伴</span>
           </Link>
-          <p className="text-xs text-text-muted text-center">
+          <p className="text-center text-xs text-text-muted">
             上海升学战略执行系统 · 为家长把复杂政策变成清晰计划
           </p>
           <nav aria-label="页脚导航">
@@ -33,7 +33,7 @@ export default function Footer() {
                 <Link
                   key={link.name}
                   href={link.href}
-                  className="hover:text-primary transition-colors"
+                  className="transition-colors hover:text-primary"
                 >
                   {link.name}
                 </Link>

@@ -84,7 +84,9 @@ export async function POST(req: Request) {
 
     const url = `/api/uploads/task-evidence/${filename}`;
 
-    console.log(`[task-evidence upload] success: user=${session.user.id}, task=${taskId}, url=${url}`);
+    console.log(
+      `[task-evidence upload] success: user=${session.user.id}, task=${taskId}, url=${url}`
+    );
 
     return NextResponse.json({ url });
   } catch (error) {

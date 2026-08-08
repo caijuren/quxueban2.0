@@ -25,33 +25,33 @@ export default function Navbar() {
       initial={{ y: -20, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.6 }}
-      className="fixed top-0 left-0 right-0 z-50 bg-surface-elevated/80 backdrop-blur-xl border-b border-border-subtle"
+      className="bg-surface-elevated/80 fixed inset-x-0 top-0 z-50 border-b border-border-subtle backdrop-blur-xl"
       aria-label="主导航"
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-14">
-          <Link href="/" className="flex items-center gap-2 group" aria-label="趣学伴首页">
-            <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
-              <Brain className="w-4 h-4 text-text-primary" aria-hidden="true" />
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="flex h-14 items-center justify-between">
+          <Link href="/" className="group flex items-center gap-2" aria-label="趣学伴首页">
+            <div className="flex size-8 items-center justify-center rounded-lg bg-primary">
+              <Brain className="size-4 text-text-primary" aria-hidden="true" />
             </div>
-            <span className="text-lg font-bold font-display tracking-tight text-text-primary">
+            <span className="font-display text-lg font-bold tracking-tight text-text-primary">
               趣学伴
             </span>
           </Link>
 
-          <div className="hidden md:flex items-center gap-1">
+          <div className="hidden items-center gap-1 md:flex">
             {navItems.map((item) => {
               const active = isActive(item.href);
               return (
                 <Link key={item.name} href={item.href} aria-current={active ? 'page' : undefined}>
                   <span
-                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-all duration-200 ${
+                    className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm font-medium transition-all duration-200 ${
                       active
-                        ? 'text-primary bg-primary/10'
-                        : 'text-text-tertiary hover:text-text-primary hover:bg-surface-hover'
+                        ? 'bg-primary/10 text-primary'
+                        : 'text-text-tertiary hover:bg-surface-hover hover:text-text-primary'
                     }`}
                   >
-                    <item.icon className="w-3.5 h-3.5" aria-hidden="true" />
+                    <item.icon className="size-3.5" aria-hidden="true" />
                     {item.name}
                   </span>
                 </Link>
@@ -61,18 +61,18 @@ export default function Navbar() {
 
           <div className="flex items-center gap-2">
             <Link href="/login" className="hidden sm:block">
-              <span className="px-4 py-1.5 rounded-full bg-primary text-white text-sm font-semibold hover:bg-primary/90 transition-all duration-200">
+              <span className="rounded-full bg-primary px-4 py-1.5 text-sm font-semibold text-inverse transition-all duration-200 hover:bg-primary/90">
                 登录 / 注册
               </span>
             </Link>
             <button
               onClick={() => setMobileOpen((prev) => !prev)}
-              className="md:hidden p-2 rounded-lg text-text-tertiary hover:text-text-primary hover:bg-surface-hover transition-colors focus-ring"
+              className="focus-ring rounded-lg p-2 text-text-tertiary transition-colors hover:bg-surface-hover hover:text-text-primary md:hidden"
               aria-expanded={mobileOpen}
               aria-controls="mobile-menu"
               aria-label={mobileOpen ? '关闭菜单' : '打开菜单'}
             >
-              {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+              {mobileOpen ? <X className="size-5" /> : <Menu className="size-5" />}
             </button>
           </div>
         </div>
@@ -86,9 +86,9 @@ export default function Navbar() {
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.2 }}
-            className="md:hidden border-t border-border-subtle bg-background/95 backdrop-blur-xl"
+            className="bg-background/95 border-t border-border-subtle backdrop-blur-xl md:hidden"
           >
-            <div className="px-4 py-3 space-y-1">
+            <div className="space-y-1 px-4 py-3">
               {navItems.map((item) => {
                 const active = isActive(item.href);
                 return (
@@ -97,22 +97,22 @@ export default function Navbar() {
                     href={item.href}
                     onClick={() => setMobileOpen(false)}
                     aria-current={active ? 'page' : undefined}
-                    className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
+                    className={`flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors ${
                       active
-                        ? 'text-primary bg-primary/10'
-                        : 'text-text-tertiary hover:text-text-primary hover:bg-surface-hover'
+                        ? 'bg-primary/10 text-primary'
+                        : 'text-text-tertiary hover:bg-surface-hover hover:text-text-primary'
                     }`}
                   >
-                    <item.icon className="w-4 h-4" aria-hidden="true" />
+                    <item.icon className="size-4" aria-hidden="true" />
                     {item.name}
                   </Link>
                 );
               })}
-              <div className="pt-2 border-t border-border-subtle mt-2">
+              <div className="mt-2 border-t border-border-subtle pt-2">
                 <Link
                   href="/login"
                   onClick={() => setMobileOpen(false)}
-                  className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-primary text-white text-sm font-semibold hover:bg-primary/90 transition-colors"
+                  className="flex items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-inverse transition-colors hover:bg-primary/90"
                 >
                   登录 / 注册
                 </Link>

@@ -2,16 +2,9 @@ import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
-import {
-  taskTemplateUpdateSchema,
-  validateBody,
-} from '@/lib/validation';
+import { taskTemplateUpdateSchema, validateBody } from '@/lib/validation';
 import { canManageChild, canViewChild } from '@/lib/family';
-import type {
-  TaskTemplate,
-  TaskCapabilityLink,
-  Capability,
-} from '@/lib/generated/prisma';
+import type { TaskTemplate, TaskCapabilityLink, Capability } from '@/lib/generated/prisma';
 
 type Params = { params: { id: string } };
 
@@ -24,14 +17,20 @@ async function authenticate() {
   return session?.user?.id ?? null;
 }
 
-async function canManageTemplate(userId: string, template: { userId: string; childId: string | null }) {
+async function canManageTemplate(
+  userId: string,
+  template: { userId: string; childId: string | null }
+) {
   if (!template.childId) return template.userId === userId;
   const child = await prisma.child.findUnique({ where: { id: template.childId } });
   if (!child) return false;
   return canManageChild(userId, child);
 }
 
-async function canViewTemplate(userId: string, template: { userId: string; childId: string | null }) {
+async function canViewTemplate(
+  userId: string,
+  template: { userId: string; childId: string | null }
+) {
   if (!template.childId) return template.userId === userId;
   const child = await prisma.child.findUnique({ where: { id: template.childId } });
   if (!child) return false;
@@ -86,7 +85,8 @@ function toPrismaUpdateData(body: ReturnType<typeof taskTemplateUpdateSchema.par
   if (body.customFrequency !== undefined) data.customFrequency = body.customFrequency;
   if (body.assessmentCriteria !== undefined) data.assessmentCriteria = body.assessmentCriteria;
   if (body.weeklySchedule !== undefined) data.weeklySchedule = body.weeklySchedule.toUpperCase();
-  if (body.customScheduleDays !== undefined) data.customScheduleDays = { set: body.customScheduleDays };
+  if (body.customScheduleDays !== undefined)
+    data.customScheduleDays = { set: body.customScheduleDays };
   if (body.isFavorite !== undefined) data.isFavorite = body.isFavorite;
 
   if (body.archive === true) {

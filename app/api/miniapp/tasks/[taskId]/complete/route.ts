@@ -5,10 +5,7 @@ import { normalizeWeeklyTask } from '@/lib/taskAlignment';
 import { taskCompletionInputSchema, validateBody } from '@/lib/validation';
 import { sendTaskCompletedReminder } from '@/lib/miniapp/subscription';
 import { getManageableChildIdsForUser } from '@/lib/family';
-import {
-  getGamificationContext,
-  checkAndAwardBadges,
-} from '@/lib/gamification';
+import { getGamificationContext, checkAndAwardBadges } from '@/lib/gamification';
 import type { NextRequest } from 'next/server';
 import type { WeeklyTaskItem, TaskCompletionRecord } from '@/lib/storage.types';
 
@@ -20,10 +17,7 @@ function getTodayStr() {
   return new Date().toISOString().split('T')[0];
 }
 
-export async function POST(
-  req: NextRequest,
-  { params }: { params: { taskId: string } }
-) {
+export async function POST(req: NextRequest, { params }: { params: { taskId: string } }) {
   const auth = await getMiniAppUser(req);
   if (!auth) return unauthorizedResponse();
 
@@ -35,7 +29,7 @@ export async function POST(
   const body = validation.data;
   const taskId = params.taskId;
 
-  const activeRole = auth.type === 'child' ? 'child' : (req.headers.get('x-active-role') || 'parent');
+  const activeRole = auth.type === 'child' ? 'child' : req.headers.get('x-active-role') || 'parent';
 
   // 查找包含该任务的周计划（家长包含自己创建及家庭可管理的孩子）
   let planWhere;
@@ -44,7 +38,10 @@ export async function POST(
   } else {
     const manageableChildIds = await getManageableChildIdsForUser(auth.userId);
     planWhere = {
-      OR: [{ userId: auth.userId }, ...(manageableChildIds.length > 0 ? [{ childId: { in: manageableChildIds } }] : [])],
+      OR: [
+        { userId: auth.userId },
+        ...(manageableChildIds.length > 0 ? [{ childId: { in: manageableChildIds } }] : []),
+      ],
     };
   }
 
@@ -131,7 +128,12 @@ export async function POST(
     },
   });
 
-  console.log('[miniapp complete] updated plan:', updated.id, 'task status:', tasks[taskIndex].status);
+  console.log(
+    '[miniapp complete] updated plan:',
+    updated.id,
+    'task status:',
+    tasks[taskIndex].status
+  );
 
   // 打卡成功后触发徽章/积分/连续打卡
   if (isDone && targetPlan.child) {

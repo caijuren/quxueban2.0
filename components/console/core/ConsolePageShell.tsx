@@ -18,8 +18,8 @@ export default function ConsolePageShell({ title, description, children }: Conso
       className="space-y-4"
     >
       <div className="px-1">
-        <h1 className="text-xl font-bold font-display text-text-primary">{title}</h1>
-        {description && <p className="text-sm text-text-muted mt-1">{description}</p>}
+        <h1 className="font-display text-xl font-bold text-text-primary">{title}</h1>
+        {description && <p className="mt-1 text-sm text-text-muted">{description}</p>}
       </div>
       {children}
     </motion.div>

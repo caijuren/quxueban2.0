@@ -1,12 +1,7 @@
 import { Child } from './children';
 
 export type TaskStatus =
-  | 'pending'
-  | 'in_progress'
-  | 'partially_done'
-  | 'done'
-  | 'skipped'
-  | 'rescheduled';
+  'pending' | 'in_progress' | 'partially_done' | 'done' | 'skipped' | 'rescheduled';
 
 export type TaskCompletionQuality = 'excellent' | 'good' | 'average' | 'needs_work';
 
@@ -20,13 +15,7 @@ export type DayOfWeek = '周一' | '周二' | '周三' | '周四' | '周五' | '
 
 export type SubjectId = 'chinese' | 'math' | 'english';
 
-export type TaskCategory =
-  | 'school'
-  | 'reading'
-  | 'sport'
-  | 'interest'
-  | 'ability'
-  | 'other';
+export type TaskCategory = 'school' | 'reading' | 'sport' | 'interest' | 'ability' | 'other';
 
 export type TaskSource = 'auto' | 'library' | 'manual';
 
@@ -126,12 +115,7 @@ export type TaskType = 'daily' | 'milestone' | 'remedial' | 'sprint' | 'diagnost
 
 export type TaskFrequency = 'once' | 'daily' | 'weekly' | 'custom';
 
-export type TaskWeeklySchedule =
-  | 'auto'
-  | 'daily'
-  | 'weekdays'
-  | 'weekends'
-  | 'custom';
+export type TaskWeeklySchedule = 'auto' | 'daily' | 'weekdays' | 'weekends' | 'custom';
 
 export interface TaskCapabilityLink {
   id: string;

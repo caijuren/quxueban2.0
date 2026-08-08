@@ -140,7 +140,12 @@ async function seedSystemTemplateCapabilityLinks(
   });
   const templateMap = new Map(createdTemplates.map((t) => [t.title, t.id]));
 
-  const links: { taskTemplateId: string; capabilityId: string; weight: number; expectedProgress: number }[] = [];
+  const links: {
+    taskTemplateId: string;
+    capabilityId: string;
+    weight: number;
+    expectedProgress: number;
+  }[] = [];
 
   for (const tpl of SYSTEM_TASK_TEMPLATES) {
     const taskTemplateId = templateMap.get(tpl.title);

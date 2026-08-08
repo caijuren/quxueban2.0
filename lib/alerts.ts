@@ -1,19 +1,11 @@
 import { Child } from './children';
-import {
-  type WeeklyPlan,
-  type TaskCategory,
-  type DayOfWeek,
-} from './storage.types';
+import { type WeeklyPlan, type TaskCategory, type DayOfWeek } from './storage.types';
 import { dayOrder, getTodayName, getPlanStats, getCurrentWeekId } from './weeklyTasks';
 import { TASK_CATEGORY_LABELS } from './taskTemplates';
 
 export type AlertLevel = 'urgent' | 'warning' | 'info';
 export type AlertType =
-  | 'today_pending'
-  | 'missed_yesterday'
-  | 'category_gap'
-  | 'low_completion'
-  | 'milestone_deadline';
+  'today_pending' | 'missed_yesterday' | 'category_gap' | 'low_completion' | 'milestone_deadline';
 
 export interface Alert {
   id: string;
@@ -49,10 +41,7 @@ function getPrevDayName(day: DayOfWeek, delta: number): DayOfWeek {
   return dayOrder[(idx - delta + 7) % 7];
 }
 
-function todayPendingAlert(
-  child: Child,
-  currentPlan: WeeklyPlan | undefined
-): Alert | null {
+function todayPendingAlert(child: Child, currentPlan: WeeklyPlan | undefined): Alert | null {
   if (!currentPlan) return null;
   const todayName = getTodayName();
   const todayTasks = currentPlan.tasks.filter((t) => t.day === todayName);
@@ -77,16 +66,11 @@ function todayPendingAlert(
   };
 }
 
-function yesterdayMissedAlert(
-  child: Child,
-  currentPlan: WeeklyPlan | undefined
-): Alert | null {
+function yesterdayMissedAlert(child: Child, currentPlan: WeeklyPlan | undefined): Alert | null {
   if (!currentPlan) return null;
   const yesterdayName = getYesterdayName(getTodayName());
   const yesterdayTasks = currentPlan.tasks.filter((t) => t.day === yesterdayName);
-  const missed = yesterdayTasks.filter(
-    (t) => t.status !== 'done' && t.status !== 'skipped'
-  );
+  const missed = yesterdayTasks.filter((t) => t.status !== 'done' && t.status !== 'skipped');
   if (missed.length === 0) return null;
 
   const categories = Array.from(new Set(missed.map((t) => t.category)))
@@ -106,15 +90,11 @@ function yesterdayMissedAlert(
   };
 }
 
-function categoryGapAlert(
-  child: Child,
-  currentPlan: WeeklyPlan | undefined
-): Alert | null {
+function categoryGapAlert(child: Child, currentPlan: WeeklyPlan | undefined): Alert | null {
   if (!currentPlan) return null;
 
   const todayName = getTodayName();
-  const tasksByDay = (day: DayOfWeek) =>
-    currentPlan.tasks.filter((t) => t.day === day);
+  const tasksByDay = (day: DayOfWeek) => currentPlan.tasks.filter((t) => t.day === day);
 
   for (const category of categoryOrder) {
     let consecutiveDays = 0;
@@ -143,10 +123,7 @@ function categoryGapAlert(
   return null;
 }
 
-function lowCompletionAlert(
-  child: Child,
-  currentPlan: WeeklyPlan | undefined
-): Alert | null {
+function lowCompletionAlert(child: Child, currentPlan: WeeklyPlan | undefined): Alert | null {
   if (!currentPlan || currentPlan.tasks.length === 0) return null;
   const stats = getPlanStats(currentPlan);
   if (stats.completionRate >= 60) return null;
@@ -169,10 +146,7 @@ interface GenerateAlertsInput {
   weeklyPlans: WeeklyPlan[];
 }
 
-export function generateAlerts({
-  children,
-  weeklyPlans,
-}: GenerateAlertsInput): Alert[] {
+export function generateAlerts({ children, weeklyPlans }: GenerateAlertsInput): Alert[] {
   const alerts: Alert[] = [];
 
   children.forEach((child) => {

@@ -71,7 +71,11 @@ export async function POST(req: NextRequest) {
     } catch (aiError) {
       console.error('AI diagnosis failed:', aiError);
       const fallback = getFallbackDiagnosis(input);
-      return NextResponse.json({ ...fallback, _fallback: true, _error: aiError instanceof Error ? aiError.message : 'AI 调用失败' });
+      return NextResponse.json({
+        ...fallback,
+        _fallback: true,
+        _error: aiError instanceof Error ? aiError.message : 'AI 调用失败',
+      });
     }
   } catch (error) {
     console.error('AI diagnosis route error:', error);

@@ -70,22 +70,20 @@ const routeColorClass = (color: string, active: boolean) => {
 
 export default function HeroV2() {
   const shouldReduceMotion = useReducedMotion();
-  const motionProps = shouldReduceMotion
-    ? { animate: { opacity: 1, y: 0, x: 0, scale: 1 } }
-    : {};
+  const motionProps = shouldReduceMotion ? { animate: { opacity: 1, y: 0, x: 0, scale: 1 } } : {};
 
   return (
     <section
-      className="relative min-h-[85vh] flex items-center overflow-hidden pt-14"
+      className="relative flex min-h-[85vh] items-center overflow-hidden pt-14"
       aria-label="首页首屏"
     >
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-1/4 right-0 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[120px]" />
-        <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-secondary/5 rounded-full blur-[100px]" />
+      <div className="pointer-events-none absolute inset-0">
+        <div className="bg-primary/5 absolute right-0 top-1/4 h-[500px] w-[500px] rounded-full blur-[120px]" />
+        <div className="bg-secondary/5 absolute bottom-0 left-0 h-[400px] w-[400px] rounded-full blur-[100px]" />
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
+      <div className="relative z-10 mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-2 lg:gap-16">
           <motion.div
             variants={shouldReduceMotion ? undefined : containerVariants}
             initial={shouldReduceMotion ? false : 'hidden'}
@@ -94,20 +92,20 @@ export default function HeroV2() {
           >
             <motion.div
               variants={shouldReduceMotion ? undefined : itemVariants}
-              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border border-border-subtle bg-surface mb-6"
+              className="mb-6 inline-flex items-center gap-2 rounded-lg border border-border-subtle bg-surface px-3 py-1.5"
             >
-              <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
-              <span className="text-[11px] font-medium tracking-wide text-text-tertiary uppercase">
+              <span className="size-1.5 animate-pulse rounded-full bg-primary" />
+              <span className="text-[11px] font-medium uppercase tracking-wide text-text-tertiary">
                 上海家长专属的升学执行系统
               </span>
             </motion.div>
 
             <motion.h1
               variants={shouldReduceMotion ? undefined : itemVariants}
-              className="text-4xl sm:text-5xl lg:text-6xl font-bold font-display leading-[1.05] tracking-tight mb-5"
+              className="mb-5 font-display text-4xl font-bold leading-[1.05] tracking-tight sm:text-5xl lg:text-6xl"
             >
               <span className="text-text-primary">趣学伴</span>
-              <span className="block text-xl sm:text-2xl lg:text-3xl font-medium text-text-muted mt-3 leading-snug">
+              <span className="mt-3 block text-xl font-medium leading-snug text-text-muted sm:text-2xl lg:text-3xl">
                 一张图，看清孩子
                 <br />
                 从小学到高考的每一步
@@ -116,7 +114,7 @@ export default function HeroV2() {
 
             <motion.p
               variants={shouldReduceMotion ? undefined : itemVariants}
-              className="text-sm sm:text-base text-text-tertiary max-w-md mb-8 leading-relaxed"
+              className="mb-8 max-w-md text-sm leading-relaxed text-text-tertiary sm:text-base"
             >
               三公、摇号、对口、自招、名额分配到校……所有路线、关键节点、执行进度，全部心中有数。
             </motion.p>
@@ -124,10 +122,10 @@ export default function HeroV2() {
             <motion.div variants={shouldReduceMotion ? undefined : itemVariants}>
               <Link
                 href="/login"
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-primary text-text-primary text-sm font-medium hover:bg-primary/90 transition-colors"
+                className="hover:bg-primary/90 inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-text-primary transition-colors"
               >
                 免费绘制升学地图
-                <ArrowRight className="w-4 h-4" />
+                <ArrowRight className="size-4" />
               </Link>
             </motion.div>
 
@@ -137,10 +135,10 @@ export default function HeroV2() {
             >
               {stats.map((stat) => (
                 <div key={stat.label}>
-                  <div className="text-xl sm:text-2xl font-bold font-display text-text-primary tabular-nums">
+                  <div className="font-display text-xl font-bold tabular-nums text-text-primary sm:text-2xl">
                     {stat.value}
                   </div>
-                  <div className="text-[11px] text-text-muted mt-0.5">{stat.label}</div>
+                  <div className="mt-0.5 text-[11px] text-text-muted">{stat.label}</div>
                 </div>
               ))}
             </motion.div>
@@ -152,24 +150,24 @@ export default function HeroV2() {
             animate="visible"
             className="relative hidden lg:block"
           >
-            <div className="relative rounded-2xl border border-border-subtle bg-surface-elevated p-5 overflow-hidden">
-              <div className="flex items-center justify-between mb-5">
+            <div className="relative overflow-hidden rounded-2xl border border-border-subtle bg-surface-elevated p-5">
+              <div className="mb-5 flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <Target className="w-4 h-4 text-primary" aria-hidden="true" />
-                  <span className="text-[11px] font-mono text-text-tertiary uppercase tracking-wider">
+                  <Target className="size-4 text-primary" aria-hidden="true" />
+                  <span className="font-mono text-[11px] uppercase tracking-wider text-text-tertiary">
                     升学规划图 · 2025-2030
                   </span>
                 </div>
                 <div className="flex items-center gap-1.5">
-                  <span className="relative flex h-2 w-2">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-40" />
-                    <span className="relative inline-flex rounded-full h-2 w-2 bg-primary" />
+                  <span className="relative flex size-2">
+                    <span className="absolute inline-flex size-full animate-ping rounded-full bg-primary opacity-40" />
+                    <span className="relative inline-flex size-2 rounded-full bg-primary" />
                   </span>
-                  <span className="text-[11px] font-mono text-primary">LIVE</span>
+                  <span className="font-mono text-[11px] text-primary">LIVE</span>
                 </div>
               </div>
 
-              <svg viewBox="0 0 900 300" className="w-full h-auto" aria-label="升学路线示意图">
+              <svg viewBox="0 0 900 300" className="h-auto w-full" aria-label="升学路线示意图">
                 <defs>
                   <pattern id="heroGrid" width="40" height="40" patternUnits="userSpaceOnUse">
                     <path
@@ -235,7 +233,9 @@ export default function HeroV2() {
                       y={route.y + 4}
                       textAnchor="end"
                       fill="currentColor"
-                      className={route.active ? routeColorClass(route.color, true) : 'text-text-muted'}
+                      className={
+                        route.active ? routeColorClass(route.color, true) : 'text-text-muted'
+                      }
                       fontSize="11"
                       fontFamily="var(--font-body)"
                     >
@@ -247,7 +247,9 @@ export default function HeroV2() {
                 {checkpoints.map((cp, index) => (
                   <motion.g
                     key={cp.label}
-                    initial={shouldReduceMotion ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0 }}
+                    initial={
+                      shouldReduceMotion ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0 }
+                    }
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ delay: 1 + index * 0.1, duration: 0.35 }}
                   >
@@ -288,7 +290,7 @@ export default function HeroV2() {
                       className={
                         cp.status === 'current'
                           ? 'text-primary'
-                          : 'fill-surface stroke-text-muted/25'
+                          : 'stroke-text-muted/25 fill-surface'
                       }
                     />
                   </motion.g>
@@ -323,12 +325,12 @@ export default function HeroV2() {
                 </motion.g>
               </svg>
 
-              <div className="mt-4 pt-4 border-t border-border-subtle flex items-center justify-between text-[11px]">
+              <div className="mt-4 flex items-center justify-between border-t border-border-subtle pt-4 text-[11px]">
                 <div className="flex items-center gap-4">
                   <span className="text-text-muted">
                     主路线: <span className="text-primary">三公冲刺型</span>
                   </span>
-                  <span className="text-text-muted hidden sm:inline">
+                  <span className="hidden text-text-muted sm:inline">
                     下一节点: <span className="text-text-primary">二年级末 · 基础检查</span>
                   </span>
                 </div>
@@ -343,16 +345,16 @@ export default function HeroV2() {
         initial={shouldReduceMotion ? { opacity: 1 } : { opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 2.2, duration: 0.6 }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
+        className="absolute bottom-8 left-1/2 flex -translate-x-1/2 flex-col items-center gap-2"
         aria-hidden="true"
       >
-        <span className="text-[10px] text-text-muted uppercase tracking-widest">Scroll</span>
+        <span className="text-[10px] uppercase tracking-widest text-text-muted">Scroll</span>
         <motion.div
           animate={shouldReduceMotion ? { y: 0 } : { y: [0, 6, 0] }}
           transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
-          className="w-5 h-8 rounded-full border border-border-subtle flex items-start justify-center p-1.5"
+          className="flex h-8 w-5 items-start justify-center rounded-full border border-border-subtle p-1.5"
         >
-          <div className="w-1 h-1.5 rounded-full bg-primary" />
+          <div className="h-1.5 w-1 rounded-full bg-primary" />
         </motion.div>
       </motion.div>
     </section>

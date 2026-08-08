@@ -76,7 +76,10 @@ const examEvents: ExamEvent[] = [
 function sortByDate(events: ExamEvent[]) {
   const today = new Date().toISOString().split('T')[0];
   return events
-    .map((e) => ({ ...e, daysUntil: Math.ceil((new Date(e.date).getTime() - new Date(today).getTime()) / 86400000) }))
+    .map((e) => ({
+      ...e,
+      daysUntil: Math.ceil((new Date(e.date).getTime() - new Date(today).getTime()) / 86400000),
+    }))
     .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
 }
 

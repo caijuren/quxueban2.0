@@ -12,31 +12,26 @@ export default function NotificationsPage() {
   if (isLoading) {
     return (
       <div className="flex h-[60vh] items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        <Loader2 className="size-8 animate-spin text-primary" />
       </div>
     );
   }
 
   if (error || !user?.settings) {
     return (
-      <div className="rounded-2xl border border-error/20 bg-error/10 p-6 text-error">
+      <div className="border-error/20 bg-error/10 rounded-2xl border p-6 text-error">
         {error instanceof Error ? error.message : '加载失败'}
       </div>
     );
   }
 
-  const handleSettingsUpdate = async (
-    settingUpdates: Partial<UserWithSettings['settings']>
-  ) => {
+  const handleSettingsUpdate = async (settingUpdates: Partial<UserWithSettings['settings']>) => {
     return handleUpdate(settingUpdates as Partial<UserWithSettings>);
   };
 
   return (
     <ConsolePageShell title="消息通知" description="管理提醒方式、勿扰时段与通知偏好">
-      <NotificationSection
-        settings={user.settings}
-        onUpdate={handleSettingsUpdate}
-      />
+      <NotificationSection settings={user.settings} onUpdate={handleSettingsUpdate} />
     </ConsolePageShell>
   );
 }

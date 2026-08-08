@@ -1,18 +1,7 @@
 'use client';
 
-import {
-  createContext,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-  ReactNode,
-} from 'react';
-import {
-  Child,
-  getDefaultChildren,
-  AVATAR_COLORS,
-} from '@/lib/children';
+import { createContext, useContext, useEffect, useRef, useState, ReactNode } from 'react';
+import { Child, getDefaultChildren, AVATAR_COLORS } from '@/lib/children';
 import { type WeeklyPlan, type TaskStatus, type WeeklyGoal } from '@/lib/storage.types';
 import { generateWeeklyPlan, getCurrentWeekId } from '@/lib/weeklyTasks';
 import {
@@ -21,11 +10,7 @@ import {
   useUpdateChild,
   useDeleteChild,
 } from '@/lib/hooks/useChildren';
-import {
-  useWeeklyPlans,
-  useSaveWeeklyPlan,
-  useDeleteWeeklyPlan,
-} from '@/lib/hooks/useWeeklyPlans';
+import { useWeeklyPlans, useSaveWeeklyPlan, useDeleteWeeklyPlan } from '@/lib/hooks/useWeeklyPlans';
 
 interface ChildrenContextValue {
   children: Child[];
@@ -223,8 +208,7 @@ export function ChildrenProvider({ children: childNodes }: { children: ReactNode
     await deletePlan.mutateAsync(plan.id);
   };
 
-  const currentChild =
-    children.find((c) => c.id === currentChildId) ?? children[0] ?? null;
+  const currentChild = children.find((c) => c.id === currentChildId) ?? children[0] ?? null;
 
   return (
     <ChildrenContext.Provider

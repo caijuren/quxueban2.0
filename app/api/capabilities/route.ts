@@ -2,10 +2,7 @@ import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
-import {
-  capabilityCreateSchema,
-  validateBody,
-} from '@/lib/validation';
+import { capabilityCreateSchema, validateBody } from '@/lib/validation';
 import type { Capability, CapabilityCategory } from '@/lib/generated/prisma';
 
 function normalizeCapability(cap: Capability) {

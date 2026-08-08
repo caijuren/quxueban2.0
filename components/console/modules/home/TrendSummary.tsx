@@ -7,7 +7,7 @@ import InsightRow from '@/components/console/core/InsightRow';
 export default function TrendSummary() {
   return (
     <Section title="成长趋势" description="近 30 天能力变化">
-      <div className="p-2 space-y-1">
+      <div className="space-y-1 p-2">
         <InsightRow
           icon={BookOpen}
           label="阅读能力"

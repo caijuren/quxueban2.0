@@ -24,23 +24,19 @@ export default function HeatmapCell({
       type="button"
       onClick={onClick}
       className={cn(
-        'relative min-h-[72px] w-full rounded-lg border transition-all duration-200 text-left p-2',
+        'relative min-h-[72px] w-full rounded-lg border p-2 text-left transition-all duration-200',
         intensity === 0
-          ? 'bg-transparent border-transparent'
+          ? 'border-transparent bg-transparent'
           : intensity >= 70
-          ? 'bg-success/10 border-success/20 hover:bg-success/15'
-          : intensity >= 40
-          ? 'bg-warning/10 border-warning/20 hover:bg-warning/15'
-          : 'bg-surface-hover border-border-subtle hover:bg-surface-highlight',
+            ? 'bg-success/10 border-success/20 hover:bg-success/15'
+            : intensity >= 40
+              ? 'bg-warning/10 border-warning/20 hover:bg-warning/15'
+              : 'border-border-subtle bg-surface-hover hover:bg-surface-highlight',
         className
       )}
     >
-      {label && (
-        <p className="text-[11px] font-medium text-text-secondary line-clamp-2">{label}</p>
-      )}
-      {sublabel && (
-        <p className="text-[10px] text-text-muted mt-0.5 tabular-nums">{sublabel}</p>
-      )}
+      {label && <p className="line-clamp-2 text-[11px] font-medium text-text-secondary">{label}</p>}
+      {sublabel && <p className="mt-0.5 text-[10px] tabular-nums text-text-muted">{sublabel}</p>}
     </button>
   );
 }

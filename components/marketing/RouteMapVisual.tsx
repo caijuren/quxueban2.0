@@ -38,33 +38,45 @@ const colorClass = (color: string, active: boolean) => {
 export default function RouteMapVisual() {
   return (
     <div className="rounded-2xl border border-border-subtle bg-surface-elevated p-5">
-      <div className="flex items-center justify-between mb-4">
+      <div className="mb-4 flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <Target className="w-4 h-4 text-primary" aria-hidden="true" />
-          <span className="text-[11px] font-mono text-text-tertiary uppercase tracking-wider">
+          <Target className="size-4 text-primary" aria-hidden="true" />
+          <span className="font-mono text-[11px] uppercase tracking-wider text-text-tertiary">
             路线矩阵 · 多路线并行评估
           </span>
         </div>
         <div className="flex items-center gap-1.5">
-          <span className="relative flex h-2 w-2">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-40" />
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-primary" />
+          <span className="relative flex size-2">
+            <span className="absolute inline-flex size-full animate-ping rounded-full bg-primary opacity-40" />
+            <span className="relative inline-flex size-2 rounded-full bg-primary" />
           </span>
-          <span className="text-[11px] font-mono text-primary">ACTIVE</span>
+          <span className="font-mono text-[11px] text-primary">ACTIVE</span>
         </div>
       </div>
 
-      <svg viewBox="0 0 950 270" className="w-full h-auto" aria-label="多路线评估示意图">
+      <svg viewBox="0 0 950 270" className="h-auto w-full" aria-label="多路线评估示意图">
         <defs>
           <pattern id="routeGrid" width="40" height="40" patternUnits="userSpaceOnUse">
-            <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(255,255,255,0.03)" strokeWidth="1" />
+            <path
+              d="M 40 0 L 0 0 0 40"
+              fill="none"
+              stroke="rgba(255,255,255,0.03)"
+              strokeWidth="1"
+            />
           </pattern>
         </defs>
         <rect width="950" height="270" fill="url(#routeGrid)" />
 
         {stages.map((stage) => (
           <g key={stage.label}>
-            <line x1={stage.x} y1="30" x2={stage.x} y2="240" stroke="rgba(255,255,255,0.05)" strokeWidth="1" />
+            <line
+              x1={stage.x}
+              y1="30"
+              x2={stage.x}
+              y2="240"
+              stroke="rgba(255,255,255,0.05)"
+              strokeWidth="1"
+            />
             <text
               x={stage.x}
               y="262"
@@ -118,13 +130,14 @@ export default function RouteMapVisual() {
         ))}
       </svg>
 
-      <div className="mt-4 pt-4 border-t border-border-subtle flex items-center justify-between text-[11px]">
+      <div className="mt-4 flex items-center justify-between border-t border-border-subtle pt-4 text-[11px]">
         <div className="flex items-center gap-4">
           <span className="text-text-muted">
             主路线: <span className="text-primary">三公冲刺型</span>
           </span>
-          <span className="text-text-muted hidden sm:inline">
-            备选: <span className="text-secondary">双轨维持</span> · <span className="text-accent">公办直升</span>
+          <span className="hidden text-text-muted sm:inline">
+            备选: <span className="text-secondary">双轨维持</span> ·{' '}
+            <span className="text-accent">公办直升</span>
           </span>
         </div>
         <span className="font-mono text-text-muted">4 ROUTES LOADED</span>

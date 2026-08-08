@@ -13,14 +13,14 @@ export default function TaskLibraryPage() {
         initial={shouldReduceMotion ? false : { opacity: 0, y: -8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4 }}
-        className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
+        className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
       >
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-secondary/10 border border-secondary/20 flex items-center justify-center">
-            <Library className="w-5 h-5 text-secondary" />
+          <div className="bg-secondary/10 border-secondary/20 flex size-10 items-center justify-center rounded-xl border">
+            <Library className="size-5 text-secondary" />
           </div>
           <div>
-            <h1 className="text-2xl sm:text-3xl font-bold font-display">任务库</h1>
+            <h1 className="font-display text-2xl font-bold sm:text-3xl">任务库</h1>
           </div>
         </div>
       </motion.div>

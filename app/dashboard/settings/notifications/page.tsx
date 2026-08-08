@@ -2,13 +2,7 @@
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import {
-  Bell,
-  Loader2,
-  Check,
-  Trash2,
-  CheckCheck,
-} from 'lucide-react';
+import { Bell, Loader2, Check, Trash2, CheckCheck } from 'lucide-react';
 import ConsolePageShell from '@/components/console/core/ConsolePageShell';
 import EmptyState from '@/components/ui/EmptyState';
 import {
@@ -17,10 +11,7 @@ import {
   useMarkAllNotificationsRead,
   useDeleteNotification,
 } from '@/lib/hooks/useNotifications';
-import {
-  getNotificationTypeLabel,
-  getNotificationTypeColor,
-} from '@/lib/notifications';
+import { getNotificationTypeLabel, getNotificationTypeColor } from '@/lib/notifications';
 
 export default function NotificationsPage() {
   const [page, setPage] = useState(1);
@@ -46,19 +37,19 @@ export default function NotificationsPage() {
       <div className="space-y-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2 text-sm text-text-secondary">
-            <Bell className="w-4 h-4 text-primary" />
+            <Bell className="size-4 text-primary" />
             <span>未读通知：{data?.unreadCount ?? 0}</span>
           </div>
           {(data?.unreadCount ?? 0) > 0 && (
             <button
               onClick={() => markAllRead.mutate()}
               disabled={markAllRead.isPending}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-primary/10 text-primary text-xs font-medium hover:bg-primary/20 transition-all disabled:opacity-60"
+              className="bg-primary/10 hover:bg-primary/20 flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium text-primary transition-all disabled:opacity-60"
             >
               {markAllRead.isPending ? (
-                <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                <Loader2 className="size-3.5 animate-spin" />
               ) : (
-                <CheckCheck className="w-3.5 h-3.5" />
+                <CheckCheck className="size-3.5" />
               )}
               全部已读
             </button>
@@ -67,10 +58,10 @@ export default function NotificationsPage() {
 
         {isLoading ? (
           <div className="flex items-center justify-center py-16">
-            <Loader2 className="w-8 h-8 animate-spin text-primary" />
+            <Loader2 className="size-8 animate-spin text-primary" />
           </div>
         ) : error ? (
-          <div className="rounded-2xl border border-error/20 bg-error/10 p-6 text-error text-sm">
+          <div className="border-error/20 bg-error/10 rounded-2xl border p-6 text-sm text-error">
             {error instanceof Error ? error.message : '加载失败'}
           </div>
         ) : notifications.length === 0 ? (
@@ -89,26 +80,24 @@ export default function NotificationsPage() {
                 transition={{ delay: index * 0.03 }}
                 className={`rounded-xl border p-3 transition-colors ${
                   notification.readAt
-                    ? 'bg-surface border-border-default opacity-70'
-                    : 'bg-surface-elevated border-border-default'
+                    ? 'border-border-default bg-surface opacity-70'
+                    : 'border-border-default bg-surface-elevated'
                 }`}
               >
                 <div className="flex items-start gap-3">
                   <div
-                    className={`shrink-0 px-2 py-0.5 rounded-md text-[10px] font-medium border ${getNotificationTypeColor(
+                    className={`shrink-0 rounded-md border px-2 py-0.5 text-[10px] font-medium ${getNotificationTypeColor(
                       notification.type
                     )}`}
                   >
                     {getNotificationTypeLabel(notification.type)}
                   </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-text-primary">
-                      {notification.title}
-                    </p>
-                    <p className="text-xs text-text-secondary mt-0.5 leading-relaxed">
+                  <div className="min-w-0 flex-1">
+                    <p className="text-sm font-medium text-text-primary">{notification.title}</p>
+                    <p className="mt-0.5 text-xs leading-relaxed text-text-secondary">
                       {notification.content}
                     </p>
-                    <p className="text-2xs text-text-muted mt-1.5">
+                    <p className="mt-1.5 text-2xs text-text-muted">
                       {new Date(notification.createdAt).toLocaleString('zh-CN')}
                     </p>
                   </div>
@@ -117,19 +106,19 @@ export default function NotificationsPage() {
                       <button
                         onClick={() => handleMarkRead(notification.id)}
                         disabled={markRead.isPending}
-                        className="w-8 h-8 rounded-lg bg-surface-hover flex items-center justify-center text-text-secondary hover:text-primary hover:bg-primary/10 transition-colors disabled:opacity-50"
+                        className="hover:bg-primary/10 flex size-8 items-center justify-center rounded-lg bg-surface-hover text-text-secondary transition-colors hover:text-primary disabled:opacity-50"
                         title="标记为已读"
                       >
-                        <Check className="w-4 h-4" />
+                        <Check className="size-4" />
                       </button>
                     )}
                     <button
                       onClick={() => handleDelete(notification.id)}
                       disabled={deleteNotification.isPending}
-                      className="w-8 h-8 rounded-lg bg-surface-hover flex items-center justify-center text-text-secondary hover:text-error hover:bg-error/10 transition-colors disabled:opacity-50"
+                      className="hover:bg-error/10 flex size-8 items-center justify-center rounded-lg bg-surface-hover text-text-secondary transition-colors hover:text-error disabled:opacity-50"
                       title="删除"
                     >
-                      <Trash2 className="w-4 h-4" />
+                      <Trash2 className="size-4" />
                     </button>
                   </div>
                 </div>
@@ -143,7 +132,7 @@ export default function NotificationsPage() {
             <button
               onClick={() => setPage((p) => Math.max(1, p - 1))}
               disabled={page <= 1}
-              className="px-3 py-1.5 rounded-lg bg-surface-hover text-xs text-text-secondary hover:bg-surface-highlight disabled:opacity-50"
+              className="rounded-lg bg-surface-hover px-3 py-1.5 text-xs text-text-secondary hover:bg-surface-highlight disabled:opacity-50"
             >
               上一页
             </button>
@@ -153,7 +142,7 @@ export default function NotificationsPage() {
             <button
               onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
               disabled={page >= totalPages}
-              className="px-3 py-1.5 rounded-lg bg-surface-hover text-xs text-text-secondary hover:bg-surface-highlight disabled:opacity-50"
+              className="rounded-lg bg-surface-hover px-3 py-1.5 text-xs text-text-secondary hover:bg-surface-highlight disabled:opacity-50"
             >
               下一页
             </button>

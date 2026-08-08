@@ -3,11 +3,7 @@ import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 import { canViewChild } from '@/lib/family';
-import {
-  getGamificationContext,
-  calculateStreak,
-  BADGE_DEFINITIONS,
-} from '@/lib/gamification';
+import { getGamificationContext, calculateStreak, BADGE_DEFINITIONS } from '@/lib/gamification';
 
 type Params = { params: { id: string } };
 

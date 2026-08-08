@@ -47,25 +47,34 @@ export default function MilestonesMarketingPage() {
         }
         description="升学不是一蹴而就。趣学伴将长远目标拆分为年级目标、学期目标、月度任务和周计划，让每一步都有明确的截止时间。"
         tags={[
-          { icon: <Layers className="w-3.5 h-3.5 text-primary" aria-hidden="true" />, text: '层级拆解' },
-          { icon: <Bell className="w-3.5 h-3.5 text-secondary" aria-hidden="true" />, text: '节点提醒' },
-          { icon: <CheckCircle2 className="w-3.5 h-3.5 text-accent" aria-hidden="true" />, text: '进度可视化' },
+          {
+            icon: <Layers className="size-3.5 text-primary" aria-hidden="true" />,
+            text: '层级拆解',
+          },
+          {
+            icon: <Bell className="size-3.5 text-secondary" aria-hidden="true" />,
+            text: '节点提醒',
+          },
+          {
+            icon: <CheckCircle2 className="size-3.5 text-accent" aria-hidden="true" />,
+            text: '进度可视化',
+          },
         ]}
         visual={<TimelineVisual />}
       />
 
-      <section className="py-20 px-4 sm:px-6 lg:px-8 border-t border-white/5">
-        <div className="max-w-6xl mx-auto">
+      <section className="border-t border-white/5 px-4 py-20 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-6xl">
           <div className="space-y-3">
             {levels.map((item, index) => (
-              <CommandCard key={item.grade} className="p-5 group">
-                <div className="flex flex-col md:flex-row md:items-center gap-4">
-                  <div className="md:w-48 shrink-0">
-                    <span className="text-[10px] font-mono text-primary">LEVEL 0{index + 1}</span>
-                    <h3 className="text-base font-bold font-display mt-0.5">{item.grade}</h3>
+              <CommandCard key={item.grade} className="group p-5">
+                <div className="flex flex-col gap-4 md:flex-row md:items-center">
+                  <div className="shrink-0 md:w-48">
+                    <span className="font-mono text-[10px] text-primary">LEVEL 0{index + 1}</span>
+                    <h3 className="mt-0.5 font-display text-base font-bold">{item.grade}</h3>
                   </div>
                   <div className="flex-1">
-                    <p className="text-sm text-text-primary font-medium mb-0.5">{item.example}</p>
+                    <p className="mb-0.5 text-sm font-medium text-text-primary">{item.example}</p>
                     <p className="text-xs text-text-tertiary">{item.detail}</p>
                   </div>
                 </div>

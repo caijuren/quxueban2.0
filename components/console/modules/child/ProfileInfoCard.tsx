@@ -59,33 +59,34 @@ export default function ProfileInfoCard({ child }: ProfileInfoCardProps) {
       description="孩子的核心档案信息"
       action={{ label: '编辑资料', onClick: () => {} }}
     >
-      <div className="p-4 flex items-center gap-4 border-b border-border-subtle">
+      <div className="flex items-center gap-4 border-b border-border-subtle p-4">
         <ChildAvatar child={child} size="2xl" shape="rounded" />
         <div>
           <div className="flex items-center gap-2">
             <h3 className="text-lg font-bold text-text-primary">{child.name}</h3>
-            <span className="px-2 py-0.5 rounded-full bg-primary/[0.10] text-primary text-2xs font-medium">
+            <span className="bg-primary/[0.10] rounded-full px-2 py-0.5 text-2xs font-medium text-primary">
               {stage}
             </span>
           </div>
-          <p className="text-sm text-text-muted mt-0.5">
-            {gradeLabel(child.grade, child.educationSystem)} · {educationSystemLabel(child.educationSystem)}
+          <p className="mt-0.5 text-sm text-text-muted">
+            {gradeLabel(child.grade, child.educationSystem)} ·{' '}
+            {educationSystemLabel(child.educationSystem)}
           </p>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-1 p-2">
+      <div className="grid grid-cols-1 gap-1 p-2 sm:grid-cols-2">
         {infoItems.map((item) => (
           <div
             key={item.label}
-            className="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-white/[0.02] transition-colors"
+            className="flex items-center gap-3 rounded-xl px-4 py-3 transition-colors hover:bg-white/[0.02]"
           >
-            <div className="w-9 h-9 rounded-xl bg-surface-hover flex items-center justify-center shrink-0">
-              <item.icon className="w-4 h-4 text-text-tertiary" />
+            <div className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-surface-hover">
+              <item.icon className="size-4 text-text-tertiary" />
             </div>
             <div className="min-w-0">
               <p className="text-2xs text-text-muted">{item.label}</p>
-              <p className="text-sm font-medium text-text-secondary truncate">{item.value}</p>
+              <p className="truncate text-sm font-medium text-text-secondary">{item.value}</p>
             </div>
           </div>
         ))}

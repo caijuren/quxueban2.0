@@ -66,10 +66,7 @@ export async function POST(req: Request) {
     });
 
     if (existingUser && existingUser.id !== user.id) {
-      return NextResponse.json(
-        { error: '该微信已绑定其他家长账号，请先解绑' },
-        { status: 409 }
-      );
+      return NextResponse.json({ error: '该微信已绑定其他家长账号，请先解绑' }, { status: 409 });
     }
 
     await prisma.user.update({

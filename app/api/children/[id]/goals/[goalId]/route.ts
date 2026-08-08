@@ -10,18 +10,15 @@ async function authenticate() {
   return session?.user?.id ?? null;
 }
 
-async function verifyGoalAccess(
-  childId: string,
-  goalId: string,
-  userId: string,
-  manage = false
-) {
+async function verifyGoalAccess(childId: string, goalId: string, userId: string, manage = false) {
   const goal = await prisma.learningGoal.findFirst({
     where: { id: goalId, childId },
     include: { child: true },
   });
   if (!goal) return null;
-  const allowed = manage ? await canManageChild(userId, goal.child) : await canViewChild(userId, goal.child);
+  const allowed = manage
+    ? await canManageChild(userId, goal.child)
+    : await canViewChild(userId, goal.child);
   return allowed ? goal : null;
 }
 

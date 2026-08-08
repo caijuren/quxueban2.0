@@ -50,19 +50,19 @@ export default function ExamCalendarPage() {
   const past = useMemo(() => (data?.events || []).filter((e) => e.daysUntil < 0), [data]);
 
   return (
-    <div className="space-y-6 min-h-[calc(100vh-8rem)]">
+    <div className="min-h-[calc(100vh-8rem)] space-y-6">
       <motion.div
         initial={shouldReduceMotion ? false : { opacity: 0, y: -8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4 }}
-        className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
+        className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
       >
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-warning/10 border border-warning/20 flex items-center justify-center">
-            <Award className="w-5 h-5 text-warning" />
+          <div className="bg-warning/10 border-warning/20 flex size-10 items-center justify-center rounded-xl border">
+            <Award className="size-5 text-warning" />
           </div>
           <div>
-            <h1 className="text-2xl sm:text-3xl font-bold font-display text-text-primary">
+            <h1 className="font-display text-2xl font-bold text-text-primary sm:text-3xl">
               标化考试日历
             </h1>
           </div>
@@ -73,11 +73,11 @@ export default function ExamCalendarPage() {
         initial={shouldReduceMotion ? false : { opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4, delay: 0.05 }}
-        className="rounded-2xl border border-border-default bg-surface-elevated p-5 sm:p-6 relative overflow-hidden"
+        className="relative overflow-hidden rounded-2xl border border-border-default bg-surface-elevated p-5 sm:p-6"
       >
-        <div className="absolute top-0 right-0 w-64 h-64 bg-warning/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 pointer-events-none" />
+        <div className="bg-warning/5 pointer-events-none absolute right-0 top-0 size-64 -translate-y-1/2 translate-x-1/3 rounded-full blur-3xl" />
         <div className="relative flex items-start gap-3">
-          <AlertCircle className="w-5 h-5 text-warning shrink-0 mt-0.5" />
+          <AlertCircle className="mt-0.5 size-5 shrink-0 text-warning" />
           <div>
             <p className="text-sm text-text-secondary">
               以下考试时间为参考日期，具体报名与考试安排请以官方通知为准。
@@ -88,7 +88,7 @@ export default function ExamCalendarPage() {
 
       {isLoading ? (
         <div className="flex items-center justify-center py-20">
-          <div className="w-10 h-10 border-2 border-primary/30 border-t-primary rounded-full animate-spin" />
+          <div className="border-primary/30 size-10 animate-spin rounded-full border-2 border-t-primary" />
         </div>
       ) : error ? (
         <EmptyState
@@ -104,12 +104,16 @@ export default function ExamCalendarPage() {
           className="space-y-6"
         >
           <section>
-            <h2 className="text-base font-bold font-display text-text-secondary mb-4 flex items-center gap-2">
-              <Clock className="w-4 h-4 text-primary" />
+            <h2 className="mb-4 flex items-center gap-2 font-display text-base font-bold text-text-secondary">
+              <Clock className="size-4 text-primary" />
               即将开始
             </h2>
             {upcoming.length === 0 ? (
-              <EmptyState icon={Calendar} title="暂无 upcoming 考试" description="所有考试已结束或暂未发布" />
+              <EmptyState
+                icon={Calendar}
+                title="暂无 upcoming 考试"
+                description="所有考试已结束或暂未发布"
+              />
             ) : (
               <div className="space-y-4">
                 {upcoming.map((event, index) => (
@@ -118,42 +122,50 @@ export default function ExamCalendarPage() {
                     initial={shouldReduceMotion ? false : { opacity: 0, x: -12 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ duration: 0.3, delay: Math.min(index * 0.05, 0.5) }}
-                    className="rounded-2xl border border-border-default bg-surface p-5 hover:border-border-strong transition-colors"
+                    className="rounded-2xl border border-border-default bg-surface p-5 transition-colors hover:border-border-strong"
                   >
-                    <div className="flex flex-col sm:flex-row sm:items-start gap-4">
-                      <div className="flex flex-col items-center justify-center min-w-[80px] px-4 py-3 rounded-xl bg-surface-elevated border border-border-subtle">
-                        <span className="text-2xs text-text-muted uppercase">{new Date(event.date).getFullYear()}</span>
-                        <span className="text-xl font-bold font-display text-text-primary">{formatDate(event.date)}</span>
-                        <span className={`text-2xs mt-1 ${event.daysUntil <= 30 ? 'text-primary' : 'text-text-muted'}`}>
+                    <div className="flex flex-col gap-4 sm:flex-row sm:items-start">
+                      <div className="flex min-w-[80px] flex-col items-center justify-center rounded-xl border border-border-subtle bg-surface-elevated px-4 py-3">
+                        <span className="text-2xs uppercase text-text-muted">
+                          {new Date(event.date).getFullYear()}
+                        </span>
+                        <span className="font-display text-xl font-bold text-text-primary">
+                          {formatDate(event.date)}
+                        </span>
+                        <span
+                          className={`mt-1 text-2xs ${event.daysUntil <= 30 ? 'text-primary' : 'text-text-muted'}`}
+                        >
                           {getDaysLabel(event.daysUntil)}
                         </span>
                       </div>
 
-                      <div className="flex-1 min-w-0">
-                        <div className="flex flex-wrap items-center gap-2 mb-2">
-                          <h3 className="text-lg font-bold font-display text-text-primary">{event.name}</h3>
+                      <div className="min-w-0 flex-1">
+                        <div className="mb-2 flex flex-wrap items-center gap-2">
+                          <h3 className="font-display text-lg font-bold text-text-primary">
+                            {event.name}
+                          </h3>
                           {event.tags.map((tag) => (
                             <span
                               key={tag}
-                              className="text-2xs px-1.5 py-0.5 rounded-md bg-surface-elevated text-text-muted border border-border-subtle"
+                              className="rounded-md border border-border-subtle bg-surface-elevated px-1.5 py-0.5 text-2xs text-text-muted"
                             >
                               {tag}
                             </span>
                           ))}
                         </div>
-                        <p className="text-sm text-text-secondary mb-3">{event.description}</p>
+                        <p className="mb-3 text-sm text-text-secondary">{event.description}</p>
                         <div className="flex flex-wrap gap-4 text-xs text-text-tertiary">
                           <span className="flex items-center gap-1">
-                            <span className="w-1.5 h-1.5 rounded-full bg-secondary" />
+                            <span className="size-1.5 rounded-full bg-secondary" />
                             {event.subject}
                           </span>
                           <span className="flex items-center gap-1">
-                            <span className="w-1.5 h-1.5 rounded-full bg-accent" />
+                            <span className="size-1.5 rounded-full bg-accent" />
                             适合：{event.targetGrades}
                           </span>
                           {event.registrationDeadline && (
                             <span className="flex items-center gap-1">
-                              <span className="w-1.5 h-1.5 rounded-full bg-warning" />
+                              <span className="size-1.5 rounded-full bg-warning" />
                               报名截止：{formatDate(event.registrationDeadline)}
                             </span>
                           )}
@@ -168,19 +180,25 @@ export default function ExamCalendarPage() {
 
           {past.length > 0 && (
             <section>
-              <h2 className="text-base font-bold font-display text-text-secondary mb-4 flex items-center gap-2">
-                <Calendar className="w-4 h-4 text-text-muted" />
+              <h2 className="mb-4 flex items-center gap-2 font-display text-base font-bold text-text-secondary">
+                <Calendar className="size-4 text-text-muted" />
                 已结束
               </h2>
               <div className="space-y-3 opacity-60">
                 {past.map((event) => (
                   <div
                     key={event.id}
-                    className="rounded-2xl border border-border-default bg-surface p-4 flex flex-col sm:flex-row sm:items-center gap-3"
+                    className="flex flex-col gap-3 rounded-2xl border border-border-default bg-surface p-4 sm:flex-row sm:items-center"
                   >
-                    <span className="text-sm text-text-tertiary min-w-[80px]">{formatDate(event.date)}</span>
-                    <span className="text-base font-bold font-display text-text-secondary">{event.name}</span>
-                    <span className="text-xs text-text-muted">{event.subject} · {event.targetGrades}</span>
+                    <span className="min-w-[80px] text-sm text-text-tertiary">
+                      {formatDate(event.date)}
+                    </span>
+                    <span className="font-display text-base font-bold text-text-secondary">
+                      {event.name}
+                    </span>
+                    <span className="text-xs text-text-muted">
+                      {event.subject} · {event.targetGrades}
+                    </span>
                   </div>
                 ))}
               </div>

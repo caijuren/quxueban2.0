@@ -3,11 +3,7 @@
 import { useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { CheckCircle2, CircleDot, Pause, XCircle } from 'lucide-react';
-import {
-  type WeeklyTaskItem,
-  type TaskCategory,
-  type DayOfWeek,
-} from '@/lib/storage.types';
+import { type WeeklyTaskItem, type TaskCategory, type DayOfWeek } from '@/lib/storage.types';
 import { TASK_CATEGORY_LABELS } from '@/lib/taskTemplates';
 import { categoryIcons } from '@/lib/taskIcons';
 import { getCategoryColorClass } from '@/lib/taskAlignment';
@@ -63,9 +59,9 @@ function StatusCell({
       <button
         type="button"
         onClick={onClick}
-        className="inline-flex flex-col items-center justify-center gap-1 w-full py-2.5 rounded-[14px] hover:bg-surface-hover transition-colors"
+        className="inline-flex w-full flex-col items-center justify-center gap-1 rounded-[14px] py-2.5 transition-colors hover:bg-surface-hover"
       >
-        <CheckCircle2 className="w-5 h-5 text-success" />
+        <CheckCircle2 className="size-5 text-success" />
         <span className="text-[10px] text-text-tertiary">{durationText}</span>
       </button>
     );
@@ -76,9 +72,9 @@ function StatusCell({
       <button
         type="button"
         onClick={onClick}
-        className="inline-flex flex-col items-center justify-center gap-1 w-full py-2.5 rounded-[14px] hover:bg-surface-hover transition-colors"
+        className="inline-flex w-full flex-col items-center justify-center gap-1 rounded-[14px] py-2.5 transition-colors hover:bg-surface-hover"
       >
-        <CircleDot className="w-5 h-5 text-secondary" />
+        <CircleDot className="size-5 text-secondary" />
         <span className="text-[10px] text-text-tertiary">{durationText}</span>
       </button>
     );
@@ -89,9 +85,9 @@ function StatusCell({
       <button
         type="button"
         onClick={onClick}
-        className="inline-flex flex-col items-center justify-center gap-1 w-full py-2.5 rounded-[14px] hover:bg-surface-hover transition-colors"
+        className="inline-flex w-full flex-col items-center justify-center gap-1 rounded-[14px] py-2.5 transition-colors hover:bg-surface-hover"
       >
-        <XCircle className="w-5 h-5 text-error" />
+        <XCircle className="size-5 text-error" />
         <span className="text-[10px] text-text-tertiary">未完成</span>
       </button>
     );
@@ -101,9 +97,9 @@ function StatusCell({
     <button
       type="button"
       onClick={onClick}
-      className="inline-flex flex-col items-center justify-center gap-1 w-full py-2.5 rounded-[14px] hover:bg-surface-hover transition-colors"
+      className="inline-flex w-full flex-col items-center justify-center gap-1 rounded-[14px] py-2.5 transition-colors hover:bg-surface-hover"
     >
-      <Pause className="w-4 h-4 text-warning" />
+      <Pause className="size-4 text-warning" />
       <span className="text-[10px] text-text-tertiary">待开始</span>
     </button>
   );
@@ -164,25 +160,25 @@ export default function WeeklyTaskChecklistMatrix({
 
   if (rows.length === 0) {
     return (
-      <div className="rounded-[20px] bg-surface border border-border-default p-8 text-center text-sm text-text-muted">
+      <div className="rounded-[20px] border border-border-default bg-surface p-8 text-center text-sm text-text-muted">
         本周暂无任务，点击「编辑周计划」添加
       </div>
     );
   }
 
   return (
-    <div className="rounded-[20px] bg-surface border border-border-default overflow-hidden shadow-card">
+    <div className="overflow-hidden rounded-[20px] border border-border-default bg-surface shadow-card">
       <div className="overflow-x-auto">
         <table className="w-full min-w-[900px] border-collapse">
           <thead>
             <tr className="border-b border-border-default">
-              <th className="sticky left-0 z-10 bg-surface/95 backdrop-blur-sm text-left py-3.5 px-5 text-xs font-medium text-text-muted w-[220px] min-w-[220px]">
+              <th className="bg-surface/95 sticky left-0 z-10 w-[220px] min-w-[220px] px-5 py-3.5 text-left text-xs font-medium text-text-muted backdrop-blur-sm">
                 任务
               </th>
               {DAYS.map((day, idx) => (
                 <th
                   key={day}
-                  className="py-3.5 px-2 text-center text-xs font-medium text-text-muted w-[1/7]"
+                  className="w-[1/7] px-2 py-3.5 text-center text-xs font-medium text-text-muted"
                 >
                   <div className="flex flex-col items-center gap-0.5">
                     <span>{day}</span>
@@ -204,22 +200,20 @@ export default function WeeklyTaskChecklistMatrix({
                   initial={{ opacity: 0, y: 8 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: rowIndex * 0.03 }}
-                  className="border-b border-border-default last:border-b-0 hover:bg-surface-hover/40 transition-colors"
+                  className="hover:bg-surface-hover/40 border-b border-border-default transition-colors last:border-b-0"
                 >
-                  <td className="sticky left-0 z-10 bg-surface/95 backdrop-blur-sm py-3.5 px-5 align-top">
+                  <td className="bg-surface/95 sticky left-0 z-10 px-5 py-3.5 align-top backdrop-blur-sm">
                     <div className="flex items-start gap-3">
                       <div
-                        className={`mt-0.5 w-9 h-9 rounded-[14px] flex items-center justify-center ${colorClass}`}
+                        className={`mt-0.5 flex size-9 items-center justify-center rounded-[14px] ${colorClass}`}
                       >
-                        <CategoryIcon className="w-4 h-4" />
+                        <CategoryIcon className="size-4" />
                       </div>
                       <div className="min-w-0">
-                        <p className="text-sm font-semibold text-text-primary leading-snug break-words">
+                        <p className="break-words text-sm font-semibold leading-snug text-text-primary">
                           {row.focus}
                         </p>
-                        <p className="text-[11px] text-text-muted mt-0.5">
-                          {categoryLabel}
-                        </p>
+                        <p className="mt-0.5 text-[11px] text-text-muted">{categoryLabel}</p>
                       </div>
                     </div>
                   </td>
@@ -227,11 +221,8 @@ export default function WeeklyTaskChecklistMatrix({
                     const day = DAYS[dayIndex];
                     if (!task) {
                       return (
-                        <td
-                          key={day}
-                          className="py-2 px-1 text-center align-middle"
-                        >
-                          <span className="inline-flex items-center justify-center w-full py-4 text-text-muted/30">
+                        <td key={day} className="px-1 py-2 text-center align-middle">
+                          <span className="text-text-muted/30 inline-flex w-full items-center justify-center py-4">
                             —
                           </span>
                         </td>
@@ -239,10 +230,7 @@ export default function WeeklyTaskChecklistMatrix({
                     }
 
                     return (
-                      <td
-                        key={day}
-                        className="py-2 px-1 text-center align-middle"
-                      >
+                      <td key={day} className="px-1 py-2 text-center align-middle">
                         <StatusCell
                           task={task}
                           dayIndex={dayIndex}
@@ -258,26 +246,26 @@ export default function WeeklyTaskChecklistMatrix({
           </tbody>
         </table>
       </div>
-      <div className="flex flex-wrap items-center justify-between gap-3 px-5 py-3.5 border-t border-border-default bg-surface">
+      <div className="flex flex-wrap items-center justify-between gap-3 border-t border-border-default bg-surface px-5 py-3.5">
         <div className="flex flex-wrap items-center gap-4">
           <div className="flex items-center gap-1.5 text-xs text-text-tertiary">
-            <CheckCircle2 className="w-3.5 h-3.5 text-success" />
+            <CheckCircle2 className="size-3.5 text-success" />
             <span>已完成</span>
           </div>
           <div className="flex items-center gap-1.5 text-xs text-text-tertiary">
-            <CircleDot className="w-3.5 h-3.5 text-secondary" />
+            <CircleDot className="size-3.5 text-secondary" />
             <span>进行中</span>
           </div>
           <div className="flex items-center gap-1.5 text-xs text-text-tertiary">
-            <Pause className="w-3 h-3 text-warning" />
+            <Pause className="size-3 text-warning" />
             <span>未开始</span>
           </div>
           <div className="flex items-center gap-1.5 text-xs text-text-tertiary">
-            <XCircle className="w-3.5 h-3.5 text-error" />
+            <XCircle className="size-3.5 text-error" />
             <span>未完成</span>
           </div>
           <div className="flex items-center gap-1.5 text-xs text-text-tertiary">
-            <span className="w-3.5 text-center text-text-muted/30">—</span>
+            <span className="text-text-muted/30 w-3.5 text-center">—</span>
             <span>无安排</span>
           </div>
         </div>

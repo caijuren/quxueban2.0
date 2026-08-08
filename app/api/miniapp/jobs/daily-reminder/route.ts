@@ -57,13 +57,7 @@ export async function POST() {
       const pendingCount = todayTasks.length - doneCount;
 
       try {
-        await sendDailyReminder(
-          user.id,
-          user.wechatOpenId,
-          child.name,
-          pendingCount,
-          doneCount
-        );
+        await sendDailyReminder(user.id, user.wechatOpenId, child.name, pendingCount, doneCount);
         sent++;
       } catch (err) {
         console.error(`[daily-reminder] send failed for user ${user.id}:`, err);

@@ -6,7 +6,8 @@ const pains = [
   {
     number: '01',
     title: '关键节点总怕错过',
-    description: '三公报名、民办摇号、名额分配、自招……每个窗口期都很短，一不留神就错过最佳准备时机。',
+    description:
+      '三公报名、民办摇号、名额分配、自招……每个窗口期都很短，一不留神就错过最佳准备时机。',
   },
   {
     number: '02',
@@ -22,21 +23,21 @@ const pains = [
 
 export default function PainPoints() {
   return (
-    <section className="py-14 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-6xl mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-start">
+    <section className="px-4 py-14 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-6xl">
+        <div className="grid grid-cols-1 items-start gap-12 lg:grid-cols-2 lg:gap-16">
           <MotionSection direction="up" duration={0.6}>
-            <span className="text-[11px] font-mono text-primary uppercase tracking-widest mb-3 block">
+            <span className="mb-3 block font-mono text-[11px] uppercase tracking-widest text-primary">
               The Problem
             </span>
-            <h2 className="text-3xl sm:text-4xl font-bold font-display leading-tight mb-4">
+            <h2 className="mb-4 font-display text-3xl font-bold leading-tight sm:text-4xl">
               上海升学
               <br />
               <span className="text-text-muted">不是信息不够</span>
               <br />
               是信息太杂
             </h2>
-            <p className="text-text-tertiary text-base leading-relaxed max-w-sm">
+            <p className="max-w-sm text-base leading-relaxed text-text-tertiary">
               政策每年微调、学校要求各不相同、时间节点密集。家长最缺的不是资源，而是一张清晰的执行地图。
             </p>
           </MotionSection>
@@ -48,16 +49,16 @@ export default function PainPoints() {
                 direction="left"
                 delay={index * 0.1}
                 duration={0.5}
-                className="group flex gap-5 pb-6 border-b border-border-subtle last:border-0 last:pb-0"
+                className="group flex gap-5 border-b border-border-subtle pb-6 last:border-0 last:pb-0"
               >
-                <span className="text-2xl font-mono text-text-muted font-bold group-hover:text-primary transition-colors duration-300">
+                <span className="font-mono text-2xl font-bold text-text-muted transition-colors duration-300 group-hover:text-primary">
                   {pain.number}
                 </span>
                 <div>
-                  <h3 className="text-lg font-bold font-display mb-1.5 text-text-primary group-hover:text-primary transition-colors duration-300">
+                  <h3 className="mb-1.5 font-display text-lg font-bold text-text-primary transition-colors duration-300 group-hover:text-primary">
                     {pain.title}
                   </h3>
-                  <p className="text-sm text-text-tertiary leading-relaxed">{pain.description}</p>
+                  <p className="text-sm leading-relaxed text-text-tertiary">{pain.description}</p>
                 </div>
               </MotionSection>
             ))}

@@ -33,27 +33,27 @@ export default function MarketingHero({
   visual,
 }: MarketingHeroProps) {
   return (
-    <section className="relative pt-28 pb-16 px-4 sm:px-6 lg:px-8 overflow-hidden min-h-[90vh] flex items-center">
-      <div className="absolute top-1/2 right-0 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[120px] -z-10" />
-      <div className="max-w-7xl mx-auto w-full">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-14 items-center">
+    <section className="relative flex min-h-[90vh] items-center overflow-hidden px-4 pb-16 pt-28 sm:px-6 lg:px-8">
+      <div className="bg-primary/5 absolute right-0 top-1/2 -z-10 h-[500px] w-[500px] rounded-full blur-[120px]" />
+      <div className="mx-auto w-full max-w-7xl">
+        <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-2 lg:gap-14">
           <MotionSection direction="up" duration={0.7}>
             <span
-              className={`text-[11px] font-mono ${colorMap[eyebrowColor]} uppercase tracking-widest mb-3 block`}
+              className={`font-mono text-[11px] ${colorMap[eyebrowColor]} mb-3 block uppercase tracking-widest`}
             >
               {eyebrow}
             </span>
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold font-display leading-[1.05] mb-5">
+            <h1 className="mb-5 font-display text-3xl font-bold leading-[1.05] sm:text-4xl lg:text-5xl">
               {title}
             </h1>
-            <p className="text-sm sm:text-base text-text-tertiary max-w-md mb-8 leading-relaxed">
+            <p className="mb-8 max-w-md text-sm leading-relaxed text-text-tertiary sm:text-base">
               {description}
             </p>
             <div className="flex flex-wrap gap-2">
               {tags.map((tag) => (
                 <div
                   key={tag.text}
-                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-border-subtle bg-surface text-xs text-text-secondary"
+                  className="flex items-center gap-1.5 rounded-lg border border-border-subtle bg-surface px-3 py-1.5 text-xs text-text-secondary"
                 >
                   {tag.icon}
                   {tag.text}

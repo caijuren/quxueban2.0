@@ -18,7 +18,7 @@ export default function ChinesePlanConfigPage() {
       childId={currentChild?.id}
       description={
         <div>
-          <p className="font-medium text-text-secondary mb-1">
+          <p className="mb-1 font-medium text-text-secondary">
             本路径服务于三公冲刺路线的语文素养与综合荣誉
           </p>
           <p className="text-text-tertiary">

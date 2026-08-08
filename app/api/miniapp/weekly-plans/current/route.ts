@@ -60,9 +60,7 @@ export async function GET(req: NextRequest) {
   }
 
   const rawTasks = (plan.tasks as unknown as Partial<WeeklyTaskItem>[]) || [];
-  const normalizedTasks = rawTasks.map((task) =>
-    normalizeWeeklyTask(task as WeeklyTaskItem)
-  );
+  const normalizedTasks = rawTasks.map((task) => normalizeWeeklyTask(task as WeeklyTaskItem));
 
   const stats = getPlanStats({
     tasks: normalizedTasks,

@@ -103,7 +103,9 @@ function buildRuleSummary(input: DailySummaryInput): string {
     suggestions.push(`部分完成的任务建议明天先收尾，不要一直拖着。`);
   }
   if (totalActualMinutes > 180) {
-    suggestions.push(`今天已经学了快 ${Math.round(totalActualMinutes / 60)} 个小时，注意让孩子早点休息。`);
+    suggestions.push(
+      `今天已经学了快 ${Math.round(totalActualMinutes / 60)} 个小时，注意让孩子早点休息。`
+    );
   } else if (totalActualMinutes < 30 && total > 0) {
     suggestions.push(`今天实际投入偏少，明天可以试试固定一个「学习启动时间」。`);
   }
@@ -165,7 +167,11 @@ async function callLLM(messages: LLMMessage[]): Promise<string | null> {
     });
 
     if (!res.ok) {
-      console.error('[dailySummary] LLM request failed:', res.status, await res.text().catch(() => ''));
+      console.error(
+        '[dailySummary] LLM request failed:',
+        res.status,
+        await res.text().catch(() => '')
+      );
       return null;
     }
 

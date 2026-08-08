@@ -43,22 +43,13 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
-      if (
-        childDropdownRef.current &&
-        !childDropdownRef.current.contains(e.target as Node)
-      ) {
+      if (childDropdownRef.current && !childDropdownRef.current.contains(e.target as Node)) {
         setChildDropdownOpen(false);
       }
-      if (
-        notificationRef.current &&
-        !notificationRef.current.contains(e.target as Node)
-      ) {
+      if (notificationRef.current && !notificationRef.current.contains(e.target as Node)) {
         setNotificationOpen(false);
       }
-      if (
-        userMenuRef.current &&
-        !userMenuRef.current.contains(e.target as Node)
-      ) {
+      if (userMenuRef.current && !userMenuRef.current.contains(e.target as Node)) {
         setUserMenuOpen(false);
       }
     };
@@ -136,33 +127,35 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
     router.push('/dashboard/settings');
   };
 
-  const currentStage = currentChild ? gradeToStage(currentChild.grade, currentChild.educationSystem) : null;
+  const currentStage = currentChild
+    ? gradeToStage(currentChild.grade, currentChild.educationSystem)
+    : null;
 
   return (
     <motion.header
       initial={{ y: -16, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-      className="fixed top-0 right-0 left-0 lg:left-56 h-16 bg-surface-elevated/80 backdrop-blur-md border-b border-border-default z-30 px-3 sm:px-5 flex items-center justify-between"
+      className="bg-surface-elevated/80 fixed inset-x-0 top-0 z-30 flex h-16 items-center justify-between border-b border-border-default px-3 backdrop-blur-md sm:px-5 lg:left-56"
     >
       <div className="flex items-center gap-3">
         <button
           onClick={onMenuClick}
-          className="lg:hidden w-10 h-10 rounded-module bg-surface-elevated/60 flex items-center justify-center text-text-secondary hover:text-text-primary hover:bg-surface-highlight transition-all focus-ring"
+          className="bg-surface-elevated/60 focus-ring flex size-10 items-center justify-center rounded-module text-text-secondary transition-all hover:bg-surface-highlight hover:text-text-primary lg:hidden"
           aria-label="打开菜单"
         >
-          <Menu className="w-5 h-5" />
+          <Menu className="size-5" />
         </button>
 
         <div className="relative hidden sm:block">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted" />
+          <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-text-muted" />
           <input
             type="text"
             placeholder="搜索路线、任务、学校…"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             onKeyDown={handleSearch}
-            className="pl-10 pr-4 py-2.5 w-56 lg:w-72 rounded-[14px] bg-surface-header border border-border-default text-sm text-text-secondary placeholder:text-text-muted focus:outline-none focus:border-primary/50 focus:ring-2 focus:ring-primary/10 transition-all"
+            className="focus:border-primary/50 focus:ring-primary/10 w-56 rounded-[14px] border border-border-default bg-surface-header py-2.5 pl-10 pr-4 text-sm text-text-secondary transition-all placeholder:text-text-muted focus:outline-none focus:ring-2 lg:w-72"
           />
         </div>
       </div>
@@ -171,26 +164,26 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
         <div className="relative" ref={notificationRef}>
           <button
             onClick={() => setNotificationOpen((prev) => !prev)}
-            className="relative w-10 h-10 rounded-module bg-surface-elevated/60 flex items-center justify-center text-text-secondary hover:text-text-primary hover:bg-surface-highlight transition-all focus-ring"
+            className="bg-surface-elevated/60 focus-ring relative flex size-10 items-center justify-center rounded-module text-text-secondary transition-all hover:bg-surface-highlight hover:text-text-primary"
             aria-label="通知"
           >
-            <Bell className="w-5 h-5" />
+            <Bell className="size-5" />
             {unreadCount > 0 && (
-              <span className="absolute top-2 right-2 min-w-[16px] h-4 px-1 rounded-full bg-primary text-2xs font-bold text-text-primary flex items-center justify-center tabular-nums">
+              <span className="absolute right-2 top-2 flex h-4 min-w-[16px] items-center justify-center rounded-full bg-primary px-1 text-2xs font-bold tabular-nums text-text-primary">
                 {unreadCount > 9 ? '9+' : unreadCount}
               </span>
             )}
           </button>
 
           {notificationOpen && (
-            <div className="absolute right-0 top-full mt-2 w-80 rounded-card bg-surface-elevated/95 backdrop-blur-md border border-border-default overflow-hidden z-50 shadow-panel modal-scroll">
+            <div className="bg-surface-elevated/95 modal-scroll absolute right-0 top-full z-50 mt-2 w-80 overflow-hidden rounded-card border border-border-default shadow-panel backdrop-blur-md">
               <div className="flex items-center justify-between border-b border-border-default px-4 py-3">
                 <p className="text-sm font-semibold text-text-primary">通知中心</p>
                 {unreadCount > 0 && (
                   <button
                     onClick={handleMarkAllRead}
                     disabled={markAllRead.isPending}
-                    className="text-xs text-primary hover:text-primary-glow transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="text-xs text-primary transition-colors hover:text-primary-glow disabled:cursor-not-allowed disabled:opacity-50"
                   >
                     {markAllRead.isPending ? '标记中...' : '全部已读'}
                   </button>
@@ -199,12 +192,10 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
               <div className="max-h-80 overflow-y-auto">
                 {loadingNotifications ? (
                   <div className="flex items-center justify-center py-8">
-                    <div className="h-4 w-4 animate-spin rounded-full border-2 border-primary border-t-transparent" />
+                    <div className="size-4 animate-spin rounded-full border-2 border-primary border-t-transparent" />
                   </div>
                 ) : notifications.length === 0 ? (
-                  <div className="py-8 text-center text-sm text-text-tertiary">
-                    暂无通知
-                  </div>
+                  <div className="py-8 text-center text-sm text-text-tertiary">暂无通知</div>
                 ) : (
                   <div>
                     {notifications.map((n) => {
@@ -214,18 +205,18 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
                           key={n.id}
                           onClick={() => handleMarkRead(n.id)}
                           disabled={marking}
-                          className={`w-full text-left border-b border-border-default px-4 py-3 transition-colors hover:bg-surface-elevated disabled:opacity-50 ${
+                          className={`w-full border-b border-border-default px-4 py-3 text-left transition-colors hover:bg-surface-elevated disabled:opacity-50 ${
                             n.readAt ? 'opacity-55' : ''
                           }`}
                         >
                           <div className="mb-1 flex items-start justify-between gap-2">
                             <p className="text-sm font-medium text-text-secondary">{n.title}</p>
                             {!n.readAt && (
-                              <span className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-primary" />
+                              <span className="mt-1.5 size-2 shrink-0 rounded-full bg-primary" />
                             )}
                           </div>
                           <p className="line-clamp-2 text-xs text-text-tertiary">{n.content}</p>
-                          <p className="mt-1 text-2xs text-text-muted tabular-nums">
+                          <p className="mt-1 text-2xs tabular-nums text-text-muted">
                             {new Date(n.createdAt).toLocaleString('zh-CN')}
                           </p>
                         </button>
@@ -241,7 +232,7 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
         <div className="relative" ref={userMenuRef}>
           <button
             onClick={() => setUserMenuOpen((prev) => !prev)}
-            className="relative flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-module bg-surface-elevated/60 border border-border-default hover:border-border-strong hover:bg-surface-elevated text-text-primary text-left focus-ring transition-all overflow-hidden"
+            className="bg-surface-elevated/60 focus-ring relative flex size-9 items-center justify-center overflow-hidden rounded-module border border-border-default text-left text-text-primary transition-all hover:border-border-strong hover:bg-surface-elevated sm:size-10"
             aria-label="用户菜单"
             aria-haspopup="menu"
             aria-expanded={userMenuOpen}
@@ -260,38 +251,38 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
                 {currentUser.name.slice(0, 1).toUpperCase()}
               </span>
             ) : (
-              <User className="w-5 h-5 text-text-secondary" />
+              <User className="size-5 text-text-secondary" />
             )}
           </button>
 
           {userMenuOpen && (
             <div
               role="menu"
-              className="absolute right-0 top-full mt-2 w-44 rounded-card bg-surface-elevated border border-border-default overflow-hidden z-50 shadow-card"
+              className="absolute right-0 top-full z-50 mt-2 w-44 overflow-hidden rounded-card border border-border-default bg-surface-elevated shadow-card"
             >
               <div className="p-1.5">
-                <div className="px-3 py-2 border-b border-border-default mb-1">
-                  <p className="text-sm font-semibold text-text-primary truncate">
+                <div className="mb-1 border-b border-border-default px-3 py-2">
+                  <p className="truncate text-sm font-semibold text-text-primary">
                     {currentUser?.name || currentUser?.username || '用户'}
                   </p>
-                  <p className="text-xs text-text-tertiary truncate">
+                  <p className="truncate text-xs text-text-tertiary">
                     {currentUser?.username || ''}
                   </p>
                 </div>
                 <button
                   role="menuitem"
                   onClick={handleGoToSettings}
-                  className="w-full flex items-center gap-2.5 px-3 py-2 rounded-module text-left text-sm text-text-secondary hover:bg-surface-elevated transition-colors"
+                  className="flex w-full items-center gap-2.5 rounded-module px-3 py-2 text-left text-sm text-text-secondary transition-colors hover:bg-surface-elevated"
                 >
-                  <Settings className="w-4 h-4" />
+                  <Settings className="size-4" />
                   设置
                 </button>
                 <button
                   role="menuitem"
                   onClick={handleLogout}
-                  className="w-full flex items-center gap-2.5 px-3 py-2 rounded-module text-left text-sm text-error hover:bg-error/[0.08] transition-colors"
+                  className="hover:bg-error/[0.08] flex w-full items-center gap-2.5 rounded-module px-3 py-2 text-left text-sm text-error transition-colors"
                 >
-                  <LogOut className="w-4 h-4" />
+                  <LogOut className="size-4" />
                   退出登录
                 </button>
               </div>
@@ -302,15 +293,15 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
         <div className="relative" ref={childDropdownRef}>
           <button
             onClick={() => setChildDropdownOpen((prev) => !prev)}
-            className="flex items-center gap-2 pl-1 pr-2 py-1 rounded-module bg-surface-elevated/60 border border-border-default hover:border-border-strong hover:bg-surface-elevated text-left focus-ring transition-all"
+            className="bg-surface-elevated/60 focus-ring flex items-center gap-2 rounded-module border border-border-default py-1 pl-1 pr-2 text-left transition-all hover:border-border-strong hover:bg-surface-elevated"
             aria-label="切换孩子"
             aria-haspopup="listbox"
             aria-expanded={childDropdownOpen}
             aria-controls="child-listbox"
           >
             <ChildAvatar child={currentChild} size="md" shape="rounded" fallbackIcon />
-            <div className="text-right hidden sm:block">
-              <p className="text-sm font-semibold text-text-primary leading-tight">
+            <div className="hidden text-right sm:block">
+              <p className="text-sm font-semibold leading-tight text-text-primary">
                 {currentChild ? currentChild.name : '未选择孩子'}
               </p>
               <p className="text-2xs text-text-tertiary">
@@ -320,7 +311,7 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
               </p>
             </div>
             <ChevronDown
-              className={`w-4 h-4 text-text-muted hidden sm:block transition-transform duration-200 ${
+              className={`hidden size-4 text-text-muted transition-transform duration-200 sm:block ${
                 childDropdownOpen ? 'rotate-180' : ''
               }`}
             />
@@ -332,7 +323,7 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
               ref={childListboxRef}
               role="listbox"
               aria-label="切换孩子"
-              className="absolute right-0 top-full mt-2 w-48 rounded-card bg-surface-elevated border border-border-default overflow-hidden z-50 shadow-card"
+              className="absolute right-0 top-full z-50 mt-2 w-48 overflow-hidden rounded-card border border-border-default bg-surface-elevated shadow-card"
             >
               <div className="p-1.5">
                 {children.map((child, index) => {
@@ -349,18 +340,22 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
                         setCurrentChildId(child.id);
                         setChildDropdownOpen(false);
                       }}
-                      className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-module text-left transition-all ${
+                      className={`flex w-full items-center gap-3 rounded-module px-3 py-2.5 text-left transition-all ${
                         isActive ? 'bg-primary/[0.08]' : 'hover:bg-surface-elevated'
                       }`}
                     >
                       <ChildAvatar child={child} size="sm" shape="rounded" />
-                      <div className="flex-1 min-w-0">
-                        <p className={`text-sm font-semibold truncate ${isActive ? 'text-primary' : 'text-text-primary'}`}>
+                      <div className="min-w-0 flex-1">
+                        <p
+                          className={`truncate text-sm font-semibold ${isActive ? 'text-primary' : 'text-text-primary'}`}
+                        >
                           {child.name}
                         </p>
-                        <p className="text-xs text-text-tertiary">{gradeLabel(child.grade, child.educationSystem)}</p>
+                        <p className="text-xs text-text-tertiary">
+                          {gradeLabel(child.grade, child.educationSystem)}
+                        </p>
                       </div>
-                      {isActive && <Check className="w-4 h-4 text-primary shrink-0" />}
+                      {isActive && <Check className="size-4 shrink-0 text-primary" />}
                     </button>
                   );
                 })}

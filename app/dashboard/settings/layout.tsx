@@ -82,43 +82,43 @@ export default function SettingsLayout({ children }: { children: React.ReactNode
   }));
 
   return (
-    <div className="flex flex-col lg:flex-row gap-4 min-h-[calc(100vh-8rem)]">
+    <div className="flex min-h-[calc(100vh-8rem)] flex-col gap-4 lg:flex-row">
       <motion.aside
         initial={{ opacity: 0, x: -12 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.35 }}
         className={`shrink-0 transition-all duration-300 ${collapsed ? 'lg:w-16' : 'lg:w-56'}`}
       >
-        <div className="flex items-center gap-2 mb-3 px-1">
-          <Settings className="w-4 h-4 text-primary" />
+        <div className="mb-3 flex items-center gap-2 px-1">
+          <Settings className="size-4 text-primary" />
           {!collapsed && (
-            <h1 className="text-base font-bold font-display text-text-primary">设置</h1>
+            <h1 className="font-display text-base font-bold text-text-primary">设置</h1>
           )}
         </div>
 
-        <nav className="flex lg:flex-col gap-4 overflow-x-auto lg:overflow-visible pb-2 lg:pb-0">
+        <nav className="flex gap-4 overflow-x-auto pb-2 lg:flex-col lg:overflow-visible lg:pb-0">
           {visibleNav.map((group) => (
             <div key={group.title} className={collapsed ? 'hidden lg:block' : ''}>
               {!collapsed && (
-                <p className="px-3 mb-1.5 text-2xs font-semibold text-text-muted uppercase tracking-wider">
+                <p className="mb-1.5 px-3 text-2xs font-semibold uppercase tracking-wider text-text-muted">
                   {group.title}
                 </p>
               )}
-              <div className="flex lg:flex-col gap-0.5">
+              <div className="flex gap-0.5 lg:flex-col">
                 {group.items.map((item) => {
                   const isActive = pathname === item.href || pathname.startsWith(`${item.href}/`);
                   return (
                     <Link
                       key={item.name}
                       href={item.href}
-                      className={`flex items-center gap-2 px-3 py-2 rounded-xl text-left transition-colors whitespace-nowrap ${
+                      className={`flex items-center gap-2 whitespace-nowrap rounded-xl px-3 py-2 text-left transition-colors ${
                         isActive
-                          ? 'bg-primary/[0.08] text-primary font-medium'
+                          ? 'bg-primary/[0.08] font-medium text-primary'
                           : 'text-text-tertiary hover:bg-surface-hover hover:text-text-secondary'
                       }`}
                       title={collapsed ? item.name : undefined}
                     >
-                      <item.icon className="w-4 h-4 shrink-0" />
+                      <item.icon className="size-4 shrink-0" />
                       {!collapsed && <span className="text-xs">{item.name}</span>}
                     </Link>
                   );
@@ -130,14 +130,14 @@ export default function SettingsLayout({ children }: { children: React.ReactNode
 
         <button
           onClick={() => setCollapsed(!collapsed)}
-          className="hidden lg:flex items-center justify-center w-8 h-8 mt-4 rounded-lg bg-surface-hover text-text-muted hover:text-text-secondary transition-colors"
+          className="mt-4 hidden size-8 items-center justify-center rounded-lg bg-surface-hover text-text-muted transition-colors hover:text-text-secondary lg:flex"
           title={collapsed ? '展开' : '收起'}
         >
-          <ChevronLeft className={`w-4 h-4 transition-transform ${collapsed ? 'rotate-180' : ''}`} />
+          <ChevronLeft className={`size-4 transition-transform ${collapsed ? 'rotate-180' : ''}`} />
         </button>
       </motion.aside>
 
-      <main className="flex-1 min-w-0 overflow-y-auto pb-8">{children}</main>
+      <main className="min-w-0 flex-1 overflow-y-auto pb-8">{children}</main>
     </div>
   );
 }

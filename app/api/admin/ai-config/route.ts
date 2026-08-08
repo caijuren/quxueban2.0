@@ -1,12 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession, type Session } from 'next-auth';
 import { authOptions } from '@/lib/auth';
-import {
-  getAiConfig,
-  upsertAiConfig,
-  toSafeConfig,
-  type SafeAiConfigData,
-} from '@/lib/aiConfig';
+import { getAiConfig, upsertAiConfig, toSafeConfig, type SafeAiConfigData } from '@/lib/aiConfig';
 
 export async function GET() {
   try {

@@ -24,10 +24,7 @@ export async function POST(req: Request, { params }: Params) {
   const childId = params.id;
 
   if (targetWeekId !== params.weekId) {
-    return NextResponse.json(
-      { error: '目标周 ID 与 URL 不一致' },
-      { status: 400 }
-    );
+    return NextResponse.json({ error: '目标周 ID 与 URL 不一致' }, { status: 400 });
   }
 
   const child = await prisma.child.findUnique({ where: { id: childId } });
@@ -43,10 +40,7 @@ export async function POST(req: Request, { params }: Params) {
   });
 
   if (!sourcePlan) {
-    return NextResponse.json(
-      { error: '源周计划不存在' },
-      { status: 404 }
-    );
+    return NextResponse.json({ error: '源周计划不存在' }, { status: 404 });
   }
 
   const rawTasks = (sourcePlan.tasks as unknown as Partial<WeeklyTaskItem>[]) || [];

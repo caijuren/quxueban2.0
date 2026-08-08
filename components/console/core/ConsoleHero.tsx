@@ -26,30 +26,30 @@ export default function ConsoleHero({
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.35 }}
-      className="relative overflow-hidden rounded-[20px] bg-gradient-to-br from-surface to-surface-elevated border border-border-default p-6"
+      className="relative overflow-hidden rounded-[20px] border border-border-default bg-gradient-to-br from-surface to-surface-elevated p-6"
     >
       {/* Ambient glow */}
-      <div className="absolute -top-20 -right-20 w-64 h-64 bg-primary/10 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute -bottom-16 -left-16 w-48 h-48 bg-ai/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="bg-primary/10 pointer-events-none absolute -right-20 -top-20 size-64 rounded-full blur-3xl" />
+      <div className="bg-ai/10 pointer-events-none absolute -bottom-16 -left-16 size-48 rounded-full blur-3xl" />
 
       <div className="relative">
         {/* Breadcrumb / title */}
-        <div className="flex items-center gap-2 text-text-muted text-xs mb-4">
-          <Home className="w-3.5 h-3.5" />
+        <div className="mb-4 flex items-center gap-2 text-xs text-text-muted">
+          <Home className="size-3.5" />
           <span>家庭学习控制台</span>
           <span>/</span>
           <span className="text-text-secondary">成长概览</span>
         </div>
 
         {/* Child selector + status */}
-        <div className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-6">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-6">
           <button
             onClick={onSwitchChild}
-            className="group flex items-center gap-3 p-2 pr-4 rounded-2xl bg-surface-hover border border-border-subtle hover:border-primary/30 hover:bg-surface-hover transition-all"
+            className="hover:border-primary/30 group flex items-center gap-3 rounded-2xl border border-border-subtle bg-surface-hover p-2 pr-4 transition-all hover:bg-surface-hover"
           >
             <ChildAvatar child={child} size="xl" shape="rounded" fallbackIcon />
             <div className="text-left">
-              <p className="text-lg font-bold text-text-primary leading-tight">
+              <p className="text-lg font-bold leading-tight text-text-primary">
                 {child ? child.name : '未选择孩子'}
               </p>
               <p className="text-xs text-text-tertiary">
@@ -58,18 +58,18 @@ export default function ConsoleHero({
                   : '请选择孩子'}
               </p>
             </div>
-            <ChevronDown className="w-4 h-4 text-text-muted group-hover:text-primary transition-colors" />
+            <ChevronDown className="size-4 text-text-muted transition-colors group-hover:text-primary" />
           </button>
 
           <div className="flex items-center gap-3 sm:gap-4">
             {completionRate !== undefined && (
-              <div className="px-4 py-2 rounded-xl bg-surface-hover">
+              <div className="rounded-xl bg-surface-hover px-4 py-2">
                 <p className="text-2xs text-text-muted">本周完成</p>
                 <p className="text-base font-bold text-primary">{completionRate}%</p>
               </div>
             )}
             {aiSuggestionsCount !== undefined && (
-              <div className="px-4 py-2 rounded-xl bg-surface-hover">
+              <div className="rounded-xl bg-surface-hover px-4 py-2">
                 <p className="text-2xs text-text-muted">AI 建议</p>
                 <p className="text-base font-bold text-ai">{aiSuggestionsCount} 条</p>
               </div>

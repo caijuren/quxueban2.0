@@ -78,9 +78,10 @@ function PlanPageContent() {
   // Sync expanded plan with child's bound route
   useEffect(() => {
     if (!currentChild?.routeId) {
-      const firstPrimary = activeStage === '中考'
-        ? middleSchoolPlans.find((p) => p.type === 'primary')
-        : defaultPlans.find((p) => p.type === 'primary');
+      const firstPrimary =
+        activeStage === '中考'
+          ? middleSchoolPlans.find((p) => p.type === 'primary')
+          : defaultPlans.find((p) => p.type === 'primary');
       setExpandedPlanId(firstPrimary?.id ?? null);
       return;
     }
@@ -100,10 +101,7 @@ function PlanPageContent() {
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
-      if (
-        stageDropdownRef.current &&
-        !stageDropdownRef.current.contains(e.target as Node)
-      ) {
+      if (stageDropdownRef.current && !stageDropdownRef.current.contains(e.target as Node)) {
         setStageDropdownOpen(false);
       }
     };
@@ -161,14 +159,14 @@ function PlanPageContent() {
         initial={shouldReduceMotion ? false : { opacity: 0, y: -8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4 }}
-        className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
+        className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
       >
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center">
-            <Route className="w-5 h-5 text-primary" />
+          <div className="bg-primary/10 border-primary/20 flex size-10 items-center justify-center rounded-xl border">
+            <Route className="size-5 text-primary" />
           </div>
           <div>
-            <h1 className="text-2xl sm:text-3xl font-bold font-display">
+            <h1 className="font-display text-2xl font-bold sm:text-3xl">
               {currentChild ? `${currentChild.name}的路线方案` : '路线方案'}
             </h1>
           </div>
@@ -177,20 +175,20 @@ function PlanPageContent() {
           <div ref={stageDropdownRef} className="relative">
             <button
               onClick={() => setStageDropdownOpen((prev) => !prev)}
-              className="flex items-center gap-2 px-3 py-2 rounded-lg bg-surface-elevated border border-border-default text-sm font-medium text-text-secondary hover:bg-surface-elevated transition-colors focus-ring"
+              className="focus-ring flex items-center gap-2 rounded-lg border border-border-default bg-surface-elevated px-3 py-2 text-sm font-medium text-text-secondary transition-colors hover:bg-surface-elevated"
               aria-haspopup="listbox"
               aria-expanded={stageDropdownOpen}
             >
               <span className="text-text-muted">阶段</span>
-              <span className="text-primary font-semibold">{activeStage}</span>
+              <span className="font-semibold text-primary">{activeStage}</span>
               <ChevronDown
-                className={`w-3.5 h-3.5 text-text-tertiary transition-transform duration-200 ${
+                className={`size-3.5 text-text-tertiary transition-transform duration-200 ${
                   stageDropdownOpen ? 'rotate-180' : ''
                 }`}
               />
             </button>
             {stageDropdownOpen && (
-              <div className="absolute right-0 top-full mt-2 w-40 rounded-xl bg-surface-elevated border border-border-default overflow-hidden z-50 shadow-2xl">
+              <div className="absolute right-0 top-full z-50 mt-2 w-40 overflow-hidden rounded-xl border border-border-default bg-surface-elevated shadow-2xl">
                 {stages.map((stage) => {
                   const isActive = activeStage === stage.id;
                   const disabled = stage.status === 'coming';
@@ -203,18 +201,16 @@ function PlanPageContent() {
                         setActiveStage(stage.id);
                         setStageDropdownOpen(false);
                       }}
-                      className={`w-full text-left px-3 py-2 text-sm transition-colors flex items-center justify-between ${
+                      className={`flex w-full items-center justify-between px-3 py-2 text-left text-sm transition-colors ${
                         disabled
-                          ? 'text-text-muted cursor-not-allowed'
+                          ? 'cursor-not-allowed text-text-muted'
                           : isActive
-                          ? 'bg-primary/[0.08] text-primary font-medium'
-                          : 'text-text-secondary hover:bg-surface-elevated'
+                            ? 'bg-primary/[0.08] font-medium text-primary'
+                            : 'text-text-secondary hover:bg-surface-elevated'
                       }`}
                     >
                       {stage.label}
-                      {disabled && (
-                        <span className="text-2xs text-text-muted">即将上线</span>
-                      )}
+                      {disabled && <span className="text-2xs text-text-muted">即将上线</span>}
                     </button>
                   );
                 })}
@@ -223,9 +219,9 @@ function PlanPageContent() {
           </div>
           <button
             onClick={() => setShowNewPlanModal(true)}
-            className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-primary text-white text-sm font-semibold hover:bg-primary/90 transition-all duration-200 focus-ring"
+            className="focus-ring flex items-center gap-1.5 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-inverse transition-all duration-200 hover:bg-primary/90"
           >
-            <Plus className="w-4 h-4" />
+            <Plus className="size-4" />
             新建方案
           </button>
         </div>
@@ -260,71 +256,86 @@ function PlanPageContent() {
                 {/* Header — always visible */}
                 <button
                   onClick={() => togglePlan(plan.id)}
-                  className="w-full p-4 text-left focus-ring rounded-xl"
+                  className="focus-ring w-full rounded-xl p-4 text-left"
                   aria-expanded={isExpanded}
                 >
                   <div className="flex items-start justify-between gap-4">
                     <div className="flex items-start gap-3">
                       <div
-                        className={`w-10 h-10 rounded-xl ${type.bg} flex items-center justify-center shrink-0`}
+                        className={`size-10 rounded-xl ${type.bg} flex shrink-0 items-center justify-center`}
                         style={{
-                          boxShadow: plan.type === 'primary' ? '0 0 15px rgba(244, 63, 94, 0.12)' : 'none',
+                          boxShadow:
+                            plan.type === 'primary' ? '0 0 15px rgba(244, 63, 94, 0.12)' : 'none',
                         }}
                       >
                         {plan.type === 'primary' ? (
-                          <Target className={`w-5 h-5 ${type.color}`} />
+                          <Target className={`size-5 ${type.color}`} />
                         ) : (
-                          <Shield className={`w-5 h-5 ${type.color}`} />
+                          <Shield className={`size-5 ${type.color}`} />
                         )}
                       </div>
                       <div>
-                        <div className="flex items-center gap-2 flex-wrap">
-                          <h2 className="text-base font-bold font-display">{plan.name}</h2>
+                        <div className="flex flex-wrap items-center gap-2">
+                          <h2 className="font-display text-base font-bold">{plan.name}</h2>
                           <span
-                            className={`px-2 py-0.5 rounded-md text-2xs font-medium ${type.bg} ${type.color} border ${type.border}`}
+                            className={`rounded-md px-2 py-0.5 text-2xs font-medium ${type.bg} ${type.color} border ${type.border}`}
                           >
                             {type.label}
                           </span>
-                          <span className={`flex items-center gap-1 text-2xs font-medium ${status.color}`}>
-                            <status.icon className="w-3 h-3" />
+                          <span
+                            className={`flex items-center gap-1 text-2xs font-medium ${status.color}`}
+                          >
+                            <status.icon className="size-3" />
                             {status.label}
                           </span>
                         </div>
-                        <p className="text-xs text-text-muted mt-1 max-w-xl line-clamp-1">
+                        <p className="mt-1 line-clamp-1 max-w-xl text-xs text-text-muted">
                           {plan.description}
                         </p>
                       </div>
                     </div>
 
-                    <div className="flex items-center gap-3 shrink-0">
+                    <div className="flex shrink-0 items-center gap-3">
                       <div className="text-right">
-                        <p className="text-2xs text-text-muted mb-0.5">匹配度</p>
+                        <p className="mb-0.5 text-2xs text-text-muted">匹配度</p>
                         <p
-                          className={`text-base font-bold font-display tabular-nums ${
+                          className={`font-display text-base font-bold tabular-nums ${
                             plan.probability >= 80
                               ? 'text-success'
                               : plan.probability >= 60
-                              ? 'text-warning'
-                              : 'text-text-secondary'
+                                ? 'text-warning'
+                                : 'text-text-secondary'
                           }`}
                         >
                           {plan.probability}%
                         </p>
                       </div>
                       {plan.type === 'primary' && activeStage === '小升初' && (
-                        <button
+                        <div
+                          role="button"
+                          tabIndex={0}
                           onClick={(e) => {
                             e.stopPropagation();
                             setShowMatchModal(true);
                           }}
-                          className="w-8 h-8 rounded-lg bg-surface-elevated flex items-center justify-center text-text-tertiary hover:text-primary hover:bg-primary/10 transition-colors focus-ring"
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter' || e.key === ' ') {
+                              e.stopPropagation();
+                              setShowMatchModal(true);
+                            }
+                          }}
+                          className="hover:bg-primary/10 focus-ring flex size-8 cursor-pointer items-center justify-center rounded-lg bg-surface-elevated text-text-tertiary transition-colors hover:text-primary"
                           aria-label="编辑匹配度"
                         >
-                          <Edit3 className="w-3.5 h-3.5" />
-                        </button>
+                          <Edit3 className="size-3.5" />
+                        </div>
                       )}
                       <div className="text-text-muted">
-                        {isExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                        {isExpanded ? (
+                          <ChevronUp className="size-4" />
+                        ) : (
+                          <ChevronDown className="size-4" />
+                        )}
                       </div>
                     </div>
                   </div>
@@ -339,19 +350,19 @@ function PlanPageContent() {
                     transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
                     className="overflow-hidden"
                   >
-                    <div className="px-4 pb-4 pt-0 border-t border-border-subtle">
-                      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 pt-4">
+                    <div className="border-t border-border-subtle px-4 pb-4 pt-0">
+                      <div className="grid grid-cols-1 gap-5 pt-4 lg:grid-cols-2">
                         {/* Requirements */}
                         <div>
-                          <h3 className="text-xs font-semibold text-text-tertiary mb-2.5 flex items-center gap-1.5">
-                            <AlertTriangle className="w-3.5 h-3.5 text-warning" />
+                          <h3 className="mb-2.5 flex items-center gap-1.5 text-xs font-semibold text-text-tertiary">
+                            <AlertTriangle className="size-3.5 text-warning" />
                             关键要求
                           </h3>
                           <div className="flex flex-wrap gap-1.5">
                             {plan.requirements.map((req) => (
                               <span
                                 key={req}
-                                className="px-2 py-1 rounded-md bg-surface-elevated text-xs text-text-secondary border border-border-subtle"
+                                className="rounded-md border border-border-subtle bg-surface-elevated px-2 py-1 text-xs text-text-secondary"
                               >
                                 {req}
                               </span>
@@ -361,8 +372,8 @@ function PlanPageContent() {
 
                         {/* Milestones */}
                         <div>
-                          <h3 className="text-xs font-semibold text-text-tertiary mb-2.5 flex items-center gap-1.5">
-                            <Route className="w-3.5 h-3.5 text-secondary" />
+                          <h3 className="mb-2.5 flex items-center gap-1.5 text-xs font-semibold text-text-tertiary">
+                            <Route className="size-3.5 text-secondary" />
                             关键里程碑
                           </h3>
                           <div className="space-y-1">
@@ -381,44 +392,44 @@ function PlanPageContent() {
 
                       {/* Targets */}
                       <div className="mt-5">
-                        <h3 className="text-xs font-semibold text-text-tertiary mb-2.5 flex items-center gap-1.5">
+                        <h3 className="mb-2.5 flex items-center gap-1.5 text-xs font-semibold text-text-tertiary">
                           {activeStage === '中考' ? (
                             <>
-                              <GraduationCap className="w-3.5 h-3.5 text-primary" />
+                              <GraduationCap className="size-3.5 text-primary" />
                               目标高中
                             </>
                           ) : plan.id === 'sg' ? (
                             <>
-                              <School className="w-3.5 h-3.5 text-primary" />
+                              <School className="size-3.5 text-primary" />
                               目标学校
                             </>
                           ) : plan.id === 'yaohao' ? (
                             <>
-                              <GraduationCap className="w-3.5 h-3.5 text-secondary" />
+                              <GraduationCap className="size-3.5 text-secondary" />
                               目标民办
                             </>
                           ) : (
                             <>
-                              <Home className="w-3.5 h-3.5 text-accent" />
+                              <Home className="size-3.5 text-accent" />
                               保底选项
                             </>
                           )}
                         </h3>
-                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                        <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
                           {plan.targets.map((school) => (
                             <button
                               key={school.slug}
                               onClick={() => router.push(`/dashboard/schools/${school.slug}`)}
-                              className="text-left rounded-xl bg-surface-elevated border border-border-subtle p-3 hover:border-border-default hover:bg-surface-elevated transition-all focus-ring group"
+                              className="focus-ring group rounded-xl border border-border-subtle bg-surface-elevated p-3 text-left transition-all hover:border-border-default hover:bg-surface-elevated"
                             >
                               <div className="flex items-center gap-2.5">
                                 <div
-                                  className={`w-8 h-8 rounded-lg bg-gradient-to-br ${school.color} flex items-center justify-center shrink-0`}
+                                  className={`size-8 rounded-lg bg-gradient-to-br ${school.color} flex shrink-0 items-center justify-center`}
                                 >
-                                  <school.icon className="w-4 h-4 text-text-primary" />
+                                  <school.icon className="size-4 text-text-primary" />
                                 </div>
                                 <div className="min-w-0">
-                                  <h4 className="text-sm font-semibold text-text-secondary truncate group-hover:text-text-primary transition-colors">
+                                  <h4 className="truncate text-sm font-semibold text-text-secondary transition-colors group-hover:text-text-primary">
                                     {school.name}
                                   </h4>
                                   <p className="text-2xs text-text-muted">{school.tag}</p>
@@ -430,17 +441,17 @@ function PlanPageContent() {
                       </div>
 
                       {/* Footer */}
-                      <div className="mt-4 pt-3 border-t border-border-subtle flex items-center justify-between">
+                      <div className="mt-4 flex items-center justify-between border-t border-border-subtle pt-3">
                         <div className="flex items-center gap-1.5 text-xs text-text-muted">
-                          <Clock className="w-3.5 h-3.5" />
+                          <Clock className="size-3.5" />
                           最近更新：2 天前
                         </div>
                         <button
                           onClick={() => router.push(`/dashboard/plan/${plan.id}`)}
-                          className="flex items-center gap-1 text-xs text-primary hover:text-primary-glow transition-colors group/btn focus-ring rounded-md px-1.5 py-1"
+                          className="group/btn focus-ring flex items-center gap-1 rounded-md px-1.5 py-1 text-xs text-primary transition-colors hover:text-primary-glow"
                         >
                           查看完整方案{' '}
-                          <ChevronRight className="w-3.5 h-3.5 group-hover/btn:translate-x-0.5 transition-transform" />
+                          <ChevronRight className="size-3.5 transition-transform group-hover/btn:translate-x-0.5" />
                         </button>
                       </div>
                     </div>
@@ -457,7 +468,7 @@ function PlanPageContent() {
           {planList.length === 0 ? (
             <EmptyState
               title="还没有任何路线方案"
-              description='点击右上角「新建方案」创建第一条升学路线'
+              description="点击右上角「新建方案」创建第一条升学路线"
               action={{ label: '新建方案', onClick: () => setShowNewPlanModal(true) }}
             />
           ) : (

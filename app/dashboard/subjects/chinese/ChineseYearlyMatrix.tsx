@@ -82,32 +82,32 @@ export default function ChineseYearlyMatrix({ config, currentGrade }: ChineseYea
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.2 }}
-        className="rounded-2xl bg-surface-elevated p-6 border border-border-subtle"
+        className="rounded-2xl border border-border-subtle bg-surface-elevated p-6"
       >
-        <div className="flex items-center gap-3 mb-6">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-violet-500 to-fuchsia-500 flex items-center justify-center">
-            <Target className="w-5 h-5 text-text-primary" />
+        <div className="mb-6 flex items-center gap-3">
+          <div className="flex size-10 items-center justify-center rounded-xl bg-gradient-to-br from-violet-500 to-fuchsia-500">
+            <Target className="size-5 text-text-primary" />
           </div>
           <div>
-            <h2 className="text-xl font-bold font-display">关键时间点成果矩阵</h2>
+            <h2 className="font-display text-xl font-bold">关键时间点成果矩阵</h2>
             <p className="text-sm text-text-tertiary">按线路查看关键节点应取得的成果</p>
           </div>
         </div>
 
         {/* Desktop matrix */}
-        <div className="hidden md:block overflow-x-auto">
+        <div className="hidden overflow-x-auto md:block">
           <table className="w-full border-collapse">
             <thead>
               <tr>
-                <th className="text-left text-xs text-text-tertiary font-medium p-3 w-28">线路</th>
+                <th className="w-28 p-3 text-left text-xs font-medium text-text-tertiary">线路</th>
                 {times.map((time) => {
                   const isCurrent = time === currentTimeLabel;
                   return (
-                    <th key={time} className="p-3 text-left min-w-[140px]">
+                    <th key={time} className="min-w-[140px] p-3 text-left">
                       <div className="flex items-center gap-2">
-                        <span className="text-xs text-text-secondary font-medium">{time}</span>
+                        <span className="text-xs font-medium text-text-secondary">{time}</span>
                         {isCurrent && (
-                          <span className="text-2xs px-1.5 py-0.5 rounded bg-primary/10 text-primary border border-primary/20">
+                          <span className="bg-primary/10 border-primary/20 rounded border px-1.5 py-0.5 text-2xs text-primary">
                             当前
                           </span>
                         )}
@@ -122,7 +122,10 @@ export default function ChineseYearlyMatrix({ config, currentGrade }: ChineseYea
                 <tr key={track.id} className="border-t border-border-subtle">
                   <td className="p-3">
                     <div className="flex items-center gap-2">
-                      <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: track.color }} />
+                      <div
+                        className="size-2.5 rounded-full"
+                        style={{ backgroundColor: track.color }}
+                      />
                       <span className="text-sm font-medium text-text-secondary">{track.name}</span>
                     </div>
                   </td>
@@ -133,17 +136,17 @@ export default function ChineseYearlyMatrix({ config, currentGrade }: ChineseYea
                         {achievement ? (
                           <button
                             onClick={() => setSelectedCell({ track, achievement })}
-                            className="w-full text-left rounded-lg bg-surface-elevated border border-border-subtle p-3 hover:border-border-default hover:bg-surface-highlight transition-all group"
+                            className="group w-full rounded-lg border border-border-subtle bg-surface-elevated p-3 text-left transition-all hover:border-border-default hover:bg-surface-highlight"
                           >
-                            <p className="text-sm font-medium text-text-secondary group-hover:text-text-primary transition-colors">
+                            <p className="text-sm font-medium text-text-secondary transition-colors group-hover:text-text-primary">
                               {achievement.keyword}
                             </p>
                             {achievement.milestones && achievement.milestones.length > 0 && (
-                              <div className="flex flex-wrap gap-1 mt-2">
+                              <div className="mt-2 flex flex-wrap gap-1">
                                 {achievement.milestones.map((m) => (
                                   <span
                                     key={m}
-                                    className="text-2xs px-1.5 py-0.5 rounded bg-secondary/10 text-secondary border border-secondary/20"
+                                    className="bg-secondary/10 border-secondary/20 rounded border px-1.5 py-0.5 text-2xs text-secondary"
                                   >
                                     {m}
                                   </span>
@@ -166,11 +169,14 @@ export default function ChineseYearlyMatrix({ config, currentGrade }: ChineseYea
         </div>
 
         {/* Mobile track cards */}
-        <div className="md:hidden space-y-4">
+        <div className="space-y-4 md:hidden">
           {config.tracks.map((track) => (
-            <div key={track.id} className="rounded-xl border border-border-subtle bg-surface-elevated p-4">
-              <div className="flex items-center gap-2 mb-3">
-                <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: track.color }} />
+            <div
+              key={track.id}
+              className="rounded-xl border border-border-subtle bg-surface-elevated p-4"
+            >
+              <div className="mb-3 flex items-center gap-2">
+                <div className="size-2.5 rounded-full" style={{ backgroundColor: track.color }} />
                 <h3 className="font-bold text-text-secondary">{track.name}</h3>
               </div>
               <div className="space-y-2">
@@ -182,12 +188,12 @@ export default function ChineseYearlyMatrix({ config, currentGrade }: ChineseYea
                       key={time}
                       onClick={() => achievement && setSelectedCell({ track, achievement })}
                       disabled={!achievement}
-                      className="w-full flex items-center justify-between rounded-lg border border-border-subtle p-3 disabled:opacity-40 disabled:cursor-not-allowed hover:border-border-default transition-colors"
+                      className="flex w-full items-center justify-between rounded-lg border border-border-subtle p-3 transition-colors hover:border-border-default disabled:cursor-not-allowed disabled:opacity-40"
                     >
                       <div className="flex items-center gap-2">
                         <span className="text-xs text-text-tertiary">{time}</span>
                         {isCurrent && (
-                          <span className="text-2xs px-1.5 py-0.5 rounded bg-primary/10 text-primary border border-primary/20">
+                          <span className="bg-primary/10 border-primary/20 rounded border px-1.5 py-0.5 text-2xs text-primary">
                             当前
                           </span>
                         )}
@@ -218,26 +224,27 @@ export default function ChineseYearlyMatrix({ config, currentGrade }: ChineseYea
         >
           <div className="space-y-4">
             <div>
-              <p className="text-xs text-text-tertiary mb-1">成果说明</p>
-              <p className="text-sm text-text-secondary leading-relaxed whitespace-pre-wrap">
+              <p className="mb-1 text-xs text-text-tertiary">成果说明</p>
+              <p className="whitespace-pre-wrap text-sm leading-relaxed text-text-secondary">
                 {selectedCell.achievement.detail || '暂无详细说明'}
               </p>
             </div>
-            {selectedCell.achievement.milestones && selectedCell.achievement.milestones.length > 0 && (
-              <div>
-                <p className="text-xs text-text-tertiary mb-2">关键里程碑</p>
-                <div className="flex flex-wrap gap-2">
-                  {selectedCell.achievement.milestones.map((m) => (
-                    <span
-                      key={m}
-                      className="text-xs px-2.5 py-1 rounded-lg bg-secondary/10 text-secondary border border-secondary/20"
-                    >
-                      {m}
-                    </span>
-                  ))}
+            {selectedCell.achievement.milestones &&
+              selectedCell.achievement.milestones.length > 0 && (
+                <div>
+                  <p className="mb-2 text-xs text-text-tertiary">关键里程碑</p>
+                  <div className="flex flex-wrap gap-2">
+                    {selectedCell.achievement.milestones.map((m) => (
+                      <span
+                        key={m}
+                        className="bg-secondary/10 border-secondary/20 rounded-lg border px-2.5 py-1 text-xs text-secondary"
+                      >
+                        {m}
+                      </span>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
           </div>
         </Modal>
       )}

@@ -29,9 +29,7 @@ export async function POST(_req: Request, { params }: Params) {
   }
 
   const rawTasks = (plan.tasks as unknown as Partial<WeeklyTaskItem>[]) || [];
-  const tasks = rawTasks.map((task) =>
-    normalizeWeeklyTask(task as WeeklyTaskItem)
-  );
+  const tasks = rawTasks.map((task) => normalizeWeeklyTask(task as WeeklyTaskItem));
 
   const summary = generateAiReview(
     { weekId: plan.weekId, childId: plan.childId, tasks },

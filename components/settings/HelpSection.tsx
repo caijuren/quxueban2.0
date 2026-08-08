@@ -1,7 +1,15 @@
 'use client';
 
 import { useState } from 'react';
-import { HelpCircle, MessageSquare, FileText, ChevronDown, ChevronUp, Send, Loader2 } from 'lucide-react';
+import {
+  HelpCircle,
+  MessageSquare,
+  FileText,
+  ChevronDown,
+  ChevronUp,
+  Send,
+  Loader2,
+} from 'lucide-react';
 import packageInfo from '@/package.json';
 import SettingsSection from './SettingsSection';
 
@@ -52,21 +60,21 @@ export default function HelpSection() {
             return (
               <div
                 key={index}
-                className="rounded-xl bg-surface-elevated border border-border-subtle overflow-hidden"
+                className="overflow-hidden rounded-xl border border-border-subtle bg-surface-elevated"
               >
                 <button
                   onClick={() => setOpenIndex(isOpen ? null : index)}
-                  className="w-full flex items-center justify-between p-4 text-left hover:bg-surface-elevated transition-colors"
+                  className="flex w-full items-center justify-between p-4 text-left transition-colors hover:bg-surface-elevated"
                 >
                   <span className="text-sm font-medium text-text-secondary">{item.q}</span>
                   {isOpen ? (
-                    <ChevronUp className="w-4 h-4 text-text-muted" />
+                    <ChevronUp className="size-4 text-text-muted" />
                   ) : (
-                    <ChevronDown className="w-4 h-4 text-text-muted" />
+                    <ChevronDown className="size-4 text-text-muted" />
                   )}
                 </button>
                 {isOpen && (
-                  <div className="px-4 pb-4 text-sm text-text-tertiary leading-relaxed">
+                  <div className="px-4 pb-4 text-sm leading-relaxed text-text-tertiary">
                     {item.a}
                   </div>
                 )}
@@ -83,17 +91,17 @@ export default function HelpSection() {
             onChange={(e) => setFeedback(e.target.value)}
             placeholder="请描述你遇到的问题或建议..."
             rows={4}
-            className="w-full px-4 py-3 rounded-xl bg-surface-elevated border border-border-default text-sm text-text-secondary placeholder:text-text-tertiary focus:outline-none focus:border-primary transition-all resize-none"
+            className="w-full resize-none rounded-xl border border-border-default bg-surface-elevated px-4 py-3 text-sm text-text-secondary transition-all placeholder:text-text-tertiary focus:border-primary focus:outline-none"
           />
           <input
             type="text"
             value={contact}
             onChange={(e) => setContact(e.target.value)}
             placeholder="联系方式（选填）"
-            className="w-full px-4 py-2.5 rounded-xl bg-surface-elevated border border-border-default text-sm text-text-secondary placeholder:text-text-tertiary focus:outline-none focus:border-primary transition-all"
+            className="w-full rounded-xl border border-border-default bg-surface-elevated px-4 py-2.5 text-sm text-text-secondary transition-all placeholder:text-text-tertiary focus:border-primary focus:outline-none"
           />
           {submitted && (
-            <div className="text-sm px-4 py-2 rounded-lg bg-success/10 text-success border border-success/20">
+            <div className="bg-success/10 border-success/20 rounded-lg border px-4 py-2 text-sm text-success">
               反馈已提交，感谢你的建议！
             </div>
           )}
@@ -101,9 +109,13 @@ export default function HelpSection() {
             <button
               onClick={handleSubmitFeedback}
               disabled={submitting || !feedback.trim()}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-primary text-text-primary text-sm font-medium hover:opacity-90 transition-all disabled:opacity-70"
+              className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-text-primary transition-all hover:opacity-90 disabled:opacity-70"
             >
-              {submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
+              {submitting ? (
+                <Loader2 className="size-4 animate-spin" />
+              ) : (
+                <Send className="size-4" />
+              )}
               提交反馈
             </button>
           </div>
@@ -111,25 +123,25 @@ export default function HelpSection() {
       </SettingsSection>
 
       <SettingsSection title="关于" description="版本与法律信息">
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
           <a
             href="/terms"
             target="_blank"
-            className="flex items-center gap-3 p-4 rounded-xl bg-surface-elevated border border-border-subtle hover:bg-surface-elevated transition-colors"
+            className="flex items-center gap-3 rounded-xl border border-border-subtle bg-surface-elevated p-4 transition-colors hover:bg-surface-elevated"
           >
-            <FileText className="w-5 h-5 text-primary" />
+            <FileText className="size-5 text-primary" />
             <span className="text-sm text-text-secondary">用户协议</span>
           </a>
           <a
             href="/privacy"
             target="_blank"
-            className="flex items-center gap-3 p-4 rounded-xl bg-surface-elevated border border-border-subtle hover:bg-surface-elevated transition-colors"
+            className="flex items-center gap-3 rounded-xl border border-border-subtle bg-surface-elevated p-4 transition-colors hover:bg-surface-elevated"
           >
-            <FileText className="w-5 h-5 text-secondary" />
+            <FileText className="size-5 text-secondary" />
             <span className="text-sm text-text-secondary">隐私政策</span>
           </a>
         </div>
-        <p className="mt-4 text-xs text-text-muted text-center">
+        <p className="mt-4 text-center text-xs text-text-muted">
           趣学伴 v{packageInfo.version} · 升学规划中心
         </p>
       </SettingsSection>

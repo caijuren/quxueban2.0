@@ -1,11 +1,6 @@
 import { Child } from './children';
 import { SYSTEM_TASK_TEMPLATES, SystemTaskTemplate } from './taskTemplates';
-import {
-  TaskAlignment,
-  TaskCategory,
-  WeeklyTaskItem,
-  TaskCompletionRecord,
-} from './storage.types';
+import { TaskAlignment, TaskCategory, WeeklyTaskItem, TaskCompletionRecord } from './storage.types';
 
 export interface AlignmentInput {
   child: Pick<Child, 'routeId'>;

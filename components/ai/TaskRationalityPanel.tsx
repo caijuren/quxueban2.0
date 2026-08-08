@@ -66,16 +66,20 @@ export default function TaskRationalityPanel({
     >
       <button
         onClick={() => setExpanded((v) => !v)}
-        className="w-full flex items-center justify-between px-4 py-3 text-left"
+        className="flex w-full items-center justify-between px-4 py-3 text-left"
       >
         <div className="flex items-center gap-3">
-          <div className={`w-9 h-9 rounded-lg ${config.bg} border ${config.border} flex items-center justify-center`}>
-            <Icon className={`w-4 h-4 ${config.color}`} />
+          <div
+            className={`size-9 rounded-lg ${config.bg} border ${config.border} flex items-center justify-center`}
+          >
+            <Icon className={`size-4 ${config.color}`} />
           </div>
           <div>
             <div className="flex items-center gap-2">
               <span className="text-sm font-bold text-text-secondary">AI 合理性评估</span>
-              <span className={`text-xs px-1.5 py-0.5 rounded border ${config.border} ${config.color}`}>
+              <span
+                className={`rounded border px-1.5 py-0.5 text-xs ${config.border} ${config.color}`}
+              >
                 {config.label}
               </span>
             </div>
@@ -85,57 +89,60 @@ export default function TaskRationalityPanel({
           </div>
         </div>
         {expanded ? (
-          <ChevronUp className="w-4 h-4 text-text-muted" />
+          <ChevronUp className="size-4 text-text-muted" />
         ) : (
-          <ChevronDown className="w-4 h-4 text-text-muted" />
+          <ChevronDown className="size-4 text-text-muted" />
         )}
       </button>
 
       {expanded && (
-        <div className="px-4 pb-4 space-y-3">
+        <div className="space-y-3 px-4 pb-4">
           {assessments.map((assessment, index) => {
             const title = taskTitles?.[index] ?? `任务 ${index + 1}`;
             const c = verdictConfig[assessment.verdict];
             const TaskIcon = c.icon;
             return (
-              <div
-                key={index}
-                className="rounded-lg bg-surface border border-border-subtle p-3"
-              >
-                <div className="flex items-center justify-between mb-2">
-                  <div className="flex items-center gap-2 min-w-0">
-                    <TaskIcon className={`w-3.5 h-3.5 ${c.color} shrink-0`} />
-                    <span className="text-xs font-semibold text-text-secondary truncate">{title}</span>
+              <div key={index} className="rounded-lg border border-border-subtle bg-surface p-3">
+                <div className="mb-2 flex items-center justify-between">
+                  <div className="flex min-w-0 items-center gap-2">
+                    <TaskIcon className={`size-3.5 ${c.color} shrink-0`} />
+                    <span className="truncate text-xs font-semibold text-text-secondary">
+                      {title}
+                    </span>
                   </div>
-                  <span className={`text-xs font-bold ${c.color}`}>{assessment.overallScore} 分</span>
+                  <span className={`text-xs font-bold ${c.color}`}>
+                    {assessment.overallScore} 分
+                  </span>
                 </div>
 
-                <p className="text-[11px] text-text-tertiary mb-2">{assessment.summary}</p>
+                <p className="mb-2 text-[11px] text-text-tertiary">{assessment.summary}</p>
 
-                <div className="space-y-1.5 mb-2">
+                <div className="mb-2 space-y-1.5">
                   {assessment.dimensions.map((dim) => (
                     <div key={dim.id} className="flex items-center gap-2">
-                      <span className="text-[10px] text-text-muted w-16 shrink-0">{dim.name}</span>
-                      <div className="flex-1 h-1.5 rounded-full bg-surface-hover overflow-hidden">
+                      <span className="w-16 shrink-0 text-[10px] text-text-muted">{dim.name}</span>
+                      <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-surface-hover">
                         <div
                           className={`h-full rounded-full ${
                             dim.label === 'risk'
                               ? 'bg-error'
                               : dim.label === 'caution'
-                              ? 'bg-warning'
-                              : 'bg-success'
+                                ? 'bg-warning'
+                                : 'bg-success'
                           }`}
                           style={{ width: `${dim.score}%` }}
                         />
                       </div>
-                      <span className="text-[10px] text-text-tertiary w-7 text-right">{dim.score}</span>
+                      <span className="w-7 text-right text-[10px] text-text-tertiary">
+                        {dim.score}
+                      </span>
                     </div>
                   ))}
                 </div>
 
                 {assessment.suggestions.length > 0 && (
                   <div className="flex items-start gap-1.5 text-[11px] text-text-tertiary">
-                    <Lightbulb className="w-3 h-3 text-warning shrink-0 mt-0.5" />
+                    <Lightbulb className="mt-0.5 size-3 shrink-0 text-warning" />
                     <ul className="space-y-0.5">
                       {assessment.suggestions.map((s, i) => (
                         <li key={i}>{s}</li>

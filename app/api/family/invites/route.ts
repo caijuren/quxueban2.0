@@ -3,11 +3,7 @@ import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 import { familyInviteCreateSchema, validateBody } from '@/lib/validation';
-import {
-  createFamilyInvite,
-  sendInviteEmail,
-  sendInviteSms,
-} from '@/lib/invite';
+import { createFamilyInvite, sendInviteEmail, sendInviteSms } from '@/lib/invite';
 
 const MANAGER_ROLES = new Set(['OWNER', 'ADMIN']);
 
@@ -50,10 +46,7 @@ export async function POST(req: Request) {
         where: { familyId_userId: { familyId: myMembership.familyId, userId: existingUser.id } },
       });
       if (existingMember && existingMember.status !== 'DISABLED') {
-        return NextResponse.json(
-          { error: '该用户已是家庭成员或已收到邀请' },
-          { status: 400 }
-        );
+        return NextResponse.json({ error: '该用户已是家庭成员或已收到邀请' }, { status: 400 });
       }
 
       const member = await prisma.familyMember.upsert({
@@ -96,12 +89,10 @@ export async function POST(req: Request) {
     }
 
     // 未注册用户：创建 FamilyInvite token
-    const invite = await createFamilyInvite(
-      myMembership.familyId,
-      role,
-      session.user.id,
-      { email: email ?? undefined, phone: phone ?? undefined }
-    );
+    const invite = await createFamilyInvite(myMembership.familyId, role, session.user.id, {
+      email: email ?? undefined,
+      phone: phone ?? undefined,
+    });
 
     const origin = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
     const inviteUrl = `${origin}/invite?token=${invite.token}`;
@@ -134,10 +125,7 @@ export async function POST(req: Request) {
     console.error('[family/invites] POST error:', error);
     return NextResponse.json(
       {
-        error:
-          error instanceof Error
-            ? error.message
-            : '创建邀请失败，请稍后重试',
+        error: error instanceof Error ? error.message : '创建邀请失败，请稍后重试',
       },
       { status: 500 }
     );

@@ -211,12 +211,7 @@ const detailTasks: Record<string, { title: string; items: string[] }[]> = {
     },
     {
       title: '初三下 · 中考冲刺',
-      items: [
-        '合理填报名额分配与平行志愿',
-        '二模查漏补缺',
-        '中考稳定发挥',
-        '确认录取',
-      ],
+      items: ['合理填报名额分配与平行志愿', '二模查漏补缺', '中考稳定发挥', '确认录取'],
     },
   ],
   quzhong: [
@@ -249,12 +244,7 @@ const detailTasks: Record<string, { title: string; items: string[] }[]> = {
     },
     {
       title: '初三下 · 冲刺中考',
-      items: [
-        '合理填报志愿，确保保底',
-        '二模冲刺，针对性提分',
-        '中考稳定发挥',
-        '确认录取',
-      ],
+      items: ['合理填报志愿，确保保底', '二模冲刺，针对性提分', '中考稳定发挥', '确认录取'],
     },
   ],
 };
@@ -305,25 +295,23 @@ export default function PlanDetailClient({ id }: { id: string }) {
   const shouldReduceMotion = useReducedMotion();
   const allPlans = [...plans, ...middleSchoolPlans];
   const plan = allPlans.find((p) => p.id === planId);
-  const matrixCurrentGrade = currentChild
-    ? childGradeToMatrixGrade(currentChild.grade)
-    : '一升二';
+  const matrixCurrentGrade = currentChild ? childGradeToMatrixGrade(currentChild.grade) : '一升二';
 
   if (!plan) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[60vh] text-center">
-        <div className="flex items-center justify-center gap-3 mb-2">
-          <div className="w-10 h-10 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center">
-            <Route className="w-5 h-5 text-primary" />
+      <div className="flex min-h-[60vh] flex-col items-center justify-center text-center">
+        <div className="mb-2 flex items-center justify-center gap-3">
+          <div className="bg-primary/10 border-primary/20 flex size-10 items-center justify-center rounded-xl border">
+            <Route className="size-5 text-primary" />
           </div>
           <div>
-            <h1 className="text-2xl sm:text-3xl font-bold font-display">方案未找到</h1>
+            <h1 className="font-display text-2xl font-bold sm:text-3xl">方案未找到</h1>
           </div>
         </div>
-        <p className="text-text-tertiary mb-6">该路线方案不存在或已被删除</p>
+        <p className="mb-6 text-text-tertiary">该路线方案不存在或已被删除</p>
         <Link
           href="/dashboard/plan"
-          className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary text-text-primary font-semibold  transition-all"
+          className="flex items-center gap-2 rounded-xl bg-primary px-5 py-2.5 font-semibold text-text-primary transition-all"
         >
           返回路线方案
         </Link>
@@ -340,9 +328,9 @@ export default function PlanDetailClient({ id }: { id: string }) {
     <div className="space-y-8">
       <Link
         href="/dashboard/plan"
-        className="inline-flex items-center gap-1 text-sm text-text-tertiary hover:text-primary transition-colors mb-2"
+        className="mb-2 inline-flex items-center gap-1 text-sm text-text-tertiary transition-colors hover:text-primary"
       >
-        <ChevronLeft className="w-4 h-4" />
+        <ChevronLeft className="size-4" />
         返回路线方案
       </Link>
 
@@ -351,22 +339,24 @@ export default function PlanDetailClient({ id }: { id: string }) {
         initial={shouldReduceMotion ? false : { opacity: 0, y: -8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4 }}
-        className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
+        className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
       >
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center">
-            <Route className="w-5 h-5 text-primary" />
+          <div className="bg-primary/10 border-primary/20 flex size-10 items-center justify-center rounded-xl border">
+            <Route className="size-5 text-primary" />
           </div>
           <div>
-            <h1 className="text-2xl sm:text-3xl font-bold font-display">{plan.name} · 完整方案</h1>
+            <h1 className="font-display text-2xl font-bold sm:text-3xl">{plan.name} · 完整方案</h1>
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <span className={`px-3 py-1 rounded-full text-sm font-medium ${type.bg} ${type.color} border ${type.border}`}>
+          <span
+            className={`rounded-full px-3 py-1 text-sm font-medium ${type.bg} ${type.color} border ${type.border}`}
+          >
             {type.label}
           </span>
           <span className={`flex items-center gap-1 text-sm font-medium ${status.color}`}>
-            <status.icon className="w-4 h-4" />
+            <status.icon className="size-4" />
             {status.label}
           </span>
         </div>
@@ -377,37 +367,45 @@ export default function PlanDetailClient({ id }: { id: string }) {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.1 }}
-        className={`rounded-2xl bg-surface-elevated p-6 border ${plan.type === 'primary' ? 'border-primary/30' : 'border-border-subtle'} relative overflow-hidden`}
+        className={`rounded-2xl border bg-surface-elevated p-6 ${plan.type === 'primary' ? 'border-primary/30' : 'border-border-subtle'} relative overflow-hidden`}
       >
         {plan.type === 'primary' && (
-          <div className="absolute top-0 right-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
+          <div className="bg-primary/5 absolute right-0 top-0 size-96 -translate-y-1/2 translate-x-1/2 rounded-full blur-3xl" />
         )}
-        <div className="relative z-10 grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="relative z-10 grid grid-cols-1 gap-8 lg:grid-cols-3">
           <div className="lg:col-span-2">
-            <h2 className="text-xl font-bold font-display mb-3">路线概述</h2>
-            <p className="text-text-secondary leading-relaxed mb-4">{plan.description}</p>
+            <h2 className="mb-3 font-display text-xl font-bold">路线概述</h2>
+            <p className="mb-4 leading-relaxed text-text-secondary">{plan.description}</p>
             <div className="flex flex-wrap gap-2">
               {plan.requirements.map((req) => (
                 <span
                   key={req}
-                  className="px-3 py-1.5 rounded-lg bg-surface-elevated text-sm text-text-secondary border border-border-default"
+                  className="rounded-lg border border-border-default bg-surface-elevated px-3 py-1.5 text-sm text-text-secondary"
                 >
                   {req}
                 </span>
               ))}
             </div>
           </div>
-          <div className="flex flex-col justify-center items-center lg:items-end">
-            <p className="text-sm text-text-tertiary mb-1">路线匹配度</p>
+          <div className="flex flex-col items-center justify-center lg:items-end">
+            <p className="mb-1 text-sm text-text-tertiary">路线匹配度</p>
             <p
-              className={`text-5xl font-bold font-display ${
-                plan.probability >= 80 ? 'text-success' : plan.probability >= 60 ? 'text-warning' : 'text-text-secondary'
+              className={`font-display text-5xl font-bold ${
+                plan.probability >= 80
+                  ? 'text-success'
+                  : plan.probability >= 60
+                    ? 'text-warning'
+                    : 'text-text-secondary'
               }`}
             >
               {plan.probability}%
             </p>
-            <p className="text-xs text-text-muted mt-2">
-              {plan.probability >= 80 ? '匹配度较高' : plan.probability >= 60 ? '有提升空间' : '需要重点突破'}
+            <p className="mt-2 text-xs text-text-muted">
+              {plan.probability >= 80
+                ? '匹配度较高'
+                : plan.probability >= 60
+                  ? '有提升空间'
+                  : '需要重点突破'}
             </p>
           </div>
         </div>
@@ -428,18 +426,18 @@ export default function PlanDetailClient({ id }: { id: string }) {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.4 }}
-        className="rounded-2xl bg-surface-elevated p-6 border border-border-subtle"
+        className="rounded-2xl border border-border-subtle bg-surface-elevated p-6"
       >
-        <h2 className="text-xl font-bold font-display mb-6">
+        <h2 className="mb-6 font-display text-xl font-bold">
           {['sizhong', 'shizhong', 'quzhong'].includes(plan.id)
             ? '目标高中'
             : plan.id === 'sg'
-            ? '目标学校'
-            : plan.id === 'yaohao'
-            ? '目标民办'
-            : '保底选项'}
+              ? '目标学校'
+              : plan.id === 'yaohao'
+                ? '目标民办'
+                : '保底选项'}
         </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
           {plan.targets.map((school, index) => (
             <Link key={school.slug} href={`/dashboard/schools/${school.slug}`}>
               <motion.div
@@ -447,21 +445,23 @@ export default function PlanDetailClient({ id }: { id: string }) {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.5 + index * 0.1 }}
                 whileHover={{ y: -4 }}
-                className={`group rounded-xl bg-surface-elevated p-5 border border-border-subtle cursor-pointer transition-all duration-300 ${school.shadow}`}
+                className={`group cursor-pointer rounded-xl border border-border-subtle bg-surface-elevated p-5 transition-all duration-300 ${school.shadow}`}
               >
-                <div className="flex items-center gap-3 mb-3">
-                  <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${school.color} flex items-center justify-center shrink-0`}>
-                    <school.icon className="w-6 h-6 text-text-primary" />
+                <div className="mb-3 flex items-center gap-3">
+                  <div
+                    className={`size-12 rounded-xl bg-gradient-to-br ${school.color} flex shrink-0 items-center justify-center`}
+                  >
+                    <school.icon className="size-6 text-text-primary" />
                   </div>
                   <div>
-                    <h4 className="font-bold font-display group-hover:text-text-primary transition-colors">
+                    <h4 className="font-display font-bold transition-colors group-hover:text-text-primary">
                       {school.name}
                     </h4>
                     <p className="text-xs text-text-tertiary">{school.tag}</p>
                   </div>
                 </div>
-                <p className="text-sm text-primary group-hover:text-primary-glow transition-colors flex items-center gap-1">
-                  查看学校详情 <ChevronLeft className="w-3 h-3 rotate-180" />
+                <p className="flex items-center gap-1 text-sm text-primary transition-colors group-hover:text-primary-glow">
+                  查看学校详情 <ChevronLeft className="size-3 rotate-180" />
                 </p>
               </motion.div>
             </Link>
@@ -474,25 +474,25 @@ export default function PlanDetailClient({ id }: { id: string }) {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.5 }}
-        className="rounded-2xl bg-surface-elevated p-6 border border-border-subtle"
+        className="rounded-2xl border border-border-subtle bg-surface-elevated p-6"
       >
-        <h2 className="text-xl font-bold font-display mb-6 flex items-center gap-2">
-          <BookOpen className="w-5 h-5 text-accent" />
+        <h2 className="mb-6 flex items-center gap-2 font-display text-xl font-bold">
+          <BookOpen className="size-5 text-accent" />
           备考资源推荐
         </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {planResources.map((resource, index) => (
             <motion.div
               key={resource.title}
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.6 + index * 0.1 }}
-              className="rounded-xl bg-surface-elevated p-4 border border-border-subtle hover:border-primary/30 hover:bg-surface-highlight transition-all cursor-pointer group"
+              className="hover:border-primary/30 group cursor-pointer rounded-xl border border-border-subtle bg-surface-elevated p-4 transition-all hover:bg-surface-highlight"
             >
-              <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center mb-3 group-hover:bg-primary/20 transition-colors">
-                <resource.icon className="w-5 h-5 text-primary" />
+              <div className="bg-primary/10 group-hover:bg-primary/20 mb-3 flex size-10 items-center justify-center rounded-lg transition-colors">
+                <resource.icon className="size-5 text-primary" />
               </div>
-              <h4 className="font-medium text-text-secondary mb-1">{resource.title}</h4>
+              <h4 className="mb-1 font-medium text-text-secondary">{resource.title}</h4>
               <p className="text-xs text-text-muted">{resource.desc}</p>
             </motion.div>
           ))}
@@ -504,15 +504,15 @@ export default function PlanDetailClient({ id }: { id: string }) {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.6 }}
-        className="flex items-center justify-between rounded-2xl bg-surface-elevated p-6 border border-border-subtle"
+        className="flex items-center justify-between rounded-2xl border border-border-subtle bg-surface-elevated p-6"
       >
         <div className="flex items-center gap-2 text-sm text-text-muted">
-          <Clock className="w-4 h-4" />
+          <Clock className="size-4" />
           最近更新：2 天前
         </div>
-        <button className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary text-text-primary font-semibold  transition-all">
+        <button className="flex items-center gap-2 rounded-xl bg-primary px-5 py-2.5 font-semibold text-text-primary transition-all">
           制定提升计划
-          <ArrowRight className="w-4 h-4" />
+          <ArrowRight className="size-4" />
         </button>
       </motion.div>
     </div>

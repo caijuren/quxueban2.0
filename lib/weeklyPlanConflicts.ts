@@ -33,19 +33,19 @@ function getConflictId(type: ConflictType, day: DayOfWeek, suffix?: string): str
 export function detectConflicts(tasks: WeeklyTaskItem[]): WeeklyPlanConflict[] {
   const conflicts: WeeklyPlanConflict[] = [];
 
-  const tasksByDay = dayOrder.reduce((acc, day) => {
-    acc[day] = tasks.filter((t) => t.day === day);
-    return acc;
-  }, {} as Record<DayOfWeek, WeeklyTaskItem[]>);
+  const tasksByDay = dayOrder.reduce(
+    (acc, day) => {
+      acc[day] = tasks.filter((t) => t.day === day);
+      return acc;
+    },
+    {} as Record<DayOfWeek, WeeklyTaskItem[]>
+  );
 
   dayOrder.forEach((day) => {
     const dayTasks = tasksByDay[day];
     if (dayTasks.length === 0) return;
 
-    const totalMinutes = dayTasks.reduce(
-      (sum, t) => sum + parseDurationMinutes(t.duration),
-      0
-    );
+    const totalMinutes = dayTasks.reduce((sum, t) => sum + parseDurationMinutes(t.duration), 0);
     const limit = isWeekend(day) ? WEEKEND_LIMIT : SCHOOL_DAY_LIMIT;
 
     if (totalMinutes > limit) {
@@ -59,10 +59,13 @@ export function detectConflicts(tasks: WeeklyTaskItem[]): WeeklyPlanConflict[] {
       });
     }
 
-    const categoryCounts = dayTasks.reduce((acc, t) => {
-      acc[t.category] = (acc[t.category] || 0) + 1;
-      return acc;
-    }, {} as Record<TaskCategory, number>);
+    const categoryCounts = dayTasks.reduce(
+      (acc, t) => {
+        acc[t.category] = (acc[t.category] || 0) + 1;
+        return acc;
+      },
+      {} as Record<TaskCategory, number>
+    );
 
     Object.entries(categoryCounts).forEach(([category, count]) => {
       const ratio = count / dayTasks.length;

@@ -70,7 +70,9 @@ export function useUpdateMilestone() {
       data,
     }: {
       id: string;
-      data: Partial<Omit<Milestone, 'status'>> & { status?: 'pending' | 'in_progress' | 'completed' };
+      data: Partial<Omit<Milestone, 'status'>> & {
+        status?: 'pending' | 'in_progress' | 'completed';
+      };
     }) => {
       const res = await fetch(`/api/milestones/${id}`, {
         method: 'PATCH',

@@ -11,10 +11,7 @@ function getExpiryDate(minutes = 10): Date {
   return new Date(Date.now() + minutes * 60 * 1000);
 }
 
-export async function POST(
-  req: NextRequest,
-  { params }: { params: { childId: string } }
-) {
+export async function POST(req: NextRequest, { params }: { params: { childId: string } }) {
   const auth = await getMiniAppUser(req);
   if (!auth || auth.type !== 'parent') return unauthorizedResponse();
 

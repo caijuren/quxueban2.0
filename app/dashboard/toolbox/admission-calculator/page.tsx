@@ -78,19 +78,19 @@ export default function AdmissionCalculatorPage() {
   };
 
   return (
-    <div className="space-y-6 min-h-[calc(100vh-8rem)] max-w-4xl">
+    <div className="min-h-[calc(100vh-8rem)] max-w-4xl space-y-6">
       <motion.div
         initial={shouldReduceMotion ? false : { opacity: 0, y: -8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4 }}
-        className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
+        className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
       >
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center">
-            <Calculator className="w-5 h-5 text-primary" />
+          <div className="bg-primary/10 border-primary/20 flex size-10 items-center justify-center rounded-xl border">
+            <Calculator className="size-5 text-primary" />
           </div>
           <div>
-            <h1 className="text-2xl sm:text-3xl font-bold font-display text-text-primary">
+            <h1 className="font-display text-2xl font-bold text-text-primary sm:text-3xl">
               名额到校计算器
             </h1>
           </div>
@@ -101,21 +101,21 @@ export default function AdmissionCalculatorPage() {
         initial={shouldReduceMotion ? false : { opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4, delay: 0.05 }}
-        className="rounded-2xl border border-border-default bg-surface-elevated p-5 sm:p-6 relative overflow-hidden"
+        className="relative overflow-hidden rounded-2xl border border-border-default bg-surface-elevated p-5 sm:p-6"
       >
-        <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 pointer-events-none" />
+        <div className="bg-primary/5 pointer-events-none absolute right-0 top-0 size-64 -translate-y-1/2 translate-x-1/3 rounded-full blur-3xl" />
         <div className="relative space-y-5">
           <div>
-            <label className="block text-sm font-medium text-text-secondary mb-2">学籍</label>
+            <label className="mb-2 block text-sm font-medium text-text-secondary">学籍</label>
             <div className="flex flex-wrap gap-2">
               {['本市学籍', '外地学籍'].map((opt) => (
                 <button
                   key={opt}
                   onClick={() => setRegistrationType(opt)}
-                  className={`px-4 h-10 rounded-xl text-sm border transition-all ${
+                  className={`h-10 rounded-xl border px-4 text-sm transition-all ${
                     registrationType === opt
                       ? 'bg-primary/10 border-primary/30 text-primary'
-                      : 'bg-surface border-border-default text-text-secondary hover:border-border-strong'
+                      : 'border-border-default bg-surface text-text-secondary hover:border-border-strong'
                   }`}
                 >
                   {opt}
@@ -125,16 +125,16 @@ export default function AdmissionCalculatorPage() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-text-secondary mb-2">户籍</label>
+            <label className="mb-2 block text-sm font-medium text-text-secondary">户籍</label>
             <div className="flex flex-wrap gap-2">
               {['本市户籍', '非本市户籍'].map((opt) => (
                 <button
                   key={opt}
                   onClick={() => setHouseholdType(opt)}
-                  className={`px-4 h-10 rounded-xl text-sm border transition-all ${
+                  className={`h-10 rounded-xl border px-4 text-sm transition-all ${
                     householdType === opt
                       ? 'bg-primary/10 border-primary/30 text-primary'
-                      : 'bg-surface border-border-default text-text-secondary hover:border-border-strong'
+                      : 'border-border-default bg-surface text-text-secondary hover:border-border-strong'
                   }`}
                 >
                   {opt}
@@ -144,8 +144,8 @@ export default function AdmissionCalculatorPage() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-text-secondary mb-2">
-              连续就读年限：<span className="text-primary font-semibold">{continuousYears} 年</span>
+            <label className="mb-2 block text-sm font-medium text-text-secondary">
+              连续就读年限：<span className="font-semibold text-primary">{continuousYears} 年</span>
             </label>
             <input
               type="range"
@@ -156,7 +156,7 @@ export default function AdmissionCalculatorPage() {
               onChange={(e) => setContinuousYears(parseInt(e.target.value, 10))}
               className="w-full accent-primary"
             />
-            <div className="flex justify-between text-2xs text-text-muted mt-1">
+            <div className="mt-1 flex justify-between text-2xs text-text-muted">
               <span>0 年</span>
               <span>9 年</span>
             </div>
@@ -164,13 +164,13 @@ export default function AdmissionCalculatorPage() {
 
           {householdType === '非本市户籍' && (
             <>
-              <div className="flex items-center gap-3 p-4 rounded-xl bg-surface border border-border-subtle">
+              <div className="flex items-center gap-3 rounded-xl border border-border-subtle bg-surface p-4">
                 <input
                   id="hasProperty"
                   type="checkbox"
                   checked={hasProperty}
                   onChange={(e) => setHasProperty(e.target.checked)}
-                  className="w-4 h-4 accent-primary rounded"
+                  className="size-4 rounded accent-primary"
                 />
                 <label htmlFor="hasProperty" className="text-sm text-text-secondary">
                   在本区有房产
@@ -178,7 +178,7 @@ export default function AdmissionCalculatorPage() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-text-secondary mb-2">
+                <label className="mb-2 block text-sm font-medium text-text-secondary">
                   父母一方社保连续缴纳年限：{socialInsuranceYears} 年
                 </label>
                 <input
@@ -197,7 +197,7 @@ export default function AdmissionCalculatorPage() {
           <button
             onClick={calculate}
             disabled={loading}
-            className="w-full h-12 rounded-xl bg-primary text-white font-semibold hover:bg-primary-glow transition-colors disabled:opacity-60"
+            className="h-12 w-full rounded-xl bg-primary font-semibold text-inverse transition-colors hover:bg-primary-glow disabled:opacity-60"
           >
             {loading ? '计算中...' : '计算资格'}
           </button>
@@ -214,18 +214,20 @@ export default function AdmissionCalculatorPage() {
           <div className="flex items-start gap-4">
             {(() => {
               const Icon = levelConfig[result.level].icon;
-              return <Icon className={`w-8 h-8 ${levelConfig[result.level].color} shrink-0`} />;
+              return <Icon className={`size-8 ${levelConfig[result.level].color} shrink-0`} />;
             })()}
             <div className="flex-1">
-              <h2 className={`text-xl font-bold font-display ${levelConfig[result.level].color} mb-2`}>
+              <h2
+                className={`font-display text-xl font-bold ${levelConfig[result.level].color} mb-2`}
+              >
                 {levelConfig[result.level].title}
               </h2>
-              <p className="text-sm text-text-secondary mb-4">{result.reason}</p>
+              <p className="mb-4 text-sm text-text-secondary">{result.reason}</p>
               {result.suggestions.length > 0 && (
                 <ul className="space-y-2">
                   {result.suggestions.map((s, i) => (
                     <li key={i} className="flex items-start gap-2 text-sm text-text-tertiary">
-                      <span className="w-1 h-1 rounded-full bg-text-muted mt-2 shrink-0" />
+                      <span className="mt-2 size-1 shrink-0 rounded-full bg-text-muted" />
                       {s}
                     </li>
                   ))}

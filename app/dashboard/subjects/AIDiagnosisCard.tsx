@@ -36,73 +36,69 @@ export default function AIDiagnosisCard({
 }: AIDiagnosisCardProps) {
   const { data: diagnosis, isLoading, error } = useAiDiagnosis(childId);
 
-  const subjectHealth = diagnosis?.subjectHealth.find(
-    (s) => s.subject === subjectLabels[subject]
-  );
+  const subjectHealth = diagnosis?.subjectHealth.find((s) => s.subject === subjectLabels[subject]);
 
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.4 }}
-      className="rounded-2xl relative overflow-hidden border border-border-subtle"
+      className="relative overflow-hidden rounded-2xl border border-border-subtle"
       style={{
         background:
           'linear-gradient(135deg, rgba(139, 92, 246, 0.15) 0%, rgba(59, 130, 246, 0.08) 100%)',
       }}
     >
-      <div className="absolute -top-20 -right-20 w-40 h-40 rounded-full bg-secondary/20 blur-3xl" />
-      <div className="absolute -bottom-20 -left-20 w-40 h-40 rounded-full bg-primary/10 blur-3xl" />
+      <div className="bg-secondary/20 absolute -right-20 -top-20 size-40 rounded-full blur-3xl" />
+      <div className="bg-primary/10 absolute -bottom-20 -left-20 size-40 rounded-full blur-3xl" />
 
       <div className="relative p-6">
         <div className="flex items-start justify-between gap-4">
           <div className="w-full">
-            <div className="flex items-center gap-2 mb-3">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-secondary to-secondary-glow flex items-center justify-center">
-                <Brain className="w-5 h-5 text-text-primary" />
+            <div className="mb-3 flex items-center gap-2">
+              <div className="flex size-10 items-center justify-center rounded-xl bg-gradient-to-br from-secondary to-secondary-glow">
+                <Brain className="size-5 text-text-primary" />
               </div>
-              <div className="px-2 py-0.5 rounded-md bg-secondary/10 text-secondary text-xs border border-secondary/20 flex items-center gap-1">
-                <Sparkles className="w-3 h-3" />
+              <div className="bg-secondary/10 border-secondary/20 flex items-center gap-1 rounded-md border px-2 py-0.5 text-xs text-secondary">
+                <Sparkles className="size-3" />
                 AI 智能诊断
               </div>
             </div>
-            <h2 className="text-xl font-bold font-display mb-2">
+            <h2 className="mb-2 font-display text-xl font-bold">
               {subjectLabels[subject]}学科 AI 诊断
             </h2>
-            <p className="text-sm text-text-tertiary mb-4">
+            <p className="mb-4 text-sm text-text-tertiary">
               基于 {childName} 的整体升学进度、路线匹配度和学科节奏，AI
               给出该学科的长期学习调整建议。
             </p>
 
             {!childId || isLoading ? (
-              <div className="flex items-center gap-2 text-sm text-text-tertiary py-4">
-                <Loader2 className="w-4 h-4 animate-spin" />
+              <div className="flex items-center gap-2 py-4 text-sm text-text-tertiary">
+                <Loader2 className="size-4 animate-spin" />
                 正在分析 {subjectLabels[subject]} 学科整体进度…
               </div>
             ) : error ? (
-              <div className="flex items-start gap-2 text-sm text-error py-2">
-                <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
+              <div className="flex items-start gap-2 py-2 text-sm text-error">
+                <AlertCircle className="mt-0.5 size-4 shrink-0" />
                 <span>诊断失败：{error.message}</span>
               </div>
             ) : !diagnosis ? null : (
               <div className="space-y-4">
                 {diagnosis.overallScore > 0 && (
-                  <div className="flex items-center gap-4 rounded-xl bg-surface-elevated/60 border border-border-subtle p-4">
-                    <div className="text-center min-w-[72px]">
+                  <div className="bg-surface-elevated/60 flex items-center gap-4 rounded-xl border border-border-subtle p-4">
+                    <div className="min-w-[72px] text-center">
                       <div
                         className={cn(
-                          'text-3xl font-bold font-display',
+                          'font-display text-3xl font-bold',
                           scoreColor(diagnosis.overallScore)
                         )}
                       >
                         {diagnosis.overallScore}
                       </div>
-                      <div className="text-[11px] text-text-muted mt-0.5">
-                        综合评分
-                      </div>
+                      <div className="mt-0.5 text-[11px] text-text-muted">综合评分</div>
                     </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm text-text-secondary leading-relaxed">
+                    <div className="min-w-0 flex-1">
+                      <p className="text-sm leading-relaxed text-text-secondary">
                         {diagnosis.summary}
                       </p>
                     </div>
@@ -110,36 +106,34 @@ export default function AIDiagnosisCard({
                 )}
 
                 {subjectHealth && (
-                  <div className="rounded-xl bg-surface-elevated/60 border border-border-subtle p-4">
-                    <div className="flex items-center justify-between mb-2">
+                  <div className="bg-surface-elevated/60 rounded-xl border border-border-subtle p-4">
+                    <div className="mb-2 flex items-center justify-between">
                       <span className="text-sm font-medium text-text-secondary">
                         {subjectHealth.subject}健康度
                       </span>
                       <span
                         className={cn(
-                          'text-lg font-bold font-display',
+                          'font-display text-lg font-bold',
                           scoreColor(subjectHealth.score)
                         )}
                       >
                         {subjectHealth.score}
                       </span>
                     </div>
-                    <div className="h-1.5 w-full rounded-full bg-surface-highlight overflow-hidden mb-2">
+                    <div className="mb-2 h-1.5 w-full overflow-hidden rounded-full bg-surface-highlight">
                       <div
                         className={cn('h-full rounded-full', scoreBg(subjectHealth.score))}
                         style={{ width: `${subjectHealth.score}%` }}
                       />
                     </div>
-                    <p className="text-sm text-text-tertiary">
-                      {subjectHealth.comment}
-                    </p>
+                    <p className="text-sm text-text-tertiary">{subjectHealth.comment}</p>
                   </div>
                 )}
 
                 {diagnosis.risks && diagnosis.risks.length > 0 && (
                   <div className="space-y-2">
-                    <h3 className="text-xs font-medium text-text-muted flex items-center gap-1.5">
-                      <TrendingUp className="w-3.5 h-3.5" />
+                    <h3 className="flex items-center gap-1.5 text-xs font-medium text-text-muted">
+                      <TrendingUp className="size-3.5" />
                       重点关注
                     </h3>
                     <div className="flex flex-wrap gap-2">
@@ -147,7 +141,7 @@ export default function AIDiagnosisCard({
                         <span
                           key={risk.title}
                           className={cn(
-                            'px-3 py-1.5 rounded-lg border text-xs font-medium',
+                            'rounded-lg border px-3 py-1.5 text-xs font-medium',
                             risk.level === 'high'
                               ? 'bg-error/10 border-error/20 text-error'
                               : risk.level === 'medium'
@@ -181,7 +175,7 @@ export default function AIDiagnosisCard({
                           >
                             <span
                               className={cn(
-                                'mt-1 w-1.5 h-1.5 rounded-full shrink-0',
+                                'mt-1 h-1.5 w-1.5 shrink-0 rounded-full',
                                 s.priority === 'must'
                                   ? 'bg-error'
                                   : s.priority === 'should'
@@ -191,10 +185,7 @@ export default function AIDiagnosisCard({
                             />
                             <span>
                               <span className="font-medium">{s.title}</span>
-                              <span className="text-text-tertiary">
-                                {' '}
-                                · {s.description}
-                              </span>
+                              <span className="text-text-tertiary"> · {s.description}</span>
                             </span>
                           </li>
                         ))}

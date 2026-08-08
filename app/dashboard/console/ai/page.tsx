@@ -11,14 +11,14 @@ export default function AiConfigPage() {
   if (isLoading) {
     return (
       <div className="flex h-[60vh] items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        <Loader2 className="size-8 animate-spin text-primary" />
       </div>
     );
   }
 
   if (error || !user) {
     return (
-      <div className="rounded-2xl border border-error/20 bg-error/10 p-6 text-error">
+      <div className="border-error/20 bg-error/10 rounded-2xl border p-6 text-error">
         {error instanceof Error ? error.message : '加载失败'}
       </div>
     );
@@ -33,13 +33,11 @@ export default function AiConfigPage() {
       ) : (
         <div className="rounded-2xl border border-border-default bg-surface p-6">
           <div className="flex items-start gap-4">
-            <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
-              <Lock className="w-5 h-5 text-primary" />
+            <div className="bg-primary/10 flex size-10 shrink-0 items-center justify-center rounded-xl">
+              <Lock className="size-5 text-primary" />
             </div>
             <div>
-              <h3 className="text-base font-bold text-text-primary mb-1">
-                请联系管理员
-              </h3>
+              <h3 className="mb-1 text-base font-bold text-text-primary">请联系管理员</h3>
               <p className="text-sm text-text-muted">
                 AI 助手配置仅对管理员开放。如需调整模型、密钥或功能开关，请联系家庭管理员。
               </p>

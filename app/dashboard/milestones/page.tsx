@@ -25,10 +25,31 @@ import {
   type Milestone,
 } from '@/lib/hooks/useMilestones';
 
-const statusConfig: Record<string, { icon: typeof CheckCircle2; color: string; bg: string; label: string; next: string }> = {
-  completed: { icon: CheckCircle2, color: 'text-success', bg: 'bg-success/10', label: '已完成', next: 'pending' },
-  in_progress: { icon: Clock, color: 'text-warning', bg: 'bg-warning/10', label: '进行中', next: 'completed' },
-  pending: { icon: Circle, color: 'text-text-tertiary', bg: 'bg-surface-hover', label: '待开始', next: 'in_progress' },
+const statusConfig: Record<
+  string,
+  { icon: typeof CheckCircle2; color: string; bg: string; label: string; next: string }
+> = {
+  completed: {
+    icon: CheckCircle2,
+    color: 'text-success',
+    bg: 'bg-success/10',
+    label: '已完成',
+    next: 'pending',
+  },
+  in_progress: {
+    icon: Clock,
+    color: 'text-warning',
+    bg: 'bg-warning/10',
+    label: '进行中',
+    next: 'completed',
+  },
+  pending: {
+    icon: Circle,
+    color: 'text-text-tertiary',
+    bg: 'bg-surface-hover',
+    label: '待开始',
+    next: 'in_progress',
+  },
 };
 
 function groupByGrade(milestones: Milestone[]) {
@@ -55,7 +76,8 @@ export default function MilestonesPage() {
   const [newGrade, setNewGrade] = useState(currentChild?.grade ?? 1);
 
   const handleStatusToggle = (milestone: Milestone) => {
-    const next = (statusConfig[milestone.status]?.next ?? 'in_progress') as 'pending' | 'in_progress' | 'completed';
+    const next = (statusConfig[milestone.status]?.next ?? 'in_progress') as
+      'pending' | 'in_progress' | 'completed';
     updateMilestone.mutate({ id: milestone.id, data: { status: next } });
   };
 
@@ -108,14 +130,14 @@ export default function MilestonesPage() {
         initial={shouldReduceMotion ? false : { opacity: 0, y: -8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4 }}
-        className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
+        className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
       >
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center">
-            <Flag className="w-5 h-5 text-primary" />
+          <div className="bg-primary/10 border-primary/20 flex size-10 items-center justify-center rounded-lg border">
+            <Flag className="size-5 text-primary" />
           </div>
           <div>
-            <h1 className="text-2xl sm:text-3xl font-bold font-display">
+            <h1 className="font-display text-2xl font-bold sm:text-3xl">
               {currentChild ? `${currentChild.name}的里程碑任务` : '里程碑任务'}
             </h1>
           </div>
@@ -123,9 +145,9 @@ export default function MilestonesPage() {
         {currentChild && (
           <button
             onClick={() => setShowAdd(true)}
-            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-primary text-text-primary text-xs font-medium hover:opacity-90 transition-all"
+            className="inline-flex items-center gap-1.5 rounded-lg bg-primary px-3 py-2 text-xs font-medium text-text-primary transition-all hover:opacity-90"
           >
-            <Plus className="w-3.5 h-3.5" />
+            <Plus className="size-3.5" />
             添加里程碑
           </button>
         )}
@@ -137,7 +159,7 @@ export default function MilestonesPage() {
 
       {isLoading && currentChild && (
         <div className="flex items-center justify-center py-12 text-text-muted">
-          <Clock className="w-5 h-5 animate-spin mr-2" />
+          <Clock className="mr-2 size-5 animate-spin" />
           加载中...
         </div>
       )}
@@ -148,16 +170,16 @@ export default function MilestonesPage() {
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 8 }}
-            className="rounded-2xl bg-surface-elevated p-5 border border-border-default space-y-4"
+            className="space-y-4 rounded-2xl border border-border-default bg-surface-elevated p-5"
           >
             <h3 className="font-bold text-text-primary">添加自定义里程碑</h3>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
               <input
                 type="text"
                 value={newTitle}
                 onChange={(e) => setNewTitle(e.target.value)}
                 placeholder="里程碑名称"
-                className="sm:col-span-2 w-full px-3 py-2 rounded-lg bg-surface-elevated border border-border-default text-sm text-text-secondary placeholder:text-text-muted focus:outline-none focus:border-primary"
+                className="w-full rounded-lg border border-border-default bg-surface-elevated px-3 py-2 text-sm text-text-secondary placeholder:text-text-muted focus:border-primary focus:outline-none sm:col-span-2"
               />
               <input
                 type="number"
@@ -166,20 +188,20 @@ export default function MilestonesPage() {
                 placeholder="年级"
                 min={1}
                 max={12}
-                className="w-full px-3 py-2 rounded-lg bg-surface-elevated border border-border-default text-sm text-text-secondary placeholder:text-text-muted focus:outline-none focus:border-primary"
+                className="w-full rounded-lg border border-border-default bg-surface-elevated px-3 py-2 text-sm text-text-secondary placeholder:text-text-muted focus:border-primary focus:outline-none"
               />
             </div>
             <div className="flex justify-end gap-2">
               <button
                 onClick={() => setShowAdd(false)}
-                className="px-3 py-1.5 rounded-lg text-xs text-text-tertiary hover:bg-surface-hover"
+                className="rounded-lg px-3 py-1.5 text-xs text-text-tertiary hover:bg-surface-hover"
               >
                 取消
               </button>
               <button
                 onClick={handleAdd}
                 disabled={!newTitle.trim() || createMilestone.isPending}
-                className="px-3 py-1.5 rounded-lg bg-primary text-text-primary text-xs font-medium hover:opacity-90 disabled:opacity-50"
+                className="rounded-lg bg-primary px-3 py-1.5 text-xs font-medium text-text-primary hover:opacity-90 disabled:opacity-50"
               >
                 {createMilestone.isPending ? '保存中...' : '保存'}
               </button>
@@ -189,113 +211,125 @@ export default function MilestonesPage() {
       </AnimatePresence>
 
       <div className="space-y-6">
-        {currentChild && grouped.map(([grade, items], index) => (
-          <motion.div
-            key={grade}
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: index * 0.1 }}
-            className="rounded-2xl bg-surface-elevated p-6"
-          >
-            <div className="flex items-center gap-4 mb-6">
-              <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-secondary to-secondary-glow flex items-center justify-center">
-                <CalendarCheck className="w-6 h-6 text-text-primary" />
+        {currentChild &&
+          grouped.map(([grade, items], index) => (
+            <motion.div
+              key={grade}
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
+              className="rounded-2xl bg-surface-elevated p-6"
+            >
+              <div className="mb-6 flex items-center gap-4">
+                <div className="flex size-12 items-center justify-center rounded-lg bg-gradient-to-br from-secondary to-secondary-glow">
+                  <CalendarCheck className="size-6 text-text-primary" />
+                </div>
+                <div>
+                  <h2 className="font-display text-xl font-bold">
+                    {gradeLabel(grade, currentChild.educationSystem)}
+                  </h2>
+                  <p className="text-sm text-text-tertiary">
+                    {items.filter((i) => i.status === 'completed').length}/{items.length} 已完成
+                  </p>
+                </div>
+                {grade === currentGrade && (
+                  <span className="bg-primary/10 border-primary/30 ml-auto rounded-full border px-3 py-1 text-xs font-medium text-primary">
+                    当前阶段
+                  </span>
+                )}
               </div>
-              <div>
-                <h2 className="text-xl font-bold font-display">{gradeLabel(grade, currentChild.educationSystem)}</h2>
-                <p className="text-sm text-text-tertiary">
-                  {items.filter((i) => i.status === 'completed').length}/{items.length} 已完成
-                </p>
-              </div>
-              {grade === currentGrade && (
-                <span className="ml-auto px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-medium border border-primary/30">
-                  当前阶段
-                </span>
-              )}
-            </div>
 
-            <div className="space-y-3">
-              {items.map((milestone) => {
-                const config = statusConfig[milestone.status] || statusConfig.pending;
-                const m = milestones.find((x) => x.id === milestone.id)!;
-                return (
-                  <div
-                    key={milestone.id}
-                    className="flex flex-col gap-3 p-4 rounded-lg bg-surface-hover hover:bg-surface-hover transition-all"
-                  >
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-4">
-                        <button
-                          onClick={() => handleStatusToggle(milestone)}
-                          className={`w-10 h-10 rounded-lg ${config.bg} flex items-center justify-center hover:opacity-80 transition-opacity`}
-                          title={`标记为${statusConfig[config.next]?.label ?? ''}`}
-                        >
-                          <config.icon className={`w-5 h-5 ${config.color}`} />
-                        </button>
-                        <div>
-                          <span className="text-text-secondary font-medium">{milestone.title}</span>
-                          {milestone.description && (
-                            <p className="text-xs text-text-muted mt-0.5">{milestone.description}</p>
-                          )}
+              <div className="space-y-3">
+                {items.map((milestone) => {
+                  const config = statusConfig[milestone.status] || statusConfig.pending;
+                  const m = milestones.find((x) => x.id === milestone.id)!;
+                  return (
+                    <div
+                      key={milestone.id}
+                      className="flex flex-col gap-3 rounded-lg bg-surface-hover p-4 transition-all hover:bg-surface-hover"
+                    >
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-4">
+                          <button
+                            onClick={() => handleStatusToggle(milestone)}
+                            className={`size-10 rounded-lg ${config.bg} flex items-center justify-center transition-opacity hover:opacity-80`}
+                            title={`标记为${statusConfig[config.next]?.label ?? ''}`}
+                          >
+                            <config.icon className={`size-5 ${config.color}`} />
+                          </button>
+                          <div>
+                            <span className="font-medium text-text-secondary">
+                              {milestone.title}
+                            </span>
+                            {milestone.description && (
+                              <p className="mt-0.5 text-xs text-text-muted">
+                                {milestone.description}
+                              </p>
+                            )}
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span className={`text-sm font-medium ${config.color}`}>
+                            {config.label}
+                          </span>
+                          <button
+                            onClick={() => deleteMilestone.mutate(milestone.id)}
+                            className="hover:bg-error/10 rounded-lg p-1.5 text-text-tertiary transition-colors hover:text-error"
+                            title="删除"
+                          >
+                            <Trash2 className="size-4" />
+                          </button>
                         </div>
                       </div>
-                      <div className="flex items-center gap-2">
-                        <span className={`text-sm font-medium ${config.color}`}>{config.label}</span>
-                        <button
-                          onClick={() => deleteMilestone.mutate(milestone.id)}
-                          className="p-1.5 rounded-lg text-text-tertiary hover:text-error hover:bg-error/10 transition-colors"
-                          title="删除"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </button>
-                      </div>
-                    </div>
 
-                    <div className="pl-14 space-y-3">
-                      {m.certificateUrls.length > 0 && (
-                        <div className="flex flex-wrap gap-2">
-                          {m.certificateUrls.map((url) => (
-                            <div key={url} className="relative group w-20 h-20 rounded-lg overflow-hidden border border-border-subtle">
-                              <img src={url} alt="证书" className="w-full h-full object-cover" />
-                              <button
-                                onClick={() => handleRemoveImage(milestone.id, url)}
-                                className="absolute top-0.5 right-0.5 p-0.5 rounded bg-black/60 text-white opacity-0 group-hover:opacity-100 transition-opacity"
+                      <div className="space-y-3 pl-14">
+                        {m.certificateUrls.length > 0 && (
+                          <div className="flex flex-wrap gap-2">
+                            {m.certificateUrls.map((url) => (
+                              <div
+                                key={url}
+                                className="group relative size-20 overflow-hidden rounded-lg border border-border-subtle"
                               >
-                                <X className="w-3 h-3" />
-                              </button>
-                            </div>
-                          ))}
-                        </div>
-                      )}
+                                <img src={url} alt="证书" className="size-full object-cover" />
+                                <button
+                                  onClick={() => handleRemoveImage(milestone.id, url)}
+                                  className="absolute right-0.5 top-0.5 rounded bg-black/60 p-0.5 text-white opacity-0 transition-opacity group-hover:opacity-100"
+                                >
+                                  <X className="size-3" />
+                                </button>
+                              </div>
+                            ))}
+                          </div>
+                        )}
 
-                      <div className="flex items-center gap-3">
-                        <button
-                          onClick={() => fileInputRef.current?.click()}
-                          disabled={uploadingFor === milestone.id}
-                          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-elevated text-text-secondary text-xs hover:bg-surface-highlight transition-colors disabled:opacity-50"
-                        >
-                          {uploadingFor === milestone.id ? (
-                            <Clock className="w-3.5 h-3.5 animate-spin" />
-                          ) : (
-                            <ImageIcon className="w-3.5 h-3.5" />
-                          )}
-                          {uploadingFor === milestone.id ? '上传中...' : '上传证书/截图'}
-                        </button>
-                        <input
-                          ref={fileInputRef}
-                          type="file"
-                          accept="image/*"
-                          className="hidden"
-                          onChange={(e) => handleFileChange(e, milestone.id)}
-                        />
+                        <div className="flex items-center gap-3">
+                          <button
+                            onClick={() => fileInputRef.current?.click()}
+                            disabled={uploadingFor === milestone.id}
+                            className="inline-flex items-center gap-1.5 rounded-lg bg-surface-elevated px-3 py-1.5 text-xs text-text-secondary transition-colors hover:bg-surface-highlight disabled:opacity-50"
+                          >
+                            {uploadingFor === milestone.id ? (
+                              <Clock className="size-3.5 animate-spin" />
+                            ) : (
+                              <ImageIcon className="size-3.5" />
+                            )}
+                            {uploadingFor === milestone.id ? '上传中...' : '上传证书/截图'}
+                          </button>
+                          <input
+                            ref={fileInputRef}
+                            type="file"
+                            accept="image/*"
+                            className="hidden"
+                            onChange={(e) => handleFileChange(e, milestone.id)}
+                          />
+                        </div>
                       </div>
                     </div>
-                  </div>
-                );
-              })}
-            </div>
-          </motion.div>
-        ))}
+                  );
+                })}
+              </div>
+            </motion.div>
+          ))}
       </div>
 
       {currentChild && milestones.length === 0 && !isLoading && (
@@ -303,12 +337,12 @@ export default function MilestonesPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.4 }}
-          className="rounded-2xl bg-surface-elevated p-6 border border-warning/20 bg-warning/5"
+          className="border-warning/20 bg-warning/5 rounded-2xl border p-6"
         >
           <div className="flex items-start gap-3">
-            <AlertCircle className="w-5 h-5 text-warning shrink-0 mt-0.5" />
+            <AlertCircle className="mt-0.5 size-5 shrink-0 text-warning" />
             <div>
-              <h3 className="font-semibold text-warning mb-1">暂无里程碑</h3>
+              <h3 className="mb-1 font-semibold text-warning">暂无里程碑</h3>
               <p className="text-sm text-text-tertiary">
                 系统会根据孩子的年级和路线自动生成里程碑，你也可以点击右上角手动添加。
               </p>

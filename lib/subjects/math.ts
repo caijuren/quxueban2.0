@@ -45,26 +45,138 @@ export const mathTracks: Track[] = [
 // 从现在到三公的时间轴节点
 export const mathTrackNodes: TrackNode[] = [
   // 校内数学
-  { id: 'm-school-1', track: 'school', label: '二年级校内', position: 0, time: '2025.09', detail: '校内计算、应用题稳定 95+' },
-  { id: 'm-school-2', track: 'school', label: '三年级校内', position: 25, time: '2026.09', detail: '四则运算、几何基础扎实' },
-  { id: 'm-school-3', track: 'school', label: '四年级校内', position: 50, time: '2027.09', detail: '分数小数、简单方程' },
-  { id: 'm-school-4', track: 'school', label: '五年级校内', position: 75, time: '2028.09', detail: '小升初复习，校内成绩保持前列' },
-  { id: 'm-school-5', track: 'school', label: '初中衔接', position: 100, time: '2029.09', detail: '初中数学预习' },
+  {
+    id: 'm-school-1',
+    track: 'school',
+    label: '二年级校内',
+    position: 0,
+    time: '2025.09',
+    detail: '校内计算、应用题稳定 95+',
+  },
+  {
+    id: 'm-school-2',
+    track: 'school',
+    label: '三年级校内',
+    position: 25,
+    time: '2026.09',
+    detail: '四则运算、几何基础扎实',
+  },
+  {
+    id: 'm-school-3',
+    track: 'school',
+    label: '四年级校内',
+    position: 50,
+    time: '2027.09',
+    detail: '分数小数、简单方程',
+  },
+  {
+    id: 'm-school-4',
+    track: 'school',
+    label: '五年级校内',
+    position: 75,
+    time: '2028.09',
+    detail: '小升初复习，校内成绩保持前列',
+  },
+  {
+    id: 'm-school-5',
+    track: 'school',
+    label: '初中衔接',
+    position: 100,
+    time: '2029.09',
+    detail: '初中数学预习',
+  },
 
   // 奥数体系
-  { id: 'm-olympiad-1', track: 'olympiad', label: '奥数启蒙', position: 0, time: '2025.09', detail: '计算、图形、逻辑趣味题' },
-  { id: 'm-olympiad-2', track: 'olympiad', label: '系统奥数', position: 25, time: '2026.09', detail: '七大模块入门：计算、几何、数论、组合' },
-  { id: 'm-olympiad-3', track: 'olympiad', label: '模块深入', position: 50, time: '2027.09', detail: '数论、组合、几何进阶' },
-  { id: 'm-olympiad-4', track: 'olympiad', label: 'AMC8 专题', position: 75, time: '2028.09', detail: 'AMC8 高频考点、真题训练' },
-  { id: 'm-olympiad-5', track: 'olympiad', label: '奥数收尾', position: 100, time: '2029.05', detail: '三公前保持手感' },
+  {
+    id: 'm-olympiad-1',
+    track: 'olympiad',
+    label: '奥数启蒙',
+    position: 0,
+    time: '2025.09',
+    detail: '计算、图形、逻辑趣味题',
+  },
+  {
+    id: 'm-olympiad-2',
+    track: 'olympiad',
+    label: '系统奥数',
+    position: 25,
+    time: '2026.09',
+    detail: '七大模块入门：计算、几何、数论、组合',
+  },
+  {
+    id: 'm-olympiad-3',
+    track: 'olympiad',
+    label: '模块深入',
+    position: 50,
+    time: '2027.09',
+    detail: '数论、组合、几何进阶',
+  },
+  {
+    id: 'm-olympiad-4',
+    track: 'olympiad',
+    label: 'AMC8 专题',
+    position: 75,
+    time: '2028.09',
+    detail: 'AMC8 高频考点、真题训练',
+  },
+  {
+    id: 'm-olympiad-5',
+    track: 'olympiad',
+    label: '奥数收尾',
+    position: 100,
+    time: '2029.05',
+    detail: '三公前保持手感',
+  },
 
   // 竞赛证书
-  { id: 'm-exam-1', track: 'exam', label: '袋鼠 L1/L2', position: 8, time: '2026.04', detail: '低年级竞赛，培养兴趣和节奏' },
-  { id: 'm-exam-2', track: 'exam', label: '袋鼠银奖', position: 28, time: '2027.04', detail: '三年级袋鼠 L2 银奖' },
-  { id: 'm-exam-3', track: 'exam', label: '澳洲 AMC B', position: 42, time: '2027.09', detail: '四年级澳洲 AMC，目标 Distinction' },
-  { id: 'm-exam-4', track: 'exam', label: 'AMC8 首考', position: 58, time: '2028.01', detail: '四年级寒假首考 AMC8，摸底水平' },
-  { id: 'm-exam-5', track: 'exam', label: 'AMC8 二考', position: 72, time: '2028.11', detail: '五年级冲 20+' },
-  { id: 'm-exam-6', track: 'exam', label: 'AMC8 20+', position: 85, time: '2029.01', detail: '三公简历核心硬通货' },
+  {
+    id: 'm-exam-1',
+    track: 'exam',
+    label: '袋鼠 L1/L2',
+    position: 8,
+    time: '2026.04',
+    detail: '低年级竞赛，培养兴趣和节奏',
+  },
+  {
+    id: 'm-exam-2',
+    track: 'exam',
+    label: '袋鼠银奖',
+    position: 28,
+    time: '2027.04',
+    detail: '三年级袋鼠 L2 银奖',
+  },
+  {
+    id: 'm-exam-3',
+    track: 'exam',
+    label: '澳洲 AMC B',
+    position: 42,
+    time: '2027.09',
+    detail: '四年级澳洲 AMC，目标 Distinction',
+  },
+  {
+    id: 'm-exam-4',
+    track: 'exam',
+    label: 'AMC8 首考',
+    position: 58,
+    time: '2028.01',
+    detail: '四年级寒假首考 AMC8，摸底水平',
+  },
+  {
+    id: 'm-exam-5',
+    track: 'exam',
+    label: 'AMC8 二考',
+    position: 72,
+    time: '2028.11',
+    detail: '五年级冲 20+',
+  },
+  {
+    id: 'm-exam-6',
+    track: 'exam',
+    label: 'AMC8 20+',
+    position: 85,
+    time: '2029.01',
+    detail: '三公简历核心硬通货',
+  },
 ];
 
 export const mathTimeAxisLabels = [
@@ -117,13 +229,38 @@ export const mathGradePlans: Record<number, GradePlan> = {
       { label: '竞赛参赛', current: '袋鼠 70-80 分', target: '袋鼠 L1 银奖/铜奖' },
     ],
     weeklyTemplate: [
-      { day: '周一', focus: '学而思学习机校内', duration: '30 分钟', materials: ['学而思学习机', '二上课程'] },
-      { day: '周二', focus: '高思奥数新课', duration: '40 分钟', materials: ['高思教程一下', '配套练习'] },
-      { day: '周三', focus: '计算专项 + 速度', duration: '20 分钟', materials: ['口算题', '计算练习册'] },
-      { day: '周四', focus: '高思错题 + 难题拆解', duration: '30 分钟', materials: ['错题本', '高思练习'] },
+      {
+        day: '周一',
+        focus: '学而思学习机校内',
+        duration: '30 分钟',
+        materials: ['学而思学习机', '二上课程'],
+      },
+      {
+        day: '周二',
+        focus: '高思奥数新课',
+        duration: '40 分钟',
+        materials: ['高思教程一下', '配套练习'],
+      },
+      {
+        day: '周三',
+        focus: '计算专项 + 速度',
+        duration: '20 分钟',
+        materials: ['口算题', '计算练习册'],
+      },
+      {
+        day: '周四',
+        focus: '高思错题 + 难题拆解',
+        duration: '30 分钟',
+        materials: ['错题本', '高思练习'],
+      },
       { day: '周五', focus: '应用题训练', duration: '25 分钟', materials: ['应用题专项'] },
       { day: '周六', focus: '袋鼠真题模拟', duration: '40 分钟', materials: ['袋鼠 L1 真题'] },
-      { day: '周日', focus: '周复习 + 粗心复盘', duration: '30 分钟', materials: ['错题本', '计算复习'] },
+      {
+        day: '周日',
+        focus: '周复习 + 粗心复盘',
+        duration: '30 分钟',
+        materials: ['错题本', '计算复习'],
+      },
     ],
     weakSkills: ['难题畏难', '熟练度不足', '粗心'],
   },
@@ -155,7 +292,12 @@ export const mathGradePlans: Record<number, GradePlan> = {
       { label: '奥数体系', current: '基础完成', target: '模块深入' },
     ],
     weeklyTemplate: [
-      { day: '周一', focus: 'AMC8 知识点', duration: '45 分钟', materials: ['AMC8 教材', '专题训练'] },
+      {
+        day: '周一',
+        focus: 'AMC8 知识点',
+        duration: '45 分钟',
+        materials: ['AMC8 教材', '专题训练'],
+      },
       { day: '周二', focus: '奥数模块', duration: '45 分钟', materials: ['数论/几何进阶'] },
       { day: '周三', focus: '计算 + 速度', duration: '30 分钟', materials: ['限时计算'] },
       { day: '周四', focus: 'AMC8 真题', duration: '45 分钟', materials: ['AMC8 历年真题'] },
@@ -189,9 +331,7 @@ export const mathGradePlans: Record<number, GradePlan> = {
 export const postExamMathPlan: GradePlan = {
   grade: '小升初后',
   period: '2029.09 起',
-  targets: [
-    { label: '初中数学', current: '预备', target: '七年级适应' },
-  ],
+  targets: [{ label: '初中数学', current: '预备', target: '七年级适应' }],
   weeklyTemplate: [
     { day: '周一', focus: '初中预习', duration: '45 分钟', materials: ['初中教材'] },
     { day: '周二', focus: '计算维持', duration: '20 分钟', materials: ['计算练习'] },
@@ -261,14 +401,16 @@ export function getMathStatusByGrade(grade: number): MathStatus {
     },
   };
 
-  return configs[grade] || {
-    gradeLabel: '小升初后',
-    currentTopic: '初中衔接',
-    dailyMathTime: '45 分钟',
-    weakSkills: ['初中代数'],
-    nextExam: '初中适应',
-    nextExamDate: '2029.09',
-  };
+  return (
+    configs[grade] || {
+      gradeLabel: '小升初后',
+      currentTopic: '初中衔接',
+      dailyMathTime: '45 分钟',
+      weakSkills: ['初中代数'],
+      nextExam: '初中适应',
+      nextExamDate: '2029.09',
+    }
+  );
 }
 
 export interface ExamEvent {

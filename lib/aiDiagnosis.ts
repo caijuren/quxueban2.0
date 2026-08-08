@@ -208,14 +208,14 @@ function formatStageRoutesContext(stage: '小升初' | '中考' | '高考'): str
 
 function formatPrimarySubjects(): string {
   const keyResults = sgKeyResults
-    .map((k) => `- ${k.time}: ${k.title} → ${k.result}${k.fallbackSignal ? `（${k.fallbackSignal}）` : ''}`)
+    .map(
+      (k) =>
+        `- ${k.time}: ${k.title} → ${k.result}${k.fallbackSignal ? `（${k.fallbackSignal}）` : ''}`
+    )
     .join('\n');
 
   const subjects = sgSubjectPaths
-    .map(
-      (s) =>
-        `- ${s.name}：${s.phases.map((p) => `${p.time} ${p.milestone}`).join('；')}`
-    )
+    .map((s) => `- ${s.name}：${s.phases.map((p) => `${p.time} ${p.milestone}`).join('；')}`)
     .join('\n');
 
   return `关键结果节点：\n${keyResults}\n\n学科路径：\n${subjects}`;
@@ -243,9 +243,19 @@ export function getFallbackDiagnosis(input: DiagnosisInput): DiagnosisResult {
       reason: '缺少 DeepSeek API 配置或调用失败，无法计算精确匹配度。',
     },
     subjectHealth: [
-      { subject: '英语', score: 60, status: '待评估', comment: '请录入英语证书或测试成绩后重新生成。' },
+      {
+        subject: '英语',
+        score: 60,
+        status: '待评估',
+        comment: '请录入英语证书或测试成绩后重新生成。',
+      },
       { subject: '数学', score: 60, status: '待评估', comment: '请录入奥数/竞赛经历后重新生成。' },
-      { subject: '语文', score: 60, status: '待评估', comment: '请录入语文积累和获奖情况后重新生成。' },
+      {
+        subject: '语文',
+        score: 60,
+        status: '待评估',
+        comment: '请录入语文积累和获奖情况后重新生成。',
+      },
     ],
     risks: [
       {

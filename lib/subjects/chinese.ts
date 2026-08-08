@@ -44,25 +44,130 @@ export const chineseTracks: Track[] = [
 
 export const chineseTrackNodes: TrackNode[] = [
   // 古诗文积累
-  { id: 'c-classics-1', track: 'classics', label: '古诗启蒙', position: 0, time: '2025.09', detail: '每周 1-2 首古诗，熟读成诵' },
-  { id: 'c-classics-2', track: 'classics', label: '古诗理解', position: 25, time: '2026.09', detail: '理解诗意、作者、背景，尝试赏析' },
-  { id: 'c-classics-3', track: 'classics', label: '古文入门', position: 50, time: '2027.09', detail: '小古文 100 篇，积累文言词汇' },
-  { id: 'c-classics-4', track: 'classics', label: '古诗文大会', position: 75, time: '2028.09', detail: '参赛并冲刺复赛' },
-  { id: 'c-classics-5', track: 'classics', label: '文学素养', position: 100, time: '2029.05', detail: '面谈中能引用古诗文表达观点' },
+  {
+    id: 'c-classics-1',
+    track: 'classics',
+    label: '古诗启蒙',
+    position: 0,
+    time: '2025.09',
+    detail: '每周 1-2 首古诗，熟读成诵',
+  },
+  {
+    id: 'c-classics-2',
+    track: 'classics',
+    label: '古诗理解',
+    position: 25,
+    time: '2026.09',
+    detail: '理解诗意、作者、背景，尝试赏析',
+  },
+  {
+    id: 'c-classics-3',
+    track: 'classics',
+    label: '古文入门',
+    position: 50,
+    time: '2027.09',
+    detail: '小古文 100 篇，积累文言词汇',
+  },
+  {
+    id: 'c-classics-4',
+    track: 'classics',
+    label: '古诗文大会',
+    position: 75,
+    time: '2028.09',
+    detail: '参赛并冲刺复赛',
+  },
+  {
+    id: 'c-classics-5',
+    track: 'classics',
+    label: '文学素养',
+    position: 100,
+    time: '2029.05',
+    detail: '面谈中能引用古诗文表达观点',
+  },
 
   // 阅读写作
-  { id: 'c-reading-1', track: 'reading', label: '绘本/桥梁书', position: 0, time: '2025.09', detail: '培养阅读兴趣，每天阅读 30 分钟' },
-  { id: 'c-reading-2', track: 'reading', label: '儿童文学', position: 25, time: '2026.09', detail: '名著 simplified 版，写读书笔记' },
-  { id: 'c-reading-3', track: 'reading', label: '精读训练', position: 50, time: '2027.09', detail: '阅读理解题型训练，答题规范' },
-  { id: 'c-reading-4', track: 'reading', label: '写作提升', position: 75, time: '2028.09', detail: '记叙文、议论文框架训练' },
-  { id: 'c-reading-5', track: 'reading', label: '面谈表达', position: 100, time: '2029.05', detail: '自我介绍、观点表达、即兴问答' },
+  {
+    id: 'c-reading-1',
+    track: 'reading',
+    label: '绘本/桥梁书',
+    position: 0,
+    time: '2025.09',
+    detail: '培养阅读兴趣，每天阅读 30 分钟',
+  },
+  {
+    id: 'c-reading-2',
+    track: 'reading',
+    label: '儿童文学',
+    position: 25,
+    time: '2026.09',
+    detail: '名著 simplified 版，写读书笔记',
+  },
+  {
+    id: 'c-reading-3',
+    track: 'reading',
+    label: '精读训练',
+    position: 50,
+    time: '2027.09',
+    detail: '阅读理解题型训练，答题规范',
+  },
+  {
+    id: 'c-reading-4',
+    track: 'reading',
+    label: '写作提升',
+    position: 75,
+    time: '2028.09',
+    detail: '记叙文、议论文框架训练',
+  },
+  {
+    id: 'c-reading-5',
+    track: 'reading',
+    label: '面谈表达',
+    position: 100,
+    time: '2029.05',
+    detail: '自我介绍、观点表达、即兴问答',
+  },
 
   // 竞赛荣誉
-  { id: 'c-honor-1', track: 'honor', label: '校内荣誉', position: 10, time: '2026.06', detail: '三好生、全优、优秀班干部等' },
-  { id: 'c-honor-2', track: 'honor', label: '汉字小达人', position: 35, time: '2027.04', detail: '三年级参赛，展示汉字储备' },
-  { id: 'c-honor-3', track: 'honor', label: '古诗文大会', position: 55, time: '2027.11', detail: '四年级参赛，冲击复赛/决赛' },
-  { id: 'c-honor-4', track: 'honor', label: '综合荣誉', position: 78, time: '2028.09', detail: '红领巾、市/区荣誉、社会实践活动' },
-  { id: 'c-honor-5', track: 'honor', label: '简历归档', position: 95, time: '2029.04', detail: '整理所有证书和荣誉材料' },
+  {
+    id: 'c-honor-1',
+    track: 'honor',
+    label: '校内荣誉',
+    position: 10,
+    time: '2026.06',
+    detail: '三好生、全优、优秀班干部等',
+  },
+  {
+    id: 'c-honor-2',
+    track: 'honor',
+    label: '汉字小达人',
+    position: 35,
+    time: '2027.04',
+    detail: '三年级参赛，展示汉字储备',
+  },
+  {
+    id: 'c-honor-3',
+    track: 'honor',
+    label: '古诗文大会',
+    position: 55,
+    time: '2027.11',
+    detail: '四年级参赛，冲击复赛/决赛',
+  },
+  {
+    id: 'c-honor-4',
+    track: 'honor',
+    label: '综合荣誉',
+    position: 78,
+    time: '2028.09',
+    detail: '红领巾、市/区荣誉、社会实践活动',
+  },
+  {
+    id: 'c-honor-5',
+    track: 'honor',
+    label: '简历归档',
+    position: 95,
+    time: '2029.04',
+    detail: '整理所有证书和荣誉材料',
+  },
 ];
 
 export const chineseTimeAxisLabels = [
@@ -116,12 +221,37 @@ export const chineseGradePlans: Record<number, GradePlan> = {
     ],
     weeklyTemplate: [
       { day: '周一', focus: '古诗 75+80 新学', duration: '20 分钟', materials: ['古诗书', '音频'] },
-      { day: '周二', focus: '国学诵读', duration: '20 分钟', materials: ['三字经', '千字文', '声律启蒙', '论语'] },
-      { day: '周三', focus: '看图写话/小练笔', duration: '25 分钟', materials: ['看图写话本', '作文本'] },
-      { day: '周四', focus: '古诗复习 + 默写', duration: '20 分钟', materials: ['古诗卡片', '默写本'] },
+      {
+        day: '周二',
+        focus: '国学诵读',
+        duration: '20 分钟',
+        materials: ['三字经', '千字文', '声律启蒙', '论语'],
+      },
+      {
+        day: '周三',
+        focus: '看图写话/小练笔',
+        duration: '25 分钟',
+        materials: ['看图写话本', '作文本'],
+      },
+      {
+        day: '周四',
+        focus: '古诗复习 + 默写',
+        duration: '20 分钟',
+        materials: ['古诗卡片', '默写本'],
+      },
       { day: '周五', focus: '写字练习', duration: '20 分钟', materials: ['默写能手', '练字帖'] },
-      { day: '周六', focus: '整本书阅读 + 读书笔记', duration: '40 分钟', materials: ['儿童文学', '西游/封神', '读书笔记本'] },
-      { day: '周日', focus: '周复习', duration: '25 分钟', materials: ['古诗', '生字', '本周小练笔'] },
+      {
+        day: '周六',
+        focus: '整本书阅读 + 读书笔记',
+        duration: '40 分钟',
+        materials: ['儿童文学', '西游/封神', '读书笔记本'],
+      },
+      {
+        day: '周日',
+        focus: '周复习',
+        duration: '25 分钟',
+        materials: ['古诗', '生字', '本周小练笔'],
+      },
     ],
     weakSkills: ['输出能力', '写作系统训练'],
   },
@@ -135,12 +265,32 @@ export const chineseGradePlans: Record<number, GradePlan> = {
       { label: '写作', current: '短文', target: '300 字作文' },
     ],
     weeklyTemplate: [
-      { day: '周一', focus: '古诗新学 + 默写', duration: '25 分钟', materials: ['古诗 75+80', '默写本'] },
-      { day: '周二', focus: '阅读理解专项', duration: '35 分钟', materials: ['阅读训练', '答题模板'] },
+      {
+        day: '周一',
+        focus: '古诗新学 + 默写',
+        duration: '25 分钟',
+        materials: ['古诗 75+80', '默写本'],
+      },
+      {
+        day: '周二',
+        focus: '阅读理解专项',
+        duration: '35 分钟',
+        materials: ['阅读训练', '答题模板'],
+      },
       { day: '周三', focus: '写作训练', duration: '35 分钟', materials: ['作文本', '好词好句'] },
-      { day: '周四', focus: '汉字小达人准备', duration: '25 分钟', materials: ['汉字练习', '成语积累'] },
+      {
+        day: '周四',
+        focus: '汉字小达人准备',
+        duration: '25 分钟',
+        materials: ['汉字练习', '成语积累'],
+      },
       { day: '周五', focus: '古诗文大会准备', duration: '25 分钟', materials: ['古诗文大会题库'] },
-      { day: '周六', focus: '整本书阅读 + 读书笔记', duration: '45 分钟', materials: ['儿童文学', '读书笔记本'] },
+      {
+        day: '周六',
+        focus: '整本书阅读 + 读书笔记',
+        duration: '45 分钟',
+        materials: ['儿童文学', '读书笔记本'],
+      },
       { day: '周日', focus: '周复习', duration: '30 分钟', materials: ['古诗', '错题'] },
     ],
     weakSkills: ['阅读理解答题规范', '作文结构'],
@@ -155,12 +305,27 @@ export const chineseGradePlans: Record<number, GradePlan> = {
       { label: '综合荣誉', current: '校内', target: '区/市荣誉' },
     ],
     weeklyTemplate: [
-      { day: '周一', focus: '小古文精读', duration: '30 分钟', materials: ['小古文 100 篇', '文言词典'] },
+      {
+        day: '周一',
+        focus: '小古文精读',
+        duration: '30 分钟',
+        materials: ['小古文 100 篇', '文言词典'],
+      },
       { day: '周二', focus: '阅读理解提升', duration: '40 分钟', materials: ['阅读训练', '真题'] },
       { day: '周三', focus: '作文训练', duration: '40 分钟', materials: ['作文本', '范文'] },
-      { day: '周四', focus: '古诗文大会冲刺', duration: '30 分钟', materials: ['题库', '文学常识'] },
+      {
+        day: '周四',
+        focus: '古诗文大会冲刺',
+        duration: '30 分钟',
+        materials: ['题库', '文学常识'],
+      },
       { day: '周五', focus: '综合素养', duration: '30 分钟', materials: ['社会实践', '新闻阅读'] },
-      { day: '周六', focus: '整本书精读', duration: '50 分钟', materials: ['名著 simplified', '读书笔记'] },
+      {
+        day: '周六',
+        focus: '整本书精读',
+        duration: '50 分钟',
+        materials: ['名著 simplified', '读书笔记'],
+      },
       { day: '周日', focus: '周复习', duration: '30 分钟', materials: ['古诗', '小古文'] },
     ],
     weakSkills: ['小古文', '作文立意'],
@@ -176,8 +341,18 @@ export const chineseGradePlans: Record<number, GradePlan> = {
     ],
     weeklyTemplate: [
       { day: '周一', focus: '古诗文复习', duration: '25 分钟', materials: ['古诗', '小古文'] },
-      { day: '周二', focus: '面谈话题准备', duration: '35 分钟', materials: ['面谈题库', '自我介绍'] },
-      { day: '周三', focus: '议论文/观点写作', duration: '40 分钟', materials: ['作文本', '时事素材'] },
+      {
+        day: '周二',
+        focus: '面谈话题准备',
+        duration: '35 分钟',
+        materials: ['面谈题库', '自我介绍'],
+      },
+      {
+        day: '周三',
+        focus: '议论文/观点写作',
+        duration: '40 分钟',
+        materials: ['作文本', '时事素材'],
+      },
       { day: '周四', focus: '阅读理解保持', duration: '30 分钟', materials: ['阅读训练'] },
       { day: '周五', focus: '简历整理', duration: '25 分钟', materials: ['证书', '荣誉材料'] },
       { day: '周六', focus: '综合阅读', duration: '40 分钟', materials: ['名著', '报刊'] },
@@ -190,9 +365,7 @@ export const chineseGradePlans: Record<number, GradePlan> = {
 export const postExamChinesePlan: GradePlan = {
   grade: '小升初后',
   period: '2029.09 起',
-  targets: [
-    { label: '初中语文', current: '预备', target: '七年级适应' },
-  ],
+  targets: [{ label: '初中语文', current: '预备', target: '七年级适应' }],
   weeklyTemplate: [
     { day: '周一', focus: '初中古文预习', duration: '30 分钟', materials: ['初中古文'] },
     { day: '周二', focus: '阅读理解', duration: '30 分钟', materials: ['阅读训练'] },
@@ -262,14 +435,16 @@ export function getChineseStatusByGrade(grade: number): ChineseStatus {
     },
   };
 
-  return configs[grade] || {
-    gradeLabel: '小升初后',
-    currentTopic: '初中衔接',
-    dailyChineseTime: '40 分钟',
-    weakSkills: ['初中古文'],
-    nextEvent: '初中适应',
-    nextEventDate: '2029.09',
-  };
+  return (
+    configs[grade] || {
+      gradeLabel: '小升初后',
+      currentTopic: '初中衔接',
+      dailyChineseTime: '40 分钟',
+      weakSkills: ['初中古文'],
+      nextEvent: '初中适应',
+      nextEventDate: '2029.09',
+    }
+  );
 }
 
 export interface ExamEvent {

@@ -12,7 +12,12 @@ interface ManageNodesModalProps {
   onUpdate: (plans: RoutePlan[]) => void;
 }
 
-export default function ManageNodesModal({ isOpen, onClose, plans, onUpdate }: ManageNodesModalProps) {
+export default function ManageNodesModal({
+  isOpen,
+  onClose,
+  plans,
+  onUpdate,
+}: ManageNodesModalProps) {
   const [draftPlans, setDraftPlans] = useState<RoutePlan[]>(plans);
 
   useEffect(() => {
@@ -21,13 +26,20 @@ export default function ManageNodesModal({ isOpen, onClose, plans, onUpdate }: M
     }
   }, [isOpen, plans]);
 
-  const updateMilestone = (planId: string, index: number, field: 'time' | 'task', value: string) => {
+  const updateMilestone = (
+    planId: string,
+    index: number,
+    field: 'time' | 'task',
+    value: string
+  ) => {
     setDraftPlans((prev) =>
       prev.map((plan) =>
         plan.id === planId
           ? {
               ...plan,
-              milestones: plan.milestones.map((m, i) => (i === index ? { ...m, [field]: value } : m)),
+              milestones: plan.milestones.map((m, i) =>
+                i === index ? { ...m, [field]: value } : m
+              ),
             }
           : plan
       )
@@ -75,16 +87,16 @@ export default function ManageNodesModal({ isOpen, onClose, plans, onUpdate }: M
           <button
             type="button"
             onClick={onClose}
-            className="px-4 py-2 rounded-lg bg-surface-elevated text-text-tertiary text-sm hover:bg-surface-highlight transition-all"
+            className="rounded-lg bg-surface-elevated px-4 py-2 text-sm text-text-tertiary transition-all hover:bg-surface-highlight"
           >
             取消
           </button>
           <button
             type="button"
             onClick={handleSave}
-            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-accent text-text-primary text-sm font-medium transition-all"
+            className="flex items-center gap-2 rounded-lg bg-accent px-4 py-2 text-sm font-medium text-text-primary transition-all"
           >
-            <Save className="w-4 h-4" />
+            <Save className="size-4" />
             保存节点
           </button>
         </div>
@@ -93,9 +105,9 @@ export default function ManageNodesModal({ isOpen, onClose, plans, onUpdate }: M
       <div className="space-y-8">
         {draftPlans.map((plan) => (
           <div key={plan.id}>
-            <div className="flex items-center gap-2 mb-3">
+            <div className="mb-3 flex items-center gap-2">
               <span
-                className={`px-2 py-0.5 rounded-full text-xs font-medium border ${
+                className={`rounded-full border px-2 py-0.5 text-xs font-medium ${
                   plan.type === 'primary'
                     ? 'bg-primary/10 border-primary/30 text-primary'
                     : 'bg-secondary/10 border-secondary/30 text-secondary'
@@ -103,7 +115,7 @@ export default function ManageNodesModal({ isOpen, onClose, plans, onUpdate }: M
               >
                 {plan.type === 'primary' ? '主路线' : '备选路线'}
               </span>
-              <h4 className="font-bold font-display text-text-secondary">{plan.name}</h4>
+              <h4 className="font-display font-bold text-text-secondary">{plan.name}</h4>
             </div>
 
             <div className="space-y-2">
@@ -114,22 +126,22 @@ export default function ManageNodesModal({ isOpen, onClose, plans, onUpdate }: M
                     value={milestone.time}
                     onChange={(e) => updateMilestone(plan.id, index, 'time', e.target.value)}
                     placeholder="时间"
-                    className="w-28 px-3 py-2 rounded-xl bg-surface-elevated border border-border-default text-sm text-text-secondary placeholder-slate-500 focus:outline-none focus:border-secondary transition-all"
+                    className="w-28 rounded-xl border border-border-default bg-surface-elevated px-3 py-2 text-sm text-text-secondary placeholder-slate-500 transition-all focus:border-secondary focus:outline-none"
                   />
                   <input
                     type="text"
                     value={milestone.task}
                     onChange={(e) => updateMilestone(plan.id, index, 'task', e.target.value)}
                     placeholder="节点任务"
-                    className="flex-1 px-3 py-2 rounded-xl bg-surface-elevated border border-border-default text-sm text-text-secondary placeholder-slate-500 focus:outline-none focus:border-secondary transition-all"
+                    className="flex-1 rounded-xl border border-border-default bg-surface-elevated px-3 py-2 text-sm text-text-secondary placeholder-slate-500 transition-all focus:border-secondary focus:outline-none"
                   />
                   <button
                     type="button"
                     onClick={() => removeMilestone(plan.id, index)}
-                    className="w-9 h-9 rounded-xl bg-surface-elevated flex items-center justify-center text-text-muted hover:text-error hover:bg-error/10 transition-all"
+                    className="hover:bg-error/10 flex size-9 items-center justify-center rounded-xl bg-surface-elevated text-text-muted transition-all hover:text-error"
                     aria-label="删除节点"
                   >
-                    <Trash2 className="w-4 h-4" />
+                    <Trash2 className="size-4" />
                   </button>
                 </div>
               ))}
@@ -138,9 +150,9 @@ export default function ManageNodesModal({ isOpen, onClose, plans, onUpdate }: M
             <button
               type="button"
               onClick={() => addMilestone(plan.id)}
-              className="mt-3 flex items-center gap-1.5 text-sm text-secondary hover:text-secondary-glow transition-colors"
+              className="mt-3 flex items-center gap-1.5 text-sm text-secondary transition-colors hover:text-secondary-glow"
             >
-              <Plus className="w-4 h-4" />
+              <Plus className="size-4" />
               添加节点
             </button>
           </div>

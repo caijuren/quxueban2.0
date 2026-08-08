@@ -31,7 +31,7 @@ const alerts = [
 export default function AlertFeed() {
   return (
     <Section title="需要关注" description="AI 识别出的风险与机会">
-      <div className="p-2 space-y-1">
+      <div className="space-y-1 p-2">
         {alerts.map((alert) => (
           <SettingRow
             key={alert.id}

@@ -39,7 +39,7 @@ export default function ChildAvatar({
   const isEmoji = typeof avatarUrl === 'string' && !isImage;
 
   const containerClass = cn(
-    'inline-flex items-center justify-center font-bold text-text-primary shrink-0 overflow-hidden ring-1 ring-border-default',
+    'inline-flex shrink-0 items-center justify-center overflow-hidden font-bold text-text-primary ring-1 ring-border-default',
     shape === 'circle' ? 'rounded-full' : 'rounded-lg',
     sizeMap[size],
     className
@@ -54,7 +54,7 @@ export default function ChildAvatar({
   if (!child) {
     return (
       <div className={cn(containerClass, 'bg-surface-elevated')} style={style}>
-        {fallbackIcon ? <User className="w-1/2 h-1/2" /> : <span>?</span>}
+        {fallbackIcon ? <User className="size-1/2" /> : <span>?</span>}
       </div>
     );
   }

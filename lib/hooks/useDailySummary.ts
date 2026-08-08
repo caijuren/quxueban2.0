@@ -19,7 +19,6 @@ interface DailySummaryVariables {
 
 export function useDailySummary() {
   return useMutation<DailySummaryResult, Error, DailySummaryVariables>({
-    mutationFn: (variables) =>
-      apiPost<DailySummaryResult>('/api/ai/daily-summary', variables),
+    mutationFn: (variables) => apiPost<DailySummaryResult>('/api/ai/daily-summary', variables),
   });
 }

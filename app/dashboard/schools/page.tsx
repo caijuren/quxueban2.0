@@ -12,16 +12,35 @@ import { gradeLabel, gradeToStage } from '@/lib/children';
 import { schoolsData } from './[school]/SchoolDetail';
 import Modal from '@/components/ui/Modal';
 
-const levelConfig: Record<string, { color: string; bg: string; border: string; probability: number }> = {
-  冲刺: { color: 'text-primary', bg: 'bg-primary/10', border: 'border-primary/30', probability: 35 },
-  备选: { color: 'text-secondary', bg: 'bg-secondary/10', border: 'border-secondary/30', probability: 60 },
+const levelConfig: Record<
+  string,
+  { color: string; bg: string; border: string; probability: number }
+> = {
+  冲刺: {
+    color: 'text-primary',
+    bg: 'bg-primary/10',
+    border: 'border-primary/30',
+    probability: 35,
+  },
+  备选: {
+    color: 'text-secondary',
+    bg: 'bg-secondary/10',
+    border: 'border-secondary/30',
+    probability: 60,
+  },
   保底: { color: 'text-accent', bg: 'bg-accent/10', border: 'border-accent/30', probability: 85 },
 };
 
 function inferLevel(ranking: string): string {
   const text = ranking.toLowerCase();
   if (text.includes('四校') || text.includes('顶尖') || text.includes('第一梯队')) return '冲刺';
-  if (text.includes('第二梯队') || text.includes('区属市重点') || text.includes('新增市重点') || text.includes('区实验性示范')) return '备选';
+  if (
+    text.includes('第二梯队') ||
+    text.includes('区属市重点') ||
+    text.includes('新增市重点') ||
+    text.includes('区实验性示范')
+  )
+    return '备选';
   return '保底';
 }
 
@@ -65,14 +84,14 @@ function SchoolsPageContent() {
         initial={shouldReduceMotion ? false : { opacity: 0, y: -8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4 }}
-        className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
+        className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
       >
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-secondary/10 border border-secondary/20 flex items-center justify-center">
-            <School className="w-5 h-5 text-secondary" />
+          <div className="bg-secondary/10 border-secondary/20 flex size-10 items-center justify-center rounded-xl border">
+            <School className="size-5 text-secondary" />
           </div>
           <div>
-            <h1 className="text-2xl sm:text-3xl font-bold font-display">
+            <h1 className="font-display text-2xl font-bold sm:text-3xl">
               {currentChild ? `${currentChild.name}的目标学校库` : '目标学校库'}
             </h1>
           </div>
@@ -80,15 +99,15 @@ function SchoolsPageContent() {
         <div className="flex items-center gap-2">
           <button
             onClick={() => setShowAddModal(true)}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-primary text-white text-sm font-medium hover:bg-primary/90 transition-colors"
+            className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-inverse transition-colors hover:bg-primary/90"
           >
-            <Plus className="w-4 h-4" />
+            <Plus className="size-4" />
             添加学校
           </button>
         </div>
       </motion.div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
         {filteredSchools.map((school, index) => {
           const level = levelConfig[school.level];
           return (
@@ -100,49 +119,58 @@ function SchoolsPageContent() {
             >
               <Link
                 href={`/dashboard/schools/${school.id}`}
-                className="block rounded-2xl bg-surface-elevated border border-border-subtle p-6 hover:bg-surface-highlight transition-all cursor-pointer group"
+                className="group block cursor-pointer rounded-2xl border border-border-subtle bg-surface-elevated p-6 transition-all hover:bg-surface-highlight"
               >
-                <div className="flex items-start justify-between mb-4">
+                <div className="mb-4 flex items-start justify-between">
                   <div className="flex items-start gap-4">
-                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-secondary to-secondary-glow flex items-center justify-center shrink-0">
-                      <School className="w-6 h-6 text-text-primary" />
+                    <div className="flex size-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-secondary to-secondary-glow">
+                      <School className="size-6 text-text-primary" />
                     </div>
                     <div>
-                      <h2 className="text-lg font-bold font-display group-hover:text-text-primary transition-colors">{school.name}</h2>
-                      <div className="flex items-center gap-2 mt-1 text-sm text-text-tertiary">
-                        <MapPin className="w-3.5 h-3.5" />
+                      <h2 className="font-display text-lg font-bold transition-colors group-hover:text-text-primary">
+                        {school.name}
+                      </h2>
+                      <div className="mt-1 flex items-center gap-2 text-sm text-text-tertiary">
+                        <MapPin className="size-3.5" />
                         {school.area}
                         <span className="text-text-muted">·</span>
                         {school.type}
                       </div>
                     </div>
                   </div>
-                  <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${level.bg} ${level.color} border ${level.border}`}>
+                  <span
+                    className={`rounded-full px-2.5 py-1 text-xs font-medium ${level.bg} ${level.color} border ${level.border}`}
+                  >
                     {school.level}
                   </span>
                 </div>
 
-                <div className="flex flex-wrap gap-2 mb-4">
+                <div className="mb-4 flex flex-wrap gap-2">
                   {school.features.map((feature) => (
-                    <span key={feature} className="px-2.5 py-1 rounded-lg bg-surface-hover text-xs text-text-secondary border border-border-default">
+                    <span
+                      key={feature}
+                      className="rounded-lg border border-border-default bg-surface-hover px-2.5 py-1 text-xs text-text-secondary"
+                    >
                       {feature}
                     </span>
                   ))}
                 </div>
 
-                <div className="flex items-center justify-between pt-4 border-t border-border-subtle">
+                <div className="flex items-center justify-between border-t border-border-subtle pt-4">
                   <div className="flex items-center gap-2 text-sm text-text-tertiary">
-                    <Trophy className="w-4 h-4 text-warning" />
+                    <Trophy className="size-4 text-warning" />
                     录取概率
                   </div>
                   <div className="flex items-center gap-2">
-                    <div className="w-24 h-2 rounded-full bg-surface-hover overflow-hidden">
+                    <div className="h-2 w-24 overflow-hidden rounded-full bg-surface-hover">
                       <div
                         className="h-full rounded-full bg-gradient-to-r from-primary to-secondary"
                         style={{ width: `${school.probability}%` }}
                       />
                     </div>
-                    <span className="text-sm font-semibold text-text-secondary">{school.probability}%</span>
+                    <span className="text-sm font-semibold text-text-secondary">
+                      {school.probability}%
+                    </span>
                   </div>
                 </div>
               </Link>
@@ -182,13 +210,13 @@ function SchoolsPageContent() {
           <button
             type="button"
             onClick={() => setShowAddModal(false)}
-            className="w-full py-2 rounded-lg bg-surface-elevated border border-border-default text-sm text-text-secondary hover:bg-surface-hover transition-colors focus-ring"
+            className="focus-ring w-full rounded-lg border border-border-default bg-surface-elevated py-2 text-sm text-text-secondary transition-colors hover:bg-surface-hover"
           >
             知道了
           </button>
         }
       >
-        <p className="text-sm text-text-tertiary text-center">
+        <p className="text-center text-sm text-text-tertiary">
           学校库由平台维护，暂不支持自定义添加。如需补充学校，请联系管理员。
         </p>
       </Modal>

@@ -2,10 +2,7 @@ import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
-import {
-  weeklyPlanTemplateCreateSchema,
-  validateBody,
-} from '@/lib/validation';
+import { weeklyPlanTemplateCreateSchema, validateBody } from '@/lib/validation';
 import { canManageChild, canViewChild, getViewableChildIdsForUser } from '@/lib/family';
 import type { WeeklyTaskItem } from '@/lib/storage.types';
 
@@ -28,9 +25,7 @@ export async function GET(req: Request) {
       userId: session.user.id,
       OR: [
         { childId: null },
-        ...(childId
-          ? [{ childId }]
-          : [{ childId: { in: viewableChildIds } }]),
+        ...(childId ? [{ childId }] : [{ childId: { in: viewableChildIds } }]),
       ],
     },
     orderBy: [{ isDefault: 'desc' }, { updatedAt: 'desc' }],
@@ -63,10 +58,7 @@ export async function POST(req: Request) {
       where: { id: body.childId },
     });
     if (!child || !(await canViewChild(session.user.id, child))) {
-      return NextResponse.json(
-        { error: '孩子不存在或无权限' },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: '孩子不存在或无权限' }, { status: 404 });
     }
     if (!(await canManageChild(session.user.id, child))) {
       return NextResponse.json({ error: '无权限管理该孩子' }, { status: 403 });

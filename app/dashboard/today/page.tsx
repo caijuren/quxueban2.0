@@ -73,7 +73,7 @@ function ProgressRing({
         </defs>
       </svg>
       <div className="absolute inset-0 flex items-center justify-center">
-        <span className="text-xs font-bold font-display text-text-primary tabular-nums">
+        <span className="font-display text-xs font-bold tabular-nums text-text-primary">
           {rate}%
         </span>
       </div>
@@ -148,12 +148,8 @@ export default function TodayPage() {
 
   const doneCount = todayTasks.filter((t) => t.status === 'done').length;
   const totalCount = todayTasks.length;
-  const completionRate =
-    totalCount === 0 ? 0 : Math.round((doneCount / totalCount) * 100);
-  const totalMinutes = todayTasks.reduce(
-    (sum, t) => sum + parseDurationMinutes(t.duration),
-    0
-  );
+  const completionRate = totalCount === 0 ? 0 : Math.round((doneCount / totalCount) * 100);
+  const totalMinutes = todayTasks.reduce((sum, t) => sum + parseDurationMinutes(t.duration), 0);
   const remainingMinutes = todayTasks
     .filter((t) => t.status !== 'done')
     .reduce((sum, t) => sum + parseDurationMinutes(t.duration), 0);
@@ -172,10 +168,7 @@ export default function TodayPage() {
     setCompletionOpen(true);
   };
 
-  const handleSubmitCompletion = async (
-    taskId: string,
-    input: TaskCompletionInput
-  ) => {
+  const handleSubmitCompletion = async (taskId: string, input: TaskCompletionInput) => {
     if (!currentWeekPlan?.id) return;
     await completeTask.mutateAsync({
       planId: currentWeekPlan.id,
@@ -237,11 +230,7 @@ export default function TodayPage() {
         new Date(date).getDay()
       ];
       const dayTasks = currentWeekPlan.tasks.filter((t) => t.day === dayName);
-      if (
-        dayTasks.length > 0 &&
-        isDayFullyDone(dayTasks) &&
-        !isDayPushed(dayTasks, date)
-      ) {
+      if (dayTasks.length > 0 && isDayFullyDone(dayTasks) && !isDayPushed(dayTasks, date)) {
         dingTalkPush.mutate({ childId: currentChild.id, date });
       }
     });
@@ -259,30 +248,30 @@ export default function TodayPage() {
     completionRate === 100
       ? '今日任务全部完成！'
       : completionRate >= 60
-      ? '完成度不错，继续加油'
-      : totalCount > 0
-      ? '今天任务还不少，先完成重要的'
-      : '今日暂无任务';
+        ? '完成度不错，继续加油'
+        : totalCount > 0
+          ? '今天任务还不少，先完成重要的'
+          : '今日暂无任务';
 
   if (children.length === 0) {
     return <ChildEmptyState description="添加孩子后，系统会根据年级自动生成今日任务" />;
   }
 
   return (
-    <div className="space-y-6 min-h-[calc(100vh-8rem)]">
+    <div className="min-h-[calc(100vh-8rem)] space-y-6">
       {/* Header */}
       <motion.div
         initial={shouldReduceMotion ? false : { opacity: 0, y: -8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-        className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
+        className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
       >
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center">
-            <CalendarCheck className="w-5 h-5 text-primary" />
+          <div className="bg-primary/10 border-primary/20 flex size-10 items-center justify-center rounded-xl border">
+            <CalendarCheck className="size-5 text-primary" />
           </div>
           <div>
-            <h1 className="text-2xl sm:text-3xl font-bold font-display text-text-primary">
+            <h1 className="font-display text-2xl font-bold text-text-primary sm:text-3xl">
               {currentChild ? currentChild.name : '未选择孩子'}
             </h1>
           </div>
@@ -291,16 +280,16 @@ export default function TodayPage() {
           {isFullyDone && (
             <button
               onClick={() => setVictoryOpen(true)}
-              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-success/10 border border-success/20 text-success text-xs font-medium hover:bg-success/20 transition-colors"
+              className="bg-success/10 border-success/20 hover:bg-success/20 inline-flex items-center gap-1.5 rounded-lg border px-3 py-2 text-xs font-medium text-success transition-colors"
             >
-              <Trophy className="w-3.5 h-3.5" />
+              <Trophy className="size-3.5" />
               今日胜利
             </button>
           )}
-          <div className="text-right shrink-0">
-            <p className="text-2xl sm:text-3xl font-bold font-display tabular-nums text-text-primary">
+          <div className="shrink-0 text-right">
+            <p className="font-display text-2xl font-bold tabular-nums text-text-primary sm:text-3xl">
               {doneCount}
-              <span className="text-text-muted text-base sm:text-lg">/{totalCount}</span>
+              <span className="text-base text-text-muted sm:text-lg">/{totalCount}</span>
             </p>
             <p className="text-[10px] text-text-tertiary">已完成</p>
           </div>
@@ -318,22 +307,17 @@ export default function TodayPage() {
             <CommandCard active className="p-3 sm:p-4">
               <div className="flex items-center gap-3 sm:gap-4">
                 <ProgressRing rate={completionRate} />
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm sm:text-base font-semibold font-display text-text-primary">
+                <div className="min-w-0 flex-1">
+                  <p className="font-display text-sm font-semibold text-text-primary sm:text-base">
                     {progressText}
                   </p>
-                  <p className="text-xs text-text-tertiary mt-0.5">
+                  <p className="mt-0.5 text-xs text-text-tertiary">
                     {totalCount > 0 ? (
                       <>
                         剩余{' '}
-                        <span className="text-text-secondary font-medium">
-                          {remainingMinutes}
-                        </span>{' '}
+                        <span className="font-medium text-text-secondary">{remainingMinutes}</span>{' '}
                         分钟 · 今日总计{' '}
-                        <span className="text-text-secondary font-medium">
-                          {totalMinutes}
-                        </span>{' '}
-                        分钟
+                        <span className="font-medium text-text-secondary">{totalMinutes}</span> 分钟
                       </>
                     ) : (
                       '当前孩子今天没有安排任务'
@@ -342,9 +326,9 @@ export default function TodayPage() {
                 </div>
                 <button
                   onClick={() => setVictoryOpen(true)}
-                  className="hidden sm:inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-primary text-white text-sm font-bold hover:bg-primary/90 transition-all shadow-[0_0_20px_rgba(244,63,122,0.25)]"
+                  className="hover:bg-primary/90 hidden items-center gap-2 rounded-xl bg-primary px-5 py-3 text-sm font-bold text-white shadow-[0_0_20px_rgba(244,63,122,0.25)] transition-all sm:inline-flex"
                 >
-                  <Send className="w-5 h-5" />
+                  <Send className="size-5" />
                   推送简报
                 </button>
               </div>
@@ -390,14 +374,14 @@ export default function TodayPage() {
                 {/* Category header with progress bar */}
                 <div className="mb-2.5 space-y-1.5">
                   <div className="flex items-center justify-between gap-2">
-                    <span className="text-sm font-bold text-text-secondary tracking-wide">
+                    <span className="text-sm font-bold tracking-wide text-text-secondary">
                       {TASK_CATEGORY_LABELS[category]}
                     </span>
-                    <span className="text-xs font-medium text-text-tertiary tabular-nums">
+                    <span className="text-xs font-medium tabular-nums text-text-tertiary">
                       {categoryDone}/{tasks.length}
                     </span>
                   </div>
-                  <div className="h-1 w-full bg-surface rounded-full overflow-hidden">
+                  <div className="h-1 w-full overflow-hidden rounded-full bg-surface">
                     <div
                       className={`h-full rounded-full transition-all duration-500 ${categoryColorClass.replace('text-', 'bg-').replace('/10', '').replace('/20', '')}`}
                       style={{ width: `${categoryRate}%` }}
@@ -405,7 +389,7 @@ export default function TodayPage() {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-2">
                   {tasks.map((task) => {
                     const status = task.status;
                     const isDone = status === 'done';
@@ -419,85 +403,85 @@ export default function TodayPage() {
                       <button
                         key={task.id}
                         onClick={() => handleOpenCompletion(task)}
-                        className={`group relative text-left p-2.5 rounded-xl border transition-all duration-200 min-h-[84px] flex items-start gap-3 overflow-hidden ${
+                        className={`group relative flex min-h-[84px] items-start gap-3 overflow-hidden rounded-xl border p-2.5 text-left transition-all duration-200 ${
                           isDone
-                            ? 'bg-surface border-success/20 opacity-80'
+                            ? 'border-success/20 bg-surface opacity-80'
                             : isPending
-                            ? 'bg-surface border-error/20'
-                            : 'bg-surface border-border-default hover:border-border-strong hover:bg-surface-highlight'
+                              ? 'border-error/20 bg-surface'
+                              : 'border-border-default bg-surface hover:border-border-strong hover:bg-surface-highlight'
                         }`}
                       >
                         {/* Left completion checkbox */}
                         <div
-                          className={`shrink-0 w-5 h-5 mt-0.5 rounded-md border-2 flex items-center justify-center transition-all ${
+                          className={`mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-md border-2 transition-all ${
                             isDone
-                              ? 'bg-success border-success'
+                              ? 'border-success bg-success'
                               : isPending
-                              ? 'bg-error border-error'
-                              : 'border-text-muted group-hover:border-text-tertiary'
+                                ? 'border-error bg-error'
+                                : 'border-text-muted group-hover:border-text-tertiary'
                           }`}
                         >
-                          {isDone && <Check className="w-3 h-3 text-text-primary" />}
-                          {isPending && <X className="w-3 h-3 text-white" />}
+                          {isDone && <Check className="size-3 text-text-primary" />}
+                          {isPending && <X className="size-3 text-white" />}
                         </div>
 
                         {/* Done indicator line */}
                         {isDone && (
-                          <div className="absolute left-0 top-2 bottom-2 w-0.5 rounded-full bg-success/60" />
+                          <div className="bg-success/60 absolute inset-y-2 left-0 w-0.5 rounded-full" />
                         )}
 
                         {/* Content */}
-                        <div className="flex-1 min-w-0 py-0.5">
+                        <div className="min-w-0 flex-1 py-0.5">
                           <div className="flex items-start gap-2">
                             <p
-                              className={`text-sm font-semibold leading-snug flex-1 transition-colors ${
-                                isDone
-                                  ? 'text-text-tertiary line-through'
-                                  : 'text-text-primary'
+                              className={`flex-1 text-sm font-semibold leading-snug transition-colors ${
+                                isDone ? 'text-text-tertiary line-through' : 'text-text-primary'
                               }`}
                             >
                               {task.focus}
                             </p>
-                            <div className={`shrink-0 w-6 h-6 rounded-md flex items-center justify-center ${categoryColorClass}`}>
-                              <CategoryIcon className="w-3.5 h-3.5" />
+                            <div
+                              className={`flex size-6 shrink-0 items-center justify-center rounded-md ${categoryColorClass}`}
+                            >
+                              <CategoryIcon className="size-3.5" />
                             </div>
                           </div>
 
-                          <div className="flex flex-wrap items-center gap-1.5 mt-2">
-                            <span className="inline-flex items-center gap-1 text-[10px] px-1.5 py-0.5 rounded-full bg-surface-elevated border border-border-subtle text-text-tertiary">
-                              <Clock className="w-3 h-3" />
+                          <div className="mt-2 flex flex-wrap items-center gap-1.5">
+                            <span className="inline-flex items-center gap-1 rounded-full border border-border-subtle bg-surface-elevated px-1.5 py-0.5 text-[10px] text-text-tertiary">
+                              <Clock className="size-3" />
                               {task.duration}
                             </span>
-                            <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-surface-elevated border border-border-subtle text-text-tertiary">
+                            <span className="rounded-full border border-border-subtle bg-surface-elevated px-1.5 py-0.5 text-[10px] text-text-tertiary">
                               {getCategoryTimeSlot(category)}
                             </span>
                             {materialsText && (
                               <span
                                 title={materialsText}
-                                className="text-[10px] px-1.5 py-0.5 rounded-full bg-surface-elevated border border-border-subtle text-text-tertiary truncate max-w-[120px]"
+                                className="max-w-[120px] truncate rounded-full border border-border-subtle bg-surface-elevated px-1.5 py-0.5 text-[10px] text-text-tertiary"
                               >
                                 {materialsText}
                               </span>
                             )}
                             {quality && (
                               <span
-                                className={`text-[10px] px-1.5 py-0.5 rounded-full border ${
+                                className={`rounded-full border px-1.5 py-0.5 text-[10px] ${
                                   quality === 'excellent'
-                                    ? 'bg-success/10 text-success border-success/30'
+                                    ? 'bg-success/10 border-success/30 text-success'
                                     : quality === 'good'
-                                    ? 'bg-accent/10 text-accent border-accent/30'
-                                    : quality === 'average'
-                                    ? 'bg-warning/10 text-warning border-warning/30'
-                                    : 'bg-error/10 text-error border-error/30'
+                                      ? 'border-accent/30 bg-accent/10 text-accent'
+                                      : quality === 'average'
+                                        ? 'bg-warning/10 border-warning/30 text-warning'
+                                        : 'bg-error/10 border-error/30 text-error'
                                 }`}
                               >
                                 {quality === 'excellent'
                                   ? '优秀'
                                   : quality === 'good'
-                                  ? '良好'
-                                  : quality === 'average'
-                                  ? '一般'
-                                  : '需努力'}
+                                    ? '良好'
+                                    : quality === 'average'
+                                      ? '一般'
+                                      : '需努力'}
                               </span>
                             )}
                           </div>
@@ -522,11 +506,11 @@ export default function TodayPage() {
         >
           <button
             onClick={() => router.push('/dashboard/weekly')}
-            className="w-full py-3 rounded-xl border border-dashed border-border-default text-text-tertiary hover:text-text-secondary hover:border-border-strong hover:bg-surface-hover transition-all flex items-center justify-center gap-2 text-sm"
+            className="flex w-full items-center justify-center gap-2 rounded-xl border border-dashed border-border-default py-3 text-sm text-text-tertiary transition-all hover:border-border-strong hover:bg-surface-hover hover:text-text-secondary"
           >
-            <Target className="w-4 h-4" />
+            <Target className="size-4" />
             查看完整周计划
-            <ChevronRight className="w-4 h-4" />
+            <ChevronRight className="size-4" />
           </button>
         </motion.div>
       )}

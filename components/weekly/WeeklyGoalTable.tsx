@@ -63,11 +63,7 @@ function getSubjectName(subjectId: SubjectId | 'other'): string {
   return subjectMeta[subjectId]?.name || '其他';
 }
 
-export default function WeeklyGoalTable({
-  goals,
-  tasks,
-  onChange,
-}: WeeklyGoalTableProps) {
+export default function WeeklyGoalTable({ goals, tasks, onChange }: WeeklyGoalTableProps) {
   const rows = useMemo<TableRow[]>(() => {
     const result: TableRow[] = [];
     goals.forEach((goal) => {
@@ -135,12 +131,12 @@ export default function WeeklyGoalTable({
       <motion.div
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
-        className="rounded-2xl bg-surface-elevated border border-border-subtle p-8 text-center"
+        className="rounded-2xl border border-border-subtle bg-surface-elevated p-8 text-center"
       >
-        <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mx-auto mb-3">
-          <Target className="w-6 h-6 text-primary" />
+        <div className="bg-primary/10 mx-auto mb-3 flex size-12 items-center justify-center rounded-xl">
+          <Target className="size-6 text-primary" />
         </div>
-        <h3 className="text-base font-bold text-text-primary mb-1">暂无本周目标</h3>
+        <h3 className="mb-1 text-base font-bold text-text-primary">暂无本周目标</h3>
         <p className="text-sm text-text-muted">
           在编辑周计划时添加目标与明细清单，即可在此查看任务目标表
         </p>
@@ -152,25 +148,17 @@ export default function WeeklyGoalTable({
     <motion.div
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
-      className="rounded-2xl border border-border-subtle bg-surface-elevated overflow-hidden"
+      className="overflow-hidden rounded-2xl border border-border-subtle bg-surface-elevated"
     >
       <div className="overflow-x-auto">
         <table className="w-full min-w-[640px] border-collapse">
           <thead>
             <tr className="bg-surface-highlight/50 border-b border-border-subtle">
-              <th className="text-left px-4 py-3 text-xs font-medium text-text-muted w-24">
-                学科
-              </th>
-              <th className="text-left px-4 py-3 text-xs font-medium text-text-muted w-32">
-                模块
-              </th>
-              <th className="text-left px-4 py-3 text-xs font-medium text-text-muted">
-                本周任务
-              </th>
-              <th className="text-left px-4 py-3 text-xs font-medium text-text-muted w-40">
-                目标
-              </th>
-              <th className="text-center px-4 py-3 text-xs font-medium text-text-muted w-20">
+              <th className="w-24 px-4 py-3 text-left text-xs font-medium text-text-muted">学科</th>
+              <th className="w-32 px-4 py-3 text-left text-xs font-medium text-text-muted">模块</th>
+              <th className="px-4 py-3 text-left text-xs font-medium text-text-muted">本周任务</th>
+              <th className="w-40 px-4 py-3 text-left text-xs font-medium text-text-muted">目标</th>
+              <th className="w-20 px-4 py-3 text-center text-xs font-medium text-text-muted">
                 状态
               </th>
             </tr>
@@ -184,7 +172,7 @@ export default function WeeklyGoalTable({
                 <tr
                   key={row.id}
                   className={[
-                    'border-b border-border-subtle/50 transition-colors',
+                    'border-border-subtle/50 border-b transition-colors',
                     row.done ? 'bg-success/[0.03]' : 'hover:bg-surface-hover/30',
                     isNewSubject ? 'border-t border-border-subtle' : '',
                   ].join(' ')}
@@ -200,8 +188,8 @@ export default function WeeklyGoalTable({
                   </td>
                   <td className="px-4 py-3 align-top">
                     <div className="flex items-center gap-2">
-                      <div className="w-6 h-6 rounded-lg bg-surface-highlight flex items-center justify-center shrink-0">
-                        <CategoryIcon className="w-4 h-4 text-text-tertiary" />
+                      <div className="flex size-6 shrink-0 items-center justify-center rounded-lg bg-surface-highlight">
+                        <CategoryIcon className="size-4 text-text-tertiary" />
                       </div>
                       <span className="text-sm text-text-secondary">{row.moduleName}</span>
                     </div>
@@ -218,17 +206,17 @@ export default function WeeklyGoalTable({
                   <td className="px-4 py-3 align-top">
                     <span className="text-sm text-text-tertiary">{row.targetText}</span>
                   </td>
-                  <td className="px-4 py-3 align-top text-center">
+                  <td className="px-4 py-3 text-center align-top">
                     {row.itemId ? (
                       <button
                         type="button"
                         onClick={() => toggleItem(row.goalId, row.itemId)}
-                        className="inline-flex items-center justify-center p-1 rounded-lg hover:bg-surface-hover transition-colors"
+                        className="inline-flex items-center justify-center rounded-lg p-1 transition-colors hover:bg-surface-hover"
                       >
                         {row.done ? (
-                          <CheckSquare className="w-5 h-5 text-success" />
+                          <CheckSquare className="size-5 text-success" />
                         ) : (
-                          <Square className="w-5 h-5 text-text-tertiary" />
+                          <Square className="size-5 text-text-tertiary" />
                         )}
                       </button>
                     ) : (

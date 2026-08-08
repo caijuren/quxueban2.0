@@ -17,8 +17,7 @@ export function useChildren() {
 export function useCreateChild() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (data: ChildCreateInput) =>
-      apiPost<Child>('/api/children', data),
+    mutationFn: (data: ChildCreateInput) => apiPost<Child>('/api/children', data),
     onSuccess: () => queryClient.invalidateQueries({ queryKey }),
   });
 }

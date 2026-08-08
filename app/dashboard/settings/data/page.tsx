@@ -11,30 +11,32 @@ export default function DataPage() {
     <ConsolePageShell title="数据与隐私" description="管理学习数据、成长档案与账号">
       <div className="space-y-4">
         <SettingsSection title="数据资产" description="查看成长档案或导出学习数据">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             <Link
               href="/dashboard/growth"
-              className="group flex items-center gap-3 p-4 rounded-xl bg-surface-elevated border border-border-subtle hover:border-primary/30 hover:bg-surface-hover transition-all"
+              className="hover:border-primary/30 group flex items-center gap-3 rounded-xl border border-border-subtle bg-surface-elevated p-4 transition-all hover:bg-surface-hover"
             >
-              <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
-                <Sprout className="w-5 h-5 text-primary" />
+              <div className="bg-primary/10 flex size-10 items-center justify-center rounded-xl">
+                <Sprout className="size-5 text-primary" />
               </div>
-              <div className="flex-1 min-w-0">
+              <div className="min-w-0 flex-1">
                 <p className="text-sm font-semibold text-text-secondary">成长档案</p>
-                <p className="text-[11px] text-text-muted mt-0.5">时间线、证据库与完成趋势</p>
+                <p className="mt-0.5 text-[11px] text-text-muted">时间线、证据库与完成趋势</p>
               </div>
-              <ArrowRight className="w-4 h-4 text-text-muted group-hover:text-primary transition-colors" />
+              <ArrowRight className="size-4 text-text-muted transition-colors group-hover:text-primary" />
             </Link>
 
-            <div className="flex items-center gap-3 p-4 rounded-xl bg-surface-elevated border border-border-subtle opacity-70">
-              <div className="w-10 h-10 rounded-xl bg-ai/10 flex items-center justify-center">
-                <FileDown className="w-5 h-5 text-ai" />
+            <div className="flex items-center gap-3 rounded-xl border border-border-subtle bg-surface-elevated p-4 opacity-70">
+              <div className="bg-ai/10 flex size-10 items-center justify-center rounded-xl">
+                <FileDown className="size-5 text-ai" />
               </div>
-              <div className="flex-1 min-w-0">
+              <div className="min-w-0 flex-1">
                 <p className="text-sm font-semibold text-text-secondary">数据导出</p>
-                <p className="text-[11px] text-text-muted mt-0.5">PDF / Excel 等格式导出（即将上线）</p>
+                <p className="mt-0.5 text-[11px] text-text-muted">
+                  PDF / Excel 等格式导出（即将上线）
+                </p>
               </div>
-              <span className="text-[10px] px-2 py-0.5 rounded-full bg-surface text-text-muted border border-border-subtle">
+              <span className="rounded-full border border-border-subtle bg-surface px-2 py-0.5 text-[10px] text-text-muted">
                 敬请期待
               </span>
             </div>

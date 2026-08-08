@@ -24,18 +24,14 @@ export function useNotifications() {
 export function useNotificationList(page = 1, limit = 20) {
   return useQuery<PaginatedNotifications>({
     queryKey: [...queryKey, page, limit],
-    queryFn: () =>
-      apiGet<PaginatedNotifications>(
-        `/api/notifications?page=${page}&limit=${limit}`
-      ),
+    queryFn: () => apiGet<PaginatedNotifications>(`/api/notifications?page=${page}&limit=${limit}`),
   });
 }
 
 export function useMarkNotificationRead() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (id: string) =>
-      apiPatch<NotificationItem>(`/api/notifications/${id}`, {}),
+    mutationFn: (id: string) => apiPatch<NotificationItem>(`/api/notifications/${id}`, {}),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey });
     },
@@ -45,8 +41,7 @@ export function useMarkNotificationRead() {
 export function useMarkAllNotificationsRead() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: () =>
-      apiPatch<{ success: boolean }>('/api/notifications', {}),
+    mutationFn: () => apiPatch<{ success: boolean }>('/api/notifications', {}),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey });
     },
@@ -56,8 +51,7 @@ export function useMarkAllNotificationsRead() {
 export function useDeleteNotification() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (id: string) =>
-      apiDelete<{ success: boolean }>(`/api/notifications/${id}`),
+    mutationFn: (id: string) => apiDelete<{ success: boolean }>(`/api/notifications/${id}`),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey });
     },

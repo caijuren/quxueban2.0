@@ -1,15 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import {
-  Star,
-  Trophy,
-  Flame,
-  Zap,
-  Medal,
-  LucideIcon,
-  Loader2,
-} from 'lucide-react';
+import { Star, Trophy, Flame, Zap, Medal, LucideIcon, Loader2 } from 'lucide-react';
 import { useGamification } from '@/lib/hooks/useGamification';
 
 const ICON_MAP: Record<string, LucideIcon> = {
@@ -30,7 +22,7 @@ export default function BadgeShowcase({ childId }: BadgeShowcaseProps) {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center py-12">
-        <Loader2 className="w-6 h-6 animate-spin text-primary" />
+        <Loader2 className="size-6 animate-spin text-primary" />
       </div>
     );
   }
@@ -42,27 +34,27 @@ export default function BadgeShowcase({ childId }: BadgeShowcaseProps) {
   return (
     <div className="space-y-4">
       <div className="grid grid-cols-3 gap-3">
-        <div className="rounded-xl bg-surface-elevated border border-border-default p-3 text-center">
-          <p className="text-2xs text-text-muted mb-1">总积分</p>
+        <div className="rounded-xl border border-border-default bg-surface-elevated p-3 text-center">
+          <p className="mb-1 text-2xs text-text-muted">总积分</p>
           <p className="text-xl font-bold text-primary">{points}</p>
         </div>
-        <div className="rounded-xl bg-surface-elevated border border-border-default p-3 text-center">
-          <p className="text-2xs text-text-muted mb-1">当前连续</p>
+        <div className="rounded-xl border border-border-default bg-surface-elevated p-3 text-center">
+          <p className="mb-1 text-2xs text-text-muted">当前连续</p>
           <p className="text-xl font-bold text-warning">{streaks.currentStreak} 天</p>
         </div>
-        <div className="rounded-xl bg-surface-elevated border border-border-default p-3 text-center">
-          <p className="text-2xs text-text-muted mb-1">最长连续</p>
+        <div className="rounded-xl border border-border-default bg-surface-elevated p-3 text-center">
+          <p className="mb-1 text-2xs text-text-muted">最长连续</p>
           <p className="text-xl font-bold text-success">{streaks.longestStreak} 天</p>
         </div>
       </div>
 
       {badges.length === 0 ? (
-        <div className="rounded-xl bg-surface-elevated border border-border-default p-6 text-center">
+        <div className="rounded-xl border border-border-default bg-surface-elevated p-6 text-center">
           <p className="text-sm text-text-secondary">还没有获得徽章</p>
-          <p className="text-2xs text-text-muted mt-1">坚持完成任务即可获得徽章和积分</p>
+          <p className="mt-1 text-2xs text-text-muted">坚持完成任务即可获得徽章和积分</p>
         </div>
       ) : (
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4">
           {badges.map((badge, index) => {
             const Icon = ICON_MAP[badge.icon ?? ''] ?? Star;
             return (
@@ -71,25 +63,23 @@ export default function BadgeShowcase({ childId }: BadgeShowcaseProps) {
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: index * 0.05 }}
-                className="rounded-xl bg-surface-elevated border border-border-default p-4 text-center hover:border-primary/30 transition-colors"
+                className="hover:border-primary/30 rounded-xl border border-border-default bg-surface-elevated p-4 text-center transition-colors"
               >
                 <div
-                  className="w-12 h-12 rounded-full mx-auto mb-3 flex items-center justify-center"
+                  className="mx-auto mb-3 flex size-12 items-center justify-center rounded-full"
                   style={{
-                    background: `color-mix(in srgb, ${badge.color ?? '#f59e0b'} 20%, transparent)`,
-                    color: badge.color ?? '#f59e0b',
+                    background: `color-mix(in srgb, ${badge.color ?? 'var(--warning)'} 20%, transparent)`,
+                    color: badge.color ?? 'var(--warning)',
                   }}
                 >
-                  <Icon className="w-6 h-6" />
+                  <Icon className="size-6" />
                 </div>
-                <p className="text-sm font-semibold text-text-primary truncate">
-                  {badge.name}
-                </p>
-                <p className="text-[10px] text-text-muted mt-0.5 line-clamp-2">
+                <p className="truncate text-sm font-semibold text-text-primary">{badge.name}</p>
+                <p className="mt-0.5 line-clamp-2 text-[10px] text-text-muted">
                   {badge.description}
                 </p>
                 {badge.points > 0 && (
-                  <p className="text-[10px] font-medium mt-1.5 text-warning">
+                  <p className="mt-1.5 text-[10px] font-medium text-warning">
                     +{badge.points} 积分
                   </p>
                 )}

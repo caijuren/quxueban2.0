@@ -415,9 +415,7 @@ export function getTemplateStage(
   template: Pick<SystemTaskTemplate, 'routeTags'>
 ): '小升初' | '中考' | '高考' | 'general' {
   if (!template.routeTags || template.routeTags.length === 0) return 'general';
-  const stages = new Set(
-    template.routeTags.map((tag) => ROUTE_STAGE_MAP[tag]).filter(Boolean)
-  );
+  const stages = new Set(template.routeTags.map((tag) => ROUTE_STAGE_MAP[tag]).filter(Boolean));
   if (stages.size === 1) return stages.values().next().value as '小升初' | '中考';
   if (stages.size > 1) return 'general';
   return 'general';

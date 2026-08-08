@@ -77,38 +77,34 @@ function AlertCard({ alert }: { alert: Alert }) {
 
   return (
     <motion.div variants={itemVariants}>
-      <CommandCard className="p-4 overflow-hidden">
+      <CommandCard className="overflow-hidden p-4">
         <div className="flex items-start gap-3">
           <div
-            className={`w-10 h-10 rounded-lg ${meta.bg} flex items-center justify-center shrink-0`}
+            className={`size-10 rounded-lg ${meta.bg} flex shrink-0 items-center justify-center`}
           >
-            <Icon className={`w-5 h-5 ${meta.color}`} />
+            <Icon className={`size-5 ${meta.color}`} />
           </div>
-          <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-2 mb-1 flex-wrap">
+          <div className="min-w-0 flex-1">
+            <div className="mb-1 flex flex-wrap items-center gap-2">
               <span
-                className={`text-[10px] px-1.5 py-0.5 rounded-full font-medium ${meta.bg} ${meta.color}`}
+                className={`rounded-full px-1.5 py-0.5 text-[10px] font-medium ${meta.bg} ${meta.color}`}
               >
                 {meta.label}
               </span>
-              <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-surface-hover text-text-tertiary flex items-center gap-1">
-                <TypeIcon className="w-3 h-3" />
+              <span className="flex items-center gap-1 rounded-full bg-surface-hover px-1.5 py-0.5 text-[10px] text-text-tertiary">
+                <TypeIcon className="size-3" />
                 {type.label}
               </span>
             </div>
-            <h3 className="text-sm font-bold text-text-secondary mb-1">
-              {alert.title}
-            </h3>
-            <p className="text-xs text-text-tertiary leading-relaxed mb-3">
-              {alert.content}
-            </p>
+            <h3 className="mb-1 text-sm font-bold text-text-secondary">{alert.title}</h3>
+            <p className="mb-3 text-xs leading-relaxed text-text-tertiary">{alert.content}</p>
             {alert.action && (
               <button
                 onClick={() => router.push(alert.action!.href)}
-                className="inline-flex items-center gap-1 text-xs font-medium text-primary hover:text-primary-glow transition-colors"
+                className="inline-flex items-center gap-1 text-xs font-medium text-primary transition-colors hover:text-primary-glow"
               >
                 {alert.action.label}
-                <ArrowRight className="w-3 h-3" />
+                <ArrowRight className="size-3" />
               </button>
             )}
           </div>
@@ -123,10 +119,7 @@ export default function AlertsPage() {
   const router = useRouter();
   const { children, weeklyPlans } = useChildren();
 
-  const alerts = useMemo(
-    () => generateAlerts({ children, weeklyPlans }),
-    [children, weeklyPlans]
-  );
+  const alerts = useMemo(() => generateAlerts({ children, weeklyPlans }), [children, weeklyPlans]);
 
   const urgentCount = alerts.filter((a) => a.level === 'urgent').length;
   const warningCount = alerts.filter((a) => a.level === 'warning').length;
@@ -137,25 +130,25 @@ export default function AlertsPage() {
         initial={shouldReduceMotion ? false : { opacity: 0, y: -8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4 }}
-        className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
+        className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
       >
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-lg bg-error/10 border border-error/20 flex items-center justify-center">
-            <Bell className="w-5 h-5 text-error" />
+          <div className="bg-error/10 border-error/20 flex size-10 items-center justify-center rounded-lg border">
+            <Bell className="size-5 text-error" />
           </div>
           <div>
-            <h1 className="text-2xl sm:text-3xl font-bold font-display">提醒中心</h1>
+            <h1 className="font-display text-2xl font-bold sm:text-3xl">提醒中心</h1>
           </div>
         </div>
         {alerts.length > 0 && (
           <div className="flex items-center gap-2">
             {urgentCount > 0 && (
-              <span className="px-3 py-1.5 rounded-lg bg-error/10 text-error text-xs font-medium">
+              <span className="bg-error/10 rounded-lg px-3 py-1.5 text-xs font-medium text-error">
                 {urgentCount} 紧急
               </span>
             )}
             {warningCount > 0 && (
-              <span className="px-3 py-1.5 rounded-lg bg-warning/10 text-warning text-xs font-medium">
+              <span className="bg-warning/10 rounded-lg px-3 py-1.5 text-xs font-medium text-warning">
                 {warningCount} 提醒
               </span>
             )}
@@ -184,7 +177,7 @@ export default function AlertsPage() {
           variants={containerVariants}
           initial={shouldReduceMotion ? false : 'hidden'}
           animate="visible"
-          className="grid grid-cols-1 lg:grid-cols-2 gap-3"
+          className="grid grid-cols-1 gap-3 lg:grid-cols-2"
         >
           {alerts.map((alert) => (
             <AlertCard key={alert.id} alert={alert} />

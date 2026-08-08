@@ -41,10 +41,10 @@ export default function DataPrivacySection() {
   return (
     <div className="space-y-4">
       <SettingsSection title="数据导出" description="下载你的所有学习数据备份">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 rounded-xl bg-surface-elevated border border-border-subtle">
+        <div className="flex flex-col justify-between gap-4 rounded-xl border border-border-subtle bg-surface-elevated p-4 sm:flex-row sm:items-center">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-accent/10 flex items-center justify-center">
-              <FileJson className="w-5 h-5 text-accent" />
+            <div className="flex size-10 items-center justify-center rounded-xl bg-accent/10">
+              <FileJson className="size-5 text-accent" />
             </div>
             <div>
               <p className="text-sm font-medium text-text-secondary">导出全部数据</p>
@@ -54,19 +54,23 @@ export default function DataPrivacySection() {
           <button
             onClick={handleExport}
             disabled={exportData.isPending}
-            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-surface-elevated text-text-secondary text-sm hover:bg-surface-highlight transition-colors disabled:opacity-70"
+            className="inline-flex items-center gap-1.5 rounded-lg bg-surface-elevated px-4 py-2 text-sm text-text-secondary transition-colors hover:bg-surface-highlight disabled:opacity-70"
           >
-            {exportData.isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Download className="w-4 h-4" />}
+            {exportData.isPending ? (
+              <Loader2 className="size-4 animate-spin" />
+            ) : (
+              <Download className="size-4" />
+            )}
             导出 JSON
           </button>
         </div>
       </SettingsSection>
 
       <SettingsSection title="危险操作" description="以下操作不可逆，请谨慎">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 rounded-xl bg-error/5 border border-error/10">
+        <div className="bg-error/5 border-error/10 flex flex-col justify-between gap-4 rounded-xl border p-4 sm:flex-row sm:items-center">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-error/10 flex items-center justify-center">
-              <Trash2 className="w-5 h-5 text-error" />
+            <div className="bg-error/10 flex size-10 items-center justify-center rounded-xl">
+              <Trash2 className="size-5 text-error" />
             </div>
             <div>
               <p className="text-sm font-medium text-text-secondary">注销账号</p>
@@ -75,9 +79,9 @@ export default function DataPrivacySection() {
           </div>
           <button
             onClick={() => setShowDeleteConfirm(true)}
-            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-error/10 text-error text-sm font-medium hover:bg-error/20 transition-colors"
+            className="bg-error/10 hover:bg-error/20 inline-flex items-center gap-1.5 rounded-lg px-4 py-2 text-sm font-medium text-error transition-colors"
           >
-            <Trash2 className="w-4 h-4" />
+            <Trash2 className="size-4" />
             注销账号
           </button>
         </div>
@@ -89,17 +93,17 @@ export default function DataPrivacySection() {
             className="absolute inset-0 bg-black/80 backdrop-blur-md"
             onClick={() => !deleteAccount.isPending && setShowDeleteConfirm(false)}
           />
-          <div className="relative w-full max-w-md rounded-2xl bg-[#0f172a] border border-border-default p-6 shadow-2xl">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 rounded-full bg-error/10 flex items-center justify-center">
-                <AlertTriangle className="w-5 h-5 text-error" />
+          <div className="relative w-full max-w-md rounded-2xl border border-border-default bg-bg-secondary p-6 shadow-2xl">
+            <div className="mb-4 flex items-center gap-3">
+              <div className="bg-error/10 flex size-10 items-center justify-center rounded-full">
+                <AlertTriangle className="size-5 text-error" />
               </div>
               <div>
                 <h4 className="text-base font-bold text-text-secondary">确认注销账号？</h4>
                 <p className="text-xs text-text-muted">此操作不可恢复</p>
               </div>
             </div>
-            <p className="text-sm text-text-tertiary mb-4">
+            <p className="mb-4 text-sm text-text-tertiary">
               请输入当前密码以确认注销账号，注销后所有数据将被清除。
             </p>
             <input
@@ -107,22 +111,22 @@ export default function DataPrivacySection() {
               value={deletePassword}
               onChange={(e) => setDeletePassword(e.target.value)}
               placeholder="当前密码"
-              className="w-full px-4 py-2.5 rounded-xl bg-surface-elevated border border-border-default text-sm text-text-secondary placeholder:text-text-tertiary focus:outline-none focus:border-error transition-all mb-4"
+              className="mb-4 w-full rounded-xl border border-border-default bg-surface-elevated px-4 py-2.5 text-sm text-text-secondary transition-all placeholder:text-text-tertiary focus:border-error focus:outline-none"
             />
             <div className="flex justify-end gap-3">
               <button
                 onClick={() => setShowDeleteConfirm(false)}
                 disabled={deleteAccount.isPending}
-                className="px-4 py-2 rounded-lg bg-surface-elevated text-text-tertiary text-sm hover:bg-surface-highlight transition-colors disabled:opacity-50"
+                className="rounded-lg bg-surface-elevated px-4 py-2 text-sm text-text-tertiary transition-colors hover:bg-surface-highlight disabled:opacity-50"
               >
                 取消
               </button>
               <button
                 onClick={handleDelete}
                 disabled={deleteAccount.isPending || !deletePassword}
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-error text-text-primary text-sm font-medium hover:bg-error/90 transition-colors disabled:opacity-70"
+                className="hover:bg-error/90 inline-flex items-center gap-2 rounded-lg bg-error px-4 py-2 text-sm font-medium text-text-primary transition-colors disabled:opacity-70"
               >
-                {deleteAccount.isPending && <Loader2 className="w-4 h-4 animate-spin" />}
+                {deleteAccount.isPending && <Loader2 className="size-4 animate-spin" />}
                 确认注销
               </button>
             </div>

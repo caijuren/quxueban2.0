@@ -18,12 +18,12 @@ export default function EnglishPlanConfigPage() {
       childId={currentChild?.id}
       description={
         <div>
-          <p className="font-medium text-text-secondary mb-1">
+          <p className="mb-1 font-medium text-text-secondary">
             本路径服务于三公冲刺路线的英语能力与证书荣誉
           </p>
           <p className="text-text-tertiary">
-            英语学科路径是小升初方案中「三公冲刺型」路线的底层能力支撑。核心目标：三年级 KET 卓越、四年级
-            PET 卓越、五年级上小托福 850+。
+            英语学科路径是小升初方案中「三公冲刺型」路线的底层能力支撑。核心目标：三年级 KET
+            卓越、四年级 PET 卓越、五年级上小托福 850+。
           </p>
         </div>
       }

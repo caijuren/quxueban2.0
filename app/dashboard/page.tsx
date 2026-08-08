@@ -65,54 +65,45 @@ const itemVariants = {
 
 type ViewMode = 'command' | 'overview';
 
-function getCompletionRate(child: Child, getWeeklyPlan: ReturnType<typeof useChildren>['getWeeklyPlan']) {
+function getCompletionRate(
+  child: Child,
+  getWeeklyPlan: ReturnType<typeof useChildren>['getWeeklyPlan']
+) {
   const plan = getWeeklyPlan(getCurrentWeekId(), child.id);
   if (!plan) return null;
   return getPlanStats(plan).completionRate;
 }
 
-function ViewToggle({
-  mode,
-  onChange,
-}: {
-  mode: ViewMode;
-  onChange: (mode: ViewMode) => void;
-}) {
+function ViewToggle({ mode, onChange }: { mode: ViewMode; onChange: (mode: ViewMode) => void }) {
   return (
-    <div className="flex items-center gap-1 rounded-[14px] bg-surface border border-border-default p-1">
+    <div className="flex items-center gap-1 rounded-[14px] border border-border-default bg-surface p-1">
       <button
         onClick={() => onChange('command')}
-        className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+        className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium transition-all ${
           mode === 'command'
             ? 'bg-primary/[0.10] text-primary'
             : 'text-text-tertiary hover:text-text-secondary'
         }`}
       >
-        <User className="w-4 h-4" />
+        <User className="size-4" />
         当前孩子
       </button>
       <button
         onClick={() => onChange('overview')}
-        className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+        className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium transition-all ${
           mode === 'overview'
             ? 'bg-primary/[0.10] text-primary'
             : 'text-text-tertiary hover:text-text-secondary'
         }`}
       >
-        <LayoutGrid className="w-4 h-4" />
+        <LayoutGrid className="size-4" />
         全家总览
       </button>
     </div>
   );
 }
 
-function IdentityCard({
-  child,
-  completionRate,
-}: {
-  child: Child;
-  completionRate: number | null;
-}) {
+function IdentityCard({ child, completionRate }: { child: Child; completionRate: number | null }) {
   const router = useRouter();
   const routeSummary = getRouteSummary(child);
   const matchSnapshot = getRouteMatchSnapshot(child, completionRate);
@@ -146,21 +137,24 @@ function IdentityCard({
 
   return (
     <CommandCard active className="p-5 sm:p-6">
-      <div className="flex flex-col xl:flex-row xl:items-stretch gap-6">
+      <div className="flex flex-col gap-6 xl:flex-row xl:items-stretch">
         {/* Left column: header + metrics + footer */}
-        <div className="flex-1 min-w-0 flex flex-col">
+        <div className="flex min-w-0 flex-1 flex-col">
           {/* Header row */}
-          <div className="flex items-start gap-4 mb-5">
+          <div className="mb-5 flex items-start gap-4">
             <ChildAvatar child={child} size="2xl" shape="rounded" />
-            <div className="flex-1 min-w-0">
-              <div className="flex flex-wrap items-center gap-2 mb-1.5">
-                <h2 className="text-xl sm:text-2xl font-bold font-display text-text-primary">
+            <div className="min-w-0 flex-1">
+              <div className="mb-1.5 flex flex-wrap items-center gap-2">
+                <h2 className="font-display text-xl font-bold text-text-primary sm:text-2xl">
                   {child.name}
                 </h2>
                 <DataBadge variant="primary" size="sm">
                   {gradeToStage(child.grade, child.educationSystem)}
                 </DataBadge>
-                <DataBadge variant={routeSummary.type === 'primary' ? 'default' : 'secondary'} size="sm">
+                <DataBadge
+                  variant={routeSummary.type === 'primary' ? 'default' : 'secondary'}
+                  size="sm"
+                >
                   {routeSummary.type === 'primary' ? '主路线' : '备选路线'}
                 </DataBadge>
               </div>
@@ -170,8 +164,8 @@ function IdentityCard({
                 <span className="truncate">嘉定区重点冲刺</span>
                 {child.targetSchool && (
                   <>
-                    <span className="text-border-strong hidden sm:inline">·</span>
-                    <span className="text-primary truncate">目标 {child.targetSchool}</span>
+                    <span className="hidden text-border-strong sm:inline">·</span>
+                    <span className="truncate text-primary">目标 {child.targetSchool}</span>
                   </>
                 )}
               </div>
@@ -179,65 +173,65 @@ function IdentityCard({
           </div>
 
           {/* Metrics row */}
-          <div className="flex-1 grid grid-cols-1 sm:grid-cols-3 gap-3 min-h-[112px]">
+          <div className="grid min-h-[112px] flex-1 grid-cols-1 gap-3 sm:grid-cols-3">
             {metrics.map((metric) => (
               <div
                 key={metric.label}
-                className="rounded-[14px] bg-surface border border-border-default p-4 h-full flex flex-col"
+                className="flex h-full flex-col rounded-[14px] border border-border-default bg-surface p-4"
               >
-                <div className="flex items-center gap-1.5 mb-2">
-                  <metric.icon className="w-3.5 h-3.5 text-text-muted" />
+                <div className="mb-2 flex items-center gap-1.5">
+                  <metric.icon className="size-3.5 text-text-muted" />
                   <span className="text-2xs text-text-muted">{metric.label}</span>
                 </div>
-                <p className="text-base font-semibold text-text-primary truncate mb-0.5">
+                <p className="mb-0.5 truncate text-base font-semibold text-text-primary">
                   {metric.value}
                 </p>
-                <p className="text-xs text-text-tertiary truncate mt-auto">{metric.sub}</p>
+                <p className="mt-auto truncate text-xs text-text-tertiary">{metric.sub}</p>
               </div>
             ))}
           </div>
 
           {/* Footer buttons */}
-          <div className="mt-5 pt-5 border-t border-border-default flex flex-wrap gap-2">
+          <div className="mt-5 flex flex-wrap gap-2 border-t border-border-default pt-5">
             <button
               onClick={() => router.push('/dashboard/plan')}
-              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-surface text-xs font-medium text-text-secondary hover:text-text-primary hover:bg-surface-hover transition-all"
+              className="inline-flex items-center gap-1.5 rounded-lg bg-surface px-3 py-2 text-xs font-medium text-text-secondary transition-all hover:bg-surface-hover hover:text-text-primary"
             >
-              <Route className="w-4 h-4" />
+              <Route className="size-4" />
               路线方案
             </button>
             <button
               onClick={() => router.push('/dashboard/weekly')}
-              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-surface text-xs font-medium text-text-secondary hover:text-text-primary hover:bg-surface-hover transition-all"
+              className="inline-flex items-center gap-1.5 rounded-lg bg-surface px-3 py-2 text-xs font-medium text-text-secondary transition-all hover:bg-surface-hover hover:text-text-primary"
             >
-              <CalendarDays className="w-4 h-4" />
+              <CalendarDays className="size-4" />
               周计划
             </button>
             <button
               onClick={() => router.push('/dashboard/ai')}
-              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-surface text-xs font-medium text-text-secondary hover:text-text-primary hover:bg-surface-hover transition-all"
+              className="inline-flex items-center gap-1.5 rounded-lg bg-surface px-3 py-2 text-xs font-medium text-text-secondary transition-all hover:bg-surface-hover hover:text-text-primary"
             >
-              <Sparkles className="w-4 h-4" />
+              <Sparkles className="size-4" />
               AI 诊断
             </button>
           </div>
         </div>
 
         {/* Right column: match gauge */}
-        <div className="shrink-0 flex flex-col items-center justify-center min-w-[160px] xl:border-l xl:border-border-default xl:pl-8 pt-6 xl:pt-0 border-t xl:border-t-0 border-border-default">
-          <div className="flex items-center gap-1.5 mb-4">
+        <div className="flex min-w-[160px] shrink-0 flex-col items-center justify-center border-t border-border-default pt-6 xl:border-l xl:border-t-0 xl:border-border-default xl:pl-8 xl:pt-0">
+          <div className="mb-4 flex items-center gap-1.5">
             <span className="text-xs text-text-tertiary">路线匹配度</span>
-            <HelpCircle className="w-3.5 h-3.5 text-text-muted" />
+            <HelpCircle className="size-3.5 text-text-muted" />
           </div>
           <GaugeChart value={matchSnapshot.probability} size={132} strokeWidth={11} />
-          <div className="flex items-center gap-1.5 mt-4 text-xs">
-            <TrendingUpIcon className="w-4 h-4 text-primary" />
-            <span className="text-primary font-medium">
+          <div className="mt-4 flex items-center gap-1.5 text-xs">
+            <TrendingUpIcon className="size-4 text-primary" />
+            <span className="font-medium text-primary">
               较上次提升 {matchSnapshot.change > 0 ? '+' : ''}
               {matchSnapshot.change}%
             </span>
           </div>
-          <p className="text-xs text-text-tertiary mt-2 leading-relaxed">
+          <p className="mt-2 text-xs leading-relaxed text-text-tertiary">
             距离目标还有 {matchSnapshot.remaining}% 提升空间
           </p>
         </div>
@@ -284,24 +278,24 @@ function TimelineNode({ item, isLast }: { item: TimelineItem; isLast: boolean })
     <div className="relative flex gap-4">
       {!isLast && (
         <div
-          className={`absolute left-[13px] top-8 w-px h-[calc(100%-16px)] ${config.lineClass}`}
+          className={`absolute left-[13px] top-8 h-[calc(100%-16px)] w-px ${config.lineClass}`}
         />
       )}
 
-      <div className="flex flex-col items-center shrink-0 pt-1">
+      <div className="flex shrink-0 flex-col items-center pt-1">
         <div
-          className={`relative z-10 w-7 h-7 rounded-full flex items-center justify-center ${config.dotClass}`}
+          className={`relative z-10 flex size-7 items-center justify-center rounded-full ${config.dotClass}`}
         >
-          <Icon className={`w-4 h-4 ${config.iconClass}`} />
+          <Icon className={`size-4 ${config.iconClass}`} />
         </div>
       </div>
 
-      <div className="flex-1 pb-6 min-w-0">
+      <div className="min-w-0 flex-1 pb-6">
         <div className="flex flex-col md:flex-row md:gap-6">
           {/* Left: timeline header + description */}
-          <div className="flex-1 min-w-0">
-            <div className="flex flex-wrap items-center gap-2 mb-1">
-              <span className={`text-2xs font-medium px-2 py-0.5 rounded-lg ${config.badgeClass}`}>
+          <div className="min-w-0 flex-1">
+            <div className="mb-1 flex flex-wrap items-center gap-2">
+              <span className={`rounded-lg px-2 py-0.5 text-2xs font-medium ${config.badgeClass}`}>
                 {item.time}
               </span>
               {item.status === 'current' && (
@@ -309,16 +303,16 @@ function TimelineNode({ item, isLast }: { item: TimelineItem; isLast: boolean })
               )}
             </div>
             <h3 className={`text-sm font-semibold ${config.titleClass}`}>{item.title}</h3>
-            <p className="text-xs text-text-tertiary mt-0.5 leading-relaxed">{item.description}</p>
+            <p className="mt-0.5 text-xs leading-relaxed text-text-tertiary">{item.description}</p>
           </div>
 
           {/* Right: capability objectives */}
-          <div className="mt-3 md:mt-0 md:w-40 shrink-0">
-            <p className="text-xs text-text-muted mb-2">能力目标</p>
+          <div className="mt-3 shrink-0 md:mt-0 md:w-40">
+            <p className="mb-2 text-xs text-text-muted">能力目标</p>
             <div className="space-y-1.5">
               {item.objectives.map((objective, idx) => (
                 <div key={idx} className="flex items-center gap-2 text-xs text-text-secondary">
-                  <CheckCircle2 className={`w-3.5 h-3.5 shrink-0 ${config.objectiveIconClass}`} />
+                  <CheckCircle2 className={`size-3.5 shrink-0 ${config.objectiveIconClass}`} />
                   <span>{objective}</span>
                 </div>
               ))}
@@ -335,10 +329,10 @@ function TimelineSection({ child }: { child: Child }) {
 
   if (timeline.length === 0) {
     return (
-      <CommandCard className="p-6 h-full">
-        <div className="flex items-center gap-2 mb-4">
-          <TrendingUp className="w-5 h-5 text-primary" />
-          <h2 className="text-base font-bold font-display">升学时间轴</h2>
+      <CommandCard className="h-full p-6">
+        <div className="mb-4 flex items-center gap-2">
+          <TrendingUp className="size-5 text-primary" />
+          <h2 className="font-display text-base font-bold">升学时间轴</h2>
         </div>
         <EmptyState
           icon={CalendarDays}
@@ -350,23 +344,19 @@ function TimelineSection({ child }: { child: Child }) {
   }
 
   return (
-    <CommandCard className="p-5 sm:p-6 h-full">
-      <div className="flex items-center gap-2 mb-6">
-        <TrendingUp className="w-5 h-5 text-primary" />
-        <h2 className="text-base font-bold font-display">升学时间轴</h2>
+    <CommandCard className="h-full p-5 sm:p-6">
+      <div className="mb-6 flex items-center gap-2">
+        <TrendingUp className="size-5 text-primary" />
+        <h2 className="font-display text-base font-bold">升学时间轴</h2>
         <span className="ml-auto text-xs text-text-tertiary">
-          {timeline.filter((t) => t.status === 'past').length} 个已过 / {' '}
+          {timeline.filter((t) => t.status === 'past').length} 个已过 /{' '}
           {timeline.filter((t) => t.status === 'future').length} 个待完成
         </span>
       </div>
 
       <div className="pl-1">
         {timeline.map((item, index) => (
-          <TimelineNode
-            key={item.id}
-            item={item}
-            isLast={index === timeline.length - 1}
-          />
+          <TimelineNode key={item.id} item={item} isLast={index === timeline.length - 1} />
         ))}
       </div>
     </CommandCard>
@@ -395,16 +385,14 @@ function UpcomingMilestonesCard({ child }: { child: Child }) {
   const milestones = getUpcomingMilestones(child, 3);
 
   return (
-    <CommandCard className="p-5 sm:p-6 h-full">
-      <div className="flex items-center gap-2 mb-4">
-        <AlertCircle className="w-5 h-5 text-warning" />
-        <h2 className="text-base font-bold font-display">关键节点预警</h2>
+    <CommandCard className="h-full p-5 sm:p-6">
+      <div className="mb-4 flex items-center gap-2">
+        <AlertCircle className="size-5 text-warning" />
+        <h2 className="font-display text-base font-bold">关键节点预警</h2>
       </div>
 
       {milestones.length === 0 ? (
-        <div className="text-center py-8 text-sm text-text-tertiary">
-          暂无即将到来的关键节点
-        </div>
+        <div className="py-8 text-center text-sm text-text-tertiary">暂无即将到来的关键节点</div>
       ) : (
         <div className="space-y-3">
           {milestones.map((milestone, index) => {
@@ -412,25 +400,29 @@ function UpcomingMilestonesCard({ child }: { child: Child }) {
             return (
               <div
                 key={milestone.id}
-                className="p-3.5 rounded-[14px] bg-surface border border-border-default"
+                className="rounded-[14px] border border-border-default bg-surface p-3.5"
               >
-                <div className="flex items-center justify-between mb-2">
+                <div className="mb-2 flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <span className="text-2xs font-medium px-1.5 py-0.5 rounded bg-surface-hover text-text-tertiary">
+                    <span className="rounded bg-surface-hover px-1.5 py-0.5 text-2xs font-medium text-text-tertiary">
                       #{index + 1}
                     </span>
                     <span className="text-xs text-text-tertiary">{milestone.time}</span>
                   </div>
-                  <span className={`text-2xs font-medium px-2 py-0.5 rounded-lg ${risk.badgeClass}`}>
+                  <span
+                    className={`rounded-lg px-2 py-0.5 text-2xs font-medium ${risk.badgeClass}`}
+                  >
                     {risk.label}
                   </span>
                 </div>
-                <h3 className="text-sm font-semibold text-text-secondary mb-1">{milestone.title}</h3>
-                <p className="text-xs text-text-tertiary leading-relaxed mb-2">
+                <h3 className="mb-1 text-sm font-semibold text-text-secondary">
+                  {milestone.title}
+                </h3>
+                <p className="mb-2 text-xs leading-relaxed text-text-tertiary">
                   {milestone.riskReason}
                 </p>
                 <div className="flex items-start gap-1.5 text-xs">
-                  <AlertCircle className={`w-3.5 h-3.5 shrink-0 mt-0.5 ${risk.iconClass}`} />
+                  <AlertCircle className={`mt-0.5 size-3.5 shrink-0 ${risk.iconClass}`} />
                   <span className="text-text-secondary">{milestone.suggestedAction}</span>
                 </div>
               </div>
@@ -452,38 +444,42 @@ function AIStrategyCard({
   const advice = generateStrategicAdvice(
     child,
     completionRate !== null
-      ? ({ completionRate, total: 1, done: 0, skipped: 0, pending: 0 } as ReturnType<typeof getPlanStats>)
+      ? ({ completionRate, total: 1, done: 0, skipped: 0, pending: 0 } as ReturnType<
+          typeof getPlanStats
+        >)
       : null
   );
 
   return (
-    <CommandCard className="p-5 sm:p-6 h-full">
-      <div className="flex items-center justify-between gap-2 mb-4">
+    <CommandCard className="h-full p-5 sm:p-6">
+      <div className="mb-4 flex items-center justify-between gap-2">
         <div className="flex items-center gap-2">
-          <Sparkles className="w-5 h-5 text-secondary" />
-          <h2 className="text-base font-bold font-display">AI 战略建议</h2>
+          <Sparkles className="size-5 text-secondary" />
+          <h2 className="font-display text-base font-bold">AI 战略建议</h2>
         </div>
         <span className="text-2xs text-text-muted">基于当前数据分析</span>
       </div>
 
       <div className="space-y-4">
         <div>
-          <div className="flex items-center gap-2 mb-1.5">
-            <Lightbulb className="w-4 h-4 text-secondary" />
+          <div className="mb-1.5 flex items-center gap-2">
+            <Lightbulb className="size-4 text-secondary" />
             <h3 className="text-xs font-semibold text-text-secondary">当前判断</h3>
           </div>
-          <p className="text-xs text-text-tertiary leading-relaxed pl-6">{advice.currentJudgment}</p>
+          <p className="pl-6 text-xs leading-relaxed text-text-tertiary">
+            {advice.currentJudgment}
+          </p>
         </div>
 
         <div>
-          <div className="flex items-center gap-2 mb-1.5">
-            <Target className="w-4 h-4 text-secondary" />
+          <div className="mb-1.5 flex items-center gap-2">
+            <Target className="size-4 text-secondary" />
             <h3 className="text-xs font-semibold text-text-secondary">重点关注</h3>
           </div>
           <ol className="space-y-1 pl-6">
             {advice.focusAreas.map((area, idx) => (
               <li key={idx} className="flex items-start gap-2 text-xs text-text-tertiary">
-                <span className="text-secondary font-medium shrink-0">{idx + 1}</span>
+                <span className="shrink-0 font-medium text-secondary">{idx + 1}</span>
                 <span>{area}</span>
               </li>
             ))}
@@ -491,14 +487,14 @@ function AIStrategyCard({
         </div>
 
         <div>
-          <div className="flex items-center gap-2 mb-1.5">
-            <Calendar className="w-4 h-4 text-secondary" />
+          <div className="mb-1.5 flex items-center gap-2">
+            <Calendar className="size-4 text-secondary" />
             <h3 className="text-xs font-semibold text-text-secondary">未来 90 天目标</h3>
           </div>
           <ul className="space-y-1 pl-6">
             {advice.next90DaysGoals.map((goal, idx) => (
               <li key={idx} className="flex items-center gap-2 text-xs text-text-tertiary">
-                <CheckCircle2 className="w-3.5 h-3.5 text-secondary/70 shrink-0" />
+                <CheckCircle2 className="text-secondary/70 size-3.5 shrink-0" />
                 <span>{goal}</span>
               </li>
             ))}
@@ -525,57 +521,59 @@ function OverviewChildCard({
   const advice = generateStrategicAdvice(child);
 
   return (
-    <CommandCard hover onClick={onSelect} className="p-6 h-full">
-      <div className="flex items-start gap-4 mb-4">
+    <CommandCard hover onClick={onSelect} className="h-full p-6">
+      <div className="mb-4 flex items-start gap-4">
         <ChildAvatar child={child} size="xl" shape="rounded" />
-        <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2 mb-1">
-            <h3 className="text-lg font-bold font-display text-text-primary truncate">
+        <div className="min-w-0 flex-1">
+          <div className="mb-1 flex items-center gap-2">
+            <h3 className="truncate font-display text-lg font-bold text-text-primary">
               {child.name}
             </h3>
             <DataBadge variant="primary" size="sm">
               {gradeToStage(child.grade, child.educationSystem)}
             </DataBadge>
           </div>
-          <p className="text-sm text-text-tertiary truncate">
+          <p className="truncate text-sm text-text-tertiary">
             {gradeLabel(child.grade, child.educationSystem)}
             {child.targetSchool ? ` · 目标 ${child.targetSchool}` : ''}
           </p>
         </div>
-        <ChevronRight className="w-5 h-5 text-text-muted shrink-0" />
+        <ChevronRight className="size-5 shrink-0 text-text-muted" />
       </div>
 
-      <div className="space-y-2 mb-4">
-        <div className="flex items-center justify-between py-2 px-3 rounded-lg bg-surface">
+      <div className="mb-4 space-y-2">
+        <div className="flex items-center justify-between rounded-lg bg-surface px-3 py-2">
           <span className="text-xs text-text-tertiary">当前路线</span>
-          <span className="text-sm font-medium text-text-secondary truncate max-w-[60%]">
+          <span className="max-w-[60%] truncate text-sm font-medium text-text-secondary">
             {routeSummary.name}
           </span>
         </div>
 
         {upcoming[0] && (
-          <div className="flex items-start gap-2 py-2 px-3 rounded-lg bg-warning/[0.06]">
-            <AlertCircle className="w-4 h-4 text-warning shrink-0 mt-0.5" />
+          <div className="bg-warning/[0.06] flex items-start gap-2 rounded-lg px-3 py-2">
+            <AlertCircle className="mt-0.5 size-4 shrink-0 text-warning" />
             <div className="min-w-0">
-              <p className="text-xs text-warning font-medium">下一个节点：{upcoming[0].time}</p>
-              <p className="text-sm text-text-secondary truncate">{upcoming[0].title}</p>
+              <p className="text-xs font-medium text-warning">下一个节点：{upcoming[0].time}</p>
+              <p className="truncate text-sm text-text-secondary">{upcoming[0].title}</p>
             </div>
           </div>
         )}
 
         {completionRate !== null && (
-          <div className="flex items-center justify-between py-2 px-3 rounded-lg bg-surface">
+          <div className="flex items-center justify-between rounded-lg bg-surface px-3 py-2">
             <span className="text-xs text-text-tertiary">本周完成率</span>
-            <span className="text-sm font-bold text-text-primary tabular-nums">
+            <span className="text-sm font-bold tabular-nums text-text-primary">
               {completionRate}%
             </span>
           </div>
         )}
       </div>
 
-      <div className="py-2 px-3 rounded-[14px] bg-surface border border-border-ai mb-4">
-        <p className="text-xs text-secondary font-medium mb-1">AI 战略提示</p>
-        <p className="text-xs text-text-tertiary line-clamp-2 leading-relaxed">{advice.currentJudgment}</p>
+      <div className="mb-4 rounded-[14px] border border-border-ai bg-surface px-3 py-2">
+        <p className="mb-1 text-xs font-medium text-secondary">AI 战略提示</p>
+        <p className="line-clamp-2 text-xs leading-relaxed text-text-tertiary">
+          {advice.currentJudgment}
+        </p>
       </div>
 
       <div className="flex gap-2">
@@ -584,7 +582,7 @@ function OverviewChildCard({
             e.stopPropagation();
             router.push('/dashboard/plan');
           }}
-          className="flex-1 py-2 rounded-lg bg-primary/[0.10] text-primary text-xs font-semibold hover:bg-primary/[0.15] transition-all"
+          className="bg-primary/[0.10] hover:bg-primary/[0.15] flex-1 rounded-lg py-2 text-xs font-semibold text-primary transition-all"
         >
           路线
         </button>
@@ -593,7 +591,7 @@ function OverviewChildCard({
             e.stopPropagation();
             router.push('/dashboard/weekly');
           }}
-          className="flex-1 py-2 rounded-lg bg-surface text-text-secondary text-xs font-semibold hover:text-text-primary hover:bg-surface-hover transition-all"
+          className="flex-1 rounded-lg bg-surface py-2 text-xs font-semibold text-text-secondary transition-all hover:bg-surface-hover hover:text-text-primary"
         >
           周计划
         </button>
@@ -604,12 +602,7 @@ function OverviewChildCard({
 
 export default function DashboardPage() {
   const shouldReduceMotion = useReducedMotion();
-  const {
-    children,
-    currentChild,
-    setCurrentChildId,
-    getWeeklyPlan,
-  } = useChildren();
+  const { children, currentChild, setCurrentChildId, getWeeklyPlan } = useChildren();
   const [viewMode, setViewMode] = useState<ViewMode>('command');
 
   const canOverview = children.length >= 2;
@@ -631,14 +624,14 @@ export default function DashboardPage() {
         initial={shouldReduceMotion ? false : { opacity: 0, y: -8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4 }}
-        className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
+        className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
       >
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-[14px] bg-primary/10 border border-primary/20 flex items-center justify-center">
-            <LayoutGrid className="w-5 h-5 text-primary" />
+          <div className="bg-primary/10 border-primary/20 flex size-10 items-center justify-center rounded-[14px] border">
+            <LayoutGrid className="size-5 text-primary" />
           </div>
           <div>
-            <h1 className="text-2xl sm:text-3xl font-bold font-display">升学规划中心</h1>
+            <h1 className="font-display text-2xl font-bold sm:text-3xl">升学规划中心</h1>
           </div>
         </div>
 
@@ -655,7 +648,7 @@ export default function DashboardPage() {
           variants={containerVariants}
           initial={shouldReduceMotion ? false : 'hidden'}
           animate="visible"
-          className="grid grid-cols-1 md:grid-cols-2 gap-6"
+          className="grid grid-cols-1 gap-6 md:grid-cols-2"
         >
           {children.map((child) => (
             <motion.div key={child.id} variants={itemVariants}>
@@ -666,7 +659,6 @@ export default function DashboardPage() {
               />
             </motion.div>
           ))}
-
         </motion.div>
       )}
 
@@ -681,7 +673,7 @@ export default function DashboardPage() {
             <IdentityCard child={currentChild} completionRate={completionRate} />
           </motion.div>
 
-          <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 gap-6 xl:grid-cols-3">
             <motion.div
               initial={shouldReduceMotion ? false : { opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
@@ -701,16 +693,12 @@ export default function DashboardPage() {
                 <UpcomingMilestonesCard child={currentChild} />
               </motion.div>
               <motion.div variants={itemVariants}>
-                <AIStrategyCard
-                  child={currentChild}
-                  completionRate={completionRate}
-                />
+                <AIStrategyCard child={currentChild} completionRate={completionRate} />
               </motion.div>
             </motion.div>
           </div>
         </>
       )}
-
     </div>
   );
 }

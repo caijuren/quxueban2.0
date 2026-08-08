@@ -23,10 +23,7 @@ export async function POST(req: Request) {
     }
 
     if (!ALLOWED_TYPES.includes(file.type)) {
-      return NextResponse.json(
-        { error: '仅支持 JPG、PNG、WebP、GIF 格式' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: '仅支持 JPG、PNG、WebP、GIF 格式' }, { status: 400 });
     }
 
     if (file.size > MAX_SIZE) {

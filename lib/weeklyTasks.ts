@@ -16,22 +16,9 @@ import {
 import { computeTaskAlignment } from './taskAlignment';
 import { SYSTEM_TASK_TEMPLATES, TASK_CATEGORY_LABELS } from './taskTemplates';
 
-export const dayOrder: DayOfWeek[] = [
-  '周一',
-  '周二',
-  '周三',
-  '周四',
-  '周五',
-  '周六',
-  '周日',
-];
+export const dayOrder: DayOfWeek[] = ['周一', '周二', '周三', '周四', '周五', '周六', '周日'];
 
-export const timeSlotOrder: TimeSlot[] = [
-  'morning',
-  'afternoon',
-  'evening',
-  'flexible',
-];
+export const timeSlotOrder: TimeSlot[] = ['morning', 'afternoon', 'evening', 'flexible'];
 
 export function getCategoryDefaultTimeSlot(category: TaskCategory): TimeSlot {
   const map: Record<TaskCategory, TimeSlot> = {
@@ -59,10 +46,7 @@ export function getTimeSlotLabel(timeSlot: TimeSlot): string {
   return map[timeSlot] || '灵活';
 }
 
-export const subjectMeta: Record<
-  SubjectId,
-  { name: string; color: string; gradient: string }
-> = {
+export const subjectMeta: Record<SubjectId, { name: string; color: string; gradient: string }> = {
   chinese: { name: '语文', color: '#06b6d4', gradient: 'from-accent to-accent-glow' },
   math: { name: '数学', color: '#f43f5e', gradient: 'from-primary to-primary-glow' },
   english: { name: '英语', color: '#8b5cf6', gradient: 'from-secondary to-secondary-glow' },
@@ -130,15 +114,36 @@ export function generateTaskId(subjectId: SubjectId | TaskCategory, index: numbe
 }
 
 const subjectRouteTags: Record<SubjectId, string[]> = {
-  chinese: ['sanchu_gongban', 'sanchu_minban', 'sanchu_guoji', 'zhongkao_putong', 'zhongkao_tese', 'gaokao_zongping', 'gaokao_qiangji'],
-  math: ['sanchu_gongban', 'sanchu_minban', 'sanchu_guoji', 'zhongkao_putong', 'zhongkao_tese', 'gaokao_zongping', 'gaokao_qiangji'],
-  english: ['sanchu_gongban', 'sanchu_minban', 'sanchu_guoji', 'zhongkao_putong', 'zhongkao_tese', 'gaokao_zongping', 'gaokao_qiangji'],
+  chinese: [
+    'sanchu_gongban',
+    'sanchu_minban',
+    'sanchu_guoji',
+    'zhongkao_putong',
+    'zhongkao_tese',
+    'gaokao_zongping',
+    'gaokao_qiangji',
+  ],
+  math: [
+    'sanchu_gongban',
+    'sanchu_minban',
+    'sanchu_guoji',
+    'zhongkao_putong',
+    'zhongkao_tese',
+    'gaokao_zongping',
+    'gaokao_qiangji',
+  ],
+  english: [
+    'sanchu_gongban',
+    'sanchu_minban',
+    'sanchu_guoji',
+    'zhongkao_putong',
+    'zhongkao_tese',
+    'gaokao_zongping',
+    'gaokao_qiangji',
+  ],
 };
 
-export function generateWeeklyPlan(
-  child: Child,
-  weekId: string = getCurrentWeekId()
-): WeeklyPlan {
+export function generateWeeklyPlan(child: Child, weekId: string = getCurrentWeekId()): WeeklyPlan {
   const subjectPlans: Record<SubjectId, SubjectTemplate> = {
     chinese: getChinesePlanByGrade(child.grade) as SubjectTemplate,
     math: getMathPlanByGrade(child.grade) as SubjectTemplate,
@@ -251,10 +256,7 @@ export function expandTemplateToWeeklyTasks(
     template,
   });
 
-  const scheduledDays = getScheduledDays(
-    template.weeklySchedule,
-    template.customScheduleDays
-  );
+  const scheduledDays = getScheduledDays(template.weeklySchedule, template.customScheduleDays);
 
   const targetDays = scheduledDays.length > 0 ? scheduledDays : [defaultDay];
 
@@ -389,22 +391,15 @@ export function getPlanStats(plan: WeeklyPlan): PlanStats {
   const skipped = plan.tasks.filter((t) => t.status === 'skipped').length;
   const pending = total - done - skipped;
   const completionRate = total === 0 ? 0 : Math.round((done / total) * 100);
-  const estimatedMinutes = plan.tasks.reduce(
-    (sum, t) => sum + parseDurationMinutes(t.duration),
-    0
-  );
+  const estimatedMinutes = plan.tasks.reduce((sum, t) => sum + parseDurationMinutes(t.duration), 0);
 
   const goals = plan.goals || [];
-  const quantityTarget = goals.reduce(
-    (sum, g) => sum + (g.quantityTarget ?? 0),
-    0
-  );
+  const quantityTarget = goals.reduce((sum, g) => sum + (g.quantityTarget ?? 0), 0);
   const quantityDone = Math.min(
     quantityTarget,
     goals.reduce((sum, g) => sum + (g.quantityDone ?? 0), 0)
   );
-  const quantityRate =
-    quantityTarget === 0 ? 0 : Math.round((quantityDone / quantityTarget) * 100);
+  const quantityRate = quantityTarget === 0 ? 0 : Math.round((quantityDone / quantityTarget) * 100);
 
   const byCategory = {} as Record<
     TaskCategory,
@@ -471,12 +466,18 @@ export interface SubjectStat {
 
 const reportSubjectMeta: Record<
   SubjectId,
-  { getStatus: (grade: number) => { currentTopic: string; dailyTime: string; weakSkills: string[] } }
+  {
+    getStatus: (grade: number) => { currentTopic: string; dailyTime: string; weakSkills: string[] };
+  }
 > = {
   chinese: {
     getStatus: (grade) => {
       const s = getChineseStatusByGrade(grade);
-      return { currentTopic: s.currentTopic, dailyTime: s.dailyChineseTime, weakSkills: s.weakSkills };
+      return {
+        currentTopic: s.currentTopic,
+        dailyTime: s.dailyChineseTime,
+        weakSkills: s.weakSkills,
+      };
     },
   },
   math: {

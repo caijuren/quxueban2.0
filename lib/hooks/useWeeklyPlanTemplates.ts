@@ -1,17 +1,9 @@
 'use client';
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import {
-  apiDelete,
-  apiGet,
-  apiPatch,
-  apiPost,
-} from '@/lib/apiClient';
+import { apiDelete, apiGet, apiPatch, apiPost } from '@/lib/apiClient';
 import { WeeklyPlanTemplate } from '@/lib/storage.types';
-import {
-  WeeklyPlanTemplateCreateInput,
-  WeeklyPlanTemplateUpdateInput,
-} from '@/lib/validation';
+import { WeeklyPlanTemplateCreateInput, WeeklyPlanTemplateUpdateInput } from '@/lib/validation';
 
 function buildKey(childId?: string) {
   return ['weekly-plan-templates', childId ?? 'all'];
@@ -48,13 +40,8 @@ export function useCreateWeeklyPlanTemplate(childId?: string) {
 export function useUpdateWeeklyPlanTemplate(childId?: string) {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({
-      id,
-      data,
-    }: {
-      id: string;
-      data: WeeklyPlanTemplateUpdateInput;
-    }) => apiPatch<WeeklyPlanTemplate>(`/api/weekly-plan-templates/${id}`, data),
+    mutationFn: ({ id, data }: { id: string; data: WeeklyPlanTemplateUpdateInput }) =>
+      apiPatch<WeeklyPlanTemplate>(`/api/weekly-plan-templates/${id}`, data),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: buildKey(childId),
@@ -67,8 +54,7 @@ export function useUpdateWeeklyPlanTemplate(childId?: string) {
 export function useDeleteWeeklyPlanTemplate(childId?: string) {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (id: string) =>
-      apiDelete<{ success: boolean }>(`/api/weekly-plan-templates/${id}`),
+    mutationFn: (id: string) => apiDelete<{ success: boolean }>(`/api/weekly-plan-templates/${id}`),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: buildKey(childId),

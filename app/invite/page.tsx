@@ -51,30 +51,30 @@ function InvitePageContent() {
   };
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center p-4">
-      <div className="w-full max-w-md rounded-card bg-surface border border-border-default shadow-card p-6 sm:p-8">
-        <div className="text-center mb-6">
-          <div className="w-12 h-12 rounded-module bg-primary-dim flex items-center justify-center mx-auto mb-3">
-            <Users className="w-6 h-6 text-primary" />
+    <div className="flex min-h-screen items-center justify-center bg-background p-4">
+      <div className="w-full max-w-md rounded-card border border-border-default bg-surface p-6 shadow-card sm:p-8">
+        <div className="mb-6 text-center">
+          <div className="mx-auto mb-3 flex size-12 items-center justify-center rounded-module bg-primary-dim">
+            <Users className="size-6 text-primary" />
           </div>
-          <h1 className="text-xl font-bold font-display text-text-primary">家庭邀请</h1>
-          <p className="text-sm text-text-muted mt-1">趣学伴 · 家庭学习规划</p>
+          <h1 className="font-display text-xl font-bold text-text-primary">家庭邀请</h1>
+          <p className="mt-1 text-sm text-text-muted">趣学伴 · 家庭学习规划</p>
         </div>
 
         {loading && (
           <div className="flex items-center justify-center py-8 text-text-muted">
-            <Loader2 className="w-5 h-5 animate-spin mr-2" />
+            <Loader2 className="mr-2 size-5 animate-spin" />
             加载邀请信息...
           </div>
         )}
 
         {!loading && error && (
-          <div className="rounded-module bg-error/10 border border-error/20 p-4 text-center">
-            <AlertCircle className="w-6 h-6 text-error mx-auto mb-2" />
+          <div className="bg-error/10 border-error/20 rounded-module border p-4 text-center">
+            <AlertCircle className="mx-auto mb-2 size-6 text-error" />
             <p className="text-sm text-error">{error}</p>
             <Link
               href="/login"
-              className="inline-block mt-4 text-sm text-primary hover:text-primary-glow"
+              className="mt-4 inline-block text-sm text-primary hover:text-primary-glow"
             >
               返回登录
             </Link>
@@ -83,16 +83,16 @@ function InvitePageContent() {
 
         {!loading && invite && (
           <div className="space-y-5">
-            <div className="rounded-module bg-surface border border-border-default p-4 text-center">
-              <p className="text-sm text-text-secondary mb-1">你收到了来自家庭的邀请</p>
+            <div className="rounded-module border border-border-default bg-surface p-4 text-center">
+              <p className="mb-1 text-sm text-text-secondary">你收到了来自家庭的邀请</p>
               <p className="text-lg font-bold text-text-primary">{invite.family.name}</p>
-              <p className="text-xs text-text-muted mt-1">
+              <p className="mt-1 text-xs text-text-muted">
                 邀请身份：{roleLabel[invite.role] || invite.role}
               </p>
             </div>
 
-            <div className="flex items-start gap-3 text-xs text-text-muted bg-success/10 border border-success/20 rounded-module p-3">
-              <CheckCircle className="w-4 h-4 text-success shrink-0 mt-0.5" />
+            <div className="bg-success/10 border-success/20 flex items-start gap-3 rounded-module border p-3 text-xs text-text-muted">
+              <CheckCircle className="mt-0.5 size-4 shrink-0 text-success" />
               <p>
                 点击下方按钮登录或注册账号，接受邀请后即可共同管理孩子的学习。
                 <br />
@@ -103,13 +103,13 @@ function InvitePageContent() {
             <div className="grid grid-cols-2 gap-3">
               <Link
                 href={`/login?inviteToken=${token}`}
-                className="inline-flex items-center justify-center px-4 py-2 rounded-module bg-surface-hover text-text-secondary text-sm hover:bg-surface-highlight transition-colors"
+                className="inline-flex items-center justify-center rounded-module bg-surface-hover px-4 py-2 text-sm text-text-secondary transition-colors hover:bg-surface-highlight"
               >
                 登录并加入
               </Link>
               <Link
                 href={`/register?inviteToken=${token}`}
-                className="inline-flex items-center justify-center px-4 py-2 rounded-module bg-primary text-text-primary text-sm hover:bg-primary/90 transition-colors"
+                className="hover:bg-primary/90 inline-flex items-center justify-center rounded-module bg-primary px-4 py-2 text-sm text-text-primary transition-colors"
               >
                 注册并加入
               </Link>
@@ -123,14 +123,16 @@ function InvitePageContent() {
 
 export default function InvitePage() {
   return (
-    <Suspense fallback={
-      <div className="min-h-screen bg-background flex items-center justify-center p-4">
-        <div className="w-full max-w-md rounded-card bg-surface border border-border-default shadow-card p-6 text-center">
-          <Loader2 className="w-5 h-5 animate-spin mx-auto text-text-muted" />
-          <p className="text-sm text-text-muted mt-2">加载中...</p>
+    <Suspense
+      fallback={
+        <div className="flex min-h-screen items-center justify-center bg-background p-4">
+          <div className="w-full max-w-md rounded-card border border-border-default bg-surface p-6 text-center shadow-card">
+            <Loader2 className="mx-auto size-5 animate-spin text-text-muted" />
+            <p className="mt-2 text-sm text-text-muted">加载中...</p>
+          </div>
         </div>
-      </div>
-    }>
+      }
+    >
       <InvitePageContent />
     </Suspense>
   );

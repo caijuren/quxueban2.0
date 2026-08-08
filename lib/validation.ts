@@ -15,38 +15,13 @@ export const taskCategorySchema = z.enum([
   'other',
 ]);
 
-export const taskTypeSchema = z.enum([
-  'daily',
-  'milestone',
-  'remedial',
-  'sprint',
-  'diagnostic',
-]);
+export const taskTypeSchema = z.enum(['daily', 'milestone', 'remedial', 'sprint', 'diagnostic']);
 
-export const taskFrequencySchema = z.enum([
-  'once',
-  'daily',
-  'weekly',
-  'custom',
-]);
+export const taskFrequencySchema = z.enum(['once', 'daily', 'weekly', 'custom']);
 
-export const taskWeeklyScheduleSchema = z.enum([
-  'auto',
-  'daily',
-  'weekdays',
-  'weekends',
-  'custom',
-]);
+export const taskWeeklyScheduleSchema = z.enum(['auto', 'daily', 'weekdays', 'weekends', 'custom']);
 
-export const dayOfWeekSchema = z.enum([
-  '周一',
-  '周二',
-  '周三',
-  '周四',
-  '周五',
-  '周六',
-  '周日',
-]);
+export const dayOfWeekSchema = z.enum(['周一', '周二', '周三', '周四', '周五', '周六', '周日']);
 
 export const timeSlotSchema = z.enum([
   'morning',
@@ -74,10 +49,7 @@ export const childCreateSchema = z.object({
   name: z.string().min(1, '姓名不能为空').max(50, '姓名最多 50 字符'),
   grade: z.number().int().min(1, '年级最小为 1').max(12, '年级最大为 12'),
   educationSystem: educationSystemSchema.default('six-three'),
-  avatarColor: z
-    .string()
-    .regex(hexColorRegex, '头像颜色必须是有效 HEX 色值')
-    .optional(),
+  avatarColor: z.string().regex(hexColorRegex, '头像颜色必须是有效 HEX 色值').optional(),
   avatarUrl: z
     .union([
       z.string().url('头像链接格式不正确'),
@@ -162,12 +134,7 @@ export const taskStatusSchema = z.enum([
   'rescheduled',
 ]);
 
-export const taskCompletionQualitySchema = z.enum([
-  'excellent',
-  'good',
-  'average',
-  'needs_work',
-]);
+export const taskCompletionQualitySchema = z.enum(['excellent', 'good', 'average', 'needs_work']);
 
 export const taskCapabilityProgressSchema = z.object({
   capabilityId: z.string().min(1),
@@ -209,7 +176,10 @@ export const taskCompletionRecordSchema = z.object({
 const todayStr = () => new Date().toISOString().split('T')[0];
 
 export const taskCompletionInputSchema = z.object({
-  date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, '日期格式不正确').default(todayStr),
+  date: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/, '日期格式不正确')
+    .default(todayStr),
   status: taskStatusSchema,
   progress: z.number().int().min(0).max(100).default(0),
   actualDurationMinutes: z.number().int().min(0).default(0),
@@ -232,7 +202,10 @@ export const dingTalkPushSchema = z.object({
 
 export const dailySummarySchema = z.object({
   childId: z.string().min(1, '孩子 ID 不能为空'),
-  date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, '日期格式不正确').optional(),
+  date: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/, '日期格式不正确')
+    .optional(),
   taskIds: z.array(z.string()).optional(),
 });
 
@@ -259,9 +232,7 @@ export const weeklyTaskItemSchema = z.object({
   subjectId: z.enum(['chinese', 'math', 'english']).optional(),
   source: z.enum(['auto', 'library', 'manual']).default('manual'),
   templateId: z.string().optional(),
-  alignment: z
-    .enum(['ahead', 'ontrack', 'behind', 'optional', 'unrelated'])
-    .optional(),
+  alignment: z.enum(['ahead', 'ontrack', 'behind', 'optional', 'unrelated']).optional(),
   day: dayOfWeekSchema,
   timeSlot: timeSlotSchema.optional(),
   focus: z.string().min(1, '任务内容不能为空').max(200),
@@ -317,14 +288,8 @@ export const userRegisterSchema = z.object({
     .string()
     .min(3, '用户名至少 3 个字符')
     .max(20, '用户名最多 20 个字符')
-    .regex(
-      /^[a-zA-Z0-9_\u4e00-\u9fa5]+$/,
-      '用户名只能包含字母、数字、下划线和中文'
-    ),
-  password: z
-    .string()
-    .min(6, '密码至少 6 个字符')
-    .max(50, '密码最多 50 个字符'),
+    .regex(/^[a-zA-Z0-9_\u4e00-\u9fa5]+$/, '用户名只能包含字母、数字、下划线和中文'),
+  password: z.string().min(6, '密码至少 6 个字符').max(50, '密码最多 50 个字符'),
   name: z.string().max(50).nullable().optional(),
   inviteToken: z.string().max(100).nullable().optional(),
 });
@@ -343,7 +308,8 @@ export const userSettingsUpdateSchema = z.object({
   avatarUrl: z.string().url().nullable().optional(),
   phone: z.string().max(20).trim().nullable().optional(),
   email: z.string().email('邮箱格式不正确').nullable().optional(),
-  theme: z.enum(['dark-tech', 'rose-pink']).optional(),
+  theme: z.enum(['dark-tech', 'rose-pink', 'light']).optional(),
+  appearance: z.enum(['light', 'dark', 'system']).optional(),
   fontSize: z.enum(['normal', 'large', 'xlarge']).optional(),
   density: z.enum(['comfortable', 'compact']).optional(),
   reducedMotion: z.boolean().optional(),
@@ -465,21 +431,23 @@ export const familyMemberUpdateSchema = z.object({
   status: z.enum(['INVITED', 'ACTIVE', 'DISABLED']).optional(),
 });
 
-export const familyInviteCreateSchema = z.object({
-  role: z.enum(['ADMIN', 'MEMBER', 'VIEWER']),
-  email: z.string().email('邮箱格式不正确').max(100).nullable().optional(),
-  phone: z
-    .string()
-    .max(20)
-    .transform((val) => val.replace(/[\s-]/g, '').replace(/^\+?86/, ''))
-    .refine((val) => /^1[3-9]\d{9}$/.test(val), {
-      message: '手机号格式不正确',
-    })
-    .nullable()
-    .optional(),
-}).refine((data) => data.email || data.phone, {
-  message: '邮箱或手机号至少填写一个',
-});
+export const familyInviteCreateSchema = z
+  .object({
+    role: z.enum(['ADMIN', 'MEMBER', 'VIEWER']),
+    email: z.string().email('邮箱格式不正确').max(100).nullable().optional(),
+    phone: z
+      .string()
+      .max(20)
+      .transform((val) => val.replace(/[\s-]/g, '').replace(/^\+?86/, ''))
+      .refine((val) => /^1[3-9]\d{9}$/.test(val), {
+        message: '手机号格式不正确',
+      })
+      .nullable()
+      .optional(),
+  })
+  .refine((data) => data.email || data.phone, {
+    message: '邮箱或手机号至少填写一个',
+  });
 
 export const chatSessionCreateSchema = z.object({
   title: z.string().max(100, '标题最多 100 字符').optional(),

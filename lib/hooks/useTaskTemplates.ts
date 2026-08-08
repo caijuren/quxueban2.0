@@ -3,10 +3,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { apiDelete, apiGet, apiPatch, apiPost } from '@/lib/apiClient';
 import { TaskCategory, TaskTemplate } from '@/lib/storage.types';
-import {
-  TaskTemplateCreateInput,
-  TaskTemplateUpdateInput,
-} from '@/lib/validation';
+import { TaskTemplateCreateInput, TaskTemplateUpdateInput } from '@/lib/validation';
 
 function buildKey(
   childId: string | undefined,
@@ -44,33 +41,24 @@ export function useCreateTaskTemplate(childId: string | undefined) {
         ...data,
         childId,
       } as TaskTemplateCreateInput),
-    onSuccess: () =>
-      queryClient.invalidateQueries({ queryKey: ['task-templates', childId] }),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['task-templates', childId] }),
   });
 }
 
 export function useUpdateTaskTemplate(childId: string | undefined) {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({
-      id,
-      data,
-    }: {
-      id: string;
-      data: TaskTemplateUpdateInput;
-    }) => apiPatch<TaskTemplate>(`/api/task-templates/${id}`, data),
-    onSuccess: () =>
-      queryClient.invalidateQueries({ queryKey: ['task-templates', childId] }),
+    mutationFn: ({ id, data }: { id: string; data: TaskTemplateUpdateInput }) =>
+      apiPatch<TaskTemplate>(`/api/task-templates/${id}`, data),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['task-templates', childId] }),
   });
 }
 
 export function useDeleteTaskTemplate(childId: string | undefined) {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (id: string) =>
-      apiDelete<{ success: boolean }>(`/api/task-templates/${id}`),
-    onSuccess: () =>
-      queryClient.invalidateQueries({ queryKey: ['task-templates', childId] }),
+    mutationFn: (id: string) => apiDelete<{ success: boolean }>(`/api/task-templates/${id}`),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['task-templates', childId] }),
   });
 }
 
@@ -79,8 +67,7 @@ export function useToggleTaskTemplateFavorite(childId: string | undefined) {
   return useMutation({
     mutationFn: ({ id, isFavorite }: { id: string; isFavorite: boolean }) =>
       apiPatch<TaskTemplate>(`/api/task-templates/${id}`, { isFavorite }),
-    onSuccess: () =>
-      queryClient.invalidateQueries({ queryKey: ['task-templates', childId] }),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['task-templates', childId] }),
   });
 }
 
@@ -92,7 +79,6 @@ export function useImportSystemTaskTemplates(childId: string | undefined) {
         '/api/task-templates/import-system',
         { childId, templateIds }
       ),
-    onSuccess: () =>
-      queryClient.invalidateQueries({ queryKey: ['task-templates', childId] }),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['task-templates', childId] }),
   });
 }

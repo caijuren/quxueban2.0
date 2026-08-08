@@ -15,10 +15,7 @@ const TYPE_RULES: { type: NotificationType; keywords: string[] }[] = [
   },
 ];
 
-export function classifyNotificationType(
-  title: string,
-  content: string
-): NotificationType {
+export function classifyNotificationType(title: string, content: string): NotificationType {
   const text = `${title} ${content}`.toLowerCase();
   for (const rule of TYPE_RULES) {
     if (rule.keywords.some((keyword) => text.includes(keyword.toLowerCase()))) {

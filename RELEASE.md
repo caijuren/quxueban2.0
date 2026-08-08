@@ -234,6 +234,42 @@ docker image prune -f
 
 # 发版记录
 
+## v2.7.5（2026-08-08）
+
+**主题：Design System 2.0 与浅色主题上线**
+
+本版本为 2.7.x 设计系统迭代的最终整合发布，涵盖 Token 体系、原子组件、Admin 后台重构、硬编码样式清理与浅色主题支持。
+
+- Design Token 体系（v2.7.0）
+  - 新增完整 Design Token：颜色、间距、圆角、阴影、字体、动画、层级，覆盖 dark / light 双主题
+  - 通过 `data-theme` 属性切换主题，避免闪烁
+  - Tailwind 配置与 `globals.css` 全部接入 Token
+- 原子与分子组件（v2.7.1 / v2.7.2）
+  - 新增 `components/ui/*`：Button、Input、Select、Switch、Alert、Badge、Skeleton、Spinner、Toast 等
+  - 新增布局组件 `AppShell`、`PageHeader`、`Section`、`DataTable`、`FormField`
+  - 所有原子组件支持 `className` 扩展与 `ref` 转发
+- Admin 后台重构（v2.7.3）
+  - `/admin/users`、`/admin/ai-config`、`/admin` 统一使用新组件与 Token
+  - 修复 Server Component 传递 React icon 导致的报错
+- 硬编码样式清理（v2.7.4）
+  - 清理 `app/`、`components/` 中散落的十六进制色值、固定间距、重复按钮样式
+  - 设置页、控制台、任务、周计划等页面统一使用 Design System 组件
+- 浅色主题（v2.7.5）
+  - `UserSetting` 新增 `appearance` 字段，支持 `light / dark / system`
+  - 家长端可在「设置 → 外观」切换主题并实时预览
+  - Admin 后台强制使用浅色主题，退出时恢复用户偏好
+  - 登录页、注册页、找回密码页适配浅色主题
+- 缺陷修复（本版本 QA 发现）
+  - 修复登录/注册/找回密码按钮 `cursor-not-allowed` 非禁用态也显示的 bug
+  - 修复主按钮使用 `text-text-primary` 在浅色主题下对比度不足的问题，统一为 `text-inverse`
+  - 修复 `/dashboard/plan` 中 button 嵌套 button 导致的 React hydration 错误
+  - 修复 `PlanRoadmap` 粒子动画 `cy: undefined` 控制台报错
+- 质量验证
+  - `npm run type-check` 通过
+  - `npm run lint` 通过
+  - `npm run build` 通过
+  - Playwright QA：Admin 后台与家长端多页面无 console/page 错误（浅色主题 broad QA 因本地登录频率限制未完整重跑，深色主题 broad QA 全量通过）
+
 ## v2.6.0（2026-08-08）
 
 **主题：成长报告周报重构与高频任务结构化字段**

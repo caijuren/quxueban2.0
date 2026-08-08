@@ -1,8 +1,11 @@
 'use client';
 
 import { LucideIcon } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import Card from './card';
+import Button from './button';
 
-interface EmptyStateProps {
+export interface EmptyStateProps {
   icon?: LucideIcon;
   title: string;
   description?: string;
@@ -10,26 +13,51 @@ interface EmptyStateProps {
     label: string;
     onClick: () => void;
   };
+  compact?: boolean;
+  className?: string;
 }
 
-export default function EmptyState({ icon: Icon, title, description, action }: EmptyStateProps) {
+export default function EmptyState({
+  icon: Icon,
+  title,
+  description,
+  action,
+  compact = false,
+  className,
+}: EmptyStateProps) {
+  if (compact) {
+    return (
+      <div className={cn('flex flex-col items-center justify-center py-8 text-center', className)}>
+        {Icon && (
+          <div className="rounded-full bg-surface-hover p-2.5 text-text-tertiary">
+            <Icon className="size-5" />
+          </div>
+        )}
+        <p className="mt-3 text-sm font-medium text-text-secondary">{title}</p>
+        {description && <p className="mt-1 text-xs text-text-muted">{description}</p>}
+        {action && (
+          <Button variant="primary" size="sm" className="mt-3" onClick={action.onClick}>
+            {action.label}
+          </Button>
+        )}
+      </div>
+    );
+  }
+
   return (
-    <div className="rounded-card bg-surface border border-border-default shadow-card p-8 text-center">
+    <Card padding="lg" className={cn('text-center', className)}>
       {Icon && (
-        <div className="w-12 h-12 rounded-module bg-surface-hover flex items-center justify-center mx-auto mb-4">
-          <Icon className="w-6 h-6 text-text-tertiary" />
+        <div className="mx-auto mb-4 flex size-12 items-center justify-center rounded-full bg-surface-hover">
+          <Icon className="size-6 text-text-tertiary" />
         </div>
       )}
-      <p className="text-text-secondary font-medium mb-1">{title}</p>
-      {description && <p className="text-sm text-text-muted mb-4">{description}</p>}
+      <p className="mb-1 font-medium text-text-secondary">{title}</p>
+      {description && <p className="mb-4 text-sm text-text-muted">{description}</p>}
       {action && (
-        <button
-          onClick={action.onClick}
-          className="px-4 py-2 rounded-module bg-primary/10 text-primary text-sm font-medium hover:bg-primary/20 transition-all focus-ring"
-        >
+        <Button variant="primary" size="sm" onClick={action.onClick}>
           {action.label}
-        </button>
+        </Button>
       )}
-    </div>
+    </Card>
   );
 }

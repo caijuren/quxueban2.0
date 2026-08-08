@@ -18,7 +18,7 @@ export default function MathPlanConfigPage() {
       childId={currentChild?.id}
       description={
         <div>
-          <p className="font-medium text-text-secondary mb-1">
+          <p className="mb-1 font-medium text-text-secondary">
             本路径服务于三公冲刺路线的数学能力与竞赛荣誉
           </p>
           <p className="text-text-tertiary">

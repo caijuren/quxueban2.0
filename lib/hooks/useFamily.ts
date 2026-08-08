@@ -88,9 +88,7 @@ async function removeMember(id: string): Promise<void> {
   }
 }
 
-async function inviteUnregistered(
-  input: FamilyInviteCreateInput
-): Promise<{
+async function inviteUnregistered(input: FamilyInviteCreateInput): Promise<{
   invite: { token: string; email: string | null; phone: string | null; expiresAt: string };
   message: string;
 }> {

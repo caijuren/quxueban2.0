@@ -71,10 +71,7 @@ async function getBaiduToken(): Promise<string | null> {
 async function transcribeWithBaidu(audioUrl: string, filePath: string) {
   const token = await getBaiduToken();
   if (!token) {
-    return NextResponse.json(
-      { error: '百度语音识别未配置', transcript: '' },
-      { status: 503 }
-    );
+    return NextResponse.json({ error: '百度语音识别未配置', transcript: '' }, { status: 503 });
   }
 
   try {
@@ -116,19 +113,13 @@ async function transcribeWithBaidu(audioUrl: string, filePath: string) {
     return NextResponse.json({ transcript });
   } catch (err) {
     console.error('[transcribe] baidu asr process error:', err);
-    return NextResponse.json(
-      { error: '百度语音识别处理失败', transcript: '' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: '百度语音识别处理失败', transcript: '' }, { status: 500 });
   }
 }
 
 async function transcribeWithOpenAI(audioUrl: string, filePath: string) {
   if (!OPENAI_API_KEY) {
-    return NextResponse.json(
-      { error: 'OpenAI 语音识别未配置', transcript: '' },
-      { status: 503 }
-    );
+    return NextResponse.json({ error: 'OpenAI 语音识别未配置', transcript: '' }, { status: 503 });
   }
 
   try {
@@ -151,20 +142,14 @@ async function transcribeWithOpenAI(audioUrl: string, filePath: string) {
     if (!res.ok) {
       const text = await res.text();
       console.error('[transcribe] OpenAI error:', res.status, text);
-      return NextResponse.json(
-        { error: 'OpenAI 语音识别失败', transcript: '' },
-        { status: 502 }
-      );
+      return NextResponse.json({ error: 'OpenAI 语音识别失败', transcript: '' }, { status: 502 });
     }
 
     const data = (await res.json()) as { text?: string };
     return NextResponse.json({ transcript: data.text || '' });
   } catch (err) {
     console.error('[transcribe] OpenAI process error:', err);
-    return NextResponse.json(
-      { error: 'OpenAI 语音识别处理失败', transcript: '' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'OpenAI 语音识别处理失败', transcript: '' }, { status: 500 });
   }
 }
 
