@@ -7,6 +7,7 @@ import SettingsSection from './SettingsSection';
 import Switch from '@/components/ui/switch';
 import Alert from '@/components/ui/alert';
 import Button from '@/components/ui/button';
+import TimeInput from '@/components/ui/time-input';
 
 interface NotificationSectionProps {
   settings: UserSettings;
@@ -100,11 +101,11 @@ export default function NotificationSection({ settings, onUpdate }: Notification
               <p className="text-xs font-medium text-text-secondary">每日提醒时间</p>
               <p className="text-[11px] text-text-muted">每天在这个时间推送当天学习任务</p>
             </div>
-            <input
-              type="time"
+            <TimeInput
               value={reminderTime}
               onChange={(e) => setReminderTime(e.target.value)}
-              className="rounded-lg border border-border-default bg-surface-elevated px-2.5 py-1.5 text-xs text-text-secondary focus:border-primary focus:outline-none"
+              size="sm"
+              className="w-auto bg-surface-elevated"
             />
           </div>
 
@@ -123,20 +124,20 @@ export default function NotificationSection({ settings, onUpdate }: Notification
             <div className="grid grid-cols-2 gap-3 pl-11">
               <div>
                 <label className="mb-1 block text-[11px] text-text-tertiary">开始时间</label>
-                <input
-                  type="time"
+                <TimeInput
                   value={doNotDisturbStart}
                   onChange={(e) => setDoNotDisturbStart(e.target.value)}
-                  className="w-full rounded-lg border border-border-default bg-surface-elevated px-2.5 py-1.5 text-xs text-text-secondary focus:border-primary focus:outline-none"
+                  size="sm"
+                  className="bg-surface-elevated"
                 />
               </div>
               <div>
                 <label className="mb-1 block text-[11px] text-text-tertiary">结束时间</label>
-                <input
-                  type="time"
+                <TimeInput
                   value={doNotDisturbEnd}
                   onChange={(e) => setDoNotDisturbEnd(e.target.value)}
-                  className="w-full rounded-lg border border-border-default bg-surface-elevated px-2.5 py-1.5 text-xs text-text-secondary focus:border-primary focus:outline-none"
+                  size="sm"
+                  className="bg-surface-elevated"
                 />
               </div>
             </div>

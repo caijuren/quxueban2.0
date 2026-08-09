@@ -17,7 +17,6 @@ const menuGroups = [
       { name: '今日任务', href: '/dashboard/today', icon: 'Target' },
       { name: '周计划', href: '/dashboard/weekly', icon: 'Calendar' },
       { name: '任务库', href: '/dashboard/task-library', icon: 'Library' },
-      { name: '提醒中心', href: '/dashboard/alerts', icon: 'Bell' },
     ],
   },
   {

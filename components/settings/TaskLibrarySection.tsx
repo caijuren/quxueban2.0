@@ -267,17 +267,17 @@ export default function TaskLibrarySection() {
 
   return (
     <div className="space-y-4">
-      <div className="flex flex-col gap-3 sm:flex-row">
+      <div className="flex flex-col gap-3 lg:flex-row">
         <Input
           type="text"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="搜索任务名称或描述"
           leftIcon={<Icon name="Search" size="xs" />}
-          className="flex-1"
+          className="flex-1 bg-surface-elevated"
         />
 
-        <div className="flex flex-wrap items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2 lg:flex-nowrap">
           <Icon name="Filter" size="xs" className="text-text-muted" />
           <Select
             options={[
@@ -287,7 +287,8 @@ export default function TaskLibrarySection() {
             value={filterCategory}
             onChange={(e) => setFilterCategory(e.target.value as TaskCategory | 'all')}
             size="sm"
-            className="w-auto min-w-[120px] bg-surface-elevated"
+            containerClassName="w-auto min-w-[110px]"
+            className="bg-surface-elevated"
           />
           <Select
             options={[
@@ -298,7 +299,8 @@ export default function TaskLibrarySection() {
             value={filterSource}
             onChange={(e) => setFilterSource(e.target.value as typeof filterSource)}
             size="sm"
-            className="w-auto min-w-[120px] bg-surface-elevated"
+            containerClassName="w-auto min-w-[110px]"
+            className="bg-surface-elevated"
           />
           <Select
             options={[
@@ -309,7 +311,8 @@ export default function TaskLibrarySection() {
             value={filterStatus}
             onChange={(e) => setFilterStatus(e.target.value as typeof filterStatus)}
             size="sm"
-            className="w-auto min-w-[120px] bg-surface-elevated"
+            containerClassName="w-auto min-w-[110px]"
+            className="bg-surface-elevated"
           />
 
           <Button

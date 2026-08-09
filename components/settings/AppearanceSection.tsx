@@ -44,7 +44,7 @@ const DENSITIES = [
 const LANDING_PAGES = [
   { id: 'dashboard', label: '升学规划中心', icon: 'Home' as IconName },
   { id: 'weekly', label: '周计划', icon: 'Layout' as IconName },
-  { id: 'alerts', label: '提醒中心', icon: 'Eye' as IconName },
+  { id: 'alerts', label: '通知与提醒', icon: 'Bell' as IconName },
 ];
 
 const CHILD_MODES = [

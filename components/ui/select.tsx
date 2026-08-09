@@ -15,6 +15,7 @@ export interface SelectProps extends Omit<React.SelectHTMLAttributes<HTMLSelectE
   size?: 'sm' | 'md' | 'lg';
   error?: boolean;
   placeholder?: string;
+  containerClassName?: string;
 }
 
 const sizeMap = {
@@ -24,9 +25,9 @@ const sizeMap = {
 };
 
 const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
-  ({ className, options, size = 'md', error = false, placeholder, children, ...props }, ref) => {
+  ({ className, containerClassName, options, size = 'md', error = false, placeholder, children, ...props }, ref) => {
     return (
-      <div className="relative w-full">
+      <div className={cn('relative', containerClassName || 'w-full')}>
         <select
           ref={ref}
           className={cn(

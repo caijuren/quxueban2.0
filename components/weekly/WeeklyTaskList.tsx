@@ -31,156 +31,7 @@ interface WeeklyTaskListProps {
   onChange: (goals: WeeklyGoal[]) => void;
 }
 
-const MOCK_GOALS: WeeklyGoal[] = [
-  {
-    id: 'mock-chinese-reading',
-    title: '自主阅读',
-    category: 'reading',
-    checklist: [
-      { id: 'm1', title: '爱闯祸的竹蜻蜓', text: '爱闯祸的竹蜻蜓', done: false },
-      { id: 'm2', title: '宝葫芦的秘密', text: '宝葫芦的秘密', done: false },
-      { id: 'm3', title: '彼得兔经典故事全集', text: '彼得兔经典故事全集', done: false },
-      { id: 'm4', title: '彼得兔奇遇记', text: '彼得兔奇遇记', done: false },
-      { id: 'm5', title: '乌鸦办葬礼', text: '乌鸦办葬礼', done: false },
-    ],
-  },
-  {
-    id: 'mock-math-school',
-    title: '二上数学',
-    category: 'school',
-    checklist: [
-      {
-        id: 'm6',
-        title: '7月26日 3.2、4、8 的乘法',
-        text: '7月26日 3.2、4、8 的乘法',
-        done: false,
-      },
-      {
-        id: 'm7',
-        title: '7月27日 4.讲讲结算算（2）',
-        text: '7月27日 4.讲讲结算算（2）',
-        done: false,
-      },
-      { id: 'm8', title: '7月28日 5.7 的乘法', text: '7月28日 5.7 的乘法', done: false },
-      {
-        id: 'm9',
-        title: '7月29日 6.3、6、9 的乘法',
-        text: '7月29日 6.3、6、9 的乘法',
-        done: false,
-      },
-      {
-        id: 'm10',
-        title: '7月30日 整理和复习本周乘法知识',
-        text: '7月30日 整理和复习本周乘法知识',
-        done: false,
-      },
-    ],
-  },
-  {
-    id: 'mock-english-reading',
-    title: '阅读任务',
-    category: 'reading',
-    checklist: [
-      {
-        id: 'm11',
-        title: 'ABC Reading Lesson 12-13',
-        text: 'ABC Reading Lesson 12-13',
-        done: false,
-      },
-    ],
-  },
-  {
-    id: 'mock-english-practice',
-    title: '阅读任练',
-    category: 'reading',
-    checklist: [
-      {
-        id: 'm12',
-        title: 'Oxford Discover 1 Unit 4',
-        text: 'Oxford Discover 1 Unit 4',
-        done: false,
-      },
-    ],
-  },
-  {
-    id: 'mock-ability-training',
-    title: '能力训练',
-    category: 'ability',
-    checklist: [
-      {
-        id: 'm13',
-        title: '古诗文背诵积累（每日一首）',
-        text: '古诗文背诵积累（每日一首）',
-        done: false,
-      },
-      {
-        id: 'm14',
-        title: '口语表达练习（主题：我的夏天）',
-        text: '口语表达练习（主题：我的夏天）',
-        done: false,
-      },
-      {
-        id: 'm15',
-        title: '英文动画片（30分钟，原版）',
-        text: '英文动画片（30分钟，原版）',
-        done: false,
-      },
-    ],
-  },
-  {
-    id: 'mock-other-supplement',
-    title: '课外补充',
-    category: 'other',
-    checklist: [
-      {
-        id: 'm16',
-        title: '科学探索：植物生长观察记录',
-        text: '科学探索：植物生长观察记录',
-        done: false,
-      },
-      { id: 'm17', title: '艺术创作：夏日主题绘画', text: '艺术创作：夏日主题绘画', done: false },
-      {
-        id: 'm18',
-        title: '体育锻炼：跳绳（15分钟）',
-        text: '体育锻炼：跳绳（15分钟）',
-        done: false,
-      },
-      {
-        id: 'm19',
-        title: '家务劳动：整理书桌与书柜',
-        text: '家务劳动：整理书桌与书柜',
-        done: false,
-      },
-    ],
-  },
-];
 
-const MOCK_TASKS: WeeklyTaskItem[] = [
-  {
-    id: 'mock-task-en-1',
-    category: 'reading',
-    subjectId: 'english',
-    source: 'manual',
-    day: '周一',
-    focus: 'ABC Reading Lesson 12-13',
-    duration: '20分钟',
-    materials: [],
-    status: 'pending',
-    goalId: 'mock-english-reading',
-  },
-  {
-    id: 'mock-task-en-2',
-    category: 'reading',
-    subjectId: 'english',
-    source: 'manual',
-    day: '周二',
-    focus: 'Oxford Discover 1 Unit 4',
-    duration: '20分钟',
-    materials: [],
-    status: 'pending',
-    goalId: 'mock-english-practice',
-  },
-];
 
 const SUBJECT_ORDER = ['chinese', 'math', 'english', 'ability', 'other'];
 
@@ -364,15 +215,11 @@ export default function WeeklyTaskList({ goals, tasks, weekLabel, onChange }: We
   const [isEditing, setIsEditing] = useState(false);
   const [draftGoals, setDraftGoals] = useState<WeeklyGoal[]>(goals);
 
-  const isMock = goals.length === 0;
-  const baseGoals = isMock ? MOCK_GOALS : goals;
-  const baseTasks = isMock ? MOCK_TASKS : tasks;
-
   useEffect(() => {
     if (!isEditing) {
-      setDraftGoals(baseGoals);
+      setDraftGoals(goals);
     }
-  }, [baseGoals, isEditing]);
+  }, [goals, isEditing]);
 
   const commit = useCallback(
     (next: WeeklyGoal[]) => {
@@ -385,7 +232,7 @@ export default function WeeklyTaskList({ goals, tasks, weekLabel, onChange }: We
   const rows = useMemo<TaskRow[]>(() => {
     const result: TaskRow[] = [];
     draftGoals.forEach((goal) => {
-      const subjectId = getSubjectIdForGoal(goal, baseTasks);
+      const subjectId = getSubjectIdForGoal(goal, tasks);
       const checklist = goal.checklist || [];
       if (checklist.length === 0) {
         result.push({
@@ -427,7 +274,7 @@ export default function WeeklyTaskList({ goals, tasks, weekLabel, onChange }: We
       if (a.moduleName !== b.moduleName) return a.moduleName.localeCompare(b.moduleName);
       return a.taskName.localeCompare(b.taskName);
     });
-  }, [draftGoals, baseTasks]);
+  }, [draftGoals, tasks]);
 
   const toggleItem = (goalId: string, itemId: string) => {
     const next = draftGoals.map((g) => {
@@ -736,11 +583,16 @@ export default function WeeklyTaskList({ goals, tasks, weekLabel, onChange }: We
           <Button
             variant="ghost"
             size="sm"
-            onClick={() => setIsEditing((v) => !v)}
+            onClick={() => {
+              if (isEditing) {
+                onChange(draftGoals);
+              }
+              setIsEditing((v) => !v);
+            }}
             className={isEditing ? 'text-success' : 'text-text-muted/60'}
-            title={isEditing ? '完成' : '编辑'}
+            leftIcon={isEditing ? <Icon name="Check" size="sm" /> : <Icon name="Pencil" size="sm" />}
           >
-            {isEditing ? <Icon name="Check" size="sm" /> : <Icon name="Pencil" size="sm" />}
+            {isEditing ? '完成' : '编辑'}
           </Button>
         </div>
       </div>

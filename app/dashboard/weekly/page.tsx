@@ -1613,16 +1613,6 @@ function WeeklyTasksContent() {
     }
   };
 
-  const lastWeekId = useMemo(() => shiftWeekId(weekId, -1), [weekId]);
-  const lastWeekPlan = useMemo(() => {
-    if (!currentChild) return undefined;
-    return getWeeklyPlan(lastWeekId, currentChild.id);
-  }, [currentChild, getWeeklyPlan, lastWeekId]);
-  const lastWeekUncompleted = useMemo(() => {
-    if (!lastWeekPlan) return [];
-    return lastWeekPlan.tasks.filter((t) => t.status !== 'done' && t.status !== 'skipped');
-  }, [lastWeekPlan]);
-
   const conflicts = useMemo(
     () => (displayPlan ? detectConflicts(displayPlan.tasks) : []),
     [displayPlan]
@@ -1650,30 +1640,6 @@ function WeeklyTasksContent() {
       </div>
     );
   }
-
-  const handleCarryOverLastWeek = () => {
-    if (!currentChild || lastWeekUncompleted.length === 0) return;
-    const carriedTasks = lastWeekUncompleted.map((t) => ({
-      ...t,
-      id: `carryover-${Date.now()}-${Math.random().toString(36).slice(2, 5)}`,
-      status: 'pending' as TaskStatus,
-      day: '周一' as DayOfWeek,
-    }));
-    if (displayPlan) {
-      const updatedTasks = [...displayPlan.tasks, ...carriedTasks];
-      if (isDraft) {
-        setDraftPlan({ ...displayPlan, tasks: updatedTasks });
-      } else {
-        publishWeeklyPlan({ ...displayPlan, tasks: updatedTasks });
-      }
-    } else {
-      setDraftPlan({
-        weekId,
-        childId: currentChild.id,
-        tasks: carriedTasks,
-      });
-    }
-  };
 
   const handleSaveAsTemplate = async (name: string, description: string) => {
     if (!displayPlan || !currentChild) return;
@@ -1758,56 +1724,47 @@ function WeeklyTasksContent() {
           <div className="bg-primary/10 border-primary/20 flex size-10 items-center justify-center rounded-[14px] border">
             <Icon name="Calendar" size="md" className="text-primary" />
           </div>
-          <div>
-            <div className="flex items-center gap-2">
-              <h1 className="font-display text-2xl font-bold text-text-primary sm:text-3xl">
-                周计划
-              </h1>
-              {isDraft && (
-                <span className="bg-primary/10 border-primary/20 rounded-full border px-2 py-0.5 text-xs font-medium text-primary">
-                  草稿待发布
-                </span>
-              )}
-            </div>
-            <p className="mt-0.5 text-xs text-text-muted">{currentChild.name}</p>
+          <div className="flex items-center gap-2">
+            <h1 className="font-display text-2xl font-bold text-text-primary sm:text-3xl">
+              周计划
+            </h1>
+            {isDraft && (
+              <span className="bg-primary/10 border-primary/20 rounded-full border px-2 py-0.5 text-xs font-medium text-primary">
+                草稿待发布
+              </span>
+            )}
           </div>
         </div>
 
         {/* Week selector */}
-        <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-center">
-          <p className="text-sm text-text-secondary">
-            <span className="text-text-muted">当前周：</span>
-            {formatWeekLabel(weekId)}
-          </p>
-          <div className="flex items-center gap-2">
-            <Button
-              onClick={() => setWeekId((w) => shiftWeekId(w, -1))}
-              className="flex size-8 items-center justify-center rounded-[14px] border border-border-default bg-surface text-text-secondary transition-colors hover:bg-surface-hover"
-              aria-label="上一周"
-              variant="secondary"
+        <div className="flex items-center justify-end gap-3">
+          <Button
+            onClick={() => setWeekId((w) => shiftWeekId(w, -1))}
+            className="flex size-8 items-center justify-center rounded-[14px] border border-border-default bg-surface text-text-secondary transition-colors hover:bg-surface-hover"
+            aria-label="上一周"
+            variant="secondary"
+            size="sm"
+          >
+            <Icon name="ChevronLeft" size="sm" />
+          </Button>
+          <div className="relative">
+            <Select
+              value={weekId}
+              onChange={(e) => setWeekId(e.target.value)}
               size="sm"
-            >
-              <Icon name="ChevronLeft" size="sm" />
-            </Button>
-            <div className="relative">
-              <Select
-                value={weekId}
-                onChange={(e) => setWeekId(e.target.value)}
-                size="sm"
-                className="w-auto min-w-[180px] bg-surface"
-                options={weekOptions}
-              />
-            </div>
-            <Button
-              onClick={() => setWeekId((w) => shiftWeekId(w, 1))}
-              className="flex size-8 items-center justify-center rounded-[14px] border border-border-default bg-surface text-text-secondary transition-colors hover:bg-surface-hover"
-              aria-label="下一周"
-              variant="secondary"
-              size="sm"
-            >
-              <Icon name="ChevronRight" size="sm" />
-            </Button>
+              className="w-auto min-w-[180px] bg-surface"
+              options={weekOptions}
+            />
           </div>
+          <Button
+            onClick={() => setWeekId((w) => shiftWeekId(w, 1))}
+            className="flex size-8 items-center justify-center rounded-[14px] border border-border-default bg-surface text-text-secondary transition-colors hover:bg-surface-hover"
+            aria-label="下一周"
+            variant="secondary"
+            size="sm"
+          >
+            <Icon name="ChevronRight" size="sm" />
+          </Button>
         </div>
 
         {/* Toolbar */}
@@ -2050,65 +2007,17 @@ function WeeklyTasksContent() {
                   <span className="mx-1.5 text-text-muted">·</span>
                   剩余 <span className="font-medium text-text-secondary">{stats.pending} 项</span>
                 </p>
-                <Button className="mt-2.5 inline-flex items-center gap-1 text-xs text-text-muted transition-colors hover:text-text-secondary" variant="ghost" size="xs">
-                  查看详情
-                  <Icon name="ChevronRight" size="xs" />
-                </Button>
               </div>
 
-              {/* Right: stats + action */}
-              <div className="flex shrink-0 flex-col items-start gap-4 sm:flex-row sm:items-center lg:gap-5">
-                <div className="flex items-center gap-3 lg:gap-4">
-                  <div className="flex items-center gap-2">
-                    <div className="bg-success/10 border-success/20 flex size-8 items-center justify-center rounded-full border">
-                      <Icon name="CircleCheck" size="sm" className="text-success" />
-                    </div>
-                    <div>
-                      <p className="text-xs font-bold tabular-nums leading-tight text-text-primary">
-                        {stats.done}{' '}
-                        <span className="text-[10px] font-normal text-text-muted">项</span>
-                      </p>
-                      <p className="text-[10px] leading-tight text-text-muted">已完成</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <div className="bg-secondary/10 border-secondary/20 flex size-8 items-center justify-center rounded-full border">
-                      <Icon name="Clock" size="sm" className="text-secondary" />
-                    </div>
-                    <div>
-                      <p className="text-xs font-bold tabular-nums leading-tight text-text-primary">
-                        {
-                          displayPlan.tasks.filter(
-                            (t) => t.status === 'in_progress' || t.status === 'partially_done'
-                          ).length
-                        }{' '}
-                        <span className="text-[10px] font-normal text-text-muted">项</span>
-                      </p>
-                      <p className="text-[10px] leading-tight text-text-muted">进行中</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <div className="bg-warning/10 border-warning/20 flex size-8 items-center justify-center rounded-full border">
-                      <Icon name="Pause" size="sm" className="text-warning" />
-                    </div>
-                    <div>
-                      <p className="text-xs font-bold tabular-nums leading-tight text-text-primary">
-                        {displayPlan.tasks.filter((t) => t.status === 'pending').length}{' '}
-                        <span className="text-[10px] font-normal text-text-muted">项</span>
-                      </p>
-                      <p className="text-[10px] leading-tight text-text-muted">未开始</p>
-                    </div>
-                  </div>
-                </div>
-
+              {/* Right: action */}
+              <div className="flex shrink-0 items-center gap-3">
                 <Button
-                  onClick={handleCarryOverLastWeek}
-                  disabled={lastWeekUncompleted.length === 0 || weekId !== getCurrentWeekId()}
-                  className="hover:bg-primary/10 inline-flex items-center justify-center gap-1.5 rounded-[14px] border border-primary px-4 py-2 text-sm font-medium text-primary transition-colors disabled:cursor-not-allowed disabled:opacity-50"
-                  variant="secondary"
-                  size="md"
+                  variant="ghost"
+                  size="sm"
+                  className="text-text-muted hover:text-text-secondary"
                 >
-                  一键添加到本周
+                  查看详情
+                  <Icon name="ChevronRight" size="xs" />
                 </Button>
               </div>
             </div>

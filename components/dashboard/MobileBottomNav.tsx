@@ -8,7 +8,6 @@ import { Icon } from '@/components/ui/icon';
 const navItems = [
   { name: '今日任务', href: '/dashboard/today', icon: 'Target' },
   { name: '周计划', href: '/dashboard/weekly', icon: 'Calendar' },
-  { name: '提醒中心', href: '/dashboard/alerts', icon: 'Bell' },
   { name: '规划工具', href: '/dashboard/toolbox', icon: 'Wrench' },
   { name: '设置', href: '/dashboard/settings', icon: 'Settings' },
 ] as const;

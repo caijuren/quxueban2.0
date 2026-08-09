@@ -2,14 +2,16 @@
 
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { useEffect, useRef, useState } from 'react';
-import { Icon } from '@/components/ui/icon';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { Icon, type IconName } from '@/components/ui/icon';
 import Button from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
 import { signOut, useSession } from 'next-auth/react';
 import { useChildren } from '@/components/dashboard/ChildrenContext';
 import ChildAvatar from '@/components/dashboard/ChildAvatar';
 import { gradeLabel, gradeToStage } from '@/lib/children';
+import { generateAlerts, type Alert, type AlertLevel, type AlertType } from '@/lib/alerts';
+import { NotificationItem } from '@/lib/types';
 import {
   useNotifications,
   useMarkNotificationRead,
@@ -20,12 +22,29 @@ interface TopbarProps {
   onMenuClick?: () => void;
 }
 
+const alertLevelMeta: Record<AlertLevel, { label: string; dotColor: string; textColor: string; bgColor: string }> = {
+  urgent: { label: '紧急', dotColor: 'bg-error', textColor: 'text-error', bgColor: 'bg-error/10' },
+  warning: { label: '提醒', dotColor: 'bg-warning', textColor: 'text-warning', bgColor: 'bg-warning/10' },
+  info: { label: '提示', dotColor: 'bg-secondary', textColor: 'text-secondary', bgColor: 'bg-secondary/10' },
+};
+
+const alertTypeMeta: Record<AlertType, { label: string; icon: IconName }> = {
+  today_pending: { label: '今日任务', icon: 'Clock' },
+  missed_yesterday: { label: '昨日遗漏', icon: 'Calendar' },
+  category_gap: { label: '节奏断层', icon: 'Target' },
+  low_completion: { label: '完成偏低', icon: 'TrendingDown' },
+  milestone_deadline: { label: '节点临近', icon: 'Target' },
+};
+
 export default function Topbar({ onMenuClick }: TopbarProps) {
   const router = useRouter();
   const { data: session } = useSession();
-  const { children, currentChild, currentChildId, setCurrentChildId } = useChildren();
+  const { children, currentChild, currentChildId, setCurrentChildId, weeklyPlans } = useChildren();
   const { data: notificationsData, isLoading: loadingNotifications } = useNotifications();
-  const notifications = notificationsData?.notifications ?? [];
+  const notifications = useMemo(
+    () => notificationsData?.notifications ?? [],
+    [notificationsData?.notifications]
+  );
   const markRead = useMarkNotificationRead();
   const markAllRead = useMarkAllNotificationsRead();
   const [search, setSearch] = useState('');
@@ -38,7 +57,39 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
   const userMenuRef = useRef<HTMLDivElement>(null);
   const childButtonRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
-  const unreadCount = notifications.filter((n) => !n.readAt).length;
+  const alerts = useMemo(
+    () => generateAlerts({ children, weeklyPlans }),
+    [children, weeklyPlans]
+  );
+
+  type FeedItem =
+    | { kind: 'notification'; data: NotificationItem }
+    | { kind: 'alert'; data: Alert };
+
+  const { feedItems, unreadCount, alertBadgeCount } = useMemo(() => {
+    const levelWeight: Record<AlertLevel, number> = { urgent: 0, warning: 1, info: 2 };
+    const notificationItems: FeedItem[] = notifications.map((n) => ({
+      kind: 'notification' as const,
+      data: n,
+    }));
+    const alertItems: FeedItem[] = alerts.map((a) => ({ kind: 'alert' as const, data: a }));
+    const feed = [...notificationItems, ...alertItems].sort((a, b) => {
+      const aPriority = a.kind === 'alert' ? levelWeight[a.data.level] : 3;
+      const bPriority = b.kind === 'alert' ? levelWeight[b.data.level] : 3;
+      if (aPriority !== bPriority) return aPriority - bPriority;
+      return (
+        new Date(b.data.createdAt).getTime() - new Date(a.data.createdAt).getTime()
+      );
+    });
+    return {
+      feedItems: feed,
+      unreadCount: notifications.filter((n) => !n.readAt).length,
+      alertBadgeCount: alerts.filter((a) => a.level === 'urgent' || a.level === 'warning').length,
+    };
+  }, [notifications, alerts]);
+
+  const totalBadgeCount = unreadCount + alertBadgeCount;
+
   const currentUser = session?.user;
   const userAvatarUrl = currentUser?.avatarUrl;
 
@@ -177,9 +228,9 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
             aria-label="通知"
           >
             <Icon name="Bell" size="md" />
-            {unreadCount > 0 && (
+            {totalBadgeCount > 0 && (
               <span className="absolute right-2 top-2 flex h-4 min-w-[16px] items-center justify-center rounded-full bg-primary px-1 text-2xs font-bold tabular-nums text-text-primary">
-                {unreadCount > 9 ? '9+' : unreadCount}
+                {totalBadgeCount > 9 ? '9+' : totalBadgeCount}
               </span>
             )}
           </Button>
@@ -187,7 +238,7 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
           {notificationOpen && (
             <div className="bg-surface-elevated/95 modal-scroll absolute right-0 top-full z-50 mt-2 w-80 overflow-hidden rounded-card border border-border-default shadow-panel backdrop-blur-md">
               <div className="flex items-center justify-between border-b border-border-default px-4 py-3">
-                <p className="text-sm font-semibold text-text-primary">通知中心</p>
+                <p className="text-sm font-semibold text-text-primary">通知与提醒</p>
                 {unreadCount > 0 && (
                   <Button
                     variant="link"
@@ -205,15 +256,63 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
                   <div className="flex items-center justify-center py-8">
                     <Icon name="Loader2" size="sm" animate="spin" className="text-primary" />
                   </div>
-                ) : notifications.length === 0 ? (
-                  <div className="py-8 text-center text-sm text-text-tertiary">暂无通知</div>
+                ) : feedItems.length === 0 ? (
+                  <div className="py-8 text-center text-sm text-text-tertiary">
+                    暂无通知与提醒
+                  </div>
                 ) : (
                   <div>
-                    {notifications.map((n) => {
+                    {feedItems.map((item) => {
+                      if (item.kind === 'alert') {
+                        const alert = item.data;
+                        const level = alertLevelMeta[alert.level];
+                        const type = alertTypeMeta[alert.type];
+                        return (
+                          <div
+                            key={`alert-${alert.id}`}
+                            className="border-b border-border-default px-4 py-3 transition-colors hover:bg-surface-elevated"
+                          >
+                            <div className="mb-1.5 flex flex-wrap items-center gap-2">
+                              <span
+                                className={`flex items-center gap-1 rounded-full px-1.5 py-0.5 text-[10px] font-medium ${level.bgColor} ${level.textColor}`}
+                              >
+                                <span className={`size-1.5 rounded-full ${level.dotColor}`} />
+                                {level.label}
+                              </span>
+                              <span className="flex items-center gap-1 rounded-full bg-surface-hover px-1.5 py-0.5 text-[10px] text-text-tertiary">
+                                <Icon name={type.icon} size="xs" />
+                                {type.label}
+                              </span>
+                            </div>
+                            <p className="mb-1 text-sm font-medium text-text-secondary">
+                              {alert.title}
+                            </p>
+                            <p className="mb-2 line-clamp-2 text-xs leading-relaxed text-text-tertiary">
+                              {alert.content}
+                            </p>
+                            {alert.action && (
+                              <Button
+                                variant="link"
+                                size="xs"
+                                onClick={() => {
+                                  setNotificationOpen(false);
+                                  router.push(alert.action!.href);
+                                }}
+                                className="h-auto p-0"
+                              >
+                                {alert.action.label}
+                                <Icon name="ArrowRight" size="xs" />
+                              </Button>
+                            )}
+                          </div>
+                        );
+                      }
+
+                      const n = item.data;
                       const marking = markRead.isPending && markRead.variables === n.id;
                       return (
                         <Button
-                          key={n.id}
+                          key={`notification-${n.id}`}
                           variant="ghost"
                           size="md"
                           onClick={() => handleMarkRead(n.id)}
@@ -314,7 +413,7 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
             variant="ghost"
             size="sm"
             onClick={() => setChildDropdownOpen((prev) => !prev)}
-            className="flex items-center gap-2 rounded-module border border-border-default py-1 pl-1 pr-2 text-left transition-all hover:border-border-strong hover:bg-surface-elevated"
+            className="flex h-9 items-center gap-2 rounded-module border border-border-default py-1 pl-1 pr-2 text-left transition-all hover:border-border-strong hover:bg-surface-elevated"
             aria-label="切换孩子"
             aria-haspopup="listbox"
             aria-expanded={childDropdownOpen}
@@ -346,9 +445,9 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
               ref={childListboxRef}
               role="listbox"
               aria-label="切换孩子"
-              className="absolute right-0 top-full z-50 mt-2 w-48 overflow-hidden rounded-card border border-border-default bg-surface-elevated shadow-card"
+              className="absolute right-0 top-full z-50 mt-2 w-56 overflow-hidden rounded-card border border-border-default bg-surface-elevated shadow-card"
             >
-              <div className="p-1.5">
+              <div className="p-2">
                 {children.map((child, index) => {
                   const isActive = currentChild?.id === child.id;
                   return (
@@ -365,11 +464,11 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
                         setCurrentChildId(child.id);
                         setChildDropdownOpen(false);
                       }}
-                      className={`flex w-full items-center gap-3 rounded-module px-3 py-2.5 text-left transition-all ${
+                      className={`flex w-full items-center gap-3.5 rounded-module p-3 text-left transition-all ${
                         isActive ? 'bg-primary/[0.08]' : 'hover:bg-surface-elevated'
                       }`}
                     >
-                      <ChildAvatar child={child} size="sm" shape="rounded" />
+                      <ChildAvatar child={child} size="md" shape="rounded" />
                       <div className="min-w-0 flex-1">
                         <p
                           className={`truncate text-sm font-semibold ${isActive ? 'text-primary' : 'text-text-primary'}`}

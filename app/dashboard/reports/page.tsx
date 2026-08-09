@@ -13,6 +13,21 @@ import MetricCard from '@/components/ui/metric-card';
 import ProgressRing from '@/components/ui/progress-ring';
 import TrendChart from '@/components/ui/trend-chart';
 import Heatmap from '@/components/ui/heatmap';
+import {
+  PieChart,
+  Pie,
+  Cell,
+  ResponsiveContainer,
+  Tooltip as RechartsTooltip,
+  Legend as RechartsLegend,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  LineChart,
+  Line,
+} from 'recharts';
 import { ProgressBar } from '@/components/motion/progress-bar';
 import Skeleton from '@/components/ui/skeleton';
 import { categoryIcons } from '@/lib/taskIcons';
@@ -33,6 +48,7 @@ import {
   getSubjectStats,
   parseDurationMinutes,
   dayOrder,
+  subjectMeta,
 } from '@/lib/weeklyTasks';
 import Button from '@/components/ui/button';
 import { useGenerateAiSummary, useSaveWeeklyPlan } from '@/lib/hooks/useWeeklyPlans';
@@ -171,8 +187,121 @@ function formatRecordDetail(record: TaskCompletionRecord): string {
   return parts.filter(Boolean).join(' · ') || record.note || '';
 }
 
+interface WeeklySubjectPoint {
+  weekId: string;
+  label: string;
+  chinese: number;
+  math: number;
+  english: number;
+}
+
+function getSubjectWeeklyTrend(
+  weeklyPlans: WeeklyPlan[],
+  childId: string,
+  currentWeekId: string
+): WeeklySubjectPoint[] {
+  const weeks = Array.from({ length: 4 }, (_, i) => shiftWeekId(currentWeekId, -i)).reverse();
+  return weeks.map((id) => {
+    const plan = weeklyPlans.find((p) => p.childId === childId && p.weekId === id);
+    const tasks = plan?.tasks ?? [];
+    const actualMinutes = (subjectId: 'chinese' | 'math' | 'english') =>
+      tasks
+        .filter((t) => t.subjectId === subjectId)
+        .reduce((sum, t) => {
+          const record = t.completionRecords?.[t.completionRecords.length - 1];
+          return sum + (record?.actualDurationMinutes ?? 0);
+        }, 0);
+    return {
+      weekId: id,
+      label: formatWeekLabel(id),
+      chinese: actualMinutes('chinese'),
+      math: actualMinutes('math'),
+      english: actualMinutes('english'),
+    };
+  });
+}
+
+interface TimeAnalysisAlert {
+  id: string;
+  type: 'warning' | 'info' | 'success';
+  message: string;
+}
+
+function getTimeAnalysisAlerts(
+  subjectStats: ReturnType<typeof getSubjectStats>,
+  totalPlanned: number,
+  totalActual: number
+): TimeAnalysisAlert[] {
+  const alerts: TimeAnalysisAlert[] = [];
+
+  if (subjectStats.length === 0) return alerts;
+
+  const maxSubject = subjectStats.reduce((max, s) =>
+    s.plannedMinutes > max.plannedMinutes ? s : max
+  );
+  const totalPlannedMinutes = subjectStats.reduce((sum, s) => sum + s.plannedMinutes, 0);
+
+  if (totalPlannedMinutes > 0) {
+    const maxRatio = maxSubject.plannedMinutes / totalPlannedMinutes;
+    if (maxRatio > 0.5) {
+      alerts.push({
+        id: 'subject-imbalance',
+        type: 'warning',
+        message: `${maxSubject.name}计划占比 ${Math.round(maxRatio * 100)}%，建议适当平衡各学科时间。`,
+      });
+    }
+  }
+
+  subjectStats.forEach((s) => {
+    if (s.plannedMinutes > 0 && s.actualMinutes === 0) {
+      alerts.push({
+        id: `${s.subjectId}-no-actual`,
+        type: 'warning',
+        message: `${s.name}本周有计划但暂无实际投入记录。`,
+      });
+    } else if (s.plannedMinutes > 0 && s.actualMinutes < s.plannedMinutes * 0.3) {
+      alerts.push({
+        id: `${s.subjectId}-low-actual`,
+        type: 'info',
+        message: `${s.name}实际投入 ${formatMinutes(s.actualMinutes)}，仅完成计划的 ${Math.round((s.actualMinutes / s.plannedMinutes) * 100)}%。`,
+      });
+    }
+  });
+
+  if (totalPlanned > 0 && totalActual > totalPlanned * 1.3) {
+    alerts.push({
+      id: 'over-time',
+      type: 'info',
+      message: `本周实际投入 ${formatMinutes(totalActual)}，超出计划 ${formatMinutes(totalActual - totalPlanned)}。`,
+    });
+  }
+
+  if (alerts.length === 0) {
+    alerts.push({
+      id: 'balanced',
+      type: 'success',
+      message: '本周学科时间分配较为均衡，继续保持。',
+    });
+  }
+
+  return alerts;
+}
+
+function SubjectTooltip({ active, payload }: { active?: boolean; payload?: Array<Record<string, unknown>> }) {
+  if (!active || !payload || payload.length === 0) return null;
+  return (
+    <div className="glass rounded-lg px-3 py-2 text-sm shadow-lg">
+      {payload.map((entry, i) => (
+        <p key={i} className="tabular-nums text-text-primary" style={{ color: String(entry.color) }}>
+          {String(entry.name)}: {formatMinutes(Number(entry.value))}
+        </p>
+      ))}
+    </div>
+  );
+}
+
 export default function ReportsPage() {
-  const { children, currentChild, getWeeklyPlan } = useChildren();
+  const { children, currentChild, getWeeklyPlan, weeklyPlans } = useChildren();
   const generateAiSummary = useGenerateAiSummary();
 
   const [weekId, setWeekId] = useState<string>(getCurrentWeekId());
@@ -291,6 +420,27 @@ export default function ReportsPage() {
       .slice(0, 8);
     return tasks;
   }, [plan]);
+
+  const subjectTimeData = useMemo(() => {
+    return subjectStats
+      .filter((s) => s.plannedMinutes > 0 || s.actualMinutes > 0)
+      .map((s) => ({
+        subjectId: s.subjectId,
+        name: s.name,
+        color: s.color,
+        plannedMinutes: s.plannedMinutes,
+        actualMinutes: s.actualMinutes,
+      }));
+  }, [subjectStats]);
+
+  const subjectWeeklyTrend = useMemo(() => {
+    if (!currentChild) return [];
+    return getSubjectWeeklyTrend(weeklyPlans, currentChild.id, weekId);
+  }, [weeklyPlans, currentChild, weekId]);
+
+  const timeAnalysisAlerts = useMemo(() => {
+    return getTimeAnalysisAlerts(subjectStats, totalMinutes, actualMinutes);
+  }, [subjectStats, totalMinutes, actualMinutes]);
 
   useEffect(() => {
     if (!plan?.id || plan.aiSummary || autoGenerated || aiGenerating) return;
@@ -582,6 +732,228 @@ export default function ReportsPage() {
                   </GlassCard>
                 ))}
               </div>
+            </GlassCard>
+          </StaggerItem>
+
+          {/* Subject time analysis */}
+          <StaggerItem>
+            <GlassCard className="p-5">
+              <div className="mb-5 flex items-center gap-2">
+                <Icon name="PieChart" size="md" className="text-primary" />
+                <h2 className="text-lg font-bold text-text-secondary">学科时间投入分析</h2>
+              </div>
+
+              {subjectTimeData.length === 0 ? (
+                <EmptyState scene="no-data" size="sm" />
+              ) : (
+                <div className="space-y-6">
+                  {/* Stats */}
+                  <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+                    <MetricCard
+                      label="计划总时长"
+                      value={Math.round(totalMinutes / 60 * 10) / 10}
+                      suffix="h"
+                      icon="Clock"
+                      variant="glass"
+                    />
+                    <MetricCard
+                      label="实际总时长"
+                      value={Math.round(actualMinutes / 60 * 10) / 10}
+                      suffix="h"
+                      icon="Timer"
+                      variant="glass"
+                    />
+                    <MetricCard
+                      label="时间完成率"
+                      value={totalMinutes > 0 ? Math.round((actualMinutes / totalMinutes) * 100) : 0}
+                      suffix="%"
+                      icon="TrendingUp"
+                      variant="glass"
+                    />
+                    <GlassCard className="p-4">
+                      <div className="flex items-start justify-between gap-3">
+                        <div className="min-w-0 flex-1">
+                          <p className="truncate text-sm text-text-secondary">最大投入学科</p>
+                          <p className="mt-1 truncate text-2xl font-bold text-text-primary">
+                            {subjectTimeData.reduce((max, s) =>
+                              s.actualMinutes > max.actualMinutes ? s : max
+                            )?.name ?? '-'}
+                          </p>
+                        </div>
+                        <div className="bg-primary/10 shrink-0 rounded-lg p-2 text-primary">
+                          <Icon name="Target" size="md" />
+                        </div>
+                      </div>
+                    </GlassCard>
+                  </div>
+
+                  {/* Charts */}
+                  <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+                    {/* Pie chart */}
+                    <div className="rounded-xl border border-border-subtle bg-surface-elevated p-4">
+                      <p className="mb-3 text-sm font-semibold text-text-secondary">学科实际时长占比</p>
+                      <div className="h-64">
+                        <ResponsiveContainer width="100%" height="100%">
+                          <PieChart>
+                            <Pie
+                              data={subjectTimeData}
+                              dataKey="actualMinutes"
+                              nameKey="name"
+                              cx="50%"
+                              cy="50%"
+                              innerRadius={60}
+                              outerRadius={80}
+                              paddingAngle={4}
+                            >
+                              {subjectTimeData.map((entry) => (
+                                <Cell key={entry.subjectId} fill={entry.color} stroke="transparent" />
+                              ))}
+                            </Pie>
+                            <RechartsTooltip content={<SubjectTooltip />} />
+                            <RechartsLegend
+                              verticalAlign="bottom"
+                              iconType="circle"
+                              formatter={(value: string, entry: { payload?: { actualMinutes?: number; plannedMinutes?: number } }) =>
+                                `${value} · ${formatMinutes(entry?.payload?.actualMinutes ?? 0)}`
+                              }
+                            />
+                          </PieChart>
+                        </ResponsiveContainer>
+                      </div>
+                    </div>
+
+                    {/* Bar chart */}
+                    <div className="rounded-xl border border-border-subtle bg-surface-elevated p-4">
+                      <p className="mb-3 text-sm font-semibold text-text-secondary">计划 vs 实际时长</p>
+                      <div className="h-64">
+                        <ResponsiveContainer width="100%" height="100%">
+                          <BarChart
+                            data={subjectTimeData}
+                            margin={{ top: 8, right: 8, bottom: 0, left: -16 }}
+                          >
+                            <CartesianGrid stroke="var(--border-subtle)" strokeWidth={1} vertical={false} />
+                            <XAxis
+                              dataKey="name"
+                              axisLine={false}
+                              tickLine={false}
+                              tick={{ fill: 'var(--text-tertiary)', fontSize: 12 }}
+                              dy={8}
+                            />
+                            <YAxis
+                              axisLine={false}
+                              tickLine={false}
+                              tick={{ fill: 'var(--text-tertiary)', fontSize: 12 }}
+                              width={40}
+                              tickFormatter={(v: number) => `${Math.round(v / 60)}h`}
+                            />
+                            <RechartsTooltip content={<SubjectTooltip />} />
+                            <Bar
+                              dataKey="plannedMinutes"
+                              name="计划时长"
+                              fill="var(--color-primary)"
+                              radius={[4, 4, 0, 0]}
+                              barSize={24}
+                            />
+                            <Bar
+                              dataKey="actualMinutes"
+                              name="实际时长"
+                              fill="var(--color-secondary)"
+                              radius={[4, 4, 0, 0]}
+                              barSize={24}
+                            />
+                          </BarChart>
+                        </ResponsiveContainer>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Trend chart */}
+                  <div className="rounded-xl border border-border-subtle bg-surface-elevated p-4">
+                    <p className="mb-3 text-sm font-semibold text-text-secondary">近 4 周学科实际投入趋势</p>
+                    <div className="h-56">
+                      <ResponsiveContainer width="100%" height="100%">
+                        <LineChart
+                          data={subjectWeeklyTrend}
+                          margin={{ top: 8, right: 8, bottom: 0, left: -16 }}
+                        >
+                          <CartesianGrid stroke="var(--border-subtle)" strokeWidth={1} vertical={false} />
+                          <XAxis
+                            dataKey="label"
+                            axisLine={false}
+                            tickLine={false}
+                            tick={{ fill: 'var(--text-tertiary)', fontSize: 11 }}
+                            dy={8}
+                            tickFormatter={(value: string) => value.split(' - ')[0]}
+                          />
+                          <YAxis
+                            axisLine={false}
+                            tickLine={false}
+                            tick={{ fill: 'var(--text-tertiary)', fontSize: 12 }}
+                            width={40}
+                            tickFormatter={(v: number) => `${Math.round(v / 60)}h`}
+                          />
+                          <RechartsTooltip content={<SubjectTooltip />} />
+                          <Line
+                            type="monotone"
+                            dataKey="chinese"
+                            name="语文"
+                            stroke={subjectMeta.chinese.color}
+                            strokeWidth={2}
+                            dot={{ r: 3, fill: subjectMeta.chinese.color }}
+                            activeDot={{ r: 5 }}
+                          />
+                          <Line
+                            type="monotone"
+                            dataKey="math"
+                            name="数学"
+                            stroke={subjectMeta.math.color}
+                            strokeWidth={2}
+                            dot={{ r: 3, fill: subjectMeta.math.color }}
+                            activeDot={{ r: 5 }}
+                          />
+                          <Line
+                            type="monotone"
+                            dataKey="english"
+                            name="英语"
+                            stroke={subjectMeta.english.color}
+                            strokeWidth={2}
+                            dot={{ r: 3, fill: subjectMeta.english.color }}
+                            activeDot={{ r: 5 }}
+                          />
+                          <RechartsLegend iconType="circle" />
+                        </LineChart>
+                      </ResponsiveContainer>
+                    </div>
+                  </div>
+
+                  {/* Alerts */}
+                  {timeAnalysisAlerts.length > 0 && (
+                    <div className="space-y-2">
+                      {timeAnalysisAlerts.map((alert) => {
+                        const alertStyles = {
+                          warning: 'border-warning/20 bg-warning/10 text-warning',
+                          info: 'border-ai/20 bg-ai/10 text-ai',
+                          success: 'border-success/20 bg-success/10 text-success',
+                        };
+                        const iconMap = {
+                          warning: 'AlertTriangle',
+                          info: 'Info',
+                          success: 'CheckCircle2',
+                        } as const;
+                        return (
+                          <div
+                            key={alert.id}
+                            className={`flex items-start gap-2 rounded-xl border p-3 text-sm ${alertStyles[alert.type]}`}
+                          >
+                            <Icon name={iconMap[alert.type]} size="sm" className="mt-0.5 shrink-0" />
+                            <span>{alert.message}</span>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
+              )}
             </GlassCard>
           </StaggerItem>
 
