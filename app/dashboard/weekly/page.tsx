@@ -19,6 +19,7 @@ import { TaskLibraryModal } from '@/components/weekly/TaskLibraryModal';
 import { SaveTemplateModal } from '@/components/weekly/SaveTemplateModal';
 import { ApplyTemplateModal } from '@/components/weekly/ApplyTemplateModal';
 import { CopyHistoryModal } from '@/components/weekly/CopyHistoryModal';
+import { WeeklyPlanAnalytics } from '@/components/weekly/WeeklyPlanAnalytics';
 import {
   type WeeklyPlan,
   type WeeklyTaskItem,
@@ -34,6 +35,7 @@ import {
   getPlanStats,
   generateAiReview,
   toggleTaskStatus,
+  parseDurationMinutes,
 } from '@/lib/weeklyTasks';
 import { TASK_CATEGORY_LABELS } from '@/lib/taskTemplates';
 import { getCategoryColorClass } from '@/lib/taskAlignment';
@@ -752,6 +754,8 @@ function WeeklyTasksContent() {
           </CommandCard>
         </motion.div>
       )}
+
+      {displayPlan && <WeeklyPlanAnalytics plan={displayPlan} />}
 
       {displayPlan && (
         <WeeklyTaskList
