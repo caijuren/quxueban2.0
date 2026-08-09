@@ -4,6 +4,7 @@ import { Icon } from '@/components/ui/icon';
 import Select from '@/components/ui/select';
 import Textarea from '@/components/ui/textarea';
 import Button from '@/components/ui/button';
+import Input from '@/components/ui/input';
 import { useEffect, useMemo, useState } from 'react';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 
@@ -267,16 +268,14 @@ export default function TaskLibrarySection() {
   return (
     <div className="space-y-4">
       <div className="flex flex-col gap-3 sm:flex-row">
-        <div className="relative flex-1">
-          <Icon name="Search" size="xs" className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted" />
-          <input
-            type="text"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder="搜索任务名称或描述"
-            className="focus:border-primary/50 w-full rounded-lg border border-border-default bg-surface-elevated py-2 pl-9 pr-3 text-xs text-text-secondary placeholder:text-text-muted focus:outline-none"
-          />
-        </div>
+        <Input
+          type="text"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder="搜索任务名称或描述"
+          leftIcon={<Icon name="Search" size="xs" />}
+          className="flex-1"
+        />
 
         <div className="flex flex-wrap items-center gap-2">
           <Icon name="Filter" size="xs" className="text-text-muted" />
@@ -288,7 +287,7 @@ export default function TaskLibrarySection() {
             value={filterCategory}
             onChange={(e) => setFilterCategory(e.target.value as TaskCategory | 'all')}
             size="sm"
-            className="bg-surface-elevated"
+            className="w-auto min-w-[120px] bg-surface-elevated"
           />
           <Select
             options={[
@@ -299,7 +298,7 @@ export default function TaskLibrarySection() {
             value={filterSource}
             onChange={(e) => setFilterSource(e.target.value as typeof filterSource)}
             size="sm"
-            className="bg-surface-elevated"
+            className="w-auto min-w-[120px] bg-surface-elevated"
           />
           <Select
             options={[
@@ -310,16 +309,16 @@ export default function TaskLibrarySection() {
             value={filterStatus}
             onChange={(e) => setFilterStatus(e.target.value as typeof filterStatus)}
             size="sm"
-            className="bg-surface-elevated"
+            className="w-auto min-w-[120px] bg-surface-elevated"
           />
 
           <Button
-            variant="primary"
+            variant="secondary"
             size="sm"
             onClick={handleAdd}
+            leftIcon={<Icon name="Plus" size="sm" />}
             className="font-semibold"
           >
-            <Icon name="Plus" size="sm" />
             添加任务
           </Button>
         </div>
