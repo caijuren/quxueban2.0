@@ -1,12 +1,11 @@
-// @ts-nocheck
-// FIXME: 本页面包含大量未完成的类型和组件引用，需要后续重构补齐
 'use client';
 
 import React, { Suspense, useEffect, useMemo, useRef, useState } from 'react';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
-import { Icon } from '@/components/ui/icon';
+import { Icon, type IconName } from '@/components/ui/icon';
 import Button from '@/components/ui/button';
 import Select from '@/components/ui/select';
+import Input from '@/components/ui/input';
 import Modal from '@/components/ui/Modal';
 import Textarea from '@/components/ui/textarea';
 import { useChildren } from '@/components/dashboard/ChildrenContext';
@@ -570,12 +569,13 @@ function EditPlanModal({ plan, onClose, onSave }: EditPlanModalProps) {
                     <div className="grid grid-cols-12 items-start gap-3">
                       <div className="col-span-5">
                         <label className="mb-1 block text-2xs text-text-muted">目标名称</label>
-                        <input
+                        <Input
                           type="text"
                           value={goal.title}
                           onChange={(e) => updateGoal(goal.id, { title: e.target.value })}
                           placeholder="例如：阅读精读"
-                          className="w-full rounded-lg border border-border-default bg-surface px-2 py-1.5 text-xs text-text-primary placeholder:text-text-tertiary focus:border-primary focus:outline-none"
+                          size="sm"
+                          className="bg-surface"
                         />
                       </div>
                       <div className="col-span-3">
@@ -595,7 +595,7 @@ function EditPlanModal({ plan, onClose, onSave }: EditPlanModalProps) {
                       </div>
                       <div className="col-span-2">
                         <label className="mb-1 block text-2xs text-text-muted">目标量</label>
-                        <input
+                        <Input
                           type="number"
                           min={0}
                           value={goal.quantityTarget ?? 0}
@@ -604,17 +604,19 @@ function EditPlanModal({ plan, onClose, onSave }: EditPlanModalProps) {
                               quantityTarget: parseInt(e.target.value || '0', 10),
                             })
                           }
-                          className="w-full rounded-lg border border-border-default bg-surface px-2 py-1.5 text-xs text-text-primary focus:border-primary focus:outline-none"
+                          size="sm"
+                          className="bg-surface"
                         />
                       </div>
                       <div className="col-span-2">
                         <label className="mb-1 block text-2xs text-text-muted">单位</label>
-                        <input
+                        <Input
                           type="text"
                           value={goal.quantityUnit ?? ''}
                           onChange={(e) => updateGoal(goal.id, { quantityUnit: e.target.value })}
                           placeholder="篇/首"
-                          className="w-full rounded-lg border border-border-default bg-surface px-2 py-1.5 text-xs text-text-primary placeholder:text-text-tertiary focus:border-primary focus:outline-none"
+                          size="sm"
+                          className="bg-surface"
                         />
                       </div>
                     </div>
@@ -635,14 +637,15 @@ function EditPlanModal({ plan, onClose, onSave }: EditPlanModalProps) {
                       <div className="space-y-2">
                         {(goal.checklist || []).map((item) => (
                           <div key={item.id} className="flex items-center gap-2">
-                            <input
+                            <Input
                               type="text"
                               value={item.text}
                               onChange={(e) =>
                                 updateGoalChecklistItem(goal.id, item.id, e.target.value)
                               }
                               placeholder="例如：《朝花夕拾》精读第二章"
-                              className="flex-1 rounded-lg border border-border-default bg-surface px-2 py-1.5 text-xs text-text-primary placeholder:text-text-tertiary focus:border-primary focus:outline-none"
+                              size="sm"
+                              className="flex-1 bg-surface"
                             />
                             <Button
                               variant="ghost"
@@ -764,12 +767,13 @@ function TaskEditRow({
 
         <div className="col-span-6 sm:col-span-4">
           <label className="mb-1 block text-2xs text-text-muted">任务内容</label>
-          <input
+          <Input
             type="text"
             value={task.focus}
             onChange={(e) => onUpdate(task.id, { focus: e.target.value })}
             placeholder="例如：古诗新学"
-            className="w-full rounded-lg border border-border-default bg-surface px-2 py-1.5 text-xs text-text-primary placeholder:text-text-tertiary focus:border-primary focus:outline-none"
+            size="sm"
+            className="bg-surface"
           />
         </div>
 
@@ -789,12 +793,13 @@ function TaskEditRow({
 
         <div className="col-span-4 sm:col-span-2">
           <label className="mb-1 block text-2xs text-text-muted">时长</label>
-          <input
+          <Input
             type="text"
             value={task.duration}
             onChange={(e) => onUpdate(task.id, { duration: e.target.value })}
             placeholder="30分钟"
-            className="w-full rounded-lg border border-border-default bg-surface px-2 py-1.5 text-xs text-text-primary placeholder:text-text-tertiary focus:border-primary focus:outline-none"
+            size="sm"
+            className="bg-surface"
           />
           <div className="mt-1.5 flex flex-wrap gap-1">
             {durationPresets.map((preset) => (
@@ -816,29 +821,28 @@ function TaskEditRow({
           </div>
         </div>
 
-        <div className="col-span-4 flex items-end justify-end gap-1 sm:col-span-2">
+        <div className="col-span-4 flex items-end justify-end gap-2 sm:col-span-2">
           <Button
             variant="ghost"
             size="xs"
             onClick={onToggleCopy}
-            className={`focus-ring rounded-lg p-1.5 ${
+            className={`rounded-lg px-2 ${
               isCopying
                 ? 'bg-primary/[0.08] text-primary'
                 : 'text-text-muted hover:bg-surface-highlight hover:text-text-secondary'
             }`}
-            aria-label="复制到其它日期"
-            title="复制到其它日期"
+            leftIcon={<Icon name="Copy" size="xs" />}
           >
-            <Icon name="Copy" size="sm" />
+            复制
           </Button>
           <Button
-            variant="ghost"
+            variant="danger"
             size="xs"
             onClick={() => onDelete(task.id)}
-            className="hover:bg-error/10 focus-ring rounded-lg p-1.5 text-text-muted hover:text-error"
-            aria-label="删除任务"
+            className="rounded-lg px-2"
+            leftIcon={<Icon name="Trash2" size="xs" />}
           >
-            <Icon name="Trash2" size="sm" />
+            删除
           </Button>
         </div>
       </div>
@@ -1042,6 +1046,7 @@ interface TaskLibraryModalProps {
   childRouteId?: string | null;
   weekId: string;
   existingTasks: WeeklyTaskItem[];
+  mode?: 'add' | 'makeup';
   onClose: () => void;
   onAdd: (tasks: WeeklyTaskItem[]) => void;
 }
@@ -1051,6 +1056,7 @@ function TaskLibraryModal({
   childRouteId,
   weekId,
   existingTasks,
+  mode = 'add',
   onClose,
   onAdd,
 }: TaskLibraryModalProps) {
@@ -1059,13 +1065,42 @@ function TaskLibraryModal({
   });
   const [selectedCategory, setSelectedCategory] = useState<TaskCategory | 'all'>('all');
   const [selectedTemplateIds, setSelectedTemplateIds] = useState<Set<string>>(new Set());
-  const [selectedDay, setSelectedDay] = useState<DayOfWeek>('周一');
+  const [selectedDay, setSelectedDay] = useState<DayOfWeek>(() => {
+    if (mode !== 'makeup' || weekId !== getCurrentWeekId()) return '周一';
+    const dayMap: Record<number, DayOfWeek> = {
+      0: '周日',
+      1: '周一',
+      2: '周二',
+      3: '周三',
+      4: '周四',
+      5: '周五',
+      6: '周六',
+    };
+    return dayMap[new Date().getDay()];
+  });
   const [assessments, setAssessments] = useState<TaskRationalityAssessment[] | null>(null);
   const assess = useAssessTasks();
 
   useEffect(() => {
     setAssessments(null);
   }, [selectedTemplateIds, selectedDay]);
+
+  useEffect(() => {
+    if (mode === 'makeup' && weekId === getCurrentWeekId()) {
+      const dayMap: Record<number, DayOfWeek> = {
+        0: '周日',
+        1: '周一',
+        2: '周二',
+        3: '周三',
+        4: '周四',
+        5: '周五',
+        6: '周六',
+      };
+      setSelectedDay(dayMap[new Date().getDay()]);
+    } else {
+      setSelectedDay('周一');
+    }
+  }, [mode, weekId]);
 
   const filteredTemplates = useMemo(() => {
     let list = templates;
@@ -1176,9 +1211,13 @@ function TaskLibraryModal({
     <Modal
       isOpen
       onClose={onClose}
-      title="从任务库选择"
-      subtitle={`勾选常用任务一键添加到${selectedDay}`}
-      icon="Library"
+      title={mode === 'makeup' ? '补任务' : '从任务库选择'}
+      subtitle={
+        mode === 'makeup'
+          ? `选择要补到${selectedDay}的任务`
+          : `勾选常用任务一键添加到${selectedDay}`
+      }
+      icon={mode === 'makeup' ? 'CalendarPlus' : 'Library'}
       iconClassName="bg-secondary"
       size="xl"
       colorScheme="violet"
@@ -1208,12 +1247,12 @@ function TaskLibraryModal({
               ) : assessments ? (
                 <>
                   <Icon name="CircleCheck" size="sm" />
-                  确认添加
+                  {mode === 'makeup' ? '确认补任务' : '确认添加'}
                 </>
               ) : (
                 <>
                   <Icon name="Sparkles" size="sm" animate="pulse" />
-                  AI 评估并添加
+                  {mode === 'makeup' ? 'AI 评估并补任务' : 'AI 评估并添加'}
                 </>
               )}
             </Button>
@@ -1480,6 +1519,7 @@ function WeeklyTasksContent() {
   const [reviewComment, setReviewComment] = useState('');
   const [editOpen, setEditOpen] = useState(false);
   const [libraryOpen, setLibraryOpen] = useState(false);
+  const [libraryMode, setLibraryMode] = useState<'add' | 'makeup'>('add');
   const [reportOpen, setReportOpen] = useState(false);
   const [generateOpen, setGenerateOpen] = useState(false);
   const [saveTemplateOpen, setSaveTemplateOpen] = useState(false);
@@ -1665,6 +1705,7 @@ function WeeklyTasksContent() {
       description,
       tasks: resetTasks,
       goals: resetGoals,
+      isDefault: false,
     });
     setSaveTemplateOpen(false);
   };
@@ -1832,13 +1873,28 @@ function WeeklyTasksContent() {
               {displayPlan && (
                 <>
                   <Button
-                    onClick={() => setLibraryOpen(true)}
+                    onClick={() => {
+                      setLibraryMode('add');
+                      setLibraryOpen(true);
+                    }}
                     className="inline-flex items-center gap-1.5 rounded-[14px] border border-border-default bg-surface px-3.5 py-2 text-sm font-medium text-text-secondary transition-colors hover:bg-surface-hover hover:text-text-primary"
                     variant="secondary"
                     size="md"
                   >
                     <Icon name="Library" size="xs" />
-                    从任务库选择
+                    添加任务
+                  </Button>
+                  <Button
+                    onClick={() => {
+                      setLibraryMode('makeup');
+                      setLibraryOpen(true);
+                    }}
+                    className="inline-flex items-center gap-1.5 rounded-[14px] border border-border-default bg-surface px-3.5 py-2 text-sm font-medium text-text-secondary transition-colors hover:bg-surface-hover hover:text-text-primary"
+                    variant="secondary"
+                    size="md"
+                  >
+                    <Icon name="CalendarPlus" size="xs" />
+                    补任务
                   </Button>
                   <MoreActions>
                     <Button
@@ -2073,7 +2129,7 @@ function WeeklyTasksContent() {
           onClose={() => setReviewOpen(false)}
           title="本周复盘"
           subtitle={formatWeekLabel(weekId)}
-          icon={Sparkles}
+          icon="Sparkles"
           iconClassName="bg-accent"
           size="lg"
           footer={
@@ -2250,6 +2306,7 @@ function WeeklyTasksContent() {
           childRouteId={currentChild.routeId}
           weekId={weekId}
           existingTasks={displayPlan.tasks}
+          mode={libraryMode}
           onClose={() => setLibraryOpen(false)}
           onAdd={handleAddFromLibrary}
         />

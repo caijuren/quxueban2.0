@@ -223,7 +223,7 @@ export default function WeeklyTaskChecklistMatrix({
       },
       ...dayColumns,
     ];
-  }, [rows, weekStart, onCellClick]);
+  }, [weekStart, weekDates, onCellClick]);
 
   if (rows.length === 0) {
     return (

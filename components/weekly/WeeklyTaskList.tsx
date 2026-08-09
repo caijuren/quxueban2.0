@@ -276,88 +276,109 @@ export default function WeeklyTaskList({ goals, tasks, weekLabel, onChange }: We
     });
   }, [draftGoals, tasks]);
 
-  const toggleItem = (goalId: string, itemId: string) => {
-    const next = draftGoals.map((g) => {
-      if (g.id !== goalId) return g;
-      return {
-        ...g,
-        checklist: (g.checklist || []).map((item) =>
-          item.id === itemId ? { ...item, done: !item.done } : item
-        ),
+  const toggleItem = useCallback(
+    (goalId: string, itemId: string) => {
+      const next = draftGoals.map((g) => {
+        if (g.id !== goalId) return g;
+        return {
+          ...g,
+          checklist: (g.checklist || []).map((item) =>
+            item.id === itemId ? { ...item, done: !item.done } : item
+          ),
+        };
+      });
+      commit(next);
+    },
+    [draftGoals, commit]
+  );
+
+  const updateItem = useCallback(
+    (goalId: string, itemId: string, patch: Partial<WeeklyGoalChecklistItem>) => {
+      const next = draftGoals.map((g) => {
+        if (g.id !== goalId) return g;
+        return {
+          ...g,
+          checklist: (g.checklist || []).map((item) =>
+            item.id === itemId ? { ...item, ...patch } : item
+          ),
+        };
+      });
+      commit(next);
+    },
+    [draftGoals, commit]
+  );
+
+  const deleteItem = useCallback(
+    (goalId: string, itemId: string) => {
+      const next = draftGoals.map((g) => {
+        if (g.id !== goalId) return g;
+        return {
+          ...g,
+          checklist: (g.checklist || []).filter((item) => item.id !== itemId),
+        };
+      });
+      commit(next);
+    },
+    [draftGoals, commit]
+  );
+
+  const addItem = useCallback(
+    (goalId: string) => {
+      const next = draftGoals.map((g) => {
+        if (g.id !== goalId) return g;
+        const newItem: WeeklyGoalChecklistItem = {
+          id: generateId('check'),
+          title: '新任务',
+          text: '',
+          done: false,
+        };
+        return { ...g, checklist: [...(g.checklist || []), newItem] };
+      });
+      commit(next);
+    },
+    [draftGoals, commit]
+  );
+
+  const updateGoalTitle = useCallback(
+    (goalId: string, title: string) => {
+      const next = draftGoals.map((g) => (g.id === goalId ? { ...g, title } : g));
+      commit(next);
+    },
+    [draftGoals, commit]
+  );
+
+  const deleteGoal = useCallback(
+    (goalId: string) => {
+      const next = draftGoals.filter((g) => g.id !== goalId);
+      commit(next);
+    },
+    [draftGoals, commit]
+  );
+
+  const addGoal = useCallback(
+    (subjectId: string) => {
+      const category: TaskCategory =
+        subjectId === 'chinese'
+          ? 'reading'
+          : subjectId === 'math'
+            ? 'school'
+            : subjectId === 'english'
+              ? 'reading'
+              : subjectId === 'ability'
+                ? 'ability'
+                : 'other';
+
+      const newGoal: WeeklyGoal = {
+        id: generateId('goal'),
+        title: '新模块',
+        category,
+        checklist: [{ id: generateId('check'), title: '新任务', text: '', done: false }],
       };
-    });
-    commit(next);
-  };
-
-  const updateItem = (goalId: string, itemId: string, patch: Partial<WeeklyGoalChecklistItem>) => {
-    const next = draftGoals.map((g) => {
-      if (g.id !== goalId) return g;
-      return {
-        ...g,
-        checklist: (g.checklist || []).map((item) =>
-          item.id === itemId ? { ...item, ...patch } : item
-        ),
-      };
-    });
-    commit(next);
-  };
-
-  const deleteItem = (goalId: string, itemId: string) => {
-    const next = draftGoals.map((g) => {
-      if (g.id !== goalId) return g;
-      return {
-        ...g,
-        checklist: (g.checklist || []).filter((item) => item.id !== itemId),
-      };
-    });
-    commit(next);
-  };
-
-  const addItem = (goalId: string) => {
-    const next = draftGoals.map((g) => {
-      if (g.id !== goalId) return g;
-      const newItem: WeeklyGoalChecklistItem = {
-        id: generateId('check'),
-        title: '新任务',
-        text: '',
-        done: false,
-      };
-      return { ...g, checklist: [...(g.checklist || []), newItem] };
-    });
-    commit(next);
-  };
-
-  const updateGoalTitle = (goalId: string, title: string) => {
-    const next = draftGoals.map((g) => (g.id === goalId ? { ...g, title } : g));
-    commit(next);
-  };
-
-  const deleteGoal = (goalId: string) => {
-    const next = draftGoals.filter((g) => g.id !== goalId);
-    commit(next);
-  };
-
-  const addGoal = (subjectId: string) => {
-    const category: TaskCategory =
-      subjectId === 'chinese'
-        ? 'reading'
-        : subjectId === 'math'
-          ? 'school'
-          : subjectId === 'english'
-            ? 'reading'
-            : subjectId === 'ability'
-              ? 'ability'
-              : 'other';
-
-    const newGoal: WeeklyGoal = {
-      id: generateId('goal'),
-      title: '新模块',
-      category,
-      checklist: [{ id: generateId('check'), title: '新任务', text: '', done: false }],
-    };
-    const next = [...draftGoals, newGoal];
-    commit(next);
-  };
+      const next = [...draftGoals, newGoal];
+      commit(next);
+    },
+    [draftGoals, commit]
+  );
 
   const tableColumns = useMemo<DataTableColumn<TaskRow>[]>(
     () => [

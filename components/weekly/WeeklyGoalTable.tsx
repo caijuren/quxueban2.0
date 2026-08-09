@@ -1,7 +1,7 @@
 'use client';
 import { Icon } from '@/components/ui/icon';
 
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import DataTable, { type DataTableColumn } from '@/components/ui/data-table';
 import Button from '@/components/ui/button';
@@ -116,18 +116,21 @@ export default function WeeklyGoalTable({ goals, tasks, onChange }: WeeklyGoalTa
     });
   }, [goals, tasks]);
 
-  const toggleItem = (goalId: string, itemId: string) => {
-    const next = goals.map((g) => {
-      if (g.id !== goalId) return g;
-      return {
-        ...g,
-        checklist: (g.checklist || []).map((item) =>
-          item.id === itemId ? { ...item, done: !item.done } : item
-        ),
-      };
-    });
-    onChange(next);
-  };
+  const toggleItem = useCallback(
+    (goalId: string, itemId: string) => {
+      const next = goals.map((g) => {
+        if (g.id !== goalId) return g;
+        return {
+          ...g,
+          checklist: (g.checklist || []).map((item) =>
+            item.id === itemId ? { ...item, done: !item.done } : item
+          ),
+        };
+      });
+      onChange(next);
+    },
+    [goals, onChange]
+  );
 
   const tableColumns = useMemo<DataTableColumn<TableRow>[]>(
     () => [
