@@ -65,7 +65,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       >
         {isLoading && <Spinner size={size === 'lg' ? 'sm' : 'xs'} color="current" />}
         {!isLoading && leftIcon}
-        {children && <span className={cn(isLoading && 'opacity-70')}>{children}</span>}
+        {!isLoading && children}
         {!isLoading && rightIcon}
       </button>
     );
