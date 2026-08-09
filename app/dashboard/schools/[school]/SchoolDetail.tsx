@@ -50,7 +50,7 @@ export const schoolsData: Record<string, SchoolData> = {
     ranking: '三公第一梯队',
     fees: '公办免学费',
     accent: 'var(--color-primary)',
-    glow: 'rgba(244,63,94,0.35)',
+    glow: 'color-mix(in srgb, var(--color-primary) 35%, transparent)',
     gradient: 'from-primary to-primary-glow',
     timeline: [
       {
@@ -138,7 +138,7 @@ export const schoolsData: Record<string, SchoolData> = {
     ranking: '三公第一梯队',
     fees: '公办免学费',
     accent: 'var(--color-secondary)',
-    glow: 'rgba(139,92,246,0.35)',
+    glow: 'color-mix(in srgb, var(--color-secondary) 35%, transparent)',
     gradient: 'from-secondary to-secondary-glow',
     timeline: [
       {
@@ -239,7 +239,7 @@ export const schoolsData: Record<string, SchoolData> = {
     ranking: '三公第一梯队',
     fees: '公办免学费',
     accent: 'var(--accent)',
-    glow: 'rgba(6,182,212,0.35)',
+    glow: 'color-mix(in srgb, var(--accent) 35%, transparent)',
     gradient: 'from-accent to-accent-glow',
     timeline: [
       {
@@ -340,7 +340,7 @@ export const schoolsData: Record<string, SchoolData> = {
     ranking: '嘉定民办第一梯队',
     fees: '约 2.78万/学期（2024年参考）',
     accent: 'var(--color-secondary)',
-    glow: 'rgba(139,92,246,0.35)',
+    glow: 'color-mix(in srgb, var(--color-secondary) 35%, transparent)',
     gradient: 'from-secondary to-purple-400',
     timeline: [
       {
@@ -415,7 +415,7 @@ export const schoolsData: Record<string, SchoolData> = {
     ranking: '嘉定区九年一贯制优质民办',
     fees: '约 3.2万/学期，住宿费3950元/学期（2024年参考）',
     accent: 'var(--color-secondary-glow)',
-    glow: 'rgba(99,102,241,0.35)',
+    glow: 'color-mix(in srgb, var(--color-secondary-glow) 35%, transparent)',
     gradient: 'from-indigo-500 to-purple-500',
     timeline: [
       {
@@ -481,7 +481,7 @@ export const schoolsData: Record<string, SchoolData> = {
     ranking: '嘉定民办第二梯队',
     fees: '约 1.925万/学期（2024年参考）',
     accent: 'var(--color-secondary)',
-    glow: 'rgba(168,85,247,0.35)',
+    glow: 'color-mix(in srgb, var(--color-secondary) 35%, transparent)',
     gradient: 'from-violet-500 to-fuchsia-500',
     timeline: [
       {
@@ -544,7 +544,7 @@ export const schoolsData: Record<string, SchoolData> = {
     ranking: '按对口学区',
     fees: '公办免学费',
     accent: 'var(--accent)',
-    glow: 'rgba(6,182,212,0.35)',
+    glow: 'color-mix(in srgb, var(--accent) 35%, transparent)',
     gradient: 'from-accent to-cyan-400',
     timeline: [
       {
@@ -599,7 +599,7 @@ export const schoolsData: Record<string, SchoolData> = {
     ranking: '南翔镇对口公办',
     fees: '公办免学费',
     accent: 'var(--accent)',
-    glow: 'rgba(6,182,212,0.35)',
+    glow: 'color-mix(in srgb, var(--accent) 35%, transparent)',
     gradient: 'from-accent to-cyan-400',
     timeline: [
       {
@@ -663,7 +663,7 @@ export const schoolsData: Record<string, SchoolData> = {
     ranking: '一贯制直升',
     fees: '公办免学费 / 民办按学校标准',
     accent: 'var(--accent)',
-    glow: 'rgba(20,184,166,0.35)',
+    glow: 'color-mix(in srgb, var(--accent) 35%, transparent)',
     gradient: 'from-teal-500 to-emerald-500',
     timeline: [
       { step: '直升确认', time: '五年级', desc: '了解本校一贯制直升政策，确认直升意向。' },
@@ -710,7 +710,7 @@ export const schoolsData: Record<string, SchoolData> = {
     ranking: '区域优质公办',
     fees: '公办免学费',
     accent: 'var(--accent)',
-    glow: 'rgba(14,165,233,0.35)',
+    glow: 'color-mix(in srgb, var(--accent) 35%, transparent)',
     gradient: 'from-sky-500 to-blue-500',
     timeline: [
       { step: '了解学校', time: '五年级', desc: '关注本区优质公办初中及其特色班信息。' },
@@ -761,7 +761,7 @@ export const schoolsData: Record<string, SchoolData> = {
     ranking: '四校之首 · 全市顶尖',
     fees: '公办，约 2000 元/学期',
     accent: 'var(--color-primary)',
-    glow: 'rgba(244,63,94,0.35)',
+    glow: 'color-mix(in srgb, var(--color-primary) 35%, transparent)',
     gradient: 'from-primary to-primary-glow',
     timeline: [
       {
@@ -835,7 +835,7 @@ export const schoolsData: Record<string, SchoolData> = {
     ranking: '四校 · 理科竞赛强校',
     fees: '公办，约 2000 元/学期',
     accent: 'var(--color-secondary)',
-    glow: 'rgba(139,92,246,0.35)',
+    glow: 'color-mix(in srgb, var(--color-secondary) 35%, transparent)',
     gradient: 'from-secondary to-secondary-glow',
     timeline: [
       {
@@ -904,7 +904,7 @@ export const schoolsData: Record<string, SchoolData> = {
     ranking: '四校 · 人文理科均衡',
     fees: '公办，约 2000 元/学期',
     accent: 'var(--accent)',
-    glow: 'rgba(6,182,212,0.35)',
+    glow: 'color-mix(in srgb, var(--accent) 35%, transparent)',
     gradient: 'from-accent to-accent-glow',
     timeline: [
       { step: '开放日/自招', time: '初三上 3-5月', desc: '参加复旦附中校园开放日，准备自招材料。' },
@@ -969,7 +969,7 @@ export const schoolsData: Record<string, SchoolData> = {
     ranking: '嘉定区第一梯队 · 四校分校',
     fees: '公办，约 2000 元/学期',
     accent: 'var(--color-secondary)',
-    glow: 'rgba(139,92,246,0.35)',
+    glow: 'color-mix(in srgb, var(--color-secondary) 35%, transparent)',
     gradient: 'from-secondary to-purple-400',
     timeline: [
       {
@@ -1024,7 +1024,7 @@ export const schoolsData: Record<string, SchoolData> = {
     ranking: '嘉定区第二梯队 · 区属市重点',
     fees: '公办，约 2000 元/学期',
     accent: 'var(--color-secondary)',
-    glow: 'rgba(168,85,247,0.35)',
+    glow: 'color-mix(in srgb, var(--color-secondary) 35%, transparent)',
     gradient: 'from-violet-500 to-fuchsia-500',
     timeline: [
       {
@@ -1079,7 +1079,7 @@ export const schoolsData: Record<string, SchoolData> = {
     ranking: '嘉定区市重点 · 新增校',
     fees: '公办，约 2000 元/学期',
     accent: 'var(--color-secondary-glow)',
-    glow: 'rgba(99,102,241,0.35)',
+    glow: 'color-mix(in srgb, var(--color-secondary-glow) 35%, transparent)',
     gradient: 'from-indigo-500 to-purple-500',
     timeline: [
       {
@@ -1130,7 +1130,7 @@ export const schoolsData: Record<string, SchoolData> = {
     ranking: '嘉定区第三梯队 · 区实验性示范',
     fees: '公办，约 2000 元/学期',
     accent: 'var(--accent)',
-    glow: 'rgba(20,184,166,0.35)',
+    glow: 'color-mix(in srgb, var(--accent) 35%, transparent)',
     gradient: 'from-teal-500 to-emerald-500',
     timeline: [
       { step: '开放日', time: '初三上 3-5月', desc: '参加嘉一实验开放日，了解特色培养方向。' },
@@ -1181,7 +1181,7 @@ export const schoolsData: Record<string, SchoolData> = {
     ranking: '嘉定区市特色高中 · 本科率高',
     fees: '公办，约 2000 元/学期',
     accent: 'var(--accent)',
-    glow: 'rgba(14,165,233,0.35)',
+    glow: 'color-mix(in srgb, var(--accent) 35%, transparent)',
     gradient: 'from-sky-500 to-blue-500',
     timeline: [
       { step: '开放日', time: '初三上 3-5月', desc: '参加嘉定二中开放日，了解海洋/工程特色项目。' },
@@ -1232,7 +1232,7 @@ export const schoolsData: Record<string, SchoolData> = {
     ranking: '嘉定区区重点',
     fees: '公办，约 2000 元/学期',
     accent: 'var(--color-primary)',
-    glow: 'rgba(244,63,94,0.35)',
+    glow: 'color-mix(in srgb, var(--color-primary) 35%, transparent)',
     gradient: 'from-rose-500 to-pink-500',
     timeline: [
       { step: '开放日', time: '初三上 3-5月', desc: '参加安亭高中开放日，了解办学特色。' },
@@ -1554,7 +1554,7 @@ export default function SchoolDetail({ school }: { school: string }) {
         </div>
         <Link
           href="/dashboard/plan"
-          className="inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-primary to-secondary px-6 py-2.5 font-semibold text-text-primary transition-all duration-300 hover:shadow-[0_0_30px_rgba(244,63,94,0.5)]"
+          className="inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-primary to-secondary px-6 py-2.5 font-semibold text-text-primary transition-all duration-300 hover:shadow-[0_0_30px_color-mix(in_srgb,var(--color-primary)_50%,transparent)]"
         >
           <Icon name="FileText" size="sm" />
           返回路线方案页

@@ -233,7 +233,7 @@ export default function SubjectTrackMap({
                 y1={40}
                 x2={x}
                 y2={viewBoxHeight - 80}
-                stroke="rgba(255,255,255,0.06)"
+                stroke="var(--glass-border-subtle)"
                 strokeWidth="1"
                 strokeDasharray="4 4"
               />
@@ -328,7 +328,7 @@ export default function SubjectTrackMap({
             y1={50}
             x2={VIEWBOX.endX + 20}
             y2={50}
-            stroke="rgba(255,255,255,0.15)"
+            stroke="color-mix(in srgb, var(--text-primary) 15%, transparent)"
             strokeWidth="2"
             strokeLinecap="round"
           />
@@ -341,13 +341,13 @@ export default function SubjectTrackMap({
                   y1={46}
                   x2={x}
                   y2={54}
-                  stroke="rgba(255,255,255,0.3)"
+                  stroke="color-mix(in srgb, var(--text-primary) 30%, transparent)"
                   strokeWidth="2"
                 />
                 <text
                   x={x}
                   y={34}
-                  fill="rgba(148,163,184,0.8)"
+                  fill="color-mix(in srgb, var(--text-tertiary) 80%, transparent)"
                   fontSize="11"
                   fontWeight="500"
                   textAnchor="middle"
@@ -442,7 +442,7 @@ export default function SubjectTrackMap({
 
                       <text
                         y={22}
-                        fill="rgba(148,163,184,0.9)"
+                        fill="color-mix(in srgb, var(--text-tertiary) 90%, transparent)"
                         fontSize="10"
                         fontWeight="500"
                         textAnchor="middle"

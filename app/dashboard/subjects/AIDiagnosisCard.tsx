@@ -46,7 +46,7 @@ export default function AIDiagnosisCard({
       className="relative overflow-hidden rounded-2xl border border-border-subtle"
       style={{
         background:
-          'linear-gradient(135deg, rgba(139, 92, 246, 0.15) 0%, rgba(59, 130, 246, 0.08) 100%)',
+          'linear-gradient(135deg, color-mix(in srgb, var(--color-secondary) 15%, transparent) 0%, color-mix(in srgb, var(--info) 8%, transparent) 100%)',
       }}
     >
       <div className="bg-secondary/20 absolute -right-20 -top-20 size-40 rounded-full blur-3xl" />

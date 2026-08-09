@@ -259,7 +259,7 @@ function PlanPageContent() {
                         className={`size-10 rounded-xl ${type.bg} flex shrink-0 items-center justify-center`}
                         style={{
                           boxShadow:
-                            plan.type === 'primary' ? '0 0 15px rgba(244, 63, 94, 0.12)' : 'none',
+                            plan.type === 'primary' ? '0 0 15px color-mix(in srgb, var(--color-primary) 12%, transparent)' : 'none',
                         }}
                       >
                         {plan.type === 'primary' ? (

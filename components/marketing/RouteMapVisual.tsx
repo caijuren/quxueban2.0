@@ -60,7 +60,7 @@ export default function RouteMapVisual() {
             <path
               d="M 40 0 L 0 0 0 40"
               fill="none"
-              stroke="rgba(255,255,255,0.03)"
+              stroke="color-mix(in srgb, var(--text-primary) 3%, transparent)"
               strokeWidth="1"
             />
           </pattern>
@@ -74,7 +74,7 @@ export default function RouteMapVisual() {
               y1="30"
               x2={stage.x}
               y2="240"
-              stroke="rgba(255,255,255,0.05)"
+              stroke="color-mix(in srgb, var(--text-primary) 5%, transparent)"
               strokeWidth="1"
             />
             <text

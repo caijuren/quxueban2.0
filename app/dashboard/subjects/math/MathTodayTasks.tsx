@@ -49,8 +49,8 @@ export default function MathTodayTasks({ grade }: { grade: number }) {
       transition={{ duration: 0.5 }}
       className="border-primary/20 relative overflow-hidden rounded-2xl border p-6"
       style={{
-        background: 'linear-gradient(135deg, rgba(59,130,246,0.08) 0%, rgba(139,92,246,0.08) 100%)',
-        boxShadow: '0 0 30px rgba(59,130,246,0.1), inset 0 0 20px rgba(59,130,246,0.05)',
+        background: 'linear-gradient(135deg, color-mix(in srgb, var(--info) 8%, transparent) 0%, color-mix(in srgb, var(--color-secondary) 8%, transparent) 100%)',
+        boxShadow: '0 0 30px color-mix(in srgb, var(--info) 10%, transparent), inset 0 0 20px color-mix(in srgb, var(--info) 5%, transparent)',
       }}
     >
       {/* Animated border */}
@@ -58,7 +58,7 @@ export default function MathTodayTasks({ grade }: { grade: number }) {
         className="pointer-events-none absolute inset-0 rounded-2xl"
         style={{
           background:
-            'linear-gradient(90deg, transparent, rgba(59,130,246,0.3), rgba(139,92,246,0.3), transparent)',
+            'linear-gradient(90deg, transparent, color-mix(in srgb, var(--info) 30%, transparent), color-mix(in srgb, var(--color-secondary) 30%, transparent), transparent)',
           backgroundSize: '200% 100%',
         }}
         animate={{ backgroundPosition: ['200% 0', '-200% 0'] }}
@@ -72,15 +72,15 @@ export default function MathTodayTasks({ grade }: { grade: number }) {
             <div
               className="flex size-12 shrink-0 items-center justify-center rounded-xl"
               style={{
-                background: 'rgba(59,130,246,0.15)',
-                boxShadow: '0 0 20px rgba(59,130,246,0.3)',
+                background: 'color-mix(in srgb, var(--info) 15%, transparent)',
+                boxShadow: '0 0 20px color-mix(in srgb, var(--info) 30%, transparent)',
               }}
             >
               <Icon
                 name="Calendar"
                 size="lg"
                 className="text-blue-400"
-                style={{ filter: 'drop-shadow(0 0 8px rgba(59,130,246,0.8))' }}
+                style={{ filter: 'drop-shadow(0 0 8px color-mix(in srgb, var(--info) 80%, transparent))' }}
               />
             </div>
             <div>

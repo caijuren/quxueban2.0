@@ -43,7 +43,7 @@ function ProgressRing({
           cy={size / 2}
           r={radius}
           fill="none"
-          stroke="rgba(255,255,255,0.08)"
+          stroke="var(--border-strong)"
           strokeWidth={stroke}
         />
         <circle
@@ -325,9 +325,9 @@ export default function TodayPage() {
                   </p>
                 </div>
                 <Button
-                  variant="primary"
+                  variant="secondary"
                   onClick={() => setVictoryOpen(true)}
-                  className="hover:bg-primary/90 hidden items-center gap-2 rounded-xl bg-primary px-5 py-3 text-sm font-bold text-white shadow-[0_0_20px_rgba(244,63,122,0.25)] transition-all sm:inline-flex"
+                  className="hidden items-center gap-2 sm:inline-flex"
                 >
                   <Icon name="Send" size="md" />
                   推送简报
@@ -401,15 +401,17 @@ export default function TodayPage() {
                     const materialsText = task.materials.join('、');
 
                     return (
-                      <Button
-                        variant="secondary"
+                      <div
+                        role="button"
+                        tabIndex={0}
                         key={task.id}
                         onClick={() => handleOpenCompletion(task)}
+                        onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') handleOpenCompletion(task); }}
                         className={`group relative flex min-h-[84px] items-start gap-3 overflow-hidden rounded-xl border p-2.5 text-left transition-all duration-200 ${
                           isDone
                             ? 'border-success/20 bg-surface opacity-80'
                             : isPending
-                              ? 'border-error/20 bg-surface'
+                              ? 'border-warning/20 bg-surface'
                               : 'border-border-default bg-surface hover:border-border-strong hover:bg-surface-highlight'
                         }`}
                       >
@@ -488,7 +490,7 @@ export default function TodayPage() {
                             )}
                           </div>
                         </div>
-                      </Button>
+                      </div>
                     );
                   })}
                 </div>
@@ -509,7 +511,7 @@ export default function TodayPage() {
           <Button
             variant="secondary"
             onClick={() => router.push('/dashboard/weekly')}
-            className="flex w-full items-center justify-center gap-2 rounded-xl border border-dashed border-border-default py-3 text-sm text-text-tertiary transition-all hover:border-border-strong hover:bg-surface-hover hover:text-text-secondary"
+            className="flex w-full items-center justify-center gap-2 rounded-xl border border-dashed border-border-default py-3 text-sm"
           >
             <Icon name="Target" size="sm" />
             查看完整周计划

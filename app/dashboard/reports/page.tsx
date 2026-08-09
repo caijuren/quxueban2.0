@@ -701,7 +701,7 @@ export default function ReportsPage() {
             <Button
               variant="primary"
               onClick={() => alert('分享图功能将在后续迭代中提供')}
-              className="hover:bg-primary/90 flex items-center gap-2 rounded-[14px] bg-primary px-5 py-2.5 text-sm font-medium text-text-primary shadow-[0_0_16px_rgba(244,63,122,0.25)] transition-all"
+              className="hover:bg-primary/90 flex items-center gap-2 rounded-[14px] bg-primary px-5 py-2.5 text-sm font-medium text-text-primary shadow-[0_0_16px_color-mix(in_srgb,var(--color-primary)_25%,transparent)] transition-all"
             >
               <Icon name="Share2" size="sm" />
               生成分享图

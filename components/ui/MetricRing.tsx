@@ -40,7 +40,7 @@ export default function MetricRing({
           cx={size / 2}
           cy={size / 2}
           r={radius}
-          stroke="rgba(255,255,255,0.06)"
+          stroke="var(--glass-border-subtle)"
           strokeWidth={strokeWidth}
           fill="none"
         />

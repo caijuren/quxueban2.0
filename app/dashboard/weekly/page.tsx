@@ -142,7 +142,7 @@ function ProgressRing({ rate, size = 96 }: { rate: number; size?: number }) {
           cx={size / 2}
           cy={size / 2}
           r={radius}
-          stroke="rgba(255,255,255,0.08)"
+          stroke="var(--border-default)"
           strokeWidth={10}
           fill="none"
         />
@@ -413,7 +413,7 @@ function EditPlanModal({ plan, onClose, onSave }: EditPlanModalProps) {
             <Button variant="ghost" size="md" onClick={handleClose}>
               取消
             </Button>
-            <Button variant="primary" size="lg" onClick={handleSave} className="bg-accent text-text-primary">
+            <Button variant="secondary" size="lg" onClick={handleSave}>
               <Icon name="Send" size="sm" />
               保存
             </Button>
@@ -545,10 +545,9 @@ function EditPlanModal({ plan, onClose, onSave }: EditPlanModalProps) {
                   目标用于汇总进度，任务可绑定到目标自动累计完成量
                 </p>
                 <Button
-                  variant="primary"
+                  variant="secondary"
                   size="sm"
                   onClick={addGoal}
-                  className="text-text-primary"
                 >
                   <Icon name="Plus" size="xs" />
                   新建目标
@@ -1198,8 +1197,7 @@ function TaskLibraryModal({
             <Button
               onClick={handleAdd}
               disabled={selectedTemplateIds.size === 0 || assess.isPending}
-              className="flex items-center gap-2 rounded-lg bg-primary px-6 py-2 font-semibold text-inverse transition-all disabled:cursor-not-allowed disabled:opacity-50"
-              variant="primary"
+              variant="secondary"
               size="lg"
             >
               {assess.isPending ? (
@@ -1277,7 +1275,7 @@ function TaskLibraryModal({
             value={selectedDay}
             onChange={(e) => setSelectedDay(e.target.value as DayOfWeek)}
             size="sm"
-            className="bg-surface"
+            className="w-auto min-w-[120px] bg-surface"
             options={dayOrder.map((d) => ({
               value: d,
               label: d,
@@ -1461,7 +1459,7 @@ function MoreActions({ children }: { children: React.ReactNode }) {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -4, scale: 0.98 }}
             transition={{ duration: 0.15 }}
-            className="absolute right-0 z-50 mt-2 w-52 rounded-[14px] border border-border-default bg-surface-elevated py-1.5 shadow-[0_8px_32px_rgba(0,0,0,0.4)]"
+            className="absolute right-0 z-50 mt-2 w-52 rounded-[14px] border border-border-default bg-surface-elevated py-1.5 shadow-[0_8px_32px_color-mix(in_srgb,black_40%,transparent)]"
           >
             {wrappedChildren}
           </motion.div>
@@ -1796,7 +1794,7 @@ function WeeklyTasksContent() {
                 value={weekId}
                 onChange={(e) => setWeekId(e.target.value)}
                 size="sm"
-                className="min-w-[180px] bg-surface"
+                className="w-auto min-w-[180px] bg-surface"
                 options={weekOptions}
               />
             </div>
@@ -1819,8 +1817,8 @@ function WeeklyTasksContent() {
               {!displayPlan && (
                 <Button
                   onClick={handleGenerate}
-                  className="hover:bg-primary/90 inline-flex items-center gap-1.5 rounded-[14px] bg-primary px-3.5 py-2 text-sm font-medium text-inverse shadow-[0_0_16px_rgba(244,63,122,0.25)] transition-all"
-                  variant="primary"
+                  className="inline-flex items-center gap-1.5 rounded-[14px] px-3.5 py-2 text-sm font-medium"
+                  variant="secondary"
                   size="md"
                 >
                   <Icon name="Target" size="xs" />
@@ -1830,8 +1828,8 @@ function WeeklyTasksContent() {
               {displayPlan && !isDraft && (
                 <Button
                   onClick={() => setEditOpen(true)}
-                  className="hover:bg-primary/90 inline-flex items-center gap-1.5 rounded-[14px] bg-primary px-3.5 py-2 text-sm font-medium text-inverse shadow-[0_0_16px_rgba(244,63,122,0.25)] transition-all"
-                  variant="primary"
+                  className="inline-flex items-center gap-1.5 rounded-[14px] px-3.5 py-2 text-sm font-medium"
+                  variant="secondary"
                   size="md"
                 >
                   <Icon name="Pencil" size="xs" />
@@ -1842,7 +1840,7 @@ function WeeklyTasksContent() {
                 <>
                   <Button
                     onClick={handlePublish}
-                    className="hover:bg-primary/90 inline-flex items-center gap-1.5 rounded-[14px] bg-primary px-3.5 py-2 text-sm font-medium text-inverse shadow-[0_0_16px_rgba(244,63,122,0.25)] transition-all"
+                    className="inline-flex items-center gap-1.5 rounded-[14px] px-3.5 py-2 text-sm font-medium"
                     variant="primary"
                     size="md"
                   >
@@ -1851,7 +1849,7 @@ function WeeklyTasksContent() {
                   </Button>
                   <Button
                     onClick={handleCancelDraft}
-                    className="inline-flex items-center gap-1.5 rounded-[14px] border border-border-default bg-surface px-3.5 py-2 text-sm font-medium text-text-secondary transition-colors hover:bg-surface-hover"
+                    className="inline-flex items-center gap-1.5 rounded-[14px] px-3.5 py-2 text-sm font-medium"
                     variant="secondary"
                     size="md"
                   >
@@ -2006,7 +2004,7 @@ function WeeklyTasksContent() {
                       cx="48"
                       cy="48"
                       r="40"
-                      stroke="rgba(255,255,255,0.08)"
+                      stroke="var(--border-default)"
                       strokeWidth="8"
                       fill="none"
                     />
@@ -2145,8 +2143,7 @@ function WeeklyTasksContent() {
             </p>
             <Button
               onClick={handleGenerate}
-              className="focus-ring rounded-lg bg-primary px-6 py-3 font-semibold text-text-primary transition-all"
-              variant="primary"
+              variant="secondary"
               size="lg"
             >
               生成本周计划
@@ -2182,8 +2179,7 @@ function WeeklyTasksContent() {
               </Button>
               <Button
                 onClick={handleSaveReview}
-                className="flex items-center gap-2 rounded-lg bg-accent px-6 py-2 font-semibold text-text-primary transition-all"
-                variant="primary"
+                variant="secondary"
                 size="lg"
               >
                 <Icon name="RotateCcw" size="sm" />
@@ -2427,7 +2423,7 @@ function SaveTemplateModal({
           <Button
             onClick={() => onSave(name, description)}
             disabled={saving || !name.trim()}
-            className="flex items-center gap-2 rounded-xl bg-secondary px-5 py-2 font-semibold text-text-primary transition-all hover:shadow-[0_0_30px_rgba(139,92,246,0.4)] disabled:opacity-50"
+            className="flex items-center gap-2 rounded-xl bg-secondary px-5 py-2 font-semibold text-text-primary transition-all hover:shadow-[0_0_30px_color-mix(in_srgb,var(--color-secondary)_40%,transparent)] disabled:opacity-50"
             variant="secondary"
             size="md"
           >
@@ -2501,7 +2497,7 @@ function ApplyTemplateModal({
           <Button
             onClick={() => selectedId && onApply(selectedId, mode)}
             disabled={!selectedId}
-            className="flex items-center gap-2 rounded-xl bg-secondary px-5 py-2 font-semibold text-text-primary transition-all hover:shadow-[0_0_30px_rgba(139,92,246,0.4)] disabled:opacity-50"
+            className="flex items-center gap-2 rounded-xl bg-secondary px-5 py-2 font-semibold text-text-primary transition-all hover:shadow-[0_0_30px_color-mix(in_srgb,var(--color-secondary)_40%,transparent)] disabled:opacity-50"
             variant="secondary"
             size="md"
           >

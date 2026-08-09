@@ -357,16 +357,16 @@ export default function MiddleSchoolRoadmap() {
         className="relative flex flex-col justify-between gap-4 overflow-hidden rounded-2xl p-5 sm:flex-row sm:items-center"
         style={{
           background:
-            'linear-gradient(135deg, rgba(139,92,246,0.08) 0%, rgba(6,182,212,0.08) 100%)',
-          border: '1px solid rgba(139,92,246,0.35)',
-          boxShadow: '0 0 30px rgba(139,92,246,0.15), inset 0 0 20px rgba(139,92,246,0.05)',
+            'linear-gradient(135deg, color-mix(in srgb, var(--color-secondary) 8%, transparent) 0%, color-mix(in srgb, var(--accent) 8%, transparent) 100%)',
+          border: '1px solid color-mix(in srgb, var(--color-secondary) 35%, transparent)',
+          boxShadow: '0 0 30px color-mix(in srgb, var(--color-secondary) 15%, transparent), inset 0 0 20px color-mix(in srgb, var(--color-secondary) 5%, transparent)',
         }}
       >
         <motion.div
           className="pointer-events-none absolute inset-0 rounded-2xl"
           style={{
             background:
-              'linear-gradient(90deg, transparent, rgba(139,92,246,0.4), rgba(6,182,212,0.4), transparent)',
+              'linear-gradient(90deg, transparent, color-mix(in srgb, var(--color-secondary) 40%, transparent), color-mix(in srgb, var(--accent) 40%, transparent), transparent)',
             backgroundSize: '200% 100%',
           }}
           animate={{ backgroundPosition: ['200% 0', '-200% 0'] }}
@@ -508,7 +508,7 @@ export default function MiddleSchoolRoadmap() {
                   y1={60}
                   x2={x}
                   y2={360}
-                  stroke="rgba(255,255,255,0.08)"
+                  stroke="var(--border-default)"
                   strokeWidth="1"
                   strokeDasharray="4 4"
                 />

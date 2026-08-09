@@ -531,8 +531,8 @@ export default function WeeklyTaskList({ goals, tasks, weekLabel, onChange }: We
                 className={`size-10 rounded-[12px] ${meta.color} flex shrink-0 items-center justify-center`}
                 style={{
                   background: meta.gradient,
-                  boxShadow: `0 0 14px ${meta.glow}, inset 0 1px 0 rgba(255,255,255,0.18), inset 0 -1px 0 rgba(0,0,0,0.2)`,
-                  border: '1px solid rgba(255,255,255,0.14)',
+                  boxShadow: `0 0 14px ${meta.glow}, inset 0 1px 0 var(--glass-highlight), inset 0 -1px 0 var(--glass-shadow-color)`,
+                  border: '1px solid var(--glass-border-strong)',
                 }}
               >
                 <SubjectIcon className="size-5" />
@@ -685,7 +685,7 @@ export default function WeeklyTaskList({ goals, tasks, weekLabel, onChange }: We
       <motion.div
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
-        className="rounded-[20px] border border-border-subtle bg-background px-5 py-4 shadow-[0_8px_32px_rgba(0,0,0,0.4)]"
+        className="rounded-[20px] border border-border-subtle bg-background px-5 py-4 shadow-card"
       >
         <div className="flex items-center justify-between">
           <div className="flex min-w-0 flex-1 items-center gap-3">
@@ -712,7 +712,7 @@ export default function WeeklyTaskList({ goals, tasks, weekLabel, onChange }: We
     <motion.div
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
-      className="overflow-hidden rounded-[20px] border border-border-subtle bg-background shadow-[0_8px_32px_rgba(0,0,0,0.4)]"
+      className="overflow-hidden rounded-[20px] border border-border-subtle bg-background shadow-card"
     >
       {/* Header */}
       <div className="group flex items-center justify-between border-b border-border-subtle px-5 py-4">
@@ -760,7 +760,7 @@ export default function WeeklyTaskList({ goals, tasks, weekLabel, onChange }: We
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: 'auto', opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            className="overflow-hidden border-t border-border-subtle bg-white/[0.02]"
+            className="overflow-hidden border-t border-border-subtle bg-[color-mix(in_srgb,var(--text-primary)_8%,transparent)]"
           >
             <div className="flex flex-wrap items-center gap-3 px-5 py-3">
               <span className="text-text-muted/70 text-xs">添加模块到：</span>

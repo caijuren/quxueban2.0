@@ -518,7 +518,7 @@ export default function PlanRoadmap({
                     y1={60}
                     x2={x}
                     y2={360}
-                    stroke="rgba(255,255,255,0.08)"
+                    stroke="var(--border-default)"
                     strokeWidth="1"
                     strokeDasharray="4 4"
                   />
