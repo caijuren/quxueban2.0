@@ -2050,7 +2050,7 @@ function WeeklyTasksContent() {
                   <span className="mx-1.5 text-text-muted">·</span>
                   剩余 <span className="font-medium text-text-secondary">{stats.pending} 项</span>
                 </p>
-                <Button className="mt-2.5 inline-flex items-center gap-1 text-xs text-primary transition-colors hover:text-primary-glow" variant="link" size="xs">
+                <Button className="mt-2.5 inline-flex items-center gap-1 text-xs text-text-muted transition-colors hover:text-text-secondary" variant="ghost" size="xs">
                   查看详情
                   <Icon name="ChevronRight" size="xs" />
                 </Button>
