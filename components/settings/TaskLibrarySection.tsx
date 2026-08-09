@@ -959,7 +959,7 @@ function TaskTemplateModal({
                 <Icon name="Info" size="xs" />
               </span>
             </div>
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+            <div className="flex flex-col gap-3">
               {weeklyScheduleOptions.map((option) => {
                 const selected = form.weeklySchedule === option.value;
                 return (
@@ -979,19 +979,21 @@ function TaskTemplateModal({
                         : 'border-border-subtle bg-surface-elevated hover:bg-surface-highlight'
                     }`}
                   >
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-start gap-3">
                       <div
-                        className={`flex size-4 items-center justify-center rounded-full border ${
+                        className={`mt-0.5 flex size-4 shrink-0 items-center justify-center rounded-full border ${
                           selected ? 'border-secondary bg-secondary' : 'border-border-default'
                         }`}
                       >
                         {selected && <div className="size-1.5 rounded-full bg-white" />}
                       </div>
-                      <span className="text-sm font-medium text-text-secondary">
-                        {option.label}
-                      </span>
+                      <div className="min-w-0 flex-1">
+                        <span className="block text-sm font-medium text-text-secondary">
+                          {option.label}
+                        </span>
+                        <p className="text-2xs text-text-muted">{option.description}</p>
+                      </div>
                     </div>
-                    <p className="ml-6 mt-1 text-2xs text-text-muted">{option.description}</p>
                   </Button>
                 );
               })}
