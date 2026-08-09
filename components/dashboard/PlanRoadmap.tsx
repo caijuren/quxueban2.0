@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion';
 import { useEffect, useMemo, useState } from 'react';
 import { Icon, type IconName } from '@/components/ui/icon';
+import Button from '@/components/ui/button';
 
 interface Checkpoint {
   id: string;
@@ -38,8 +39,8 @@ const routes: RoutePath[] = [
   {
     id: 'sg',
     name: '三公冲刺型',
-    color: '#f43f5e',
-    glowColor: 'rgba(244, 63, 94, 0.4)',
+    color: 'var(--color-primary)',
+    glowColor: 'color-mix(in srgb, var(--color-primary) 40%, transparent)',
     description: '全市零志愿自主招生，AMC8+小托福+面谈',
     y: 100,
     checkpoints: [
@@ -129,8 +130,8 @@ const routes: RoutePath[] = [
   {
     id: 'dual',
     name: '双轨维持型',
-    color: '#8b5cf6',
-    glowColor: 'rgba(139, 92, 246, 0.4)',
+    color: 'var(--color-secondary)',
+    glowColor: 'color-mix(in srgb, var(--color-secondary) 40%, transparent)',
     description: '文理兼顾，保留三公和嘉定民办摇号两种可能',
     y: 180,
     checkpoints: [
@@ -183,8 +184,8 @@ const routes: RoutePath[] = [
   {
     id: 'public',
     name: '公办直升型',
-    color: '#06b6d4',
-    glowColor: 'rgba(6, 182, 212, 0.4)',
+    color: 'var(--accent)',
+    glowColor: 'color-mix(in srgb, var(--accent) 40%, transparent)',
     description: '保底路线，对口公办或一贯制直升',
     y: 260,
     checkpoints: [
@@ -225,7 +226,7 @@ const volunteers: VolunteerOption[] = [
     id: 'v1',
     name: '三公学校',
     type: '第一志愿（冲）',
-    color: '#f43f5e',
+    color: 'var(--color-primary)',
     probability: 35,
     requirements: ['AMC8 20分+', '小托福 850+', '竞赛经历', '面谈表现'],
   },
@@ -233,7 +234,7 @@ const volunteers: VolunteerOption[] = [
     id: 'v2',
     name: '民办摇号',
     type: '第二志愿（摇）',
-    color: '#8b5cf6',
+    color: 'var(--color-secondary)',
     probability: 40,
     requirements: ['嘉定户籍/居住证', '志愿策略', '走读/住宿选择'],
   },
@@ -241,24 +242,24 @@ const volunteers: VolunteerOption[] = [
     id: 'v3',
     name: '公办直升',
     type: '第三志愿（保）',
-    color: '#06b6d4',
+    color: 'var(--accent)',
     probability: 92,
     requirements: ['对口学区', '一贯制直升', '校内成绩'],
   },
 ];
 
 const checkpointConfig = {
-  soft: { icon: 'Clock' as IconName, color: '#f59e0b', label: '软检查点' },
-  hard: { icon: 'AlertTriangle' as IconName, color: '#ef4444', label: '硬熔断点' },
-  event: { icon: 'Trophy' as IconName, color: '#22c55e', label: '关键事件' },
-  current: { icon: 'Target' as IconName, color: '#f43f5e', label: '当前位置' },
+  soft: { icon: 'Clock' as IconName, color: 'var(--warning)', label: '软检查点' },
+  hard: { icon: 'AlertTriangle' as IconName, color: 'var(--danger)', label: '硬熔断点' },
+  event: { icon: 'Trophy' as IconName, color: 'var(--success)', label: '关键事件' },
+  current: { icon: 'Target' as IconName, color: 'var(--color-primary)', label: '当前位置' },
 };
 
 const statusConfig = {
-  passed: { color: '#22c55e', bg: 'rgba(34, 197, 94, 0.1)', label: '已达标' },
-  upcoming: { color: '#94a3b8', bg: 'rgba(148, 163, 184, 0.1)', label: '待到达' },
-  at_risk: { color: '#ef4444', bg: 'rgba(239, 68, 68, 0.1)', label: '有风险' },
-  current: { color: '#f43f5e', bg: 'rgba(244, 63, 94, 0.1)', label: '当前' },
+  passed: { color: 'var(--success)', bg: 'color-mix(in srgb, var(--success) 10%, transparent)', label: '已达标' },
+  upcoming: { color: 'var(--text-tertiary)', bg: 'color-mix(in srgb, var(--text-tertiary) 10%, transparent)', label: '待到达' },
+  at_risk: { color: 'var(--danger)', bg: 'color-mix(in srgb, var(--danger) 10%, transparent)', label: '有风险' },
+  current: { color: 'var(--color-primary)', bg: 'color-mix(in srgb, var(--color-primary) 10%, transparent)', label: '当前' },
 };
 
 // TODO: derive from current user's grade and target year
@@ -346,9 +347,9 @@ export default function PlanRoadmap({
         className="relative flex flex-col justify-between gap-4 overflow-hidden rounded-2xl p-5 sm:flex-row sm:items-center"
         style={{
           background:
-            'linear-gradient(135deg, rgba(244,63,94,0.08) 0%, rgba(139,92,246,0.08) 100%)',
-          border: '1px solid rgba(244,63,94,0.35)',
-          boxShadow: '0 0 30px rgba(244,63,94,0.15), inset 0 0 20px rgba(244,63,94,0.05)',
+            'linear-gradient(135deg, color-mix(in srgb, var(--color-primary) 8%, transparent) 0%, color-mix(in srgb, var(--color-secondary) 8%, transparent) 100%)',
+          border: '1px solid color-mix(in srgb, var(--color-primary) 35%, transparent)',
+          boxShadow: '0 0 30px color-mix(in srgb, var(--color-primary) 15%, transparent), inset 0 0 20px color-mix(in srgb, var(--color-primary) 5%, transparent)',
         }}
       >
         {/* Animated border glow */}
@@ -356,7 +357,7 @@ export default function PlanRoadmap({
           className="pointer-events-none absolute inset-0 rounded-2xl"
           style={{
             background:
-              'linear-gradient(90deg, transparent, rgba(244,63,94,0.4), rgba(139,92,246,0.4), transparent)',
+              'linear-gradient(90deg, transparent, color-mix(in srgb, var(--color-primary) 40%, transparent), color-mix(in srgb, var(--color-secondary) 40%, transparent), transparent)',
             backgroundSize: '200% 100%',
           }}
           animate={{ backgroundPosition: ['200% 0', '-200% 0'] }}
@@ -368,15 +369,15 @@ export default function PlanRoadmap({
           <div
             className="flex size-12 shrink-0 items-center justify-center rounded-xl"
             style={{
-              background: 'rgba(244,63,94,0.15)',
-              boxShadow: '0 0 20px rgba(244,63,94,0.3)',
+              background: 'color-mix(in srgb, var(--color-primary) 15%, transparent)',
+              boxShadow: '0 0 20px color-mix(in srgb, var(--color-primary) 30%, transparent)',
             }}
           >
             <Icon
               name="Zap"
               size="lg"
               className="text-warning"
-              style={{ filter: 'drop-shadow(0 0 8px rgba(244,63,94,0.8))' }}
+              style={{ filter: 'drop-shadow(0 0 8px color-mix(in srgb, var(--color-primary) 80%, transparent))' }}
             />
           </div>
           <div>
@@ -388,9 +389,9 @@ export default function PlanRoadmap({
               <motion.span
                 className="inline-block bg-clip-text font-black text-transparent"
                 style={{
-                  backgroundImage: 'linear-gradient(90deg, #f43f5e, #fbbf24, #f43f5e)',
+                  backgroundImage: 'linear-gradient(90deg, var(--color-primary), var(--warning), var(--color-primary))',
                   backgroundSize: '200% 100%',
-                  textShadow: '0 0 30px rgba(244,63,94,0.5)',
+                  textShadow: '0 0 30px color-mix(in srgb, var(--color-primary) 50%, transparent)',
                 }}
                 animate={{ backgroundPosition: ['0% 0', '200% 0'] }}
                 transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
@@ -401,12 +402,14 @@ export default function PlanRoadmap({
             </p>
           </div>
         </div>
-        <button
+        <Button
+          variant="primary"
+          size="md"
           onClick={onShowDiagnosis}
-          className="bg-primary/10 border-primary/30 hover:bg-primary/20 hover:border-primary/50 relative z-10 rounded-lg border px-5 py-2.5 font-medium text-primary transition-all hover:shadow-[0_0_30px_rgba(244,63,94,0.3)]"
+          className="bg-primary/10 border-primary/30 hover:bg-primary/20 hover:border-primary/50 hover:shadow-[0_0_30px_color-mix(in_srgb,var(--color-primary)_30%,transparent)] px-5 py-2.5"
         >
           查看诊断
-        </button>
+        </Button>
       </motion.div>
 
       <div className="grid grid-cols-1 gap-6">
@@ -450,16 +453,14 @@ export default function PlanRoadmap({
               {routes.map((route) => {
                 const isActive = activeRoute === route.id;
                 return (
-                  <button
+                  <Button
                     key={route.id}
+                    variant={isActive ? 'secondary' : 'ghost'}
+                    size="xs"
                     onMouseEnter={() => setHoveredRoute(route.id)}
                     onMouseLeave={() => setHoveredRoute(null)}
                     onClick={() => setActiveRoute(route.id)}
-                    className={`flex items-center gap-2 rounded-lg px-2 py-1 transition-colors ${
-                      isActive
-                        ? 'bg-surface-hover text-text-primary'
-                        : 'text-text-tertiary hover:bg-surface-hover hover:text-text-primary'
-                    }`}
+                    className={isActive ? 'bg-surface-hover text-text-primary' : 'text-text-tertiary hover:text-text-primary'}
                     aria-pressed={isActive}
                   >
                     <span
@@ -470,7 +471,7 @@ export default function PlanRoadmap({
                       }}
                     />
                     {route.name}
-                  </button>
+                  </Button>
                 );
               })}
             </div>
@@ -529,12 +530,12 @@ export default function PlanRoadmap({
                 <>
                   <defs>
                     <radialGradient id="ambientGlow1" cx="50%" cy="30%" r="50%">
-                      <stop offset="0%" stopColor="#8b5cf6" stopOpacity="0.12" />
-                      <stop offset="100%" stopColor="#8b5cf6" stopOpacity="0" />
+                      <stop offset="0%" stopColor="var(--color-secondary)" stopOpacity="0.12" />
+                      <stop offset="100%" stopColor="var(--color-secondary)" stopOpacity="0" />
                     </radialGradient>
                     <radialGradient id="ambientGlow2" cx="70%" cy="60%" r="40%">
-                      <stop offset="0%" stopColor="#f43f5e" stopOpacity="0.1" />
-                      <stop offset="100%" stopColor="#f43f5e" stopOpacity="0" />
+                      <stop offset="0%" stopColor="var(--color-primary)" stopOpacity="0.1" />
+                      <stop offset="100%" stopColor="var(--color-primary)" stopOpacity="0" />
                     </radialGradient>
                   </defs>
                   <ellipse cx={300} cy={150} rx={250} ry={180} fill="url(#ambientGlow1)">
@@ -568,9 +569,9 @@ export default function PlanRoadmap({
 
                   <defs>
                     <radialGradient id="cursorGlow" cx="50%" cy="50%" r="50%">
-                      <stop offset="0%" stopColor="#ffffff" stopOpacity="0.08" />
-                      <stop offset="50%" stopColor="#8b5cf6" stopOpacity="0.04" />
-                      <stop offset="100%" stopColor="#8b5cf6" stopOpacity="0" />
+                      <stop offset="0%" stopColor="var(--text-primary)" stopOpacity="0.08" />
+                      <stop offset="50%" stopColor="var(--color-secondary)" stopOpacity="0.04" />
+                      <stop offset="100%" stopColor="var(--color-secondary)" stopOpacity="0" />
                     </radialGradient>
                   </defs>
                   <motion.g
@@ -915,37 +916,37 @@ export default function PlanRoadmap({
                     orient="auto"
                     markerUnits="strokeWidth"
                   >
-                    <path d="M0,0 L0,6 L7,3 z" fill="#94a3b8" opacity="0.7" />
+                    <path d="M0,0 L0,6 L7,3 z" fill="var(--text-tertiary)" opacity="0.7" />
                   </marker>
                 </defs>
                 <motion.path
                   d="M 920 125 Q 960 125 960 155 Q 960 185 920 185"
                   fill="none"
-                  stroke="#94a3b8"
+                  stroke="var(--text-tertiary)"
                   strokeWidth="1.5"
                   strokeDasharray="4 4"
                   markerEnd="url(#fallback-arrow)"
                   initial={{ pathLength: 0 }}
                   animate={{ pathLength: 1 }}
                   transition={{ duration: 1, delay: 1.2 }}
-                  style={{ filter: 'drop-shadow(0 0 4px rgba(148,163,184,0.3))' }}
+                  style={{ filter: 'drop-shadow(0 0 4px color-mix(in srgb, var(--text-tertiary) 30%, transparent))' }}
                 />
                 <motion.path
                   d="M 920 205 Q 960 205 960 235 Q 960 265 920 265"
                   fill="none"
-                  stroke="#94a3b8"
+                  stroke="var(--text-tertiary)"
                   strokeWidth="1.5"
                   strokeDasharray="4 4"
                   markerEnd="url(#fallback-arrow)"
                   initial={{ pathLength: 0 }}
                   animate={{ pathLength: 1 }}
                   transition={{ duration: 1, delay: 1.4 }}
-                  style={{ filter: 'drop-shadow(0 0 4px rgba(148,163,184,0.3))' }}
+                  style={{ filter: 'drop-shadow(0 0 4px color-mix(in srgb, var(--text-tertiary) 30%, transparent))' }}
                 />
-                <text x={975} y={158} fill="#64748b" fontSize="9" textAnchor="middle">
+                <text x={975} y={158} fill="var(--text-muted)" fontSize="9" textAnchor="middle">
                   未录取
                 </text>
-                <text x={975} y={238} fill="#64748b" fontSize="9" textAnchor="middle">
+                <text x={975} y={238} fill="var(--text-muted)" fontSize="9" textAnchor="middle">
                   未摇中
                 </text>
               </g>
@@ -956,20 +957,20 @@ export default function PlanRoadmap({
                 y1={60}
                 x2={231}
                 y2={410}
-                stroke="#f43f5e"
+                stroke="var(--color-primary)"
                 strokeWidth="1"
                 strokeDasharray="6 4"
                 opacity="0.5"
-                style={{ filter: 'drop-shadow(0 0 10px rgba(244,63,94,0.6))' }}
+                style={{ filter: 'drop-shadow(0 0 10px color-mix(in srgb, var(--color-primary) 60%, transparent))' }}
               />
               <motion.circle
                 cx={231}
                 cy={410}
                 r={5}
-                fill="#f43f5e"
+                fill="var(--color-primary)"
                 animate={{ opacity: [0.5, 1, 0.5], scale: [1, 1.3, 1] }}
                 transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-                style={{ filter: 'drop-shadow(0 0 10px rgba(244,63,94,0.8))' }}
+                style={{ filter: 'drop-shadow(0 0 10px color-mix(in srgb, var(--color-primary) 80%, transparent))' }}
               />
 
               {/* Year labels */}
@@ -983,20 +984,20 @@ export default function PlanRoadmap({
                         cx={x}
                         cy={400}
                         r={24}
-                        fill="rgba(244,63,94,0.1)"
-                        style={{ filter: 'drop-shadow(0 0 16px rgba(244,63,94,0.4))' }}
+                        fill="color-mix(in srgb, var(--color-primary) 10%, transparent)"
+                        style={{ filter: 'drop-shadow(0 0 16px color-mix(in srgb, var(--color-primary) 40%, transparent))' }}
                       />
                     )}
                     <text
                       x={x}
                       y={390}
-                      fill={isCurrent ? '#f43f5e' : '#94a3b8'}
+                      fill={isCurrent ? 'var(--color-primary)' : 'var(--text-tertiary)'}
                       fontSize="12"
                       fontWeight={isCurrent ? '700' : '400'}
                       textAnchor="middle"
                       style={
                         isCurrent
-                          ? { filter: 'drop-shadow(0 0 10px rgba(244,63,94,0.6))' }
+                          ? { filter: 'drop-shadow(0 0 10px color-mix(in srgb, var(--color-primary) 60%, transparent))' }
                           : undefined
                       }
                     >
@@ -1005,7 +1006,7 @@ export default function PlanRoadmap({
                     <text
                       x={x}
                       y={410}
-                      fill={isCurrent ? '#fda4af' : '#64748b'}
+                      fill={isCurrent ? 'color-mix(in srgb, var(--color-primary) 60%, var(--text-primary))' : 'var(--text-muted)'}
                       fontSize="11"
                       textAnchor="middle"
                     >
@@ -1059,19 +1060,23 @@ export default function PlanRoadmap({
                   </p>
                 </div>
                 <div className="flex items-center gap-2">
-                  <button
+                  <Button
+                    variant="primary"
+                    size="md"
                     disabled
                     title="进度录入功能即将上线"
-                    className="bg-primary/10 cursor-not-allowed rounded-lg px-4 py-2 text-sm font-medium text-primary opacity-60"
+                    className="bg-primary/10 opacity-60"
                   >
                     录入进度（即将上线）
-                  </button>
-                  <button
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="md"
                     onClick={() => setSelectedCheckpoint(null)}
-                    className="rounded-lg px-4 py-2 text-sm text-text-muted hover:text-text-primary"
+                    className="text-text-muted hover:text-text-primary"
                   >
                     关闭
-                  </button>
+                  </Button>
                 </div>
               </div>
             </motion.div>
@@ -1137,12 +1142,14 @@ export default function PlanRoadmap({
             </p>
           </div>
         </div>
-        <button
+        <Button
+          variant="secondary"
+          size="md"
           onClick={onManageNodes}
-          className="rounded-lg bg-surface-hover px-4 py-2 text-sm text-text-secondary transition-all hover:bg-surface-hover"
+          className="bg-surface-hover hover:bg-surface-hover"
         >
           管理节点
-        </button>
+        </Button>
       </motion.div>
     </div>
   );

@@ -6,6 +6,7 @@ import { usePathname } from 'next/navigation';
 import { Icon, type IconName } from '@/components/ui/icon';
 import { motion } from 'framer-motion';
 import { useUser } from '@/lib/hooks/useUser';
+import Button from '@/components/ui/button';
 import GlassCard from '@/components/ui/glass-card';
 
 interface NavItem {
@@ -116,13 +117,14 @@ export default function SettingsLayout({ children }: { children: React.ReactNode
           <Icon name="Settings" size="sm" className="text-primary" />
           <h1 className="font-display text-base font-bold text-text-primary">设置</h1>
         </div>
-        <button
+        <Button
+          variant="secondary"
           onClick={() => setMobileNavOpen(true)}
           className="inline-flex items-center gap-1.5 rounded-lg bg-surface px-3 py-2 text-xs font-medium text-text-secondary transition-colors hover:bg-surface-hover"
         >
           <Icon name="Menu" size="sm" />
           菜单
-        </button>
+        </Button>
       </div>
 
       {/* Mobile overlay */}
@@ -145,12 +147,13 @@ export default function SettingsLayout({ children }: { children: React.ReactNode
                 <Icon name="Settings" size="sm" className="text-primary" />
                 <h2 className="font-display text-base font-bold text-text-primary">设置</h2>
               </div>
-              <button
+              <Button
+                variant="ghost"
                 onClick={() => setMobileNavOpen(false)}
                 className="flex size-8 items-center justify-center rounded-lg text-text-tertiary transition-colors hover:bg-surface-hover hover:text-text-primary"
               >
                 <Icon name="X" size="sm" />
-              </button>
+              </Button>
             </div>
             <div className="space-y-4">
               {visibleNav.map((group) => (
@@ -202,7 +205,8 @@ export default function SettingsLayout({ children }: { children: React.ReactNode
           {navContent}
         </GlassCard>
 
-        <button
+        <Button
+          variant="secondary"
           onClick={() => setCollapsed(!collapsed)}
           className="mt-4 hidden size-8 items-center justify-center rounded-lg bg-surface-hover text-text-muted transition-colors hover:text-text-secondary lg:flex"
           title={collapsed ? '展开' : '收起'}
@@ -212,7 +216,7 @@ export default function SettingsLayout({ children }: { children: React.ReactNode
             size="sm"
             className={`transition-transform ${collapsed ? 'rotate-180' : ''}`}
           />
-        </button>
+        </Button>
       </motion.aside>
 
       <main className="min-w-0 flex-1 overflow-y-auto pb-8">{children}</main>

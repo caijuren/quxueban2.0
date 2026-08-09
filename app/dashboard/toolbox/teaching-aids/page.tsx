@@ -1,5 +1,6 @@
 'use client';
 import { Icon } from '@/components/ui/icon';
+import Button from '@/components/ui/button';
 
 import { useEffect, useMemo, useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
@@ -158,20 +159,24 @@ export default function TeachingAidsPage() {
               className="focus:border-primary/50 focus:ring-primary/20 h-10 w-full rounded-xl border border-border-default bg-surface px-9 text-sm text-text-secondary transition-all placeholder:text-text-muted focus:outline-none focus:ring-1"
             />
             {keyword && (
-              <button
+              <Button
+                variant="ghost"
+                size="xs"
                 onClick={() => setKeyword('')}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-text-muted hover:text-text-secondary"
+                className="absolute right-3 top-1/2 -translate-y-1/2"
                 aria-label="清空搜索"
               >
                 <Icon name="X" size="sm" />
-              </button>
+              </Button>
             )}
           </div>
 
           {hasActiveFilters && (
-            <button
+            <Button
+              variant="secondary"
+              size="md"
               onClick={clearFilters}
-              className="flex h-10 shrink-0 items-center justify-center gap-1.5 rounded-xl border border-border-default px-4 text-sm text-text-tertiary transition-all hover:border-border-strong hover:bg-surface hover:text-text-secondary"
+              className=""
             >
               <Icon name="RotateCcw" size="sm" />
               清除筛选
@@ -180,7 +185,7 @@ export default function TeachingAidsPage() {
                   {activeFiltersCount}
                 </span>
               )}
-            </button>
+            </Button>
           )}
         </div>
 

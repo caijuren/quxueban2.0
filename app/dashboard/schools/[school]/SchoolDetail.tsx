@@ -49,7 +49,7 @@ export const schoolsData: Record<string, SchoolData> = {
     nature: '公办',
     ranking: '三公第一梯队',
     fees: '公办免学费',
-    accent: '#f43f5e',
+    accent: 'var(--color-primary)',
     glow: 'rgba(244,63,94,0.35)',
     gradient: 'from-primary to-primary-glow',
     timeline: [
@@ -137,7 +137,7 @@ export const schoolsData: Record<string, SchoolData> = {
     nature: '公办',
     ranking: '三公第一梯队',
     fees: '公办免学费',
-    accent: '#8b5cf6',
+    accent: 'var(--color-secondary)',
     glow: 'rgba(139,92,246,0.35)',
     gradient: 'from-secondary to-secondary-glow',
     timeline: [
@@ -238,7 +238,7 @@ export const schoolsData: Record<string, SchoolData> = {
     nature: '公办',
     ranking: '三公第一梯队',
     fees: '公办免学费',
-    accent: '#06b6d4',
+    accent: 'var(--accent)',
     glow: 'rgba(6,182,212,0.35)',
     gradient: 'from-accent to-accent-glow',
     timeline: [
@@ -339,7 +339,7 @@ export const schoolsData: Record<string, SchoolData> = {
     nature: '民办',
     ranking: '嘉定民办第一梯队',
     fees: '约 2.78万/学期（2024年参考）',
-    accent: '#8b5cf6',
+    accent: 'var(--color-secondary)',
     glow: 'rgba(139,92,246,0.35)',
     gradient: 'from-secondary to-purple-400',
     timeline: [
@@ -414,7 +414,7 @@ export const schoolsData: Record<string, SchoolData> = {
     nature: '民办',
     ranking: '嘉定区九年一贯制优质民办',
     fees: '约 3.2万/学期，住宿费3950元/学期（2024年参考）',
-    accent: '#6366f1',
+    accent: 'var(--color-secondary-glow)',
     glow: 'rgba(99,102,241,0.35)',
     gradient: 'from-indigo-500 to-purple-500',
     timeline: [
@@ -480,7 +480,7 @@ export const schoolsData: Record<string, SchoolData> = {
     nature: '民办',
     ranking: '嘉定民办第二梯队',
     fees: '约 1.925万/学期（2024年参考）',
-    accent: '#a855f7',
+    accent: 'var(--color-secondary)',
     glow: 'rgba(168,85,247,0.35)',
     gradient: 'from-violet-500 to-fuchsia-500',
     timeline: [
@@ -543,7 +543,7 @@ export const schoolsData: Record<string, SchoolData> = {
     nature: '公办',
     ranking: '按对口学区',
     fees: '公办免学费',
-    accent: '#06b6d4',
+    accent: 'var(--accent)',
     glow: 'rgba(6,182,212,0.35)',
     gradient: 'from-accent to-cyan-400',
     timeline: [
@@ -598,7 +598,7 @@ export const schoolsData: Record<string, SchoolData> = {
     nature: '公办',
     ranking: '南翔镇对口公办',
     fees: '公办免学费',
-    accent: '#06b6d4',
+    accent: 'var(--accent)',
     glow: 'rgba(6,182,212,0.35)',
     gradient: 'from-accent to-cyan-400',
     timeline: [
@@ -662,7 +662,7 @@ export const schoolsData: Record<string, SchoolData> = {
     nature: '公办或民办',
     ranking: '一贯制直升',
     fees: '公办免学费 / 民办按学校标准',
-    accent: '#14b8a6',
+    accent: 'var(--accent)',
     glow: 'rgba(20,184,166,0.35)',
     gradient: 'from-teal-500 to-emerald-500',
     timeline: [
@@ -709,7 +709,7 @@ export const schoolsData: Record<string, SchoolData> = {
     nature: '公办',
     ranking: '区域优质公办',
     fees: '公办免学费',
-    accent: '#0ea5e9',
+    accent: 'var(--accent)',
     glow: 'rgba(14,165,233,0.35)',
     gradient: 'from-sky-500 to-blue-500',
     timeline: [
@@ -760,7 +760,7 @@ export const schoolsData: Record<string, SchoolData> = {
     nature: '公办',
     ranking: '四校之首 · 全市顶尖',
     fees: '公办，约 2000 元/学期',
-    accent: '#f43f5e',
+    accent: 'var(--color-primary)',
     glow: 'rgba(244,63,94,0.35)',
     gradient: 'from-primary to-primary-glow',
     timeline: [
@@ -834,7 +834,7 @@ export const schoolsData: Record<string, SchoolData> = {
     nature: '公办',
     ranking: '四校 · 理科竞赛强校',
     fees: '公办，约 2000 元/学期',
-    accent: '#8b5cf6',
+    accent: 'var(--color-secondary)',
     glow: 'rgba(139,92,246,0.35)',
     gradient: 'from-secondary to-secondary-glow',
     timeline: [
@@ -903,7 +903,7 @@ export const schoolsData: Record<string, SchoolData> = {
     nature: '公办',
     ranking: '四校 · 人文理科均衡',
     fees: '公办，约 2000 元/学期',
-    accent: '#06b6d4',
+    accent: 'var(--accent)',
     glow: 'rgba(6,182,212,0.35)',
     gradient: 'from-accent to-accent-glow',
     timeline: [
@@ -968,7 +968,7 @@ export const schoolsData: Record<string, SchoolData> = {
     nature: '公办',
     ranking: '嘉定区第一梯队 · 四校分校',
     fees: '公办，约 2000 元/学期',
-    accent: '#8b5cf6',
+    accent: 'var(--color-secondary)',
     glow: 'rgba(139,92,246,0.35)',
     gradient: 'from-secondary to-purple-400',
     timeline: [
@@ -1023,7 +1023,7 @@ export const schoolsData: Record<string, SchoolData> = {
     nature: '公办',
     ranking: '嘉定区第二梯队 · 区属市重点',
     fees: '公办，约 2000 元/学期',
-    accent: '#a855f7',
+    accent: 'var(--color-secondary)',
     glow: 'rgba(168,85,247,0.35)',
     gradient: 'from-violet-500 to-fuchsia-500',
     timeline: [
@@ -1078,7 +1078,7 @@ export const schoolsData: Record<string, SchoolData> = {
     nature: '公办',
     ranking: '嘉定区市重点 · 新增校',
     fees: '公办，约 2000 元/学期',
-    accent: '#6366f1',
+    accent: 'var(--color-secondary-glow)',
     glow: 'rgba(99,102,241,0.35)',
     gradient: 'from-indigo-500 to-purple-500',
     timeline: [
@@ -1129,7 +1129,7 @@ export const schoolsData: Record<string, SchoolData> = {
     nature: '公办',
     ranking: '嘉定区第三梯队 · 区实验性示范',
     fees: '公办，约 2000 元/学期',
-    accent: '#14b8a6',
+    accent: 'var(--accent)',
     glow: 'rgba(20,184,166,0.35)',
     gradient: 'from-teal-500 to-emerald-500',
     timeline: [
@@ -1180,7 +1180,7 @@ export const schoolsData: Record<string, SchoolData> = {
     nature: '公办',
     ranking: '嘉定区市特色高中 · 本科率高',
     fees: '公办，约 2000 元/学期',
-    accent: '#0ea5e9',
+    accent: 'var(--accent)',
     glow: 'rgba(14,165,233,0.35)',
     gradient: 'from-sky-500 to-blue-500',
     timeline: [
@@ -1231,7 +1231,7 @@ export const schoolsData: Record<string, SchoolData> = {
     nature: '公办',
     ranking: '嘉定区区重点',
     fees: '公办，约 2000 元/学期',
-    accent: '#f43f5e',
+    accent: 'var(--color-primary)',
     glow: 'rgba(244,63,94,0.35)',
     gradient: 'from-rose-500 to-pink-500',
     timeline: [

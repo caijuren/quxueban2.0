@@ -19,6 +19,7 @@ import { useCompleteTask } from '@/lib/hooks/useWeeklyPlans';
 import { useDingTalkPush } from '@/lib/hooks/useDingTalk';
 import { toast } from '@/lib/toast';
 import { TaskCategory, WeeklyTaskItem } from '@/lib/storage.types';
+import Button from '@/components/ui/button';
 import { TaskCompletionInput } from '@/lib/validation';
 
 function ProgressRing({
@@ -276,13 +277,14 @@ export default function TodayPage() {
         </div>
         <div className="flex items-center gap-3">
           {isFullyDone && (
-            <button
+            <Button
+              variant="secondary"
               onClick={() => setVictoryOpen(true)}
               className="bg-success/10 border-success/20 hover:bg-success/20 inline-flex items-center gap-1.5 rounded-lg border px-3 py-2 text-xs font-medium text-success transition-colors"
             >
               <Icon name="Trophy" size="xs" />
               今日胜利
-            </button>
+            </Button>
           )}
           <div className="shrink-0 text-right">
             <p className="font-display text-2xl font-bold tabular-nums text-text-primary sm:text-3xl">
@@ -322,13 +324,14 @@ export default function TodayPage() {
                     )}
                   </p>
                 </div>
-                <button
+                <Button
+                  variant="primary"
                   onClick={() => setVictoryOpen(true)}
                   className="hover:bg-primary/90 hidden items-center gap-2 rounded-xl bg-primary px-5 py-3 text-sm font-bold text-white shadow-[0_0_20px_rgba(244,63,122,0.25)] transition-all sm:inline-flex"
                 >
                   <Icon name="Send" size="md" />
                   推送简报
-                </button>
+                </Button>
               </div>
             </CommandCard>
           </motion.div>
@@ -398,7 +401,8 @@ export default function TodayPage() {
                     const materialsText = task.materials.join('、');
 
                     return (
-                      <button
+                      <Button
+                        variant="secondary"
                         key={task.id}
                         onClick={() => handleOpenCompletion(task)}
                         className={`group relative flex min-h-[84px] items-start gap-3 overflow-hidden rounded-xl border p-2.5 text-left transition-all duration-200 ${
@@ -484,7 +488,7 @@ export default function TodayPage() {
                             )}
                           </div>
                         </div>
-                      </button>
+                      </Button>
                     );
                   })}
                 </div>
@@ -502,14 +506,15 @@ export default function TodayPage() {
           transition={{ duration: 0.4, delay: 0.3 }}
           className="pt-2"
         >
-          <button
+          <Button
+            variant="secondary"
             onClick={() => router.push('/dashboard/weekly')}
             className="flex w-full items-center justify-center gap-2 rounded-xl border border-dashed border-border-default py-3 text-sm text-text-tertiary transition-all hover:border-border-strong hover:bg-surface-hover hover:text-text-secondary"
           >
             <Icon name="Target" size="sm" />
             查看完整周计划
             <Icon name="ChevronRight" size="sm" />
-          </button>
+          </Button>
         </motion.div>
       )}
 

@@ -13,8 +13,11 @@ import {
   WeeklyGoal,
 } from '@/lib/storage.types';
 import { TaskCompletionInput } from '@/lib/validation';
+import Button from '@/components/ui/button';
+import Select from '@/components/ui/select';
 import CommandCard from '@/components/ui/CommandCard';
 import Modal from '@/components/ui/Modal';
+import Textarea from '@/components/ui/textarea';
 
 const statusConfig: Record<
   TaskStatus,
@@ -221,19 +224,23 @@ export default function TaskCompletionModal({
       zIndex={110}
       footer={
         <div className="flex gap-3">
-          <button
+          <Button
             onClick={onClose}
-            className="hover:bg-surface-light flex-1 rounded-xl border border-border-default py-3 text-sm font-medium text-text-secondary transition-colors"
+            variant="secondary"
+            size="md"
+            className="flex-1"
           >
             取消
-          </button>
-          <button
+          </Button>
+          <Button
             onClick={handleSubmit}
             disabled={submitting}
-            className="hover:bg-primary/90 flex-1 rounded-xl bg-primary py-3 text-sm font-medium text-inverse transition-colors disabled:cursor-not-allowed disabled:opacity-60"
+            variant="primary"
+            size="md"
+            className="flex-1"
           >
             {submitting ? '保存中...' : '保存记录'}
-          </button>
+          </Button>
         </div>
       }
     >
@@ -250,10 +257,12 @@ export default function TaskCompletionModal({
               const Icon = config.icon;
               const active = status === s;
               return (
-                <button
+                <Button
                   key={s}
                   onClick={() => setStatus(s)}
-                  className={`flex items-center justify-center gap-1.5 rounded-xl border px-2 py-2.5 text-xs font-medium transition-all ${
+                  variant="secondary"
+                  size="sm"
+                  className={`flex-1 gap-1.5 ${
                     active
                       ? `${config.bg} ${config.color}`
                       : 'hover:bg-surface-light border-border-default bg-surface text-text-tertiary hover:border-border-strong'
@@ -261,7 +270,7 @@ export default function TaskCompletionModal({
                 >
                   <Icon className="size-3.5" />
                   {config.label}
-                </button>
+                </Button>
               );
             })}
           </div>
@@ -313,18 +322,17 @@ export default function TaskCompletionModal({
               <Icon name="Award" size="xs" />
               完成质量
             </label>
-            <select
+            <Select
               value={quality ?? ''}
               onChange={(e) => setQuality((e.target.value as TaskCompletionQuality) || null)}
-              className="focus:border-primary/50 w-full rounded-xl border border-border-default bg-surface px-3 py-2.5 text-sm text-text-primary focus:outline-none"
-            >
-              <option value="">不评价</option>
-              {(Object.keys(qualityConfig) as TaskCompletionQuality[]).map((q) => (
-                <option key={q} value={q}>
-                  {qualityConfig[q].label}
-                </option>
-              ))}
-            </select>
+              placeholder="不评价"
+              size="md"
+              className="bg-surface"
+              options={(Object.keys(qualityConfig) as TaskCompletionQuality[]).map((q) => ({
+                value: q,
+                label: qualityConfig[q].label,
+              }))}
+            />
           </div>
         </div>
 
@@ -334,12 +342,13 @@ export default function TaskCompletionModal({
             <Icon name="MessageSquare" size="xs" />
             备注 / 反思
           </label>
-          <textarea
+          <Textarea
             value={note}
             onChange={(e) => setNote(e.target.value)}
             placeholder="记录了什么？遇到了什么问题？"
             rows={3}
-            className="focus:border-primary/50 w-full resize-none rounded-xl border border-border-default bg-surface px-3 py-2.5 text-sm text-text-primary placeholder:text-text-muted focus:outline-none"
+            resize="none"
+            className="focus:border-primary/50 border-border-default bg-surface px-3 py-2.5 text-text-primary"
           />
         </div>
 
@@ -390,12 +399,14 @@ export default function TaskCompletionModal({
                   className="group relative size-20 overflow-hidden rounded-lg border border-border-default bg-surface"
                 >
                   <img src={url} alt="佐证图片" className="size-full object-cover" />
-                  <button
+                  <Button
                     onClick={() => handleRemoveImage(url)}
-                    className="bg-surface/80 absolute right-0.5 top-0.5 rounded p-0.5 text-text-muted transition-colors hover:text-error"
+                    variant="ghost"
+                    size="xs"
+                    className="bg-surface/80 absolute right-0.5 top-0.5 rounded p-0.5 text-text-muted hover:text-error"
                   >
                     <Icon name="X" size="xs" />
-                  </button>
+                  </Button>
                 </div>
               ))}
             </div>
@@ -416,12 +427,14 @@ export default function TaskCompletionModal({
                   className="group flex max-w-full items-center gap-2 rounded-lg border border-border-default bg-surface px-2.5 py-1.5 text-xs text-text-tertiary"
                 >
                   <audio src={url} controls className="h-6 max-w-[220px]" />
-                  <button
+                  <Button
                     onClick={() => handleRemoveAudio(url)}
-                    className="hover:bg-error/10 rounded p-0.5 text-text-muted transition-colors hover:text-error"
+                    variant="ghost"
+                    size="xs"
+                    className="hover:bg-error/10 rounded p-0.5 text-text-muted hover:text-error"
                   >
                     <Icon name="X" size="xs" />
-                  </button>
+                  </Button>
                 </div>
               ))}
             </div>

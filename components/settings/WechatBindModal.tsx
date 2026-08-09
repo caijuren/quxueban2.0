@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { Icon } from '@/components/ui/icon';
+import Button from '@/components/ui/button';
 import Modal from '@/components/ui/Modal';
 import { UserWithSettings } from '@/lib/settings';
 import { apiPost } from '@/lib/apiClient';
@@ -131,10 +132,12 @@ export default function WechatBindModal({ isOpen, onClose, user }: WechatBindMod
           )}
         </div>
 
-        <button
+        <Button
           onClick={generateCode}
           disabled={loading}
-          className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-wechat py-2.5 text-sm font-semibold text-text-primary transition-all disabled:opacity-70"
+          variant="secondary"
+          size="md"
+          className="inline-flex w-full items-center justify-center gap-2 bg-wechat py-2.5 text-sm font-semibold text-text-primary disabled:opacity-70"
         >
           {loading ? (
             <Icon name="Loader2" size="sm" animate="spin" />
@@ -142,7 +145,7 @@ export default function WechatBindModal({ isOpen, onClose, user }: WechatBindMod
             <Icon name="RefreshCw" size="sm" />
           )}
           {bindCode ? '重新生成绑定码' : '生成绑定码'}
-        </button>
+        </Button>
       </div>
     </Modal>
   );

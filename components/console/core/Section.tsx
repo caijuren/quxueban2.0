@@ -1,6 +1,7 @@
 'use client';
 
 import { ReactNode } from 'react';
+import Button from '@/components/ui/button';
 
 interface SectionProps {
   title: string;
@@ -22,12 +23,14 @@ export default function Section({ title, description, action, children }: Sectio
           {description && <p className="mt-0.5 text-xs text-text-muted">{description}</p>}
         </div>
         {action && (
-          <button
+          <Button
             onClick={action.onClick}
+            variant="link"
+            size="xs"
             className="text-xs text-primary transition-colors hover:text-primary-glow"
           >
             {action.label}
-          </button>
+          </Button>
         )}
       </div>
       <div className="p-2">{children}</div>

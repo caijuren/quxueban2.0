@@ -1,6 +1,7 @@
 'use client';
 
 import { cn } from '@/lib/utils';
+import Button from '@/components/ui/button';
 
 interface HeatmapCellProps {
   value?: number;
@@ -20,9 +21,10 @@ export default function HeatmapCell({
   const intensity = value === undefined ? 0 : Math.min(100, Math.max(0, value));
 
   return (
-    <button
+    <Button
       type="button"
       onClick={onClick}
+      variant="ghost"
       className={cn(
         'relative min-h-[72px] w-full rounded-lg border p-2 text-left transition-all duration-200',
         intensity === 0
@@ -37,6 +39,6 @@ export default function HeatmapCell({
     >
       {label && <p className="line-clamp-2 text-[11px] font-medium text-text-secondary">{label}</p>}
       {sublabel && <p className="mt-0.5 text-[10px] tabular-nums text-text-muted">{sublabel}</p>}
-    </button>
+    </Button>
   );
 }

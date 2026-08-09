@@ -1,6 +1,7 @@
 'use client';
 
 import { cn } from '@/lib/utils';
+import Select from '@/components/ui/select';
 
 interface FilterSelectProps {
   label: string;
@@ -22,24 +23,14 @@ export default function FilterSelect({
   return (
     <div className={cn('flex flex-col gap-1.5', className)}>
       <label className="text-xs font-medium text-text-tertiary">{label}</label>
-      <select
+      <Select
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="focus:border-primary/50 focus:ring-primary/20 h-9 min-w-28 cursor-pointer appearance-none rounded-xl border border-border-default bg-surface-elevated px-3 text-sm text-text-secondary transition-all hover:border-border-strong focus:outline-none focus:ring-1"
-        style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E")`,
-          backgroundRepeat: 'no-repeat',
-          backgroundPosition: 'right 0.5rem center',
-          paddingRight: '2rem',
-        }}
-      >
-        <option value="">{placeholder}</option>
-        {options.map((opt) => (
-          <option key={opt.value} value={opt.value}>
-            {opt.label}
-          </option>
-        ))}
-      </select>
+        placeholder={placeholder}
+        size="sm"
+        className="min-w-28 bg-surface-elevated hover:border-border-strong"
+        options={options}
+      />
     </div>
   );
 }

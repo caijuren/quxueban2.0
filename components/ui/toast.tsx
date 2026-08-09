@@ -3,6 +3,7 @@
 import * as React from 'react';
 import { cn } from '@/lib/utils';
 import { Icon, type IconName } from '@/components/ui/icon';
+import Button from '@/components/ui/button';
 
 export type ToastType = 'success' | 'error' | 'warning' | 'info';
 
@@ -65,14 +66,16 @@ export default function Toast({
         <p className="text-sm font-medium text-text-primary">{title}</p>
         {description && <p className="mt-0.5 text-xs text-text-secondary">{description}</p>}
       </div>
-      <button
+      <Button
         type="button"
         onClick={() => onClose(id)}
+        variant="ghost"
+        size="xs"
         className="shrink-0 text-text-muted transition-colors hover:text-text-secondary"
         aria-label="关闭"
       >
         <Icon name="X" size="sm" />
-      </button>
+      </Button>
     </div>
   );
 }

@@ -1,5 +1,6 @@
 'use client';
 import { Icon } from '@/components/ui/icon';
+import Button from '@/components/ui/button';
 
 import { useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
@@ -110,17 +111,19 @@ export default function AdmissionCalculatorPage() {
             <label className="mb-2 block text-sm font-medium text-text-secondary">学籍</label>
             <div className="flex flex-wrap gap-2">
               {['本市学籍', '外地学籍'].map((opt) => (
-                <button
+                <Button
                   key={opt}
+                  variant="secondary"
+                  size="md"
                   onClick={() => setRegistrationType(opt)}
-                  className={`h-10 rounded-xl border px-4 text-sm transition-all ${
+                  className={`${
                     registrationType === opt
                       ? 'bg-primary/10 border-primary/30 text-primary'
                       : 'border-border-default bg-surface text-text-secondary hover:border-border-strong'
                   }`}
                 >
                   {opt}
-                </button>
+                </Button>
               ))}
             </div>
           </div>
@@ -129,17 +132,19 @@ export default function AdmissionCalculatorPage() {
             <label className="mb-2 block text-sm font-medium text-text-secondary">户籍</label>
             <div className="flex flex-wrap gap-2">
               {['本市户籍', '非本市户籍'].map((opt) => (
-                <button
+                <Button
                   key={opt}
+                  variant="secondary"
+                  size="md"
                   onClick={() => setHouseholdType(opt)}
-                  className={`h-10 rounded-xl border px-4 text-sm transition-all ${
+                  className={`${
                     householdType === opt
                       ? 'bg-primary/10 border-primary/30 text-primary'
                       : 'border-border-default bg-surface text-text-secondary hover:border-border-strong'
                   }`}
                 >
                   {opt}
-                </button>
+                </Button>
               ))}
             </div>
           </div>
@@ -195,13 +200,15 @@ export default function AdmissionCalculatorPage() {
             </>
           )}
 
-          <button
+          <Button
+            variant="primary"
+            size="lg"
             onClick={calculate}
             disabled={loading}
-            className="h-12 w-full rounded-xl bg-primary font-semibold text-inverse transition-colors hover:bg-primary-glow disabled:opacity-60"
+            className="w-full"
           >
             {loading ? '计算中...' : '计算资格'}
-          </button>
+          </Button>
         </div>
       </motion.div>
 

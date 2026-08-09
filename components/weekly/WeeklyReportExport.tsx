@@ -2,6 +2,7 @@
 
 import { useRef, useState, useMemo } from 'react';
 import { Icon } from '@/components/ui/icon';
+import Button from '@/components/ui/button';
 import { WeeklyPlan, TaskCategory, DayOfWeek, WeeklyTaskItem } from '@/lib/storage.types';
 import {
   getPlanStats,
@@ -91,7 +92,7 @@ export default function WeeklyReportExport({ plan, childName, onClose }: WeeklyR
     try {
       const canvas = await html2canvas(cardRef.current, {
         scale: 2,
-        backgroundColor: '#ffffff',
+        backgroundColor: 'var(--bg-primary)',
         useCORS: true,
         logging: false,
       });
@@ -325,10 +326,12 @@ export default function WeeklyReportExport({ plan, childName, onClose }: WeeklyR
 
       <div className="mt-5 space-y-2">
         {!exportedUrl ? (
-          <button
+          <Button
+            variant="primary"
+            size="lg"
             onClick={handleExport}
             disabled={exporting}
-            className="hover:bg-primary/90 flex w-full items-center justify-center gap-2 rounded-lg bg-primary py-3 font-medium text-text-primary transition-colors disabled:opacity-50"
+            className="flex w-full items-center justify-center gap-2 disabled:opacity-50"
           >
             {exporting ? (
               <>
@@ -341,23 +344,27 @@ export default function WeeklyReportExport({ plan, childName, onClose }: WeeklyR
                 生成 A4 打卡表
               </>
             )}
-          </button>
+          </Button>
         ) : (
           <div className="grid grid-cols-2 gap-3">
-            <button
+            <Button
+              variant="secondary"
+              size="lg"
               onClick={handleDownload}
-              className="bg-success/10 border-success/20 hover:bg-success/20 flex items-center justify-center gap-2 rounded-lg border py-3 font-medium text-success transition-colors"
+              className="border-success/20 bg-success/10 text-success hover:bg-success/20"
             >
               <Icon name="Download" size="md" />
               下载图片
-            </button>
-            <button
+            </Button>
+            <Button
+              variant="secondary"
+              size="lg"
               onClick={handlePrint}
-              className="flex items-center justify-center gap-2 rounded-lg border border-border-default bg-surface-elevated py-3 font-medium text-text-secondary transition-colors hover:bg-surface-highlight"
+              className=""
             >
               <Icon name="Printer" size="md" />
               打印
-            </button>
+            </Button>
           </div>
         )}
       </div>

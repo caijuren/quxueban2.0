@@ -8,6 +8,7 @@ import { useChildren } from '@/components/dashboard/ChildrenContext';
 import { generateAlerts, Alert, AlertLevel, AlertType } from '@/lib/alerts';
 import EmptyState from '@/components/ui/EmptyState';
 import CommandCard from '@/components/ui/CommandCard';
+import Button from '@/components/ui/button';
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -84,13 +85,15 @@ function AlertCard({ alert }: { alert: Alert }) {
             <h3 className="mb-1 text-sm font-bold text-text-secondary">{alert.title}</h3>
             <p className="mb-3 text-xs leading-relaxed text-text-tertiary">{alert.content}</p>
             {alert.action && (
-              <button
+              <Button
+                variant="link"
+                size="xs"
                 onClick={() => router.push(alert.action!.href)}
-                className="inline-flex items-center gap-1 text-xs font-medium text-primary transition-colors hover:text-primary-glow"
+                className=""
               >
                 {alert.action.label}
                 <Icon name="ArrowRight" size="xs" />
-              </button>
+              </Button>
             )}
           </div>
         </div>

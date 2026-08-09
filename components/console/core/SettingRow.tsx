@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { Icon, type IconName } from '@/components/ui/icon';
+import Button from '@/components/ui/button';
 
 interface SettingRowProps {
   icon?: IconName;
@@ -66,8 +67,8 @@ export default function SettingRow({
   }
 
   return (
-    <button onClick={onClick} className={className}>
+    <Button variant="ghost" size="md" onClick={onClick} className={className}>
       {content}
-    </button>
+    </Button>
   );
 }

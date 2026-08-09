@@ -5,7 +5,10 @@
 import React, { Suspense, useEffect, useMemo, useRef, useState } from 'react';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { Icon } from '@/components/ui/icon';
+import Button from '@/components/ui/button';
+import Select from '@/components/ui/select';
 import Modal from '@/components/ui/Modal';
+import Textarea from '@/components/ui/textarea';
 import { useChildren } from '@/components/dashboard/ChildrenContext';
 import EmptyState from '@/components/ui/EmptyState';
 import Skeleton from '@/components/ui/skeleton';
@@ -157,8 +160,8 @@ function ProgressRing({ rate, size = 96 }: { rate: number; size?: number }) {
         />
         <defs>
           <linearGradient id="progressGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="#ff2d6a" />
-            <stop offset="100%" stopColor="#ff5c8a" />
+            <stop offset="0%" stopColor="var(--color-primary)" />
+            <stop offset="100%" stopColor="var(--color-primary-hover)" />
           </linearGradient>
         </defs>
       </svg>
@@ -407,46 +410,42 @@ function EditPlanModal({ plan, onClose, onSave }: EditPlanModalProps) {
         size="lg"
         footer={
           <div className="flex w-full items-center justify-end gap-3">
-            <button
-              onClick={handleClose}
-              className="rounded-lg px-4 py-2 text-text-tertiary transition-colors hover:text-text-primary"
-            >
+            <Button variant="ghost" size="md" onClick={handleClose}>
               取消
-            </button>
-            <button
-              onClick={handleSave}
-              className="flex items-center gap-2 rounded-lg bg-accent px-6 py-2 font-semibold text-text-primary transition-all"
-            >
+            </Button>
+            <Button variant="primary" size="lg" onClick={handleSave} className="bg-accent text-text-primary">
               <Icon name="Send" size="sm" />
               保存
-            </button>
+            </Button>
           </div>
         }
       >
         <div className="space-y-4">
           <div className="flex items-center gap-2 rounded-xl border border-border-subtle bg-surface-elevated p-1">
-            <button
+            <Button
               type="button"
+              variant="ghost"
+              size="sm"
               onClick={() => setActiveTab('tasks')}
-              className={`flex-1 rounded-lg px-3 py-1.5 text-xs font-medium transition-colors ${
-                activeTab === 'tasks'
+              className={`flex-1 ${activeTab === 'tasks'
                   ? 'bg-primary text-text-primary'
                   : 'text-text-tertiary hover:text-text-secondary'
               }`}
             >
               任务安排
-            </button>
-            <button
+            </Button>
+            <Button
               type="button"
+              variant="ghost"
+              size="sm"
               onClick={() => setActiveTab('goals')}
-              className={`flex-1 rounded-lg px-3 py-1.5 text-xs font-medium transition-colors ${
-                activeTab === 'goals'
+              className={`flex-1 ${activeTab === 'goals'
                   ? 'bg-primary text-text-primary'
                   : 'text-text-tertiary hover:text-text-secondary'
               }`}
             >
               本周目标
-            </button>
+            </Button>
           </div>
 
           {activeTab === 'tasks' && (
@@ -460,9 +459,11 @@ function EditPlanModal({ plan, onClose, onSave }: EditPlanModalProps) {
                     key={day}
                     className="overflow-hidden rounded-2xl border border-border-subtle bg-surface-hover"
                   >
-                    <button
+                    <Button
+                      variant="ghost"
+                      size="md"
                       onClick={() => toggleDay(day)}
-                      className="hover:bg-surface-hover/50 flex w-full items-center justify-between px-4 py-3 transition-colors"
+                      className="hover:bg-surface-hover/50 flex w-full items-center justify-between px-4 py-3"
                     >
                       <div className="flex items-center gap-3">
                         <span className="text-sm font-bold text-text-secondary">{day}</span>
@@ -476,16 +477,18 @@ function EditPlanModal({ plan, onClose, onSave }: EditPlanModalProps) {
                         )}
                       </div>
                       <div className="flex items-center gap-2">
-                        <button
+                        <Button
+                          variant="ghost"
+                          size="xs"
                           onClick={(e) => {
                             e.stopPropagation();
                             addTask(day);
                           }}
-                          className="rounded-lg p-1.5 text-text-tertiary transition-colors hover:bg-surface-hover hover:text-text-secondary"
+                          className="rounded-lg p-1.5"
                           aria-label={`${day}添加任务`}
                         >
                           <Icon name="Plus" size="sm" />
-                        </button>
+                        </Button>
                         <Icon
                           name="ChevronDown"
                           size="sm"
@@ -494,7 +497,7 @@ function EditPlanModal({ plan, onClose, onSave }: EditPlanModalProps) {
                           }`}
                         />
                       </div>
-                    </button>
+                    </Button>
 
                     <AnimatePresence initial={false}>
                       {!isCollapsed && (
@@ -541,14 +544,15 @@ function EditPlanModal({ plan, onClose, onSave }: EditPlanModalProps) {
                 <p className="text-xs text-text-muted">
                   目标用于汇总进度，任务可绑定到目标自动累计完成量
                 </p>
-                <button
-                  type="button"
+                <Button
+                  variant="primary"
+                  size="sm"
                   onClick={addGoal}
-                  className="flex items-center gap-1.5 rounded-lg bg-primary px-3 py-1.5 text-xs font-medium text-text-primary"
+                  className="text-text-primary"
                 >
                   <Icon name="Plus" size="xs" />
                   新建目标
-                </button>
+                </Button>
               </div>
 
               {goals.length === 0 && (
@@ -577,19 +581,18 @@ function EditPlanModal({ plan, onClose, onSave }: EditPlanModalProps) {
                       </div>
                       <div className="col-span-3">
                         <label className="mb-1 block text-2xs text-text-muted">类别</label>
-                        <select
+                        <Select
                           value={goal.category}
                           onChange={(e) =>
                             updateGoal(goal.id, { category: e.target.value as TaskCategory })
                           }
-                          className="w-full rounded-lg border border-border-default bg-surface px-2 py-1.5 text-xs text-text-primary focus:border-primary focus:outline-none"
-                        >
-                          {allCategories.map((c) => (
-                            <option key={c} value={c}>
-                              {TASK_CATEGORY_LABELS[c]}
-                            </option>
-                          ))}
-                        </select>
+                          size="sm"
+                          className="bg-surface"
+                          options={allCategories.map((c) => ({
+                            value: c,
+                            label: TASK_CATEGORY_LABELS[c],
+                          }))}
+                        />
                       </div>
                       <div className="col-span-2">
                         <label className="mb-1 block text-2xs text-text-muted">目标量</label>
@@ -620,13 +623,15 @@ function EditPlanModal({ plan, onClose, onSave }: EditPlanModalProps) {
                     <div>
                       <div className="mb-2 flex items-center justify-between">
                         <label className="block text-2xs text-text-muted">明细清单</label>
-                        <button
+                        <Button
                           type="button"
                           onClick={() => addGoalChecklistItem(goal.id)}
                           className="text-2xs text-primary hover:text-primary-glow"
+                          variant="link"
+                          size="xs"
                         >
                           + 添加明细
-                        </button>
+                        </Button>
                       </div>
                       <div className="space-y-2">
                         {(goal.checklist || []).map((item) => (
@@ -640,13 +645,14 @@ function EditPlanModal({ plan, onClose, onSave }: EditPlanModalProps) {
                               placeholder="例如：《朝花夕拾》精读第二章"
                               className="flex-1 rounded-lg border border-border-default bg-surface px-2 py-1.5 text-xs text-text-primary placeholder:text-text-tertiary focus:border-primary focus:outline-none"
                             />
-                            <button
-                              type="button"
+                            <Button
+                              variant="ghost"
+                              size="xs"
                               onClick={() => deleteGoalChecklistItem(goal.id, item.id)}
-                              className="hover:bg-error/10 rounded-lg p-1.5 text-text-muted transition-colors hover:text-error"
+                              className="hover:bg-error/10 rounded-lg p-1.5 text-text-muted hover:text-error"
                             >
                               <Icon name="Trash2" size="xs" />
-                            </button>
+                            </Button>
                           </div>
                         ))}
                         {(goal.checklist || []).length === 0 && (
@@ -656,14 +662,15 @@ function EditPlanModal({ plan, onClose, onSave }: EditPlanModalProps) {
                     </div>
 
                     <div className="flex justify-end">
-                      <button
-                        type="button"
+                      <Button
+                        variant="danger"
+                        size="xs"
                         onClick={() => deleteGoal(goal.id)}
-                        className="hover:text-error/80 flex items-center gap-1 text-xs text-error"
+                        className="hover:text-error/80"
                       >
                         <Icon name="Trash2" size="xs" />
                         删除目标
-                      </button>
+                      </Button>
                     </div>
                   </div>
                 ))}
@@ -739,21 +746,20 @@ function TaskEditRow({
               size="xs"
               className="pointer-events-none absolute left-2 top-1/2 -translate-y-1/2 text-text-tertiary"
             />
-            <select
+            <Select
               value={task.category}
               onChange={(e) =>
                 onUpdate(task.id, {
                   category: e.target.value as TaskCategory,
                 })
               }
-              className="w-full rounded-lg border border-border-default bg-surface py-1.5 pl-7 pr-2 text-xs text-text-primary focus:border-primary focus:outline-none"
-            >
-              {allCategories.map((c) => (
-                <option key={c} value={c}>
-                  {TASK_CATEGORY_LABELS[c]}
-                </option>
-              ))}
-            </select>
+              size="sm"
+              className="bg-surface"
+              options={allCategories.map((c) => ({
+                value: c,
+                label: TASK_CATEGORY_LABELS[c],
+              }))}
+            />
           </div>
         </div>
 
@@ -770,17 +776,16 @@ function TaskEditRow({
 
         <div className="col-span-4 sm:col-span-2">
           <label className="mb-1 block text-2xs text-text-muted">时段</label>
-          <select
+          <Select
             value={task.timeSlot || 'flexible'}
             onChange={(e) => onUpdate(task.id, { timeSlot: e.target.value as TimeSlot })}
-            className="w-full rounded-lg border border-border-default bg-surface px-2 py-1.5 text-xs text-text-primary focus:border-primary focus:outline-none"
-          >
-            {timeSlotOrder.map((slot) => (
-              <option key={slot} value={slot}>
-                {getTimeSlotLabel(slot)}
-              </option>
-            ))}
-          </select>
+            size="sm"
+            className="bg-surface"
+            options={timeSlotOrder.map((slot) => ({
+              value: slot,
+              label: getTimeSlotLabel(slot),
+            }))}
+          />
         </div>
 
         <div className="col-span-4 sm:col-span-2">
@@ -794,26 +799,30 @@ function TaskEditRow({
           />
           <div className="mt-1.5 flex flex-wrap gap-1">
             {durationPresets.map((preset) => (
-              <button
+              <Button
                 key={preset}
                 type="button"
+                variant="ghost"
+                size="xs"
                 onClick={() => onUpdate(task.id, { duration: preset })}
-                className={`rounded px-1.5 py-0.5 text-[9px] transition-colors ${
+                className={`rounded px-1.5 py-0.5 text-[9px] ${
                   task.duration === preset
                     ? 'border border-accent/30 bg-accent/20 text-accent'
                     : 'bg-surface-elevated text-text-muted hover:bg-surface-highlight'
                 }`}
               >
                 {preset.replace('分钟', '')}
-              </button>
+              </Button>
             ))}
           </div>
         </div>
 
         <div className="col-span-4 flex items-end justify-end gap-1 sm:col-span-2">
-          <button
+          <Button
+            variant="ghost"
+            size="xs"
             onClick={onToggleCopy}
-            className={`focus-ring rounded-lg p-1.5 transition-colors ${
+            className={`focus-ring rounded-lg p-1.5 ${
               isCopying
                 ? 'bg-primary/[0.08] text-primary'
                 : 'text-text-muted hover:bg-surface-highlight hover:text-text-secondary'
@@ -822,35 +831,36 @@ function TaskEditRow({
             title="复制到其它日期"
           >
             <Icon name="Copy" size="sm" />
-          </button>
-          <button
+          </Button>
+          <Button
+            variant="ghost"
+            size="xs"
             onClick={() => onDelete(task.id)}
-            className="hover:bg-error/10 focus-ring rounded-lg p-1.5 text-text-muted transition-colors hover:text-error"
+            className="hover:bg-error/10 focus-ring rounded-lg p-1.5 text-text-muted hover:text-error"
             aria-label="删除任务"
           >
             <Icon name="Trash2" size="sm" />
-          </button>
+          </Button>
         </div>
       </div>
 
       <div className="mt-2">
         <label className="mb-1 block text-2xs text-text-muted">绑定目标</label>
-        <select
+        <Select
           value={task.goalId || ''}
           onChange={(e) =>
             onUpdate(task.id, {
               goalId: e.target.value || undefined,
             })
           }
-          className="w-full rounded-lg border border-border-default bg-surface px-2 py-1.5 text-xs text-text-primary focus:border-primary focus:outline-none"
-        >
-          <option value="">不绑定目标</option>
-          {goals.map((g) => (
-            <option key={g.id} value={g.id}>
-              {g.title}
-            </option>
-          ))}
-        </select>
+          size="sm"
+          className="bg-surface"
+          placeholder="不绑定目标"
+          options={goals.map((g) => ({
+            value: g.id,
+            label: g.title,
+          }))}
+        />
       </div>
 
       <div className="mt-2">
@@ -862,7 +872,7 @@ function TaskEditRow({
               className="flex items-center gap-1 rounded-full bg-surface-highlight px-2 py-0.5 text-2xs text-text-secondary"
             >
               {m}
-              <button
+              <Button
                 onClick={() =>
                   onUpdate(task.id, {
                     materials: task.materials.filter((_, i) => i !== idx),
@@ -870,9 +880,11 @@ function TaskEditRow({
                 }
                 className="hover:text-error"
                 aria-label={`删除 ${m}`}
+                variant="ghost"
+                size="xs"
               >
                 <Icon name="X" size="xs" />
-              </button>
+              </Button>
             </span>
           ))}
           <input
@@ -914,12 +926,13 @@ function TaskEditRow({
 
       <div className="mt-2">
         <label className="mb-1 block text-2xs text-text-muted">详细说明（周总结会引用）</label>
-        <textarea
+        <Textarea
           value={task.note || ''}
           onChange={(e) => onUpdate(task.id, { note: e.target.value })}
           placeholder="例如：今天阅读《夏洛的网》第1-3章，完成生词摘抄..."
           rows={2}
-          className="w-full resize-none rounded-lg border border-border-default bg-surface px-2 py-1.5 text-xs text-text-primary placeholder:text-text-tertiary focus:border-primary focus:outline-none"
+          resize="none"
+          className="border-border-default bg-surface px-2 py-1.5 text-xs text-text-primary"
         />
       </div>
 
@@ -937,37 +950,41 @@ function TaskEditRow({
                 {dayOrder.map((day) => {
                   const selected = selectedDays.has(day);
                   return (
-                    <button
+                    <Button
                       key={day}
                       type="button"
+                      variant="ghost"
+                      size="xs"
                       onClick={() => toggleDay(day)}
-                      className={`rounded-lg px-2.5 py-1 text-xs transition-all ${
+                      className={`rounded-lg px-2.5 py-1 ${
                         selected
                           ? 'bg-primary/[0.08] border-primary/25 border text-primary'
                           : 'border border-border-subtle bg-surface-elevated text-text-tertiary hover:bg-surface-elevated'
                       }`}
                     >
                       {day}
-                    </button>
+                    </Button>
                   );
                 })}
               </div>
               <div className="flex items-center gap-2">
-                <button
-                  type="button"
+                <Button
+                  variant="ghost"
+                  size="sm"
                   onClick={handleCopy}
                   disabled={selectedDays.size === 0}
-                  className="bg-primary/[0.08] hover:bg-primary/[0.12] rounded-lg px-3 py-1.5 text-xs text-primary transition-colors disabled:opacity-50"
+                  className="bg-primary/[0.08] hover:bg-primary/[0.12] text-primary"
                 >
                   确认复制
-                </button>
-                <button
-                  type="button"
+                </Button>
+                <Button
+                  variant="secondary"
+                  size="sm"
                   onClick={onToggleCopy}
-                  className="rounded-lg bg-surface-elevated px-3 py-1.5 text-xs text-text-tertiary transition-colors hover:bg-surface-highlight"
+                  className="bg-surface-elevated text-text-tertiary hover:bg-surface-highlight"
                 >
                   取消
-                </button>
+                </Button>
               </div>
             </div>
           </motion.div>
@@ -995,18 +1012,22 @@ function UnsavedPrompt({ onCancel, onConfirm }: UnsavedPromptProps) {
       showClose={false}
       footer={
         <div className="flex w-full items-center justify-center gap-3">
-          <button
+          <Button
             onClick={onCancel}
             className="rounded-lg px-4 py-2 text-text-tertiary transition-colors hover:text-text-primary"
+            variant="ghost"
+            size="md"
           >
             继续编辑
-          </button>
-          <button
+          </Button>
+          <Button
             onClick={onConfirm}
             className="bg-error/15 hover:bg-error/20 rounded-lg px-4 py-2 text-error transition-colors"
+            variant="danger"
+            size="md"
           >
             放弃更改
-          </button>
+          </Button>
         </div>
       }
     >
@@ -1166,16 +1187,20 @@ function TaskLibraryModal({
         <div className="flex w-full items-center justify-between">
           <p className="text-xs text-text-muted">已选 {selectedTemplateIds.size} 项</p>
           <div className="flex items-center gap-3">
-            <button
+            <Button
               onClick={onClose}
               className="rounded-lg px-4 py-2 text-text-tertiary transition-colors hover:text-text-secondary"
+              variant="ghost"
+              size="md"
             >
               取消
-            </button>
-            <button
+            </Button>
+            <Button
               onClick={handleAdd}
               disabled={selectedTemplateIds.size === 0 || assess.isPending}
               className="flex items-center gap-2 rounded-lg bg-primary px-6 py-2 font-semibold text-inverse transition-all disabled:cursor-not-allowed disabled:opacity-50"
+              variant="primary"
+              size="lg"
             >
               {assess.isPending ? (
                 <>
@@ -1193,25 +1218,27 @@ function TaskLibraryModal({
                   AI 评估并添加
                 </>
               )}
-            </button>
+            </Button>
           </div>
         </div>
       }
     >
       <div className="mb-4 flex flex-col gap-3 sm:flex-row">
         <div className="flex flex-wrap gap-2">
-          <button
+          <Button
             onClick={() => setSelectedCategory('all')}
             className={`rounded-lg px-3 py-1.5 text-xs transition-colors ${
               selectedCategory === 'all'
                 ? 'bg-surface-highlight text-text-primary'
                 : 'bg-surface-elevated text-text-tertiary hover:text-text-secondary'
             }`}
+            variant="secondary"
+            size="sm"
           >
             全部
-          </button>
+          </Button>
           {allCategories.map((cat) => (
-            <button
+            <Button
               key={cat}
               onClick={() => setSelectedCategory(cat)}
               className={`rounded-lg px-3 py-1.5 text-xs transition-colors ${
@@ -1219,16 +1246,20 @@ function TaskLibraryModal({
                   ? 'bg-surface-highlight text-text-primary'
                   : 'bg-surface-elevated text-text-tertiary hover:text-text-secondary'
               }`}
+              variant="secondary"
+              size="sm"
             >
               {TASK_CATEGORY_LABELS[cat]}
-            </button>
+            </Button>
           ))}
         </div>
         <div className="ml-auto flex items-center gap-3">
-          <button
+          <Button
             onClick={toggleAllFiltered}
             disabled={filteredTemplates.length === 0}
             className="flex items-center gap-1.5 text-xs text-text-secondary transition-colors hover:text-text-primary disabled:cursor-not-allowed disabled:opacity-40"
+            variant="ghost"
+            size="xs"
           >
             <div
               className={`flex size-4 items-center justify-center rounded border ${
@@ -1240,19 +1271,18 @@ function TaskLibraryModal({
               )}
             </div>
             全选
-          </button>
+          </Button>
           <span className="text-xs text-text-muted">添加到</span>
-          <select
+          <Select
             value={selectedDay}
             onChange={(e) => setSelectedDay(e.target.value as DayOfWeek)}
-            className="rounded-lg border border-border-default bg-surface px-2 py-1.5 text-xs text-text-primary focus:border-primary focus:outline-none"
-          >
-            {dayOrder.map((d) => (
-              <option key={d} value={d}>
-                {d}
-              </option>
-            ))}
-          </select>
+            size="sm"
+            className="bg-surface"
+            options={dayOrder.map((d) => ({
+              value: d,
+              label: d,
+            }))}
+          />
         </div>
       </div>
 
@@ -1270,7 +1300,7 @@ function TaskLibraryModal({
             const alignment = tpl.alignment;
             const difficultyColor = tpl.difficulty ? DIFFICULTY_COLORS[tpl.difficulty] : '';
             return (
-              <button
+              <Button
                 key={tpl.id}
                 onClick={() => toggleTemplate(tpl.id)}
                 className={`rounded-lg border p-3 text-left transition-all ${
@@ -1278,6 +1308,8 @@ function TaskLibraryModal({
                     ? 'bg-primary/[0.08] border-primary/25'
                     : 'border-border-subtle bg-surface-elevated hover:bg-surface-highlight'
                 }`}
+                variant="secondary"
+                size="sm"
               >
                 <div className="flex items-start gap-3">
                   <div
@@ -1360,7 +1392,7 @@ function TaskLibraryModal({
                     )}
                   </div>
                 </div>
-              </button>
+              </Button>
             );
           })}
         </div>
@@ -1408,10 +1440,12 @@ function MoreActions({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="relative" ref={ref}>
-      <button
+      <Button
         type="button"
         onClick={() => setOpen((v) => !v)}
         className="inline-flex items-center gap-1.5 rounded-[14px] border border-border-default bg-surface px-3.5 py-2 text-sm font-medium text-text-secondary transition-colors hover:bg-surface-hover hover:text-text-primary"
+        variant="secondary"
+        size="md"
       >
         更多
         <Icon
@@ -1419,7 +1453,7 @@ function MoreActions({ children }: { children: React.ReactNode }) {
           size="xs"
           className={`transition-transform ${open ? 'rotate-180' : ''}`}
         />
-      </button>
+      </Button>
       <AnimatePresence>
         {open && (
           <motion.div
@@ -1748,39 +1782,33 @@ function WeeklyTasksContent() {
             {formatWeekLabel(weekId)}
           </p>
           <div className="flex items-center gap-2">
-            <button
+            <Button
               onClick={() => setWeekId((w) => shiftWeekId(w, -1))}
               className="flex size-8 items-center justify-center rounded-[14px] border border-border-default bg-surface text-text-secondary transition-colors hover:bg-surface-hover"
               aria-label="上一周"
+              variant="secondary"
+              size="sm"
             >
               <Icon name="ChevronLeft" size="sm" />
-            </button>
+            </Button>
             <div className="relative">
-              <select
+              <Select
                 value={weekId}
                 onChange={(e) => setWeekId(e.target.value)}
-                className="focus:border-primary/50 focus:ring-primary/10 min-w-[180px] cursor-pointer appearance-none rounded-[14px] border border-border-default bg-surface py-1.5 pl-3 pr-9 text-sm font-medium text-text-primary transition-colors focus:outline-none focus:ring-2"
-                aria-label="选择周"
-              >
-                {weekOptions.map((opt) => (
-                  <option key={opt.value} value={opt.value}>
-                    {opt.label}
-                  </option>
-                ))}
-              </select>
-              <Icon
-                name="ChevronDown"
                 size="sm"
-                className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-text-tertiary"
+                className="min-w-[180px] bg-surface"
+                options={weekOptions}
               />
             </div>
-            <button
+            <Button
               onClick={() => setWeekId((w) => shiftWeekId(w, 1))}
               className="flex size-8 items-center justify-center rounded-[14px] border border-border-default bg-surface text-text-secondary transition-colors hover:bg-surface-hover"
               aria-label="下一周"
+              variant="secondary"
+              size="sm"
             >
               <Icon name="ChevronRight" size="sm" />
-            </button>
+            </Button>
           </div>
         </div>
 
@@ -1789,92 +1817,112 @@ function WeeklyTasksContent() {
           <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-center">
             <div className="flex flex-wrap items-center gap-2">
               {!displayPlan && (
-                <button
+                <Button
                   onClick={handleGenerate}
                   className="hover:bg-primary/90 inline-flex items-center gap-1.5 rounded-[14px] bg-primary px-3.5 py-2 text-sm font-medium text-inverse shadow-[0_0_16px_rgba(244,63,122,0.25)] transition-all"
+                  variant="primary"
+                  size="md"
                 >
                   <Icon name="Target" size="xs" />
                   生成本周计划
-                </button>
+                </Button>
               )}
               {displayPlan && !isDraft && (
-                <button
+                <Button
                   onClick={() => setEditOpen(true)}
                   className="hover:bg-primary/90 inline-flex items-center gap-1.5 rounded-[14px] bg-primary px-3.5 py-2 text-sm font-medium text-inverse shadow-[0_0_16px_rgba(244,63,122,0.25)] transition-all"
+                  variant="primary"
+                  size="md"
                 >
                   <Icon name="Pencil" size="xs" />
                   编辑周计划
-                </button>
+                </Button>
               )}
               {isDraft && (
                 <>
-                  <button
+                  <Button
                     onClick={handlePublish}
                     className="hover:bg-primary/90 inline-flex items-center gap-1.5 rounded-[14px] bg-primary px-3.5 py-2 text-sm font-medium text-inverse shadow-[0_0_16px_rgba(244,63,122,0.25)] transition-all"
+                    variant="primary"
+                    size="md"
                   >
                     <Icon name="Send" size="xs" />
                     发布
-                  </button>
-                  <button
+                  </Button>
+                  <Button
                     onClick={handleCancelDraft}
                     className="inline-flex items-center gap-1.5 rounded-[14px] border border-border-default bg-surface px-3.5 py-2 text-sm font-medium text-text-secondary transition-colors hover:bg-surface-hover"
+                    variant="secondary"
+                    size="md"
                   >
                     <Icon name="X" size="xs" />
                     取消
-                  </button>
+                  </Button>
                 </>
               )}
             </div>
 
             <div className="flex flex-wrap items-center gap-2">
               {displayPlan && !isDraft && isPublished && (
-                <button
+                <Button
                   onClick={handleOpenReview}
                   className="inline-flex items-center gap-1.5 rounded-[14px] border border-border-default bg-surface px-3.5 py-2 text-sm font-medium text-text-secondary transition-colors hover:bg-surface-hover hover:text-text-primary"
+                  variant="secondary"
+                  size="md"
                 >
                   <Icon name="Sparkles" size="xs" animate="pulse" />
                   {plan?.reviewedAt ? '查看复盘' : '本周复盘'}
-                </button>
+                </Button>
               )}
               {displayPlan && (
                 <>
-                  <button
+                  <Button
                     onClick={() => setLibraryOpen(true)}
                     className="inline-flex items-center gap-1.5 rounded-[14px] border border-border-default bg-surface px-3.5 py-2 text-sm font-medium text-text-secondary transition-colors hover:bg-surface-hover hover:text-text-primary"
+                    variant="secondary"
+                    size="md"
                   >
                     <Icon name="Library" size="xs" />
                     从任务库选择
-                  </button>
+                  </Button>
                   <MoreActions>
-                    <button
+                    <Button
                       onClick={() => setSaveTemplateOpen(true)}
-                      className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-text-secondary transition-colors hover:bg-surface-hover hover:text-text-primary"
+                      className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-text-secondary hover:bg-surface-hover hover:text-text-primary"
+                      variant="ghost"
+                      size="sm"
                     >
                       <Icon name="Save" size="sm" />
                       保存为模板
-                    </button>
-                    <button
+                    </Button>
+                    <Button
                       onClick={() => setApplyTemplateOpen(true)}
-                      className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-text-secondary transition-colors hover:bg-surface-hover hover:text-text-primary"
+                      className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-text-secondary hover:bg-surface-hover hover:text-text-primary"
+                      variant="ghost"
+                      size="sm"
                     >
                       <Icon name="LayoutTemplate" size="sm" />
                       套用模板
-                    </button>
-                    <button
+                    </Button>
+                    <Button
                       onClick={() => setCopyHistoryOpen(true)}
-                      className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-text-secondary transition-colors hover:bg-surface-hover hover:text-text-primary"
+                      className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-text-secondary hover:bg-surface-hover hover:text-text-primary"
+                      variant="ghost"
+                      size="sm"
                     >
                       <Icon name="History" size="sm" />
                       复制历史周
-                    </button>
+                    </Button>
                     {isPublished && !isDraft && stats && (
-                      <button
+                      <Button
                         onClick={() => setReportOpen(true)}
-                        className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-text-secondary transition-colors hover:bg-surface-hover hover:text-text-primary"
+                        className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-text-secondary hover:bg-surface-hover hover:text-text-primary"
+                        variant="ghost"
+                        size="sm"
                       >
                         <Icon name="Share2" size="sm" />
                         导出周计划
-                      </button>
+                      </Button>
                     )}
                   </MoreActions>
                 </>
@@ -1898,9 +1946,11 @@ function WeeklyTasksContent() {
                 <p className="text-sm font-medium text-text-secondary">
                   本周计划存在 {conflicts.length} 项潜在冲突
                 </p>
-                <button
+                <Button
                   onClick={() => setConflictsExpanded((v) => !v)}
                   className="inline-flex items-center gap-1 text-xs text-text-muted transition-colors hover:text-text-secondary"
+                  variant="ghost"
+                  size="xs"
                 >
                   {conflictsExpanded ? '收起' : '查看详情'}
                   <Icon
@@ -1908,7 +1958,7 @@ function WeeklyTasksContent() {
                     size="xs"
                     className={`transition-transform ${conflictsExpanded ? 'rotate-180' : ''}`}
                   />
-                </button>
+                </Button>
               </div>
               <AnimatePresence initial={false}>
                 {conflictsExpanded && (
@@ -1980,8 +2030,8 @@ function WeeklyTasksContent() {
                         x2="100%"
                         y2="100%"
                       >
-                        <stop offset="0%" stopColor="#FB7185" />
-                        <stop offset="100%" stopColor="#F43F7A" />
+                        <stop offset="0%" stopColor="var(--color-primary-glow)" />
+                        <stop offset="100%" stopColor="var(--color-primary)" />
                       </linearGradient>
                     </defs>
                   </svg>
@@ -2002,10 +2052,10 @@ function WeeklyTasksContent() {
                   <span className="mx-1.5 text-text-muted">·</span>
                   剩余 <span className="font-medium text-text-secondary">{stats.pending} 项</span>
                 </p>
-                <button className="mt-2.5 inline-flex items-center gap-1 text-xs text-primary transition-colors hover:text-primary-glow">
+                <Button className="mt-2.5 inline-flex items-center gap-1 text-xs text-primary transition-colors hover:text-primary-glow" variant="link" size="xs">
                   查看详情
                   <Icon name="ChevronRight" size="xs" />
-                </button>
+                </Button>
               </div>
 
               {/* Right: stats + action */}
@@ -2053,13 +2103,15 @@ function WeeklyTasksContent() {
                   </div>
                 </div>
 
-                <button
+                <Button
                   onClick={handleCarryOverLastWeek}
                   disabled={lastWeekUncompleted.length === 0 || weekId !== getCurrentWeekId()}
                   className="hover:bg-primary/10 inline-flex items-center justify-center gap-1.5 rounded-[14px] border border-primary px-4 py-2 text-sm font-medium text-primary transition-colors disabled:cursor-not-allowed disabled:opacity-50"
+                  variant="secondary"
+                  size="md"
                 >
                   一键添加到本周
-                </button>
+                </Button>
               </div>
             </div>
           </CommandCard>
@@ -2091,12 +2143,14 @@ function WeeklyTasksContent() {
             <p className="mx-auto mb-6 max-w-md text-sm text-text-tertiary">
               从任务库中选择任务，按周发布时间属性自动生成矩阵。发布后即可每日打卡。
             </p>
-            <button
+            <Button
               onClick={handleGenerate}
               className="focus-ring rounded-lg bg-primary px-6 py-3 font-semibold text-text-primary transition-all"
+              variant="primary"
+              size="lg"
             >
               生成本周计划
-            </button>
+            </Button>
           </motion.div>
         ) : (
           <WeeklyTaskChecklistMatrix
@@ -2118,19 +2172,23 @@ function WeeklyTasksContent() {
           size="lg"
           footer={
             <div className="flex w-full items-center justify-end gap-3">
-              <button
+              <Button
                 onClick={() => setReviewOpen(false)}
                 className="rounded-lg px-4 py-2 text-text-tertiary transition-colors hover:text-text-primary"
+                variant="ghost"
+                size="md"
               >
                 取消
-              </button>
-              <button
+              </Button>
+              <Button
                 onClick={handleSaveReview}
                 className="flex items-center gap-2 rounded-lg bg-accent px-6 py-2 font-semibold text-text-primary transition-all"
+                variant="primary"
+                size="lg"
               >
                 <Icon name="RotateCcw" size="sm" />
                 保存复盘
-              </button>
+              </Button>
             </div>
           }
         >
@@ -2260,12 +2318,13 @@ function WeeklyTasksContent() {
             {/* Parent comment */}
             <div>
               <label className="mb-2 block text-sm font-medium text-text-secondary">家长评语</label>
-              <textarea
+              <Textarea
                 value={reviewComment}
                 onChange={(e) => setReviewComment(e.target.value)}
                 placeholder="写下对孩子的鼓励、问题或下周调整..."
-                className="w-full resize-none rounded-lg border border-border-default bg-surface px-4 py-3 text-sm text-text-primary placeholder:text-text-tertiary focus:border-primary focus:outline-none"
+                className="border-border-default bg-surface px-4 py-3 text-text-primary"
                 rows={4}
+                resize="none"
               />
             </div>
           </div>
@@ -2357,16 +2416,20 @@ function SaveTemplateModal({
       size="md"
       footer={
         <div className="flex items-center justify-end gap-3">
-          <button
+          <Button
             onClick={onClose}
             className="rounded-xl px-4 py-2 text-text-tertiary transition-colors hover:text-text-secondary"
+            variant="ghost"
+            size="md"
           >
             取消
-          </button>
-          <button
+          </Button>
+          <Button
             onClick={() => onSave(name, description)}
             disabled={saving || !name.trim()}
             className="flex items-center gap-2 rounded-xl bg-secondary px-5 py-2 font-semibold text-text-primary transition-all hover:shadow-[0_0_30px_rgba(139,92,246,0.4)] disabled:opacity-50"
+            variant="secondary"
+            size="md"
           >
             {saving ? (
               <Icon name="Loader" size="sm" animate="spin" />
@@ -2374,7 +2437,7 @@ function SaveTemplateModal({
               <Icon name="Save" size="sm" />
             )}
             保存
-          </button>
+          </Button>
         </div>
       }
     >
@@ -2391,12 +2454,13 @@ function SaveTemplateModal({
         </div>
         <div>
           <label className="mb-1.5 block text-xs text-text-tertiary">备注说明（可选）</label>
-          <textarea
+          <Textarea
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             placeholder="简要描述模板适用场景"
             rows={3}
-            className="focus:border-primary/50 w-full resize-none rounded-lg border border-border-default bg-surface-elevated px-3 py-2 text-sm text-text-secondary placeholder:text-text-muted focus:outline-none"
+            resize="none"
+            className="focus:border-primary/50 border-border-default bg-surface-elevated px-3 py-2 text-text-secondary"
           />
         </div>
       </div>
@@ -2426,44 +2490,52 @@ function ApplyTemplateModal({
       size="lg"
       footer={
         <div className="flex items-center justify-end gap-3">
-          <button
+          <Button
             onClick={onClose}
             className="rounded-xl px-4 py-2 text-text-tertiary transition-colors hover:text-text-secondary"
+            variant="ghost"
+            size="md"
           >
             取消
-          </button>
-          <button
+          </Button>
+          <Button
             onClick={() => selectedId && onApply(selectedId, mode)}
             disabled={!selectedId}
             className="flex items-center gap-2 rounded-xl bg-secondary px-5 py-2 font-semibold text-text-primary transition-all hover:shadow-[0_0_30px_rgba(139,92,246,0.4)] disabled:opacity-50"
+            variant="secondary"
+            size="md"
           >
             套用
-          </button>
+          </Button>
         </div>
       }
     >
       <div className="space-y-4">
         <div className="flex items-center gap-2 rounded-xl border border-border-default bg-surface-elevated p-1">
-          <button
+          <Button
             onClick={() => setMode('merge')}
             className={`flex-1 rounded-lg px-3 py-1.5 text-xs font-medium transition-colors ${
               mode === 'merge'
                 ? 'bg-secondary text-text-primary'
                 : 'text-text-tertiary hover:text-text-secondary'
             }`}
+            variant="ghost"
+            size="sm"
           >
             合并到当前计划
-          </button>
-          <button
+          </Button>
+          <Button
             onClick={() => setMode('replace')}
             className={`flex-1 rounded-lg px-3 py-1.5 text-xs font-medium transition-colors ${
               mode === 'replace'
                 ? 'bg-secondary text-text-primary'
                 : 'text-text-tertiary hover:text-text-secondary'
             }`}
+            variant="ghost"
+            size="sm"
           >
             替换当前计划
-          </button>
+          </Button>
         </div>
 
         {templates.length === 0 ? (
@@ -2471,7 +2543,7 @@ function ApplyTemplateModal({
         ) : (
           <div className="max-h-[50vh] space-y-2 overflow-y-auto">
             {templates.map((tpl) => (
-              <button
+              <Button
                 key={tpl.id}
                 onClick={() => setSelectedId(tpl.id)}
                 className={`w-full rounded-xl border p-3 text-left transition-all ${
@@ -2479,6 +2551,8 @@ function ApplyTemplateModal({
                     ? 'bg-secondary/10 border-secondary/30'
                     : 'border-border-subtle bg-surface-elevated hover:border-border-default'
                 }`}
+                variant="secondary"
+                size="sm"
               >
                 <div className="flex items-center justify-between">
                   <span className="text-sm font-medium text-text-secondary">{tpl.name}</span>
@@ -2490,7 +2564,7 @@ function ApplyTemplateModal({
                   <p className="mt-1 line-clamp-2 text-xs text-text-muted">{tpl.description}</p>
                 )}
                 <p className="mt-2 text-2xs text-text-tertiary">{tpl.tasks.length} 个任务</p>
-              </button>
+              </Button>
             ))}
           </div>
         )}
@@ -2550,13 +2624,15 @@ function CopyHistoryModal({
                   {plan.tasks.filter((t) => t.status === 'done').length} 已完成
                 </p>
               </div>
-              <button
+              <Button
                 onClick={() => onCopy(plan.weekId)}
                 className="bg-secondary/10 hover:bg-secondary/20 flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium text-secondary transition-colors"
+                variant="secondary"
+                size="sm"
               >
                 <Icon name="Copy" size="xs" />
                 复制
-              </button>
+              </Button>
             </div>
           ))
         )}

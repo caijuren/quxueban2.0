@@ -24,23 +24,23 @@ export interface ChildData {
 }
 
 export const AVATAR_COLORS = [
-  '#f43f5e',
-  '#8b5cf6',
-  '#06b6d4',
-  '#f59e0b',
-  '#10b981',
+  'var(--color-primary)',
+  'var(--color-secondary)',
+  'var(--accent)',
+  'var(--warning)',
+  'var(--success)',
   '#ec4899',
-  '#6366f1',
+  'var(--color-secondary-glow)',
 ];
 
 export const AVATAR_PRESETS = [
-  { id: 'boy-1', emoji: '👦', bg: '#f43f5e' },
-  { id: 'girl-1', emoji: '👧', bg: '#8b5cf6' },
-  { id: 'boy-2', emoji: '🧒', bg: '#06b6d4' },
-  { id: 'girl-2', emoji: '👶', bg: '#f59e0b' },
-  { id: 'rocket', emoji: '🚀', bg: '#10b981' },
+  { id: 'boy-1', emoji: '👦', bg: 'var(--color-primary)' },
+  { id: 'girl-1', emoji: '👧', bg: 'var(--color-secondary)' },
+  { id: 'boy-2', emoji: '🧒', bg: 'var(--accent)' },
+  { id: 'girl-2', emoji: '👶', bg: 'var(--warning)' },
+  { id: 'rocket', emoji: '🚀', bg: 'var(--success)' },
   { id: 'star', emoji: '⭐', bg: '#ec4899' },
-  { id: 'book', emoji: '📚', bg: '#6366f1' },
+  { id: 'book', emoji: '📚', bg: 'var(--color-secondary-glow)' },
   { id: 'trophy', emoji: '🏆', bg: '#f97316' },
 ];
 
@@ -78,14 +78,14 @@ export function getDefaultChildren(): Child[] {
     {
       id: 'child_dabao',
       name: '大宝',
-      avatarColor: '#f43f5e',
+      avatarColor: 'var(--color-primary)',
       grade: 6,
       educationSystem: 'five-four',
     },
     {
       id: 'child_xiaobao',
       name: '小宝',
-      avatarColor: '#06b6d4',
+      avatarColor: 'var(--accent)',
       grade: 1,
       educationSystem: 'six-three',
     },

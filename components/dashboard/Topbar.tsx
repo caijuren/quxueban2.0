@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { useEffect, useRef, useState } from 'react';
 import { Icon } from '@/components/ui/icon';
+import Button from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
 import { signOut, useSession } from 'next-auth/react';
 import { useChildren } from '@/components/dashboard/ChildrenContext';
@@ -139,13 +140,15 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
       className="bg-surface-elevated/80 fixed inset-x-0 top-0 z-30 flex h-16 items-center justify-between border-b border-border-default px-3 backdrop-blur-md sm:px-5 lg:left-56"
     >
       <div className="flex items-center gap-3">
-        <button
+        <Button
+          variant="ghost"
+          size="md"
           onClick={onMenuClick}
-          className="bg-surface-elevated/60 focus-ring flex size-10 items-center justify-center rounded-module text-text-secondary transition-all hover:bg-surface-highlight hover:text-text-primary lg:hidden"
+          className="focus-ring lg:hidden"
           aria-label="打开菜单"
         >
           <Icon name="Menu" size="md" />
-        </button>
+        </Button>
 
         <div className="relative hidden sm:block">
           <Icon
@@ -166,9 +169,11 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
 
       <div className="flex items-center gap-2 sm:gap-3">
         <div className="relative" ref={notificationRef}>
-          <button
+          <Button
+            variant="ghost"
+            size="md"
             onClick={() => setNotificationOpen((prev) => !prev)}
-            className="bg-surface-elevated/60 focus-ring relative flex size-10 items-center justify-center rounded-module text-text-secondary transition-all hover:bg-surface-highlight hover:text-text-primary"
+            className="relative"
             aria-label="通知"
           >
             <Icon name="Bell" size="md" />
@@ -177,20 +182,22 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
                 {unreadCount > 9 ? '9+' : unreadCount}
               </span>
             )}
-          </button>
+          </Button>
 
           {notificationOpen && (
             <div className="bg-surface-elevated/95 modal-scroll absolute right-0 top-full z-50 mt-2 w-80 overflow-hidden rounded-card border border-border-default shadow-panel backdrop-blur-md">
               <div className="flex items-center justify-between border-b border-border-default px-4 py-3">
                 <p className="text-sm font-semibold text-text-primary">通知中心</p>
                 {unreadCount > 0 && (
-                  <button
+                  <Button
+                    variant="link"
+                    size="xs"
                     onClick={handleMarkAllRead}
                     disabled={markAllRead.isPending}
-                    className="text-xs text-primary transition-colors hover:text-primary-glow disabled:cursor-not-allowed disabled:opacity-50"
+                    className="disabled:cursor-not-allowed disabled:opacity-50"
                   >
                     {markAllRead.isPending ? '标记中...' : '全部已读'}
-                  </button>
+                  </Button>
                 )}
               </div>
               <div className="max-h-80 overflow-y-auto">
@@ -205,8 +212,10 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
                     {notifications.map((n) => {
                       const marking = markRead.isPending && markRead.variables === n.id;
                       return (
-                        <button
+                        <Button
                           key={n.id}
+                          variant="ghost"
+                          size="md"
                           onClick={() => handleMarkRead(n.id)}
                           disabled={marking}
                           className={`w-full border-b border-border-default px-4 py-3 text-left transition-colors hover:bg-surface-elevated disabled:opacity-50 ${
@@ -223,7 +232,7 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
                           <p className="mt-1 text-2xs tabular-nums text-text-muted">
                             {new Date(n.createdAt).toLocaleString('zh-CN')}
                           </p>
-                        </button>
+                        </Button>
                       );
                     })}
                   </div>
@@ -234,9 +243,11 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
         </div>
 
         <div className="relative" ref={userMenuRef}>
-          <button
+          <Button
+            variant="ghost"
+            size="md"
             onClick={() => setUserMenuOpen((prev) => !prev)}
-            className="bg-surface-elevated/60 focus-ring relative flex size-9 items-center justify-center overflow-hidden rounded-module border border-border-default text-left text-text-primary transition-all hover:border-border-strong hover:bg-surface-elevated sm:size-10"
+            className="relative flex size-9 items-center justify-center overflow-hidden rounded-module border border-border-default text-left text-text-primary transition-all hover:border-border-strong hover:bg-surface-elevated sm:size-10"
             aria-label="用户菜单"
             aria-haspopup="menu"
             aria-expanded={userMenuOpen}
@@ -257,7 +268,7 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
             ) : (
               <Icon name="User" size="md" className="text-text-secondary" />
             )}
-          </button>
+          </Button>
 
           {userMenuOpen && (
             <div
@@ -273,31 +284,37 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
                     {currentUser?.username || ''}
                   </p>
                 </div>
-                <button
+                <Button
+                  variant="ghost"
+                  size="sm"
                   role="menuitem"
                   onClick={handleGoToSettings}
                   className="flex w-full items-center gap-2.5 rounded-module px-3 py-2 text-left text-sm text-text-secondary transition-colors hover:bg-surface-elevated"
                 >
                   <Icon name="Settings" size="sm" />
                   设置
-                </button>
-                <button
+                </Button>
+                <Button
+                  variant="danger"
+                  size="sm"
                   role="menuitem"
                   onClick={handleLogout}
-                  className="hover:bg-error/[0.08] flex w-full items-center gap-2.5 rounded-module px-3 py-2 text-left text-sm text-error transition-colors"
+                  className="flex w-full items-center gap-2.5 rounded-module px-3 py-2 text-left text-sm transition-colors"
                 >
                   <Icon name="LogOut" size="sm" />
                   退出登录
-                </button>
+                </Button>
               </div>
             </div>
           )}
         </div>
 
         <div className="relative" ref={childDropdownRef}>
-          <button
+          <Button
+            variant="ghost"
+            size="sm"
             onClick={() => setChildDropdownOpen((prev) => !prev)}
-            className="bg-surface-elevated/60 focus-ring flex items-center gap-2 rounded-module border border-border-default py-1 pl-1 pr-2 text-left transition-all hover:border-border-strong hover:bg-surface-elevated"
+            className="flex items-center gap-2 rounded-module border border-border-default py-1 pl-1 pr-2 text-left transition-all hover:border-border-strong hover:bg-surface-elevated"
             aria-label="切换孩子"
             aria-haspopup="listbox"
             aria-expanded={childDropdownOpen}
@@ -321,7 +338,7 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
                 childDropdownOpen ? 'rotate-180' : ''
               }`}
             />
-          </button>
+          </Button>
 
           {childDropdownOpen && (
             <div
@@ -335,8 +352,10 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
                 {children.map((child, index) => {
                   const isActive = currentChild?.id === child.id;
                   return (
-                    <button
+                    <Button
                       key={child.id}
+                      variant="ghost"
+                      size="sm"
                       ref={(el) => {
                         childButtonRefs.current[index] = el;
                       }}
@@ -364,7 +383,7 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
                       {isActive && (
                         <Icon name="Check" size="sm" className="shrink-0 text-primary" />
                       )}
-                    </button>
+                    </Button>
                   );
                 })}
               </div>

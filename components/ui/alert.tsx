@@ -3,6 +3,7 @@
 import * as React from 'react';
 import { cn } from '@/lib/utils';
 import { Icon, type IconName } from '@/components/ui/icon';
+import Button from '@/components/ui/button';
 import Card from './card';
 
 export interface AlertProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -46,14 +47,16 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(
             {children}
           </div>
           {onClose && (
-            <button
+            <Button
               type="button"
               onClick={onClose}
+              variant="ghost"
+              size="xs"
               className="shrink-0 text-text-muted transition-colors hover:text-text-secondary"
               aria-label="关闭"
             >
               <Icon name="X" size="sm" />
-            </button>
+            </Button>
           )}
         </div>
       </Card>

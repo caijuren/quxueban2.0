@@ -1,5 +1,6 @@
 'use client';
 
+import Button from '@/components/ui/button';
 import { Icon } from '@/components/ui/icon';
 import packageInfo from '@/package.json';
 import Link from 'next/link';
@@ -70,13 +71,15 @@ export default function Sidebar({ mobileMenuOpen, onLinkClick }: SidebarProps) {
               <p className="text-2xs leading-tight tracking-wide text-text-muted">升学规划中心</p>
             </div>
           </Link>
-          <button
+          <Button
+            variant="ghost"
+            size="md"
             onClick={onLinkClick}
-            className="flex size-9 items-center justify-center rounded-module bg-surface text-text-secondary transition-colors hover:bg-surface-highlight hover:text-text-primary lg:hidden"
+            className="lg:hidden"
             aria-label="关闭菜单"
           >
             <Icon name="X" size="md" />
-          </button>
+          </Button>
         </div>
       </div>
 

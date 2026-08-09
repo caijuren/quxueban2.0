@@ -4,6 +4,7 @@ import { ReactNode, useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { createPortal } from 'react-dom';
 import { Icon, type IconName } from '@/components/ui/icon';
+import Button from '@/components/ui/button';
 
 export type ModalColorScheme = 'rose' | 'violet' | 'green' | 'error' | 'accent' | 'gold';
 
@@ -149,13 +150,15 @@ export default function Modal({
                 </div>
               </div>
               {showClose && (
-                <button
+                <Button
                   onClick={onClose}
+                  variant="ghost"
+                  size="sm"
                   className="flex size-8 items-center justify-center rounded-module bg-surface-hover text-text-tertiary transition-all hover:bg-surface-highlight hover:text-text-primary"
                   aria-label="关闭"
                 >
                   <Icon name="X" size="sm" className="text-text-tertiary" />
-                </button>
+                </Button>
               )}
             </div>
 

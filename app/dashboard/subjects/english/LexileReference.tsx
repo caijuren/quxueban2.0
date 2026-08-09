@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion';
 import { Icon } from '@/components/ui/icon';
 import { lexileReference } from '@/lib/subjects/english';
+import DataTable from '@/components/ui/data-table';
 
 export default function LexileReference() {
   return (
@@ -22,38 +23,24 @@ export default function LexileReference() {
         </div>
       </div>
 
-      <div className="overflow-x-auto">
-        <table className="w-full">
-          <thead>
-            <tr className="border-b border-border-default">
-              <th className="p-3 text-left text-xs font-medium text-text-muted">RAZ 级别</th>
-              <th className="p-3 text-left text-xs font-medium text-text-muted">蓝思值</th>
-              <th className="p-3 text-left text-xs font-medium text-text-muted">对应证书</th>
-              <th className="p-3 text-left text-xs font-medium text-text-muted">阶段说明</th>
-            </tr>
-          </thead>
-          <tbody>
-            {lexileReference.map((row, index) => (
-              <motion.tr
-                key={row.razLevel}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4 + index * 0.05 }}
-                className="border-b border-border-subtle transition-colors last:border-0 hover:bg-surface-elevated"
-              >
-                <td className="p-3">
-                  <span className="bg-success/10 border-success/20 rounded-md border px-2 py-1 text-xs text-success">
-                    {row.razLevel}
-                  </span>
-                </td>
-                <td className="p-3 text-sm text-text-secondary">{row.lexileRange}</td>
-                <td className="p-3 text-sm text-text-secondary">{row.equivalent}</td>
-                <td className="p-3 text-sm text-text-tertiary">{row.description}</td>
-              </motion.tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      <DataTable
+        columns={[
+          {
+            key: 'razLevel',
+            title: 'RAZ 级别',
+            render: (row) => (
+              <span className="bg-success/10 border-success/20 rounded-md border px-2 py-1 text-xs text-success">
+                {row.razLevel}
+              </span>
+            ),
+          },
+          { key: 'lexileRange', title: '蓝思值' },
+          { key: 'equivalent', title: '对应证书' },
+          { key: 'description', title: '阶段说明' },
+        ]}
+        data={lexileReference}
+        emptyText="暂无数据"
+      />
 
       <div className="mt-4 flex items-start gap-3 border-t border-border-subtle pt-4">
         <Icon name="BookOpen" size="sm" className="mt-0.5 shrink-0 text-success" />

@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Icon, type IconName } from '@/components/ui/icon';
 import { motion } from 'framer-motion';
+import Button from '@/components/ui/button';
 
 interface NavItem {
   name: string;
@@ -99,7 +100,8 @@ export default function ConsoleLayout({ children }: { children: React.ReactNode 
           ))}
         </nav>
 
-        <button
+        <Button
+          variant="secondary"
           onClick={() => setCollapsed(!collapsed)}
           className="mt-4 hidden size-8 items-center justify-center rounded-lg bg-surface-hover text-text-muted transition-colors hover:text-text-secondary lg:flex"
           title={collapsed ? '展开' : '收起'}
@@ -109,7 +111,7 @@ export default function ConsoleLayout({ children }: { children: React.ReactNode 
             size="sm"
             className={`transition-transform ${collapsed ? 'rotate-180' : ''}`}
           />
-        </button>
+        </Button>
       </motion.aside>
 
       {/* Main content */}

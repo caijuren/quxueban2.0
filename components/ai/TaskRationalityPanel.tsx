@@ -1,4 +1,5 @@
 'use client';
+import Button from '@/components/ui/button';
 import { Icon, type IconName } from '@/components/ui/icon';
 
 import { motion } from 'framer-motion';
@@ -64,7 +65,9 @@ export default function TaskRationalityPanel({
       animate={{ opacity: 1, y: 0 }}
       className={`rounded-xl border ${config.border} ${config.bg} overflow-hidden`}
     >
-      <button
+      <Button
+        variant="ghost"
+        size="md"
         onClick={() => setExpanded((v) => !v)}
         className="flex w-full items-center justify-between px-4 py-3 text-left"
       >
@@ -93,7 +96,7 @@ export default function TaskRationalityPanel({
         ) : (
           <Icon name="ChevronDown" size="sm" className="text-text-muted" />
         )}
-      </button>
+      </Button>
 
       {expanded && (
         <div className="space-y-3 px-4 pb-4">

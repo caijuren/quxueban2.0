@@ -217,14 +217,15 @@ export default function AiConfigSection() {
                 placeholder="sk-..."
                 className="pr-10"
               />
-              <button
+              <Button
+                variant="ghost"
                 type="button"
                 onClick={() => setShowKey((v) => !v)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-text-muted transition-colors hover:text-text-secondary"
+                className="absolute right-3 top-1/2 -translate-y-1/2"
                 aria-label={showKey ? '隐藏 API Key' : '显示 API Key'}
               >
                 {showKey ? <Icon name="EyeOff" size="sm" /> : <Icon name="Eye" size="sm" />}
-              </button>
+              </Button>
             </div>
           </FormField>
 

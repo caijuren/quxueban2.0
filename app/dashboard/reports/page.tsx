@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
 import { SlideUp, StaggerContainer, StaggerItem } from '@/components/motion';
 import { Icon } from '@/components/ui/icon';
+import Select from '@/components/ui/select';
 import { useChildren } from '@/components/dashboard/ChildrenContext';
 import ChildEmptyState from '@/components/dashboard/ChildEmptyState';
 import EmptyState from '@/components/ui/EmptyState';
@@ -33,6 +34,7 @@ import {
   parseDurationMinutes,
   dayOrder,
 } from '@/lib/weeklyTasks';
+import Button from '@/components/ui/button';
 import { useGenerateAiSummary, useSaveWeeklyPlan } from '@/lib/hooks/useWeeklyPlans';
 
 function shiftWeekId(weekId: string, delta: number): string {
@@ -340,39 +342,31 @@ export default function ReportsPage() {
 
             {plan && stats && (
               <div className="flex items-center justify-end gap-2">
-                <button
+                <Button
+                  variant="secondary"
                   onClick={() => setWeekId((w) => shiftWeekId(w, -1))}
                   className="flex size-8 items-center justify-center rounded-[14px] border border-border-default bg-surface text-text-secondary transition-colors hover:bg-surface-hover"
                   aria-label="上一周"
                 >
                   <Icon name="ChevronLeft" size="sm" />
-                </button>
+                </Button>
                 <div className="relative">
-                  <select
+                  <Select
                     value={weekId}
                     onChange={(e) => setWeekId(e.target.value)}
-                    className="focus:border-primary/50 focus:ring-primary/10 min-w-[180px] cursor-pointer appearance-none rounded-[14px] border border-border-default bg-surface py-1.5 pl-3 pr-9 text-sm font-medium text-text-primary transition-colors focus:outline-none focus:ring-2"
-                    aria-label="选择周"
-                  >
-                    {weekOptions.map((opt) => (
-                      <option key={opt.value} value={opt.value}>
-                        {opt.label}
-                      </option>
-                    ))}
-                  </select>
-                  <Icon
-                    name="ChevronDown"
                     size="sm"
-                    className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-text-tertiary"
+                    className="min-w-[180px] bg-surface"
+                    options={weekOptions}
                   />
                 </div>
-                <button
+                <Button
+                  variant="secondary"
                   onClick={() => setWeekId((w) => shiftWeekId(w, 1))}
                   className="flex size-8 items-center justify-center rounded-[14px] border border-border-default bg-surface text-text-secondary transition-colors hover:bg-surface-hover"
                   aria-label="下一周"
                 >
                   <Icon name="ChevronRight" size="sm" />
-                </button>
+                </Button>
               </div>
             )}
           </div>
@@ -389,7 +383,8 @@ export default function ReportsPage() {
                   <Icon name="Sparkles" size="md" animate="pulse" className="text-ai" />
                   <h2 className="text-lg font-bold text-text-secondary">AI 周报总结</h2>
                 </div>
-                <button
+                <Button
+                  variant="secondary"
                   onClick={handleRefreshAiSummary}
                   disabled={aiGenerating}
                   className="bg-ai/10 border-ai/20 hover:bg-ai/15 flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-xs font-medium text-ai transition-colors disabled:opacity-50"
@@ -400,7 +395,7 @@ export default function ReportsPage() {
                     <Icon name="RotateCw" size="xs" />
                   )}
                   {aiGenerating ? '生成中...' : '重新生成'}
-                </button>
+                </Button>
               </div>
 
               {plan.aiSummary ? (
@@ -703,13 +698,14 @@ export default function ReportsPage() {
 
           {/* Share action */}
           <StaggerItem className="flex justify-end">
-            <button
+            <Button
+              variant="primary"
               onClick={() => alert('分享图功能将在后续迭代中提供')}
               className="hover:bg-primary/90 flex items-center gap-2 rounded-[14px] bg-primary px-5 py-2.5 text-sm font-medium text-text-primary shadow-[0_0_16px_rgba(244,63,122,0.25)] transition-all"
             >
               <Icon name="Share2" size="sm" />
               生成分享图
-            </button>
+            </Button>
           </StaggerItem>
         </StaggerContainer>
       )}

@@ -9,6 +9,7 @@ import ChildEmptyState from '@/components/dashboard/ChildEmptyState';
 import CommandCard from '@/components/ui/CommandCard';
 import EmptyState from '@/components/ui/EmptyState';
 import { gradeLabel } from '@/lib/children';
+import Button from '@/components/ui/button';
 import { useGrowthTimeline, useGrowthEvidence, GrowthTimelineItem } from '@/lib/hooks/useGrowth';
 import {
   getPlanStats,
@@ -123,7 +124,8 @@ export default function GrowthPage() {
           {children.map((child) => {
             const active = child.id === currentChildId;
             return (
-              <button
+              <Button
+                variant="secondary"
                 key={child.id}
                 onClick={() => setCurrentChildId(child.id)}
                 className={`flex items-center gap-2 rounded-xl border px-3 py-1.5 text-sm transition-all ${
@@ -134,7 +136,7 @@ export default function GrowthPage() {
               >
                 <ChildAvatar child={child} size="sm" shape="rounded" />
                 <span className="font-medium">{child.name}</span>
-              </button>
+              </Button>
             );
           })}
         </div>

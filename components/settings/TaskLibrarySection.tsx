@@ -1,6 +1,9 @@
 'use client';
 import { Icon } from '@/components/ui/icon';
 
+import Select from '@/components/ui/select';
+import Textarea from '@/components/ui/textarea';
+import Button from '@/components/ui/button';
 import { useEffect, useMemo, useState } from 'react';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 
@@ -277,44 +280,48 @@ export default function TaskLibrarySection() {
 
         <div className="flex flex-wrap items-center gap-2">
           <Icon name="Filter" size="xs" className="text-text-muted" />
-          <select
+          <Select
+            options={[
+              { value: 'all', label: '全部分类' },
+              ...allCategories.map((c) => ({ value: c, label: TASK_CATEGORY_LABELS[c] })),
+            ]}
             value={filterCategory}
             onChange={(e) => setFilterCategory(e.target.value as TaskCategory | 'all')}
-            className="focus:border-primary/50 rounded-lg border border-border-default bg-surface-elevated p-2 text-xs text-text-secondary focus:outline-none"
-          >
-            <option value="all">全部分类</option>
-            {allCategories.map((c) => (
-              <option key={c} value={c}>
-                {TASK_CATEGORY_LABELS[c]}
-              </option>
-            ))}
-          </select>
-          <select
+            size="sm"
+            className="bg-surface-elevated"
+          />
+          <Select
+            options={[
+              { value: 'all', label: '全部来源' },
+              { value: 'system', label: '系统预设' },
+              { value: 'user', label: '自定义' },
+            ]}
             value={filterSource}
             onChange={(e) => setFilterSource(e.target.value as typeof filterSource)}
-            className="focus:border-primary/50 rounded-lg border border-border-default bg-surface-elevated p-2 text-xs text-text-secondary focus:outline-none"
-          >
-            <option value="all">全部来源</option>
-            <option value="system">系统预设</option>
-            <option value="user">自定义</option>
-          </select>
-          <select
+            size="sm"
+            className="bg-surface-elevated"
+          />
+          <Select
+            options={[
+              { value: 'active', label: '使用中' },
+              { value: 'archived', label: '已归档' },
+              { value: 'all', label: '全部' },
+            ]}
             value={filterStatus}
             onChange={(e) => setFilterStatus(e.target.value as typeof filterStatus)}
-            className="focus:border-primary/50 rounded-lg border border-border-default bg-surface-elevated p-2 text-xs text-text-secondary focus:outline-none"
-          >
-            <option value="active">使用中</option>
-            <option value="archived">已归档</option>
-            <option value="all">全部</option>
-          </select>
+            size="sm"
+            className="bg-surface-elevated"
+          />
 
-          <button
+          <Button
+            variant="primary"
+            size="sm"
             onClick={handleAdd}
-            className="flex items-center gap-1.5 rounded-lg bg-primary px-3 py-2 text-xs font-semibold text-text-primary transition-all hover:opacity-90"
+            className="font-semibold"
           >
-            <Icon name="Plus" size="xs" />
+            <Icon name="Plus" size="sm" />
             添加任务
-          </button>
+          </Button>
         </div>
       </div>
 
@@ -457,20 +464,24 @@ export default function TaskLibrarySection() {
                 </div>
 
                 <div className="mt-auto flex items-center justify-end gap-2 border-t border-border-subtle pt-3">
-                  <button
+                  <Button
+                    variant="ghost"
+                    size="sm"
                     onClick={() => handleEdit(tpl)}
-                    className="flex items-center gap-1 rounded-lg bg-surface-elevated px-3 py-1.5 text-xs text-text-secondary transition-colors hover:bg-surface-highlight"
+                    className="bg-surface-elevated hover:bg-surface-highlight"
                   >
                     <Icon name="Pencil" size="xs" />
                     编辑
-                  </button>
-                  <button
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="sm"
                     onClick={() => handleArchive(tpl.id, !isArchived)}
                     disabled={archivingId === tpl.id}
-                    className={`flex items-center gap-1 rounded-lg px-3 py-1.5 text-xs transition-colors disabled:opacity-50 ${
+                    className={`${
                       isArchived
-                        ? 'bg-success/10 hover:bg-success/15 text-success'
-                        : 'bg-surface/10 hover:bg-surface/15 text-text-tertiary'
+                        ? 'bg-success/10 text-success hover:bg-success/15'
+                        : 'bg-surface/10 text-text-tertiary hover:bg-surface/15'
                     }`}
                   >
                     {archivingId === tpl.id ? (
@@ -481,11 +492,13 @@ export default function TaskLibrarySection() {
                       <Icon name="Archive" size="xs" />
                     )}
                     {isArchived ? '恢复' : '归档'}
-                  </button>
-                  <button
+                  </Button>
+                  <Button
+                    variant="danger"
+                    size="sm"
                     onClick={() => handleDelete(tpl.id)}
                     disabled={deletingId === tpl.id}
-                    className="bg-error/10 hover:bg-error/15 flex items-center gap-1 rounded-lg px-3 py-1.5 text-xs text-error transition-colors disabled:opacity-50"
+                    className="hover:bg-error/15"
                   >
                     {deletingId === tpl.id ? (
                       <Icon name="Loader2" size="xs" animate="spin" />
@@ -493,7 +506,7 @@ export default function TaskLibrarySection() {
                       <Icon name="Trash2" size="xs" />
                     )}
                     删除
-                  </button>
+                  </Button>
                 </div>
               </motion.div>
             );
@@ -699,13 +712,15 @@ function TaskTemplateModal({
               </p>
             </div>
           </div>
-          <button
+          <Button
+            variant="ghost"
+            size="xs"
             onClick={onClose}
-            className="focus-ring rounded-lg p-2 text-text-tertiary hover:bg-surface-elevated"
+            className="p-2 hover:bg-surface-elevated"
             aria-label="关闭"
           >
             <Icon name="X" size="md" />
-          </button>
+          </Button>
         </div>
 
         <form
@@ -730,17 +745,13 @@ function TaskTemplateModal({
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
             <div>
               <label className="mb-1.5 block text-xs text-text-tertiary">分类</label>
-              <select
+              <Select
+                options={allCategories.map((c) => ({ value: c, label: TASK_CATEGORY_LABELS[c] }))}
                 value={form.category}
                 onChange={(e) => updateField('category', e.target.value as TaskCategory)}
-                className="focus:border-primary/50 w-full rounded-lg border border-border-default bg-surface-elevated px-3 py-2 text-sm text-text-secondary focus:outline-none"
-              >
-                {allCategories.map((c) => (
-                  <option key={c} value={c}>
-                    {TASK_CATEGORY_LABELS[c]}
-                  </option>
-                ))}
-              </select>
+                size="md"
+                className="bg-surface-elevated"
+              />
             </div>
             <div>
               <label className="mb-1.5 block text-xs text-text-tertiary">参考时长</label>
@@ -754,19 +765,15 @@ function TaskTemplateModal({
             </div>
             <div>
               <label className="mb-1.5 block text-xs text-text-tertiary">难度</label>
-              <select
+              <Select
+                options={difficultyOptions.map((d) => ({ value: d.value, label: d.label }))}
                 value={form.difficulty ?? 'medium'}
                 onChange={(e) =>
                   updateField('difficulty', e.target.value as 'easy' | 'medium' | 'hard')
                 }
-                className="focus:border-primary/50 w-full rounded-lg border border-border-default bg-surface-elevated px-3 py-2 text-sm text-text-secondary focus:outline-none"
-              >
-                {difficultyOptions.map((d) => (
-                  <option key={d.value} value={d.value}>
-                    {d.label}
-                  </option>
-                ))}
-              </select>
+                size="md"
+                className="bg-surface-elevated"
+              />
             </div>
           </div>
 
@@ -805,17 +812,13 @@ function TaskTemplateModal({
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div>
               <label className="mb-1.5 block text-xs text-text-tertiary">关联里程碑标签</label>
-              <select
+              <Select
+                options={milestoneOptions}
                 value={milestoneSelectValue}
                 onChange={(e) => handleMilestoneChange(e.target.value)}
-                className="focus:border-primary/50 w-full rounded-lg border border-border-default bg-surface-elevated px-3 py-2 text-sm text-text-secondary focus:outline-none"
-              >
-                {milestoneOptions.map((o) => (
-                  <option key={o.value} value={o.value}>
-                    {o.label}
-                  </option>
-                ))}
-              </select>
+                size="md"
+                className="bg-surface-elevated"
+              />
               {milestoneSelectValue === '__custom__' && (
                 <input
                   type="text"
@@ -831,18 +834,16 @@ function TaskTemplateModal({
             </div>
             <div>
               <label className="mb-1.5 block text-xs text-text-tertiary">适用学期场景</label>
-              <select
+              <Select
+                options={[
+                  { value: '', label: '全年通用' },
+                  ...semesterOptions.map((s) => ({ value: s.value, label: s.label })),
+                ]}
                 value={form.semesterTag ?? ''}
                 onChange={(e) => updateField('semesterTag', e.target.value)}
-                className="focus:border-primary/50 w-full rounded-lg border border-border-default bg-surface-elevated px-3 py-2 text-sm text-text-secondary focus:outline-none"
-              >
-                <option value="">全年通用</option>
-                {semesterOptions.map((s) => (
-                  <option key={s.value} value={s.value}>
-                    {s.label}
-                  </option>
-                ))}
-              </select>
+                size="md"
+                className="bg-surface-elevated"
+              />
             </div>
           </div>
 
@@ -862,11 +863,13 @@ function TaskTemplateModal({
               {routeOptions.map((route) => {
                 const selected = form.routeTags.includes(route.value);
                 return (
-                  <button
+                  <Button
                     key={route.value}
+                    variant="ghost"
+                    size="xs"
                     type="button"
                     onClick={() => toggleRouteTag(route.value)}
-                    className={`rounded-lg px-2.5 py-1.5 text-xs transition-all ${
+                    className={`px-2.5 py-1.5 ${
                       selected
                         ? 'bg-primary/15 border-primary/30 border text-primary'
                         : 'border border-border-subtle bg-surface-elevated text-text-tertiary hover:bg-surface-highlight'
@@ -874,7 +877,7 @@ function TaskTemplateModal({
                   >
                     {selected && <Icon name="Sparkles" size="xs" className="mr-1 inline-block" />}
                     {route.label}
-                  </button>
+                  </Button>
                 );
               })}
             </div>
@@ -883,31 +886,23 @@ function TaskTemplateModal({
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div>
               <label className="mb-1.5 block text-xs text-text-tertiary">任务类型</label>
-              <select
+              <Select
+                options={taskTypeOptions.map((t) => ({ value: t.value, label: t.label }))}
                 value={form.taskType}
                 onChange={(e) => updateField('taskType', e.target.value as TaskType)}
-                className="focus:border-primary/50 w-full rounded-lg border border-border-default bg-surface-elevated px-3 py-2 text-sm text-text-secondary focus:outline-none"
-              >
-                {taskTypeOptions.map((t) => (
-                  <option key={t.value} value={t.value}>
-                    {t.label}
-                  </option>
-                ))}
-              </select>
+                size="md"
+                className="bg-surface-elevated"
+              />
             </div>
             <div>
               <label className="mb-1.5 block text-xs text-text-tertiary">执行频率</label>
-              <select
+              <Select
+                options={frequencyOptions.map((f) => ({ value: f.value, label: f.label }))}
                 value={form.frequency}
                 onChange={(e) => updateField('frequency', e.target.value as TaskFrequency)}
-                className="focus:border-primary/50 w-full rounded-lg border border-border-default bg-surface-elevated px-3 py-2 text-sm text-text-secondary focus:outline-none"
-              >
-                {frequencyOptions.map((f) => (
-                  <option key={f.value} value={f.value}>
-                    {f.label}
-                  </option>
-                ))}
-              </select>
+                size="md"
+                className="bg-surface-elevated"
+              />
             </div>
           </div>
 
@@ -931,7 +926,12 @@ function TaskTemplateModal({
               </div>
               <div>
                 <label className="mb-1.5 block text-xs text-text-tertiary">周期</label>
-                <select
+                <Select
+                  options={[
+                    { value: 'day', label: '每天' },
+                    { value: 'week', label: '每周' },
+                    { value: 'month', label: '每月' },
+                  ]}
                   value={form.customFrequency?.period ?? 'week'}
                   onChange={(e) =>
                     updateField('customFrequency', {
@@ -940,12 +940,9 @@ function TaskTemplateModal({
                       period: e.target.value as 'day' | 'week' | 'month',
                     })
                   }
-                  className="focus:border-primary/50 w-full rounded-lg border border-border-default bg-surface-elevated px-3 py-2 text-sm text-text-secondary focus:outline-none"
-                >
-                  <option value="day">每天</option>
-                  <option value="week">每周</option>
-                  <option value="month">每月</option>
-                </select>
+                  size="md"
+                  className="bg-surface-elevated"
+                />
               </div>
             </div>
           )}
@@ -964,8 +961,9 @@ function TaskTemplateModal({
               {weeklyScheduleOptions.map((option) => {
                 const selected = form.weeklySchedule === option.value;
                 return (
-                  <button
+                  <Button
                     key={option.value}
+                    variant="ghost"
                     type="button"
                     onClick={() => {
                       updateField('weeklySchedule', option.value);
@@ -973,7 +971,7 @@ function TaskTemplateModal({
                         updateField('customScheduleDays', []);
                       }
                     }}
-                    className={`rounded-xl border p-3 text-left transition-all ${
+                    className={`rounded-xl border p-3 text-left ${
                       selected
                         ? 'bg-secondary/10 border-secondary/30'
                         : 'border-border-subtle bg-surface-elevated hover:bg-surface-highlight'
@@ -992,7 +990,7 @@ function TaskTemplateModal({
                       </span>
                     </div>
                     <p className="ml-6 mt-1 text-2xs text-text-muted">{option.description}</p>
-                  </button>
+                  </Button>
                 );
               })}
             </div>
@@ -1004,8 +1002,10 @@ function TaskTemplateModal({
                   {dayOptions.map((day) => {
                     const selected = form.customScheduleDays.includes(day.value);
                     return (
-                      <button
+                      <Button
                         key={day.value}
+                        variant="ghost"
+                        size="xs"
                         type="button"
                         onClick={() => {
                           const next = new Set(form.customScheduleDays);
@@ -1013,14 +1013,14 @@ function TaskTemplateModal({
                           else next.add(day.value);
                           updateField('customScheduleDays', Array.from(next));
                         }}
-                        className={`rounded-lg px-3 py-1.5 text-xs transition-all ${
+                        className={`px-3 py-1.5 ${
                           selected
                             ? 'bg-secondary/15 border-secondary/30 border text-secondary'
                             : 'border border-border-subtle bg-surface-elevated text-text-tertiary hover:bg-surface-highlight'
                         }`}
                       >
                         {day.label}
-                      </button>
+                      </Button>
                     );
                   })}
                 </div>
@@ -1069,13 +1069,15 @@ function TaskTemplateModal({
                           className="focus:border-primary/50 w-16 rounded-lg border border-border-default bg-surface-elevated px-2 py-1 text-center text-sm text-text-secondary focus:outline-none"
                           title="权重"
                         />
-                        <button
+                        <Button
+                          variant="ghost"
+                          size="xs"
                           type="button"
                           onClick={() => removeCapabilityLink(link.capabilityId)}
-                          className="rounded-lg p-1.5 text-text-tertiary hover:bg-surface-highlight"
+                          className="p-1.5 hover:bg-surface-highlight"
                         >
                           <Icon name="X" size="xs" />
-                        </button>
+                        </Button>
                       </div>
                     </div>
                   );
@@ -1083,37 +1085,36 @@ function TaskTemplateModal({
               </div>
             )}
 
-            <select
+            <Select
+              options={[
+                { value: '', label: '+ 添加关联能力' },
+                ...capabilities
+                  .filter((c) => !form.capabilityLinks.some((l) => l.capabilityId === c.id))
+                  .map((c) => ({ value: c.id, label: `${c.name} (${capabilityCategoryLabels[c.category] || c.category})` })),
+              ]}
               value=""
               onChange={(e) => {
                 if (e.target.value) {
                   addCapabilityLink(e.target.value);
-                  e.target.value = '';
                 }
               }}
-              className="focus:border-primary/50 w-full rounded-lg border border-border-default bg-surface-elevated px-3 py-2 text-sm text-text-secondary focus:outline-none"
-            >
-              <option value="">+ 添加关联能力</option>
-              {capabilities
-                .filter((c) => !form.capabilityLinks.some((l) => l.capabilityId === c.id))
-                .map((c) => (
-                  <option key={c.id} value={c.id}>
-                    {c.name} ({capabilityCategoryLabels[c.category] || c.category})
-                  </option>
-                ))}
-            </select>
+              size="md"
+              className="bg-surface-elevated"
+            />
           </div>
 
           <div>
             <div className="mb-2 flex items-center justify-between">
               <label className="block text-xs text-text-tertiary">评估标准</label>
-              <button
+              <Button
+                variant="link"
+                size="xs"
                 type="button"
                 onClick={addAssessmentCriterion}
-                className="text-2xs text-primary transition-colors hover:text-primary-glow"
+                className="hover:text-primary-glow"
               >
                 + 添加标准
-              </button>
+              </Button>
             </div>
 
             {form.assessmentCriteria.length === 0 ? (
@@ -1152,13 +1153,15 @@ function TaskTemplateModal({
                       />
                       自评
                     </label>
-                    <button
+                    <Button
+                      variant="ghost"
+                      size="xs"
                       type="button"
                       onClick={() => removeAssessmentCriterion(index)}
-                      className="rounded-lg p-1.5 text-text-tertiary hover:bg-surface-highlight"
+                      className="p-1.5 hover:bg-surface-highlight"
                     >
                       <Icon name="X" size="xs" />
-                    </button>
+                    </Button>
                   </div>
                 ))}
               </div>
@@ -1167,22 +1170,26 @@ function TaskTemplateModal({
         </form>
 
         <div className="flex items-center justify-end gap-3 border-t border-border-subtle p-6 pt-4 sm:p-8">
-          <button
+          <Button
+            variant="ghost"
+            size="md"
             type="button"
             onClick={onClose}
-            className="rounded-xl px-4 py-2 text-text-tertiary transition-colors hover:text-text-secondary"
+            className="hover:text-text-secondary"
           >
             取消
-          </button>
-          <button
+          </Button>
+          <Button
+            variant="primary"
+            size="lg"
             type="submit"
             form="task-template-form"
             disabled={saving || !form.title.trim()}
-            className="flex items-center gap-2 rounded-xl bg-secondary px-6 py-2 font-semibold text-text-primary transition-all hover:shadow-[0_0_30px_rgba(139,92,246,0.4)] disabled:cursor-not-allowed disabled:opacity-50"
+            className="bg-secondary hover:shadow-[0_0_30px_rgba(139,92,246,0.4)]"
           >
             {saving ? <Icon name="Loader2" size="sm" animate="spin" /> : <Icon name="Save" size="sm" />}
             保存
-          </button>
+          </Button>
         </div>
       </motion.div>
     </motion.div>

@@ -47,9 +47,9 @@ export function getTimeSlotLabel(timeSlot: TimeSlot): string {
 }
 
 export const subjectMeta: Record<SubjectId, { name: string; color: string; gradient: string }> = {
-  chinese: { name: '语文', color: '#06b6d4', gradient: 'from-accent to-accent-glow' },
-  math: { name: '数学', color: '#f43f5e', gradient: 'from-primary to-primary-glow' },
-  english: { name: '英语', color: '#8b5cf6', gradient: 'from-secondary to-secondary-glow' },
+  chinese: { name: '语文', color: 'var(--accent)', gradient: 'from-accent to-accent-glow' },
+  math: { name: '数学', color: 'var(--color-primary)', gradient: 'from-primary to-primary-glow' },
+  english: { name: '英语', color: 'var(--color-secondary)', gradient: 'from-secondary to-secondary-glow' },
 };
 
 interface SubjectTemplate {

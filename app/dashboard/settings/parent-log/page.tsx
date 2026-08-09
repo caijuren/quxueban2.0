@@ -7,8 +7,9 @@ import { useChildren } from '@/components/dashboard/ChildrenContext';
 import EmptyState from '@/components/ui/EmptyState';
 import ConsolePageShell from '@/components/console/core/ConsolePageShell';
 import SettingsSection from '@/components/settings/SettingsSection';
-import {
-  useParentLogs,
+import Button from '@/components/ui/button';
+import Textarea from '@/components/ui/textarea';
+import { useParentLogs,
   useCreateParentLog,
   useUpdateParentLog,
   useDeleteParentLog,
@@ -123,13 +124,14 @@ export default function ParentLogSettingsPage() {
 
             <div>
               <label className="mb-1 block text-xs text-text-muted">观察内容</label>
-              <textarea
+              <Textarea
                 value={content}
                 onChange={(e) => setContent(e.target.value)}
                 placeholder="记录今天的学习状态、情绪变化、进步或需要关注的地方…"
                 rows={5}
                 required
-                className="focus:border-primary/50 w-full resize-none rounded-lg border border-border-default bg-surface px-3 py-2 text-sm text-text-secondary placeholder:text-text-muted focus:outline-none"
+                resize="none"
+                className="focus:border-primary/50 border-border-default bg-surface px-3 py-2 text-text-secondary"
               />
             </div>
 
@@ -152,17 +154,19 @@ export default function ParentLogSettingsPage() {
                 <Icon name="Image" size="xs" className="mr-1 inline" />
                 图片链接（每行一个）
               </label>
-              <textarea
+              <Textarea
                 value={imageUrls}
                 onChange={(e) => setImageUrls(e.target.value)}
                 placeholder="https://example.com/photo1.jpg"
                 rows={2}
-                className="focus:border-primary/50 w-full resize-none rounded-lg border border-border-default bg-surface px-3 py-2 text-sm text-text-secondary placeholder:text-text-muted focus:outline-none"
+                resize="none"
+                className="focus:border-primary/50 border-border-default bg-surface px-3 py-2 text-text-secondary"
               />
             </div>
 
             <div className="flex items-center gap-2 pt-1">
-              <button
+              <Button
+                variant="primary"
                 type="submit"
                 disabled={createLog.isPending || updateLog.isPending || !content.trim()}
                 className="flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-text-primary transition-all hover:opacity-90 disabled:opacity-60"
@@ -173,15 +177,16 @@ export default function ParentLogSettingsPage() {
                   <Icon name="Save" size="sm" />
                 )}
                 {editingId ? '保存修改' : '保存记录'}
-              </button>
+              </Button>
               {editingId && (
-                <button
+                <Button
+                  variant="secondary"
                   type="button"
                   onClick={resetForm}
                   className="rounded-lg border border-border-default bg-surface px-4 py-2 text-sm text-text-secondary transition-colors hover:bg-surface-highlight"
                 >
                   <Icon name="X" size="sm" />
-                </button>
+                </Button>
               )}
             </div>
           </form>
@@ -190,7 +195,8 @@ export default function ParentLogSettingsPage() {
         <SettingsSection title="历史记录" description="按日期或按周查看已记录的成长观察">
           <div className="mb-3 flex items-center justify-end">
             <div className="flex items-center gap-1 rounded-lg border border-border-default bg-surface p-0.5">
-              <button
+              <Button
+                variant="ghost"
                 onClick={() => setView('daily')}
                 className={`rounded-md px-2.5 py-1 text-xs transition-colors ${
                   view === 'daily'
@@ -199,8 +205,9 @@ export default function ParentLogSettingsPage() {
                 }`}
               >
                 按日期
-              </button>
-              <button
+              </Button>
+              <Button
+                variant="ghost"
                 onClick={() => setView('weekly')}
                 className={`rounded-md px-2.5 py-1 text-xs transition-colors ${
                   view === 'weekly'
@@ -209,7 +216,7 @@ export default function ParentLogSettingsPage() {
                 }`}
               >
                 按周
-              </button>
+              </Button>
             </div>
           </div>
 
@@ -315,20 +322,22 @@ function LogCard({
           )}
         </div>
         <div className="flex shrink-0 items-center gap-1">
-          <button
+          <Button
+            variant="secondary"
             onClick={onEdit}
             className="flex size-7 items-center justify-center rounded-md bg-surface-hover text-text-muted transition-colors hover:text-primary"
             title="编辑"
           >
             <Icon name="Edit2" size="xs" />
-          </button>
-          <button
+          </Button>
+          <Button
+            variant="secondary"
             onClick={onDelete}
             className="flex size-7 items-center justify-center rounded-md bg-surface-hover text-text-muted transition-colors hover:text-error"
             title="删除"
           >
             <Icon name="Trash2" size="xs" />
-          </button>
+          </Button>
         </div>
       </div>
     </div>

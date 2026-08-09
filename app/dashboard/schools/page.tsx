@@ -1,4 +1,5 @@
 'use client';
+import Button from '@/components/ui/button';
 import { Icon } from '@/components/ui/icon';
 
 import { motion, useReducedMotion } from 'framer-motion';
@@ -98,13 +99,15 @@ function SchoolsPageContent() {
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <button
+          <Button
+            variant="primary"
+            size="md"
             onClick={() => setShowAddModal(true)}
-            className="hover:bg-primary/90 inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-inverse transition-colors"
+            className=""
           >
             <Icon name="Plus" size="sm" />
             添加学校
-          </button>
+          </Button>
         </div>
       </motion.div>
 
@@ -208,13 +211,15 @@ function SchoolsPageContent() {
         size="sm"
         zIndex={60}
         footer={
-          <button
+          <Button
             type="button"
+            variant="secondary"
+            size="sm"
             onClick={() => setShowAddModal(false)}
-            className="focus-ring w-full rounded-lg border border-border-default bg-surface-elevated py-2 text-sm text-text-secondary transition-colors hover:bg-surface-hover"
+            className="w-full"
           >
             知道了
-          </button>
+          </Button>
         }
       >
         <p className="text-center text-sm text-text-tertiary">

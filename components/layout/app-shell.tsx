@@ -4,6 +4,7 @@ import * as React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
+import Button from '@/components/ui/button';
 import { Icon, type IconName } from '@/components/ui/icon';
 import PageContainer from './page-container';
 
@@ -63,14 +64,16 @@ export default function AppShell({ children, navItems, logo, title, userMenu }: 
       {/* Header */}
       <header className="bg-bg-header/80 fixed inset-x-0 top-0 z-header flex h-16 items-center justify-between border-b border-border-subtle px-4 backdrop-blur lg:left-64 lg:px-8">
         <div className="flex items-center gap-3">
-          <button
+          <Button
             type="button"
+            variant="ghost"
+            size="md"
             onClick={() => setMobileOpen(true)}
-            className="rounded-lg p-2 text-text-secondary hover:bg-surface-hover lg:hidden"
+            className="lg:hidden"
             aria-label="打开菜单"
           >
             <Icon name="Menu" size="md" />
-          </button>
+          </Button>
           {!title && logo}
         </div>
         <div className="flex items-center gap-4">{userMenu}</div>
@@ -89,14 +92,16 @@ export default function AppShell({ children, navItems, logo, title, userMenu }: 
                 {logo}
                 {title && <span className="text-lg font-bold text-text-primary">{title}</span>}
               </div>
-              <button
+              <Button
                 type="button"
+                variant="ghost"
+                size="md"
                 onClick={() => setMobileOpen(false)}
-                className="rounded-lg p-2 text-text-secondary hover:bg-surface-hover"
+                className=""
                 aria-label="关闭菜单"
               >
                 <Icon name="X" size="md" />
-              </button>
+              </Button>
             </div>
             <nav className="space-y-1 p-4">
               {navItems.map((item) => (

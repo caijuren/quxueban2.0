@@ -217,9 +217,9 @@ export default function ChineseTrackMap({ config, currentGrade }: ChineseTrackMa
             })}
 
             <linearGradient id="currentPulse" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor="#f43f5e" stopOpacity="0" />
-              <stop offset="50%" stopColor="#f43f5e" stopOpacity="0.6" />
-              <stop offset="100%" stopColor="#f43f5e" stopOpacity="0" />
+              <stop offset="0%" stopColor="var(--color-primary)" stopOpacity="0" />
+              <stop offset="50%" stopColor="var(--color-primary)" stopOpacity="0.6" />
+              <stop offset="100%" stopColor="var(--color-primary)" stopOpacity="0" />
             </linearGradient>
           </defs>
 
@@ -245,17 +245,17 @@ export default function ChineseTrackMap({ config, currentGrade }: ChineseTrackMa
             <>
               <defs>
                 <radialGradient id="ambientGlow1" cx="30%" cy="30%" r="50%">
-                  <stop offset="0%" stopColor="#f43f5e" stopOpacity="0.12" />
-                  <stop offset="100%" stopColor="#f43f5e" stopOpacity="0" />
+                  <stop offset="0%" stopColor="var(--color-primary)" stopOpacity="0.12" />
+                  <stop offset="100%" stopColor="var(--color-primary)" stopOpacity="0" />
                 </radialGradient>
                 <radialGradient id="ambientGlow2" cx="70%" cy="70%" r="45%">
-                  <stop offset="0%" stopColor="#14b8a6" stopOpacity="0.1" />
-                  <stop offset="100%" stopColor="#14b8a6" stopOpacity="0" />
+                  <stop offset="0%" stopColor="var(--accent)" stopOpacity="0.1" />
+                  <stop offset="100%" stopColor="var(--accent)" stopOpacity="0" />
                 </radialGradient>
                 <radialGradient id="cursorGlow" cx="50%" cy="50%" r="50%">
-                  <stop offset="0%" stopColor="#ffffff" stopOpacity="0.08" />
-                  <stop offset="50%" stopColor="#f43f5e" stopOpacity="0.04" />
-                  <stop offset="100%" stopColor="#f43f5e" stopOpacity="0" />
+                  <stop offset="0%" stopColor="var(--text-primary)" stopOpacity="0.08" />
+                  <stop offset="50%" stopColor="var(--color-primary)" stopOpacity="0.04" />
+                  <stop offset="100%" stopColor="var(--color-primary)" stopOpacity="0" />
                 </radialGradient>
               </defs>
               <ellipse cx={250} cy={VIEWBOX.topPadding} rx={220} ry={160} fill="url(#ambientGlow1)">
@@ -438,7 +438,7 @@ export default function ChineseTrackMap({ config, currentGrade }: ChineseTrackMa
                         animate={{ scale: 1 }}
                         transition={{ delay: 0.5 + index * 0.08 }}
                         r={10}
-                        fill="#0f172a"
+                        fill="var(--bg-primary)"
                         stroke={track.color}
                         strokeWidth={2}
                         style={{
@@ -474,7 +474,7 @@ export default function ChineseTrackMap({ config, currentGrade }: ChineseTrackMa
             y1={60}
             x2={currentX}
             y2={viewBoxHeight - 90}
-            stroke="#f43f5e"
+            stroke="var(--color-primary)"
             strokeWidth="2"
             strokeDasharray="6 4"
             opacity="0.5"
@@ -485,13 +485,13 @@ export default function ChineseTrackMap({ config, currentGrade }: ChineseTrackMa
             width="60"
             height="20"
             rx="10"
-            fill="rgba(244,63,94,0.15)"
-            stroke="rgba(244,63,94,0.4)"
+            fill="color-mix(in srgb, var(--color-primary) 15%, transparent)"
+            stroke="color-mix(in srgb, var(--color-primary) 40%, transparent)"
           />
           <text
             x={currentX}
             y={58}
-            fill="#f43f5e"
+            fill="var(--color-primary)"
             fontSize="10"
             fontWeight="600"
             textAnchor="middle"

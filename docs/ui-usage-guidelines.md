@@ -1,15 +1,10 @@
 # 趣学伴 UI 使用规范（当前深色主题）
 
-> **⚠️ 本文档正在与 Dark Premium Theme v2.1 对齐中**
+> **⚠️ 已废弃（Deprecated）**
 >
-> 本文档基于现有 `tailwind.config.ts` 与 `app/globals.css` 制定，但部分示例尚未完全对齐 `docs/design-tokens-v2.1.md`。如有冲突，请以 **`docs/design-tokens-v2.1.md`** 为准。
+> 本文档已被 v2.7.0 起的 Design System 系列规范取代。当前组件库、Token 体系和 UI 规范请以 `docs/design-system/` 下的文档为准。
 >
-> 核心差异速查：
-> - 卡片背景：`bg-surface`（#111522），不是 `bg-surface-elevated`
-> - 默认边框：`border-border-default`（rgba 0.08），不是 `border-border-subtle`
-> - 大卡片圆角：`rounded-[20px]`，按钮/输入框圆角：`rounded-[14px]`，徽章圆角：`rounded-full`
->
-> 目标：统一全站图标、文字、间距、按钮、表格、配色。
+> 保留此文件仅作历史参考，请勿依此开发新页面。
 
 ---
 

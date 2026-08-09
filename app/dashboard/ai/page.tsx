@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { SlideUp, StaggerContainer, StaggerItem } from '@/components/motion';
+import Button from '@/components/ui/button';
 import { Icon } from '@/components/ui/icon';
 import { useChildren } from '@/components/dashboard/ChildrenContext';
 import { gradeLabel } from '@/lib/children';
@@ -102,10 +103,12 @@ export default function AIPage() {
               : '基于当前进度和目标，智能生成诊断与调整建议'}
           </p>
         </div>
-        <button
+        <Button
+          variant="primary"
+          size="md"
           onClick={generateDiagnosis}
           disabled={!currentChild || loading}
-          className="flex items-center gap-2 rounded-module bg-gradient-to-r from-secondary to-secondary-glow px-5 py-2.5 font-semibold text-inverse transition-all duration-300 hover:shadow-glow-secondary disabled:cursor-not-allowed disabled:opacity-50"
+          className="bg-gradient-to-r from-secondary to-secondary-glow px-5 py-2.5 disabled:cursor-not-allowed disabled:opacity-50"
         >
           {loading ? (
             <Icon name="Loader2" size="sm" animate="spin" />
@@ -113,7 +116,7 @@ export default function AIPage() {
             <Icon name="RefreshCw" size="sm" />
           )}
           {loading ? '生成中...' : '重新生成'}
-        </button>
+        </Button>
       </SlideUp>
 
       {!currentChild && (

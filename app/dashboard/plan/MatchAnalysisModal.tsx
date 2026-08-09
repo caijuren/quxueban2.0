@@ -1,5 +1,6 @@
 'use client';
 import { Icon, type IconName } from '@/components/ui/icon';
+import Button from '@/components/ui/button';
 
 import { useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
@@ -140,10 +141,12 @@ export default function MatchAnalysisModal({
       zIndex={100}
       footer={
         <div className="flex w-full items-center justify-between gap-3">
-          <button
+          <Button
             type="button"
             onClick={() => setIsEditing((v) => !v)}
-            className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm font-medium transition-all ${
+            variant="secondary"
+            size="sm"
+            className={`gap-1.5 ${
               isEditing
                 ? 'bg-success/20 hover:bg-success/30 text-success'
                 : 'bg-surface-elevated text-text-secondary hover:bg-surface-highlight'
@@ -158,22 +161,25 @@ export default function MatchAnalysisModal({
                 <Icon name="Pencil" size="xs" /> 编辑
               </>
             )}
-          </button>
+          </Button>
           <div className="flex items-center gap-2">
-            <button
+            <Button
               type="button"
               onClick={reset}
-              className="flex items-center gap-1.5 rounded-lg bg-surface-elevated px-3 py-2 text-sm text-text-tertiary transition-all hover:bg-surface-highlight"
+              variant="secondary"
+              size="sm"
+              className="bg-surface-elevated text-text-tertiary hover:bg-surface-highlight"
             >
               <Icon name="RotateCcw" size="xs" />
               重置
-            </button>
-            <button
+            </Button>
+            <Button
               type="button"
-              className="hover:bg-primary/90 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-inverse transition-all"
+              variant="primary"
+              size="sm"
             >
               制定提升计划
-            </button>
+            </Button>
           </div>
         </div>
       }

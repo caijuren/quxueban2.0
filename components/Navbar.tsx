@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import Button from '@/components/ui/button';
 import { Icon, type IconName } from '@/components/ui/icon';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -65,15 +66,17 @@ export default function Navbar() {
                 登录 / 注册
               </span>
             </Link>
-            <button
+            <Button
+              variant="ghost"
+              size="md"
               onClick={() => setMobileOpen((prev) => !prev)}
-              className="focus-ring rounded-lg p-2 text-text-tertiary transition-colors hover:bg-surface-hover hover:text-text-primary md:hidden"
+              className="md:hidden"
               aria-expanded={mobileOpen}
               aria-controls="mobile-menu"
               aria-label={mobileOpen ? '关闭菜单' : '打开菜单'}
             >
               {mobileOpen ? <Icon name="X" size="md" /> : <Icon name="Menu" size="md" />}
-            </button>
+            </Button>
           </div>
         </div>
       </div>

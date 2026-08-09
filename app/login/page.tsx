@@ -1,5 +1,6 @@
 'use client';
 import { Icon } from '@/components/ui/icon';
+import Button from '@/components/ui/button';
 
 import { useState, useEffect } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
@@ -248,8 +249,10 @@ function LoginForm() {
                 </div>
               )}
 
-              <button
+              <Button
                 type="submit"
+                variant="primary"
+                size="md"
                 disabled={loading}
                 className="hover:bg-primary/90 inline-flex w-full items-center justify-center gap-2 rounded-module bg-primary px-4 py-2 text-sm font-medium text-inverse transition-colors disabled:cursor-not-allowed disabled:opacity-50"
               >
@@ -260,7 +263,7 @@ function LoginForm() {
                     登录 <Icon name="ArrowRight" size="sm" />
                   </>
                 )}
-              </button>
+              </Button>
             </form>
 
             <p className="mt-6 text-center text-xs text-text-muted">

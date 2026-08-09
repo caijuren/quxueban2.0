@@ -24,6 +24,7 @@ import DataBadge from '@/components/ui/DataBadge';
 import EmptyState from '@/components/ui/EmptyState';
 import GaugeChart from '@/components/ui/GaugeChart';
 import GlassCard from '@/components/ui/glass-card';
+import Button from '@/components/ui/button';
 
 type ViewMode = 'command' | 'overview';
 
@@ -39,8 +40,10 @@ function getCompletionRate(
 function ViewToggle({ mode, onChange }: { mode: ViewMode; onChange: (mode: ViewMode) => void }) {
   return (
     <div className="flex items-center gap-1 rounded-[14px] border border-border-default bg-surface p-1">
-      <button
+      <Button
         onClick={() => onChange('command')}
+        variant="ghost"
+        size="sm"
         className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium transition-all ${
           mode === 'command'
             ? 'bg-primary/[0.10] text-primary'
@@ -49,9 +52,11 @@ function ViewToggle({ mode, onChange }: { mode: ViewMode; onChange: (mode: ViewM
       >
         <Icon name="User" size="sm" />
         当前孩子
-      </button>
-      <button
+      </Button>
+      <Button
         onClick={() => onChange('overview')}
+        variant="ghost"
+        size="sm"
         className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium transition-all ${
           mode === 'overview'
             ? 'bg-primary/[0.10] text-primary'
@@ -60,7 +65,7 @@ function ViewToggle({ mode, onChange }: { mode: ViewMode; onChange: (mode: ViewM
       >
         <Icon name="LayoutGrid" size="sm" />
         全家总览
-      </button>
+      </Button>
     </div>
   );
 }
@@ -155,27 +160,33 @@ function IdentityCard({ child, completionRate }: { child: Child; completionRate:
 
           {/* Footer buttons */}
           <div className="mt-5 flex flex-wrap gap-2 border-t border-border-default pt-5">
-            <button
+            <Button
               onClick={() => router.push('/dashboard/plan')}
+              variant="secondary"
+              size="sm"
               className="inline-flex items-center gap-1.5 rounded-lg bg-surface px-3 py-2 text-xs font-medium text-text-secondary transition-all hover:bg-surface-hover hover:text-text-primary"
             >
               <Icon name="Route" size="sm" />
               路线方案
-            </button>
-            <button
+            </Button>
+            <Button
               onClick={() => router.push('/dashboard/weekly')}
+              variant="secondary"
+              size="sm"
               className="inline-flex items-center gap-1.5 rounded-lg bg-surface px-3 py-2 text-xs font-medium text-text-secondary transition-all hover:bg-surface-hover hover:text-text-primary"
             >
               <Icon name="CalendarDays" size="sm" />
               周计划
-            </button>
-            <button
+            </Button>
+            <Button
               onClick={() => router.push('/dashboard/ai')}
+              variant="secondary"
+              size="sm"
               className="inline-flex items-center gap-1.5 rounded-lg bg-surface px-3 py-2 text-xs font-medium text-text-secondary transition-all hover:bg-surface-hover hover:text-text-primary"
             >
               <Icon name="Sparkles" size="sm" animate="pulse" />
               AI 诊断
-            </button>
+            </Button>
           </div>
         </div>
 
@@ -546,24 +557,27 @@ function OverviewChildCard({
       </div>
 
       <div className="flex gap-2">
-        <button
+        <Button
           onClick={(e) => {
             e.stopPropagation();
             router.push('/dashboard/plan');
           }}
+          variant="ghost"
           className="bg-primary/[0.10] hover:bg-primary/[0.15] flex-1 rounded-lg py-2 text-xs font-semibold text-primary transition-all"
         >
           路线
-        </button>
-        <button
+        </Button>
+        <Button
           onClick={(e) => {
             e.stopPropagation();
             router.push('/dashboard/weekly');
           }}
+          variant="secondary"
+          size="sm"
           className="flex-1 rounded-lg bg-surface py-2 text-xs font-semibold text-text-secondary transition-all hover:bg-surface-hover hover:text-text-primary"
         >
           周计划
-        </button>
+        </Button>
       </div>
     </GlassCard>
   );

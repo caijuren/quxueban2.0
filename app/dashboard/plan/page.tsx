@@ -1,5 +1,6 @@
 'use client';
 import { Icon } from '@/components/ui/icon';
+import Button from '@/components/ui/button';
 
 import { motion, useReducedMotion } from 'framer-motion';
 import { useEffect, useRef, useState, Suspense } from 'react';
@@ -160,8 +161,10 @@ function PlanPageContent() {
         </div>
         <div className="flex items-center gap-2">
           <div ref={stageDropdownRef} className="relative">
-            <button
+            <Button
               onClick={() => setStageDropdownOpen((prev) => !prev)}
+              variant="secondary"
+              size="md"
               className="focus-ring flex items-center gap-2 rounded-lg border border-border-default bg-surface-elevated px-3 py-2 text-sm font-medium text-text-secondary transition-colors hover:bg-surface-elevated"
               aria-haspopup="listbox"
               aria-expanded={stageDropdownOpen}
@@ -173,14 +176,14 @@ function PlanPageContent() {
                 size="md"
                 className={`size-3.5 text-text-tertiary transition-transform duration-200 ${stageDropdownOpen ? 'rotate-180' : ''}`}
               />
-            </button>
+            </Button>
             {stageDropdownOpen && (
               <div className="absolute right-0 top-full z-50 mt-2 w-40 overflow-hidden rounded-xl border border-border-default bg-surface-elevated shadow-2xl">
                 {stages.map((stage) => {
                   const isActive = activeStage === stage.id;
                   const disabled = stage.status === 'coming';
                   return (
-                    <button
+                    <Button
                       key={stage.id}
                       disabled={disabled}
                       onClick={() => {
@@ -188,6 +191,7 @@ function PlanPageContent() {
                         setActiveStage(stage.id);
                         setStageDropdownOpen(false);
                       }}
+                      variant="ghost"
                       className={`flex w-full items-center justify-between px-3 py-2 text-left text-sm transition-colors ${
                         disabled
                           ? 'cursor-not-allowed text-text-muted'
@@ -198,19 +202,21 @@ function PlanPageContent() {
                     >
                       {stage.label}
                       {disabled && <span className="text-2xs text-text-muted">即将上线</span>}
-                    </button>
+                    </Button>
                   );
                 })}
               </div>
             )}
           </div>
-          <button
+          <Button
             onClick={() => setShowNewPlanModal(true)}
+            variant="primary"
+            size="md"
             className="focus-ring hover:bg-primary/90 flex items-center gap-1.5 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-inverse transition-all duration-200"
           >
             <Icon name="Plus" size="sm" />
             新建方案
-          </button>
+          </Button>
         </div>
       </motion.div>
 
@@ -241,8 +247,9 @@ function PlanPageContent() {
                 className="overflow-visible"
               >
                 {/* Header — always visible */}
-                <button
+                <Button
                   onClick={() => togglePlan(plan.id)}
+                  variant="ghost"
                   className="focus-ring w-full rounded-xl p-4 text-left"
                   aria-expanded={isExpanded}
                 >
@@ -326,7 +333,7 @@ function PlanPageContent() {
                       </div>
                     </div>
                   </div>
-                </button>
+                </Button>
 
                 {/* Expandable content */}
                 {isExpanded && (
@@ -404,9 +411,10 @@ function PlanPageContent() {
                         </h3>
                         <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
                           {plan.targets.map((school) => (
-                            <button
+                            <Button
                               key={school.slug}
                               onClick={() => router.push(`/dashboard/schools/${school.slug}`)}
+                              variant="secondary"
                               className="focus-ring group rounded-xl border border-border-subtle bg-surface-elevated p-3 text-left transition-all hover:border-border-default hover:bg-surface-elevated"
                             >
                               <div className="flex items-center gap-2.5">
@@ -426,7 +434,7 @@ function PlanPageContent() {
                                   <p className="text-2xs text-text-muted">{school.tag}</p>
                                 </div>
                               </div>
-                            </button>
+                            </Button>
                           ))}
                         </div>
                       </div>
@@ -437,8 +445,10 @@ function PlanPageContent() {
                           <Icon name="Clock" size="xs" />
                           最近更新：2 天前
                         </div>
-                        <button
+                        <Button
                           onClick={() => router.push(`/dashboard/plan/${plan.id}`)}
+                          variant="link"
+                          size="xs"
                           className="group/btn focus-ring flex items-center gap-1 rounded-md px-1.5 py-1 text-xs text-primary transition-colors hover:text-primary-glow"
                         >
                           查看完整方案{' '}
@@ -447,7 +457,7 @@ function PlanPageContent() {
                             size="xs"
                             className="transition-transform group-hover/btn:translate-x-0.5"
                           />
-                        </button>
+                        </Button>
                       </div>
                     </div>
                   </motion.div>

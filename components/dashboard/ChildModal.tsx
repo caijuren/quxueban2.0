@@ -5,6 +5,8 @@ import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { createPortal } from 'react-dom';
 import { Icon } from '@/components/ui/icon';
+import Button from '@/components/ui/button';
+import Textarea from '@/components/ui/textarea';
 import { useChildren } from '@/components/dashboard/ChildrenContext';
 import {
   Child,
@@ -15,6 +17,7 @@ import {
   gradeToStage,
   educationSystemLabel,
 } from '@/lib/children';
+import Select from '@/components/ui/select';
 import { getRoutesByStage, RoutePlan } from '@/lib/plans';
 
 interface ChildModalProps {
@@ -330,14 +333,16 @@ export default function ChildModal({ isOpen, onClose, child }: ChildModalProps) 
                   </p>
                 </div>
               </div>
-              <button
+              <Button
                 onClick={onClose}
                 disabled={saving}
-                className="flex size-8 items-center justify-center rounded-lg bg-surface-hover text-text-tertiary transition-all hover:bg-surface-highlight hover:text-text-primary disabled:opacity-50"
+                variant="ghost"
+                size="sm"
+                className="size-8 bg-surface-hover text-text-tertiary hover:bg-surface-highlight hover:text-text-primary disabled:opacity-50"
                 aria-label="关闭"
               >
                 <Icon name="X" size="sm" />
-              </button>
+              </Button>
             </div>
 
             <form
@@ -365,11 +370,13 @@ export default function ChildModal({ isOpen, onClose, child }: ChildModalProps) 
                   </div>
 
                   <div className="flex items-center gap-2">
-                    <button
+                    <Button
                       type="button"
                       onClick={() => fileInputRef.current?.click()}
                       disabled={uploadingAvatar}
-                      className="inline-flex items-center gap-1.5 rounded-lg bg-surface-hover px-3 py-1.5 text-xs text-text-secondary transition-colors hover:bg-surface-highlight disabled:opacity-50"
+                      variant="secondary"
+                      size="sm"
+                      className="bg-surface-hover text-text-secondary hover:bg-surface-highlight disabled:opacity-50"
                     >
                       {uploadingAvatar ? (
                         <Icon name="Loader2" size="sm" animate="spin" />
@@ -377,16 +384,18 @@ export default function ChildModal({ isOpen, onClose, child }: ChildModalProps) 
                         <Icon name="Upload" size="sm" />
                       )}
                       {uploadingAvatar ? '上传中...' : '上传头像'}
-                    </button>
+                    </Button>
                     {avatarUrl && (
-                      <button
+                      <Button
                         type="button"
                         onClick={handleClearAvatar}
-                        className="inline-flex items-center gap-1.5 rounded-lg bg-surface-hover px-3 py-1.5 text-xs text-text-tertiary transition-colors hover:bg-surface-highlight"
+                        variant="secondary"
+                        size="sm"
+                        className="bg-surface-hover text-text-tertiary hover:bg-surface-highlight"
                       >
                         <Icon name="X" size="sm" className="size-3.5" />
                         清除
-                      </button>
+                      </Button>
                     )}
                   </div>
                   <input
@@ -403,11 +412,13 @@ export default function ChildModal({ isOpen, onClose, child }: ChildModalProps) 
                       {AVATAR_PRESETS.map((preset) => {
                         const active = selectedPreset === preset.id;
                         return (
-                          <button
+                          <Button
                             key={preset.id}
                             type="button"
                             onClick={() => handlePresetSelect(preset)}
-                            className={`flex size-10 items-center justify-center rounded-full text-lg transition-all ${
+                            variant="ghost"
+                            size="xs"
+                            className={`size-10 rounded-full text-lg ${
                               active
                                 ? 'ring-2 ring-text-primary ring-offset-2 ring-offset-surface-elevated'
                                 : 'opacity-70 hover:opacity-100'
@@ -418,7 +429,7 @@ export default function ChildModal({ isOpen, onClose, child }: ChildModalProps) 
                             aria-label={`选择头像 ${preset.id}`}
                           >
                             {preset.emoji}
-                          </button>
+                          </Button>
                         );
                       })}
                     </div>
@@ -430,11 +441,13 @@ export default function ChildModal({ isOpen, onClose, child }: ChildModalProps) 
                       {AVATAR_COLORS.map((color) => {
                         const active = avatarColor === color;
                         return (
-                          <button
+                          <Button
                             key={color}
                             type="button"
                             onClick={() => setAvatarColor(color)}
-                            className={`size-8 rounded-full transition-all ${
+                            variant="ghost"
+                            size="xs"
+                            className={`size-8 rounded-full ${
                               active
                                 ? 'ring-2 ring-text-primary ring-offset-2 ring-offset-surface-elevated'
                                 : ''
@@ -477,41 +490,32 @@ export default function ChildModal({ isOpen, onClose, child }: ChildModalProps) 
                     <label className="mb-1.5 block text-xs text-text-tertiary">
                       学制 <span className="text-primary">*</span>
                     </label>
-                    <select
+                    <Select
                       value={educationSystem}
                       onChange={(e) => setEducationSystem(e.target.value as EducationSystem)}
-                      className="w-full appearance-none rounded-lg border border-border-default bg-surface px-4 py-2 text-sm text-text-primary transition-all focus:border-primary focus:outline-none"
-                      style={{
-                        backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23757575' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E")`,
-                        backgroundRepeat: 'no-repeat',
-                        backgroundPosition: 'right 12px center',
-                      }}
-                    >
-                      <option value="six-three">六三制（小学 6 年）</option>
-                      <option value="five-four">五四制（小学 5 年）</option>
-                    </select>
+                      size="md"
+                      className="bg-surface"
+                      options={[
+                        { value: 'six-three', label: '六三制（小学 6 年）' },
+                        { value: 'five-four', label: '五四制（小学 5 年）' },
+                      ]}
+                    />
                   </div>
 
                   <div>
                     <label className="mb-1.5 block text-xs text-text-tertiary">
                       当前年级 <span className="text-primary">*</span>
                     </label>
-                    <select
-                      value={grade}
+                    <Select
+                      value={String(grade)}
                       onChange={(e) => setGrade(Number(e.target.value))}
-                      className="w-full appearance-none rounded-lg border border-border-default bg-surface px-4 py-2 text-sm text-text-primary transition-all focus:border-primary focus:outline-none"
-                      style={{
-                        backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23757575' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E")`,
-                        backgroundRepeat: 'no-repeat',
-                        backgroundPosition: 'right 12px center',
-                      }}
-                    >
-                      {GRADES.map((g) => (
-                        <option key={g} value={g}>
-                          {gradeLabel(g, educationSystem)} · {gradeToStage(g, educationSystem)}
-                        </option>
-                      ))}
-                    </select>
+                      size="md"
+                      className="bg-surface"
+                      options={GRADES.map((g) => ({
+                        value: String(g),
+                        label: `${gradeLabel(g, educationSystem)} · ${gradeToStage(g, educationSystem)}`,
+                      }))}
+                    />
                   </div>
 
                   <div>
@@ -601,12 +605,13 @@ export default function ChildModal({ isOpen, onClose, child }: ChildModalProps) 
                       size="sm"
                       className="absolute left-3 top-3 text-text-muted"
                     />
-                    <textarea
+                    <Textarea
                       value={notes}
                       onChange={(e) => setNotes(e.target.value)}
                       placeholder="记录孩子的特长、薄弱项或其他关键信息"
                       rows={3}
-                      className="w-full resize-none rounded-lg border border-border-default bg-surface py-2 pl-9 pr-4 text-sm text-text-primary transition-all placeholder:text-text-tertiary focus:border-primary focus:outline-none"
+                      resize="none"
+                      className="border-border-default bg-surface py-2 pl-9 pr-4 text-text-primary"
                     />
                   </div>
                 </div>
@@ -670,40 +675,45 @@ export default function ChildModal({ isOpen, onClose, child }: ChildModalProps) 
 
               <div className="mt-6 flex items-center justify-between gap-3 border-t border-border-subtle pt-4">
                 {isEdit ? (
-                  <button
+                  <Button
                     type="button"
                     onClick={() => setShowDeleteConfirm(true)}
                     disabled={saving}
-                    className="bg-error/[0.08] hover:bg-error/[0.12] inline-flex items-center gap-1.5 rounded-lg px-4 py-2 text-sm text-error transition-all disabled:opacity-50"
+                    variant="danger"
+                    size="md"
+                    className="bg-error/[0.08] hover:bg-error/[0.12]"
                   >
                     <Icon name="Trash2" size="sm" className="size-4" />
                     删除
-                  </button>
+                  </Button>
                 ) : (
                   <div />
                 )}
                 <div className="flex items-center gap-3">
-                  <button
+                  <Button
                     type="button"
                     onClick={() => {
                       console.log('[ChildModal] cancel clicked, onClose:', onClose);
                       onClose();
                     }}
                     disabled={saving}
-                    className="rounded-lg bg-surface-hover px-4 py-2 text-sm text-text-tertiary transition-all hover:bg-surface-highlight disabled:opacity-50"
+                    variant="secondary"
+                    size="md"
+                    className="bg-surface-hover text-text-tertiary hover:bg-surface-highlight disabled:opacity-50"
                   >
                     取消
-                  </button>
-                  <button
+                  </Button>
+                  <Button
                     type="submit"
                     disabled={saving || uploadingAvatar}
-                    className="inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-primary to-secondary px-4 py-2 text-sm font-medium text-text-primary transition-all disabled:opacity-70"
+                    variant="primary"
+                    size="md"
                   >
                     {(saving || uploadingAvatar) && (
                       <Icon name="Loader2" size="sm" className="size-4 animate-spin" />
                     )}
                     {isEdit ? '保存修改' : '添加孩子'}
-                  </button>
+                  </Button>
                 </div>
               </div>
             </form>
@@ -735,25 +745,28 @@ export default function ChildModal({ isOpen, onClose, child }: ChildModalProps) 
                       </div>
                     </div>
                     <div className="flex items-center justify-end gap-3">
-                      <button
+                      <Button
                         type="button"
                         onClick={() => setShowDeleteConfirm(false)}
                         disabled={saving}
-                        className="rounded-lg bg-surface-hover px-4 py-2 text-sm text-text-tertiary transition-all hover:bg-surface-highlight disabled:opacity-50"
+                        variant="secondary"
+                        size="md"
+                        className="bg-surface-hover text-text-tertiary hover:bg-surface-highlight disabled:opacity-50"
                       >
                         取消
-                      </button>
-                      <button
+                      </Button>
+                      <Button
                         type="button"
                         onClick={handleDelete}
                         disabled={saving}
-                        className="hover:bg-error/90 inline-flex items-center gap-2 rounded-lg bg-error px-4 py-2 text-sm font-medium text-text-primary transition-all disabled:opacity-70"
+                        variant="danger"
+                        size="md"
                       >
                         {saving && (
                           <Icon name="Loader2" size="sm" className="size-4 animate-spin" />
                         )}
                         确认删除
-                      </button>
+                      </Button>
                     </div>
                   </motion.div>
                 </motion.div>
@@ -777,10 +790,12 @@ function RouteOption({
   onSelect: () => void;
 }) {
   return (
-    <button
+    <Button
       type="button"
       onClick={onSelect}
-      className={`w-full rounded-lg border p-3 text-left transition-all ${
+      variant="secondary"
+      size="md"
+      className={`w-full rounded-lg border p-3 text-left ${
         selected
           ? 'bg-primary/10 border-primary/40'
           : 'border-border-subtle bg-surface-hover hover:bg-surface-highlight'
@@ -816,6 +831,6 @@ function RouteOption({
           <p className="line-clamp-2 text-xs text-text-tertiary">{route.description}</p>
         </div>
       </div>
-    </button>
+    </Button>
   );
 }

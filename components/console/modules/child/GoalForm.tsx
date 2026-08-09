@@ -2,6 +2,8 @@
 
 import { useState } from 'react';
 import { Icon } from '@/components/ui/icon';
+import Button from '@/components/ui/button';
+import Select from '@/components/ui/select';
 import { LearningGoal } from '@/lib/types';
 import { LearningGoalCreateInput } from '@/lib/validation';
 
@@ -33,7 +35,13 @@ const metricTypes = [
   { value: 'habit', label: '习惯' },
 ];
 
-const periods = ['2026春季', '2026秋季', '2027春季', '2027秋季', '长期'];
+const periods = [
+  { value: '2026春季', label: '2026春季' },
+  { value: '2026秋季', label: '2026秋季' },
+  { value: '2027春季', label: '2027春季' },
+  { value: '2027秋季', label: '2027秋季' },
+  { value: '长期', label: '长期' },
+];
 
 export default function GoalForm({ initial, onSubmit, onCancel, isLoading }: GoalFormProps) {
   const [form, setForm] = useState<LearningGoalCreateInput>({
@@ -66,12 +74,14 @@ export default function GoalForm({ initial, onSubmit, onCancel, isLoading }: Goa
           <h3 className="text-base font-bold text-text-primary">
             {initial ? '编辑目标' : '新增目标'}
           </h3>
-          <button
+          <Button
+            variant="ghost"
+            size="sm"
             onClick={onCancel}
             className="flex size-8 items-center justify-center rounded-lg bg-surface-hover text-text-muted transition-colors hover:text-text-secondary"
           >
             <Icon name="X" size="sm" />
-          </button>
+          </Button>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4 p-5">
@@ -90,68 +100,52 @@ export default function GoalForm({ initial, onSubmit, onCancel, isLoading }: Goa
           <div className="grid grid-cols-2 gap-3">
             <div>
               <label className="mb-1.5 block text-xs text-text-muted">学科</label>
-              <select
+              <Select
+                options={subjects}
                 value={form.subject}
                 onChange={(e) =>
                   update('subject', e.target.value as LearningGoalCreateInput['subject'])
                 }
-                className="focus:border-primary/50 w-full rounded-xl border border-border-default bg-surface-hover px-3 py-2.5 text-sm text-text-secondary focus:outline-none"
-              >
-                {subjects.map((s) => (
-                  <option key={s.value} value={s.value}>
-                    {s.label}
-                  </option>
-                ))}
-              </select>
+                size="md"
+                className="bg-surface-hover"
+              />
             </div>
             <div>
               <label className="mb-1.5 block text-xs text-text-muted">目标周期</label>
-              <select
+              <Select
+                options={periods}
                 value={form.period}
                 onChange={(e) => update('period', e.target.value)}
-                className="focus:border-primary/50 w-full rounded-xl border border-border-default bg-surface-hover px-3 py-2.5 text-sm text-text-secondary focus:outline-none"
-              >
-                {periods.map((p) => (
-                  <option key={p} value={p}>
-                    {p}
-                  </option>
-                ))}
-              </select>
+                size="md"
+                className="bg-surface-hover"
+              />
             </div>
           </div>
 
           <div className="grid grid-cols-2 gap-3">
             <div>
               <label className="mb-1.5 block text-xs text-text-muted">目标类型</label>
-              <select
+              <Select
+                options={goalTypes}
                 value={form.goalType}
                 onChange={(e) =>
                   update('goalType', e.target.value as LearningGoalCreateInput['goalType'])
                 }
-                className="focus:border-primary/50 w-full rounded-xl border border-border-default bg-surface-hover px-3 py-2.5 text-sm text-text-secondary focus:outline-none"
-              >
-                {goalTypes.map((t) => (
-                  <option key={t.value} value={t.value}>
-                    {t.label}
-                  </option>
-                ))}
-              </select>
+                size="md"
+                className="bg-surface-hover"
+              />
             </div>
             <div>
               <label className="mb-1.5 block text-xs text-text-muted">评价指标</label>
-              <select
+              <Select
+                options={metricTypes}
                 value={form.metricType}
                 onChange={(e) =>
                   update('metricType', e.target.value as LearningGoalCreateInput['metricType'])
                 }
-                className="focus:border-primary/50 w-full rounded-xl border border-border-default bg-surface-hover px-3 py-2.5 text-sm text-text-secondary focus:outline-none"
-              >
-                {metricTypes.map((m) => (
-                  <option key={m.value} value={m.value}>
-                    {m.label}
-                  </option>
-                ))}
-              </select>
+                size="md"
+                className="bg-surface-hover"
+              />
             </div>
           </div>
 
@@ -167,20 +161,24 @@ export default function GoalForm({ initial, onSubmit, onCancel, isLoading }: Goa
           </div>
 
           <div className="flex items-center gap-3 pt-2">
-            <button
+            <Button
+              variant="primary"
+              size="md"
               type="submit"
               disabled={isLoading || !form.title.trim()}
               className="flex-1 rounded-xl bg-primary py-2.5 text-sm font-medium text-inverse transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
             >
               {isLoading ? '保存中...' : '保存目标'}
-            </button>
-            <button
+            </Button>
+            <Button
+              variant="secondary"
+              size="md"
               type="button"
               onClick={onCancel}
               className="flex-1 rounded-xl bg-surface-hover py-2.5 text-sm font-medium text-text-secondary transition-colors hover:bg-surface-hover"
             >
               取消
-            </button>
+            </Button>
           </div>
         </form>
       </div>

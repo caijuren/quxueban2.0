@@ -154,17 +154,19 @@ export default function AppearanceSection({ settings, onUpdate }: AppearanceSect
               </div>
               <div className="flex gap-1.5">
                 {FONT_SIZES.map((fs) => (
-                  <button
+                  <Button
                     key={fs.id}
+                    size="xs"
+                    variant={fontSize === fs.id ? 'primary' : 'secondary'}
                     onClick={() => setFontSize(fs.id as typeof fontSize)}
-                    className={`flex-1 rounded-md py-1.5 text-xs font-medium transition-colors ${
+                    className={`flex-1 ${
                       fontSize === fs.id
                         ? 'border-primary/20 bg-primary/[0.08] border text-primary'
-                        : 'border border-border-subtle bg-surface-elevated text-text-tertiary hover:bg-surface-highlight'
+                        : 'border border-border-subtle bg-surface-elevated text-text-tertiary'
                     }`}
                   >
                     {fs.label}
-                  </button>
+                  </Button>
                 ))}
               </div>
             </div>
@@ -176,17 +178,19 @@ export default function AppearanceSection({ settings, onUpdate }: AppearanceSect
               </div>
               <div className="flex gap-1.5">
                 {DENSITIES.map((d) => (
-                  <button
+                  <Button
                     key={d.id}
+                    size="xs"
+                    variant={density === d.id ? 'primary' : 'secondary'}
                     onClick={() => setDensity(d.id as typeof density)}
-                    className={`flex-1 rounded-md py-1.5 text-xs font-medium transition-colors ${
+                    className={`flex-1 ${
                       density === d.id
                         ? 'border-secondary/20 bg-secondary/10 border text-secondary'
-                        : 'border border-border-subtle bg-surface-elevated text-text-tertiary hover:bg-surface-highlight'
+                        : 'border border-border-subtle bg-surface-elevated text-text-tertiary'
                     }`}
                   >
                     {d.label}
-                  </button>
+                  </Button>
                 ))}
               </div>
             </div>
@@ -209,18 +213,20 @@ export default function AppearanceSection({ settings, onUpdate }: AppearanceSect
             </div>
             <div className="grid grid-cols-3 gap-1.5">
               {LANDING_PAGES.map((page) => (
-                <button
+                <Button
                   key={page.id}
+                  size="xs"
+                  variant={defaultLandingPage === page.id ? 'primary' : 'secondary'}
                   onClick={() => setDefaultLandingPage(page.id as typeof defaultLandingPage)}
-                  className={`flex items-center justify-center gap-1 rounded-md px-2 py-1.5 text-xs transition-colors ${
+                  className={`flex items-center justify-center gap-1 px-2 py-1.5 ${
                     defaultLandingPage === page.id
                       ? 'border-primary/20 bg-primary/[0.08] border text-primary'
-                      : 'border border-border-subtle bg-surface-elevated text-text-tertiary hover:bg-surface-highlight'
+                      : 'border border-border-subtle bg-surface-elevated text-text-tertiary'
                   }`}
                 >
                   <Icon name={page.icon} size="xs" />
                   <span className="truncate">{page.label}</span>
-                </button>
+                </Button>
               ))}
             </div>
           </div>
@@ -232,17 +238,19 @@ export default function AppearanceSection({ settings, onUpdate }: AppearanceSect
             </div>
             <div className="flex gap-1.5">
               {CHILD_MODES.map((mode) => (
-                <button
+                <Button
                   key={mode.id}
+                  size="xs"
+                  variant={defaultChildMode === mode.id ? 'primary' : 'secondary'}
                   onClick={() => setDefaultChildMode(mode.id as typeof defaultChildMode)}
-                  className={`flex-1 rounded-md py-1.5 text-xs font-medium transition-colors ${
+                  className={`flex-1 ${
                     defaultChildMode === mode.id
                       ? 'border-secondary/20 bg-secondary/10 border text-secondary'
-                      : 'border border-border-subtle bg-surface-elevated text-text-tertiary hover:bg-surface-highlight'
-                  }`}
+                      : 'border border-border-subtle bg-surface-elevated text-text-tertiary'
+                    }`}
                 >
                   {mode.label}
-                </button>
+                </Button>
               ))}
             </div>
           </div>

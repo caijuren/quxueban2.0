@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Icon } from '@/components/ui/icon';
 import MotionSection from '@/components/ui/MotionSection';
+import Button from '@/components/ui/button';
 
 const faqs = [
   {
@@ -57,8 +58,9 @@ export default function FAQ() {
                 duration={0.4}
                 className="overflow-hidden rounded-xl border border-border-subtle bg-surface transition-colors duration-200 hover:border-border-default"
               >
-                <button
+                <Button
                   onClick={() => setOpenIndex(isOpen ? null : index)}
+                  variant="ghost"
                   className="focus-visible:ring-primary/55 flex w-full items-center justify-between p-4 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
                   aria-expanded={isOpen}
                   aria-controls={`faq-answer-${index}`}
@@ -74,7 +76,7 @@ export default function FAQ() {
                   >
                     {isOpen ? <Icon name="Minus" size="sm" /> : <Icon name="Plus" size="sm" />}
                   </span>
-                </button>
+                </Button>
                 <AnimatePresence initial={false}>
                   {isOpen && (
                     <motion.div

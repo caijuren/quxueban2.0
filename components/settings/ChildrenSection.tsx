@@ -7,6 +7,7 @@ import ChildAvatar from '@/components/dashboard/ChildAvatar';
 import ChildModal from '@/components/dashboard/ChildModal';
 import { Child, gradeLabel, gradeToStage, educationSystemLabel } from '@/lib/children';
 import { getRouteById } from '@/lib/plans';
+import Button from '@/components/ui/button';
 import SettingsSection from './SettingsSection';
 
 export default function ChildrenSection() {
@@ -76,34 +77,39 @@ export default function ChildrenSection() {
               </div>
 
               <div className="flex items-center gap-2">
-                <button
+                <Button
+                  variant="ghost"
+                  size="sm"
                   onClick={() => handleEdit(child)}
-                  className="flex flex-1 items-center justify-center gap-1 rounded-lg bg-surface-elevated px-3 py-2 text-xs text-text-secondary transition-colors hover:bg-surface-highlight"
+                  className="flex flex-1 items-center justify-center gap-1 bg-surface-elevated hover:bg-surface-highlight"
                 >
                   <Icon name="Pencil" size="xs" />
                   编辑
-                </button>
+                </Button>
                 {currentChildId !== child.id && (
-                  <button
+                  <Button
+                    variant="ghost"
+                    size="sm"
                     onClick={() => handleSetDefault(child.id)}
-                    className="bg-primary/[0.08] hover:bg-primary/15 flex-1 rounded-lg px-3 py-2 text-xs text-primary transition-colors"
+                    className="flex-1 bg-primary/[0.08] text-primary hover:bg-primary/15"
                   >
                     设为默认
-                  </button>
+                  </Button>
                 )}
               </div>
             </div>
           ))}
 
-          <button
+          <Button
+            variant="ghost"
             onClick={handleAdd}
-            className="flex min-h-[180px] flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-border-default bg-surface-elevated p-4 text-sm text-text-muted transition-all hover:border-border-default hover:bg-surface-elevated hover:text-text-secondary"
+            className="flex min-h-[180px] flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-border-default bg-surface-elevated p-4 text-sm text-text-muted hover:border-border-default hover:bg-surface-elevated hover:text-text-secondary"
           >
             <div className="flex size-10 items-center justify-center rounded-full bg-surface-elevated">
               <Icon name="Plus" size="md" />
             </div>
             <span className="font-medium">添加孩子</span>
-          </button>
+          </Button>
         </div>
       </SettingsSection>
 

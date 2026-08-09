@@ -1,8 +1,9 @@
 'use client';
 
 import { useMemo } from 'react';
-import { motion } from 'framer-motion';
 import { Icon } from '@/components/ui/icon';
+import DataTable, { type DataTableColumn } from '@/components/ui/data-table';
+import Button from '@/components/ui/button';
 import { type WeeklyTaskItem, type TaskCategory, type DayOfWeek } from '@/lib/storage.types';
 import { TASK_CATEGORY_LABELS } from '@/lib/taskTemplates';
 import { categoryIcons } from '@/lib/taskIcons';
@@ -56,52 +57,64 @@ function StatusCell({
 
   if (status === 'done') {
     return (
-      <button
-        type="button"
+      <Button
+        variant="ghost"
+        size="xs"
         onClick={onClick}
-        className="inline-flex w-full flex-col items-center justify-center gap-1 rounded-[14px] py-2.5 transition-colors hover:bg-surface-hover"
+        className="!min-h-0 !h-auto w-full !p-0"
       >
-        <Icon name="CheckCircle2" size="md" className="text-success" />
-        <span className="text-[10px] text-text-tertiary">{durationText}</span>
-      </button>
+        <div className="flex w-full flex-col items-center justify-center gap-1 rounded-[14px] py-2.5 transition-colors hover:bg-surface-hover">
+          <Icon name="CheckCircle2" size="md" className="text-success" />
+          <span className="text-[10px] text-text-tertiary">{durationText}</span>
+        </div>
+      </Button>
     );
   }
 
   if (status === 'in_progress' || status === 'partially_done') {
     return (
-      <button
-        type="button"
+      <Button
+        variant="ghost"
+        size="xs"
         onClick={onClick}
-        className="inline-flex w-full flex-col items-center justify-center gap-1 rounded-[14px] py-2.5 transition-colors hover:bg-surface-hover"
+        className="!min-h-0 !h-auto w-full !p-0"
       >
-        <Icon name="CircleDot" size="md" className="text-secondary" />
-        <span className="text-[10px] text-text-tertiary">{durationText}</span>
-      </button>
+        <div className="flex w-full flex-col items-center justify-center gap-1 rounded-[14px] py-2.5 transition-colors hover:bg-surface-hover">
+          <Icon name="CircleDot" size="md" className="text-secondary" />
+          <span className="text-[10px] text-text-tertiary">{durationText}</span>
+        </div>
+      </Button>
     );
   }
 
   if (isOverdue) {
     return (
-      <button
-        type="button"
+      <Button
+        variant="ghost"
+        size="xs"
         onClick={onClick}
-        className="inline-flex w-full flex-col items-center justify-center gap-1 rounded-[14px] py-2.5 transition-colors hover:bg-surface-hover"
+        className="!min-h-0 !h-auto w-full !p-0"
       >
-        <Icon name="XCircle" size="md" className="text-error" />
-        <span className="text-[10px] text-text-tertiary">未完成</span>
-      </button>
+        <div className="flex w-full flex-col items-center justify-center gap-1 rounded-[14px] py-2.5 transition-colors hover:bg-surface-hover">
+          <Icon name="XCircle" size="md" className="text-error" />
+          <span className="text-[10px] text-text-tertiary">未完成</span>
+        </div>
+      </Button>
     );
   }
 
   return (
-    <button
-      type="button"
+    <Button
+      variant="ghost"
+      size="xs"
       onClick={onClick}
-      className="inline-flex w-full flex-col items-center justify-center gap-1 rounded-[14px] py-2.5 transition-colors hover:bg-surface-hover"
+      className="!min-h-0 !h-auto w-full !p-0"
     >
-      <Icon name="Pause" size="sm" className="text-warning" />
-      <span className="text-[10px] text-text-tertiary">待开始</span>
-    </button>
+      <div className="flex w-full flex-col items-center justify-center gap-1 rounded-[14px] py-2.5 transition-colors hover:bg-surface-hover">
+        <Icon name="Pause" size="sm" className="text-warning" />
+        <span className="text-[10px] text-text-tertiary">待开始</span>
+      </div>
+    </Button>
   );
 }
 
@@ -158,6 +171,60 @@ export default function WeeklyTaskChecklistMatrix({
     });
   }, [tasks]);
 
+  const tableColumns = useMemo<DataTableColumn<TaskRow>[]>(() => {
+    const dayColumns: DataTableColumn<TaskRow>[] = DAYS.map((day, idx) => ({
+      key: `day-${idx}`,
+      title: `${day} ${weekDates[idx]}`,
+      align: 'center' as const,
+      render: (row) => {
+        const task = row.cells[idx];
+        if (!task) {
+          return (
+            <span className="text-text-muted/30 inline-flex w-full items-center justify-center py-4">
+              —
+            </span>
+          );
+        }
+        return (
+          <StatusCell
+            task={task}
+            dayIndex={idx}
+            weekStart={weekStart}
+            onClick={() => onCellClick?.(task)}
+          />
+        );
+      },
+    }));
+
+    return [
+      {
+        key: 'task',
+        title: '任务',
+        render: (row) => {
+          const CategoryIcon = categoryIcons[row.category];
+          const colorClass = getCategoryColorClass(row.category);
+          const categoryLabel = TASK_CATEGORY_LABELS[row.category];
+          return (
+            <div className="flex items-start gap-3">
+              <div
+                className={`mt-0.5 flex size-9 items-center justify-center rounded-[14px] ${colorClass}`}
+              >
+                <CategoryIcon className="size-4" />
+              </div>
+              <div className="min-w-0">
+                <p className="break-words text-sm font-semibold leading-snug text-text-primary">
+                  {row.focus}
+                </p>
+                <p className="mt-0.5 text-[11px] text-text-muted">{categoryLabel}</p>
+              </div>
+            </div>
+          );
+        },
+      },
+      ...dayColumns,
+    ];
+  }, [rows, weekStart, onCellClick]);
+
   if (rows.length === 0) {
     return (
       <div className="rounded-[20px] border border-border-default bg-surface p-8 text-center text-sm text-text-muted">
@@ -168,84 +235,12 @@ export default function WeeklyTaskChecklistMatrix({
 
   return (
     <div className="overflow-hidden rounded-[20px] border border-border-default bg-surface shadow-card">
-      <div className="overflow-x-auto">
-        <table className="w-full min-w-[900px] border-collapse">
-          <thead>
-            <tr className="border-b border-border-default">
-              <th className="bg-surface/95 sticky left-0 z-10 w-[220px] min-w-[220px] px-5 py-3.5 text-left text-xs font-medium text-text-muted backdrop-blur-sm">
-                任务
-              </th>
-              {DAYS.map((day, idx) => (
-                <th
-                  key={day}
-                  className="w-[1/7] px-2 py-3.5 text-center text-xs font-medium text-text-muted"
-                >
-                  <div className="flex flex-col items-center gap-0.5">
-                    <span>{day}</span>
-                    <span className="text-[10px] text-text-tertiary">{weekDates[idx]}</span>
-                  </div>
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {rows.map((row, rowIndex) => {
-              const CategoryIcon = categoryIcons[row.category];
-              const colorClass = getCategoryColorClass(row.category);
-              const categoryLabel = TASK_CATEGORY_LABELS[row.category];
-
-              return (
-                <motion.tr
-                  key={row.key}
-                  initial={{ opacity: 0, y: 8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: rowIndex * 0.03 }}
-                  className="hover:bg-surface-hover/40 border-b border-border-default transition-colors last:border-b-0"
-                >
-                  <td className="bg-surface/95 sticky left-0 z-10 px-5 py-3.5 align-top backdrop-blur-sm">
-                    <div className="flex items-start gap-3">
-                      <div
-                        className={`mt-0.5 flex size-9 items-center justify-center rounded-[14px] ${colorClass}`}
-                      >
-                        <CategoryIcon className="size-4" />
-                      </div>
-                      <div className="min-w-0">
-                        <p className="break-words text-sm font-semibold leading-snug text-text-primary">
-                          {row.focus}
-                        </p>
-                        <p className="mt-0.5 text-[11px] text-text-muted">{categoryLabel}</p>
-                      </div>
-                    </div>
-                  </td>
-                  {row.cells.map((task, dayIndex) => {
-                    const day = DAYS[dayIndex];
-                    if (!task) {
-                      return (
-                        <td key={day} className="px-1 py-2 text-center align-middle">
-                          <span className="text-text-muted/30 inline-flex w-full items-center justify-center py-4">
-                            —
-                          </span>
-                        </td>
-                      );
-                    }
-
-                    return (
-                      <td key={day} className="px-1 py-2 text-center align-middle">
-                        <StatusCell
-                          task={task}
-                          dayIndex={dayIndex}
-                          weekStart={weekStart}
-                          onClick={() => onCellClick?.(task)}
-                        />
-                      </td>
-                    );
-                  })}
-                </motion.tr>
-              );
-            })}
-          </tbody>
-        </table>
-      </div>
+      <DataTable<TaskRow>
+        columns={tableColumns}
+        data={rows}
+        rowKey="key"
+        className="border-0 shadow-none bg-transparent"
+      />
       <div className="flex flex-wrap items-center justify-between gap-3 border-t border-border-default bg-surface px-5 py-3.5">
         <div className="flex flex-wrap items-center gap-4">
           <div className="flex items-center gap-1.5 text-xs text-text-tertiary">

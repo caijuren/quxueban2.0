@@ -1,11 +1,13 @@
 'use client';
 
+import Button from '@/components/ui/button';
 import { Icon } from '@/components/ui/icon';
 import { WeeklyTaskItem } from '@/lib/storage.types';
 import { TASK_CATEGORY_LABELS } from '@/lib/taskTemplates';
 import { getCategoryColorClass } from '@/lib/taskAlignment';
 import { categoryIcons } from '@/lib/taskIcons';
 import { cn } from '@/lib/utils';
+import Textarea from '@/components/ui/textarea';
 
 interface TaskCardProps {
   task: WeeklyTaskItem;
@@ -48,7 +50,9 @@ export default function TaskCard({
       }}
     >
       <div className={cn('flex items-start gap-3', compact ? 'p-3' : 'p-4')}>
-        <button
+        <Button
+          variant="ghost"
+          size="xs"
           type="button"
           onClick={(e) => {
             e.stopPropagation();
@@ -66,7 +70,7 @@ export default function TaskCard({
               className="text-text-muted transition-colors group-hover:text-primary"
             />
           )}
-        </button>
+        </Button>
 
         <div className="min-w-0 flex-1">
           <div className="mb-1.5 flex flex-wrap items-center gap-2">
@@ -114,13 +118,14 @@ export default function TaskCard({
           )}
 
           {showNote && !isDraft && onNoteBlur && (
-            <textarea
+            <Textarea
               defaultValue={task.note ?? ''}
               onBlur={(e) => onNoteBlur(e.target.value)}
               placeholder="完成备注（正确率、感受等）"
               onClick={(e) => e.stopPropagation()}
-              className="focus:border-primary/40 focus:ring-primary/20 mt-3 w-full resize-none rounded-lg border border-border-default bg-surface-highlight px-3 py-2 text-xs text-text-secondary placeholder:text-text-muted focus:outline-none focus:ring-1"
+              className="focus:border-primary/40 focus:ring-primary/20 border-border-default bg-surface-highlight px-3 py-2 text-xs text-text-secondary"
               rows={2}
+              resize="none"
             />
           )}
         </div>

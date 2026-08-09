@@ -3,6 +3,8 @@ import { Icon } from '@/components/ui/icon';
 
 import { useMemo } from 'react';
 import { motion } from 'framer-motion';
+import DataTable, { type DataTableColumn } from '@/components/ui/data-table';
+import Button from '@/components/ui/button';
 
 import {
   type WeeklyGoal,
@@ -127,6 +129,84 @@ export default function WeeklyGoalTable({ goals, tasks, onChange }: WeeklyGoalTa
     onChange(next);
   };
 
+  const tableColumns = useMemo<DataTableColumn<TableRow>[]>(
+    () => [
+      {
+        key: 'subject',
+        title: '学科',
+        width: '96px',
+        render: (row, index) => {
+          const isNewSubject = index === 0 || rows[index - 1].subjectName !== row.subjectName;
+          return isNewSubject ? (
+            <span className="inline-flex items-center gap-1.5 text-sm font-bold text-text-secondary">
+              {row.subjectName}
+            </span>
+          ) : (
+            <span className="text-sm text-text-muted">〃</span>
+          );
+        },
+      },
+      {
+        key: 'module',
+        title: '模块',
+        width: '128px',
+        render: (row) => {
+          const CategoryIcon = categoryIcons[row.category];
+          return (
+            <div className="flex items-center gap-2">
+              <div className="flex size-6 shrink-0 items-center justify-center rounded-lg bg-surface-highlight">
+                <CategoryIcon className="size-4 text-text-tertiary" />
+              </div>
+              <span className="text-sm text-text-secondary">{row.moduleName}</span>
+            </div>
+          );
+        },
+      },
+      {
+        key: 'task',
+        title: '本周任务',
+        render: (row) => (
+          <span
+            className={`text-sm ${
+              row.done ? 'text-text-muted line-through' : 'text-text-primary'
+            }`}
+          >
+            {row.taskName}
+          </span>
+        ),
+      },
+      {
+        key: 'target',
+        title: '目标',
+        width: '160px',
+        render: (row) => <span className="text-sm text-text-tertiary">{row.targetText}</span>,
+      },
+      {
+        key: 'status',
+        title: '状态',
+        width: '80px',
+        align: 'center',
+        render: (row) =>
+          row.itemId ? (
+            <Button
+              variant="ghost"
+              size="xs"
+              onClick={() => toggleItem(row.goalId, row.itemId)}
+            >
+              {row.done ? (
+                <Icon name="CheckSquare" size="md" className="text-success" />
+              ) : (
+                <Icon name="Square" size="md" className="text-text-tertiary" />
+              )}
+            </Button>
+          ) : (
+            <span className="text-xs text-text-muted">—</span>
+          ),
+      },
+    ],
+    [rows, toggleItem]
+  );
+
   if (rows.length === 0) {
     return (
       <motion.div
@@ -151,85 +231,12 @@ export default function WeeklyGoalTable({ goals, tasks, onChange }: WeeklyGoalTa
       animate={{ opacity: 1, y: 0 }}
       className="overflow-hidden rounded-2xl border border-border-subtle bg-surface-elevated"
     >
-      <div className="overflow-x-auto">
-        <table className="w-full min-w-[640px] border-collapse">
-          <thead>
-            <tr className="bg-surface-highlight/50 border-b border-border-subtle">
-              <th className="w-24 px-4 py-3 text-left text-xs font-medium text-text-muted">学科</th>
-              <th className="w-32 px-4 py-3 text-left text-xs font-medium text-text-muted">模块</th>
-              <th className="px-4 py-3 text-left text-xs font-medium text-text-muted">本周任务</th>
-              <th className="w-40 px-4 py-3 text-left text-xs font-medium text-text-muted">目标</th>
-              <th className="w-20 px-4 py-3 text-center text-xs font-medium text-text-muted">
-                状态
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {rows.map((row, index) => {
-              const CategoryIcon = categoryIcons[row.category];
-              const isNewSubject = index === 0 || rows[index - 1].subjectName !== row.subjectName;
-
-              return (
-                <tr
-                  key={row.id}
-                  className={[
-                    'border-border-subtle/50 border-b transition-colors',
-                    row.done ? 'bg-success/[0.03]' : 'hover:bg-surface-hover/30',
-                    isNewSubject ? 'border-t border-border-subtle' : '',
-                  ].join(' ')}
-                >
-                  <td className="px-4 py-3 align-top">
-                    {isNewSubject ? (
-                      <span className="inline-flex items-center gap-1.5 text-sm font-bold text-text-secondary">
-                        {row.subjectName}
-                      </span>
-                    ) : (
-                      <span className="text-sm text-text-muted">〃</span>
-                    )}
-                  </td>
-                  <td className="px-4 py-3 align-top">
-                    <div className="flex items-center gap-2">
-                      <div className="flex size-6 shrink-0 items-center justify-center rounded-lg bg-surface-highlight">
-                        <CategoryIcon className="size-4 text-text-tertiary" />
-                      </div>
-                      <span className="text-sm text-text-secondary">{row.moduleName}</span>
-                    </div>
-                  </td>
-                  <td className="px-4 py-3 align-top">
-                    <span
-                      className={`text-sm ${
-                        row.done ? 'text-text-muted line-through' : 'text-text-primary'
-                      }`}
-                    >
-                      {row.taskName}
-                    </span>
-                  </td>
-                  <td className="px-4 py-3 align-top">
-                    <span className="text-sm text-text-tertiary">{row.targetText}</span>
-                  </td>
-                  <td className="px-4 py-3 text-center align-top">
-                    {row.itemId ? (
-                      <button
-                        type="button"
-                        onClick={() => toggleItem(row.goalId, row.itemId)}
-                        className="inline-flex items-center justify-center rounded-lg p-1 transition-colors hover:bg-surface-hover"
-                      >
-                        {row.done ? (
-                          <Icon name="CheckSquare" size="md" className="text-success" />
-                        ) : (
-                          <Icon name="Square" size="md" className="text-text-tertiary" />
-                        )}
-                      </button>
-                    ) : (
-                      <span className="text-xs text-text-muted">—</span>
-                    )}
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-      </div>
+      <DataTable<TableRow>
+        columns={tableColumns}
+        data={rows}
+        rowKey="id"
+        className="border-0 shadow-none bg-transparent"
+      />
     </motion.div>
   );
 }

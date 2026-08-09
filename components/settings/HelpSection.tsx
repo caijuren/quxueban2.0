@@ -4,6 +4,8 @@ import { useState } from 'react';
 import { Icon } from '@/components/ui/icon';
 import packageInfo from '@/package.json';
 import SettingsSection from './SettingsSection';
+import Button from '@/components/ui/button';
+import Textarea from '@/components/ui/textarea';
 
 const FAQS = [
   {
@@ -54,9 +56,10 @@ export default function HelpSection() {
                 key={index}
                 className="overflow-hidden rounded-xl border border-border-subtle bg-surface-elevated"
               >
-                <button
+                <Button
+                  variant="ghost"
                   onClick={() => setOpenIndex(isOpen ? null : index)}
-                  className="flex w-full items-center justify-between p-4 text-left transition-colors hover:bg-surface-elevated"
+                  className="flex w-full items-center justify-between p-4 text-left"
                 >
                   <span className="text-sm font-medium text-text-secondary">{item.q}</span>
                   <Icon
@@ -64,7 +67,7 @@ export default function HelpSection() {
                     size="sm"
                     className="text-text-muted"
                   />
-                </button>
+                </Button>
                 {isOpen && (
                   <div className="px-4 pb-4 text-sm leading-relaxed text-text-tertiary">
                     {item.a}
@@ -78,12 +81,13 @@ export default function HelpSection() {
 
       <SettingsSection title="意见反馈" description="遇到问题或有新想法，告诉我们">
         <div className="space-y-4">
-          <textarea
+          <Textarea
             value={feedback}
             onChange={(e) => setFeedback(e.target.value)}
             placeholder="请描述你遇到的问题或建议..."
             rows={4}
-            className="w-full resize-none rounded-xl border border-border-default bg-surface-elevated px-4 py-3 text-sm text-text-secondary transition-all placeholder:text-text-tertiary focus:border-primary focus:outline-none"
+            resize="none"
+            className="border-border-default bg-surface-elevated px-4 py-3 text-text-secondary"
           />
           <input
             type="text"
@@ -98,10 +102,11 @@ export default function HelpSection() {
             </div>
           )}
           <div className="flex justify-end">
-            <button
+            <Button
+              variant="primary"
               onClick={handleSubmitFeedback}
               disabled={submitting || !feedback.trim()}
-              className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-text-primary transition-all hover:opacity-90 disabled:opacity-70"
+              className="px-4 py-2"
             >
               {submitting ? (
                 <Icon name="Loader2" size="sm" animate="spin" />
@@ -109,7 +114,7 @@ export default function HelpSection() {
                 <Icon name="Send" size="sm" />
               )}
               提交反馈
-            </button>
+            </Button>
           </div>
         </div>
       </SettingsSection>

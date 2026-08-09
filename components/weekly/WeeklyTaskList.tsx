@@ -3,6 +3,8 @@
 import { useMemo, useState, useCallback, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Icon, type IconName } from '@/components/ui/icon';
+import DataTable, { type DataTableColumn } from '@/components/ui/data-table';
+import Button from '@/components/ui/button';
 import {
   type WeeklyGoal,
   type WeeklyGoalChecklistItem,
@@ -427,17 +429,6 @@ export default function WeeklyTaskList({ goals, tasks, weekLabel, onChange }: We
     });
   }, [draftGoals, baseTasks]);
 
-  const grouped = useMemo(() => {
-    const map = new Map<string, TaskRow[]>();
-    rows.forEach((row) => {
-      if (!map.has(row.subjectId)) map.set(row.subjectId, []);
-      map.get(row.subjectId)!.push(row);
-    });
-    return Array.from(map.entries()).sort(
-      (a, b) => (SUBJECT_ORDER.indexOf(a[0]) ?? 9) - (SUBJECT_ORDER.indexOf(b[0]) ?? 9)
-    );
-  }, [rows]);
-
   const toggleItem = (goalId: string, itemId: string) => {
     const next = draftGoals.map((g) => {
       if (g.id !== goalId) return g;
@@ -521,6 +512,174 @@ export default function WeeklyTaskList({ goals, tasks, weekLabel, onChange }: We
     commit(next);
   };
 
+  const tableColumns = useMemo<DataTableColumn<TaskRow>[]>(
+    () => [
+      {
+        key: 'subject',
+        title: '学科',
+        width: '140px',
+        render: (row, index) => {
+          const isFirst = index === 0 || rows[index - 1]?.subjectId !== row.subjectId;
+          if (!isFirst) return null;
+          const subjectId = row.subjectId;
+          const meta = SUBJECT_META[subjectId] || SUBJECT_META.other;
+          const SubjectIcon = meta.icon;
+          const taskCount = rows.filter((r) => r.subjectId === subjectId && r.itemId).length;
+          return (
+            <div className="flex items-center gap-3">
+              <div
+                className={`size-10 rounded-[12px] ${meta.color} flex shrink-0 items-center justify-center`}
+                style={{
+                  background: meta.gradient,
+                  boxShadow: `0 0 14px ${meta.glow}, inset 0 1px 0 rgba(255,255,255,0.18), inset 0 -1px 0 rgba(0,0,0,0.2)`,
+                  border: '1px solid rgba(255,255,255,0.14)',
+                }}
+              >
+                <SubjectIcon className="size-5" />
+              </div>
+              <div>
+                <p className="text-sm font-bold text-text-primary">{meta.name}</p>
+                <p className="text-text-muted/70 text-[11px]">{taskCount}项任务</p>
+              </div>
+            </div>
+          );
+        },
+      },
+      {
+        key: 'module',
+        title: '模块',
+        width: '120px',
+        render: (row) => (
+          <div className="flex items-center gap-2">
+            <Icon
+              name={MODULE_ICONS[row.category]}
+              size="sm"
+              className="h-[18px] w-[18px] shrink-0 text-text-muted"
+            />
+            {isEditing ? (
+              <input
+                type="text"
+                value={row.moduleName}
+                onChange={(e) => updateGoalTitle(row.goalId, e.target.value)}
+                className="w-full rounded-md border border-border-default bg-surface-elevated px-2 py-1 text-[13px] text-text-primary focus:border-primary focus:outline-none"
+              />
+            ) : (
+              <span className="truncate text-[13px] text-text-tertiary">{row.moduleName}</span>
+            )}
+            {isEditing && (
+              <>
+                <Button
+                  variant="ghost"
+                  size="xs"
+                  onClick={() => addItem(row.goalId)}
+                  title="添加任务"
+                >
+                  <Icon name="Plus" size="xs" />
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="xs"
+                  onClick={() => deleteGoal(row.goalId)}
+                  title="删除模块"
+                >
+                  <Icon name="Trash2" size="xs" />
+                </Button>
+              </>
+            )}
+          </div>
+        ),
+      },
+      {
+        key: 'task',
+        title: '本周任务',
+        render: (row) => {
+          if (isEditing && !row.itemId) {
+            return <span className="text-xs text-text-muted">点击 + 添加任务</span>;
+          }
+          if (isEditing) {
+            return (
+              <input
+                type="text"
+                value={row.taskName}
+                onChange={(e) => updateItem(row.goalId, row.itemId, { title: e.target.value })}
+                className="w-full rounded-md border border-border-default bg-surface-elevated px-2 py-1 text-[13px] text-text-primary focus:border-primary focus:outline-none"
+              />
+            );
+          }
+          return (
+            <span
+              className={`block truncate text-sm ${
+                row.done ? 'text-text-muted line-through' : 'text-text-primary'
+              }`}
+            >
+              {row.taskName}
+            </span>
+          );
+        },
+      },
+      {
+        key: 'target',
+        title: '检验标准',
+        render: (row) => {
+          if (isEditing && !row.itemId) {
+            return <span className="text-xs text-text-muted">—</span>;
+          }
+          if (isEditing) {
+            return (
+              <input
+                type="text"
+                value={row.targetText}
+                onChange={(e) => updateItem(row.goalId, row.itemId, { text: e.target.value })}
+                placeholder="填写检验标准"
+                className="w-full rounded-md border border-border-default bg-surface-elevated px-2 py-1 text-[13px] text-text-primary placeholder:text-text-tertiary focus:border-primary focus:outline-none"
+              />
+            );
+          }
+          return (
+            <span
+              className={`block truncate text-sm ${
+                row.done ? 'text-text-muted line-through' : 'text-text-primary'
+              }`}
+            >
+              {row.targetText || <span className="text-text-muted/50">—</span>}
+            </span>
+          );
+        },
+      },
+      {
+        key: 'status',
+        title: '状态',
+        width: '72px',
+        align: 'center',
+        render: (row) => (
+          <div className="flex items-center justify-center gap-2">
+            {row.itemId && (
+              <Button
+                variant="ghost"
+                size="xs"
+                onClick={() => toggleItem(row.goalId, row.itemId)}
+                className="!min-h-0 !h-4 !w-4 !rounded-[3px] !border !border-text-disabled/60 !p-0"
+              >
+                {row.done && <Icon name="Check" size="xs" className="text-text-tertiary" />}
+              </Button>
+            )}
+            {isEditing && row.itemId && (
+              <Button
+                variant="ghost"
+                size="xs"
+                onClick={() => deleteItem(row.goalId, row.itemId)}
+                title="删除任务"
+              >
+                <Icon name="Trash2" size="xs" />
+              </Button>
+            )}
+          </div>
+        ),
+      },
+    ],
+    [rows, isEditing, toggleItem, updateItem, deleteItem, addItem, updateGoalTitle, deleteGoal]
+  );
+
   if (draftGoals.length === 0 && !isEditing) {
     return (
       <motion.div
@@ -540,13 +699,10 @@ export default function WeeklyTaskList({ goals, tasks, weekLabel, onChange }: We
               </p>
             </div>
           </div>
-          <button
-            onClick={() => addGoal('chinese')}
-            className="bg-primary/90 inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium text-inverse transition-colors hover:bg-primary"
-          >
+          <Button variant="primary" size="sm" onClick={() => addGoal('chinese')}>
             <Icon name="Plus" size="xs" />
             添加任务
-          </button>
+          </Button>
         </div>
       </motion.div>
     );
@@ -577,67 +733,25 @@ export default function WeeklyTaskList({ goals, tasks, weekLabel, onChange }: We
             <Icon name="CalendarDays" size="xs" className="text-text-muted/60" />
             <span>本周：{weekLabel}</span>
           </div>
-          <button
+          <Button
+            variant="ghost"
+            size="sm"
             onClick={() => setIsEditing((v) => !v)}
-            className={`inline-flex size-8 items-center justify-center rounded-lg transition-colors ${
-              isEditing
-                ? 'hover:bg-success/10 text-success'
-                : 'text-text-muted/60 opacity-100 hover:text-text-muted sm:opacity-0 sm:group-hover:opacity-100'
-            }`}
+            className={isEditing ? 'text-success' : 'text-text-muted/60'}
             title={isEditing ? '完成' : '编辑'}
           >
             {isEditing ? <Icon name="Check" size="sm" /> : <Icon name="Pencil" size="sm" />}
-          </button>
+          </Button>
         </div>
       </div>
 
       {/* Table */}
-      <div className="overflow-x-auto">
-        <table className="w-full min-w-[820px] table-fixed border-collapse">
-          <thead>
-            <tr className="border-b border-border-subtle">
-              <th className="text-text-muted/80 w-[140px] whitespace-nowrap px-4 py-7 text-left text-[13px] font-medium">
-                学科
-              </th>
-              <th className="text-text-muted/80 w-[120px] whitespace-nowrap px-4 py-7 text-left text-[13px] font-medium">
-                模块
-              </th>
-              <th className="text-text-muted/80 w-[28%] whitespace-nowrap px-4 py-7 text-left text-[13px] font-medium">
-                本周任务
-              </th>
-              <th className="text-text-muted/80 w-[36%] whitespace-nowrap px-4 py-7 text-left text-[13px] font-medium">
-                检验标准
-              </th>
-              <th className="text-text-muted/80 w-[72px] whitespace-nowrap px-4 py-7 text-center text-[13px] font-medium">
-                状态
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {grouped.map(([subjectId, subjectRows]) => {
-              const meta = SUBJECT_META[subjectId] || SUBJECT_META.other;
-              const taskCount = subjectRows.filter((r) => r.itemId).length;
-
-              return (
-                <SubjectGroup
-                  key={subjectId}
-                  subjectId={subjectId}
-                  meta={meta}
-                  rows={subjectRows}
-                  taskCount={taskCount}
-                  isEditing={isEditing}
-                  onToggle={toggleItem}
-                  onUpdateItem={updateItem}
-                  onDeleteItem={deleteItem}
-                  onAddItem={addItem}
-                  onUpdateGoalTitle={updateGoalTitle}
-                  onDeleteGoal={deleteGoal}
-                />
-              );
-            })}
-          </tbody>
-        </table>
-      </div>
+      <DataTable<TaskRow>
+        columns={tableColumns}
+        data={rows}
+        rowKey="id"
+        className="border-0 shadow-none bg-transparent"
+      />
 
       {/* Edit footer */}
       <AnimatePresence>
@@ -653,14 +767,15 @@ export default function WeeklyTaskList({ goals, tasks, weekLabel, onChange }: We
               {SUBJECT_ORDER.map((sid) => {
                 const meta = SUBJECT_META[sid];
                 return (
-                  <button
+                  <Button
                     key={sid}
+                    variant="secondary"
+                    size="xs"
                     onClick={() => addGoal(sid)}
-                    className="inline-flex items-center gap-1.5 rounded-lg border border-border-default bg-surface-hover px-2.5 py-1.5 text-xs text-text-muted transition-colors hover:bg-surface-hover hover:text-text-primary"
                   >
                     <Icon name="Plus" size="xs" />
                     {meta.name}
-                  </button>
+                  </Button>
                 );
               })}
             </div>
@@ -671,177 +786,4 @@ export default function WeeklyTaskList({ goals, tasks, weekLabel, onChange }: We
   );
 }
 
-interface SubjectGroupProps {
-  subjectId: string;
-  meta: (typeof SUBJECT_META)[string];
-  rows: TaskRow[];
-  taskCount: number;
-  isEditing: boolean;
-  onToggle: (goalId: string, itemId: string) => void;
-  onUpdateItem: (goalId: string, itemId: string, patch: Partial<WeeklyGoalChecklistItem>) => void;
-  onDeleteItem: (goalId: string, itemId: string) => void;
-  onAddItem: (goalId: string) => void;
-  onUpdateGoalTitle: (goalId: string, title: string) => void;
-  onDeleteGoal: (goalId: string) => void;
-}
 
-function SubjectGroup({
-  subjectId,
-  meta,
-  rows,
-  taskCount,
-  isEditing,
-  onToggle,
-  onUpdateItem,
-  onDeleteItem,
-  onAddItem,
-  onUpdateGoalTitle,
-  onDeleteGoal,
-}: SubjectGroupProps) {
-  const SubjectIcon = meta.icon;
-
-  return (
-    <>
-      {rows.map((row, index) => {
-        const isFirst = index === 0;
-        const isLast = index === rows.length - 1;
-        const ModuleIcon = MODULE_ICONS[row.category];
-        const rowDivider = isLast ? 'shadow-[inset_0_-1px_0_rgba(255,255,255,0.06)]' : '';
-
-        return (
-          <tr key={row.id} className="h-12">
-            {/* Subject cell */}
-            <td className={`h-12 w-[140px] px-4 align-middle ${rowDivider}`}>
-              {isFirst && (
-                <div className="flex items-center gap-3">
-                  <div
-                    className={`size-10 rounded-[12px] ${meta.color} flex shrink-0 items-center justify-center`}
-                    style={{
-                      background: meta.gradient,
-                      boxShadow: `0 0 14px ${meta.glow}, inset 0 1px 0 rgba(255,255,255,0.18), inset 0 -1px 0 rgba(0,0,0,0.2)`,
-                      border: `1px solid rgba(255,255,255,0.14)`,
-                    }}
-                  >
-                    <SubjectIcon className="size-5" />
-                  </div>
-                  <div>
-                    <p className="text-sm font-bold text-text-primary">{meta.name}</p>
-                    <p className="text-text-muted/70 text-[11px]">{taskCount}项任务</p>
-                  </div>
-                </div>
-              )}
-            </td>
-
-            {/* Module cell */}
-            <td className={`h-12 w-[120px] px-4 align-middle ${rowDivider}`}>
-              <div className="flex items-center gap-2">
-                <Icon
-                  name={MODULE_ICONS[row.category]}
-                  size="sm"
-                  className="h-[18px] w-[18px] shrink-0 text-text-muted"
-                />
-                {isEditing ? (
-                  <input
-                    type="text"
-                    value={row.moduleName}
-                    onChange={(e) => onUpdateGoalTitle(row.goalId, e.target.value)}
-                    className="w-full rounded-md border border-border-default bg-surface-elevated px-2 py-1 text-[13px] text-text-primary focus:border-primary focus:outline-none"
-                  />
-                ) : (
-                  <span className="truncate text-[13px] text-text-tertiary">{row.moduleName}</span>
-                )}
-                {isEditing && (
-                  <>
-                    <button
-                      onClick={() => onAddItem(row.goalId)}
-                      className="hover:bg-primary/10 rounded-md p-1 text-text-muted transition-colors hover:text-primary"
-                      title="添加任务"
-                    >
-                      <Icon name="Plus" size="xs" />
-                    </button>
-                    <button
-                      onClick={() => onDeleteGoal(row.goalId)}
-                      className="hover:bg-error/10 rounded-md p-1 text-text-muted transition-colors hover:text-error"
-                      title="删除模块"
-                    >
-                      <Icon name="Trash2" size="xs" />
-                    </button>
-                  </>
-                )}
-              </div>
-            </td>
-
-            {/* Task cell */}
-            <td className={`h-12 px-4 align-middle ${rowDivider}`}>
-              {isEditing && !row.itemId ? (
-                <span className="text-xs text-text-muted">点击 + 添加任务</span>
-              ) : isEditing ? (
-                <input
-                  type="text"
-                  value={row.taskName}
-                  onChange={(e) => onUpdateItem(row.goalId, row.itemId, { title: e.target.value })}
-                  className="w-full rounded-md border border-border-default bg-surface-elevated px-2 py-1 text-[13px] text-text-primary focus:border-primary focus:outline-none"
-                />
-              ) : (
-                <span
-                  className={`block truncate text-sm ${
-                    row.done ? 'text-text-muted line-through' : 'text-text-primary'
-                  }`}
-                >
-                  {row.taskName}
-                </span>
-              )}
-            </td>
-
-            {/* Check standard cell */}
-            <td className={`h-12 px-4 align-middle ${rowDivider}`}>
-              {isEditing && !row.itemId ? (
-                <span className="text-xs text-text-muted">—</span>
-              ) : isEditing ? (
-                <input
-                  type="text"
-                  value={row.targetText}
-                  onChange={(e) => onUpdateItem(row.goalId, row.itemId, { text: e.target.value })}
-                  placeholder="填写检验标准"
-                  className="w-full rounded-md border border-border-default bg-surface-elevated px-2 py-1 text-[13px] text-text-primary placeholder:text-text-tertiary focus:border-primary focus:outline-none"
-                />
-              ) : (
-                <span
-                  className={`block truncate text-sm ${
-                    row.done ? 'text-text-muted line-through' : 'text-text-primary'
-                  }`}
-                >
-                  {row.targetText || <span className="text-text-muted/50">—</span>}
-                </span>
-              )}
-            </td>
-
-            {/* Status cell */}
-            <td className={`h-12 w-[72px] px-4 text-center align-middle ${rowDivider}`}>
-              <div className="flex items-center justify-center gap-2">
-                {row.itemId && (
-                  <button
-                    type="button"
-                    onClick={() => onToggle(row.goalId, row.itemId)}
-                    className="border-text-disabled/60 flex size-4 items-center justify-center rounded-[3px] border transition-colors hover:border-text-muted"
-                  >
-                    {row.done && <Icon name="Check" size="xs" className="text-text-tertiary" />}
-                  </button>
-                )}
-                {isEditing && row.itemId && (
-                  <button
-                    onClick={() => onDeleteItem(row.goalId, row.itemId)}
-                    className="hover:bg-error/10 rounded-md p-1 text-text-muted transition-colors hover:text-error"
-                    title="删除任务"
-                  >
-                    <Icon name="Trash2" size="xs" />
-                  </button>
-                )}
-              </div>
-            </td>
-          </tr>
-        );
-      })}
-    </>
-  );
-}

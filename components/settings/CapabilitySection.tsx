@@ -1,5 +1,8 @@
 'use client';
 import { Icon } from '@/components/ui/icon';
+import Select from '@/components/ui/select';
+import Textarea from '@/components/ui/textarea';
+import Button from '@/components/ui/button';
 
 import { useState } from 'react';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
@@ -153,23 +156,27 @@ export default function CapabilitySection() {
                       </div>
                       {!cap.isSystem && (
                         <div className="flex items-center gap-1 opacity-0 transition-opacity group-hover:opacity-100">
-                          <button
+                          <Button
+                            variant="ghost"
+                            size="xs"
                             onClick={() => handleEdit(cap)}
-                            className="rounded-lg p-1 text-text-tertiary hover:bg-surface-highlight"
+                            className="p-1 hover:bg-surface-highlight"
                           >
                             <Icon name="Pencil" size="xs" />
-                          </button>
-                          <button
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="xs"
                             onClick={() => handleDelete(cap.id)}
                             disabled={deletingId === cap.id}
-                            className="rounded-lg p-1 text-error hover:bg-surface-highlight disabled:opacity-50"
+                            className="p-1 text-error hover:bg-surface-highlight"
                           >
                             {deletingId === cap.id ? (
                               <Icon name="Loader2" size="xs" animate="spin" />
                             ) : (
                               <Icon name="Trash2" size="xs" />
                             )}
-                          </button>
+                          </Button>
                         </div>
                       )}
                     </div>
@@ -184,13 +191,14 @@ export default function CapabilitySection() {
         </div>
       )}
 
-      <button
+      <Button
+        variant="ghost"
         onClick={handleAdd}
-        className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl border border-dashed border-white/[0.12] py-2.5 text-sm text-text-tertiary transition-all hover:border-border-default hover:bg-surface-elevated hover:text-text-secondary"
+        className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl border border-dashed border-white/[0.12] py-2.5 text-sm text-text-tertiary hover:border-border-default hover:bg-surface-elevated hover:text-text-secondary"
       >
         <Icon name="Plus" size="sm" />
         添加自定义能力
-      </button>
+      </Button>
 
       <AnimatePresence>
         {modalOpen && (
@@ -221,12 +229,14 @@ export default function CapabilitySection() {
                     {editing ? '编辑能力' : '添加能力'}
                   </h2>
                 </div>
-                <button
+                <Button
+                  variant="ghost"
+                  size="xs"
                   onClick={() => setModalOpen(false)}
-                  className="rounded-lg p-2 text-text-tertiary hover:bg-surface-elevated"
+                  className="p-2 hover:bg-surface-elevated"
                 >
                   <Icon name="X" size="md" />
-                </button>
+                </Button>
               </div>
 
               <form onSubmit={handleSave} className="space-y-4">
@@ -276,17 +286,21 @@ export default function CapabilitySection() {
                 </div>
 
                 <div className="flex items-center justify-end gap-3 border-t border-border-subtle pt-4">
-                  <button
+                  <Button
+                    variant="ghost"
+                    size="md"
                     type="button"
                     onClick={() => setModalOpen(false)}
-                    className="rounded-xl px-4 py-2 text-text-tertiary transition-colors hover:text-text-secondary"
+                    className="hover:text-text-secondary"
                   >
                     取消
-                  </button>
-                  <button
+                  </Button>
+                  <Button
+                    variant="primary"
+                    size="lg"
                     type="submit"
                     disabled={isSaving || !form.name?.trim()}
-                    className="flex items-center gap-2 rounded-xl bg-secondary px-6 py-2 font-semibold text-text-primary transition-all hover:shadow-[0_0_30px_rgba(139,92,246,0.4)] disabled:opacity-50"
+                    className="bg-secondary hover:shadow-[0_0_30px_rgba(139,92,246,0.4)]"
                   >
                     {isSaving ? (
                       <Icon name="Loader2" size="sm" animate="spin" />
@@ -294,7 +308,7 @@ export default function CapabilitySection() {
                       <Icon name="Save" size="sm" />
                     )}
                     保存
-                  </button>
+                  </Button>
                 </div>
               </form>
             </motion.div>

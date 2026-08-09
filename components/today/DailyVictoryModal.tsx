@@ -1,5 +1,6 @@
 'use client';
 import { Icon } from '@/components/ui/icon';
+import Button from '@/components/ui/button';
 
 import { useMemo } from 'react';
 import Image from 'next/image';
@@ -107,16 +108,20 @@ export default function DailyVictoryModal({
       zIndex={120}
       footer={
         <div className="flex gap-3">
-          <button
+          <Button
             onClick={onClose}
-            className="hover:bg-surface-light flex-1 rounded-xl border border-border-default py-3 text-sm font-medium text-text-secondary transition-colors"
+            variant="secondary"
+            size="md"
+            className="flex-1"
           >
             关闭
-          </button>
-          <button
+          </Button>
+          <Button
             onClick={onPush}
             disabled={pushing || pushed}
-            className="hover:bg-primary/90 inline-flex flex-1 items-center justify-center gap-2 rounded-xl bg-primary py-3 text-sm font-medium text-inverse transition-colors disabled:cursor-not-allowed disabled:opacity-60"
+            variant="primary"
+            size="md"
+            className="flex-1"
           >
             {pushing ? (
               '推送中...'
@@ -128,7 +133,7 @@ export default function DailyVictoryModal({
                 推送到钉钉
               </>
             )}
-          </button>
+          </Button>
         </div>
       }
     >

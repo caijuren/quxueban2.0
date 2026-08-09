@@ -1,5 +1,7 @@
 'use client';
 import { Icon, type IconName } from '@/components/ui/icon';
+import Button from '@/components/ui/button';
+import Textarea from '@/components/ui/textarea';
 
 import { useEffect, useMemo, useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
@@ -16,6 +18,7 @@ import {
   SubjectId,
 } from '@/lib/subjects/subjectPlan';
 import { subjectPlanConfigDataSchema } from '@/lib/validation';
+import Select from '@/components/ui/select';
 import { ZodError } from 'zod';
 
 const TABS = [
@@ -125,7 +128,7 @@ export default function SubjectPlanConfigEditor({
           id: generateId('track'),
           name: '新线路',
           // 默认线路色，后续可由用户自定义
-          color: '#3b82f6',
+          color: 'var(--info)',
           description: '',
         },
       ],
@@ -363,18 +366,22 @@ export default function SubjectPlanConfigEditor({
         </div>
 
         <div className="flex items-center gap-2">
-          <button
+          <Button
+            variant="secondary"
+            size="md"
             onClick={handleReset}
             disabled={isLoading || !draft}
-            className="inline-flex items-center gap-2 rounded-lg border border-border-subtle bg-surface-elevated px-4 py-2 text-sm font-medium text-text-secondary transition-colors hover:bg-surface-hover hover:text-text-primary disabled:opacity-50"
+            className="border-border-subtle bg-surface-elevated hover:text-text-primary"
           >
             <Icon name="RotateCcw" size="sm" />
             重置
-          </button>
-          <button
+          </Button>
+          <Button
+            variant="primary"
+            size="md"
             onClick={handleSave}
             disabled={isLoading || updateConfig.isPending || !draft || !hasChanges}
-            className="hover:bg-primary/90 inline-flex items-center gap-2 rounded-lg bg-primary px-5 py-2 text-sm font-semibold text-text-primary transition-colors disabled:opacity-50"
+            className="hover:bg-primary/90"
           >
             {updateConfig.isPending ? (
               <Icon name="Loader2" size="sm" animate="spin" />
@@ -384,7 +391,7 @@ export default function SubjectPlanConfigEditor({
               <Icon name="Save" size="sm" />
             )}
             {updateConfig.isPending ? '保存中' : saveSuccess ? '已保存' : '保存'}
-          </button>
+          </Button>
         </div>
       </motion.div>
 
@@ -449,18 +456,16 @@ export default function SubjectPlanConfigEditor({
             {TABS.map((tab) => {
               const isActive = activeTab === tab.id;
               return (
-                <button
+                <Button
                   key={tab.id}
+                  variant={isActive ? 'primary' : 'secondary'}
+                  size="md"
                   onClick={() => setActiveTab(tab.id)}
-                  className={`inline-flex items-center gap-1.5 rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
-                    isActive
-                      ? 'bg-primary text-text-primary'
-                      : 'border border-border-subtle bg-surface-elevated text-text-secondary hover:bg-surface-hover hover:text-text-primary'
-                  }`}
+                  className={isActive ? '' : 'border-border-subtle bg-surface-elevated hover:text-text-primary'}
                 >
                   <Icon name={tab.icon} size="sm" className="size-4" />
                   {tab.label}
-                </button>
+                </Button>
               );
             })}
           </div>
@@ -523,24 +528,28 @@ export default function SubjectPlanConfigEditor({
                         />
                       </div>
                       <div className="flex md:col-span-1 md:justify-end">
-                        <button
+                        <Button
+                          variant="ghost"
+                          size="xs"
                           onClick={() => removeTrack(index)}
-                          className="hover:bg-error/10 rounded-lg p-2 text-text-tertiary transition-colors hover:text-error"
+                          className="hover:bg-error/10 hover:text-error text-text-tertiary"
                           title="删除"
                         >
                           <Icon name="Trash2" size="sm" />
-                        </button>
+                        </Button>
                       </div>
                     </div>
                   </div>
                 ))}
-                <button
+                <Button
+                  variant="ghost"
+                  size="md"
                   onClick={addTrack}
-                  className="hover:border-primary/40 hover:bg-primary/5 flex w-full items-center justify-center gap-2 rounded-lg border border-dashed border-border-default py-3 text-sm text-text-tertiary transition-colors hover:text-primary"
+                  className="hover:border-primary/40 hover:bg-primary/5 hover:text-primary w-full border border-dashed border-border-default py-3 text-text-tertiary"
                 >
                   <Icon name="Plus" size="sm" />
                   添加线路
-                </button>
+                </Button>
               </div>
             </ConfigSection>
           )}
@@ -581,22 +590,26 @@ export default function SubjectPlanConfigEditor({
                         />
                       </div>
                     </div>
-                    <button
+                    <Button
+                      variant="ghost"
+                      size="xs"
                       onClick={() => removeTimeAxisItem(index)}
-                      className="hover:bg-error/10 rounded-lg p-2 text-text-tertiary transition-colors hover:text-error"
+                      className="hover:bg-error/10 hover:text-error text-text-tertiary"
                       title="删除"
                     >
                       <Icon name="Trash2" size="sm" />
-                    </button>
+                    </Button>
                   </div>
                 ))}
-                <button
+                <Button
+                  variant="ghost"
+                  size="md"
                   onClick={addTimeAxisItem}
-                  className="hover:border-primary/40 hover:bg-primary/5 flex w-full items-center justify-center gap-2 rounded-lg border border-dashed border-border-default py-3 text-sm text-text-tertiary transition-colors hover:text-primary"
+                  className="hover:border-primary/40 hover:bg-primary/5 hover:text-primary w-full border border-dashed border-border-default py-3 text-text-tertiary"
                 >
                   <Icon name="Plus" size="sm" />
                   添加时间轴节点
-                </button>
+                </Button>
               </div>
             </ConfigSection>
           )}
@@ -613,17 +626,16 @@ export default function SubjectPlanConfigEditor({
                     <div className="grid grid-cols-1 items-start gap-4 md:grid-cols-12">
                       <div className="md:col-span-2">
                         <label className="mb-1.5 block text-xs text-text-tertiary">所属线路</label>
-                        <select
+                        <Select
                           value={node.trackId}
                           onChange={(e) => updateNode(index, { trackId: e.target.value })}
-                          className="w-full rounded-lg border border-border-subtle bg-surface px-3 py-2 text-sm text-text-secondary focus:border-primary focus:outline-none"
-                        >
-                          {draft.tracks.map((track) => (
-                            <option key={track.id} value={track.id}>
-                              {track.name}
-                            </option>
-                          ))}
-                        </select>
+                          size="md"
+                          className="bg-surface"
+                          options={draft.tracks.map((track) => ({
+                            value: track.id,
+                            label: track.name,
+                          }))}
+                        />
                       </div>
                       <div className="md:col-span-2">
                         <label className="mb-1.5 block text-xs text-text-tertiary">标签</label>
@@ -667,24 +679,28 @@ export default function SubjectPlanConfigEditor({
                         />
                       </div>
                       <div className="flex md:col-span-1 md:justify-end">
-                        <button
+                        <Button
+                          variant="ghost"
+                          size="xs"
                           onClick={() => removeNode(index)}
-                          className="hover:bg-error/10 rounded-lg p-2 text-text-tertiary transition-colors hover:text-error"
+                          className="hover:bg-error/10 hover:text-error text-text-tertiary"
                           title="删除"
                         >
                           <Icon name="Trash2" size="sm" />
-                        </button>
+                        </Button>
                       </div>
                     </div>
                   </div>
                 ))}
-                <button
+                <Button
+                  variant="ghost"
+                  size="md"
                   onClick={addNode}
-                  className="hover:border-primary/40 hover:bg-primary/5 flex w-full items-center justify-center gap-2 rounded-lg border border-dashed border-border-default py-3 text-sm text-text-tertiary transition-colors hover:text-primary"
+                  className="hover:border-primary/40 hover:bg-primary/5 hover:text-primary w-full border border-dashed border-border-default py-3 text-text-tertiary"
                 >
                   <Icon name="Plus" size="sm" />
                   添加节点
-                </button>
+                </Button>
               </div>
             </ConfigSection>
           )}
@@ -762,26 +778,30 @@ export default function SubjectPlanConfigEditor({
                                 />
                               </div>
                               <div className="flex md:col-span-1 md:justify-end">
-                                <button
+                                <Button
+                                  variant="ghost"
+                                  size="xs"
                                   onClick={() => removeAchievement(track.id, index)}
-                                  className="hover:bg-error/10 rounded-lg p-2 text-text-tertiary transition-colors hover:text-error"
+                                  className="hover:bg-error/10 hover:text-error text-text-tertiary"
                                   title="删除"
                                 >
                                   <Icon name="Trash2" size="sm" />
-                                </button>
+                                </Button>
                               </div>
                             </div>
 
                             <div>
                               <div className="mb-2 flex items-center gap-2">
                                 <span className="text-xs text-text-tertiary">里程碑</span>
-                                <button
+                                <Button
+                                  variant="link"
+                                  size="xs"
                                   onClick={() => addMilestone(track.id, index)}
-                                  className="hover:text-primary/80 inline-flex items-center gap-1 text-xs text-primary"
+                                  className="hover:text-primary/80"
                                 >
                                   <Icon name="Plus" size="xs" />
                                   添加
-                                </button>
+                                </Button>
                               </div>
                               <div className="flex flex-wrap gap-2">
                                 {(achievement.milestones ?? []).map((milestone, mi) => (
@@ -797,12 +817,14 @@ export default function SubjectPlanConfigEditor({
                                       }
                                       className="w-24 bg-transparent text-xs text-secondary focus:outline-none"
                                     />
-                                    <button
+                                    <Button
+                                      variant="ghost"
+                                      size="xs"
                                       onClick={() => removeMilestone(track.id, index, mi)}
                                       className="text-secondary/70 hover:text-secondary"
                                     >
                                       <Icon name="X" size="xs" />
-                                    </button>
+                                    </Button>
                                   </div>
                                 ))}
                                 {(achievement.milestones ?? []).length === 0 && (
@@ -814,13 +836,15 @@ export default function SubjectPlanConfigEditor({
                         ))}
                       </div>
 
-                      <button
+                      <Button
+                        variant="ghost"
+                        size="md"
                         onClick={() => addAchievement(track.id)}
-                        className="hover:border-primary/40 hover:bg-primary/5 mt-3 flex w-full items-center justify-center gap-2 rounded-lg border border-dashed border-border-default py-2.5 text-sm text-text-tertiary transition-colors hover:text-primary"
+                        className="hover:border-primary/40 hover:bg-primary/5 hover:text-primary mt-3 w-full border border-dashed border-border-default py-2.5 text-text-tertiary"
                       >
                         <Icon name="Plus" size="sm" />
                         添加 {track.name} 目标
-                      </button>
+                      </Button>
                     </div>
                   );
                 })}
@@ -890,33 +914,38 @@ export default function SubjectPlanConfigEditor({
                         />
                       </div>
                       <div className="flex md:col-span-1 md:justify-end">
-                        <button
+                        <Button
+                          variant="ghost"
+                          size="xs"
                           onClick={() => removeExamEvent(index)}
-                          className="hover:bg-error/10 rounded-lg p-2 text-text-tertiary transition-colors hover:text-error"
+                          className="hover:bg-error/10 hover:text-error text-text-tertiary"
                           title="删除"
                         >
                           <Icon name="Trash2" size="sm" />
-                        </button>
+                        </Button>
                       </div>
                     </div>
                     <div>
                       <label className="mb-1.5 block text-xs text-text-tertiary">备注提醒</label>
-                      <textarea
+                      <Textarea
                         value={exam.notes ?? ''}
                         onChange={(e) => updateExamEvent(index, { notes: e.target.value })}
                         rows={2}
-                        className="w-full resize-none rounded-lg border border-border-subtle bg-surface px-3 py-2 text-sm text-text-secondary focus:border-primary focus:outline-none"
+                        resize="none"
+                        className="border-border-subtle bg-surface px-3 py-2 text-text-secondary"
                       />
                     </div>
                   </div>
                 ))}
-                <button
+                <Button
+                  variant="ghost"
+                  size="md"
                   onClick={addExamEvent}
-                  className="hover:border-primary/40 hover:bg-primary/5 flex w-full items-center justify-center gap-2 rounded-lg border border-dashed border-border-default py-3 text-sm text-text-tertiary transition-colors hover:text-primary"
+                  className="hover:border-primary/40 hover:bg-primary/5 hover:text-primary w-full border border-dashed border-border-default py-3 text-text-tertiary"
                 >
                   <Icon name="Plus" size="sm" />
                   添加赛事节点
-                </button>
+                </Button>
               </div>
             </ConfigSection>
           )}

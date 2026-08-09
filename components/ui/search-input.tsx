@@ -3,6 +3,7 @@
 import * as React from 'react';
 import { cn } from '@/lib/utils';
 import { Icon } from '@/components/ui/icon';
+import Button from '@/components/ui/button';
 import Input, { InputProps } from './input';
 
 export interface SearchInputProps extends Omit<InputProps, 'leftIcon' | 'type'> {
@@ -26,14 +27,16 @@ const SearchInput = React.forwardRef<HTMLInputElement, SearchInputProps>(
           {...props}
         />
         {hasValue && onClear && (
-          <button
+          <Button
             type="button"
             onClick={onClear}
+            variant="ghost"
+            size="xs"
             className="absolute right-3 top-1/2 -translate-y-1/2 text-text-muted transition-colors hover:text-text-secondary"
             aria-label="清除"
           >
             <Icon name="X" size="sm" />
-          </button>
+          </Button>
         )}
       </div>
     );

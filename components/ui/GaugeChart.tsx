@@ -47,8 +47,8 @@ export default function GaugeChart({
         {/* Progress arc with gradient */}
         <defs>
           <linearGradient id="gaugeGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="var(--color-primary-glow, #FB7185)" />
-            <stop offset="100%" stopColor="var(--color-primary, #F43F7A)" />
+            <stop offset="0%" stopColor="var(--color-primary-glow)" />
+            <stop offset="100%" stopColor="var(--color-primary)" />
           </linearGradient>
         </defs>
         <circle

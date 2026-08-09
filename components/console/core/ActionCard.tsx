@@ -1,6 +1,7 @@
 'use client';
 
 import { Icon, type IconName } from '@/components/ui/icon';
+import Button from '@/components/ui/button';
 
 interface Action {
   label: string;
@@ -34,8 +35,10 @@ export default function ActionCard({ icon, title, description, actions }: Action
       {actions && actions.length > 0 && (
         <div className="mt-3 flex items-center justify-end gap-2">
           {actions.map((action, index) => (
-            <button
+            <Button
               key={index}
+              variant={action.variant === 'primary' ? 'primary' : 'secondary'}
+              size="sm"
               onClick={action.onClick}
               className={`rounded-lg px-3 py-1.5 text-xs font-medium transition-colors ${
                 action.variant === 'primary'
@@ -44,7 +47,7 @@ export default function ActionCard({ icon, title, description, actions }: Action
               }`}
             >
               {action.label}
-            </button>
+            </Button>
           ))}
         </div>
       )}

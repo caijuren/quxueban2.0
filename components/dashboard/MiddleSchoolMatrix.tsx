@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { useState, type ElementType } from 'react';
 import Link from 'next/link';
 import { Icon, type IconName } from '@/components/ui/icon';
+import Button from '@/components/ui/button';
 
 type ChannelRole = 'primary' | 'optional' | 'partial' | 'none';
 
@@ -76,7 +77,7 @@ const roleConfig: Record<
     color: 'text-violet-300',
     bg: 'bg-violet-500/15',
     border: 'border-violet-500/40',
-    glow: 'shadow-[0_0_25px_rgba(139,92,246,0.25)]',
+    glow: 'shadow-[0_0_25px_color-mix(in_srgb,var(--color-secondary)_25%,transparent)]',
     pillBg: 'bg-violet-500/25',
   },
   optional: {
@@ -84,7 +85,7 @@ const roleConfig: Record<
     color: 'text-cyan-300',
     bg: 'bg-cyan-500/15',
     border: 'border-cyan-500/40',
-    glow: 'shadow-[0_0_25px_rgba(6,182,212,0.25)]',
+    glow: 'shadow-[0_0_25px_color-mix(in_srgb,var(--accent)_25%,transparent)]',
     pillBg: 'bg-cyan-500/25',
   },
   partial: {
@@ -92,7 +93,7 @@ const roleConfig: Record<
     color: 'text-warning',
     bg: 'bg-warning/15',
     border: 'border-warning/40',
-    glow: 'shadow-[0_0_25px_rgba(245,158,11,0.25)]',
+    glow: 'shadow-[0_0_25px_color-mix(in_srgb,var(--warning)_25%,transparent)]',
     pillBg: 'bg-warning/25',
   },
   none: {
@@ -281,21 +282,21 @@ const strategyByTier: Record<
       title: '当前最该关注',
       value: '四校八大 · 自招/到区',
       desc: '准备竞赛奖项或保持全区前排名',
-      accent: '#f43f5e',
+      accent: 'var(--color-primary)',
     },
     high: {
       icon: 'TrendingUp',
       title: '冲高通道',
       value: '四校八大 · 自招',
       desc: '需要竞赛奖项或综评优秀',
-      accent: '#f43f5e',
+      accent: 'var(--color-primary)',
     },
     safe: {
       icon: 'Shield',
       title: '保底通道',
       value: '本区市重点 · 名额到校',
       desc: '校内排名争取名额，降低风险',
-      accent: '#8b5cf6',
+      accent: 'var(--color-secondary)',
     },
   },
   benshi: {
@@ -304,21 +305,21 @@ const strategyByTier: Record<
       title: '当前最该关注',
       value: '本区市重点 · 名额到校',
       desc: '按就读初中的校内排名争取名额',
-      accent: '#8b5cf6',
+      accent: 'var(--color-secondary)',
     },
     high: {
       icon: 'TrendingUp',
       title: '冲高通道',
       value: '四校八大 · 自招/到区',
       desc: '需要竞赛奖项或全区前排名',
-      accent: '#f43f5e',
+      accent: 'var(--color-primary)',
     },
     safe: {
       icon: 'Shield',
       title: '保底通道',
       value: '本区区重点 / 中本贯通',
       desc: '名额到校、统招、提前批多层兜底',
-      accent: '#06b6d4',
+      accent: 'var(--accent)',
     },
   },
   benqu: {
@@ -327,21 +328,21 @@ const strategyByTier: Record<
       title: '当前最该关注',
       value: '本区区重点 · 名额到校',
       desc: '校内排名争取名额，到校为主',
-      accent: '#06b6d4',
+      accent: 'var(--accent)',
     },
     high: {
       icon: 'TrendingUp',
       title: '冲高通道',
       value: '本区市重点 · 名额到校/统招',
       desc: '校内排名靠前或裸分冲刺',
-      accent: '#8b5cf6',
+      accent: 'var(--color-secondary)',
     },
     safe: {
       icon: 'Shield',
       title: '保底通道',
       value: '本区普高 / 中本贯通',
       desc: '平行志愿、提前批录取兜底',
-      accent: '#64748b',
+      accent: 'var(--text-muted)',
     },
   },
   zhongben: {
@@ -350,21 +351,21 @@ const strategyByTier: Record<
       title: '当前最该关注',
       value: '中本贯通 · 提前批',
       desc: '关注招生简章与专业分数线',
-      accent: '#10b981',
+      accent: 'var(--success)',
     },
     high: {
       icon: 'TrendingUp',
       title: '冲高通道',
       value: '本区市重点 · 统招',
       desc: '裸分够线可冲市重点',
-      accent: '#8b5cf6',
+      accent: 'var(--color-secondary)',
     },
     safe: {
       icon: 'Shield',
       title: '保底通道',
       value: '中高职贯通 / 五年一贯制',
       desc: '同批提前批，多层兜底',
-      accent: '#14b8a6',
+      accent: 'var(--accent)',
     },
   },
   benpu: {
@@ -373,21 +374,21 @@ const strategyByTier: Record<
       title: '当前最该关注',
       value: '本区普高 · 统招',
       desc: '达到控分线，平行志愿保底',
-      accent: '#64748b',
+      accent: 'var(--text-muted)',
     },
     high: {
       icon: 'TrendingUp',
       title: '冲高通道',
       value: '本区区重点 · 名额到校',
       desc: '校内排名争取名额',
-      accent: '#06b6d4',
+      accent: 'var(--accent)',
     },
     safe: {
       icon: 'Shield',
       title: '保底通道',
       value: '中高职贯通 / 五年一贯制',
       desc: '中职提前批，确保有学上',
-      accent: '#14b8a6',
+      accent: 'var(--accent)',
     },
   },
   zhonggaozhi: {
@@ -396,21 +397,21 @@ const strategyByTier: Record<
       title: '当前最该关注',
       value: '中高职贯通 · 提前批',
       desc: '3+2 培养模式，关注专业',
-      accent: '#14b8a6',
+      accent: 'var(--accent)',
     },
     high: {
       icon: 'TrendingUp',
       title: '冲高通道',
       value: '中本贯通 · 提前批',
       desc: '需要达到更高分数线',
-      accent: '#10b981',
+      accent: 'var(--success)',
     },
     safe: {
       icon: 'Shield',
       title: '保底通道',
       value: '五年一贯制 / 普通中专',
       desc: '同批录取，多层兜底',
-      accent: '#0ea5e9',
+      accent: 'var(--accent)',
     },
   },
   wunian: {
@@ -419,21 +420,21 @@ const strategyByTier: Record<
       title: '当前最该关注',
       value: '五年一贯制 · 提前批',
       desc: '5 年一贯培养，高职大专文凭',
-      accent: '#0ea5e9',
+      accent: 'var(--accent)',
     },
     high: {
       icon: 'TrendingUp',
       title: '冲高通道',
       value: '中高职贯通 · 提前批',
       desc: '专业选择更灵活',
-      accent: '#14b8a6',
+      accent: 'var(--accent)',
     },
     safe: {
       icon: 'Shield',
       title: '保底通道',
       value: '普通中专 / 技校',
       desc: '确保录取，后续可升学',
-      accent: '#64748b',
+      accent: 'var(--text-muted)',
     },
   },
 };
@@ -476,15 +477,15 @@ export default function MiddleSchoolMatrix() {
           <div className="flex flex-wrap items-center gap-3">
             <div className="flex flex-wrap items-center gap-2 text-[11px] text-text-muted">
               <span className="flex items-center gap-1.5 rounded-full border border-border-subtle bg-surface-hover px-2 py-1">
-                <span className="size-2 rounded-full bg-violet-500 shadow-[0_0_6px_rgba(139,92,246,0.8)]" />
+                <span className="size-2 rounded-full bg-violet-500 shadow-[0_0_6px_color-mix(in_srgb,var(--color-secondary)_80%,transparent)]" />
                 主通道
               </span>
               <span className="flex items-center gap-1.5 rounded-full border border-border-subtle bg-surface-hover px-2 py-1">
-                <span className="size-2 rounded-full bg-cyan-500 shadow-[0_0_6px_rgba(6,182,212,0.8)]" />
+                <span className="size-2 rounded-full bg-cyan-500 shadow-[0_0_6px_color-mix(in_srgb,var(--accent)_80%,transparent)]" />
                 可选
               </span>
               <span className="flex items-center gap-1.5 rounded-full border border-border-subtle bg-surface-hover px-2 py-1">
-                <span className="size-2 rounded-full bg-warning shadow-[0_0_6px_rgba(245,158,11,0.8)]" />
+                <span className="size-2 rounded-full bg-warning shadow-[0_0_6px_color-mix(in_srgb,var(--warning)_80%,transparent)]" />
                 部分有
               </span>
               <span className="flex items-center gap-1.5 rounded-full border border-border-subtle bg-surface-hover px-2 py-1">
@@ -493,20 +494,24 @@ export default function MiddleSchoolMatrix() {
               </span>
             </div>
             <div className="flex items-center gap-2">
-              <button
+              <Button
+                variant="secondary"
+                size="sm"
                 onClick={() => console.log('导出图片')}
-                className="flex items-center gap-1.5 rounded-lg border border-border-subtle bg-surface-hover px-3 py-1.5 text-[11px] text-text-secondary transition-all hover:border-border-default hover:bg-surface-highlight"
+                className="border-border-subtle bg-surface-hover hover:border-border-default hover:bg-surface-highlight"
               >
                 <Icon name="Camera" size="xs" />
                 导出
-              </button>
-              <button
+              </Button>
+              <Button
+                variant="secondary"
+                size="sm"
                 onClick={() => console.log('分享')}
-                className="flex items-center gap-1.5 rounded-lg border border-border-subtle bg-surface-hover px-3 py-1.5 text-[11px] text-text-secondary transition-all hover:border-border-default hover:bg-surface-highlight"
+                className="border-border-subtle bg-surface-hover hover:border-border-default hover:bg-surface-highlight"
               >
                 <Icon name="Share2" size="xs" />
                 分享
-              </button>
+              </Button>
             </div>
           </div>
         </div>
@@ -569,7 +574,7 @@ export default function MiddleSchoolMatrix() {
                 initial="hidden"
                 animate="visible"
                 className={`mb-2.5 grid grid-cols-[220px_repeat(4,1fr)] gap-2.5 rounded-lg ${
-                  isCurrentTier ? 'shadow-[0_0_30px_rgba(244,63,94,0.12)]' : ''
+                  isCurrentTier ? 'shadow-[0_0_30px_color-mix(in_srgb,var(--color-primary)_12%,transparent)]' : ''
                 }`}
                 onMouseEnter={() => setHoveredTier(tier.id)}
                 onMouseLeave={() => setHoveredTier(null)}
@@ -631,7 +636,7 @@ export default function MiddleSchoolMatrix() {
 
                   {/* Current tier badge */}
                   {isCurrentTier && (
-                    <div className="absolute -right-2 -top-2 rounded-full bg-primary px-2 py-0.5 text-[10px] font-bold text-text-primary shadow-[0_0_15px_rgba(244,63,94,0.5)]">
+                    <div className="absolute -right-2 -top-2 rounded-full bg-primary px-2 py-0.5 text-[10px] font-bold text-text-primary shadow-[0_0_15px_color-mix(in_srgb,var(--color-primary)_50%,transparent)]">
                       当前目标
                     </div>
                   )}

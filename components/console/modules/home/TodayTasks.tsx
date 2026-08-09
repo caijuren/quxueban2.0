@@ -1,6 +1,7 @@
 'use client';
 
 import { Icon, type IconName } from '@/components/ui/icon';
+import Button from '@/components/ui/button';
 import Section from '@/components/console/core/Section';
 
 interface Task {
@@ -49,9 +50,9 @@ export default function TodayTasks() {
             </div>
           </div>
         ))}
-        <button className="bg-primary/[0.08] hover:bg-primary/[0.12] w-full rounded-xl py-2.5 text-sm font-medium text-primary transition-colors">
+        <Button variant="ghost" size="md" className="bg-primary/[0.08] hover:bg-primary/[0.12] w-full rounded-xl py-2.5 text-sm font-medium text-primary transition-colors">
           继续学习 →
-        </button>
+        </Button>
       </div>
     </Section>
   );

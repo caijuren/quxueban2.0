@@ -54,10 +54,11 @@ export default function NotificationSection({ settings, onUpdate }: Notification
       <SettingsSection title="通知类型" description="选择你关心的提醒">
         <div className="grid grid-cols-1 gap-1.5 sm:grid-cols-2">
           {NOTIFICATION_OPTIONS.map((option) => (
-            <button
+            <Button
               key={option.key}
+              variant="secondary"
               onClick={() => togglePref(option.key)}
-              className={`flex items-start gap-2.5 rounded-lg border p-2.5 text-left transition-colors ${
+              className={`flex items-start gap-2.5 rounded-lg border p-2.5 text-left ${
                 localPrefs[option.key]
                   ? 'bg-primary/10 border-primary/30'
                   : 'border-border-subtle bg-surface-elevated hover:bg-surface-elevated'
@@ -84,7 +85,7 @@ export default function NotificationSection({ settings, onUpdate }: Notification
                 <p className="text-[11px] font-medium text-text-secondary">{option.label}</p>
                 <p className="text-[11px] leading-tight text-text-muted">{option.description}</p>
               </div>
-            </button>
+            </Button>
           ))}
         </div>
       </SettingsSection>

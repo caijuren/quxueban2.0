@@ -1,5 +1,6 @@
 'use client';
 import { Icon } from '@/components/ui/icon';
+import Button from '@/components/ui/button';
 
 import { useState, useEffect } from 'react';
 
@@ -85,21 +86,25 @@ export default function ManageNodesModal({
       zIndex={100}
       footer={
         <div className="flex items-center justify-end gap-3">
-          <button
+          <Button
             type="button"
             onClick={onClose}
-            className="rounded-lg bg-surface-elevated px-4 py-2 text-sm text-text-tertiary transition-all hover:bg-surface-highlight"
+            variant="secondary"
+            size="md"
+            className="bg-surface-elevated text-text-tertiary hover:bg-surface-highlight"
           >
             取消
-          </button>
-          <button
+          </Button>
+          <Button
             type="button"
             onClick={handleSave}
-            className="flex items-center gap-2 rounded-lg bg-accent px-4 py-2 text-sm font-medium text-text-primary transition-all"
+            variant="primary"
+            size="md"
+            className="bg-accent text-text-primary"
           >
             <Icon name="Save" size="sm" />
             保存节点
-          </button>
+          </Button>
         </div>
       }
     >
@@ -136,26 +141,30 @@ export default function ManageNodesModal({
                     placeholder="节点任务"
                     className="flex-1 rounded-xl border border-border-default bg-surface-elevated px-3 py-2 text-sm text-text-secondary placeholder-slate-500 transition-all focus:border-secondary focus:outline-none"
                   />
-                  <button
+                  <Button
                     type="button"
                     onClick={() => removeMilestone(plan.id, index)}
-                    className="hover:bg-error/10 flex size-9 items-center justify-center rounded-xl bg-surface-elevated text-text-muted transition-all hover:text-error"
+                    variant="ghost"
+                    size="sm"
+                    className="hover:bg-error/10 size-9 text-text-muted hover:text-error"
                     aria-label="删除节点"
                   >
                     <Icon name="Trash2" size="sm" />
-                  </button>
+                  </Button>
                 </div>
               ))}
             </div>
 
-            <button
+            <Button
               type="button"
               onClick={() => addMilestone(plan.id)}
-              className="mt-3 flex items-center gap-1.5 text-sm text-secondary transition-colors hover:text-secondary-glow"
+              variant="link"
+              size="sm"
+              className="mt-3 text-secondary"
             >
               <Icon name="Plus" size="sm" />
               添加节点
-            </button>
+            </Button>
           </div>
         ))}
       </div>

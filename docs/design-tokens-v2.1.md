@@ -1,5 +1,11 @@
 # 趣学伴 v2.1 Dark Premium Theme 配色规范
 
+> **⚠️ 已废弃（Deprecated）**
+>
+> 本文档已被 v2.7.0 Design Token 规范取代。当前 Token 体系已整合深色/浅色双主题，请以 `docs/design-system/v2.7.0-token-spec.md` 为准。
+>
+> 保留此文件仅作历史参考，请勿依此开发新页面。
+
 > 版本：v2.1 Dark Premium  
 > 定位：高端教育科技 / AI 家庭教育操作系统  
 > 风格关键词：专业、克制、未来感、成长感  

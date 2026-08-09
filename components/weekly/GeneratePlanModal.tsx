@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { Icon, type IconName } from '@/components/ui/icon';
+import Button from '@/components/ui/button';
 import { useChildren } from '@/components/dashboard/ChildrenContext';
 import Modal from '@/components/ui/Modal';
 import {
@@ -13,6 +14,7 @@ import {
   type DayOfWeek,
 } from '@/lib/storage.types';
 import { useTaskTemplates } from '@/lib/hooks/useTaskTemplates';
+import Select from '@/components/ui/select';
 import {
   dayOrder,
   getCurrentWeekId,
@@ -244,28 +246,34 @@ export default function GeneratePlanModal({
           </div>
           <div className="flex items-center gap-3">
             {step !== 'week' && (
-              <button
+              <Button
                 onClick={handleBack}
-                className="flex items-center gap-1.5 rounded-lg px-4 py-2 text-text-tertiary transition-colors hover:bg-surface-hover hover:text-text-secondary"
+                variant="ghost"
+                size="md"
+                className="gap-1.5"
               >
                 <Icon name="ChevronLeft" size="md" />
                 上一步
-              </button>
+              </Button>
             )}
             {step !== 'preview' ? (
-              <button
+              <Button
                 onClick={handleNext}
                 disabled={!canNext}
-                className="hover:bg-primary/90 flex items-center gap-1.5 rounded-lg bg-primary px-6 py-2 font-medium text-inverse transition-colors disabled:cursor-not-allowed disabled:opacity-50"
+                variant="primary"
+                size="md"
+                className="gap-1.5"
               >
                 下一步
                 <Icon name="ChevronRight" size="md" />
-              </button>
+              </Button>
             ) : (
-              <button
+              <Button
                 onClick={handlePublish}
                 disabled={publishing || previewTasks.length === 0}
-                className="hover:bg-primary/90 flex items-center gap-1.5 rounded-lg bg-primary px-6 py-2 font-medium text-inverse transition-colors disabled:cursor-not-allowed disabled:opacity-50"
+                variant="primary"
+                size="md"
+                className="gap-1.5"
               >
                 {publishing ? (
                   <Icon name="Loader2" size="md" animate="spin" />
@@ -273,7 +281,7 @@ export default function GeneratePlanModal({
                   <Icon name="Send" size="md" />
                 )}
                 发布
-              </button>
+              </Button>
             )}
           </div>
         </div>
@@ -342,10 +350,12 @@ function StepWeek({ weekId, setWeekId, options }: StepWeekProps) {
         {options.map((option) => {
           const selected = weekId === option.weekId;
           return (
-            <button
+            <Button
               key={option.weekId}
               onClick={() => setWeekId(option.weekId)}
-              className={`rounded-2xl border p-4 text-left transition-colors ${
+              variant="secondary"
+              size="md"
+              className={`rounded-2xl border p-4 text-left ${
                 selected
                   ? 'border-primary/30 bg-surface-highlight'
                   : 'border-border-subtle bg-surface-elevated hover:bg-surface-hover'
@@ -362,7 +372,7 @@ function StepWeek({ weekId, setWeekId, options }: StepWeekProps) {
                 <span className="text-sm font-bold text-text-secondary">{option.label}</span>
               </div>
               <p className="ml-6 text-xs text-text-muted">{option.range}</p>
-            </button>
+            </Button>
           );
         })}
       </div>
@@ -425,35 +435,31 @@ function StepTasks({
         </div>
         <div className="flex flex-wrap items-center gap-2">
           <Icon name="Filter" size="sm" className="text-text-muted" />
-          <select
+          <Select
             value={filterCategory}
             onChange={(e) => setFilterCategory(e.target.value as TaskCategory | 'all')}
-            className="rounded-lg border border-border-default bg-surface p-2 text-xs text-text-primary focus:border-primary focus:outline-none"
-          >
-            <option value="all">全部分类</option>
-            {allCategories.map((c) => (
-              <option key={c} value={c}>
-                {TASK_CATEGORY_LABELS[c]}
-              </option>
-            ))}
-          </select>
-          <select
+            size="sm"
+            className="bg-surface"
+            options={[
+              { value: 'all', label: '全部分类' },
+              ...allCategories.map((c) => ({ value: c, label: TASK_CATEGORY_LABELS[c] })),
+            ]}
+          />
+          <Select
             value={filterSchedule}
             onChange={(e) =>
               setFilterSchedule(e.target.value as 'all' | TaskTemplate['weeklySchedule'])
             }
-            className="rounded-lg border border-border-default bg-surface p-2 text-xs text-text-primary focus:border-primary focus:outline-none"
-          >
-            {scheduleFilterOptions.map((o) => (
-              <option key={o.value} value={o.value}>
-                {o.label}
-              </option>
-            ))}
-          </select>
-          <button
+            size="sm"
+            className="bg-surface"
+            options={scheduleFilterOptions}
+          />
+          <Button
             onClick={toggleAllFiltered}
             disabled={templates.length === 0}
-            className="flex items-center gap-1.5 text-xs text-text-tertiary transition-colors hover:text-text-secondary disabled:cursor-not-allowed disabled:opacity-40"
+            variant="ghost"
+            size="sm"
+            className="gap-1.5 text-xs text-text-tertiary hover:text-text-secondary disabled:opacity-40"
           >
             <div
               className={`flex size-4 items-center justify-center rounded border ${
@@ -465,7 +471,7 @@ function StepTasks({
               )}
             </div>
             全选
-          </button>
+          </Button>
         </div>
       </div>
 
@@ -479,10 +485,12 @@ function StepTasks({
             const selected = selectedIds.has(tpl.id);
             const scheduleDays = getScheduledDays(tpl.weeklySchedule, tpl.customScheduleDays);
             return (
-              <button
+              <Button
                 key={tpl.id}
                 onClick={() => toggleTemplate(tpl.id)}
-                className={`rounded-2xl border p-3 text-left transition-colors ${
+                variant="secondary"
+                size="md"
+                className={`rounded-2xl border p-3 text-left ${
                   selected
                     ? 'border-primary/30 bg-surface-highlight'
                     : 'border-border-subtle bg-surface-elevated hover:bg-surface-hover'
@@ -538,7 +546,7 @@ function StepTasks({
                     </div>
                   </div>
                 </div>
-              </button>
+              </Button>
             );
           })}
         </div>
@@ -669,26 +677,24 @@ function PreviewTaskCard({ task, onMove, onRemove }: PreviewTaskCardProps) {
           <p className="truncate text-xs font-medium text-text-secondary">{task.focus}</p>
           <p className="text-[10px] text-text-muted">{task.duration}</p>
         </div>
-        <button
+        <Button
           onClick={() => onRemove(task.id)}
-          className="hover:bg-error/10 rounded-lg p-1 text-text-tertiary opacity-0 transition-opacity hover:text-error group-hover:opacity-100"
+          variant="ghost"
+          size="xs"
+          className="hover:bg-error/10 rounded-lg p-1 text-text-tertiary opacity-0 hover:text-error group-hover:opacity-100"
           aria-label="删除"
         >
           <Icon name="Trash2" size="sm" />
-        </button>
+        </Button>
       </div>
       <div className="mt-2 flex items-center gap-2">
-        <select
+        <Select
           value={task.day}
           onChange={(e) => onMove(task.id, e.target.value as DayOfWeek)}
-          className="rounded-lg border border-border-default bg-surface px-1.5 py-1 text-[10px] text-text-secondary focus:border-primary focus:outline-none"
-        >
-          {dayOrder.map((d) => (
-            <option key={d} value={d}>
-              移到 {d}
-            </option>
-          ))}
-        </select>
+          size="sm"
+          className="bg-surface"
+          options={dayOrder.map((d) => ({ value: d, label: `移到 ${d}` }))}
+        />
       </div>
     </div>
   );

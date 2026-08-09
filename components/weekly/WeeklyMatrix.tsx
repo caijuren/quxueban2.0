@@ -2,6 +2,7 @@
 // FIXME: 本组件引用了 weeklyTasks 中未实现的 timeSlot 相关函数
 'use client';
 import { Icon } from '@/components/ui/icon';
+import Button from '@/components/ui/button';
 
 import { useMemo, useState, useRef } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
@@ -261,11 +262,13 @@ export default function WeeklyMatrix({
             const isSelected = day === matrixDay;
             const ds = stats?.byDay[day];
             return (
-              <button
+              <Button
                 key={day}
+                variant="ghost"
+                size="sm"
                 onClick={() => setMatrixDay(day)}
                 aria-pressed={isSelected}
-                className={`focus-ring relative min-w-[72px] flex-shrink-0 rounded-xl border px-3 py-2 text-left transition-colors ${
+                className={`relative min-w-[72px] flex-shrink-0 rounded-xl border px-3 py-2 text-left transition-colors ${
                   isSelected
                     ? 'border-primary/30 bg-surface-highlight'
                     : 'border-border-subtle bg-surface-elevated hover:border-border-default'
@@ -283,7 +286,7 @@ export default function WeeklyMatrix({
                 <p className="mt-0.5 text-2xs tabular-nums text-text-tertiary">
                   {ds && ds.total > 0 ? `${ds.done}/${ds.total}` : '无任务'}
                 </p>
-              </button>
+              </Button>
             );
           })}
         </div>
@@ -440,8 +443,10 @@ function MobileTaskRow({ task, onToggle }: MobileTaskRowProps) {
     task.timeSlot || getCategoryDefaultTimeSlot(task.category)
   );
   return (
-    <button
+    <Button
       type="button"
+      variant="ghost"
+      size="sm"
       onClick={onToggle}
       className={`flex w-full items-center gap-3 rounded-xl border px-3 py-2.5 text-left transition-colors ${
         done
@@ -484,6 +489,6 @@ function MobileTaskRow({ task, onToggle }: MobileTaskRowProps) {
         )}
       </div>
       {done && <Icon name="CheckCircle2" size="md" className="shrink-0 text-success" />}
-    </button>
+    </Button>
   );
 }

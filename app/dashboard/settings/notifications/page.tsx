@@ -11,6 +11,7 @@ import {
   useMarkAllNotificationsRead,
   useDeleteNotification,
 } from '@/lib/hooks/useNotifications';
+import Button from '@/components/ui/button';
 import { getNotificationTypeLabel, getNotificationTypeColor } from '@/lib/notifications';
 
 export default function NotificationsPage() {
@@ -41,7 +42,8 @@ export default function NotificationsPage() {
             <span>未读通知：{data?.unreadCount ?? 0}</span>
           </div>
           {(data?.unreadCount ?? 0) > 0 && (
-            <button
+            <Button
+              variant="primary"
               onClick={() => markAllRead.mutate()}
               disabled={markAllRead.isPending}
               className="bg-primary/10 hover:bg-primary/20 flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium text-primary transition-all disabled:opacity-60"
@@ -52,7 +54,7 @@ export default function NotificationsPage() {
                 <Icon name="CheckCheck" size="xs" />
               )}
               全部已读
-            </button>
+            </Button>
           )}
         </div>
 
@@ -103,23 +105,25 @@ export default function NotificationsPage() {
                   </div>
                   <div className="flex items-center gap-1">
                     {!notification.readAt && (
-                      <button
+                      <Button
+                        variant="secondary"
                         onClick={() => handleMarkRead(notification.id)}
                         disabled={markRead.isPending}
                         className="hover:bg-primary/10 flex size-8 items-center justify-center rounded-lg bg-surface-hover text-text-secondary transition-colors hover:text-primary disabled:opacity-50"
                         title="标记为已读"
                       >
                         <Icon name="Check" size="sm" />
-                      </button>
+                      </Button>
                     )}
-                    <button
+                    <Button
+                      variant="secondary"
                       onClick={() => handleDelete(notification.id)}
                       disabled={deleteNotification.isPending}
                       className="hover:bg-error/10 flex size-8 items-center justify-center rounded-lg bg-surface-hover text-text-secondary transition-colors hover:text-error disabled:opacity-50"
                       title="删除"
                     >
                       <Icon name="Trash2" size="sm" />
-                    </button>
+                    </Button>
                   </div>
                 </div>
               </motion.div>
@@ -129,23 +133,25 @@ export default function NotificationsPage() {
 
         {totalPages > 1 && (
           <div className="flex items-center justify-center gap-2 pt-2">
-            <button
+            <Button
+              variant="secondary"
               onClick={() => setPage((p) => Math.max(1, p - 1))}
               disabled={page <= 1}
               className="rounded-lg bg-surface-hover px-3 py-1.5 text-xs text-text-secondary hover:bg-surface-highlight disabled:opacity-50"
             >
               上一页
-            </button>
+            </Button>
             <span className="text-xs text-text-muted">
               {page} / {totalPages}
             </span>
-            <button
+            <Button
+              variant="secondary"
               onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
               disabled={page >= totalPages}
               className="rounded-lg bg-surface-hover px-3 py-1.5 text-xs text-text-secondary hover:bg-surface-highlight disabled:opacity-50"
             >
               下一页
-            </button>
+            </Button>
           </div>
         )}
       </div>

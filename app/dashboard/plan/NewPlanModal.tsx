@@ -2,6 +2,8 @@
 
 import { useState } from 'react';
 
+import Button from '@/components/ui/button';
+import Textarea from '@/components/ui/textarea';
 import Modal from '@/components/ui/Modal';
 import type { RoutePlan } from '@/lib/plans';
 
@@ -118,20 +120,23 @@ export default function NewPlanModal({ isOpen, onClose, onCreate }: NewPlanModal
       zIndex={100}
       footer={
         <div className="flex items-center justify-end gap-3">
-          <button
+          <Button
             type="button"
             onClick={onClose}
-            className="rounded-lg bg-surface-elevated px-4 py-2 text-sm text-text-tertiary transition-all hover:bg-surface-highlight"
+            variant="secondary"
+            size="md"
+            className="bg-surface-elevated text-text-tertiary hover:bg-surface-highlight"
           >
             取消
-          </button>
-          <button
+          </Button>
+          <Button
             type="button"
             onClick={handleSubmit}
-            className="rounded-lg bg-primary px-4 py-2 text-sm font-medium text-text-primary transition-all"
+            variant="primary"
+            size="md"
           >
             创建方案
-          </button>
+          </Button>
         </div>
       }
     >
@@ -151,39 +156,44 @@ export default function NewPlanModal({ isOpen, onClose, onCreate }: NewPlanModal
         <div>
           <label className="mb-1 block text-sm text-text-tertiary">方案类型</label>
           <div className="flex gap-2">
-            <button
+            <Button
               type="button"
               onClick={() => setType('primary')}
-              className={`flex-1 rounded-xl border px-4 py-2 text-sm font-medium transition-all ${
+              variant="secondary"
+              size="sm"
+              className={`flex-1 rounded-xl border px-4 py-2 ${
                 type === 'primary'
                   ? 'bg-primary/10 border-primary/40 text-primary'
                   : 'border-border-default bg-surface-elevated text-text-tertiary hover:bg-surface-highlight'
               }`}
             >
               主路线
-            </button>
-            <button
+            </Button>
+            <Button
               type="button"
               onClick={() => setType('backup')}
-              className={`flex-1 rounded-xl border px-4 py-2 text-sm font-medium transition-all ${
+              variant="secondary"
+              size="sm"
+              className={`flex-1 rounded-xl border px-4 py-2 ${
                 type === 'backup'
                   ? 'bg-secondary/10 border-secondary/40 text-secondary'
                   : 'border-border-default bg-surface-elevated text-text-tertiary hover:bg-surface-highlight'
               }`}
             >
               备选路线
-            </button>
+            </Button>
           </div>
         </div>
 
         <div>
           <label className="mb-1 block text-sm text-text-tertiary">方案说明</label>
-          <textarea
+          <Textarea
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             placeholder="简要说明该路线的目标与策略"
             rows={3}
-            className="w-full resize-none rounded-xl border border-border-default bg-surface-elevated px-4 py-2.5 text-sm text-text-secondary placeholder-slate-500 transition-all focus:border-primary focus:outline-none"
+            resize="none"
+            className="rounded-xl border-border-default bg-surface-elevated px-4 py-2.5 text-text-secondary placeholder-slate-500"
           />
         </div>
 
@@ -191,12 +201,13 @@ export default function NewPlanModal({ isOpen, onClose, onCreate }: NewPlanModal
           <label className="mb-1 block text-sm text-text-tertiary">
             关键要求（用逗号或换行分隔）
           </label>
-          <textarea
+          <Textarea
             value={requirements}
             onChange={(e) => setRequirements(e.target.value)}
             placeholder="例如：AMC8 20分+, 小托福 850+"
             rows={3}
-            className="w-full resize-none rounded-xl border border-border-default bg-surface-elevated px-4 py-2.5 text-sm text-text-secondary placeholder-slate-500 transition-all focus:border-primary focus:outline-none"
+            resize="none"
+            className="rounded-xl border-border-default bg-surface-elevated px-4 py-2.5 text-text-secondary placeholder-slate-500"
           />
         </div>
 
@@ -204,12 +215,13 @@ export default function NewPlanModal({ isOpen, onClose, onCreate }: NewPlanModal
           <label className="mb-1 block text-sm text-text-tertiary">
             关键里程碑（每行一个，格式：时间 | 任务）
           </label>
-          <textarea
+          <Textarea
             value={milestonesText}
             onChange={(e) => setMilestonesText(e.target.value)}
             placeholder={'例如：五年级上 | AMC8 二次冲刺\n五年级下 4 月 | 三公报名 + 面谈评估'}
             rows={3}
-            className="w-full resize-none rounded-xl border border-border-default bg-surface-elevated px-4 py-2.5 text-sm text-text-secondary placeholder-slate-500 transition-all focus:border-primary focus:outline-none"
+            resize="none"
+            className="rounded-xl border-border-default bg-surface-elevated px-4 py-2.5 text-text-secondary placeholder-slate-500"
           />
         </div>
 
@@ -217,12 +229,13 @@ export default function NewPlanModal({ isOpen, onClose, onCreate }: NewPlanModal
           <label className="mb-1 block text-sm text-text-tertiary">
             目标选项（每行一个，格式：名称 | 标签）
           </label>
-          <textarea
+          <Textarea
             value={targetsText}
             onChange={(e) => setTargetsText(e.target.value)}
             placeholder={'例如：南翔中学 | 对口公办\n华曜嘉定 | 民办强校'}
             rows={3}
-            className="w-full resize-none rounded-xl border border-border-default bg-surface-elevated px-4 py-2.5 text-sm text-text-secondary placeholder-slate-500 transition-all focus:border-primary focus:outline-none"
+            resize="none"
+            className="rounded-xl border-border-default bg-surface-elevated px-4 py-2.5 text-text-secondary placeholder-slate-500"
           />
         </div>
 

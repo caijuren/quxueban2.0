@@ -3,6 +3,8 @@
 import Image from 'next/image';
 import { useState } from 'react';
 import { Icon, type IconName } from '@/components/ui/icon';
+import Button from '@/components/ui/button';
+import Select from '@/components/ui/select';
 import SettingsSection from './SettingsSection';
 import Skeleton from '@/components/ui/skeleton';
 import ErrorState from '@/components/ui/error-state';
@@ -251,10 +253,12 @@ export default function FamilySection() {
               {actionError}
             </div>
           )}
-          <button
+          <Button
+            variant="primary"
+            size="md"
             type="submit"
             disabled={!newFamilyName.trim() || createFamily.isPending}
-            className="inline-flex items-center gap-1.5 rounded-lg bg-primary px-4 py-2 text-xs font-medium text-text-primary transition-all hover:opacity-90 disabled:opacity-50"
+            className="text-xs hover:opacity-90"
           >
             {createFamily.isPending ? (
               <Icon name="Loader2" size="sm" animate="spin" />
@@ -262,7 +266,7 @@ export default function FamilySection() {
               <Icon name="Users" size="sm" />
             )}
             创建家庭
-          </button>
+          </Button>
         </form>
       </SettingsSection>
     );
@@ -287,11 +291,12 @@ export default function FamilySection() {
           </div>
 
           {isOwner && (
-            <button
+            <Button
+              variant="danger"
+              size="sm"
               onClick={handleDeleteFamily}
               disabled={deleteFamily.isPending}
               title="解散家庭"
-              className="bg-error/10 hover:bg-error/20 inline-flex items-center gap-1 rounded-lg px-3 py-1.5 text-xs text-error transition-colors disabled:opacity-50"
             >
               {deleteFamily.isPending ? (
                 <Icon name="Loader2" size="sm" animate="spin" />
@@ -299,7 +304,7 @@ export default function FamilySection() {
                 <Icon name="Trash2" size="sm" />
               )}
               解散家庭
-            </button>
+            </Button>
           )}
         </div>
       </SettingsSection>
@@ -353,30 +358,35 @@ export default function FamilySection() {
 
                   <div className="flex shrink-0 items-center gap-2">
                     {member.status === 'INVITED' && isMe && (
-                      <button
+                      <Button
+                        variant="ghost"
+                        size="sm"
                         onClick={() => handleAccept(member.id)}
                         disabled={updateMember.isPending}
-                        className="bg-success/10 hover:bg-success/20 flex items-center gap-1 rounded-lg px-2.5 py-1.5 text-xs text-success transition-colors"
+                        className="bg-success/10 text-success hover:bg-success/20"
                       >
                         <Icon name="Check" size="sm" />
                         接受
-                      </button>
+                      </Button>
                     )}
 
                     {canTransferOwner && (
-                      <button
+                      <Button
+                        variant="ghost"
+                        size="sm"
                         onClick={() => handleTransferOwner(member.id)}
                         disabled={transferOwner.isPending}
                         title="转让创建者身份"
-                        className="bg-warning/10 hover:bg-warning/20 flex items-center gap-1 rounded-lg px-2.5 py-1.5 text-xs text-warning transition-colors"
+                        className="bg-warning/10 text-warning hover:bg-warning/20"
                       >
                         <Icon name="Crown" size="sm" />
                         转让
-                      </button>
+                      </Button>
                     )}
 
                     {canManage ? (
-                      <select
+                      <Select
+                        options={ROLE_OPTIONS}
                         value={member.role}
                         onChange={(e) =>
                           handleRoleChange(
@@ -385,36 +395,35 @@ export default function FamilySection() {
                           )
                         }
                         disabled={updateMember.isPending}
-                        className="focus:border-primary/40 rounded-lg border border-border-subtle bg-surface-hover px-2 py-1.5 text-xs text-text-secondary focus:outline-none"
-                      >
-                        {ROLE_OPTIONS.map((opt) => (
-                          <option key={opt.value} value={opt.value}>
-                            {opt.label}
-                          </option>
-                        ))}
-                      </select>
+                        size="sm"
+                        className="border-border-subtle bg-surface-hover"
+                      />
                     ) : null}
 
                     {canRemove && (
-                      <button
+                      <Button
+                        variant="ghost"
+                        size="xs"
                         onClick={() => handleRemove(member.id)}
                         disabled={removeMember.isPending}
-                        className="hover:bg-error/10 rounded-lg p-1.5 text-text-muted transition-colors hover:text-error"
+                        className="p-1.5 text-text-muted hover:bg-error/10 hover:text-error"
                         title="移除成员"
                       >
                         <Icon name="X" size="sm" />
-                      </button>
+                      </Button>
                     )}
 
                     {isMe && member.role !== 'OWNER' && (
-                      <button
+                      <Button
+                        variant="ghost"
+                        size="xs"
                         onClick={() => handleLeaveFamily(member.id)}
                         disabled={removeMember.isPending}
                         title="退出家庭"
-                        className="hover:bg-error/10 rounded-lg p-1.5 text-text-muted transition-colors hover:text-error"
+                        className="p-1.5 text-text-muted hover:bg-error/10 hover:text-error"
                       >
                         <Icon name="LogOut" size="sm" />
-                      </button>
+                      </Button>
                     )}
                   </div>
                 </div>
@@ -425,13 +434,15 @@ export default function FamilySection() {
           {isManager && (
             <div className="pt-2">
               {!showInvite ? (
-                <button
+                <Button
+                  variant="ghost"
+                  size="sm"
                   onClick={() => setShowInvite(true)}
-                  className="inline-flex items-center gap-1.5 rounded-lg bg-surface-hover px-3 py-2 text-xs text-text-secondary transition-colors hover:bg-surface-highlight"
+                  className="bg-surface-hover hover:bg-surface-highlight"
                 >
                   <Icon name="UserPlus" size="sm" />
                   邀请成员
-                </button>
+                </Button>
               ) : (
                 <form
                   onSubmit={handleInvite}
@@ -443,8 +454,10 @@ export default function FamilySection() {
                       { value: 'email', label: '邮箱' },
                       { value: 'phone', label: '手机' },
                     ].map((mode) => (
-                      <button
+                      <Button
                         key={mode.value}
+                        variant="ghost"
+                        size="xs"
                         type="button"
                         onClick={() => {
                           setInviteMode(mode.value as typeof inviteMode);
@@ -453,14 +466,14 @@ export default function FamilySection() {
                           setGeneratedInvite(null);
                           setCopied(false);
                         }}
-                        className={`rounded-lg px-2.5 py-1 text-xs transition-colors ${
+                        className={`${
                           inviteMode === mode.value
                             ? 'bg-primary/10 text-primary'
                             : 'bg-surface-hover text-text-tertiary hover:text-text-secondary'
                         }`}
                       >
                         {mode.label}
-                      </button>
+                      </Button>
                     ))}
                   </div>
 
@@ -499,19 +512,15 @@ export default function FamilySection() {
                     </div>
                     <div>
                       <label className="mb-1.5 block text-xs text-text-secondary">权限</label>
-                      <select
+                      <Select
+                        options={ROLE_OPTIONS}
                         value={inviteRole}
                         onChange={(e) =>
                           setInviteRole(e.target.value as Exclude<FamilyMemberRole, 'OWNER'>)
                         }
-                        className="focus:border-primary/40 w-full rounded-lg border border-border-subtle bg-surface-hover px-3 py-2 text-sm text-text-primary focus:outline-none"
-                      >
-                        {ROLE_OPTIONS.map((opt) => (
-                          <option key={opt.value} value={opt.value}>
-                            {opt.label}
-                          </option>
-                        ))}
-                      </select>
+                        size="md"
+                        className="border-border-subtle bg-surface-hover"
+                      />
                     </div>
                   </div>
                   <p className="text-2xs text-text-muted">
@@ -536,7 +545,9 @@ export default function FamilySection() {
                           value={generatedInvite.url}
                           className="min-w-0 flex-1 rounded-md border border-border-subtle bg-surface-elevated px-2.5 py-1.5 text-xs text-text-secondary focus:outline-none"
                         />
-                        <button
+                        <Button
+                          variant="ghost"
+                          size="sm"
                           type="button"
                           onClick={async () => {
                             try {
@@ -547,7 +558,7 @@ export default function FamilySection() {
                               // ignore
                             }
                           }}
-                          className="bg-primary/10 hover:bg-primary/20 inline-flex items-center gap-1 rounded-md px-2.5 py-1.5 text-xs text-primary transition-colors"
+                          className="bg-primary/10 text-primary hover:bg-primary/20 rounded-md"
                         >
                           {copied ? (
                             <Icon name="Check" size="sm" />
@@ -555,7 +566,7 @@ export default function FamilySection() {
                             <Icon name="Copy" size="sm" />
                           )}
                           {copied ? '已复制' : '复制'}
-                        </button>
+                        </Button>
                         <a
                           href={generatedInvite.url}
                           target="_blank"
@@ -572,7 +583,9 @@ export default function FamilySection() {
                   )}
 
                   <div className="flex items-center gap-2">
-                    <button
+                    <Button
+                      variant="primary"
+                      size="sm"
                       type="submit"
                       disabled={
                         (inviteMode === 'username' && !inviteUsername.trim()) ||
@@ -581,7 +594,7 @@ export default function FamilySection() {
                         inviteMember.isPending ||
                         inviteUnregistered.isPending
                       }
-                      className="inline-flex items-center gap-1.5 rounded-lg bg-primary px-3 py-1.5 text-xs font-medium text-text-primary transition-all hover:opacity-90 disabled:opacity-50"
+                      className="hover:opacity-90"
                     >
                       {inviteMember.isPending || inviteUnregistered.isPending ? (
                         <Icon name="Loader2" size="sm" animate="spin" />
@@ -589,8 +602,10 @@ export default function FamilySection() {
                         <Icon name="Plus" size="sm" />
                       )}
                       发送邀请
-                    </button>
-                    <button
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="sm"
                       type="button"
                       onClick={() => {
                         setShowInvite(false);
@@ -602,10 +617,9 @@ export default function FamilySection() {
                         setGeneratedInvite(null);
                         setCopied(false);
                       }}
-                      className="rounded-lg px-3 py-1.5 text-xs text-text-secondary transition-colors hover:text-text-primary"
                     >
                       取消
-                    </button>
+                    </Button>
                   </div>
                 </form>
               )}

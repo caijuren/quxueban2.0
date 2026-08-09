@@ -1,5 +1,6 @@
 'use client';
 import { Icon } from '@/components/ui/icon';
+import Button from '@/components/ui/button';
 
 import { useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
@@ -104,13 +105,15 @@ export default function ForgotPasswordPage() {
                   </div>
                 </div>
 
-                <button
+                <Button
                   type="submit"
+                  variant="primary"
+                  size="md"
                   disabled={loading}
                   className="hover:bg-primary/90 inline-flex w-full items-center justify-center gap-2 rounded-module bg-primary px-4 py-2 text-sm font-medium text-inverse transition-colors disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   {loading ? '发送中...' : '发送重置链接'}
-                </button>
+                </Button>
 
                 <p className="text-center text-xs text-text-muted">
                   想起密码了？{' '}

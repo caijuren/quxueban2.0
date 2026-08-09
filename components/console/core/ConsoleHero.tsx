@@ -1,6 +1,7 @@
 'use client';
 
 import { Icon } from '@/components/ui/icon';
+import Button from '@/components/ui/button';
 import { motion } from 'framer-motion';
 import { Child } from '@/lib/children';
 import ChildAvatar from '@/components/dashboard/ChildAvatar';
@@ -43,7 +44,9 @@ export default function ConsoleHero({
 
         {/* Child selector + status */}
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-6">
-          <button
+          <Button
+            variant="secondary"
+            size="sm"
             onClick={onSwitchChild}
             className="hover:border-primary/30 group flex items-center gap-3 rounded-2xl border border-border-subtle bg-surface-hover p-2 pr-4 transition-all hover:bg-surface-hover"
           >
@@ -63,7 +66,7 @@ export default function ConsoleHero({
               size="sm"
               className="text-text-muted transition-colors group-hover:text-primary"
             />
-          </button>
+          </Button>
 
           <div className="flex items-center gap-3 sm:gap-4">
             {completionRate !== undefined && (

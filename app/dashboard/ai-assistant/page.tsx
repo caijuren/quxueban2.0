@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import Button from '@/components/ui/button';
 import { Icon } from '@/components/ui/icon';
 import { useChildren } from '@/components/dashboard/ChildrenContext';
 import EmptyState from '@/components/ui/EmptyState';
@@ -67,10 +68,12 @@ export default function AIAssistantPage() {
       >
         <div className="flex items-center justify-between">
           <h1 className="font-display text-xl font-bold text-text-primary">AI 学习助手</h1>
-          <button
+          <Button
+            variant="primary"
+            size="sm"
             onClick={handleCreateSession}
             disabled={createSession.isPending}
-            className="flex items-center gap-1.5 rounded-lg bg-primary px-3 py-1.5 text-xs font-medium text-text-primary transition-all hover:opacity-90 disabled:opacity-60"
+            className=""
           >
             {createSession.isPending ? (
               <Icon name="Loader" size="xs" animate="spin" />
@@ -78,7 +81,7 @@ export default function AIAssistantPage() {
               <Icon name="Plus" size="xs" />
             )}
             新对话
-          </button>
+          </Button>
         </div>
 
         <GlassCard strength="subtle" className="flex-1 space-y-1 overflow-y-auto p-2">
@@ -96,8 +99,10 @@ export default function AIAssistantPage() {
             </div>
           ) : (
             sessions.map((session) => (
-              <button
+              <Button
                 key={session.id}
+                variant="ghost"
+                size="sm"
                 onClick={() => handleSelectSession(session.id)}
                 className={`w-full rounded-lg px-3 py-2.5 text-left transition-colors ${
                   selectedSessionId === session.id
@@ -124,7 +129,7 @@ export default function AIAssistantPage() {
                   </span>
                   <span>{session._count?.messages ?? 0} 条消息</span>
                 </div>
-              </button>
+              </Button>
             ))
           )}
         </GlassCard>
@@ -139,12 +144,14 @@ export default function AIAssistantPage() {
       >
         {/* Header */}
         <div className="flex shrink-0 items-center gap-3 border-b border-border-default px-4 py-3">
-          <button
+          <Button
+            variant="ghost"
+            size="sm"
             onClick={() => setIsMobileListVisible(true)}
-            className="flex size-8 items-center justify-center rounded-lg bg-surface-hover text-text-secondary lg:hidden"
+            className="lg:hidden"
           >
             <Icon name="ChevronLeft" size="sm" />
-          </button>
+          </Button>
           <div className="flex size-9 items-center justify-center rounded-lg bg-gradient-to-br from-secondary to-secondary-glow">
             <Icon name="Bot" size="md" className="text-text-primary" />
           </div>
@@ -254,17 +261,19 @@ export default function AIAssistantPage() {
               disabled={!selectedSessionId || sendMessage.isPending}
               className="flex-1 bg-transparent text-sm text-text-secondary placeholder:text-text-muted focus:outline-none disabled:opacity-50"
             />
-            <button
+            <Button
               type="submit"
+              variant="primary"
+              size="md"
               disabled={!input.trim() || !selectedSessionId || sendMessage.isPending}
-              className="flex size-9 items-center justify-center rounded-xl bg-primary text-inverse transition-all hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
+              className=""
             >
               {sendMessage.isPending ? (
                 <Icon name="Loader" size="sm" animate="spin" />
               ) : (
                 <Icon name="Send" size="sm" />
               )}
-            </button>
+            </Button>
           </div>
         </form>
       </GlassCard>

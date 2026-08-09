@@ -1,5 +1,6 @@
 'use client';
 import { Icon, type IconName } from '@/components/ui/icon';
+import Button from '@/components/ui/button';
 
 import { motion, useReducedMotion } from 'framer-motion';
 
@@ -502,10 +503,10 @@ export default function PlanDetailClient({ id }: { id: string }) {
           <Icon name="Clock" size="sm" />
           最近更新：2 天前
         </div>
-        <button className="flex items-center gap-2 rounded-xl bg-primary px-5 py-2.5 font-semibold text-text-primary transition-all">
+        <Button variant="primary" size="md" className="rounded-xl px-5 py-2.5">
           制定提升计划
           <Icon name="ArrowRight" size="sm" />
-        </button>
+        </Button>
       </motion.div>
     </div>
   );

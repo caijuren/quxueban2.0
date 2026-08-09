@@ -3,6 +3,8 @@
 import { useState, useRef } from 'react';
 import { motion, useReducedMotion, AnimatePresence } from 'framer-motion';
 import { Icon, type IconName } from '@/components/ui/icon';
+import Button from '@/components/ui/button';
+import Skeleton from '@/components/ui/skeleton';
 import { useChildren } from '@/components/dashboard/ChildrenContext';
 import { gradeLabel } from '@/lib/children';
 import ChildEmptyState from '@/components/dashboard/ChildEmptyState';
@@ -132,13 +134,15 @@ export default function MilestonesPage() {
           </div>
         </div>
         {currentChild && (
-          <button
+          <Button
+            variant="primary"
+            size="sm"
             onClick={() => setShowAdd(true)}
-            className="inline-flex items-center gap-1.5 rounded-lg bg-primary px-3 py-2 text-xs font-medium text-text-primary transition-all hover:opacity-90"
+            className="px-3 py-2"
           >
             <Icon name="Plus" size="xs" />
             添加里程碑
-          </button>
+          </Button>
         )}
       </motion.div>
 
@@ -147,9 +151,10 @@ export default function MilestonesPage() {
       )}
 
       {isLoading && currentChild && (
-        <div className="flex items-center justify-center py-12 text-text-muted">
-          <Icon name="Clock" size="md" animate="spin" className="mr-2" />
-          加载中...
+        <div className="space-y-4 py-8">
+          <Skeleton variant="rounded" height={80} />
+          <Skeleton variant="rounded" height={120} />
+          <Skeleton variant="rounded" height={60} />
         </div>
       )}
 
@@ -181,19 +186,22 @@ export default function MilestonesPage() {
               />
             </div>
             <div className="flex justify-end gap-2">
-              <button
+              <Button
+                variant="ghost"
+                size="sm"
                 onClick={() => setShowAdd(false)}
-                className="rounded-lg px-3 py-1.5 text-xs text-text-tertiary hover:bg-surface-hover"
+                className="text-text-tertiary"
               >
                 取消
-              </button>
-              <button
+              </Button>
+              <Button
+                variant="primary"
+                size="sm"
                 onClick={handleAdd}
                 disabled={!newTitle.trim() || createMilestone.isPending}
-                className="rounded-lg bg-primary px-3 py-1.5 text-xs font-medium text-text-primary hover:opacity-90 disabled:opacity-50"
               >
                 {createMilestone.isPending ? '保存中...' : '保存'}
-              </button>
+              </Button>
             </div>
           </motion.div>
         )}
@@ -239,13 +247,15 @@ export default function MilestonesPage() {
                     >
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-4">
-                          <button
+                          <Button
+                            variant="ghost"
+                            size="xs"
                             onClick={() => handleStatusToggle(milestone)}
-                            className={`size-10 rounded-lg ${config.bg} flex items-center justify-center transition-opacity hover:opacity-80`}
+                            className={`size-10 ${config.bg}`}
                             title={`标记为${statusConfig[config.next]?.label ?? ''}`}
                           >
                             <Icon name={config.icon} size="sm" className={config.color} />
-                          </button>
+                          </Button>
                           <div>
                             <span className="font-medium text-text-secondary">
                               {milestone.title}
@@ -261,13 +271,15 @@ export default function MilestonesPage() {
                           <span className={`text-sm font-medium ${config.color}`}>
                             {config.label}
                           </span>
-                          <button
+                          <Button
+                            variant="ghost"
+                            size="xs"
                             onClick={() => deleteMilestone.mutate(milestone.id)}
-                            className="hover:bg-error/10 rounded-lg p-1.5 text-text-tertiary transition-colors hover:text-error"
+                            className="hover:bg-error/10 hover:text-error text-text-tertiary"
                             title="删除"
                           >
                             <Icon name="Trash2" size="sm" />
-                          </button>
+                          </Button>
                         </div>
                       </div>
 
@@ -280,22 +292,26 @@ export default function MilestonesPage() {
                                 className="group relative size-20 overflow-hidden rounded-lg border border-border-subtle"
                               >
                                 <img src={url} alt="证书" className="size-full object-cover" />
-                                <button
+                                <Button
+                                  variant="ghost"
+                                  size="xs"
                                   onClick={() => handleRemoveImage(milestone.id, url)}
-                                  className="absolute right-0.5 top-0.5 rounded bg-black/60 p-0.5 text-white opacity-0 transition-opacity group-hover:opacity-100"
+                                  className="absolute right-0.5 top-0.5 bg-black/60 p-0.5 text-white opacity-0 group-hover:opacity-100"
                                 >
                                   <Icon name="X" size="xs" />
-                                </button>
+                                </Button>
                               </div>
                             ))}
                           </div>
                         )}
 
                         <div className="flex items-center gap-3">
-                          <button
+                          <Button
+                            variant="secondary"
+                            size="sm"
                             onClick={() => fileInputRef.current?.click()}
                             disabled={uploadingFor === milestone.id}
-                            className="inline-flex items-center gap-1.5 rounded-lg bg-surface-elevated px-3 py-1.5 text-xs text-text-secondary transition-colors hover:bg-surface-highlight disabled:opacity-50"
+                            className="bg-surface-elevated hover:bg-surface-highlight"
                           >
                             {uploadingFor === milestone.id ? (
                               <Icon name="Clock" size="xs" animate="spin" />
@@ -303,7 +319,7 @@ export default function MilestonesPage() {
                               <Icon name="Image" size="xs" />
                             )}
                             {uploadingFor === milestone.id ? '上传中...' : '上传证书/截图'}
-                          </button>
+                          </Button>
                           <input
                             ref={fileInputRef}
                             type="file"

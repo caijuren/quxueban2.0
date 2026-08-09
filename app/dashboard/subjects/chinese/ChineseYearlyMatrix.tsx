@@ -3,6 +3,8 @@
 import { useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { Icon } from '@/components/ui/icon';
+import Button from '@/components/ui/button';
+import DataTable from '@/components/ui/data-table';
 import {
   SubjectPlanConfig,
   SubjectPlanTrack,
@@ -96,76 +98,62 @@ export default function ChineseYearlyMatrix({ config, currentGrade }: ChineseYea
 
         {/* Desktop matrix */}
         <div className="hidden overflow-x-auto md:block">
-          <table className="w-full border-collapse">
-            <thead>
-              <tr>
-                <th className="w-28 p-3 text-left text-xs font-medium text-text-tertiary">线路</th>
-                {times.map((time) => {
-                  const isCurrent = time === currentTimeLabel;
-                  return (
-                    <th key={time} className="min-w-[140px] p-3 text-left">
-                      <div className="flex items-center gap-2">
-                        <span className="text-xs font-medium text-text-secondary">{time}</span>
-                        {isCurrent && (
-                          <span className="bg-primary/10 border-primary/20 rounded border px-1.5 py-0.5 text-2xs text-primary">
-                            当前
-                          </span>
-                        )}
-                      </div>
-                    </th>
-                  );
-                })}
-              </tr>
-            </thead>
-            <tbody>
-              {config.tracks.map((track) => (
-                <tr key={track.id} className="border-t border-border-subtle">
-                  <td className="p-3">
-                    <div className="flex items-center gap-2">
-                      <div
-                        className="size-2.5 rounded-full"
-                        style={{ backgroundColor: track.color }}
-                      />
-                      <span className="text-sm font-medium text-text-secondary">{track.name}</span>
+          <DataTable<SubjectPlanTrack>
+            columns={[
+              {
+                key: 'track',
+                title: '线路',
+                width: '7rem',
+                render: (track) => (
+                  <div className="flex items-center gap-2">
+                    <div
+                      className="size-2.5 rounded-full"
+                      style={{ backgroundColor: track.color }}
+                    />
+                    <span className="text-sm font-medium text-text-secondary">{track.name}</span>
+                  </div>
+                ),
+              },
+              ...times.map((time) => ({
+                key: time,
+                title: time,
+                render: (track: SubjectPlanTrack) => {
+                  const achievement = getAchievement(track.id, time);
+                  return achievement ? (
+                    <Button
+                      variant="secondary"
+                      size="xs"
+                      className="w-full flex-col items-start gap-0 p-3 text-left border-border-subtle bg-surface-elevated hover:border-border-default hover:bg-surface-highlight group"
+                      onClick={() => setSelectedCell({ track, achievement })}
+                    >
+                      <span className="text-sm font-medium text-text-secondary transition-colors group-hover:text-text-primary">
+                        {achievement.keyword}
+                      </span>
+                      {achievement.milestones && achievement.milestones.length > 0 && (
+                        <div className="mt-2 flex flex-wrap gap-1">
+                          {achievement.milestones.map((m) => (
+                            <span
+                              key={m}
+                              className="bg-secondary/10 border-secondary/20 rounded border px-1.5 py-0.5 text-2xs text-secondary"
+                            >
+                              {m}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+                    </Button>
+                  ) : (
+                    <div className="w-full rounded-lg border border-dashed border-border-subtle p-3 text-center text-xs text-text-muted">
+                      —
                     </div>
-                  </td>
-                  {times.map((time) => {
-                    const achievement = getAchievement(track.id, time);
-                    return (
-                      <td key={`${track.id}-${time}`} className="p-2">
-                        {achievement ? (
-                          <button
-                            onClick={() => setSelectedCell({ track, achievement })}
-                            className="group w-full rounded-lg border border-border-subtle bg-surface-elevated p-3 text-left transition-all hover:border-border-default hover:bg-surface-highlight"
-                          >
-                            <p className="text-sm font-medium text-text-secondary transition-colors group-hover:text-text-primary">
-                              {achievement.keyword}
-                            </p>
-                            {achievement.milestones && achievement.milestones.length > 0 && (
-                              <div className="mt-2 flex flex-wrap gap-1">
-                                {achievement.milestones.map((m) => (
-                                  <span
-                                    key={m}
-                                    className="bg-secondary/10 border-secondary/20 rounded border px-1.5 py-0.5 text-2xs text-secondary"
-                                  >
-                                    {m}
-                                  </span>
-                                ))}
-                              </div>
-                            )}
-                          </button>
-                        ) : (
-                          <div className="w-full rounded-lg border border-dashed border-border-subtle p-3 text-center text-xs text-text-muted">
-                            —
-                          </div>
-                        )}
-                      </td>
-                    );
-                  })}
-                </tr>
-              ))}
-            </tbody>
-          </table>
+                  );
+                },
+              })),
+            ]}
+            data={config.tracks}
+            rowKey="id"
+            emptyText="暂无数据"
+          />
         </div>
 
         {/* Mobile track cards */}
@@ -184,24 +172,29 @@ export default function ChineseYearlyMatrix({ config, currentGrade }: ChineseYea
                   const achievement = getAchievement(track.id, time);
                   const isCurrent = time === currentTimeLabel;
                   return (
-                    <button
+                    <Button
                       key={time}
+                      variant="secondary"
+                      size="xs"
+                      className="w-full justify-between p-3 border-border-subtle hover:border-border-default disabled:opacity-40"
                       onClick={() => achievement && setSelectedCell({ track, achievement })}
                       disabled={!achievement}
-                      className="flex w-full items-center justify-between rounded-lg border border-border-subtle p-3 transition-colors hover:border-border-default disabled:cursor-not-allowed disabled:opacity-40"
-                    >
-                      <div className="flex items-center gap-2">
-                        <span className="text-xs text-text-tertiary">{time}</span>
-                        {isCurrent && (
-                          <span className="bg-primary/10 border-primary/20 rounded border px-1.5 py-0.5 text-2xs text-primary">
-                            当前
-                          </span>
-                        )}
-                      </div>
-                      <span className="text-sm font-medium text-text-secondary">
-                        {achievement?.keyword || '—'}
-                      </span>
-                    </button>
+                      leftIcon={
+                        <div className="flex items-center gap-2">
+                          <span className="text-xs text-text-tertiary">{time}</span>
+                          {isCurrent && (
+                            <span className="bg-primary/10 border-primary/20 rounded border px-1.5 py-0.5 text-2xs text-primary">
+                              当前
+                            </span>
+                          )}
+                        </div>
+                      }
+                      rightIcon={
+                        <span className="text-sm font-medium text-text-secondary">
+                          {achievement?.keyword || '—'}
+                        </span>
+                      }
+                    />
                   );
                 })}
               </div>

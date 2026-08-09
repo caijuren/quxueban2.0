@@ -3,6 +3,7 @@
 import { useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { Icon } from '@/components/ui/icon';
+import Button from '@/components/ui/button';
 import { type WeeklyGoal, type WeeklyTaskItem, type TaskCategory } from '@/lib/storage.types';
 import { TASK_CATEGORY_LABELS } from '@/lib/taskTemplates';
 import { categoryIcons } from '@/lib/taskIcons';
@@ -66,14 +67,16 @@ export default function WeeklyGoalsPanel({
             </div>
           </div>
           {onConfigure && (
-            <button
+            <Button
               type="button"
+              variant="primary"
+              size="sm"
               onClick={onConfigure}
-              className="hover:bg-primary/90 flex shrink-0 items-center gap-1.5 rounded-lg bg-primary px-3 py-1.5 text-xs font-medium text-inverse transition-colors"
+              className=""
             >
               <Icon name="Settings2" size="sm" />
               去配置
-            </button>
+            </Button>
           )}
         </div>
       </motion.div>
@@ -170,9 +173,11 @@ export default function WeeklyGoalsPanel({
                   </div>
                   <div className="max-h-[160px] space-y-1.5 overflow-y-auto pr-1">
                     {checklist.map((item) => (
-                      <button
+                      <Button
                         key={item.id}
                         type="button"
+                        variant="ghost"
+                        size="xs"
                         onClick={() => toggleChecklistItem(goal.id, item.id)}
                         className={`flex w-full items-start gap-2 rounded-lg px-2 py-1.5 text-left transition-colors ${
                           item.done ? 'bg-success/[0.06]' : 'hover:bg-surface-hover/50'
@@ -198,7 +203,7 @@ export default function WeeklyGoalsPanel({
                         >
                           {item.text}
                         </span>
-                      </button>
+                      </Button>
                     ))}
                   </div>
                 </div>
