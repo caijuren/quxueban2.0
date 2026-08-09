@@ -46,6 +46,42 @@ export function getTimeSlotLabel(timeSlot: TimeSlot): string {
   return map[timeSlot] || '灵活';
 }
 
+export type DayType = 'weekday' | 'weekend';
+
+export function getDayType(day: DayOfWeek): DayType {
+  return day === '周六' || day === '周日' ? 'weekend' : 'weekday';
+}
+
+export const timeSlotTemplates: Record<'weekday' | 'weekend', Record<TaskCategory, TimeSlot>> = {
+  weekday: {
+    school: 'morning',
+    reading: 'afternoon',
+    sport: 'afternoon',
+    interest: 'evening',
+    ability: 'evening',
+    other: 'flexible',
+  },
+  weekend: {
+    school: 'morning',
+    reading: 'morning',
+    sport: 'morning',
+    interest: 'afternoon',
+    ability: 'afternoon',
+    other: 'flexible',
+  },
+};
+
+export function applyTimeSlotTemplate(
+  tasks: WeeklyTaskItem[],
+  templateKey: 'weekday' | 'weekend'
+): WeeklyTaskItem[] {
+  const template = timeSlotTemplates[templateKey];
+  return tasks.map((task) => {
+    if (getDayType(task.day) !== templateKey) return task;
+    return { ...task, timeSlot: template[task.category] ?? task.timeSlot };
+  });
+}
+
 export const subjectMeta: Record<SubjectId, { name: string; color: string; gradient: string }> = {
   chinese: { name: '语文', color: 'var(--accent)', gradient: 'from-accent to-accent-glow' },
   math: { name: '数学', color: 'var(--color-primary)', gradient: 'from-primary to-primary-glow' },
