@@ -1,6 +1,7 @@
 'use client';
 import { Icon } from '@/components/ui/icon';
 import Button from '@/components/ui/button';
+import Input from '@/components/ui/input';
 
 import { useState, Suspense } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
@@ -115,13 +116,7 @@ function RegisterPageContent() {
                 >
                   用户名
                 </label>
-                <div className="relative">
-                  <Icon
-                    name="User"
-                    size="sm"
-                    className="absolute left-3.5 top-1/2 -translate-y-1/2 text-text-muted"
-                  />
-                  <input
+                <Input
                     id="username"
                     name="username"
                     type="text"
@@ -132,9 +127,9 @@ function RegisterPageContent() {
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
                     placeholder="3-20 位字符"
-                    className="w-full rounded-module border border-border-default bg-surface py-2 pl-10 pr-4 text-sm text-text-primary transition-colors placeholder:text-text-tertiary focus:border-primary focus:outline-none"
+                    leftIcon={<Icon name="User" size="sm" />}
+                    className="rounded-module py-2 pl-10 placeholder:text-text-tertiary"
                   />
-                </div>
               </div>
 
               <div>
@@ -144,13 +139,7 @@ function RegisterPageContent() {
                 >
                   昵称（选填）
                 </label>
-                <div className="relative">
-                  <Icon
-                    name="UserCircle"
-                    size="sm"
-                    className="absolute left-3.5 top-1/2 -translate-y-1/2 text-text-muted"
-                  />
-                  <input
+                <Input
                     id="name"
                     name="name"
                     type="text"
@@ -158,9 +147,9 @@ function RegisterPageContent() {
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     placeholder="如何称呼您"
-                    className="w-full rounded-module border border-border-default bg-surface py-2 pl-10 pr-4 text-sm text-text-primary transition-colors placeholder:text-text-tertiary focus:border-primary focus:outline-none"
+                    leftIcon={<Icon name="UserCircle" size="sm" />}
+                    className="rounded-module py-2 pl-10 placeholder:text-text-tertiary"
                   />
-                </div>
               </div>
 
               <div>
@@ -170,13 +159,7 @@ function RegisterPageContent() {
                 >
                   密码
                 </label>
-                <div className="relative">
-                  <Icon
-                    name="Lock"
-                    size="sm"
-                    className="absolute left-3.5 top-1/2 -translate-y-1/2 text-text-muted"
-                  />
-                  <input
+                <Input
                     id="password"
                     name="password"
                     type="password"
@@ -187,9 +170,9 @@ function RegisterPageContent() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="至少 6 位"
-                    className="w-full rounded-module border border-border-default bg-surface py-2 pl-10 pr-4 text-sm text-text-primary transition-colors placeholder:text-text-tertiary focus:border-primary focus:outline-none"
+                    leftIcon={<Icon name="Lock" size="sm" />}
+                    className="rounded-module py-2 pl-10 placeholder:text-text-tertiary"
                   />
-                </div>
               </div>
 
               <div>
@@ -199,13 +182,7 @@ function RegisterPageContent() {
                 >
                   确认密码
                 </label>
-                <div className="relative">
-                  <Icon
-                    name="Lock"
-                    size="sm"
-                    className="absolute left-3.5 top-1/2 -translate-y-1/2 text-text-muted"
-                  />
-                  <input
+                <Input
                     id="confirmPassword"
                     name="confirmPassword"
                     type="password"
@@ -215,9 +192,9 @@ function RegisterPageContent() {
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
                     placeholder="再次输入密码"
-                    className="w-full rounded-module border border-border-default bg-surface py-2 pl-10 pr-4 text-sm text-text-primary transition-colors placeholder:text-text-tertiary focus:border-primary focus:outline-none"
+                    leftIcon={<Icon name="Lock" size="sm" />}
+                    className="rounded-module py-2 pl-10 placeholder:text-text-tertiary"
                   />
-                </div>
               </div>
 
               {error && (

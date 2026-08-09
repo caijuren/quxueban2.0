@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { Icon, type IconName } from '@/components/ui/icon';
 import Button from '@/components/ui/button';
 import Select from '@/components/ui/select';
+import Input from '@/components/ui/input';
 import SettingsSection from './SettingsSection';
 import Skeleton from '@/components/ui/skeleton';
 import ErrorState from '@/components/ui/error-state';
@@ -239,12 +240,12 @@ export default function FamilySection() {
         <form onSubmit={handleCreateFamily} className="max-w-md space-y-4">
           <div>
             <label className="mb-1.5 block text-xs text-text-secondary">家庭名称</label>
-            <input
+            <Input
               type="text"
               value={newFamilyName}
               onChange={(e) => setNewFamilyName(e.target.value)}
               placeholder="例如：小明家"
-              className="focus:border-primary/40 w-full rounded-lg border border-border-subtle bg-surface-elevated px-3 py-2 text-sm text-text-primary placeholder:text-text-muted focus:outline-none"
+              className="border-border-subtle bg-surface-elevated text-text-primary"
             />
           </div>
           {actionError && (
@@ -485,28 +486,28 @@ export default function FamilySection() {
                         {inviteMode === 'phone' && '手机号'}
                       </label>
                       {inviteMode === 'username' ? (
-                        <input
+                        <Input
                           type="text"
                           value={inviteUsername}
                           onChange={(e) => setInviteUsername(e.target.value)}
                           placeholder="输入对方的登录用户名"
-                          className="focus:border-primary/40 w-full rounded-lg border border-border-subtle bg-surface-hover px-3 py-2 text-sm text-text-primary placeholder:text-text-muted focus:outline-none"
+                          className="border-border-subtle bg-surface-hover text-text-primary"
                         />
                       ) : inviteMode === 'email' ? (
-                        <input
+                        <Input
                           type="email"
                           value={inviteEmail}
                           onChange={(e) => setInviteEmail(e.target.value)}
                           placeholder="对方的邮箱地址"
-                          className="focus:border-primary/40 w-full rounded-lg border border-border-subtle bg-surface-hover px-3 py-2 text-sm text-text-primary placeholder:text-text-muted focus:outline-none"
+                          className="border-border-subtle bg-surface-hover text-text-primary"
                         />
                       ) : (
-                        <input
+                        <Input
                           type="tel"
                           value={invitePhone}
                           onChange={(e) => setInvitePhone(e.target.value)}
                           placeholder="对方的手机号码"
-                          className="focus:border-primary/40 w-full rounded-lg border border-border-subtle bg-surface-hover px-3 py-2 text-sm text-text-primary placeholder:text-text-muted focus:outline-none"
+                          className="border-border-subtle bg-surface-hover text-text-primary"
                         />
                       )}
                     </div>
@@ -539,11 +540,11 @@ export default function FamilySection() {
                         邀请链接已生成，请复制或打开下方链接发送给对方：
                       </p>
                       <div className="flex items-center gap-2">
-                        <input
+                        <Input
                           type="text"
                           readOnly
                           value={generatedInvite.url}
-                          className="min-w-0 flex-1 rounded-md border border-border-subtle bg-surface-elevated px-2.5 py-1.5 text-xs text-text-secondary focus:outline-none"
+                          className="min-w-0 flex-1 border-border-subtle bg-surface-elevated text-text-secondary"
                         />
                         <Button
                           variant="ghost"

@@ -1,6 +1,7 @@
 'use client';
 import { Icon } from '@/components/ui/icon';
 import Button from '@/components/ui/button';
+import Input from '@/components/ui/input';
 
 import { useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
@@ -85,24 +86,18 @@ export default function ForgotPasswordPage() {
                   >
                     邮箱
                   </label>
-                  <div className="relative">
-                    <Icon
-                      name="Mail"
-                      size="sm"
-                      className="absolute left-3.5 top-1/2 -translate-y-1/2 text-text-muted"
-                    />
-                    <input
-                      id="email"
-                      name="email"
-                      type="email"
-                      autoComplete="email"
-                      required
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      placeholder="请输入注册邮箱"
-                      className="w-full rounded-module border border-border-default bg-surface py-2 pl-10 pr-4 text-sm text-text-primary transition-colors placeholder:text-text-tertiary focus:border-primary focus:outline-none"
-                    />
-                  </div>
+                  <Input
+                    id="email"
+                    name="email"
+                    type="email"
+                    autoComplete="email"
+                    required
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="请输入注册邮箱"
+                    leftIcon={<Icon name="Mail" size="sm" />}
+                    className="rounded-module py-2 pl-10 placeholder:text-text-tertiary"
+                  />
                 </div>
 
                 <Button

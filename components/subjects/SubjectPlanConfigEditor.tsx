@@ -2,6 +2,7 @@
 import { Icon, type IconName } from '@/components/ui/icon';
 import Button from '@/components/ui/button';
 import Textarea from '@/components/ui/textarea';
+import Input from '@/components/ui/input';
 
 import { useEffect, useMemo, useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
@@ -485,7 +486,7 @@ export default function SubjectPlanConfigEditor({
                     <div className="grid grid-cols-1 items-start gap-4 md:grid-cols-12">
                       <div className="md:col-span-3">
                         <label className="mb-1.5 block text-xs text-text-tertiary">线路 ID</label>
-                        <input
+                        <Input
                           type="text"
                           value={track.id}
                           readOnly
@@ -494,7 +495,7 @@ export default function SubjectPlanConfigEditor({
                       </div>
                       <div className="md:col-span-3">
                         <label className="mb-1.5 block text-xs text-text-tertiary">名称</label>
-                        <input
+                        <Input
                           type="text"
                           value={track.name}
                           onChange={(e) => updateTrack(index, { name: e.target.value })}
@@ -504,13 +505,13 @@ export default function SubjectPlanConfigEditor({
                       <div className="md:col-span-2">
                         <label className="mb-1.5 block text-xs text-text-tertiary">颜色</label>
                         <div className="flex items-center gap-2">
-                          <input
+                          <Input
                             type="color"
                             value={track.color}
                             onChange={(e) => updateTrack(index, { color: e.target.value })}
                             className="h-9 w-10 cursor-pointer rounded-lg border border-border-subtle bg-transparent"
                           />
-                          <input
+                          <Input
                             type="text"
                             value={track.color}
                             onChange={(e) => updateTrack(index, { color: e.target.value })}
@@ -520,7 +521,7 @@ export default function SubjectPlanConfigEditor({
                       </div>
                       <div className="md:col-span-3">
                         <label className="mb-1.5 block text-xs text-text-tertiary">说明</label>
-                        <input
+                        <Input
                           type="text"
                           value={track.description ?? ''}
                           onChange={(e) => updateTrack(index, { description: e.target.value })}
@@ -567,7 +568,7 @@ export default function SubjectPlanConfigEditor({
                     <div className="grid flex-1 grid-cols-1 gap-4 md:grid-cols-2">
                       <div>
                         <label className="mb-1.5 block text-xs text-text-tertiary">标签</label>
-                        <input
+                        <Input
                           type="text"
                           value={item.label}
                           onChange={(e) => updateTimeAxisItem(index, { label: e.target.value })}
@@ -578,7 +579,7 @@ export default function SubjectPlanConfigEditor({
                         <label className="mb-1.5 block text-xs text-text-tertiary">
                           位置（0-100）
                         </label>
-                        <input
+                        <Input
                           type="number"
                           min={0}
                           max={100}
@@ -639,7 +640,7 @@ export default function SubjectPlanConfigEditor({
                       </div>
                       <div className="md:col-span-2">
                         <label className="mb-1.5 block text-xs text-text-tertiary">标签</label>
-                        <input
+                        <Input
                           type="text"
                           value={node.label}
                           onChange={(e) => updateNode(index, { label: e.target.value })}
@@ -650,7 +651,7 @@ export default function SubjectPlanConfigEditor({
                         <label className="mb-1.5 block text-xs text-text-tertiary">
                           位置（0-100）
                         </label>
-                        <input
+                        <Input
                           type="number"
                           min={0}
                           max={100}
@@ -661,7 +662,7 @@ export default function SubjectPlanConfigEditor({
                       </div>
                       <div className="md:col-span-2">
                         <label className="mb-1.5 block text-xs text-text-tertiary">时间</label>
-                        <input
+                        <Input
                           type="text"
                           value={node.time}
                           onChange={(e) => updateNode(index, { time: e.target.value })}
@@ -671,7 +672,7 @@ export default function SubjectPlanConfigEditor({
                       </div>
                       <div className="md:col-span-3">
                         <label className="mb-1.5 block text-xs text-text-tertiary">详细说明</label>
-                        <input
+                        <Input
                           type="text"
                           value={node.detail ?? ''}
                           onChange={(e) => updateNode(index, { detail: e.target.value })}
@@ -741,7 +742,7 @@ export default function SubjectPlanConfigEditor({
                                 <label className="mb-1.5 block text-xs text-text-tertiary">
                                   时间点
                                 </label>
-                                <input
+                                <Input
                                   type="text"
                                   value={achievement.time}
                                   onChange={(e) =>
@@ -755,7 +756,7 @@ export default function SubjectPlanConfigEditor({
                                 <label className="mb-1.5 block text-xs text-text-tertiary">
                                   成果关键词
                                 </label>
-                                <input
+                                <Input
                                   type="text"
                                   value={achievement.keyword}
                                   onChange={(e) =>
@@ -768,7 +769,7 @@ export default function SubjectPlanConfigEditor({
                                 <label className="mb-1.5 block text-xs text-text-tertiary">
                                   详细说明
                                 </label>
-                                <input
+                                <Input
                                   type="text"
                                   value={achievement.detail ?? ''}
                                   onChange={(e) =>
@@ -809,7 +810,7 @@ export default function SubjectPlanConfigEditor({
                                     key={mi}
                                     className="bg-secondary/10 border-secondary/20 flex items-center gap-1 rounded-lg border px-2 py-1"
                                   >
-                                    <input
+                                    <Input
                                       type="text"
                                       value={milestone}
                                       onChange={(e) =>
@@ -864,7 +865,7 @@ export default function SubjectPlanConfigEditor({
                     <div className="mb-3 grid grid-cols-1 items-start gap-4 md:grid-cols-12">
                       <div className="md:col-span-2">
                         <label className="mb-1.5 block text-xs text-text-tertiary">赛事名称</label>
-                        <input
+                        <Input
                           type="text"
                           value={exam.name}
                           onChange={(e) => updateExamEvent(index, { name: e.target.value })}
@@ -873,7 +874,7 @@ export default function SubjectPlanConfigEditor({
                       </div>
                       <div className="md:col-span-2">
                         <label className="mb-1.5 block text-xs text-text-tertiary">目标</label>
-                        <input
+                        <Input
                           type="text"
                           value={exam.target ?? ''}
                           onChange={(e) => updateExamEvent(index, { target: e.target.value })}
@@ -882,7 +883,7 @@ export default function SubjectPlanConfigEditor({
                       </div>
                       <div className="md:col-span-2">
                         <label className="mb-1.5 block text-xs text-text-tertiary">日期</label>
-                        <input
+                        <Input
                           type="text"
                           value={exam.date ?? ''}
                           onChange={(e) => updateExamEvent(index, { date: e.target.value })}
@@ -892,7 +893,7 @@ export default function SubjectPlanConfigEditor({
                       </div>
                       <div className="md:col-span-2">
                         <label className="mb-1.5 block text-xs text-text-tertiary">月份/学期</label>
-                        <input
+                        <Input
                           type="text"
                           value={exam.month ?? ''}
                           onChange={(e) => updateExamEvent(index, { month: e.target.value })}
@@ -904,7 +905,7 @@ export default function SubjectPlanConfigEditor({
                         <label className="mb-1.5 block text-xs text-text-tertiary">
                           报名/准备时间
                         </label>
-                        <input
+                        <Input
                           type="text"
                           value={exam.registerBefore ?? ''}
                           onChange={(e) =>

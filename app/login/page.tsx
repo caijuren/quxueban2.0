@@ -1,6 +1,7 @@
 'use client';
 import { Icon } from '@/components/ui/icon';
 import Button from '@/components/ui/button';
+import Input from '@/components/ui/input';
 
 import { useState, useEffect } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
@@ -172,24 +173,18 @@ function LoginForm() {
                 >
                   用户名
                 </label>
-                <div className="relative">
-                  <Icon
-                    name="User"
-                    size="sm"
-                    className="absolute left-3.5 top-1/2 -translate-y-1/2 text-text-muted"
-                  />
-                  <input
-                    id="username"
-                    name="username"
-                    type="text"
-                    autoComplete="username"
-                    required
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
-                    placeholder="请输入用户名"
-                    className="w-full rounded-module border border-border-default bg-surface py-2 pl-10 pr-4 text-sm text-text-primary transition-colors placeholder:text-text-tertiary focus:border-primary focus:outline-none"
-                  />
-                </div>
+                <Input
+                  id="username"
+                  name="username"
+                  type="text"
+                  autoComplete="username"
+                  required
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  placeholder="请输入用户名"
+                  leftIcon={<Icon name="User" size="sm" />}
+                  className="rounded-module py-2 pl-10 placeholder:text-text-tertiary"
+                />
               </div>
 
               <div>
@@ -199,24 +194,18 @@ function LoginForm() {
                 >
                   密码
                 </label>
-                <div className="relative">
-                  <Icon
-                    name="Lock"
-                    size="sm"
-                    className="absolute left-3.5 top-1/2 -translate-y-1/2 text-text-muted"
-                  />
-                  <input
-                    id="password"
-                    name="password"
-                    type="password"
-                    autoComplete="current-password"
-                    required
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    placeholder="请输入密码"
-                    className="w-full rounded-module border border-border-default bg-surface py-2 pl-10 pr-4 text-sm text-text-primary transition-colors placeholder:text-text-tertiary focus:border-primary focus:outline-none"
-                  />
-                </div>
+                <Input
+                  id="password"
+                  name="password"
+                  type="password"
+                  autoComplete="current-password"
+                  required
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="请输入密码"
+                  leftIcon={<Icon name="Lock" size="sm" />}
+                  className="rounded-module py-2 pl-10 placeholder:text-text-tertiary"
+                />
               </div>
 
               <div className="flex items-center justify-between text-xs">

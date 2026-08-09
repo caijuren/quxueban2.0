@@ -6,6 +6,7 @@ import packageInfo from '@/package.json';
 import SettingsSection from './SettingsSection';
 import Button from '@/components/ui/button';
 import Textarea from '@/components/ui/textarea';
+import Input from '@/components/ui/input';
 
 const FAQS = [
   {
@@ -89,12 +90,12 @@ export default function HelpSection() {
             resize="none"
             className="border-border-default bg-surface-elevated px-4 py-3 text-text-secondary"
           />
-          <input
+          <Input
             type="text"
             value={contact}
             onChange={(e) => setContact(e.target.value)}
             placeholder="联系方式（选填）"
-            className="w-full rounded-xl border border-border-default bg-surface-elevated px-4 py-2.5 text-sm text-text-secondary transition-all placeholder:text-text-tertiary focus:border-primary focus:outline-none"
+            className="border-border-default bg-surface-elevated text-text-secondary"
           />
           {submitted && (
             <div className="bg-success/10 border-success/20 rounded-lg border px-4 py-2 text-sm text-success">
