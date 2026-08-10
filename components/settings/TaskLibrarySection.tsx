@@ -274,7 +274,7 @@ export default function TaskLibrarySection() {
           onChange={(e) => setSearch(e.target.value)}
           placeholder="搜索任务名称或描述"
           leftIcon={<Icon name="Search" size="xs" />}
-          className="flex-1 bg-surface-elevated"
+          className="w-full bg-surface-elevated lg:max-w-sm"
         />
 
         <div className="flex flex-wrap items-center gap-2 lg:flex-nowrap">
@@ -320,7 +320,7 @@ export default function TaskLibrarySection() {
             size="sm"
             onClick={handleAdd}
             leftIcon={<Icon name="Plus" size="sm" />}
-            className="font-semibold"
+            className="whitespace-nowrap font-semibold"
           >
             添加任务
           </Button>
