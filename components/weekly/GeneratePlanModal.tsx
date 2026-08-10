@@ -418,7 +418,7 @@ function StepTasks({
       exit={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, x: -20 }}
       className="space-y-4"
     >
-      <div className="flex flex-col gap-3 lg:flex-row lg:items-start">
+      <div className="grid grid-cols-1 gap-3 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-start">
         <div className="relative w-full lg:max-w-sm">
           <Icon
             name="Search"
@@ -433,12 +433,13 @@ function StepTasks({
             className="w-full rounded-lg border border-border-default bg-surface py-2 pl-9 pr-3 text-sm text-text-primary placeholder:text-text-tertiary focus:border-primary focus:outline-none"
           />
         </div>
-        <div className="flex flex-wrap items-center gap-2">
+        <div className="flex flex-wrap items-center justify-start gap-2 lg:justify-end">
           <Icon name="Filter" size="sm" className="text-text-muted" />
           <Select
             value={filterCategory}
             onChange={(e) => setFilterCategory(e.target.value as TaskCategory | 'all')}
             size="sm"
+            containerClassName="w-[148px] shrink-0"
             className="bg-surface"
             options={[
               { value: 'all', label: '全部分类' },
@@ -451,6 +452,7 @@ function StepTasks({
               setFilterSchedule(e.target.value as 'all' | TaskTemplate['weeklySchedule'])
             }
             size="sm"
+            containerClassName="w-[148px] shrink-0"
             className="bg-surface"
             options={scheduleFilterOptions}
           />
@@ -459,7 +461,7 @@ function StepTasks({
             disabled={templates.length === 0}
             variant="ghost"
             size="sm"
-            className="gap-1.5 text-xs text-text-tertiary hover:text-text-secondary disabled:opacity-40"
+            className="shrink-0 gap-1.5 whitespace-nowrap text-xs text-text-tertiary hover:text-text-secondary disabled:opacity-40"
           >
             <div
               className={`flex size-4 items-center justify-center rounded border ${
@@ -490,13 +492,13 @@ function StepTasks({
                 onClick={() => toggleTemplate(tpl.id)}
                 variant="secondary"
                 size="md"
-                className={`!h-auto items-start justify-start rounded-2xl border p-3 text-left ${
+                className={`!h-auto !items-start !justify-start rounded-2xl border p-3 text-left ${
                   selected
                     ? 'border-primary/30 bg-surface-highlight'
                     : 'border-border-subtle bg-surface-elevated hover:bg-surface-hover'
                 }`}
               >
-                <div className="flex items-start gap-3">
+                <div className="flex w-full items-start gap-3">
                   <div
                     className={`mt-0.5 flex size-5 items-center justify-center rounded border ${
                       selected ? 'border-primary bg-primary' : 'border-border-default'

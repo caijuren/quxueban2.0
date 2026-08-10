@@ -1,5 +1,3 @@
-// @ts-nocheck
-// FIXME: 本组件包含大量未完成的 state/useMemo 引用，需要后续补齐目标关联打卡逻辑
 'use client';
 import { Icon, type IconName } from '@/components/ui/icon';
 
@@ -204,6 +202,8 @@ export default function TaskCompletionModal({
         audioUrls,
         audioTranscript,
         capabilityProgress: latestRecord?.capabilityProgress ?? [],
+        quantityIncrement: latestRecord?.quantityIncrement ?? 0,
+        checklistProgress: latestRecord?.checklistProgress ?? [],
       });
       onClose();
     } finally {
@@ -254,7 +254,7 @@ export default function TaskCompletionModal({
           <div className="grid grid-cols-3 gap-2">
             {(['done', 'partially_done', 'pending'] as TaskStatus[]).map((s) => {
               const config = statusConfig[s];
-              const Icon = config.icon;
+              const StatusIcon = config.icon;
               const active = status === s;
               return (
                 <Button
@@ -268,7 +268,7 @@ export default function TaskCompletionModal({
                       : 'hover:bg-surface-light border-border-default bg-surface text-text-tertiary hover:border-border-strong'
                   }`}
                 >
-                  <Icon className="size-3.5" />
+                  <Icon name={StatusIcon} size="xs" />
                   {config.label}
                 </Button>
               );
@@ -404,6 +404,7 @@ export default function TaskCompletionModal({
                     variant="ghost"
                     size="xs"
                     className="bg-surface/80 absolute right-0.5 top-0.5 rounded p-0.5 text-text-muted hover:text-error"
+                    aria-label="移除佐证图片"
                   >
                     <Icon name="X" size="xs" />
                   </Button>
@@ -432,6 +433,7 @@ export default function TaskCompletionModal({
                     variant="ghost"
                     size="xs"
                     className="hover:bg-error/10 rounded p-0.5 text-text-muted hover:text-error"
+                    aria-label="移除语音记录"
                   >
                     <Icon name="X" size="xs" />
                   </Button>

@@ -1,10 +1,9 @@
 'use client';
-import Button from '@/components/ui/button';
 import { Icon } from '@/components/ui/icon';
 
 import { motion, useReducedMotion } from 'framer-motion';
 
-import { Suspense, useMemo, useState } from 'react';
+import { Suspense, useMemo } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import EmptyState from '@/components/ui/EmptyState';
@@ -12,7 +11,6 @@ import ChildEmptyState from '@/components/dashboard/ChildEmptyState';
 import { useChildren } from '@/components/dashboard/ChildrenContext';
 import { gradeLabel, gradeToStage } from '@/lib/children';
 import { schoolsData } from './[school]/SchoolDetail';
-import Modal from '@/components/ui/Modal';
 
 const levelConfig: Record<
   string,
@@ -51,7 +49,6 @@ function SchoolsPageContent() {
   const query = searchParams.get('q')?.toLowerCase() || '';
   const { currentChild } = useChildren();
   const shouldReduceMotion = useReducedMotion();
-  const [showAddModal, setShowAddModal] = useState(false);
 
   const schools = useMemo(
     () =>
@@ -97,17 +94,6 @@ function SchoolsPageContent() {
               {currentChild ? `${currentChild.name}的目标学校库` : '目标学校库'}
             </h1>
           </div>
-        </div>
-        <div className="flex items-center gap-2">
-          <Button
-            variant="primary"
-            size="md"
-            onClick={() => setShowAddModal(true)}
-            className=""
-          >
-            <Icon name="Plus" size="sm" />
-            添加学校
-          </Button>
         </div>
       </motion.div>
 
@@ -201,31 +187,6 @@ function SchoolsPageContent() {
         />
       )}
 
-      <Modal
-        isOpen={showAddModal}
-        onClose={() => setShowAddModal(false)}
-        title="添加学校"
-        icon="School"
-        iconClassName="bg-secondary"
-        colorScheme="violet"
-        size="sm"
-        zIndex={60}
-        footer={
-          <Button
-            type="button"
-            variant="secondary"
-            size="sm"
-            onClick={() => setShowAddModal(false)}
-            className="w-full"
-          >
-            知道了
-          </Button>
-        }
-      >
-        <p className="text-center text-sm text-text-tertiary">
-          学校库由平台维护，暂不支持自定义添加。如需补充学校，请联系管理员。
-        </p>
-      </Modal>
     </div>
   );
 }

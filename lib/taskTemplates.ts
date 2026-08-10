@@ -77,6 +77,28 @@ export const TASK_ALIGNMENT_LABELS: Record<TaskAlignment, string> = {
   unrelated: '不相关',
 };
 
+// Route and scenario tags are stored as stable ids, but should never leak into the UI.
+export const TASK_TAG_LABELS: Record<string, string> = {
+  sg: '三公冲刺',
+  yaohao: '私立摇号',
+  gongban: '公办对口/直升',
+  sizhong: '四校八大自招冲刺',
+  shizhong: '嘉定区市重点冲刺',
+  quzhong: '区重点/特色高中',
+  sanchu_gongban: '三公/公办方向',
+  sanchu_guoji: '三公/国际方向',
+  gongban_duikou: '公办对口',
+};
+
+export function getTaskTagLabel(tag: string): string | null {
+  const normalized = tag.trim();
+  if (!normalized) return null;
+  if (TASK_TAG_LABELS[normalized]) return TASK_TAG_LABELS[normalized];
+  // Keep user-authored Chinese tags, hide opaque internal ids.
+  if (/^[a-z0-9_-]+$/.test(normalized)) return null;
+  return normalized;
+}
+
 // 系统任务模板：只保留路线里程碑级别的核心任务，按「路线 → 关键节点 → 具体动作」组织
 export const SYSTEM_TASK_TEMPLATES: SystemTaskTemplate[] = [
   // ===== 三公路线：三公/民办摇号 =====

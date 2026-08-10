@@ -291,10 +291,8 @@ function createParticles() {
 
 export default function PlanRoadmap({
   onShowDiagnosis,
-  onManageNodes,
 }: {
   onShowDiagnosis?: () => void;
-  onManageNodes?: () => void;
 }) {
   const [mounted, setMounted] = useState(false);
   useEffect(() => {
@@ -1124,32 +1122,22 @@ export default function PlanRoadmap({
         ))}
       </motion.div>
 
-      {/* Manage checkpoints hint */}
+      {/* Planning-reference note */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.5 }}
-        className="flex items-center justify-between rounded-2xl border border-border-subtle bg-surface-elevated p-4"
+        className="flex items-center gap-3 rounded-2xl border border-border-subtle bg-surface-elevated p-4"
       >
         <div className="flex items-center gap-3">
           <div className="flex size-10 items-center justify-center rounded-xl bg-surface-hover">
             <Icon name="Plus" size="md" className="text-text-tertiary" />
           </div>
           <div>
-            <p className="text-sm font-medium text-text-primary">自定义熔断点</p>
-            <p className="text-xs text-text-muted">
-              系统已内置默认节点，你也可以添加、修改或删除自己的检查点
-            </p>
+            <p className="text-sm font-medium text-text-primary">规划参考节点</p>
+            <p className="text-xs text-text-muted">节点会随平台规划内容更新，帮助你判断当前阶段的准备节奏。</p>
           </div>
         </div>
-        <Button
-          variant="secondary"
-          size="md"
-          onClick={onManageNodes}
-          className="bg-surface-hover hover:bg-surface-hover"
-        >
-          管理节点
-        </Button>
       </motion.div>
     </div>
   );

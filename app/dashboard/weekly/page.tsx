@@ -4,6 +4,7 @@ import React, { Suspense, useEffect, useMemo, useRef, useState } from 'react';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { Icon } from '@/components/ui/icon';
 import Button from '@/components/ui/button';
+import ConfirmDialog from '@/components/ui/confirm-dialog';
 import Select from '@/components/ui/select';
 import Modal from '@/components/ui/Modal';
 import Textarea from '@/components/ui/textarea';
@@ -41,6 +42,7 @@ import { TASK_CATEGORY_LABELS } from '@/lib/taskTemplates';
 import { getCategoryColorClass } from '@/lib/taskAlignment';
 import { detectConflicts } from '@/lib/weeklyPlanConflicts';
 import { allCategories, categoryIcons } from '@/components/weekly/weeklyConstants';
+import { toast } from '@/lib/toast';
 
 function shiftWeekId(weekId: string, delta: number): string {
   const { start } = getWeekRange(weekId);
@@ -137,6 +139,9 @@ function WeeklyTasksContent() {
   const [libraryMode, setLibraryMode] = useState<'add' | 'makeup'>('add');
   const [generateOpen, setGenerateOpen] = useState(false);
   const [conflictsExpanded, setConflictsExpanded] = useState(false);
+  const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
+  const [deletingPlan, setDeletingPlan] = useState(false);
+  const deletingPlanRef = useRef(false);
 
   useEffect(() => {
     setDraftPlan(null);
@@ -243,12 +248,21 @@ function WeeklyTasksContent() {
   };
 
   const handleDeleteWeekPlan = async () => {
-    if (!currentChild || !displayPlan) return;
-    if (!confirm('确定删除本周计划？任务清单不会被删除，之后可以重新生成。')) return;
-    if (isDraft) {
-      setDraftPlan(null);
-    } else {
-      await deleteWeeklyPlan(currentChild.id, weekId);
+    if (!currentChild || !displayPlan || deletingPlanRef.current) return;
+    deletingPlanRef.current = true;
+    setDeletingPlan(true);
+    try {
+      if (isDraft) {
+        setDraftPlan(null);
+      } else {
+        await deleteWeeklyPlan(currentChild.id, weekId);
+      }
+      setDeleteConfirmOpen(false);
+    } catch (error) {
+      toast.error('删除周计划失败', error instanceof Error ? error.message : '请稍后重试');
+    } finally {
+      deletingPlanRef.current = false;
+      setDeletingPlan(false);
     }
   };
 
@@ -268,22 +282,43 @@ function WeeklyTasksContent() {
     setReviewOpen(false);
   };
 
-  const handleAddFromLibrary = (newTasks: WeeklyTaskItem[]) => {
+  const handleAddFromLibrary = async (newTasks: WeeklyTaskItem[]) => {
     if (!displayPlan || !currentChild) return;
     const updatedTasks = [...displayPlan.tasks, ...newTasks];
     if (isDraft) {
       setDraftPlan({ ...displayPlan, tasks: updatedTasks });
     } else {
-      publishWeeklyPlan({ ...displayPlan, tasks: updatedTasks });
+      try {
+        await publishWeeklyPlan({ ...displayPlan, tasks: updatedTasks });
+        toast.success('任务已添加到本周计划');
+      } catch (error) {
+        toast.error('添加任务失败', error instanceof Error ? error.message : '请稍后重试');
+      }
     }
   };
 
   const handleGoalsChange = async (goals: WeeklyGoal[]) => {
     if (!displayPlan || !currentChild) return;
+    const normalizedGoals = goals.map((goal) => ({
+      ...goal,
+      title: goal.title.trim() || '未命名模块',
+      checklist: goal.checklist?.map((item) => {
+        const title = item.title.trim() || '未命名任务';
+        return {
+          ...item,
+          title,
+          text: item.text.trim() || title,
+        };
+      }),
+    }));
     if (isDraft) {
-      setDraftPlan({ ...displayPlan, goals });
+      setDraftPlan({ ...displayPlan, goals: normalizedGoals });
     } else {
-      await publishWeeklyPlan({ ...displayPlan, goals });
+      try {
+        await publishWeeklyPlan({ ...displayPlan, goals: normalizedGoals });
+      } catch (error) {
+        toast.error('保存任务清单失败', error instanceof Error ? error.message : '请稍后重试');
+      }
     }
   };
 
@@ -449,7 +484,7 @@ function WeeklyTasksContent() {
                     补任务
                   </Button>
                   <Button
-                    onClick={handleDeleteWeekPlan}
+                    onClick={() => setDeleteConfirmOpen(true)}
                     className="inline-flex items-center gap-1.5 rounded-[14px] border border-error/30 bg-error/[0.08] px-3.5 py-2 text-sm font-medium text-error transition-colors hover:bg-error/[0.12]"
                     variant="ghost"
                     size="md"
@@ -837,6 +872,17 @@ function WeeklyTasksContent() {
           onPublish={handlePublishDraft}
         />
       )}
+
+      <ConfirmDialog
+        isOpen={deleteConfirmOpen}
+        onClose={() => setDeleteConfirmOpen(false)}
+        onConfirm={handleDeleteWeekPlan}
+        title={isDraft ? '放弃本周草稿？' : '删除本周计划？'}
+        description={isDraft ? '尚未发布的任务调整将被放弃。' : '任务清单不会被删除，之后可以重新生成本周计划。'}
+        confirmText={isDraft ? '放弃草稿' : '删除计划'}
+        confirmVariant="danger"
+        isLoading={deletingPlan}
+      />
 
     </div>
   );

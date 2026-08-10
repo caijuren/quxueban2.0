@@ -5,6 +5,7 @@ import { useState } from 'react';
 
 import { useExportUserData, useDeleteAccount } from '@/lib/hooks/useUser';
 import SettingsSection from './SettingsSection';
+import { toast } from '@/lib/toast';
 
 export default function DataPrivacySection() {
   const exportData = useExportUserData();
@@ -25,7 +26,7 @@ export default function DataPrivacySection() {
       a.click();
       URL.revokeObjectURL(url);
     } catch (err) {
-      alert(err instanceof Error ? err.message : '导出失败');
+      toast.error('导出失败', err instanceof Error ? err.message : '请稍后重试');
     }
   };
 
@@ -35,7 +36,7 @@ export default function DataPrivacySection() {
       await deleteAccount.mutateAsync({ password: deletePassword });
       window.location.href = '/';
     } catch (err) {
-      alert(err instanceof Error ? err.message : '注销失败');
+      toast.error('注销失败', err instanceof Error ? err.message : '请检查密码后重试');
     }
   };
 

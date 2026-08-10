@@ -1,27 +1,12 @@
 'use client';
 import { Icon } from '@/components/ui/icon';
-import Button from '@/components/ui/button';
-import Input from '@/components/ui/input';
 
-import { useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 
 import Link from 'next/link';
 
 export default function ForgotPasswordPage() {
   const shouldReduceMotion = useReducedMotion();
-  const [email, setEmail] = useState('');
-  const [submitted, setSubmitted] = useState(false);
-  const [loading, setLoading] = useState(false);
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    // Placeholder: real implementation would call a password reset API
-    await new Promise((resolve) => setTimeout(resolve, 600));
-    setSubmitted(true);
-    setLoading(false);
-  };
 
   return (
     <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-background p-4">
@@ -61,66 +46,20 @@ export default function ForgotPasswordPage() {
           <div className="rounded-card border border-border-default bg-surface p-6 shadow-card sm:p-8">
             <div className="mb-8 text-center">
               <h2 className="mb-1.5 font-display text-xl font-bold text-text-primary">重置密码</h2>
-              <p className="text-sm text-text-muted">我们将发送重置链接到你的邮箱</p>
+              <p className="text-sm text-text-muted">通过管理员协助恢复账户访问</p>
             </div>
 
-            {submitted ? (
-              <div className="space-y-4 text-center">
-                <div className="bg-success/10 border-success/20 mx-auto flex size-12 items-center justify-center rounded-module border">
-                  <Icon name="CheckCircle2" size="lg" className="text-success" />
-                </div>
-                <p className="text-sm text-text-secondary">如果该邮箱已注册，重置链接已发送。</p>
-                <Link
-                  href="/login"
-                  className="inline-flex items-center gap-1.5 text-sm text-primary transition-colors hover:text-primary-glow"
-                >
-                  <Icon name="ArrowLeft" size="sm" /> 返回登录
-                </Link>
+            <div className="space-y-4">
+              <div className="rounded-module border border-warning/20 bg-warning/10 px-4 py-3 text-sm leading-relaxed text-warning">
+                密码重置邮件服务暂未开放。请联系管理员处理账号密码问题。
               </div>
-            ) : (
-              <form className="space-y-4" onSubmit={handleSubmit}>
-                <div>
-                  <label
-                    htmlFor="email"
-                    className="mb-1.5 block text-sm font-medium text-text-secondary"
-                  >
-                    邮箱
-                  </label>
-                  <Input
-                    id="email"
-                    name="email"
-                    type="email"
-                    autoComplete="email"
-                    required
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="请输入注册邮箱"
-                    leftIcon={<Icon name="Mail" size="sm" />}
-                    className="rounded-module py-2 pl-10 placeholder:text-text-tertiary"
-                  />
-                </div>
-
-                <Button
-                  type="submit"
-                  variant="primary"
-                  size="md"
-                  disabled={loading}
-                  className="hover:bg-primary/90 inline-flex w-full items-center justify-center gap-2 rounded-module bg-primary px-4 py-2 text-sm font-medium text-inverse transition-colors disabled:cursor-not-allowed disabled:opacity-50"
-                >
-                  {loading ? '发送中...' : '发送重置链接'}
-                </Button>
-
-                <p className="text-center text-xs text-text-muted">
-                  想起密码了？{' '}
-                  <Link
-                    href="/login"
-                    className="text-primary transition-colors hover:text-primary-glow"
-                  >
-                    返回登录
-                  </Link>
-                </p>
-              </form>
-            )}
+              <p className="text-center text-xs text-text-muted">
+                想起密码了？{' '}
+                <Link href="/login" className="text-primary transition-colors hover:text-primary-glow">
+                  返回登录
+                </Link>
+              </p>
+            </div>
           </div>
         </motion.div>
       </div>

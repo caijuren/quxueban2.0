@@ -6,6 +6,7 @@ import { Icon, type IconName } from '@/components/ui/icon';
 import Button from '@/components/ui/button';
 import Skeleton from '@/components/ui/skeleton';
 import { useChildren } from '@/components/dashboard/ChildrenContext';
+import { toast } from '@/lib/toast';
 import { gradeLabel } from '@/lib/children';
 import ChildEmptyState from '@/components/dashboard/ChildEmptyState';
 import {
@@ -88,7 +89,7 @@ export default function MilestonesPage() {
       const urls = [...(milestone?.certificateUrls || []), data.url];
       updateMilestone.mutate({ id: milestoneId, data: { certificateUrls: urls } });
     } catch (err) {
-      alert(err instanceof Error ? err.message : '上传失败');
+      toast.error('证书上传失败', err instanceof Error ? err.message : '请稍后重试');
     } finally {
       setUploadingFor(null);
       if (fileInputRef.current) fileInputRef.current.value = '';
@@ -297,6 +298,7 @@ export default function MilestonesPage() {
                                   size="xs"
                                   onClick={() => handleRemoveImage(milestone.id, url)}
                                   className="absolute right-0.5 top-0.5 bg-black/60 p-0.5 text-white opacity-0 group-hover:opacity-100"
+                                  aria-label="移除证书图片"
                                 >
                                   <Icon name="X" size="xs" />
                                 </Button>

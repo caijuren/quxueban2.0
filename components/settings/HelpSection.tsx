@@ -5,8 +5,6 @@ import { Icon } from '@/components/ui/icon';
 import packageInfo from '@/package.json';
 import SettingsSection from './SettingsSection';
 import Button from '@/components/ui/button';
-import Textarea from '@/components/ui/textarea';
-import Input from '@/components/ui/input';
 
 const FAQS = [
   {
@@ -29,22 +27,6 @@ const FAQS = [
 
 export default function HelpSection() {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
-  const [feedback, setFeedback] = useState('');
-  const [contact, setContact] = useState('');
-  const [submitting, setSubmitting] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
-
-  const handleSubmitFeedback = async () => {
-    if (!feedback.trim()) return;
-    setSubmitting(true);
-    // TODO: send feedback to backend or IM
-    await new Promise((resolve) => setTimeout(resolve, 600));
-    setSubmitting(false);
-    setSubmitted(true);
-    setFeedback('');
-    setContact('');
-    setTimeout(() => setSubmitted(false), 3000);
-  };
 
   return (
     <div className="space-y-4">
@@ -82,40 +64,8 @@ export default function HelpSection() {
 
       <SettingsSection title="意见反馈" description="遇到问题或有新想法，告诉我们">
         <div className="space-y-4">
-          <Textarea
-            value={feedback}
-            onChange={(e) => setFeedback(e.target.value)}
-            placeholder="请描述你遇到的问题或建议..."
-            rows={4}
-            resize="none"
-            className="border-border-default bg-surface-elevated px-4 py-3 text-text-secondary"
-          />
-          <Input
-            type="text"
-            value={contact}
-            onChange={(e) => setContact(e.target.value)}
-            placeholder="联系方式（选填）"
-            className="border-border-default bg-surface-elevated text-text-secondary"
-          />
-          {submitted && (
-            <div className="bg-success/10 border-success/20 rounded-lg border px-4 py-2 text-sm text-success">
-              反馈已提交，感谢你的建议！
-            </div>
-          )}
-          <div className="flex justify-end">
-            <Button
-              variant="primary"
-              onClick={handleSubmitFeedback}
-              disabled={submitting || !feedback.trim()}
-              className="px-4 py-2"
-            >
-              {submitting ? (
-                <Icon name="Loader2" size="sm" animate="spin" />
-              ) : (
-                <Icon name="Send" size="sm" />
-              )}
-              提交反馈
-            </Button>
+          <div className="rounded-lg border border-warning/20 bg-warning/10 px-4 py-2 text-sm text-warning">
+            反馈入口正在完善中，暂不支持在线提交。
           </div>
         </div>
       </SettingsSection>

@@ -218,13 +218,13 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
         </div>
       </div>
 
-      <div className="flex items-center gap-3 sm:gap-4">
+      <div className="min-w-0 flex items-center gap-1.5 sm:gap-3 lg:gap-4">
         <div className="relative" ref={notificationRef}>
           <Button
             variant="ghost"
             size="md"
             onClick={() => setNotificationOpen((prev) => !prev)}
-            className="relative"
+            className="relative shrink-0"
             aria-label="通知"
           >
             <Icon name="Bell" size="md" />
@@ -346,7 +346,7 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
             variant="ghost"
             size="md"
             onClick={() => setUserMenuOpen((prev) => !prev)}
-            className="relative flex size-10 items-center justify-center overflow-hidden rounded-module border border-border-default text-left text-text-primary transition-all hover:border-border-strong hover:bg-surface-elevated sm:size-11"
+            className="relative flex size-10 shrink-0 items-center justify-center overflow-hidden rounded-module border border-border-default text-left text-text-primary transition-all hover:border-border-strong hover:bg-surface-elevated sm:size-11"
             aria-label="用户菜单"
             aria-haspopup="menu"
             aria-expanded={userMenuOpen}
@@ -413,18 +413,20 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
             variant="ghost"
             size="sm"
             onClick={() => setChildDropdownOpen((prev) => !prev)}
-            className="flex h-10 items-center gap-3 rounded-module border border-border-default py-1.5 pl-1.5 pr-3 text-left transition-all hover:border-border-strong hover:bg-surface-elevated"
+            className="flex h-10 min-w-0 max-w-[min(48vw,220px)] items-center gap-2 rounded-module border border-border-default py-1.5 pl-1.5 pr-2 text-left transition-all hover:border-border-strong hover:bg-surface-elevated sm:max-w-[240px] sm:gap-3 sm:pr-3"
             aria-label="切换孩子"
             aria-haspopup="listbox"
             aria-expanded={childDropdownOpen}
             aria-controls="child-listbox"
           >
-            <ChildAvatar child={currentChild} size="md" shape="rounded" fallbackIcon />
-            <div className="hidden text-right sm:block">
-              <p className="text-sm font-semibold leading-tight text-text-primary">
+            <div className="shrink-0">
+              <ChildAvatar child={currentChild} size="md" shape="rounded" fallbackIcon />
+            </div>
+            <div className="hidden min-w-0 text-right sm:block">
+              <p className="truncate text-sm font-semibold leading-tight text-text-primary">
                 {currentChild ? currentChild.name : '未选择孩子'}
               </p>
-              <p className="text-2xs text-text-tertiary">
+              <p className="truncate text-2xs text-text-tertiary">
                 {currentChild && currentStage
                   ? `${gradeLabel(currentChild.grade, currentChild.educationSystem)} · ${currentStage}`
                   : '请选择孩子'}
@@ -445,7 +447,7 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
               ref={childListboxRef}
               role="listbox"
               aria-label="切换孩子"
-              className="absolute right-0 top-full z-50 mt-2 w-64 overflow-hidden rounded-card border border-border-default bg-surface-elevated shadow-card"
+              className="absolute right-0 top-full z-50 mt-2 w-[min(16rem,calc(100vw-1.5rem))] overflow-hidden rounded-card border border-border-default bg-surface-elevated shadow-card"
             >
               <div className="p-2.5">
                 {children.map((child, index) => {
@@ -464,7 +466,7 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
                         setCurrentChildId(child.id);
                         setChildDropdownOpen(false);
                       }}
-                      className={`flex w-full items-center gap-4 rounded-module p-3.5 text-left transition-all ${
+                      className={`flex h-auto min-h-[62px] w-full items-center gap-3 rounded-module p-3 text-left transition-all sm:gap-4 sm:p-3.5 ${
                         isActive ? 'bg-primary/[0.08]' : 'hover:bg-surface-elevated'
                       }`}
                     >

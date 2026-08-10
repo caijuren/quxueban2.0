@@ -15,6 +15,7 @@ import {
   useDeleteCapability,
 } from '@/lib/hooks/useCapabilities';
 import SettingsSection from './SettingsSection';
+import { toast } from '@/lib/toast';
 
 const categoryLabels: Record<string, string> = {
   chinese: '语文',
@@ -94,7 +95,7 @@ export default function CapabilitySection() {
       }
       setModalOpen(false);
     } catch (err) {
-      alert(err instanceof Error ? err.message : '保存失败');
+      toast.error('保存失败', err instanceof Error ? err.message : '请稍后重试');
     }
   };
 
@@ -104,7 +105,7 @@ export default function CapabilitySection() {
       setDeletingId(id);
       await deleteCapability.mutateAsync(id);
     } catch (err) {
-      alert(err instanceof Error ? err.message : '删除失败');
+      toast.error('删除失败', err instanceof Error ? err.message : '请稍后重试');
     } finally {
       setDeletingId(null);
     }

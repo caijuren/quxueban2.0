@@ -19,7 +19,7 @@ import {
   TaskWeeklySchedule,
   DayOfWeek,
 } from '@/lib/storage.types';
-import { TASK_CATEGORY_LABELS, getTemplateStage } from '@/lib/taskTemplates';
+import { TASK_CATEGORY_LABELS, getTemplateStage, getTaskTagLabel } from '@/lib/taskTemplates';
 import { getCategoryColorClass } from '@/lib/taskAlignment';
 import { categoryIcons, allCategories } from '@/lib/taskIcons';
 import { useChildren } from '@/components/dashboard/ChildrenContext';
@@ -33,6 +33,7 @@ import {
 } from '@/lib/hooks/useTaskTemplates';
 import { useCapabilities } from '@/lib/hooks/useCapabilities';
 import { TaskTemplateCreateInput, TaskTemplateUpdateInput } from '@/lib/validation';
+import { toast } from '@/lib/toast';
 
 const difficultyOptions = [
   { value: 'easy', label: '基础', color: 'bg-success/10 text-success border-success/20' },
@@ -216,7 +217,7 @@ export default function TaskLibrarySection() {
       setDeletingId(id);
       await deleteTemplate.mutateAsync(id);
     } catch (err) {
-      alert(err instanceof Error ? err.message : '删除失败');
+      toast.error('删除失败', err instanceof Error ? err.message : '请稍后重试');
     } finally {
       setDeletingId(null);
     }
@@ -227,7 +228,7 @@ export default function TaskLibrarySection() {
       setArchivingId(id);
       await updateTemplate.mutateAsync({ id, data: { archive } });
     } catch (err) {
-      alert(err instanceof Error ? err.message : archive ? '归档失败' : '恢复失败');
+      toast.error(archive ? '归档失败' : '恢复失败', err instanceof Error ? err.message : '请稍后重试');
     } finally {
       setArchivingId(null);
     }
@@ -260,8 +261,10 @@ export default function TaskLibrarySection() {
         await createTemplate.mutateAsync(payload as TaskTemplateCreateInput);
       }
       setModalOpen(false);
+      setEditing(null);
+      toast.success(editing ? '任务模板已更新' : '任务模板已创建');
     } catch (err) {
-      alert(err instanceof Error ? err.message : '保存失败');
+      toast.error('保存失败', err instanceof Error ? err.message : '请稍后重试');
     }
   };
 
@@ -451,7 +454,8 @@ export default function TaskLibrarySection() {
                         </span>
                       )}
                       {tpl.routeTags.map((tag) => {
-                        const routeLabel = routeOptions.find((r) => r.value === tag)?.label || tag;
+                        const routeLabel = getTaskTagLabel(tag);
+                        if (!routeLabel) return null;
                         return (
                           <span
                             key={tag}
@@ -973,13 +977,13 @@ function TaskTemplateModal({
                         updateField('customScheduleDays', []);
                       }
                     }}
-                    className={`rounded-xl border p-3 text-left ${
+                    className={`!h-auto !w-full !items-start !justify-start rounded-xl border p-3 text-left ${
                       selected
                         ? 'bg-secondary/10 border-secondary/30'
                         : 'border-border-subtle bg-surface-elevated hover:bg-surface-highlight'
                     }`}
                   >
-                    <div className="flex items-start gap-3">
+                    <div className="flex w-full items-start gap-3">
                       <div
                         className={`mt-0.5 flex size-4 shrink-0 items-center justify-center rounded-full border ${
                           selected ? 'border-secondary bg-secondary' : 'border-border-default'

@@ -329,7 +329,7 @@ export default function WeeklyTaskList({ goals, tasks, weekLabel, onChange }: We
         const newItem: WeeklyGoalChecklistItem = {
           id: generateId('check'),
           title: '新任务',
-          text: '',
+          text: '待补充任务说明',
           done: false,
         };
         return { ...g, checklist: [...(g.checklist || []), newItem] };
@@ -372,7 +372,9 @@ export default function WeeklyTaskList({ goals, tasks, weekLabel, onChange }: We
         id: generateId('goal'),
         title: '新模块',
         category,
-        checklist: [{ id: generateId('check'), title: '新任务', text: '', done: false }],
+        checklist: [
+          { id: generateId('check'), title: '新任务', text: '待补充任务说明', done: false },
+        ],
       };
       const next = [...draftGoals, newGoal];
       commit(next);
@@ -658,5 +660,4 @@ export default function WeeklyTaskList({ goals, tasks, weekLabel, onChange }: We
     </motion.div>
   );
 }
-
 

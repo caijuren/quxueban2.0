@@ -1,6 +1,6 @@
 'use client';
 
-import { ReactNode, useEffect, useState } from 'react';
+import { ReactNode, useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { createPortal } from 'react-dom';
 import { Icon, type IconName } from '@/components/ui/icon';
@@ -83,15 +83,43 @@ export default function Modal({
   colorScheme = 'rose',
 }: ModalProps) {
   const [mounted, setMounted] = useState(false);
+  const dialogRef = useRef<HTMLDivElement>(null);
   useEffect(() => setMounted(true), []);
 
   useEffect(() => {
     if (!isOpen) return;
+    const previousActiveElement = document.activeElement as HTMLElement | null;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    requestAnimationFrame(() => dialogRef.current?.focus());
+
     const handler = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose();
+      if (e.key !== 'Tab' || !dialogRef.current) return;
+
+      const focusable = dialogRef.current.querySelectorAll<HTMLElement>(
+        'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+      );
+      if (focusable.length === 0) {
+        e.preventDefault();
+        return;
+      }
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
     };
     document.addEventListener('keydown', handler);
-    return () => document.removeEventListener('keydown', handler);
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      document.removeEventListener('keydown', handler);
+      previousActiveElement?.focus();
+    };
   }, [isOpen, onClose]);
 
   if (!mounted) return null;
@@ -108,6 +136,11 @@ export default function Modal({
           style={{ zIndex }}
         >
           <motion.div
+            ref={dialogRef}
+            role="dialog"
+            aria-modal="true"
+            aria-label={title}
+            tabIndex={-1}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -119,7 +152,7 @@ export default function Modal({
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
             transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-            className={`relative w-full ${sizeClasses[size]} pointer-events-auto flex max-h-[90vh] flex-col overflow-hidden rounded-card bg-surface-elevated shadow-card ${className}`}
+            className={`relative w-full ${sizeClasses[size]} pointer-events-auto flex max-h-[90vh] flex-col overflow-hidden rounded-card bg-surface-elevated shadow-card outline-none ${className}`}
             style={{
               border: `1px solid ${schemeStyles[colorScheme].border}`,
               boxShadow: schemeStyles[colorScheme].shadow,

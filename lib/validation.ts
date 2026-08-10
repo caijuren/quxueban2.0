@@ -212,7 +212,7 @@ export const dailySummarySchema = z.object({
 export const weeklyGoalChecklistItemSchema = z.object({
   id: z.string().min(1),
   title: z.string().min(1),
-  text: z.string().min(1),
+  text: z.string().max(2000).default(''),
   done: z.boolean().default(false),
 });
 

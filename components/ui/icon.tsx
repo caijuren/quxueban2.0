@@ -13,6 +13,7 @@ const iconAliases: Record<string, keyof typeof icons> = {
   HelpCircle: 'CircleHelp',
   Home: 'House',
   ImageIcon: 'Image',
+  Grid3X3: 'Grid3x3',
   Loader2: 'LoaderCircle',
   XCircle: 'CircleX',
 };

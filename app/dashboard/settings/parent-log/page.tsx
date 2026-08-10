@@ -8,6 +8,7 @@ import EmptyState from '@/components/ui/EmptyState';
 import ConsolePageShell from '@/components/console/core/ConsolePageShell';
 import SettingsSection from '@/components/settings/SettingsSection';
 import Button from '@/components/ui/button';
+import ConfirmDialog from '@/components/ui/confirm-dialog';
 import Textarea from '@/components/ui/textarea';
 import { useParentLogs,
   useCreateParentLog,
@@ -41,6 +42,7 @@ export default function ParentLogSettingsPage() {
   const [imageUrls, setImageUrls] = useState('');
   const [editingId, setEditingId] = useState<string | null>(null);
   const [view, setView] = useState<'daily' | 'weekly'>('daily');
+  const [deleteLogId, setDeleteLogId] = useState<string | null>(null);
 
   const handleEdit = (log: (typeof logs)[0]) => {
     setEditingId(log.id);
@@ -85,9 +87,9 @@ export default function ParentLogSettingsPage() {
 
   const handleDelete = async (logId: string) => {
     if (!childId) return;
-    if (!confirm('确定删除这条记录吗？')) return;
     await deleteLog.mutateAsync({ childId, logId });
     if (editingId === logId) resetForm();
+    setDeleteLogId(null);
   };
 
   const groupedByWeek = useMemo(() => {
@@ -237,7 +239,7 @@ export default function ParentLogSettingsPage() {
                   key={log.id}
                   log={log}
                   onEdit={() => handleEdit(log)}
-                  onDelete={() => handleDelete(log.id)}
+                  onDelete={() => setDeleteLogId(log.id)}
                 />
               ))}
             </div>
@@ -256,7 +258,7 @@ export default function ParentLogSettingsPage() {
                           key={log.id}
                           log={log}
                           onEdit={() => handleEdit(log)}
-                          onDelete={() => handleDelete(log.id)}
+                          onDelete={() => setDeleteLogId(log.id)}
                         />
                       ))}
                     </div>
@@ -266,6 +268,16 @@ export default function ParentLogSettingsPage() {
           )}
         </SettingsSection>
       </div>
+      <ConfirmDialog
+        isOpen={!!deleteLogId}
+        onClose={() => setDeleteLogId(null)}
+        onConfirm={() => deleteLogId && handleDelete(deleteLogId)}
+        title="删除这条记录？"
+        description="删除后将无法恢复这条家长观察记录。"
+        confirmText="删除记录"
+        confirmVariant="danger"
+        isLoading={deleteLog.isPending}
+      />
     </ConsolePageShell>
   );
 }

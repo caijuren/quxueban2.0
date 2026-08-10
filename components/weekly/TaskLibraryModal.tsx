@@ -18,6 +18,7 @@ import { getCurrentWeekId } from '@/lib/weeklyTasks';
 import {
   TASK_CATEGORY_LABELS,
   TASK_ALIGNMENT_LABELS,
+  getTaskTagLabel,
 } from '@/lib/taskTemplates';
 import { getAlignmentColorClass, computeTaskAlignment } from '@/lib/taskAlignment';
 import TaskRationalityPanel from '@/components/ai/TaskRationalityPanel';
@@ -27,6 +28,7 @@ import {
 } from '@/lib/ai/taskAssessment';
 import { useTaskTemplates } from '@/lib/hooks/useTaskTemplates';
 import { useAssessTasks } from '@/lib/hooks/useTaskAssessment';
+import { toast } from '@/lib/toast';
 import { categoryIcons, allCategories, DIFFICULTY_LABELS, DIFFICULTY_COLORS, SEMESTER_LABELS } from './weeklyConstants';
 
 interface TaskLibraryModalProps {
@@ -161,8 +163,9 @@ export function TaskLibraryModal({
       });
       setAssessments(results);
     } catch {
-      // 评估失败不阻塞添加
+      // 评估失败不阻塞添加，但需要让用户知道发生了什么。
       setAssessments(null);
+      toast.warning('AI 评估暂时不可用', '仍可直接确认添加已选任务。');
     }
   };
 
@@ -248,8 +251,8 @@ export function TaskLibraryModal({
         </div>
       }
     >
-      <div className="mb-4 flex flex-col gap-3 sm:flex-row">
-        <div className="flex flex-wrap gap-2">
+      <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
+        <div className="flex min-w-0 flex-wrap gap-2">
           <Button
             onClick={() => setSelectedCategory('all')}
             className={`rounded-lg px-3 py-1.5 text-xs transition-colors ${
@@ -278,11 +281,11 @@ export function TaskLibraryModal({
             </Button>
           ))}
         </div>
-        <div className="ml-auto flex items-center gap-3">
+        <div className="ml-auto flex shrink-0 items-center gap-3">
           <Button
             onClick={toggleAllFiltered}
             disabled={filteredTemplates.length === 0}
-            className="flex items-center gap-1.5 text-xs text-text-secondary transition-colors hover:text-text-primary disabled:cursor-not-allowed disabled:opacity-40"
+            className="flex shrink-0 items-center gap-1.5 whitespace-nowrap text-xs text-text-secondary transition-colors hover:text-text-primary disabled:cursor-not-allowed disabled:opacity-40"
             variant="ghost"
             size="xs"
           >
@@ -297,12 +300,13 @@ export function TaskLibraryModal({
             </div>
             全选
           </Button>
-          <span className="text-xs text-text-muted">添加到</span>
+          <span className="whitespace-nowrap text-xs text-text-muted">添加到</span>
           <Select
             value={selectedDay}
             onChange={(e) => setSelectedDay(e.target.value as DayOfWeek)}
             size="sm"
-            className="w-auto min-w-[120px] bg-surface"
+            containerClassName="w-[120px] shrink-0"
+            className="bg-surface"
             options={[
               { value: '周一', label: '周一' },
               { value: '周二', label: '周二' },
@@ -323,7 +327,7 @@ export function TaskLibraryModal({
       ) : filteredTemplates.length === 0 ? (
         <EmptyState scene="no-data" size="sm" />
       ) : (
-        <div className="mb-6 grid max-h-[50vh] grid-cols-1 gap-3 overflow-y-auto pr-1 sm:grid-cols-2">
+        <div className="mb-6 grid max-h-[50vh] grid-cols-1 items-stretch gap-3 overflow-y-auto pr-1 md:grid-cols-2">
           {filteredTemplates.map((tpl) => {
             const selected = selectedTemplateIds.has(tpl.id);
             const categoryIcon = categoryIcons[tpl.category];
@@ -333,7 +337,7 @@ export function TaskLibraryModal({
               <Button
                 key={tpl.id}
                 onClick={() => toggleTemplate(tpl.id)}
-                className={`rounded-lg border p-3 text-left transition-all ${
+                className={`!h-auto !items-start !justify-start min-h-[148px] rounded-lg border p-3 text-left transition-all ${
                   selected
                     ? 'bg-primary/[0.08] border-primary/25'
                     : 'border-border-subtle bg-surface-elevated hover:bg-surface-highlight'
@@ -341,7 +345,7 @@ export function TaskLibraryModal({
                 variant="secondary"
                 size="sm"
               >
-                <div className="flex items-start gap-3">
+                <div className="flex w-full items-start gap-3">
                   <div
                     className={`mt-0.5 flex size-5 items-center justify-center rounded border ${
                       selected ? 'border-primary bg-primary' : 'border-border-default'
@@ -351,8 +355,8 @@ export function TaskLibraryModal({
                       <Icon name="CircleCheck" size="xs" className="text-text-primary" />
                     )}
                   </div>
-                  <div className="min-w-0 flex-1">
-                    <div className="mb-1 flex flex-wrap items-center gap-1.5">
+                  <div className="min-w-0 flex-1 self-stretch">
+                    <div className="mb-2 flex flex-wrap items-center gap-1.5">
                       <Icon name={categoryIcon} size="xs" className="text-text-tertiary" />
                       <span className="text-2xs text-text-tertiary">
                         {TASK_CATEGORY_LABELS[tpl.category]}
@@ -383,11 +387,11 @@ export function TaskLibraryModal({
                           不相关
                         </span>
                       )}
-                      <span className="ml-auto rounded bg-surface-elevated px-1.5 py-0.5 text-2xs text-text-secondary">
+                      <span className="ml-auto shrink-0 rounded bg-surface-elevated px-1.5 py-0.5 text-2xs text-text-secondary">
                         {tpl.duration}
                       </span>
                     </div>
-                    <p className="mb-1 truncate text-sm font-semibold text-text-secondary">
+                    <p className="mb-1 break-words text-sm font-semibold leading-snug text-text-secondary">
                       {tpl.title}
                     </p>
                     {tpl.description && (
@@ -397,28 +401,31 @@ export function TaskLibraryModal({
                     )}
                     {tpl.tags.length > 0 && (
                       <div className="mb-1 flex flex-wrap gap-1">
-                        {tpl.tags.slice(0, 3).map((tag) => (
-                          <span
-                            key={tag}
-                            className="rounded bg-surface-elevated px-1 py-0.5 text-[9px] text-text-muted"
-                          >
-                            {tag}
-                          </span>
-                        ))}
-                        {tpl.tags.length > 3 && (
+                        {tpl.tags
+                          .map(getTaskTagLabel)
+                          .filter((tag): tag is string => !!tag)
+                          .slice(0, 3)
+                          .map((tag) => (
+                            <span
+                              key={tag}
+                              className="rounded bg-surface-elevated px-1 py-0.5 text-[9px] text-text-muted"
+                            >
+                              {tag}
+                            </span>
+                          ))}
+                        {tpl.tags
+                          .map(getTaskTagLabel)
+                          .filter((tag): tag is string => !!tag).length > 3 && (
                           <span className="rounded bg-surface-elevated px-1 py-0.5 text-[9px] text-text-muted">
-                            +{tpl.tags.length - 3}
+                            +{tpl.tags.map(getTaskTagLabel).filter((tag) => !!tag).length - 3}
                           </span>
                         )}
                       </div>
                     )}
                     {tpl.routeTags.length > 0 && (
                       <div className="flex flex-wrap gap-1">
-                        {tpl.routeTags.map((tag) => (
-                          <span
-                            key={tag}
-                            className="rounded bg-surface-elevated px-1 py-0.5 text-[9px] text-text-muted"
-                          >
+                        {tpl.routeTags.map(getTaskTagLabel).filter((tag): tag is string => !!tag).map((tag) => (
+                          <span key={tag} className="rounded bg-surface-elevated px-1 py-0.5 text-[9px] text-text-muted">
                             {tag}
                           </span>
                         ))}

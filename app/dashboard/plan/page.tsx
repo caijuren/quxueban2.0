@@ -17,8 +17,6 @@ import {
   getRouteById,
 } from '@/lib/plans';
 import MatchAnalysisModal from './MatchAnalysisModal';
-import NewPlanModal from './NewPlanModal';
-import ManageNodesModal from './ManageNodesModal';
 import EmptyState from '@/components/ui/EmptyState';
 import ChildEmptyState from '@/components/dashboard/ChildEmptyState';
 import CommandCard from '@/components/ui/CommandCard';
@@ -40,11 +38,8 @@ function PlanPageContent() {
   const stageFromUrl = searchParams.get('stage');
   const { currentChild } = useChildren();
 
-  // TODO: fetch plan list from backend
   const [planList, setPlanList] = useState<RoutePlan[]>(defaultPlans);
   const [showMatchModal, setShowMatchModal] = useState(false);
-  const [showNewPlanModal, setShowNewPlanModal] = useState(false);
-  const [showManageNodesModal, setShowManageNodesModal] = useState(false);
   const [activeStage, setActiveStageState] = useState('小升初');
   const [stageDropdownOpen, setStageDropdownOpen] = useState(false);
   const [expandedPlanId, setExpandedPlanId] = useState<string | null>(null);
@@ -109,15 +104,6 @@ function PlanPageContent() {
     }
   }, [activeStage]);
 
-  const handleCreatePlan = (plan: RoutePlan) => {
-    setPlanList((prev) => [...prev, plan]);
-    setShowNewPlanModal(false);
-  };
-
-  const handleUpdateNodes = (nextPlans: RoutePlan[]) => {
-    setPlanList(nextPlans);
-  };
-
   const togglePlan = (id: string) => {
     setExpandedPlanId((prev) => (prev === id ? null : id));
   };
@@ -157,6 +143,7 @@ function PlanPageContent() {
             <h1 className="font-display text-2xl font-bold sm:text-3xl">
               {currentChild ? `${currentChild.name}的路线方案` : '路线方案'}
             </h1>
+            <p className="mt-1 text-sm text-text-muted">按阶段查看平台整理的规划参考与关键节点</p>
           </div>
         </div>
         <div className="flex items-center gap-2">
@@ -208,23 +195,11 @@ function PlanPageContent() {
               </div>
             )}
           </div>
-          <Button
-            onClick={() => setShowNewPlanModal(true)}
-            variant="primary"
-            size="md"
-            className="focus-ring hover:bg-primary/90 flex items-center gap-1.5 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-inverse transition-all duration-200"
-          >
-            <Icon name="Plus" size="sm" />
-            新建方案
-          </Button>
         </div>
       </motion.div>
 
       {activeStage === '小升初' && (
-        <PlanRoadmap
-          onShowDiagnosis={() => setShowMatchModal(true)}
-          onManageNodes={() => setShowManageNodesModal(true)}
-        />
+        <PlanRoadmap onShowDiagnosis={() => setShowMatchModal(true)} />
       )}
       {activeStage === '中考' && <MiddleSchoolMatrix />}
 
@@ -471,11 +446,7 @@ function PlanPageContent() {
       {filteredPlans.length === 0 && (
         <>
           {planList.length === 0 ? (
-            <EmptyState
-              title="还没有任何路线方案"
-              description="点击右上角「新建方案」创建第一条升学路线"
-              action={{ label: '新建方案', onClick: () => setShowNewPlanModal(true) }}
-            />
+            <EmptyState title="当前阶段暂无路线参考" description="请切换阶段或稍后再试。" />
           ) : (
             <EmptyState
               title={`没有找到与 “${query}” 匹配的路线、任务或学校`}
@@ -495,17 +466,6 @@ function PlanPageContent() {
         isOpen={showMatchModal}
         onClose={() => setShowMatchModal(false)}
         plan={planList[0]}
-      />
-      <NewPlanModal
-        isOpen={showNewPlanModal}
-        onClose={() => setShowNewPlanModal(false)}
-        onCreate={handleCreatePlan}
-      />
-      <ManageNodesModal
-        isOpen={showManageNodesModal}
-        onClose={() => setShowManageNodesModal(false)}
-        plans={planList}
-        onUpdate={handleUpdateNodes}
       />
     </div>
   );
