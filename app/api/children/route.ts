@@ -45,6 +45,8 @@ export async function POST(req: Request) {
         birthday: body.birthday ? new Date(body.birthday) : null,
         notes: body.notes ?? null,
         routeId: body.routeId ?? null,
+        dingTalkWebhook: body.dingTalkWebhook ?? null,
+        dingTalkSecret: body.dingTalkSecret ?? null,
       },
     });
 

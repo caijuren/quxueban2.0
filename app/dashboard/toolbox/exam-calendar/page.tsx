@@ -112,7 +112,7 @@ export default function ExamCalendarPage() {
             {upcoming.length === 0 ? (
               <EmptyState
                 icon="Calendar"
-                title="暂无 upcoming 考试"
+                title="暂无即将开始的考试"
                 description="所有考试已结束或暂未发布"
               />
             ) : (

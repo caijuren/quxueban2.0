@@ -48,6 +48,8 @@ export async function PATCH(req: Request, { params }: Params) {
     setIfDefined('birthday', body.birthday ? new Date(body.birthday) : null);
     setIfDefined('notes', body.notes ?? null);
     setIfDefined('routeId', body.routeId ?? null);
+    setIfDefined('dingTalkWebhook', body.dingTalkWebhook ?? null);
+    setIfDefined('dingTalkSecret', body.dingTalkSecret ?? null);
 
     const updated = await prisma.child.update({
       where: { id: params.id },

@@ -220,6 +220,7 @@ export const weeklyGoalSchema = z.object({
   id: z.string().min(1),
   title: z.string().min(1, '目标标题不能为空'),
   category: taskCategorySchema,
+  subjectId: z.enum(['chinese', 'math', 'english', 'ability', 'other']).optional(),
   quantityTarget: z.number().int().min(0).optional(),
   quantityDone: z.number().int().min(0).optional(),
   quantityUnit: z.string().max(20).optional(),

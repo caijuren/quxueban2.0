@@ -38,7 +38,6 @@ export default function AlertFeed() {
             label={alert.label}
             value={alert.value}
             variant={alert.variant}
-            onClick={() => {}}
           />
         ))}
       </div>

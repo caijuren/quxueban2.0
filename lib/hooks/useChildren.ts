@@ -27,7 +27,12 @@ export function useUpdateChild() {
   return useMutation({
     mutationFn: ({ id, data }: { id: string; data: ChildUpdateInput }) =>
       apiPatch<Child>(`/api/children/${id}`, data),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey }),
+    onSuccess: (updated) => {
+      queryClient.setQueryData<Child[]>(queryKey, (children) =>
+        children?.map((child) => (child.id === updated.id ? updated : child))
+      );
+      queryClient.invalidateQueries({ queryKey });
+    },
   });
 }
 

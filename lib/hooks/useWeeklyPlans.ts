@@ -73,7 +73,12 @@ export function useDeleteWeeklyPlan() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (id: string) => apiDelete<{ success: boolean }>(`/api/weekly-plans/${id}`),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['weekly-plans'] }),
+    onSuccess: (_, planId) => {
+      queryClient.setQueriesData<WeeklyPlan[]>({ queryKey: ['weekly-plans'] }, (plans) =>
+        plans?.filter((plan) => plan.id !== planId)
+      );
+      queryClient.invalidateQueries({ queryKey: ['weekly-plans'] });
+    },
   });
 }
 

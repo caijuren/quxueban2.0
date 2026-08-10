@@ -76,7 +76,12 @@ export default function GeneratePlanModal({
 
   const [step, setStep] = useState<Step>('week');
   const [weekId, setWeekId] = useState<string>(initialWeekId ?? getCurrentWeekId());
-  const { data: templates = [], isLoading: loadingTemplates } = useTaskTemplates(currentChild?.id, {
+  const {
+    data: templates = [],
+    isLoading: loadingTemplates,
+    error: templatesError,
+    refetch: refetchTemplates,
+  } = useTaskTemplates(currentChild?.id, {
     status: 'active',
   });
   const [selectedTemplateIds, setSelectedTemplateIds] = useState<Set<string>>(new Set());
@@ -296,6 +301,8 @@ export default function GeneratePlanModal({
             key="tasks"
             templates={filteredTemplates}
             loading={loadingTemplates}
+            error={templatesError}
+            onRetry={() => refetchTemplates()}
             selectedIds={selectedTemplateIds}
             toggleTemplate={toggleTemplate}
             allFilteredSelected={allFilteredSelected}
@@ -383,6 +390,8 @@ function StepWeek({ weekId, setWeekId, options }: StepWeekProps) {
 interface StepTasksProps {
   templates: TaskTemplate[];
   loading: boolean;
+  error: unknown;
+  onRetry: () => void;
   selectedIds: Set<string>;
   toggleTemplate: (id: string) => void;
   allFilteredSelected: boolean;
@@ -398,6 +407,8 @@ interface StepTasksProps {
 function StepTasks({
   templates,
   loading,
+  error,
+  onRetry,
   selectedIds,
   toggleTemplate,
   allFilteredSelected,
@@ -479,6 +490,16 @@ function StepTasks({
 
       {loading ? (
         <div className="py-12 text-center text-sm text-text-muted">加载任务库...</div>
+      ) : error ? (
+        <div className="flex flex-col items-center justify-center gap-3 py-12 text-center">
+          <p className="text-sm text-error">
+            {error instanceof Error ? error.message : '任务库加载失败'}
+          </p>
+          <Button variant="ghost" size="sm" onClick={onRetry}>
+            <Icon name="RefreshCw" size="sm" />
+            重试
+          </Button>
+        </div>
       ) : templates.length === 0 ? (
         <div className="py-12 text-center text-sm text-text-muted">没有匹配的任务</div>
       ) : (

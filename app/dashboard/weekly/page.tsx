@@ -165,15 +165,25 @@ function WeeklyTasksContent() {
   };
 
   const handlePublishDraft = async (plan: WeeklyPlan) => {
-    await publishWeeklyPlan(plan);
-    setGenerateOpen(false);
-    setWeekId(plan.weekId);
+    try {
+      await publishWeeklyPlan(plan);
+      setGenerateOpen(false);
+      setWeekId(plan.weekId);
+      toast.success('周计划已发布');
+    } catch (error) {
+      toast.error('发布周计划失败', error instanceof Error ? error.message : '请稍后重试');
+    }
   };
 
   const handlePublish = async () => {
     if (!draftPlan) return;
-    await publishWeeklyPlan(draftPlan);
-    setDraftPlan(null);
+    try {
+      await publishWeeklyPlan(draftPlan);
+      setDraftPlan(null);
+      toast.success('周计划已发布');
+    } catch (error) {
+      toast.error('发布周计划失败', error instanceof Error ? error.message : '请稍后重试');
+    }
   };
 
   const handleCancelDraft = () => {
@@ -219,7 +229,11 @@ function WeeklyTasksContent() {
       });
       return;
     }
-    await updateTaskStatus(currentChild.id, weekId, task.id, newStatus);
+    try {
+      await updateTaskStatus(currentChild.id, weekId, task.id, newStatus);
+    } catch (error) {
+      toast.error('更新任务状态失败', error instanceof Error ? error.message : '请稍后重试');
+    }
   };
 
   const handleMoveTask = async (
@@ -243,7 +257,11 @@ function WeeklyTasksContent() {
     if (isDraft) {
       setDraftPlan({ ...displayPlan, tasks: updatedTasks });
     } else {
-      await publishWeeklyPlan({ ...displayPlan, tasks: updatedTasks });
+      try {
+        await publishWeeklyPlan({ ...displayPlan, tasks: updatedTasks });
+      } catch (error) {
+        toast.error('移动任务失败', error instanceof Error ? error.message : '请稍后重试');
+      }
     }
   };
 
@@ -258,6 +276,7 @@ function WeeklyTasksContent() {
         await deleteWeeklyPlan(currentChild.id, weekId);
       }
       setDeleteConfirmOpen(false);
+      toast.success('周计划已删除');
     } catch (error) {
       toast.error('删除周计划失败', error instanceof Error ? error.message : '请稍后重试');
     } finally {
@@ -268,7 +287,11 @@ function WeeklyTasksContent() {
 
   const handleNoteBlur = async (task: WeeklyTaskItem, note: string) => {
     if (!currentChild || !displayPlan || isDraft) return;
-    await updateTaskStatus(currentChild.id, weekId, task.id, task.status, note);
+    try {
+      await updateTaskStatus(currentChild.id, weekId, task.id, task.status, note);
+    } catch (error) {
+      toast.error('保存任务备注失败', error instanceof Error ? error.message : '请稍后重试');
+    }
   };
 
   const handleOpenReview = () => {
@@ -278,8 +301,13 @@ function WeeklyTasksContent() {
 
   const handleSaveReview = async () => {
     if (!currentChild || !plan) return;
-    await reviewWeeklyPlan(currentChild.id, weekId, reviewComment);
-    setReviewOpen(false);
+    try {
+      await reviewWeeklyPlan(currentChild.id, weekId, reviewComment);
+      setReviewOpen(false);
+      toast.success('复盘已保存');
+    } catch (error) {
+      toast.error('保存复盘失败', error instanceof Error ? error.message : '请稍后重试');
+    }
   };
 
   const handleAddFromLibrary = async (newTasks: WeeklyTaskItem[]) => {
@@ -292,7 +320,7 @@ function WeeklyTasksContent() {
         await publishWeeklyPlan({ ...displayPlan, tasks: updatedTasks });
         toast.success('任务已添加到本周计划');
       } catch (error) {
-        toast.error('添加任务失败', error instanceof Error ? error.message : '请稍后重试');
+        throw error;
       }
     }
   };
@@ -318,6 +346,7 @@ function WeeklyTasksContent() {
         await publishWeeklyPlan({ ...displayPlan, goals: normalizedGoals });
       } catch (error) {
         toast.error('保存任务清单失败', error instanceof Error ? error.message : '请稍后重试');
+        throw error;
       }
     }
   };

@@ -20,6 +20,7 @@ interface TaskRow {
   category: TaskCategory;
   moduleName: string;
   taskName: string;
+  taskValue: string;
   targetText: string;
   done: boolean;
 }
@@ -28,7 +29,7 @@ interface WeeklyTaskListProps {
   goals: WeeklyGoal[];
   tasks: WeeklyTaskItem[];
   weekLabel: string;
-  onChange: (goals: WeeklyGoal[]) => void;
+  onChange: (goals: WeeklyGoal[]) => void | Promise<void>;
 }
 
 
@@ -54,6 +55,7 @@ const MODULE_ICONS: Record<TaskCategory, IconName> = {
 };
 
 function getSubjectIdForGoal(goal: WeeklyGoal, tasks: WeeklyTaskItem[]): string {
+  if (goal.subjectId) return goal.subjectId;
   const linked = tasks.filter((t) => t.goalId === goal.id);
   const counts: Record<string, number> = {};
   linked.forEach((t) => {
@@ -214,6 +216,7 @@ function generateId(prefix = 'id') {
 export default function WeeklyTaskList({ goals, tasks, weekLabel, onChange }: WeeklyTaskListProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [draftGoals, setDraftGoals] = useState<WeeklyGoal[]>(goals);
+  const [saving, setSaving] = useState(false);
 
   useEffect(() => {
     if (!isEditing) {
@@ -224,9 +227,10 @@ export default function WeeklyTaskList({ goals, tasks, weekLabel, onChange }: We
   const commit = useCallback(
     (next: WeeklyGoal[]) => {
       setDraftGoals(next);
-      onChange(next);
+      // 文本编辑期间只更新本地草稿，退出编辑时一次性保存，避免每个字符都发请求。
+      if (!isEditing) onChange(next);
     },
-    [onChange]
+    [isEditing, onChange]
   );
 
   const rows = useMemo<TaskRow[]>(() => {
@@ -245,6 +249,7 @@ export default function WeeklyTaskList({ goals, tasks, weekLabel, onChange }: We
           taskName: goal.quantityTarget
             ? `完成 ${goal.quantityTarget}${goal.quantityUnit || '项'}`
             : '暂无明细',
+          taskValue: '',
           targetText: goal.quantityTarget
             ? `完成 ${goal.quantityTarget}${goal.quantityUnit || '项'}`
             : '',
@@ -261,12 +266,14 @@ export default function WeeklyTaskList({ goals, tasks, weekLabel, onChange }: We
           category: goal.category,
           moduleName: goal.title,
           taskName: item.title || item.text || '未命名任务',
+          taskValue: item.title || '',
           targetText: item.title ? item.text || '' : '',
           done: item.done,
         });
       });
     });
 
+    if (isEditing) return result;
     return result.sort((a, b) => {
       const subjectDiff =
         (SUBJECT_ORDER.indexOf(a.subjectId) ?? 9) - (SUBJECT_ORDER.indexOf(b.subjectId) ?? 9);
@@ -274,7 +281,7 @@ export default function WeeklyTaskList({ goals, tasks, weekLabel, onChange }: We
       if (a.moduleName !== b.moduleName) return a.moduleName.localeCompare(b.moduleName);
       return a.taskName.localeCompare(b.taskName);
     });
-  }, [draftGoals, tasks]);
+  }, [draftGoals, tasks, isEditing]);
 
   const toggleItem = useCallback(
     (goalId: string, itemId: string) => {
@@ -324,19 +331,27 @@ export default function WeeklyTaskList({ goals, tasks, weekLabel, onChange }: We
 
   const addItem = useCallback(
     (goalId: string) => {
-      const next = draftGoals.map((g) => {
-        if (g.id !== goalId) return g;
-        const newItem: WeeklyGoalChecklistItem = {
-          id: generateId('check'),
-          title: '新任务',
-          text: '待补充任务说明',
-          done: false,
-        };
-        return { ...g, checklist: [...(g.checklist || []), newItem] };
-      });
-      commit(next);
+      const newItem: WeeklyGoalChecklistItem = {
+        id: generateId('check'),
+        title: '',
+        text: '',
+        done: false,
+      };
+      if (isEditing) {
+        setDraftGoals((prev) =>
+          prev.map((g) =>
+            g.id === goalId ? { ...g, checklist: [...(g.checklist || []), newItem] } : g
+          )
+        );
+      } else {
+        commit(
+          draftGoals.map((g) =>
+            g.id === goalId ? { ...g, checklist: [...(g.checklist || []), newItem] } : g
+          )
+        );
+      }
     },
-    [draftGoals, commit]
+    [draftGoals, commit, isEditing]
   );
 
   const updateGoalTitle = useCallback(
@@ -370,17 +385,33 @@ export default function WeeklyTaskList({ goals, tasks, weekLabel, onChange }: We
 
       const newGoal: WeeklyGoal = {
         id: generateId('goal'),
-        title: '新模块',
+        title: '',
         category,
+        subjectId: subjectId as WeeklyGoal['subjectId'],
         checklist: [
-          { id: generateId('check'), title: '新任务', text: '待补充任务说明', done: false },
+          { id: generateId('check'), title: '', text: '', done: false },
         ],
       };
-      const next = [...draftGoals, newGoal];
-      commit(next);
+      if (isEditing) {
+        setDraftGoals((prev) => [...prev, newGoal]);
+      } else {
+        commit([...draftGoals, newGoal]);
+      }
     },
-    [draftGoals, commit]
+    [draftGoals, commit, isEditing]
   );
+
+  const finishEditing = useCallback(async () => {
+    setSaving(true);
+    try {
+      await onChange(draftGoals);
+      setIsEditing(false);
+    } catch {
+      // 保存失败时保留编辑态和草稿，用户可以直接重试。
+    } finally {
+      setSaving(false);
+    }
+  }, [draftGoals, onChange]);
 
   const tableColumns = useMemo<DataTableColumn<TaskRow>[]>(
     () => [
@@ -432,6 +463,7 @@ export default function WeeklyTaskList({ goals, tasks, weekLabel, onChange }: We
                 value={row.moduleName}
                 onChange={(e) => updateGoalTitle(row.goalId, e.target.value)}
                 className="w-full rounded-md border border-border-default bg-surface-elevated px-2 py-1 text-[13px] text-text-primary focus:border-primary focus:outline-none"
+                style={{ minHeight: 32 }}
               />
             ) : (
               <span className="truncate text-[13px] text-text-tertiary">{row.moduleName}</span>
@@ -470,9 +502,9 @@ export default function WeeklyTaskList({ goals, tasks, weekLabel, onChange }: We
             return (
               <input
                 type="text"
-                value={row.taskName}
+                value={row.taskValue}
                 onChange={(e) => updateItem(row.goalId, row.itemId, { title: e.target.value })}
-                className="w-full rounded-md border border-border-default bg-surface-elevated px-2 py-1 text-[13px] text-text-primary focus:border-primary focus:outline-none"
+                className="h-8 w-full rounded-md border border-border-default bg-surface-elevated px-2 py-1 text-[13px] text-text-primary focus:border-primary focus:outline-none"
               />
             );
           }
@@ -500,8 +532,7 @@ export default function WeeklyTaskList({ goals, tasks, weekLabel, onChange }: We
                 type="text"
                 value={row.targetText}
                 onChange={(e) => updateItem(row.goalId, row.itemId, { text: e.target.value })}
-                placeholder="填写检验标准"
-                className="w-full rounded-md border border-border-default bg-surface-elevated px-2 py-1 text-[13px] text-text-primary placeholder:text-text-tertiary focus:border-primary focus:outline-none"
+                className="h-8 w-full rounded-md border border-border-default bg-surface-elevated px-2 py-1 text-[13px] text-text-primary focus:border-primary focus:outline-none"
               />
             );
           }
@@ -606,16 +637,12 @@ export default function WeeklyTaskList({ goals, tasks, weekLabel, onChange }: We
           <Button
             variant="ghost"
             size="sm"
-            onClick={() => {
-              if (isEditing) {
-                onChange(draftGoals);
-              }
-              setIsEditing((v) => !v);
-            }}
+            onClick={() => (isEditing ? finishEditing() : setIsEditing(true))}
+            disabled={saving}
             className={isEditing ? 'text-success' : 'text-text-muted/60'}
             leftIcon={isEditing ? <Icon name="Check" size="sm" /> : <Icon name="Pencil" size="sm" />}
           >
-            {isEditing ? '完成' : '编辑'}
+            {saving ? '保存中' : isEditing ? '完成' : '编辑'}
           </Button>
         </div>
       </div>
@@ -660,4 +687,3 @@ export default function WeeklyTaskList({ goals, tasks, weekLabel, onChange }: We
     </motion.div>
   );
 }
-

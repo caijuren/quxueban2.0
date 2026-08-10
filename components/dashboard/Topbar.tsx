@@ -413,14 +413,14 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
             variant="ghost"
             size="sm"
             onClick={() => setChildDropdownOpen((prev) => !prev)}
-            className="flex h-10 min-w-0 max-w-[min(48vw,220px)] items-center gap-2 rounded-module border border-border-default py-1.5 pl-1.5 pr-2 text-left transition-all hover:border-border-strong hover:bg-surface-elevated sm:max-w-[240px] sm:gap-3 sm:pr-3"
+            className="flex h-14 min-w-0 max-w-[min(48vw,220px)] items-center gap-2 rounded-module border border-border-default py-1.5 pl-1.5 pr-2 text-left transition-all hover:border-border-strong hover:bg-surface-elevated sm:max-w-[240px] sm:gap-3 sm:pr-3"
             aria-label="切换孩子"
             aria-haspopup="listbox"
             aria-expanded={childDropdownOpen}
             aria-controls="child-listbox"
           >
             <div className="shrink-0">
-              <ChildAvatar child={currentChild} size="md" shape="rounded" fallbackIcon />
+              <ChildAvatar child={currentChild} size="xl" shape="rounded" fallbackIcon />
             </div>
             <div className="hidden min-w-0 text-right sm:block">
               <p className="truncate text-sm font-semibold leading-tight text-text-primary">

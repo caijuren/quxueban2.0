@@ -38,7 +38,7 @@ interface TaskLibraryModalProps {
   existingTasks: WeeklyTaskItem[];
   mode?: 'add' | 'makeup';
   onClose: () => void;
-  onAdd: (tasks: WeeklyTaskItem[]) => void;
+  onAdd: (tasks: WeeklyTaskItem[]) => void | Promise<void>;
 }
 
 export function TaskLibraryModal({
@@ -50,7 +50,12 @@ export function TaskLibraryModal({
   onClose,
   onAdd,
 }: TaskLibraryModalProps) {
-  const { data: templates = [], isLoading: loading } = useTaskTemplates(childId, {
+  const {
+    data: templates = [],
+    isLoading: loading,
+    error: templatesError,
+    refetch: refetchTemplates,
+  } = useTaskTemplates(childId, {
     status: 'active',
   });
   const [selectedCategory, setSelectedCategory] = useState<TaskCategory | 'all'>('all');
@@ -69,10 +74,13 @@ export function TaskLibraryModal({
     return dayMap[new Date().getDay()];
   });
   const [assessments, setAssessments] = useState<TaskRationalityAssessment[] | null>(null);
+  const [assessmentSkipped, setAssessmentSkipped] = useState(false);
+  const [saving, setSaving] = useState(false);
   const assess = useAssessTasks();
 
   useEffect(() => {
     setAssessments(null);
+    setAssessmentSkipped(false);
   }, [selectedTemplateIds, selectedDay]);
 
   useEffect(() => {
@@ -165,12 +173,13 @@ export function TaskLibraryModal({
     } catch {
       // 评估失败不阻塞添加，但需要让用户知道发生了什么。
       setAssessments(null);
+      setAssessmentSkipped(true);
       toast.warning('AI 评估暂时不可用', '仍可直接确认添加已选任务。');
     }
   };
 
-  const handleAdd = () => {
-    if (!assessments) {
+  const handleAdd = async () => {
+    if (!assessments && !assessmentSkipped) {
       runAssessment();
       return;
     }
@@ -194,8 +203,15 @@ export function TaskLibraryModal({
         alignment,
       };
     });
-    onAdd(newTasks);
-    onClose();
+    setSaving(true);
+    try {
+      await onAdd(newTasks);
+      onClose();
+    } catch (error) {
+      toast.error('保存任务失败', error instanceof Error ? error.message : '请稍后重试');
+    } finally {
+      setSaving(false);
+    }
   };
 
   return (
@@ -226,7 +242,7 @@ export function TaskLibraryModal({
             </Button>
             <Button
               onClick={handleAdd}
-              disabled={selectedTemplateIds.size === 0 || assess.isPending}
+              disabled={selectedTemplateIds.size === 0 || assess.isPending || saving}
               variant="secondary"
               size="lg"
             >
@@ -235,7 +251,7 @@ export function TaskLibraryModal({
                   <Icon name="Loader" size="sm" animate="spin" />
                   评估中...
                 </>
-              ) : assessments ? (
+              ) : assessments || assessmentSkipped ? (
                 <>
                   <Icon name="CircleCheck" size="sm" />
                   {mode === 'makeup' ? '确认补任务' : '确认添加'}
@@ -323,6 +339,16 @@ export function TaskLibraryModal({
       {loading ? (
         <div className="flex items-center justify-center py-12">
           <Skeleton variant="rounded" width={200} height={24} />
+        </div>
+      ) : templatesError ? (
+        <div className="flex flex-col items-center justify-center gap-3 py-12 text-center">
+          <p className="text-sm text-error">
+            {templatesError instanceof Error ? templatesError.message : '任务库加载失败'}
+          </p>
+          <Button variant="ghost" size="sm" onClick={() => refetchTemplates()}>
+            <Icon name="RefreshCw" size="sm" />
+            重试
+          </Button>
         </div>
       ) : filteredTemplates.length === 0 ? (
         <EmptyState scene="no-data" size="sm" />

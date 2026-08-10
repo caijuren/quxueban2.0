@@ -73,6 +73,7 @@ export interface WeeklyGoal {
   id: string;
   title: string;
   category: TaskCategory;
+  subjectId?: 'chinese' | 'math' | 'english' | 'ability' | 'other';
   quantityTarget?: number;
   quantityDone?: number;
   quantityUnit?: string;
