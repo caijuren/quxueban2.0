@@ -67,7 +67,12 @@ export default function AIAssistantPage() {
         }`}
       >
         <div className="flex items-center justify-between">
-          <h1 className="font-display text-xl font-bold text-text-primary">AI 学习助手</h1>
+          <div className="flex items-center gap-2.5">
+            <div className="flex size-8 items-center justify-center rounded-xl border border-secondary/20 bg-secondary/10">
+              <Icon name="Sparkles" size="sm" className="text-secondary" />
+            </div>
+            <h1 className="font-display text-xl font-bold text-text-primary">AI 学习助手</h1>
+          </div>
           <Button
             variant="primary"
             size="sm"

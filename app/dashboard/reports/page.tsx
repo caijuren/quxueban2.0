@@ -480,47 +480,43 @@ export default function ReportsPage() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <SlideUp>
-        <GlassCard strength="strong" glow="secondary" className="max-sm:!bg-surface max-sm:!backdrop-blur-none max-sm:!border-border-default p-5 sm:p-6">
-          <div className="flex flex-col gap-5">
-            <div className="flex items-center gap-3">
-              <div className="bg-primary/10 border-primary/20 flex size-10 items-center justify-center rounded-xl border">
-                <Icon name="BarChart3" size="md" className="text-primary" />
-              </div>
-              <h1 className="font-display text-2xl font-bold sm:text-3xl">成长报告</h1>
-            </div>
-
-            {plan && stats && (
-              <div className="flex items-center justify-end gap-2">
-                <Button
-                  variant="secondary"
-                  onClick={() => setWeekId((w) => shiftWeekId(w, -1))}
-                  className="flex size-8 items-center justify-center rounded-[14px] border border-border-default bg-surface text-text-secondary transition-colors hover:bg-surface-hover"
-                  aria-label="上一周"
-                >
-                  <Icon name="ChevronLeft" size="sm" />
-                </Button>
-                <div className="relative">
-                  <Select
-                    value={weekId}
-                    onChange={(e) => setWeekId(e.target.value)}
-                    size="sm"
-                    className="min-w-[180px] bg-surface"
-                    options={weekOptions}
-                  />
-                </div>
-                <Button
-                  variant="secondary"
-                  onClick={() => setWeekId((w) => shiftWeekId(w, 1))}
-                  className="flex size-8 items-center justify-center rounded-[14px] border border-border-default bg-surface text-text-secondary transition-colors hover:bg-surface-hover"
-                  aria-label="下一周"
-                >
-                  <Icon name="ChevronRight" size="sm" />
-                </Button>
-              </div>
-            )}
+      <SlideUp className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex items-center gap-3">
+          <div className="flex size-10 items-center justify-center rounded-[14px] border border-primary/20 bg-primary/10">
+            <Icon name="BarChart3" size="md" className="text-primary" />
           </div>
-        </GlassCard>
+          <h1 className="font-display text-2xl font-bold sm:text-3xl">成长报告</h1>
+        </div>
+
+        {plan && stats && (
+          <div className="flex items-center justify-end gap-2">
+            <Button
+              variant="secondary"
+              onClick={() => setWeekId((w) => shiftWeekId(w, -1))}
+              className="flex size-8 items-center justify-center rounded-[14px] border border-border-default bg-surface text-text-secondary transition-colors hover:bg-surface-hover"
+              aria-label="上一周"
+            >
+              <Icon name="ChevronLeft" size="sm" />
+            </Button>
+            <div className="relative">
+              <Select
+                value={weekId}
+                onChange={(e) => setWeekId(e.target.value)}
+                size="sm"
+                className="min-w-[180px] bg-surface"
+                options={weekOptions}
+              />
+            </div>
+            <Button
+              variant="secondary"
+              onClick={() => setWeekId((w) => shiftWeekId(w, 1))}
+              className="flex size-8 items-center justify-center rounded-[14px] border border-border-default bg-surface text-text-secondary transition-colors hover:bg-surface-hover"
+              aria-label="下一周"
+            >
+              <Icon name="ChevronRight" size="sm" />
+            </Button>
+          </div>
+        )}
       </SlideUp>
 
       {plan && stats && (

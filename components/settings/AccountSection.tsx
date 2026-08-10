@@ -7,6 +7,7 @@ import { useState, useRef, useEffect } from 'react';
 
 import { UserWithSettings } from '@/lib/settings';
 import { useChangePassword, useDeleteAccount } from '@/lib/hooks/useUser';
+import Input from '@/components/ui/input';
 import SettingsSection from './SettingsSection';
 import WechatBindModal from './WechatBindModal';
 import { useRouter } from 'next/navigation';
@@ -282,14 +283,14 @@ export default function AccountSection({ user, onUpdate }: AccountSectionProps) 
       </SettingsSection>
 
       <SettingsSection title="账号安全" description="绑定、密码与账号注销">
-        <div className="space-y-2">
+        <div className="space-y-3">
           <Button
             variant="ghost"
             onClick={() => toggleSecurity('wechat')}
-            className="flex w-full items-center justify-between rounded-lg border border-border-subtle bg-surface-elevated p-3 text-left hover:bg-surface-elevated"
+            className="flex w-full items-center justify-between rounded-lg border border-border-subtle bg-surface-elevated p-4 text-left hover:bg-surface-elevated"
           >
-            <div className="flex items-center gap-3">
-              <div className="flex size-9 items-center justify-center rounded-lg bg-wechat/10">
+            <div className="flex items-center gap-4">
+              <div className="flex size-10 items-center justify-center rounded-lg bg-wechat/10">
                 <Icon name="MessageCircle" size="sm" className="text-wechat" />
               </div>
               <div>
@@ -310,7 +311,7 @@ export default function AccountSection({ user, onUpdate }: AccountSectionProps) 
           </Button>
 
           {expandedSecurity === 'wechat' && (
-            <div className="rounded-lg border border-border-subtle bg-surface-elevated p-3">
+            <div className="rounded-lg border border-border-subtle bg-surface-elevated p-4">
               <p className="mb-2 text-xs text-text-tertiary">
                 绑定微信后可使用微信一键登录和接收微信提醒。
               </p>
@@ -328,10 +329,10 @@ export default function AccountSection({ user, onUpdate }: AccountSectionProps) 
           <Button
             variant="ghost"
             onClick={() => toggleSecurity('password')}
-            className="flex w-full items-center justify-between rounded-lg border border-border-subtle bg-surface-elevated p-3 text-left hover:bg-surface-elevated"
+            className="flex w-full items-center justify-between rounded-lg border border-border-subtle bg-surface-elevated p-4 text-left hover:bg-surface-elevated"
           >
-            <div className="flex items-center gap-3">
-              <div className="bg-primary/10 flex size-9 items-center justify-center rounded-lg">
+            <div className="flex items-center gap-4">
+              <div className="bg-primary/10 flex size-10 items-center justify-center rounded-lg">
                 <Icon name="Lock" size="sm" className="text-primary" />
               </div>
               <div>
@@ -347,8 +348,8 @@ export default function AccountSection({ user, onUpdate }: AccountSectionProps) 
           </Button>
 
           {expandedSecurity === 'password' && (
-            <div className="space-y-3 rounded-lg border border-border-subtle bg-surface-elevated p-3">
-              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+            <div className="space-y-4 rounded-lg border border-border-subtle bg-surface-elevated p-4">
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <div className="relative">
                   <label className="mb-1 block text-xs text-text-tertiary">当前密码</label>
                   <input
@@ -421,10 +422,10 @@ export default function AccountSection({ user, onUpdate }: AccountSectionProps) 
           <Button
             variant="ghost"
             onClick={() => toggleSecurity('error')}
-            className="bg-error/5 border-error/10 hover:bg-error/[0.07] flex w-full items-center justify-between rounded-lg border p-3 text-left"
+            className="bg-error/5 border-error/10 hover:bg-error/[0.07] flex w-full items-center justify-between rounded-lg border p-4 text-left"
           >
-            <div className="flex items-center gap-3">
-              <div className="bg-error/10 flex size-9 items-center justify-center rounded-lg">
+            <div className="flex items-center gap-4">
+              <div className="bg-error/10 flex size-10 items-center justify-center rounded-lg">
                 <Icon name="Trash2" size="sm" className="text-error" />
               </div>
               <div>
@@ -440,7 +441,7 @@ export default function AccountSection({ user, onUpdate }: AccountSectionProps) 
           </Button>
 
           {expandedSecurity === 'error' && (
-            <div className="bg-error/5 border-error/10 space-y-3 rounded-lg border p-3">
+            <div className="bg-error/5 border-error/10 space-y-4 rounded-lg border p-4">
               <p className="text-xs text-text-tertiary">
                 注销后所有孩子、计划、任务数据将无法恢复，请谨慎操作。
               </p>

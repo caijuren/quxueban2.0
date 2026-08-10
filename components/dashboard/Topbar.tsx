@@ -218,7 +218,7 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
         </div>
       </div>
 
-      <div className="flex items-center gap-2 sm:gap-3">
+      <div className="flex items-center gap-3 sm:gap-4">
         <div className="relative" ref={notificationRef}>
           <Button
             variant="ghost"
@@ -236,7 +236,7 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
           </Button>
 
           {notificationOpen && (
-            <div className="bg-surface-elevated/95 modal-scroll absolute right-0 top-full z-50 mt-2 w-80 overflow-hidden rounded-card border border-border-default shadow-panel backdrop-blur-md">
+            <div className="bg-surface-elevated modal-scroll absolute right-0 top-full z-50 mt-2 w-80 overflow-hidden rounded-card border border-border-default shadow-card">
               <div className="flex items-center justify-between border-b border-border-default px-4 py-3">
                 <p className="text-sm font-semibold text-text-primary">通知与提醒</p>
                 {unreadCount > 0 && (
@@ -346,7 +346,7 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
             variant="ghost"
             size="md"
             onClick={() => setUserMenuOpen((prev) => !prev)}
-            className="relative flex size-9 items-center justify-center overflow-hidden rounded-module border border-border-default text-left text-text-primary transition-all hover:border-border-strong hover:bg-surface-elevated sm:size-10"
+            className="relative flex size-10 items-center justify-center overflow-hidden rounded-module border border-border-default text-left text-text-primary transition-all hover:border-border-strong hover:bg-surface-elevated sm:size-11"
             aria-label="用户菜单"
             aria-haspopup="menu"
             aria-expanded={userMenuOpen}
@@ -413,7 +413,7 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
             variant="ghost"
             size="sm"
             onClick={() => setChildDropdownOpen((prev) => !prev)}
-            className="flex h-9 items-center gap-2 rounded-module border border-border-default py-1 pl-1 pr-2 text-left transition-all hover:border-border-strong hover:bg-surface-elevated"
+            className="flex h-10 items-center gap-3 rounded-module border border-border-default py-1.5 pl-1.5 pr-3 text-left transition-all hover:border-border-strong hover:bg-surface-elevated"
             aria-label="切换孩子"
             aria-haspopup="listbox"
             aria-expanded={childDropdownOpen}
@@ -445,9 +445,9 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
               ref={childListboxRef}
               role="listbox"
               aria-label="切换孩子"
-              className="absolute right-0 top-full z-50 mt-2 w-56 overflow-hidden rounded-card border border-border-default bg-surface-elevated shadow-card"
+              className="absolute right-0 top-full z-50 mt-2 w-64 overflow-hidden rounded-card border border-border-default bg-surface-elevated shadow-card"
             >
-              <div className="p-2">
+              <div className="p-2.5">
                 {children.map((child, index) => {
                   const isActive = currentChild?.id === child.id;
                   return (
@@ -464,7 +464,7 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
                         setCurrentChildId(child.id);
                         setChildDropdownOpen(false);
                       }}
-                      className={`flex w-full items-center gap-3.5 rounded-module p-3 text-left transition-all ${
+                      className={`flex w-full items-center gap-4 rounded-module p-3.5 text-left transition-all ${
                         isActive ? 'bg-primary/[0.08]' : 'hover:bg-surface-elevated'
                       }`}
                     >

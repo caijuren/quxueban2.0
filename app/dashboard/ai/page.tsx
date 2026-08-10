@@ -33,41 +33,95 @@ const sectionConfig = {
   },
 };
 
+function getDiagnosisCacheKey(childId: string): string {
+  return `ai:diagnosis:${childId}`;
+}
+
+function getTodayKey(): string {
+  return new Date().toISOString().slice(0, 10);
+}
+
+interface DiagnosisCache {
+  date: string;
+  data: DiagnosisResult;
+}
+
+function loadCachedDiagnosis(childId: string): DiagnosisResult | null {
+  try {
+    const raw = localStorage.getItem(getDiagnosisCacheKey(childId));
+    if (!raw) return null;
+    const cache = JSON.parse(raw) as DiagnosisCache;
+    if (cache.date !== getTodayKey()) return null;
+    return cache.data;
+  } catch {
+    return null;
+  }
+}
+
+function saveCachedDiagnosis(childId: string, data: DiagnosisResult): void {
+  try {
+    const cache: DiagnosisCache = { date: getTodayKey(), data };
+    localStorage.setItem(getDiagnosisCacheKey(childId), JSON.stringify(cache));
+  } catch {
+    // ignore storage errors
+  }
+}
+
 export default function AIPage() {
   const { currentChild } = useChildren();
   const [diagnosis, setDiagnosis] = useState<DiagnosisResult | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const generateDiagnosis = useCallback(async () => {
-    if (!currentChild) return;
+  const generateDiagnosis = useCallback(
+    async (options?: { force?: boolean }) => {
+      if (!currentChild) return;
 
-    setLoading(true);
-    setError(null);
-
-    try {
-      const res = await fetch('/api/ai/diagnosis', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ childId: currentChild.id }),
-      });
-
-      if (!res.ok) {
-        const data = await res.json().catch(() => ({}));
-        throw new Error(data.error || `请求失败: ${res.status}`);
+      if (!options?.force) {
+        const cached = loadCachedDiagnosis(currentChild.id);
+        if (cached) {
+          setDiagnosis(cached);
+          return;
+        }
       }
 
-      const data = (await res.json()) as DiagnosisResult;
-      setDiagnosis(data);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : '生成诊断失败');
-    } finally {
-      setLoading(false);
-    }
-  }, [currentChild]);
+      setLoading(true);
+      setError(null);
+
+      try {
+        const res = await fetch('/api/ai/diagnosis', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ childId: currentChild.id }),
+        });
+
+        if (!res.ok) {
+          const data = await res.json().catch(() => ({}));
+          throw new Error(data.error || `请求失败: ${res.status}`);
+        }
+
+        const data = (await res.json()) as DiagnosisResult;
+        setDiagnosis(data);
+        saveCachedDiagnosis(currentChild.id, data);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : '生成诊断失败');
+      } finally {
+        setLoading(false);
+      }
+    },
+    [currentChild]
+  );
 
   useEffect(() => {
-    if (currentChild && !diagnosis && !loading) {
+    if (!currentChild || loading) return;
+
+    const cached = loadCachedDiagnosis(currentChild.id);
+    if (cached) {
+      setDiagnosis(cached);
+      return;
+    }
+
+    if (!diagnosis) {
       generateDiagnosis();
     }
   }, [currentChild, diagnosis, loading, generateDiagnosis]);
@@ -93,20 +147,25 @@ export default function AIPage() {
   return (
     <div className="space-y-8">
       <SlideUp className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h1 className="mb-2 font-display text-3xl font-bold">
-            {currentChild ? `${currentChild.name}的 AI 检视` : 'AI 检视'}
-          </h1>
-          <p className="text-text-tertiary">
-            {currentChild
-              ? `当前阶段：${gradeLabel(currentChild.grade)} · 基于当前进度和目标生成诊断建议`
-              : '基于当前进度和目标，智能生成诊断与调整建议'}
-          </p>
+        <div className="flex items-center gap-3">
+          <div className="flex size-10 items-center justify-center rounded-[14px] border border-secondary/20 bg-secondary/10">
+            <Icon name="Sparkles" size="md" className="text-secondary" />
+          </div>
+          <div>
+            <h1 className="font-display text-2xl font-bold sm:text-3xl">
+              {currentChild ? `${currentChild.name}的 AI 检视` : 'AI 检视'}
+            </h1>
+            <p className="text-sm text-text-tertiary">
+              {currentChild
+                ? `当前阶段：${gradeLabel(currentChild.grade)} · 基于当前进度和目标生成诊断建议`
+                : '基于当前进度和目标，智能生成诊断与调整建议'}
+            </p>
+          </div>
         </div>
         <Button
           variant="primary"
           size="md"
-          onClick={generateDiagnosis}
+          onClick={() => generateDiagnosis({ force: true })}
           disabled={!currentChild || loading}
           className="bg-gradient-to-r from-secondary to-secondary-glow px-5 py-2.5 disabled:cursor-not-allowed disabled:opacity-50"
         >
