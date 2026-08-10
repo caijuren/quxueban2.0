@@ -10,18 +10,11 @@ import Textarea from '@/components/ui/textarea';
 import { useChildren } from '@/components/dashboard/ChildrenContext';
 import ChildEmptyState from '@/components/dashboard/ChildEmptyState';
 import CommandCard from '@/components/ui/CommandCard';
-import WeeklyReportExport from '@/components/weekly/WeeklyReportExport';
 import GeneratePlanModal from '@/components/weekly/GeneratePlanModal';
 import WeeklyTaskList from '@/components/weekly/WeeklyTaskList';
 import WeeklyMatrix from '@/components/weekly/WeeklyMatrix';
-import { EditPlanModal } from '@/components/weekly/EditPlanModal';
 import { TaskLibraryModal } from '@/components/weekly/TaskLibraryModal';
-import { SaveTemplateModal } from '@/components/weekly/SaveTemplateModal';
-import { ApplyTemplateModal } from '@/components/weekly/ApplyTemplateModal';
-import { CopyHistoryModal } from '@/components/weekly/CopyHistoryModal';
 import { WeeklyPlanAnalytics } from '@/components/weekly/WeeklyPlanAnalytics';
-import { BatchOperationsBar } from '@/components/weekly/BatchOperationsBar';
-import { BatchMoveModal } from '@/components/weekly/BatchMoveModal';
 import {
   type WeeklyPlan,
   type WeeklyTaskItem,
@@ -43,15 +36,9 @@ import {
   parseDurationMinutes,
   getTodayName,
   getCategoryDefaultTimeSlot,
-  applyTimeSlotTemplate,
 } from '@/lib/weeklyTasks';
 import { TASK_CATEGORY_LABELS } from '@/lib/taskTemplates';
 import { getCategoryColorClass } from '@/lib/taskAlignment';
-import {
-  useWeeklyPlanTemplates,
-  useCreateWeeklyPlanTemplate,
-} from '@/lib/hooks/useWeeklyPlanTemplates';
-import { useCopyWeeklyPlan } from '@/lib/hooks/useWeeklyPlans';
 import { detectConflicts } from '@/lib/weeklyPlanConflicts';
 import { allCategories, categoryIcons } from '@/components/weekly/weeklyConstants';
 
@@ -130,91 +117,26 @@ function ProgressRing({ rate, size = 96 }: { rate: number; size?: number }) {
   );
 }
 
-function MoreActions({ children }: { children: React.ReactNode }) {
-  const [open, setOpen] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    function handleClick(e: MouseEvent) {
-      if (ref.current && !ref.current.contains(e.target as Node)) {
-        setOpen(false);
-      }
-    }
-    if (open) {
-      document.addEventListener('mousedown', handleClick);
-      return () => document.removeEventListener('mousedown', handleClick);
-    }
-  }, [open]);
-
-  const wrappedChildren = React.Children.map(children, (child) => {
-    if (!React.isValidElement(child)) return child;
-    const originalOnClick = child.props.onClick as (() => void) | undefined;
-    return React.cloneElement(child, {
-      onClick: () => {
-        originalOnClick?.();
-        setOpen(false);
-      },
-    });
-  });
-
-  return (
-    <div className="relative" ref={ref}>
-      <Button
-        type="button"
-        onClick={() => setOpen((v) => !v)}
-        className="inline-flex items-center gap-1.5 rounded-[14px] border border-border-default bg-surface px-3.5 py-2 text-sm font-medium text-text-secondary transition-colors hover:bg-surface-hover hover:text-text-primary"
-        variant="secondary"
-        size="md"
-      >
-        更多
-        <Icon
-          name="ChevronDown"
-          size="xs"
-          className={`transition-transform ${open ? 'rotate-180' : ''}`}
-        />
-      </Button>
-      <AnimatePresence>
-        {open && (
-          <motion.div
-            initial={{ opacity: 0, y: -4, scale: 0.98 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: -4, scale: 0.98 }}
-            transition={{ duration: 0.15 }}
-            className="absolute right-0 z-50 mt-2 w-52 rounded-[14px] border border-border-default bg-surface-elevated py-1.5 shadow-[0_8px_32px_color-mix(in_srgb,black_40%,transparent)]"
-          >
-            {wrappedChildren}
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
-  );
-}
 
 function WeeklyTasksContent() {
   const shouldReduceMotion = useReducedMotion();
-  const { currentChild, getWeeklyPlan, publishWeeklyPlan, updateTaskStatus, reviewWeeklyPlan } =
-    useChildren();
+  const {
+    currentChild,
+    getWeeklyPlan,
+    publishWeeklyPlan,
+    updateTaskStatus,
+    reviewWeeklyPlan,
+    deleteWeeklyPlan,
+  } = useChildren();
 
   const [weekId, setWeekId] = useState<string>(getCurrentWeekId());
   const [draftPlan, setDraftPlan] = useState<WeeklyPlan | null>(null);
   const [reviewOpen, setReviewOpen] = useState(false);
   const [reviewComment, setReviewComment] = useState('');
-  const [editOpen, setEditOpen] = useState(false);
   const [libraryOpen, setLibraryOpen] = useState(false);
   const [libraryMode, setLibraryMode] = useState<'add' | 'makeup'>('add');
-  const [reportOpen, setReportOpen] = useState(false);
   const [generateOpen, setGenerateOpen] = useState(false);
-  const [saveTemplateOpen, setSaveTemplateOpen] = useState(false);
-  const [applyTemplateOpen, setApplyTemplateOpen] = useState(false);
-  const [copyHistoryOpen, setCopyHistoryOpen] = useState(false);
   const [conflictsExpanded, setConflictsExpanded] = useState(false);
-  const [batchMode, setBatchMode] = useState(false);
-  const [selectedTaskIds, setSelectedTaskIds] = useState<string[]>([]);
-  const [batchMoveOpen, setBatchMoveOpen] = useState(false);
-
-  const createTemplate = useCreateWeeklyPlanTemplate(currentChild?.id);
-  const { data: weeklyPlanTemplates = [] } = useWeeklyPlanTemplates(currentChild?.id);
-  const copyPlan = useCopyWeeklyPlan();
 
   useEffect(() => {
     setDraftPlan(null);
@@ -320,85 +242,13 @@ function WeeklyTasksContent() {
     }
   };
 
-  const handleToggleSelection = (taskId: string) => {
-    setSelectedTaskIds((prev) =>
-      prev.includes(taskId) ? prev.filter((id) => id !== taskId) : [...prev, taskId]
-    );
-  };
-
-  const handleSelectAll = () => {
-    if (!displayPlan) return;
-    setSelectedTaskIds(displayPlan.tasks.map((t) => t.id));
-  };
-
-  const handleClearSelection = () => setSelectedTaskIds([]);
-
-  const handleExitBatchMode = () => {
-    setBatchMode(false);
-    handleClearSelection();
-  };
-
-  const handleBatchDelete = async () => {
-    if (!currentChild || !displayPlan || selectedTaskIds.length === 0) return;
-    if (!confirm(`确定删除选中的 ${selectedTaskIds.length} 项任务？`)) return;
-    const nextTasks = displayPlan.tasks.filter((t) => !selectedTaskIds.includes(t.id));
-    if (isDraft) {
-      setDraftPlan({ ...displayPlan, tasks: nextTasks });
-    } else {
-      await publishWeeklyPlan({ ...displayPlan, tasks: nextTasks });
-    }
-    handleExitBatchMode();
-  };
-
-  const handleBatchChangeCategory = async (category: TaskCategory) => {
-    if (!currentChild || !displayPlan || selectedTaskIds.length === 0) return;
-    const nextTasks = displayPlan.tasks.map((t) =>
-      selectedTaskIds.includes(t.id)
-        ? { ...t, category, timeSlot: getCategoryDefaultTimeSlot(category) }
-        : t
-    );
-    if (isDraft) {
-      setDraftPlan({ ...displayPlan, tasks: nextTasks });
-    } else {
-      await publishWeeklyPlan({ ...displayPlan, tasks: nextTasks });
-    }
-  };
-
-  const handleBatchMove = async (targetWeekId: string) => {
-    if (!currentChild || !displayPlan || selectedTaskIds.length === 0) return;
-    const targetPlan = getWeeklyPlan(targetWeekId, currentChild.id);
-    if (!targetPlan) {
-      alert('目标周尚未发布计划，请先创建目标周计划');
-      return;
-    }
-    const movedTasks = displayPlan.tasks
-      .filter((t) => selectedTaskIds.includes(t.id))
-      .map((t) => ({
-        ...t,
-        id: `moved-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
-        status: 'pending' as TaskStatus,
-        completedAt: undefined,
-        completionRecords: undefined,
-      }));
-    const nextTargetTasks = [...targetPlan.tasks, ...movedTasks];
-    const nextCurrentTasks = displayPlan.tasks.filter((t) => !selectedTaskIds.includes(t.id));
-    if (isDraft) {
-      setDraftPlan({ ...displayPlan, tasks: nextCurrentTasks });
-    } else {
-      await publishWeeklyPlan({ ...displayPlan, tasks: nextCurrentTasks });
-    }
-    await publishWeeklyPlan({ ...targetPlan, tasks: nextTargetTasks });
-    setBatchMoveOpen(false);
-    handleExitBatchMode();
-  };
-
-  const handleApplyTimeSlotTemplate = async (templateKey: 'weekday' | 'weekend') => {
+  const handleDeleteWeekPlan = async () => {
     if (!currentChild || !displayPlan) return;
-    const nextTasks = applyTimeSlotTemplate(displayPlan.tasks, templateKey);
+    if (!confirm('确定删除本周计划？任务清单不会被删除，之后可以重新生成。')) return;
     if (isDraft) {
-      setDraftPlan({ ...displayPlan, tasks: nextTasks });
+      setDraftPlan(null);
     } else {
-      await publishWeeklyPlan({ ...displayPlan, tasks: nextTasks });
+      await deleteWeeklyPlan(currentChild.id, weekId);
     }
   };
 
@@ -416,15 +266,6 @@ function WeeklyTasksContent() {
     if (!currentChild || !plan) return;
     await reviewWeeklyPlan(currentChild.id, weekId, reviewComment);
     setReviewOpen(false);
-  };
-
-  const handleSaveTasks = async (tasks: WeeklyTaskItem[], goals: WeeklyGoal[]) => {
-    if (!displayPlan || !currentChild) return;
-    if (isDraft) {
-      setDraftPlan({ ...displayPlan, tasks, goals });
-    } else {
-      await publishWeeklyPlan({ ...displayPlan, tasks, goals });
-    }
   };
 
   const handleAddFromLibrary = (newTasks: WeeklyTaskItem[]) => {
@@ -473,77 +314,6 @@ function WeeklyTasksContent() {
       </div>
     );
   }
-
-  const handleSaveAsTemplate = async (name: string, description: string) => {
-    if (!displayPlan || !currentChild) return;
-    const resetTasks = displayPlan.tasks.map((t) => ({
-      ...t,
-      id: `template-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
-      status: 'pending' as TaskStatus,
-      completedAt: undefined,
-      completionRecords: undefined,
-    }));
-    const resetGoals = (displayPlan.goals ?? []).map((g) => ({
-      ...g,
-      id: `template-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
-      quantityDone: 0,
-      checklist: (g.checklist || []).map((item) => ({
-        ...item,
-        id: `template-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
-        done: false,
-      })),
-    }));
-    await createTemplate.mutateAsync({
-      name,
-      description,
-      tasks: resetTasks,
-      goals: resetGoals,
-      isDefault: false,
-    });
-    setSaveTemplateOpen(false);
-  };
-
-  const handleApplyTemplate = async (templateId: string, mode: 'merge' | 'replace') => {
-    if (!displayPlan || !currentChild) return;
-    const tpl = weeklyPlanTemplates.find((t) => t.id === templateId);
-    if (!tpl) return;
-    const resetTasks = tpl.tasks.map((t) => ({
-      ...t,
-      id: `tplapply-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
-      status: 'pending' as TaskStatus,
-      completedAt: undefined,
-      completionRecords: undefined,
-    }));
-    const resetGoals = (tpl.goals ?? []).map((g) => ({
-      ...g,
-      id: `tplapply-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
-      quantityDone: 0,
-      checklist: (g.checklist || []).map((item) => ({
-        ...item,
-        id: `tplapply-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
-        done: false,
-      })),
-    }));
-    const nextTasks = mode === 'replace' ? resetTasks : [...displayPlan.tasks, ...resetTasks];
-    const nextGoals =
-      mode === 'replace' ? resetGoals : [...(displayPlan.goals ?? []), ...resetGoals];
-    if (isDraft) {
-      setDraftPlan({ ...displayPlan, tasks: nextTasks, goals: nextGoals });
-    } else {
-      await publishWeeklyPlan({ ...displayPlan, tasks: nextTasks, goals: nextGoals });
-    }
-    setApplyTemplateOpen(false);
-  };
-
-  const handleCopyFromHistory = async (sourceWeekId: string) => {
-    if (!currentChild) return;
-    await copyPlan.mutateAsync({
-      childId: currentChild.id,
-      targetWeekId: weekId,
-      sourceWeekId,
-    });
-    setCopyHistoryOpen(false);
-  };
 
   return (
     <div className="space-y-6">
@@ -603,176 +373,94 @@ function WeeklyTasksContent() {
 
         {/* Toolbar */}
         <CommandCard className="p-3">
-          {batchMode && displayPlan ? (
-            <BatchOperationsBar
-              selectedCount={selectedTaskIds.length}
-              totalCount={displayPlan.tasks.length}
-              onSelectAll={handleSelectAll}
-              onClear={handleClearSelection}
-              onDelete={handleBatchDelete}
-              onChangeCategory={handleBatchChangeCategory}
-              onMove={() => setBatchMoveOpen(true)}
-              onExit={handleExitBatchMode}
-            />
-          ) : (
-            <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-center">
-              <div className="flex flex-wrap items-center gap-2">
-                {!displayPlan && (
+          <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-center">
+            <div className="flex flex-wrap items-center gap-2">
+              {!displayPlan && (
+                <Button
+                  onClick={handleGenerate}
+                  className="inline-flex items-center gap-1.5 rounded-[14px] px-3.5 py-2 text-sm font-medium"
+                  variant="secondary"
+                  size="md"
+                >
+                  <Icon name="Target" size="xs" />
+                  生成本周计划
+                </Button>
+              )}
+              {isDraft && (
+                <>
                   <Button
-                    onClick={handleGenerate}
+                    onClick={handlePublish}
+                    className="inline-flex items-center gap-1.5 rounded-[14px] px-3.5 py-2 text-sm font-medium"
+                    variant="primary"
+                    size="md"
+                  >
+                    <Icon name="Send" size="xs" />
+                    发布
+                  </Button>
+                  <Button
+                    onClick={handleCancelDraft}
                     className="inline-flex items-center gap-1.5 rounded-[14px] px-3.5 py-2 text-sm font-medium"
                     variant="secondary"
                     size="md"
                   >
-                    <Icon name="Target" size="xs" />
-                    生成本周计划
+                    <Icon name="X" size="xs" />
+                    取消
                   </Button>
-                )}
-                {displayPlan && !isDraft && (
-                  <Button
-                    onClick={() => setEditOpen(true)}
-                    className="inline-flex items-center gap-1.5 rounded-[14px] px-3.5 py-2 text-sm font-medium"
-                    variant="secondary"
-                    size="md"
-                  >
-                    <Icon name="Pencil" size="xs" />
-                    编辑周计划
-                  </Button>
-                )}
-                {isDraft && (
-                  <>
-                    <Button
-                      onClick={handlePublish}
-                      className="inline-flex items-center gap-1.5 rounded-[14px] px-3.5 py-2 text-sm font-medium"
-                      variant="primary"
-                      size="md"
-                    >
-                      <Icon name="Send" size="xs" />
-                      发布
-                    </Button>
-                    <Button
-                      onClick={handleCancelDraft}
-                      className="inline-flex items-center gap-1.5 rounded-[14px] px-3.5 py-2 text-sm font-medium"
-                      variant="secondary"
-                      size="md"
-                    >
-                      <Icon name="X" size="xs" />
-                      取消
-                    </Button>
-                  </>
-                )}
-              </div>
+                </>
+              )}
+            </div>
 
-              <div className="flex flex-wrap items-center gap-2">
-                {displayPlan && !isDraft && isPublished && (
+            <div className="flex flex-wrap items-center gap-2">
+              {displayPlan && !isDraft && isPublished && (
+                <Button
+                  onClick={handleOpenReview}
+                  className="inline-flex items-center gap-1.5 rounded-[14px] border border-border-default bg-surface px-3.5 py-2 text-sm font-medium text-text-secondary transition-colors hover:bg-surface-hover hover:text-text-primary"
+                  variant="secondary"
+                  size="md"
+                >
+                  <Icon name="Sparkles" size="xs" animate="pulse" />
+                  {plan?.reviewedAt ? '查看复盘' : '本周复盘'}
+                </Button>
+              )}
+              {displayPlan && (
+                <>
                   <Button
-                    onClick={handleOpenReview}
+                    onClick={() => {
+                      setLibraryMode('add');
+                      setLibraryOpen(true);
+                    }}
                     className="inline-flex items-center gap-1.5 rounded-[14px] border border-border-default bg-surface px-3.5 py-2 text-sm font-medium text-text-secondary transition-colors hover:bg-surface-hover hover:text-text-primary"
                     variant="secondary"
                     size="md"
                   >
-                    <Icon name="Sparkles" size="xs" animate="pulse" />
-                    {plan?.reviewedAt ? '查看复盘' : '本周复盘'}
+                    <Icon name="Library" size="xs" />
+                    添加任务
                   </Button>
-                )}
-                {displayPlan && (
-                  <>
-                    <Button
-                      onClick={() => {
-                        setLibraryMode('add');
-                        setLibraryOpen(true);
-                      }}
-                      className="inline-flex items-center gap-1.5 rounded-[14px] border border-border-default bg-surface px-3.5 py-2 text-sm font-medium text-text-secondary transition-colors hover:bg-surface-hover hover:text-text-primary"
-                      variant="secondary"
-                      size="md"
-                    >
-                      <Icon name="Library" size="xs" />
-                      添加任务
-                    </Button>
-                    <Button
-                      onClick={() => {
-                        setLibraryMode('makeup');
-                        setLibraryOpen(true);
-                      }}
-                      className="inline-flex items-center gap-1.5 rounded-[14px] border border-border-default bg-surface px-3.5 py-2 text-sm font-medium text-text-secondary transition-colors hover:bg-surface-hover hover:text-text-primary"
-                      variant="secondary"
-                      size="md"
-                    >
-                      <Icon name="CalendarPlus" size="xs" />
-                      补任务
-                    </Button>
-                    <Button
-                      onClick={() => setBatchMode(true)}
-                      className="inline-flex items-center gap-1.5 rounded-[14px] border border-border-default bg-surface px-3.5 py-2 text-sm font-medium text-text-secondary transition-colors hover:bg-surface-hover hover:text-text-primary"
-                      variant="secondary"
-                      size="md"
-                    >
-                      <Icon name="CheckSquare" size="xs" />
-                      批量操作
-                    </Button>
-                    <MoreActions>
-                      <Button
-                        onClick={() => handleApplyTimeSlotTemplate('weekday')}
-                        className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-text-secondary hover:bg-surface-hover hover:text-text-primary"
-                        variant="ghost"
-                        size="sm"
-                      >
-                        <Icon name="Sunrise" size="sm" />
-                        安排工作日
-                      </Button>
-                      <Button
-                        onClick={() => handleApplyTimeSlotTemplate('weekend')}
-                        className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-text-secondary hover:bg-surface-hover hover:text-text-primary"
-                        variant="ghost"
-                        size="sm"
-                      >
-                        <Icon name="Sunset" size="sm" />
-                        安排周末
-                      </Button>
-                      <Button
-                        onClick={() => setSaveTemplateOpen(true)}
-                        className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-text-secondary hover:bg-surface-hover hover:text-text-primary"
-                        variant="ghost"
-                        size="sm"
-                      >
-                        <Icon name="Save" size="sm" />
-                        保存为模板
-                      </Button>
-                      <Button
-                        onClick={() => setApplyTemplateOpen(true)}
-                        className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-text-secondary hover:bg-surface-hover hover:text-text-primary"
-                        variant="ghost"
-                        size="sm"
-                      >
-                        <Icon name="LayoutTemplate" size="sm" />
-                        套用模板
-                      </Button>
-                      <Button
-                        onClick={() => setCopyHistoryOpen(true)}
-                        className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-text-secondary hover:bg-surface-hover hover:text-text-primary"
-                        variant="ghost"
-                        size="sm"
-                      >
-                        <Icon name="History" size="sm" />
-                        复制历史周
-                      </Button>
-                      {isPublished && !isDraft && stats && (
-                        <Button
-                          onClick={() => setReportOpen(true)}
-                          className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-text-secondary hover:bg-surface-hover hover:text-text-primary"
-                          variant="ghost"
-                          size="sm"
-                        >
-                          <Icon name="Share2" size="sm" />
-                          导出周计划
-                        </Button>
-                      )}
-                    </MoreActions>
-                  </>
-                )}
-              </div>
+                  <Button
+                    onClick={() => {
+                      setLibraryMode('makeup');
+                      setLibraryOpen(true);
+                    }}
+                    className="inline-flex items-center gap-1.5 rounded-[14px] border border-border-default bg-surface px-3.5 py-2 text-sm font-medium text-text-secondary transition-colors hover:bg-surface-hover hover:text-text-primary"
+                    variant="secondary"
+                    size="md"
+                  >
+                    <Icon name="CalendarPlus" size="xs" />
+                    补任务
+                  </Button>
+                  <Button
+                    onClick={handleDeleteWeekPlan}
+                    className="inline-flex items-center gap-1.5 rounded-[14px] border border-error/30 bg-error/[0.08] px-3.5 py-2 text-sm font-medium text-error transition-colors hover:bg-error/[0.12]"
+                    variant="ghost"
+                    size="md"
+                  >
+                    <Icon name="Trash2" size="xs" />
+                    删除本周计划
+                  </Button>
+                </>
+              )}
             </div>
-          )}
+          </div>
         </CommandCard>
       </motion.div>
 
@@ -957,21 +645,9 @@ function WeeklyTasksContent() {
             stats={stats}
             onToggleTask={handleToggleTask}
             onMoveTask={handleMoveTask}
-            batchMode={batchMode}
-            selectedIds={selectedTaskIds}
-            onToggleSelection={handleToggleSelection}
           />
         )}
       </AnimatePresence>
-
-      {batchMoveOpen && displayPlan && (
-        <BatchMoveModal
-          isOpen={batchMoveOpen}
-          currentWeekId={weekId}
-          onClose={() => setBatchMoveOpen(false)}
-          onConfirm={handleBatchMove}
-        />
-      )}
 
       {reviewOpen && stats && displayPlan && (
         <Modal
@@ -1142,14 +818,6 @@ function WeeklyTasksContent() {
         </Modal>
       )}
 
-      {editOpen && displayPlan && (
-        <EditPlanModal
-          plan={displayPlan}
-          onClose={() => setEditOpen(false)}
-          onSave={handleSaveTasks}
-        />
-      )}
-
       {libraryOpen && currentChild && displayPlan && (
         <TaskLibraryModal
           childId={currentChild.id}
@@ -1162,14 +830,6 @@ function WeeklyTasksContent() {
         />
       )}
 
-      {reportOpen && displayPlan && currentChild && (
-        <WeeklyReportExport
-          plan={displayPlan}
-          childName={currentChild.name}
-          onClose={() => setReportOpen(false)}
-        />
-      )}
-
       {generateOpen && currentChild && (
         <GeneratePlanModal
           initialWeekId={weekId}
@@ -1178,30 +838,6 @@ function WeeklyTasksContent() {
         />
       )}
 
-      {saveTemplateOpen && displayPlan && (
-        <SaveTemplateModal
-          onClose={() => setSaveTemplateOpen(false)}
-          onSave={handleSaveAsTemplate}
-          saving={createTemplate.isPending}
-        />
-      )}
-
-      {applyTemplateOpen && displayPlan && (
-        <ApplyTemplateModal
-          templates={weeklyPlanTemplates}
-          onClose={() => setApplyTemplateOpen(false)}
-          onApply={handleApplyTemplate}
-        />
-      )}
-
-      {copyHistoryOpen && currentChild && (
-        <CopyHistoryModal
-          childId={currentChild.id}
-          currentWeekId={weekId}
-          onClose={() => setCopyHistoryOpen(false)}
-          onCopy={handleCopyFromHistory}
-        />
-      )}
     </div>
   );
 }

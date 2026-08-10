@@ -38,9 +38,6 @@ interface WeeklyMatrixProps {
     targetCategory: TaskCategory,
     targetTimeSlot?: TimeSlot
   ) => void;
-  batchMode?: boolean;
-  selectedIds?: string[];
-  onToggleSelection?: (taskId: string) => void;
 }
 
 export default function WeeklyMatrix({
@@ -50,9 +47,6 @@ export default function WeeklyMatrix({
   stats,
   onToggleTask,
   onMoveTask,
-  batchMode = false,
-  selectedIds = [],
-  onToggleSelection,
 }: WeeklyMatrixProps) {
   const shouldReduceMotion = useReducedMotion();
   const [viewMode, setViewMode] = useState<'week' | 'day'>('week');
@@ -210,18 +204,12 @@ export default function WeeklyMatrix({
 
   const handleTaskClick = (task: WeeklyTaskItem) => {
     if (clickIgnoreRef.current) return;
-    if (batchMode) {
-      onToggleSelection?.(task.id);
-      return;
-    }
     onToggleTask(task);
   };
 
   const cellKey = (category: TaskCategory, day: DayOfWeek) => `${category}-${day}`;
   const slotKey = (slot: TimeSlot) => `slot-${slot}`;
   const dayButtonKey = (day: DayOfWeek) => `day-${day}`;
-
-  const isSelected = (taskId: string) => selectedIds.includes(taskId);
 
   return (
     <motion.div
@@ -344,9 +332,6 @@ export default function WeeklyMatrix({
                                 task={task}
                                 category={category}
                                 isDragging={draggingTaskId === task.id}
-                                batchMode={batchMode}
-                                selected={isSelected(task.id)}
-                                onToggleSelection={onToggleSelection}
                                 onDragStart={handleDragStart}
                                 onDragEnd={handleDragEnd}
                                 onClick={handleTaskClick}
@@ -431,21 +416,6 @@ export default function WeeklyMatrix({
                     <div className="space-y-2">
                       {dayTasks.length === 0 ? (
                         <p className="py-2 text-center text-xs text-text-muted">当天无安排</p>
-                      ) : batchMode ? (
-                        dayTasks.map((task) => (
-                          <MatrixTaskCard
-                            key={task.id}
-                            task={task}
-                            category={category}
-                            isDragging={draggingTaskId === task.id}
-                            batchMode={batchMode}
-                            selected={isSelected(task.id)}
-                            onToggleSelection={onToggleSelection}
-                            onDragStart={handleDragStart}
-                            onDragEnd={handleDragEnd}
-                            onClick={handleTaskClick}
-                          />
-                        ))
                       ) : (
                         dayTasks.map((task) => (
                           <MobileTaskRow
@@ -548,9 +518,6 @@ export default function WeeklyMatrix({
                           category={task.category}
                           isDragging={draggingTaskId === task.id}
                           showTimeSlot={false}
-                          batchMode={batchMode}
-                          selected={isSelected(task.id)}
-                          onToggleSelection={onToggleSelection}
                           onDragStart={handleDragStart}
                           onDragEnd={handleDragEnd}
                           onClick={handleTaskClick}
@@ -573,9 +540,6 @@ interface MatrixTaskCardProps {
   category: TaskCategory;
   isDragging: boolean;
   showTimeSlot?: boolean;
-  batchMode?: boolean;
-  selected?: boolean;
-  onToggleSelection?: (taskId: string) => void;
   onDragStart: (e: React.DragEvent, task: WeeklyTaskItem) => void;
   onDragEnd: () => void;
   onClick: (task: WeeklyTaskItem) => void;
@@ -586,9 +550,6 @@ function MatrixTaskCard({
   category,
   isDragging,
   showTimeSlot = true,
-  batchMode = false,
-  selected = false,
-  onToggleSelection,
   onDragStart,
   onDragEnd,
   onClick,
@@ -615,25 +576,6 @@ function MatrixTaskCard({
           : 'border-border-subtle bg-surface-hover/40 hover:border-border-strong'
       } ${isDragging ? 'scale-[0.98] opacity-40' : ''}`}
     >
-      {batchMode && (
-        <div
-          onClick={(e) => {
-            e.stopPropagation();
-            onToggleSelection?.(task.id);
-          }}
-          className="mt-0.5 flex shrink-0 items-center"
-        >
-          <div
-            className={`flex size-4 items-center justify-center rounded border transition-colors ${
-              selected
-                ? 'border-primary bg-primary'
-                : 'border-text-tertiary bg-surface hover:border-primary/50'
-            }`}
-          >
-            {selected && <Icon name="Check" size="xs" className="text-text-primary" />}
-          </div>
-        </div>
-      )}
       <div
         className={`flex size-5 shrink-0 items-center justify-center rounded-lg ${getCategoryColorClass(
           category
@@ -686,13 +628,11 @@ function MatrixTaskCard({
           </div>
         )}
       </div>
-      {!batchMode && (
-        <Icon
-          name="GripVertical"
-          size="sm"
-          className="mt-0.5 shrink-0 text-text-tertiary/40 opacity-0 transition-opacity group-hover:opacity-100"
-        />
-      )}
+      <Icon
+        name="GripVertical"
+        size="sm"
+        className="mt-0.5 shrink-0 text-text-tertiary/40 opacity-0 transition-opacity group-hover:opacity-100"
+      />
     </div>
   );
 }
