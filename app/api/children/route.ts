@@ -10,8 +10,16 @@ export async function GET() {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
+  const memberships = await prisma.familyMember.findMany({
+    where: { userId: session.user.id, status: 'ACTIVE' },
+    select: { familyId: true },
+  });
+  const familyIds = memberships.map((m) => m.familyId);
+
   const children = await prisma.child.findMany({
-    where: { userId: session.user.id },
+    where: {
+      OR: [{ userId: session.user.id }, { familyId: { in: familyIds } }],
+    },
     orderBy: { createdAt: 'asc' },
   });
 

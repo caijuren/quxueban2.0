@@ -85,7 +85,7 @@ export default function DataTable<T>({
   return (
     <Card padding="none" className={cn('overflow-hidden', className)}>
       <div className="overflow-x-auto">
-        <table className="w-full">
+        <table className="w-full table-fixed">
           <thead>
             <tr className="bg-surface-hover text-xs font-medium uppercase tracking-wide text-text-muted">
               {columns.map((column) => (

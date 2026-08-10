@@ -418,7 +418,7 @@ export default function WeeklyTaskList({ goals, tasks, weekLabel, onChange }: We
       {
         key: 'subject',
         title: '学科',
-        width: '140px',
+        width: '180px',
         render: (row, index) => {
           const isFirst = index === 0 || rows[index - 1]?.subjectId !== row.subjectId;
           if (!isFirst) return null;
@@ -440,7 +440,7 @@ export default function WeeklyTaskList({ goals, tasks, weekLabel, onChange }: We
               </div>
               <div>
                 <p className="text-sm font-bold text-text-primary">{meta.name}</p>
-                <p className="text-text-muted/70 text-[11px]">{taskCount}项任务</p>
+                <p className="text-text-muted/70 whitespace-nowrap text-[11px]">{taskCount}项任务</p>
               </div>
             </div>
           );
@@ -449,7 +449,7 @@ export default function WeeklyTaskList({ goals, tasks, weekLabel, onChange }: We
       {
         key: 'module',
         title: '模块',
-        width: '120px',
+        width: '160px',
         render: (row) => (
           <div className="flex items-center gap-2">
             <Icon
@@ -462,8 +462,8 @@ export default function WeeklyTaskList({ goals, tasks, weekLabel, onChange }: We
                 type="text"
                 value={row.moduleName}
                 onChange={(e) => updateGoalTitle(row.goalId, e.target.value)}
-                className="w-full rounded-md border border-border-default bg-surface-elevated px-2 py-1 text-[13px] text-text-primary focus:border-primary focus:outline-none"
-                style={{ minHeight: 32 }}
+                placeholder="输入模块名称"
+                className="h-8 w-full rounded-md border border-border-default bg-surface-elevated px-2 py-1 text-[13px] text-text-primary placeholder:text-text-muted/50 focus:border-primary focus:outline-none"
               />
             ) : (
               <span className="truncate text-[13px] text-text-tertiary">{row.moduleName}</span>
@@ -504,7 +504,8 @@ export default function WeeklyTaskList({ goals, tasks, weekLabel, onChange }: We
                 type="text"
                 value={row.taskValue}
                 onChange={(e) => updateItem(row.goalId, row.itemId, { title: e.target.value })}
-                className="h-8 w-full rounded-md border border-border-default bg-surface-elevated px-2 py-1 text-[13px] text-text-primary focus:border-primary focus:outline-none"
+                placeholder="输入任务名称"
+                className="h-8 w-full rounded-md border border-border-default bg-surface-elevated px-2 py-1 text-[13px] text-text-primary placeholder:text-text-muted/50 focus:border-primary focus:outline-none"
               />
             );
           }
@@ -532,7 +533,8 @@ export default function WeeklyTaskList({ goals, tasks, weekLabel, onChange }: We
                 type="text"
                 value={row.targetText}
                 onChange={(e) => updateItem(row.goalId, row.itemId, { text: e.target.value })}
-                className="h-8 w-full rounded-md border border-border-default bg-surface-elevated px-2 py-1 text-[13px] text-text-primary focus:border-primary focus:outline-none"
+                placeholder="填写检验标准"
+                className="h-8 w-full rounded-md border border-border-default bg-surface-elevated px-2 py-1 text-[13px] text-text-primary placeholder:text-text-muted/50 focus:border-primary focus:outline-none"
               />
             );
           }
@@ -550,10 +552,9 @@ export default function WeeklyTaskList({ goals, tasks, weekLabel, onChange }: We
       {
         key: 'status',
         title: '状态',
-        width: '72px',
-        align: 'center',
+        width: '60px',
         render: (row) => (
-          <div className="flex items-center justify-center gap-2">
+          <div className="flex items-center justify-start gap-2">
             {row.itemId && (
               <Button
                 variant="ghost"
