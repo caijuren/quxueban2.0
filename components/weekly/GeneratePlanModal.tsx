@@ -418,8 +418,8 @@ function StepTasks({
       exit={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, x: -20 }}
       className="space-y-4"
     >
-      <div className="flex flex-col gap-3 sm:flex-row">
-        <div className="relative flex-1">
+      <div className="flex flex-col gap-3 lg:flex-row lg:items-start">
+        <div className="relative w-full lg:max-w-sm">
           <Icon
             name="Search"
             size="sm"
@@ -490,7 +490,7 @@ function StepTasks({
                 onClick={() => toggleTemplate(tpl.id)}
                 variant="secondary"
                 size="md"
-                className={`rounded-2xl border p-3 text-left ${
+                className={`!h-auto items-start justify-start rounded-2xl border p-3 text-left ${
                   selected
                     ? 'border-primary/30 bg-surface-highlight'
                     : 'border-border-subtle bg-surface-elevated hover:bg-surface-hover'
@@ -533,7 +533,7 @@ function StepTasks({
                         scheduleDays.map((d) => (
                           <span
                             key={d}
-                            className="bg-primary/10 border-primary/20 rounded border px-1.5 py-0.5 text-[9px] text-primary"
+                            className="rounded border border-primary/20 bg-primary/10 px-1.5 py-0.5 text-[9px] text-primary"
                           >
                             {d}
                           </span>
