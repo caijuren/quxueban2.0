@@ -42,7 +42,10 @@ class LocalStorageProvider implements StorageProvider {
   }
 
   async upload(file: UploadedFile, directory: string): Promise<string> {
-    const ext = path.extname(file.originalName || '') || getExtFromMime(file.mimetype);
+    const ext = getExtFromMime(file.mimetype);
+    if (!ext) {
+      throw new Error('不支持的文件类型');
+    }
     const filename = `${randomUUID()}${ext}`;
     const relativeDir = path.posix.join(directory, filename);
     const absolutePath = path.join(this.root, directory, filename);

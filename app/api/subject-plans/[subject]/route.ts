@@ -2,31 +2,21 @@ import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
+import { Prisma, type SubjectPlanConfig as PrismaSubjectPlanConfig } from '@/lib/generated/prisma';
 import { subjectIdSchema, subjectPlanUpdateSchema, validateBody } from '@/lib/validation';
 import { SubjectPlanConfig } from '@/lib/subjects/subjectPlan';
 
 type Params = { params: { subject: string } };
 
-function normalizeConfig(config: {
-  id: string;
-  subject: string;
-  tracks: any;
-  timeAxis: any;
-  nodes: any;
-  keyAchievements: any;
-  examTimeline: any;
-  isSystem: boolean;
-  createdAt: Date;
-  updatedAt: Date;
-}): SubjectPlanConfig {
+function normalizeConfig(config: PrismaSubjectPlanConfig): SubjectPlanConfig {
   return {
     id: config.id,
     subject: config.subject as SubjectPlanConfig['subject'],
-    tracks: config.tracks as SubjectPlanConfig['tracks'],
-    timeAxis: config.timeAxis as SubjectPlanConfig['timeAxis'],
-    nodes: config.nodes as SubjectPlanConfig['nodes'],
-    keyAchievements: config.keyAchievements as SubjectPlanConfig['keyAchievements'],
-    examTimeline: config.examTimeline as SubjectPlanConfig['examTimeline'],
+    tracks: config.tracks as unknown as SubjectPlanConfig['tracks'],
+    timeAxis: config.timeAxis as unknown as SubjectPlanConfig['timeAxis'],
+    nodes: config.nodes as unknown as SubjectPlanConfig['nodes'],
+    keyAchievements: config.keyAchievements as unknown as SubjectPlanConfig['keyAchievements'],
+    examTimeline: config.examTimeline as unknown as SubjectPlanConfig['examTimeline'],
     isSystem: config.isSystem,
     createdAt: config.createdAt.toISOString(),
     updatedAt: config.updatedAt.toISOString(),
@@ -117,11 +107,11 @@ export async function PATCH(req: Request, { params }: Params) {
     config = await prisma.subjectPlanConfig.update({
       where: { id: existing.id },
       data: {
-        tracks: data.tracks as any,
-        timeAxis: data.timeAxis as any,
-        nodes: data.nodes as any,
-        keyAchievements: data.keyAchievements as any,
-        examTimeline: data.examTimeline as any,
+        tracks: data.tracks as Prisma.InputJsonValue,
+        timeAxis: data.timeAxis as Prisma.InputJsonValue,
+        nodes: data.nodes as Prisma.InputJsonValue,
+        keyAchievements: data.keyAchievements as Prisma.InputJsonValue,
+        examTimeline: data.examTimeline as Prisma.InputJsonValue,
       },
     });
   } else {
@@ -130,11 +120,11 @@ export async function PATCH(req: Request, { params }: Params) {
         userId: session.user.id,
         childId,
         subject,
-        tracks: data.tracks as any,
-        timeAxis: data.timeAxis as any,
-        nodes: data.nodes as any,
-        keyAchievements: data.keyAchievements as any,
-        examTimeline: data.examTimeline as any,
+        tracks: data.tracks as Prisma.InputJsonValue,
+        timeAxis: data.timeAxis as Prisma.InputJsonValue,
+        nodes: data.nodes as Prisma.InputJsonValue,
+        keyAchievements: data.keyAchievements as Prisma.InputJsonValue,
+        examTimeline: data.examTimeline as Prisma.InputJsonValue,
         isSystem: false,
       },
     });

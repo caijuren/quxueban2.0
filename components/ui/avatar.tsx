@@ -1,6 +1,7 @@
 'use client';
 
 import * as React from 'react';
+import Image from 'next/image';
 import { cn } from '@/lib/utils';
 import { Icon } from '@/components/ui/icon';
 
@@ -44,9 +45,12 @@ const Avatar = React.forwardRef<HTMLDivElement, AvatarProps>(
         {...props}
       >
         {hasImage ? (
-          <img
+          <Image
             src={src}
             alt={name || 'Avatar'}
+            fill
+            sizes="64px"
+            unoptimized
             className="absolute inset-0 size-full object-cover"
           />
         ) : initial ? (

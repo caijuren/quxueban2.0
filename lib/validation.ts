@@ -346,8 +346,8 @@ export const aiTaskAssessmentSchema = z.object({
   context: z
     .object({
       existingTasks: z.array(weeklyTaskItemSchema).optional(),
-      existingTemplates: z.array(z.record(z.string(), z.any())).optional(),
-      capabilities: z.array(z.record(z.string(), z.any())).optional(),
+      existingTemplates: z.array(z.record(z.string(), z.unknown())).optional(),
+      capabilities: z.array(z.record(z.string(), z.unknown())).optional(),
       selectedDay: z.string().optional(),
     })
     .optional(),

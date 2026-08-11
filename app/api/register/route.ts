@@ -46,10 +46,17 @@ export async function POST(req: NextRequest) {
       });
 
       if (invite) {
-        await tx.familyInvite.update({
-          where: { id: invite.id },
+        const claimed = await tx.familyInvite.updateMany({
+          where: {
+            id: invite.id,
+            usedAt: null,
+            expiresAt: { gte: new Date() },
+          },
           data: { usedAt: new Date(), usedByUserId: created.id },
         });
+        if (claimed.count !== 1) {
+          throw new Error('INVITE_ALREADY_USED');
+        }
 
         await tx.familyMember.create({
           data: {
@@ -70,6 +77,9 @@ export async function POST(req: NextRequest) {
       { status: 201 }
     );
   } catch (error) {
+    if (error instanceof Error && error.message === 'INVITE_ALREADY_USED') {
+      return NextResponse.json({ error: '邀请链接已失效或已被使用' }, { status: 409 });
+    }
     console.error('Registration error:', error);
     return NextResponse.json({ error: '注册失败，请稍后重试' }, { status: 500 });
   }

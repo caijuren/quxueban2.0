@@ -2,9 +2,11 @@ import { NextResponse } from 'next/server';
 import { getMiniAppUser, unauthorizedResponse } from '@/lib/miniapp/auth';
 import { prisma } from '@/lib/prisma';
 import type { NextRequest } from 'next/server';
+import { randomInt } from 'node:crypto';
+import { bindRateLimit, getClientIp } from '@/lib/rateLimit';
 
 function generateBindCode(): string {
-  return Math.floor(100000 + Math.random() * 900000).toString();
+  return randomInt(100000, 1000000).toString();
 }
 
 function getExpiryDate(minutes = 10): Date {
@@ -14,6 +16,10 @@ function getExpiryDate(minutes = 10): Date {
 export async function POST(req: NextRequest, { params }: { params: { childId: string } }) {
   const auth = await getMiniAppUser(req);
   if (!auth || auth.type !== 'parent') return unauthorizedResponse();
+
+  if (!bindRateLimit(`generate-miniapp:${getClientIp(req)}`).allowed) {
+    return NextResponse.json({ error: '请求过于频繁，请稍后再试' }, { status: 429 });
+  }
 
   const { childId } = params;
 

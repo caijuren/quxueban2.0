@@ -50,6 +50,11 @@ export const authRateLimit = createRateLimiter({
   windowMs: 15 * 60 * 1000, // 15 分钟
 });
 
+export const bindRateLimit = createRateLimiter({
+  maxRequests: 8,
+  windowMs: 15 * 60 * 1000,
+});
+
 export function getClientIp(req: Request): string {
   const forwarded = req.headers.get('x-forwarded-for');
   if (forwarded) {

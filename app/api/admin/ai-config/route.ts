@@ -9,6 +9,9 @@ export async function GET() {
     if (!session?.user?.id) {
       return NextResponse.json({ error: '未登录' }, { status: 401 });
     }
+    if (session.user.role !== 'ADMIN') {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+    }
 
     const config = await getAiConfig();
     const response: SafeAiConfigData | null = config ? toSafeConfig(config) : null;
@@ -39,6 +42,9 @@ export async function POST(req: NextRequest) {
     if (!session?.user?.id) {
       return NextResponse.json({ error: '未登录' }, { status: 401 });
     }
+    if (session.user.role !== 'ADMIN') {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+    }
 
     const body = (await req.json()) as {
       provider?: string;
@@ -57,6 +63,9 @@ export async function POST(req: NextRequest) {
     if (!apiKey) {
       return NextResponse.json({ error: 'API Key 不能为空' }, { status: 400 });
     }
+    if (apiKey.length > 500) {
+      return NextResponse.json({ error: 'API Key 长度无效' }, { status: 400 });
+    }
 
     // 如果前端传的是脱敏后的 key（包含 *），则保留原 key
     const existing = await getAiConfig();
@@ -67,6 +76,17 @@ export async function POST(req: NextRequest) {
 
     const apiUrl = body.apiUrl?.trim() || DEFAULT_URLS[provider];
     const model = body.model?.trim() || DEFAULT_MODELS[provider];
+    if (apiUrl.length > 500 || model.length > 100) {
+      return NextResponse.json({ error: 'AI 配置长度无效' }, { status: 400 });
+    }
+    try {
+      const parsedUrl = new URL(apiUrl);
+      if (parsedUrl.protocol !== 'https:') {
+        return NextResponse.json({ error: 'AI 接口必须使用 HTTPS' }, { status: 400 });
+      }
+    } catch {
+      return NextResponse.json({ error: 'AI 接口地址无效' }, { status: 400 });
+    }
 
     const config = await upsertAiConfig({
       provider,

@@ -44,7 +44,17 @@ pnpm dev          # 本地开发
 pnpm build        # 生产构建
 pnpm type-check   # TypeScript 检查
 pnpm lint         # ESLint 检查
+pnpm test         # 运行纯逻辑安全测试
+pnpm test:smoke   # 对已启动的服务执行 API 冒烟测试
 ```
+
+API 冒烟测试默认访问 `http://localhost:3000`，也可以通过 `SMOKE_BASE_URL` 指定部署地址：
+
+```bash
+SMOKE_BASE_URL=https://your-domain.com pnpm test:smoke
+```
+
+测试会验证健康检查、定时任务密钥保护和上传资源未登录拒绝。
 
 ## 项目结构
 

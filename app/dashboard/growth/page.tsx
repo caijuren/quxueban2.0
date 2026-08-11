@@ -1,6 +1,7 @@
 'use client';
 
 import { useMemo } from 'react';
+import Image from 'next/image';
 import { motion, useReducedMotion } from 'framer-motion';
 import { Icon, type IconName } from '@/components/ui/icon';
 import { useChildren } from '@/components/dashboard/ChildrenContext';
@@ -294,11 +295,14 @@ export default function GrowthPage() {
                                 href={url}
                                 target="_blank"
                                 rel="noreferrer"
-                                className="aspect-square overflow-hidden rounded-lg border border-border-subtle bg-surface"
+                                className="relative aspect-square overflow-hidden rounded-lg border border-border-subtle bg-surface"
                               >
-                                <img
+                                <Image
                                   src={url}
                                   alt={`证据 ${idx + 1}`}
+                                  fill
+                                  sizes="(max-width: 768px) 50vw, 240px"
+                                  unoptimized
                                   className="size-full object-cover transition-transform hover:scale-105"
                                 />
                               </a>
@@ -410,11 +414,14 @@ function TimelineRow({ item, index }: { item: GrowthTimelineItem; index: number 
                       href={url}
                       target="_blank"
                       rel="noreferrer"
-                      className="size-12 overflow-hidden rounded-lg border border-border-subtle bg-surface"
+                      className="relative size-12 overflow-hidden rounded-lg border border-border-subtle bg-surface"
                     >
-                      <img
+                      <Image
                         src={url}
                         alt=""
+                        fill
+                        sizes="48px"
+                        unoptimized
                         className="size-full object-cover transition-transform hover:scale-105"
                       />
                     </a>

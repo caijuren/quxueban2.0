@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useRef } from 'react';
+import Image from 'next/image';
 import { motion, useReducedMotion, AnimatePresence } from 'framer-motion';
 import { Icon, type IconName } from '@/components/ui/icon';
 import Button from '@/components/ui/button';
@@ -292,7 +293,14 @@ export default function MilestonesPage() {
                                 key={url}
                                 className="group relative size-20 overflow-hidden rounded-lg border border-border-subtle"
                               >
-                                <img src={url} alt="证书" className="size-full object-cover" />
+                                <Image
+                                  src={url}
+                                  alt="证书"
+                                  fill
+                                  sizes="80px"
+                                  unoptimized
+                                  className="size-full object-cover"
+                                />
                                 <Button
                                   variant="ghost"
                                   size="xs"

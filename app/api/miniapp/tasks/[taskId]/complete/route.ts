@@ -121,11 +121,21 @@ export async function POST(req: NextRequest, { params }: { params: { taskId: str
     completionRecords,
   };
 
-  const updated = await prisma.weeklyPlan.update({
-    where: { id: targetPlan.id },
+  const writeResult = await prisma.weeklyPlan.updateMany({
+    where: { id: targetPlan.id, updatedAt: targetPlan.updatedAt },
     data: {
       tasks: tasks as unknown as object[],
     },
+  });
+  if (writeResult.count !== 1) {
+    return NextResponse.json(
+      { error: '计划已被其他操作更新，请刷新后重试' },
+      { status: 409 }
+    );
+  }
+
+  const updated = await prisma.weeklyPlan.findUniqueOrThrow({
+    where: { id: targetPlan.id },
   });
 
   console.log(

@@ -1,4 +1,4 @@
-import { PrismaClient } from './generated/prisma';
+import { PrismaClient, Prisma, TaskCategory, TaskType, TaskFrequency, TaskWeeklySchedule } from './generated/prisma';
 import { SYSTEM_TASK_TEMPLATES } from './taskTemplates';
 
 export async function seedSystemTaskTemplatesForChild(
@@ -7,7 +7,7 @@ export async function seedSystemTaskTemplatesForChild(
   childId: string
 ): Promise<number> {
   const existingCount = await prisma.taskTemplate.count({
-    where: { userId, childId, source: 'SYSTEM' } as any,
+    where: { userId, childId, source: 'SYSTEM' },
   });
 
   let createdCount = 0;
@@ -17,7 +17,7 @@ export async function seedSystemTaskTemplatesForChild(
       userId,
       childId,
       title: tpl.title,
-      category: tpl.category.toUpperCase() as any,
+      category: tpl.category.toUpperCase() as TaskCategory,
       duration: tpl.duration,
       difficulty: tpl.difficulty,
       materials: tpl.materials,
@@ -28,16 +28,16 @@ export async function seedSystemTaskTemplatesForChild(
       tags: tpl.tags,
       source: 'SYSTEM' as const,
       isActive: tpl.isActive,
-      taskType: (tpl.taskType ?? 'daily').toUpperCase() as any,
-      frequency: (tpl.frequency ?? 'once').toUpperCase() as any,
+      taskType: (tpl.taskType ?? 'daily').toUpperCase() as TaskType,
+      frequency: (tpl.frequency ?? 'once').toUpperCase() as TaskFrequency,
       customFrequency: tpl.customFrequency ?? undefined,
-      weeklySchedule: (tpl.weeklySchedule ?? 'auto').toUpperCase() as any,
+      weeklySchedule: (tpl.weeklySchedule ?? 'auto').toUpperCase() as TaskWeeklySchedule,
       customScheduleDays: tpl.customScheduleDays ?? [],
-      assessmentCriteria: tpl.assessmentCriteria ?? [],
+      assessmentCriteria: (tpl.assessmentCriteria ?? []) as unknown as Prisma.InputJsonValue,
     }));
 
     await prisma.taskTemplate.createMany({
-      data: data as any[],
+      data,
       skipDuplicates: false,
     });
 
@@ -63,7 +63,7 @@ async function seedSystemTemplateCapabilityLinks(
   const capabilityMap = new Map(systemCapabilities.map((c) => [c.name, c.id]));
 
   const createdTemplates = await prisma.taskTemplate.findMany({
-    where: { userId, childId, source: 'SYSTEM' } as any,
+    where: { userId, childId, source: 'SYSTEM' },
   });
   const templateMap = new Map(createdTemplates.map((t) => [t.title, t.id]));
 
@@ -93,7 +93,7 @@ async function seedSystemTemplateCapabilityLinks(
   if (links.length === 0) return;
 
   await prisma.taskCapabilityLink.createMany({
-    data: links as any[],
+    data: links satisfies Prisma.TaskCapabilityLinkCreateManyInput[],
     skipDuplicates: true,
   });
 }

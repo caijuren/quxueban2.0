@@ -5,6 +5,7 @@ import { writeFile, mkdir } from 'fs/promises';
 import path from 'path';
 
 const MAX_SIZE = 5 * 1024 * 1024;
+const ALLOWED_FOLDERS = new Set(['general', 'certificates']);
 
 const MIME_TO_EXT: Record<string, string> = {
   'image/jpeg': 'jpg',
@@ -44,6 +45,10 @@ export async function POST(req: Request) {
     const file = formData.get('file') as File | null;
     const folder = (formData.get('folder') as string) || 'general';
 
+    if (!ALLOWED_FOLDERS.has(folder)) {
+      return NextResponse.json({ error: '上传目录无效' }, { status: 400 });
+    }
+
     if (!file || typeof file === 'string') {
       return NextResponse.json({ error: '请上传文件' }, { status: 400 });
     }
@@ -72,7 +77,7 @@ export async function POST(req: Request) {
     const filePath = path.join(uploadsDir, filename);
     await writeFile(filePath, buffer);
 
-    const url = `/uploads/${folder}/${filename}`;
+    const url = `/api/uploads/${folder}/${filename}`;
 
     console.log(`[upload] success: user=${session.user.id}, folder=${folder}, url=${url}`);
 

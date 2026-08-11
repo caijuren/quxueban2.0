@@ -1,5 +1,6 @@
 'use client';
 import { Icon, type IconName } from '@/components/ui/icon';
+import Image from 'next/image';
 
 import { useEffect, useMemo, useState } from 'react';
 
@@ -398,7 +399,14 @@ export default function TaskCompletionModal({
                   key={url}
                   className="group relative size-20 overflow-hidden rounded-lg border border-border-default bg-surface"
                 >
-                  <img src={url} alt="佐证图片" className="size-full object-cover" />
+                  <Image
+                    src={url}
+                    alt="佐证图片"
+                    fill
+                    sizes="80px"
+                    unoptimized
+                    className="size-full object-cover"
+                  />
                   <Button
                     onClick={() => handleRemoveImage(url)}
                     variant="ghost"

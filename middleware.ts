@@ -8,7 +8,7 @@ const LOGIN_WINDOW_MS = 15 * 60 * 1000;
 const loginAttempts = new Map<string, { count: number; resetAt: number }>();
 
 // 不需要登录即可访问的公开路由
-const PUBLIC_API_PREFIXES = ['/api/auth/', '/api/health', '/api/register', '/api/miniapp/', '/api/uploads/'];
+const PUBLIC_API_PREFIXES = ['/api/auth/', '/api/health', '/api/register', '/api/miniapp/'];
 
 function isPublicApiPath(pathname: string): boolean {
   return PUBLIC_API_PREFIXES.some((prefix) => pathname.startsWith(prefix));
@@ -81,6 +81,11 @@ export default function middleware(req: NextRequest, event: NextFetchEvent) {
     return NextResponse.next();
   }
 
+  // Web 上传资源需要登录；小程序媒体目录保留公开 URL 以兼容微信媒体组件。
+  if (pathname.startsWith('/uploads/miniapp/')) {
+    return NextResponse.next();
+  }
+
   return authMiddleware(
     req as unknown as Parameters<typeof authMiddleware>[0],
     event
@@ -88,5 +93,5 @@ export default function middleware(req: NextRequest, event: NextFetchEvent) {
 }
 
 export const config = {
-  matcher: ['/dashboard/:path*', '/admin/:path*', '/api/:path*'],
+  matcher: ['/dashboard/:path*', '/admin/:path*', '/api/:path*', '/uploads/:path*'],
 };

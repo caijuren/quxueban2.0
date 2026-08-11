@@ -5,7 +5,13 @@ import { normalizeWeeklyTask } from '@/lib/taskAlignment';
 import { sendDailyReminder, getTemplateId } from '@/lib/miniapp/subscription';
 import type { WeeklyTaskItem } from '@/lib/storage.types';
 
-export async function POST() {
+export async function POST(req: Request) {
+  const configuredSecret = process.env.CRON_SECRET;
+  const providedSecret = req.headers.get('x-cron-secret');
+  if (!configuredSecret || providedSecret !== configuredSecret) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
   const templateId = getTemplateId('dailyReminder');
   if (!templateId) {
     return NextResponse.json({ error: '未配置每日提醒模板 ID' }, { status: 400 });

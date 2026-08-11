@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
+import { Prisma, TaskCategory } from '@/lib/generated/prisma';
 import { seedSystemTaskTemplatesForChild } from '@/lib/seedTaskTemplates';
 import { seedSystemCapabilities } from '@/lib/seedCapabilities';
 import { taskCategorySchema, taskTemplateCreateSchema, validateBody } from '@/lib/validation';
@@ -62,7 +63,7 @@ export async function GET(req: Request) {
     await seedSystemTaskTemplatesForChild(prisma, session.user.id, childId);
     await seedSystemCapabilities(prisma);
 
-    const where: Record<string, unknown> = {
+    const where: Prisma.TaskTemplateWhereInput = {
       childId,
     };
 
@@ -79,11 +80,11 @@ export async function GET(req: Request) {
       if (!parsed.success) {
         return NextResponse.json({ error: 'Invalid category' }, { status: 400 });
       }
-      where.category = parsed.data.toUpperCase();
+      where.category = parsed.data.toUpperCase() as TaskCategory;
     }
 
     const templates = await prisma.taskTemplate.findMany({
-      where: where as any,
+      where,
       orderBy: [
         { isFavorite: 'desc' },
         { source: 'asc' },
@@ -159,7 +160,7 @@ export async function POST(req: Request) {
             expectedProgress: link.expectedProgress,
           })),
       },
-    } as any,
+    },
     include: {
       capabilityLinks: {
         include: {

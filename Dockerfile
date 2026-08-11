@@ -72,6 +72,7 @@ RUN addgroup --system --gid 1001 nodejs && \
 COPY --from=builder /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+COPY --from=builder --chown=nextjs:nodejs /app/scripts/validate-production-env.js ./scripts/validate-production-env.js
 
 # Prisma schema 与迁移文件供迁移命令使用
 COPY --from=builder --chown=nextjs:nodejs /app/prisma/schema.prisma ./prisma/schema.prisma
@@ -91,4 +92,4 @@ USER nextjs
 EXPOSE 3000
 
 # 启动时先执行数据库迁移，再启动应用
-CMD ["sh", "-c", "/app/prisma-cli/node_modules/.bin/prisma migrate deploy --schema=/app/prisma/schema.prisma && node server.js"]
+CMD ["sh", "-c", "node scripts/validate-production-env.js && /app/prisma-cli/node_modules/.bin/prisma migrate deploy --schema=/app/prisma/schema.prisma && node server.js"]

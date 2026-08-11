@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { signMiniAppToken } from '@/lib/miniapp/auth';
 import { prisma } from '@/lib/prisma';
+import { bindRateLimit, getClientIp } from '@/lib/rateLimit';
 
 interface WechatSessionResponse {
   openid?: string;
@@ -31,6 +32,9 @@ async function fetchWechatOpenId(code: string): Promise<string | null> {
 }
 
 export async function POST(req: Request) {
+  if (!bindRateLimit(`bind-child:${getClientIp(req)}`).allowed) {
+    return NextResponse.json({ error: '请求过于频繁，请稍后再试' }, { status: 429 });
+  }
   try {
     const body = await req.json();
     const { code, bindCode } = body;

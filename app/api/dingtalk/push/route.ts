@@ -78,7 +78,10 @@ export async function POST(req: Request) {
     }
 
     const dingTalkConfig = child.dingTalkWebhook
-      ? { webhook: child.dingTalkWebhook, secret: child.dingTalkSecret }
+      ? {
+          webhook: child.dingTalkWebhook.trim(),
+          secret: child.dingTalkSecret?.trim() || null,
+        }
       : undefined;
 
     if (!isDingTalkConfigured(dingTalkConfig)) {
@@ -220,10 +223,16 @@ export async function POST(req: Request) {
       };
     });
 
-    await prisma.weeklyPlan.update({
-      where: { id: plan.id },
+    const writeResult = await prisma.weeklyPlan.updateMany({
+      where: { id: plan.id, updatedAt: plan.updatedAt },
       data: { tasks: updatedTasks as unknown as object[] },
     });
+    if (writeResult.count !== 1) {
+      return NextResponse.json(
+        { error: '计划已被其他操作更新，请刷新后重试' },
+        { status: 409 }
+      );
+    }
 
     return NextResponse.json({
       success: true,

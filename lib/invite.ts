@@ -1,13 +1,9 @@
 import { prisma } from '@/lib/prisma';
 import { FamilyMemberRole } from '@/lib/generated/prisma';
+import { randomBytes } from 'node:crypto';
 
 export function generateInviteToken(): string {
-  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  let token = '';
-  for (let i = 0; i < 32; i++) {
-    token += chars.charAt(Math.floor(Math.random() * chars.length));
-  }
-  return token;
+  return randomBytes(32).toString('base64url');
 }
 
 export function getInviteExpiresAt(): Date {
@@ -77,17 +73,19 @@ export async function getValidInvite(token: string) {
 }
 
 export async function acceptFamilyInvite(token: string, userId: string) {
-  const invite = await getValidInvite(token);
-  if (!invite) return null;
-
-  const existingMember = await prisma.familyMember.findUnique({
-    where: { familyId_userId: { familyId: invite.familyId, userId } },
-  });
-
   const member = await prisma.$transaction(async (tx) => {
-    await tx.familyInvite.update({
-      where: { id: invite.id },
-      data: { usedAt: new Date(), usedByUserId: userId },
+    const now = new Date();
+    const invite = await tx.familyInvite.findUnique({ where: { token } });
+    if (!invite || invite.usedAt || now > invite.expiresAt) return null;
+
+    const claimed = await tx.familyInvite.updateMany({
+      where: { id: invite.id, usedAt: null, expiresAt: { gte: now } },
+      data: { usedAt: now, usedByUserId: userId },
+    });
+    if (claimed.count !== 1) return null;
+
+    const existingMember = await tx.familyMember.findUnique({
+      where: { familyId_userId: { familyId: invite.familyId, userId } },
     });
 
     if (existingMember) {

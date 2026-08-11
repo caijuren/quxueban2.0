@@ -98,12 +98,20 @@ export async function POST(req: Request, { params }: Params) {
     completionRecords,
   };
 
-  const updated = await prisma.weeklyPlan.update({
-    where: { id: params.id },
+  const writeResult = await prisma.weeklyPlan.updateMany({
+    where: { id: params.id, updatedAt: existing.updatedAt },
     data: {
       tasks: tasks as unknown as object[],
     },
   });
+  if (writeResult.count !== 1) {
+    return NextResponse.json(
+      { error: '计划已被其他操作更新，请刷新后重试' },
+      { status: 409 }
+    );
+  }
+
+  const updated = await prisma.weeklyPlan.findUniqueOrThrow({ where: { id: params.id } });
 
   const normalizedTasks = ((updated.tasks as unknown as Partial<WeeklyTaskItem>[]) || []).map(
     (task) => normalizeWeeklyTask(task as WeeklyTaskItem)

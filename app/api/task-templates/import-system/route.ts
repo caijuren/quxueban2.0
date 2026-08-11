@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
+import { TaskCategory, TaskType, TaskFrequency, TaskWeeklySchedule } from '@/lib/generated/prisma';
 import { canManageChild } from '@/lib/family';
 import { Prisma } from '@/lib/generated/prisma';
 import { SYSTEM_TASK_TEMPLATES } from '@/lib/taskTemplates';
@@ -110,7 +111,7 @@ export async function POST(req: Request) {
         userId: session.user.id,
         childId,
         title: systemTpl.title,
-        category: systemTpl.category.toUpperCase() as any,
+        category: systemTpl.category.toUpperCase() as TaskCategory,
         duration: systemTpl.duration,
         difficulty: systemTpl.difficulty,
         materials: systemTpl.materials,
@@ -121,9 +122,9 @@ export async function POST(req: Request) {
         tags: systemTpl.tags,
         source: 'USER',
         isActive: true,
-        taskType: (systemTpl.taskType ?? 'daily').toUpperCase() as any,
-        frequency: (systemTpl.frequency ?? 'once').toUpperCase() as any,
-        weeklySchedule: (systemTpl.weeklySchedule ?? 'auto').toUpperCase() as any,
+        taskType: (systemTpl.taskType ?? 'daily').toUpperCase() as TaskType,
+        frequency: (systemTpl.frequency ?? 'once').toUpperCase() as TaskFrequency,
+        weeklySchedule: (systemTpl.weeklySchedule ?? 'auto').toUpperCase() as TaskWeeklySchedule,
         customScheduleDays: systemTpl.customScheduleDays ?? [],
         assessmentCriteria: (systemTpl.assessmentCriteria ??
           []) as unknown as Prisma.InputJsonValue,

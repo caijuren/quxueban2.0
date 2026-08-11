@@ -7,6 +7,23 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
+  poweredByHeader: false,
+  async headers() {
+    return [
+      {
+        source: '/(.*)',
+        headers: [
+          { key: 'X-Content-Type-Options', value: 'nosniff' },
+          { key: 'X-Frame-Options', value: 'SAMEORIGIN' },
+          { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
+          {
+            key: 'Permissions-Policy',
+            value: 'camera=(), geolocation=(), payment=(), usb=()',
+          },
+        ],
+      },
+    ];
+  },
   async redirects() {
     return [
       // Legacy console routes now live under /dashboard/settings

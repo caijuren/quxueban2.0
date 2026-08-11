@@ -1,4 +1,4 @@
-import { PrismaClient } from './generated/prisma';
+import { PrismaClient, Prisma } from './generated/prisma';
 import { SubjectPlanConfigData } from './subjects/subjectPlan';
 
 export const DEFAULT_CHINESE_PLAN: SubjectPlanConfigData = {
@@ -1055,11 +1055,11 @@ export async function seedSystemSubjectPlans(prisma: PrismaClient): Promise<numb
     await prisma.subjectPlanConfig.create({
       data: {
         subject,
-        tracks: data.tracks as any,
-        timeAxis: data.timeAxis as any,
-        nodes: data.nodes as any,
-        keyAchievements: data.keyAchievements as any,
-        examTimeline: data.examTimeline as any,
+        tracks: data.tracks as unknown as Prisma.InputJsonValue,
+        timeAxis: data.timeAxis as unknown as Prisma.InputJsonValue,
+        nodes: data.nodes as unknown as Prisma.InputJsonValue,
+        keyAchievements: data.keyAchievements as unknown as Prisma.InputJsonValue,
+        examTimeline: data.examTimeline as unknown as Prisma.InputJsonValue,
         isSystem: true,
         userId: null,
       },

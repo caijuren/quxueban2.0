@@ -27,7 +27,7 @@ async function main() {
   }
 
   const adminUsername = process.env.ADMIN_USERNAME || 'admin';
-  const adminPassword = process.env.ADMIN_PASSWORD || 'admin123';
+  const adminPassword = process.env.ADMIN_PASSWORD;
 
   // 1. Admin user
   let admin = await prisma.user.findUnique({
@@ -35,6 +35,9 @@ async function main() {
   });
 
   if (!admin) {
+    if (!adminPassword) {
+      throw new Error('ADMIN_PASSWORD must be configured when creating the admin user');
+    }
     const passwordHash = await bcrypt.hash(adminPassword, 12);
     admin = await prisma.user.create({
       data: {
@@ -51,13 +54,19 @@ async function main() {
 
   // 2. Demo parent user
   const demoParentUsername = process.env.DEMO_PARENT_USERNAME || 'parent';
-  const demoParentPassword = process.env.DEMO_PARENT_PASSWORD || 'parent123';
+  const demoParentPassword = process.env.DEMO_PARENT_PASSWORD;
 
   let parent = await prisma.user.findUnique({
     where: { username: demoParentUsername },
   });
 
   if (!parent) {
+    if (!demoParentPassword) {
+      if (process.env.NODE_ENV === 'production') {
+        throw new Error('DEMO_PARENT_PASSWORD must be configured in production');
+      }
+      throw new Error('DEMO_PARENT_PASSWORD must be configured when creating the demo user');
+    }
     const passwordHash = await bcrypt.hash(demoParentPassword, 12);
     parent = await prisma.user.create({
       data: {

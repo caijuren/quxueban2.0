@@ -71,7 +71,7 @@ export async function POST(req: Request) {
         childId,
         isActive: true,
         archivedAt: null,
-      } as any,
+      },
       include: {
         capabilityLinks: {
           include: { capability: true },

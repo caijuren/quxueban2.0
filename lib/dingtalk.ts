@@ -26,8 +26,9 @@ export async function sendDingTalkMarkdown(
   message: DingTalkMessage,
   config?: DingTalkConfig
 ): Promise<DingTalkPushResult> {
-  const webhook = config?.webhook || process.env.DINGTALK_WEBHOOK;
-  const secret = config?.secret || process.env.DINGTALK_SECRET;
+  // A child-level configuration is isolated from global fallback credentials.
+  const webhook = config ? config.webhook : process.env.DINGTALK_WEBHOOK;
+  const secret = config ? config.secret : process.env.DINGTALK_SECRET;
 
   if (!webhook) {
     return {
@@ -80,5 +81,5 @@ export async function sendDingTalkMarkdown(
 }
 
 export function isDingTalkConfigured(config?: DingTalkConfig): boolean {
-  return !!(config?.webhook || process.env.DINGTALK_WEBHOOK);
+  return Boolean(config ? config.webhook : process.env.DINGTALK_WEBHOOK);
 }

@@ -1,4 +1,4 @@
-import { PrismaClient } from './generated/prisma';
+import { PrismaClient, Prisma, CapabilityCategory } from './generated/prisma';
 
 const SYSTEM_CAPABILITIES = [
   // 语文
@@ -46,11 +46,11 @@ export async function seedSystemCapabilities(prisma: PrismaClient): Promise<numb
   await prisma.capability.createMany({
     data: SYSTEM_CAPABILITIES.map((cap) => ({
       name: cap.name,
-      category: cap.category as any,
+      category: cap.category as CapabilityCategory,
       description: cap.description,
       isSystem: true,
       userId: null,
-    })),
+    })) satisfies Prisma.CapabilityCreateManyInput[],
     skipDuplicates: false,
   });
 
