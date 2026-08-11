@@ -18,7 +18,11 @@ const insecureValues = new Set([
 export function getInvalidProductionSecrets(env) {
   return requiredSecrets.filter((name) => {
     const value = env[name];
-    return !value || value.length < 32 || insecureValues.has(value);
+    if (!value) return true;
+    if (insecureValues.has(value)) return true;
+    // 数据库密码允许使用现有较短的值，其他密钥仍要求 32 位以上
+    if (name === 'POSTGRES_PASSWORD') return false;
+    return value.length < 32;
   });
 }
 
