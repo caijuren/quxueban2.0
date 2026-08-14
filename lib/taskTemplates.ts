@@ -387,7 +387,8 @@ export const SYSTEM_TASK_TEMPLATES: SystemTaskTemplate[] = [
     category: 'reading',
     duration: '30分钟',
     materials: ['课外书', '阅读记录本'],
-    description: '阅读课外书籍，做好摘抄和简短感想',
+    description:
+      '阅读课外书籍，做好摘抄和简短感想。阅读时长可参考《中国青少年阅读素养框架》量化目标（按年级匹配日均时长）',
     routeTags: [],
     source: 'system',
     isActive: true,

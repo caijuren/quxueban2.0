@@ -12,6 +12,7 @@ import {
   useDeleteNotification,
 } from '@/lib/hooks/useNotifications';
 import Button from '@/components/ui/button';
+import Alert from '@/components/ui/alert';
 import { getNotificationTypeLabel, getNotificationTypeColor } from '@/lib/notifications';
 
 export default function NotificationsPage() {
@@ -63,9 +64,11 @@ export default function NotificationsPage() {
             <Icon name="Loader2" size="xl" animate="spin" className="text-primary" />
           </div>
         ) : error ? (
-          <div className="border-error/20 bg-error/10 rounded-2xl border p-6 text-sm text-error">
-            {error instanceof Error ? error.message : '加载失败'}
-          </div>
+          <Alert
+            type="error"
+            title="加载失败"
+            description={error instanceof Error ? error.message : '无法加载通知'}
+          />
         ) : notifications.length === 0 ? (
           <EmptyState
             icon="Bell"

@@ -39,7 +39,7 @@ export function BatchOperationsBar({
     <motion.div
       initial={{ opacity: 0, y: -8 }}
       animate={{ opacity: 1, y: 0 }}
-      className="flex flex-wrap items-center gap-2 rounded-2xl border border-primary/20 bg-primary/[0.06] p-3"
+      className="flex flex-wrap items-center gap-2 rounded-xl border border-primary/20 bg-primary/[0.06] p-3"
     >
       <span className="text-sm font-semibold text-text-primary">已选 {selectedCount} 项</span>
       <Button

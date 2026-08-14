@@ -114,7 +114,7 @@ export default function SubjectCheckIn({
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.15 }}
-      className="rounded-2xl border border-border-subtle bg-surface-elevated p-6"
+      className="rounded-xl border border-border-subtle bg-surface-elevated p-6"
     >
       <div className="mb-6 flex items-center justify-between">
         <div className="flex items-center gap-3">

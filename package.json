@@ -1,6 +1,6 @@
 {
   "name": "quxueban",
-  "version": "2.9.1",
+  "version": "2.10.0",
   "private": true,
   "scripts": {
     "dev": "NODE_OPTIONS=--max-http-header-size=32768 next dev -H 0.0.0.0",
@@ -9,6 +9,7 @@
     "lint": "next lint",
     "test": "node --import tsx --test tests/*.test.ts",
     "test:smoke": "node scripts/smoke-test.mjs",
+    "test:integration": "node scripts/integration-test.mjs",
     "env:check": "node scripts/validate-production-env.js",
     "type-check": "tsc --noEmit",
     "db:generate": "prisma generate",

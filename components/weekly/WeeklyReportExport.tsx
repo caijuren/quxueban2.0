@@ -150,7 +150,7 @@ export default function WeeklyReportExport({ plan, childName, onClose }: WeeklyR
       iconClassName="bg-secondary"
       size="md"
     >
-      <div className="overflow-x-auto rounded-2xl border border-border-subtle bg-surface-elevated p-1">
+      <div className="overflow-x-auto rounded-xl border border-border-subtle bg-surface-elevated p-1">
         <div
           ref={cardRef}
           style={{ width: A4_WIDTH, minHeight: A4_HEIGHT }}

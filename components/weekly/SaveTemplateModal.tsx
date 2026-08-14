@@ -5,6 +5,7 @@ import { Icon } from '@/components/ui/icon';
 import Modal from '@/components/ui/Modal';
 import Button from '@/components/ui/button';
 import Textarea from '@/components/ui/textarea';
+import Input from '@/components/ui/input';
 
 interface SaveTemplateModalProps {
   onClose: () => void;
@@ -54,12 +55,12 @@ export function SaveTemplateModal({ onClose, onSave, saving }: SaveTemplateModal
       <div className="space-y-4">
         <div>
           <label className="mb-1.5 block text-xs text-text-tertiary">模板名称</label>
-          <input
+          <Input
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder="例如：三年级上学期第 1 周"
-            className="focus:border-primary/50 w-full rounded-lg border border-border-default bg-surface-elevated px-3 py-2 text-sm text-text-secondary placeholder:text-text-muted focus:outline-none"
+            className="bg-surface-elevated"
           />
         </div>
         <div>

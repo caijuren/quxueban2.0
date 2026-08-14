@@ -18,6 +18,7 @@ import OD1Schedule from './OD1Schedule';
 import ResourceList from './ResourceList';
 import SpeakWritePlan from './SpeakWritePlan';
 import LexileReference from './LexileReference';
+import Alert from '@/components/ui/alert';
 
 export default function EnglishSubjectPage() {
   const { currentChild } = useChildren();
@@ -126,9 +127,11 @@ export default function EnglishSubjectPage() {
       )}
 
       {queryError && (
-        <div className="border-error/20 bg-error/10 rounded-2xl border p-6 text-error">
-          {queryError instanceof Error ? queryError.message : '加载失败'}
-        </div>
+        <Alert
+          type="error"
+          title="加载失败"
+          description={queryError instanceof Error ? queryError.message : '无法加载英语学科规划'}
+        />
       )}
 
       {config && (

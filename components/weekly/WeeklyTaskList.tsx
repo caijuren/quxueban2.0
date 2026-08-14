@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Icon, type IconName } from '@/components/ui/icon';
 import DataTable, { type DataTableColumn } from '@/components/ui/data-table';
 import Button from '@/components/ui/button';
+import Input from '@/components/ui/input';
 import {
   type WeeklyGoal,
   type WeeklyGoalChecklistItem,
@@ -458,12 +459,13 @@ export default function WeeklyTaskList({ goals, tasks, weekLabel, onChange }: We
               className="h-[18px] w-[18px] shrink-0 text-text-muted"
             />
             {isEditing ? (
-              <input
+              <Input
                 type="text"
                 value={row.moduleName}
                 onChange={(e) => updateGoalTitle(row.goalId, e.target.value)}
                 placeholder="输入模块名称"
-                className="h-8 w-full rounded-md border border-border-default bg-surface-elevated px-2 py-1 text-[13px] text-text-primary placeholder:text-text-muted/50 focus:border-primary focus:outline-none"
+                size="sm"
+                className="h-8 bg-surface-elevated px-2 text-[13px] placeholder:text-text-muted/50"
               />
             ) : (
               <span className="truncate text-[13px] text-text-tertiary">{row.moduleName}</span>
@@ -500,12 +502,13 @@ export default function WeeklyTaskList({ goals, tasks, weekLabel, onChange }: We
           }
           if (isEditing) {
             return (
-              <input
+              <Input
                 type="text"
                 value={row.taskValue}
                 onChange={(e) => updateItem(row.goalId, row.itemId, { title: e.target.value })}
                 placeholder="输入任务名称"
-                className="h-8 w-full rounded-md border border-border-default bg-surface-elevated px-2 py-1 text-[13px] text-text-primary placeholder:text-text-muted/50 focus:border-primary focus:outline-none"
+                size="sm"
+                className="h-8 bg-surface-elevated px-2 text-[13px] placeholder:text-text-muted/50"
               />
             );
           }
@@ -529,12 +532,13 @@ export default function WeeklyTaskList({ goals, tasks, weekLabel, onChange }: We
           }
           if (isEditing) {
             return (
-              <input
+              <Input
                 type="text"
                 value={row.targetText}
                 onChange={(e) => updateItem(row.goalId, row.itemId, { text: e.target.value })}
                 placeholder="填写检验标准"
-                className="h-8 w-full rounded-md border border-border-default bg-surface-elevated px-2 py-1 text-[13px] text-text-primary placeholder:text-text-muted/50 focus:border-primary focus:outline-none"
+                size="sm"
+                className="h-8 bg-surface-elevated px-2 text-[13px] placeholder:text-text-muted/50"
               />
             );
           }

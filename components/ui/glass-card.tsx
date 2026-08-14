@@ -43,7 +43,7 @@ function GlassCardComponent(
     <Tag
       ref={ref}
       className={cn(
-        'relative rounded-card transition-colors duration-layout',
+        'relative rounded-xl transition-colors duration-layout',
         strengthMap[strength],
         hover && 'glass-hover cursor-pointer',
         glowMap[glow],

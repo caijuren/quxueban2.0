@@ -1402,7 +1402,7 @@ export default function SchoolDetail({ school }: { school: string }) {
             <motion.div
               key={item.step}
               variants={itemVariants}
-              className="relative rounded-2xl border border-border-subtle bg-surface-elevated p-5"
+              className="relative rounded-xl border border-border-subtle bg-surface-elevated p-5"
             >
               <div className="mb-3 flex items-center gap-3">
                 <div
@@ -1435,7 +1435,7 @@ export default function SchoolDetail({ school }: { school: string }) {
             </div>
             <h2 className="font-display text-xl font-bold">录取偏好</h2>
           </div>
-          <div className="rounded-2xl border border-border-subtle bg-surface-elevated p-6">
+          <div className="rounded-xl border border-border-subtle bg-surface-elevated p-6">
             <p className="mb-4 text-sm text-text-tertiary">学校最看重的能力与素养</p>
             <div className="flex flex-wrap gap-2">
               {data.preferences.map((pref) => (
@@ -1460,7 +1460,7 @@ export default function SchoolDetail({ school }: { school: string }) {
             </div>
             <h2 className="font-display text-xl font-bold">面谈形式</h2>
           </div>
-          <div className="space-y-4 rounded-2xl border border-border-subtle bg-surface-elevated p-6">
+          <div className="space-y-4 rounded-xl border border-border-subtle bg-surface-elevated p-6">
             {data.interviewFormat.map((item) => (
               <div key={item} className="flex items-start gap-3">
                 {item.includes('机考') ? (
@@ -1490,7 +1490,7 @@ export default function SchoolDetail({ school }: { school: string }) {
             <motion.div
               key={group.grade}
               variants={itemVariants}
-              className="rounded-2xl border border-border-subtle bg-surface-elevated p-6"
+              className="rounded-xl border border-border-subtle bg-surface-elevated p-6"
             >
               <div className="mb-4 flex items-center gap-3">
                 <Icon name="Clock" size="sm" style={{ color: data.accent }} />
@@ -1523,7 +1523,7 @@ export default function SchoolDetail({ school }: { school: string }) {
           </div>
           <h2 className="font-display text-xl font-bold">关键证书 / 竞赛</h2>
         </div>
-        <div className="rounded-2xl border border-border-subtle bg-surface-elevated p-6">
+        <div className="rounded-xl border border-border-subtle bg-surface-elevated p-6">
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {data.certificates.map((cert) => (
               <div
@@ -1541,7 +1541,7 @@ export default function SchoolDetail({ school }: { school: string }) {
       {/* Bottom CTA */}
       <motion.div
         variants={itemVariants}
-        className="flex flex-col items-center justify-between gap-4 rounded-2xl border border-border-subtle bg-surface-elevated p-6 sm:flex-row"
+        className="flex flex-col items-center justify-between gap-4 rounded-xl border border-border-subtle bg-surface-elevated p-6 sm:flex-row"
       >
         <div className="flex items-center gap-3">
           <div className="flex size-10 items-center justify-center rounded-xl bg-surface-hover">

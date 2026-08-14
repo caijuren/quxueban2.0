@@ -15,6 +15,7 @@ import {
 } from '@/lib/storage.types';
 import { useTaskTemplates } from '@/lib/hooks/useTaskTemplates';
 import Select from '@/components/ui/select';
+import SearchInput from '@/components/ui/search-input';
 import {
   dayOrder,
   getCurrentWeekId,
@@ -362,7 +363,7 @@ function StepWeek({ weekId, setWeekId, options }: StepWeekProps) {
               onClick={() => setWeekId(option.weekId)}
               variant="secondary"
               size="md"
-              className={`rounded-2xl border p-4 text-left ${
+              className={`rounded-xl border p-4 text-left ${
                 selected
                   ? 'border-primary/30 bg-surface-highlight'
                   : 'border-border-subtle bg-surface-elevated hover:bg-surface-hover'
@@ -430,20 +431,13 @@ function StepTasks({
       className="space-y-4"
     >
       <div className="grid grid-cols-1 gap-3 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-start">
-        <div className="relative w-full lg:max-w-sm">
-          <Icon
-            name="Search"
-            size="sm"
-            className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted"
-          />
-          <input
-            type="text"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder="搜索任务名称"
-            className="w-full rounded-lg border border-border-default bg-surface py-2 pl-9 pr-3 text-sm text-text-primary placeholder:text-text-tertiary focus:border-primary focus:outline-none"
-          />
-        </div>
+        <SearchInput
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          onClear={() => setSearch('')}
+          placeholder="搜索任务名称"
+          className="w-full lg:max-w-sm"
+        />
         <div className="flex flex-wrap items-center justify-start gap-2 lg:justify-end">
           <Icon name="Filter" size="sm" className="text-text-muted" />
           <Select
@@ -513,7 +507,7 @@ function StepTasks({
                 onClick={() => toggleTemplate(tpl.id)}
                 variant="secondary"
                 size="md"
-                className={`!h-auto !items-start !justify-start rounded-2xl border p-3 text-left ${
+                className={`!h-auto !items-start !justify-start rounded-xl border p-3 text-left ${
                   selected
                     ? 'border-primary/30 bg-surface-highlight'
                     : 'border-border-subtle bg-surface-elevated hover:bg-surface-hover'
@@ -604,7 +598,7 @@ function StepPreview({
       className="space-y-4"
     >
       {overloadedDays.length > 0 && (
-        <div className="border-warning/20 bg-warning/5 flex items-start gap-2 rounded-2xl border p-3">
+        <div className="border-warning/20 bg-warning/5 flex items-start gap-2 rounded-xl border p-3">
           <Icon name="AlertTriangle" size="sm" className="mt-0.5 shrink-0 text-warning" />
           <p className="text-xs text-text-secondary">
             {overloadedDays.join('、')} 任务量超过 3 小时，建议适当减少或调整。
@@ -628,7 +622,7 @@ function StepPreview({
             {dayOrder.map((day) => (
               <div
                 key={day}
-                className="min-h-[200px] space-y-2 rounded-2xl border border-border-subtle bg-surface-elevated p-2"
+                className="min-h-[200px] space-y-2 rounded-xl border border-border-subtle bg-surface-elevated p-2"
               >
                 {tasksByDay[day].map((task) => (
                   <PreviewTaskCard
@@ -648,7 +642,7 @@ function StepPreview({
         {dayOrder.map((day) => (
           <div
             key={day}
-            className="rounded-2xl border border-border-subtle bg-surface-elevated p-3"
+            className="rounded-xl border border-border-subtle bg-surface-elevated p-3"
           >
             <div className="mb-2 flex items-center justify-between">
               <span className="text-sm font-bold text-text-secondary">{day}</span>

@@ -52,7 +52,7 @@ export default function WeeklyGoalsPanel({
       <motion.div
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
-        className="rounded-2xl border border-border-subtle bg-surface-elevated p-5"
+        className="rounded-xl border border-border-subtle bg-surface-elevated p-5"
       >
         <div className="flex items-start justify-between gap-4">
           <div className="flex items-center gap-3">
@@ -111,7 +111,7 @@ export default function WeeklyGoalsPanel({
           return (
             <div
               key={goal.id}
-              className="rounded-2xl border border-border-subtle bg-surface-elevated p-4 transition-colors hover:border-border-strong"
+              className="rounded-xl border border-border-subtle bg-surface-elevated p-4 transition-colors hover:border-border-strong"
             >
               <div className="mb-3 flex items-start justify-between">
                 <div className="flex items-center gap-2.5">

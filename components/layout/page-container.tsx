@@ -19,6 +19,6 @@ const sizeMap = {
 
 export default function PageContainer({ children, size = 'full', className }: PageContainerProps) {
   return (
-    <div className={cn('mx-auto w-full p-6 lg:p-8', sizeMap[size], className)}>{children}</div>
+    <div className={cn('mx-auto w-full px-4 py-5 sm:p-6 lg:p-8', sizeMap[size], className)}>{children}</div>
   );
 }

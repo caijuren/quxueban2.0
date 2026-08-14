@@ -5,6 +5,7 @@ import Select from '@/components/ui/select';
 import Textarea from '@/components/ui/textarea';
 import Button from '@/components/ui/button';
 import Input from '@/components/ui/input';
+import Checkbox from '@/components/ui/checkbox';
 import { useEffect, useMemo, useState } from 'react';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 
@@ -738,12 +739,12 @@ function TaskTemplateModal({
             <label className="mb-1.5 block text-xs text-text-tertiary">
               任务名称 <span className="text-primary">*</span>
             </label>
-            <input
+            <Input
               type="text"
               value={form.title}
               onChange={(e) => updateField('title', e.target.value)}
               placeholder="例如：完成学校作业"
-              className="focus:border-primary/50 w-full rounded-lg border border-border-default bg-surface-elevated px-3 py-2 text-sm text-text-secondary placeholder:text-text-muted focus:outline-none"
+              className="bg-surface-elevated"
               required
             />
           </div>
@@ -761,12 +762,12 @@ function TaskTemplateModal({
             </div>
             <div>
               <label className="mb-1.5 block text-xs text-text-tertiary">参考时长</label>
-              <input
+              <Input
                 type="text"
                 value={form.duration}
                 onChange={(e) => updateField('duration', e.target.value)}
                 placeholder="30分钟"
-                className="focus:border-primary/50 w-full rounded-lg border border-border-default bg-surface-elevated px-3 py-2 text-sm text-text-secondary placeholder:text-text-muted focus:outline-none"
+                className="bg-surface-elevated"
               />
             </div>
             <div>
@@ -785,12 +786,13 @@ function TaskTemplateModal({
 
           <div>
             <label className="mb-1.5 block text-xs text-text-tertiary">任务描述</label>
-            <textarea
+            <Textarea
               value={form.description ?? ''}
               onChange={(e) => updateField('description', e.target.value)}
               placeholder="简要说明任务内容和目标"
               rows={3}
-              className="focus:border-primary/50 w-full resize-none rounded-lg border border-border-default bg-surface-elevated px-3 py-2 text-sm text-text-secondary placeholder:text-text-muted focus:outline-none"
+              className="min-h-0 bg-surface-elevated"
+              resize="none"
             />
           </div>
 
@@ -798,7 +800,7 @@ function TaskTemplateModal({
             <label className="mb-1.5 block text-xs text-text-tertiary">
               所需材料（用逗号分隔）
             </label>
-            <input
+            <Input
               type="text"
               value={form.materials.join('，')}
               onChange={(e) =>
@@ -811,7 +813,7 @@ function TaskTemplateModal({
                 )
               }
               placeholder="例如：课本，作业本，铅笔"
-              className="focus:border-primary/50 w-full rounded-lg border border-border-default bg-surface-elevated px-3 py-2 text-sm text-text-secondary placeholder:text-text-muted focus:outline-none"
+              className="bg-surface-elevated"
             />
           </div>
 
@@ -826,7 +828,7 @@ function TaskTemplateModal({
                 className="bg-surface-elevated"
               />
               {milestoneSelectValue === '__custom__' && (
-                <input
+                <Input
                   type="text"
                   value={customMilestone}
                   onChange={(e) => {
@@ -834,7 +836,7 @@ function TaskTemplateModal({
                     updateField('milestoneTag', e.target.value);
                   }}
                   placeholder="输入自定义里程碑名称"
-                  className="focus:border-primary/50 mt-2 w-full rounded-lg border border-border-default bg-surface-elevated px-3 py-2 text-sm text-text-secondary placeholder:text-text-muted focus:outline-none"
+                  className="mt-2 bg-surface-elevated"
                 />
               )}
             </div>
@@ -916,7 +918,7 @@ function TaskTemplateModal({
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className="mb-1.5 block text-xs text-text-tertiary">次数</label>
-                <input
+                <Input
                   type="number"
                   min={1}
                   value={form.customFrequency?.times ?? 1}
@@ -927,7 +929,7 @@ function TaskTemplateModal({
                       period: form.customFrequency?.period ?? 'week',
                     })
                   }
-                  className="focus:border-primary/50 w-full rounded-lg border border-border-default bg-surface-elevated px-3 py-2 text-sm text-text-secondary focus:outline-none"
+                  className="bg-surface-elevated"
                 />
               </div>
               <div>
@@ -1063,7 +1065,7 @@ function TaskTemplateModal({
                         </div>
                       </div>
                       <div className="flex items-center gap-2">
-                        <input
+                        <Input
                           type="number"
                           min={0}
                           max={2}
@@ -1074,7 +1076,8 @@ function TaskTemplateModal({
                               weight: parseFloat(e.target.value) || 0,
                             })
                           }
-                          className="focus:border-primary/50 w-16 rounded-lg border border-border-default bg-surface-elevated px-2 py-1 text-center text-sm text-text-secondary focus:outline-none"
+                          size="sm"
+                          className="w-16 bg-surface-elevated px-2 text-center"
                           title="权重"
                         />
                         <Button
@@ -1136,31 +1139,30 @@ function TaskTemplateModal({
                     key={index}
                     className="grid grid-cols-[1fr_1fr_auto_auto] items-center gap-2 rounded-lg border border-border-subtle bg-surface-elevated p-2.5"
                   >
-                    <input
+                    <Input
                       type="text"
                       value={criterion.metric}
                       onChange={(e) => updateAssessmentCriterion(index, { metric: e.target.value })}
                       placeholder="指标，例如：正确率"
-                      className="focus:border-primary/50 border-b border-border-default bg-transparent p-1 text-sm text-text-secondary placeholder:text-text-muted focus:outline-none"
+                      size="sm"
+                      className="h-8 rounded-none border-0 border-b border-border-default bg-transparent px-1 text-sm focus:border-primary"
                     />
-                    <input
+                    <Input
                       type="text"
                       value={criterion.target}
                       onChange={(e) => updateAssessmentCriterion(index, { target: e.target.value })}
                       placeholder="目标，例如：>= 80%"
-                      className="focus:border-primary/50 border-b border-border-default bg-transparent p-1 text-sm text-text-secondary placeholder:text-text-muted focus:outline-none"
+                      size="sm"
+                      className="h-8 rounded-none border-0 border-b border-border-default bg-transparent px-1 text-sm focus:border-primary"
                     />
-                    <label className="flex cursor-pointer items-center gap-1 whitespace-nowrap text-2xs text-text-tertiary">
-                      <input
-                        type="checkbox"
-                        checked={criterion.selfReport}
-                        onChange={(e) =>
-                          updateAssessmentCriterion(index, { selfReport: e.target.checked })
-                        }
-                        className="rounded border-border-default bg-surface-elevated text-primary focus:ring-0"
-                      />
-                      自评
-                    </label>
+                    <Checkbox
+                      checked={criterion.selfReport}
+                      onChange={(e) =>
+                        updateAssessmentCriterion(index, { selfReport: e.target.checked })
+                      }
+                      label="自评"
+                      className="size-3.5"
+                    />
                     <Button
                       variant="ghost"
                       size="xs"

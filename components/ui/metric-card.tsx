@@ -8,12 +8,13 @@ import Card from './card';
 
 export interface MetricCardProps {
   label: string;
-  value: number;
+  value: number | string;
   prefix?: string;
   suffix?: string;
   trend?: 'up' | 'down' | 'flat';
   trendValue?: number;
   icon?: IconName;
+  description?: React.ReactNode;
   variant?: 'default' | 'glass' | 'ai';
   countUp?: boolean;
   decimals?: number;
@@ -40,6 +41,7 @@ export default function MetricCard({
   trend,
   trendValue,
   icon,
+  description,
   variant = 'default',
   countUp = false,
   decimals = 0,
@@ -58,7 +60,7 @@ export default function MetricCard({
         <div className="min-w-0 flex-1">
           <p className="truncate text-sm text-text-secondary">{label}</p>
           <div className="mt-1 flex items-baseline gap-1.5">
-            {countUp ? (
+            {countUp && typeof value === 'number' ? (
               <CountUp
                 value={value}
                 decimals={decimals}
@@ -69,7 +71,7 @@ export default function MetricCard({
             ) : (
               <span className="truncate text-2xl font-bold tabular-nums text-text-primary">
                 {prefix}
-                {decimals > 0 ? value.toFixed(decimals) : value}
+                {typeof value === 'number' && decimals > 0 ? value.toFixed(decimals) : value}
                 {suffix}
               </span>
             )}
@@ -80,6 +82,7 @@ export default function MetricCard({
               <span className="tabular-nums">{trendValue > 0 ? '+' : ''}{trendValue}%</span>
             </div>
           )}
+          {description && <p className="mt-0.5 text-xs text-text-tertiary">{description}</p>}
         </div>
         {icon && (
           <div

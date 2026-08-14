@@ -427,7 +427,7 @@ body {
 
 /* Command panel - refined card */
 .command-panel {
-  @apply rounded-card border border-border-default bg-surface transition-all duration-200;
+  @apply rounded-xl border border-border-default bg-surface transition-colors duration-200;
   box-shadow: var(--shadow-card);
 }
 
@@ -437,7 +437,7 @@ body {
 }
 
 .command-panel-active {
-  @apply relative rounded-card bg-surface;
+  @apply relative rounded-xl bg-surface;
   border: 1px solid var(--border-primary);
 }
 

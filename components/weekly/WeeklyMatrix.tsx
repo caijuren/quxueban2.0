@@ -216,7 +216,7 @@ export default function WeeklyMatrix({
       initial={shouldReduceMotion ? false : { opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: -20 }}
-      className="rounded-2xl border border-border-subtle bg-surface-elevated p-5"
+      className="rounded-xl border border-border-subtle bg-surface-elevated p-5"
     >
       {/* View toggle */}
       <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
@@ -399,7 +399,7 @@ export default function WeeklyMatrix({
                 return (
                   <div
                     key={category}
-                    className="rounded-2xl border border-border-subtle bg-surface-elevated p-3.5"
+                    className="rounded-xl border border-border-subtle bg-surface-elevated p-3.5"
                   >
                     <div className="mb-3 flex items-center gap-2.5">
                       <div

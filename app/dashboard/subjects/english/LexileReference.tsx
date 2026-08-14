@@ -11,7 +11,7 @@ export default function LexileReference() {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.35 }}
-      className="rounded-2xl border border-border-subtle bg-surface-elevated p-6"
+      className="rounded-xl border border-border-subtle bg-surface-elevated p-6"
     >
       <div className="mb-6 flex items-center gap-3">
         <div className="flex size-10 items-center justify-center rounded-xl bg-gradient-to-br from-success to-accent">

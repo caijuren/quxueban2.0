@@ -301,7 +301,7 @@ export function EditPlanModal({ plan, onClose, onSave }: EditPlanModalProps) {
                 return (
                   <div
                     key={day}
-                    className="overflow-hidden rounded-2xl border border-border-subtle bg-surface-hover"
+                    className="overflow-hidden rounded-xl border border-border-subtle bg-surface-hover"
                   >
                     <Button
                       variant="ghost"
@@ -395,7 +395,7 @@ export function EditPlanModal({ plan, onClose, onSave }: EditPlanModalProps) {
               </div>
 
               {goals.length === 0 && (
-                <div className="rounded-2xl border border-border-subtle bg-surface-hover py-10 text-center">
+                <div className="rounded-xl border border-border-subtle bg-surface-hover py-10 text-center">
                   <Icon name="Target" size="xl" className="mx-auto mb-2 text-text-muted" />
                   <p className="text-sm text-text-muted">还没有目标，点击上方添加</p>
                 </div>
@@ -405,7 +405,7 @@ export function EditPlanModal({ plan, onClose, onSave }: EditPlanModalProps) {
                 {goals.map((goal) => (
                   <div
                     key={goal.id}
-                    className="space-y-3 rounded-2xl border border-border-subtle bg-surface-hover p-4"
+                    className="space-y-3 rounded-xl border border-border-subtle bg-surface-hover p-4"
                   >
                     <div className="grid grid-cols-12 items-start gap-3">
                       <div className="col-span-5">
@@ -577,7 +577,7 @@ function TaskEditRow({
   };
 
   return (
-    <div className="rounded-xl border border-border-subtle bg-surface-elevated p-3">
+    <div className="rounded-xl border border-border-subtle bg-surface-elevated p-3 shadow-sm transition-colors hover:border-border-default">
       <div className="grid grid-cols-12 items-start gap-2">
         <div className="col-span-6 sm:col-span-2">
           <label className="mb-1 block text-2xs text-text-muted">分类</label>
@@ -616,21 +616,36 @@ function TaskEditRow({
           />
         </div>
 
-        <div className="col-span-4 sm:col-span-2">
+        <div className="col-span-12 sm:col-span-2">
           <label className="mb-1 block text-2xs text-text-muted">时段</label>
-          <Select
-            value={task.timeSlot || 'flexible'}
-            onChange={(e) => onUpdate(task.id, { timeSlot: e.target.value as TimeSlot })}
-            size="sm"
-            className="bg-surface"
-            options={timeSlotOrder.map((slot) => ({
-              value: slot,
-              label: getTimeSlotLabel(slot),
-            }))}
-          />
+          <div
+            role="radiogroup"
+            aria-label="任务时段"
+            className="grid grid-cols-4 gap-1 rounded-lg border border-border-default bg-surface p-1"
+          >
+            {timeSlotOrder.map((slot) => {
+              const selected = (task.timeSlot || 'flexible') === slot;
+              return (
+                <button
+                  key={slot}
+                  type="button"
+                  role="radio"
+                  aria-checked={selected}
+                  onClick={() => onUpdate(task.id, { timeSlot: slot })}
+                  className={`h-7 rounded-md px-1 text-[11px] font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 ${
+                    selected
+                      ? 'bg-primary text-inverse shadow-sm'
+                      : 'text-text-muted hover:bg-surface-hover hover:text-text-secondary'
+                  }`}
+                >
+                  {getTimeSlotLabel(slot)}
+                </button>
+              );
+            })}
+          </div>
         </div>
 
-        <div className="col-span-4 sm:col-span-2">
+        <div className="col-span-6 sm:col-span-2">
           <label className="mb-1 block text-2xs text-text-muted">时长</label>
           <Input
             type="text"
@@ -640,7 +655,7 @@ function TaskEditRow({
             size="sm"
             className="bg-surface"
           />
-          <div className="mt-1.5 flex flex-wrap gap-1">
+          <div className="mt-1.5 grid grid-cols-5 gap-1">
             {durationPresets.map((preset) => (
               <Button
                 key={preset}
@@ -648,10 +663,11 @@ function TaskEditRow({
                 variant="ghost"
                 size="xs"
                 onClick={() => onUpdate(task.id, { duration: preset })}
-                className={`rounded px-1.5 py-0.5 text-[9px] ${
+                aria-pressed={task.duration === preset}
+                className={`min-h-0 h-6 rounded-md border px-0.5 py-0 text-[10px] ${
                   task.duration === preset
-                    ? 'border border-accent/30 bg-accent/20 text-accent'
-                    : 'bg-surface-elevated text-text-muted hover:bg-surface-highlight'
+                    ? 'border-primary/40 bg-primary-dim text-primary'
+                    : 'border-transparent bg-surface-elevated text-text-muted hover:border-border-default hover:bg-surface-highlight'
                 }`}
               >
                 {preset.replace('分钟', '')}
@@ -660,7 +676,7 @@ function TaskEditRow({
           </div>
         </div>
 
-        <div className="col-span-4 flex items-end justify-end gap-2 sm:col-span-2">
+        <div className="col-span-6 flex items-end justify-end gap-1.5 sm:col-span-2">
           <Button
             variant="ghost"
             size="xs"
@@ -729,7 +745,7 @@ function TaskEditRow({
               </Button>
             </span>
           ))}
-          <input
+          <Input
             type="text"
             value={materialInput}
             onChange={(e) => {
@@ -761,7 +777,8 @@ function TaskEditRow({
               }
             }}
             placeholder={task.materials.length === 0 ? '输入后回车或逗号分隔' : ''}
-            className="min-w-[120px] border-none bg-transparent px-1 py-0.5 text-xs text-text-primary placeholder:text-text-tertiary focus:outline-none focus:ring-0"
+            size="sm"
+            className="h-6 min-w-[120px] border-0 bg-transparent px-1 text-xs placeholder:text-text-tertiary focus:ring-0"
           />
         </div>
       </div>

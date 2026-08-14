@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion';
 import { Icon } from '@/components/ui/icon';
 import { useAiDiagnosis } from '@/lib/hooks/useAiDiagnosis';
+import { READING_ABILITIES } from '@/lib/subjects/readingLiteracy';
 import { cn } from '@/lib/utils';
 
 interface AIDiagnosisCardProps {
@@ -16,6 +17,10 @@ const subjectLabels: Record<string, string> = {
   math: '数学',
   chinese: '语文',
 };
+
+const readingAbilityLabels: Record<string, string> = Object.fromEntries(
+  READING_ABILITIES.map((a) => [a.id, a.name])
+);
 
 function scoreColor(score: number): string {
   if (score >= 80) return 'text-success';
@@ -127,6 +132,30 @@ export default function AIDiagnosisCard({
                       />
                     </div>
                     <p className="text-sm text-text-tertiary">{subjectHealth.comment}</p>
+                  </div>
+                )}
+
+                {subject === 'chinese' && diagnosis.readingLiteracy && (
+                  <div className="bg-surface-elevated/60 rounded-xl border border-border-subtle p-4">
+                    <div className="mb-2 flex items-center justify-between">
+                      <span className="text-sm font-medium text-text-secondary">阅读素养梯级</span>
+                      <span className="font-display text-lg font-bold text-primary">
+                        {diagnosis.readingLiteracy.ladder} 梯
+                      </span>
+                    </div>
+                    <div className="flex flex-wrap gap-1.5">
+                      {diagnosis.readingLiteracy.dimensions.map((d) => (
+                        <span
+                          key={d.id}
+                          className="rounded-lg border border-border-subtle bg-surface-hover px-2 py-1 text-2xs text-text-muted"
+                        >
+                          {readingAbilityLabels[d.id] || d.id}
+                          <span className={cn('ml-1 font-medium', scoreColor(d.score))}>
+                            {d.score}
+                          </span>
+                        </span>
+                      ))}
+                    </div>
                   </div>
                 )}
 

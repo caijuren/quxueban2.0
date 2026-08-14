@@ -482,18 +482,19 @@ export default function ReportsPage() {
       {/* Header */}
       <SlideUp className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-3">
-          <div className="flex size-10 items-center justify-center rounded-[14px] border border-primary/20 bg-primary/10">
+          <div className="flex size-10 items-center justify-center rounded-xl border border-primary/20 bg-primary/10">
             <Icon name="BarChart3" size="md" className="text-primary" />
           </div>
           <h1 className="font-display text-2xl font-bold sm:text-3xl">成长报告</h1>
         </div>
 
         {plan && stats && (
-          <div className="flex items-center justify-end gap-2">
+          <div className="flex items-center justify-end gap-1 rounded-xl border border-border-default bg-surface-elevated p-1 shadow-sm">
             <Button
               variant="secondary"
               onClick={() => setWeekId((w) => shiftWeekId(w, -1))}
-              className="flex size-8 items-center justify-center rounded-[14px] border border-border-default bg-surface text-text-secondary transition-colors hover:bg-surface-hover"
+              size="sm"
+              className="size-8 rounded-lg border-0 bg-transparent p-0"
               aria-label="上一周"
             >
               <Icon name="ChevronLeft" size="sm" />
@@ -503,14 +504,15 @@ export default function ReportsPage() {
                 value={weekId}
                 onChange={(e) => setWeekId(e.target.value)}
                 size="sm"
-                className="min-w-[180px] bg-surface"
+                className="min-w-[180px] border-0 bg-transparent focus:ring-0"
                 options={weekOptions}
               />
             </div>
             <Button
               variant="secondary"
               onClick={() => setWeekId((w) => shiftWeekId(w, 1))}
-              className="flex size-8 items-center justify-center rounded-[14px] border border-border-default bg-surface text-text-secondary transition-colors hover:bg-surface-hover"
+              size="sm"
+              className="size-8 rounded-lg border-0 bg-transparent p-0"
               aria-label="下一周"
             >
               <Icon name="ChevronRight" size="sm" />
@@ -569,18 +571,13 @@ export default function ReportsPage() {
               suffix="项"
             />
 
-            <GlassCard className="p-4">
-              <div className="mb-2 flex items-center gap-2">
-                <Icon name="Clock" size="sm" className="text-secondary" />
-                <span className="text-xs text-text-muted">学习时长</span>
-              </div>
-              <p className="font-display text-2xl font-bold text-text-primary">
-                {formatMinutes(actualMinutes)}
-              </p>
-              <p className="mt-0.5 text-xs text-text-tertiary">
-                计划 {formatMinutes(totalMinutes)}
-              </p>
-            </GlassCard>
+            <MetricCard
+              label="学习时长"
+              value={formatMinutes(actualMinutes)}
+              icon="Clock"
+              variant="glass"
+              description={`计划 ${formatMinutes(totalMinutes)}`}
+            />
 
             <MetricCard
               label="打卡天数"

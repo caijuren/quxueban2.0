@@ -3,6 +3,7 @@ import { Icon } from '@/components/ui/icon';
 import Select from '@/components/ui/select';
 import Textarea from '@/components/ui/textarea';
 import Button from '@/components/ui/button';
+import Input from '@/components/ui/input';
 
 import { useState } from 'react';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
@@ -14,6 +15,7 @@ import {
   useUpdateCapability,
   useDeleteCapability,
 } from '@/lib/hooks/useCapabilities';
+import { READING_ABILITIES } from '@/lib/subjects/readingLiteracy';
 import SettingsSection from './SettingsSection';
 import { toast } from '@/lib/toast';
 
@@ -52,6 +54,10 @@ export default function CapabilitySection() {
   const [editing, setEditing] = useState<Capability | null>(null);
   const [form, setForm] = useState<Partial<Capability>>({ ...emptyCapability });
   const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [expandedReading, setExpandedReading] = useState(false);
+
+  const isReadingComprehension = (cap: Capability) =>
+    cap.category === 'chinese' && cap.name === '阅读理解';
 
   const grouped = capabilities.reduce(
     (acc, cap) => {
@@ -184,6 +190,59 @@ export default function CapabilitySection() {
                     {cap.description && (
                       <p className="line-clamp-2 text-xs text-text-muted">{cap.description}</p>
                     )}
+                    {isReadingComprehension(cap) && (
+                      <div className="mt-3 border-t border-border-subtle pt-3">
+                        <button
+                          type="button"
+                          onClick={() => setExpandedReading((v) => !v)}
+                          className="flex w-full items-center justify-between text-xs text-secondary transition-colors hover:text-text-secondary"
+                        >
+                          <span className="flex items-center gap-1.5">
+                            <Icon name="BookOpen" size="xs" />
+                            6 个阅读子维度（官方框架）
+                          </span>
+                          <Icon
+                            name="ChevronDown"
+                            size="xs"
+                            className={`transition-transform duration-200 ${
+                              expandedReading ? 'rotate-180' : ''
+                            }`}
+                          />
+                        </button>
+                        <AnimatePresence initial={false}>
+                          {expandedReading && (
+                            <motion.div
+                              initial={shouldReduceMotion ? { opacity: 1 } : { height: 0, opacity: 0 }}
+                              animate={{ height: 'auto', opacity: 1 }}
+                              exit={shouldReduceMotion ? { opacity: 0 } : { height: 0, opacity: 0 }}
+                              transition={{ duration: 0.2 }}
+                              className="overflow-hidden"
+                            >
+                              <div className="mt-2 space-y-1.5">
+                                {READING_ABILITIES.map((ability) => (
+                                  <div
+                                    key={ability.id}
+                                    className="flex items-start gap-2 rounded-lg bg-surface-hover px-2.5 py-1.5"
+                                  >
+                                    <span className="mt-0.5 w-14 shrink-0 text-2xs text-text-muted">
+                                      {ability.groupName.slice(0, 2)}
+                                    </span>
+                                    <div className="min-w-0">
+                                      <p className="text-xs font-medium text-text-secondary">
+                                        {ability.name}
+                                      </p>
+                                      <p className="line-clamp-1 text-2xs text-text-muted">
+                                        {ability.description}
+                                      </p>
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
+                      </div>
+                    )}
                   </motion.div>
                 ))}
               </div>
@@ -245,19 +304,19 @@ export default function CapabilitySection() {
                   <label className="mb-1.5 block text-xs text-text-tertiary">
                     能力名称 <span className="text-primary">*</span>
                   </label>
-                  <input
+                  <Input
                     type="text"
                     value={form.name || ''}
                     onChange={(e) => setForm((prev) => ({ ...prev, name: e.target.value }))}
                     placeholder="例如：审题能力"
-                    className="focus:border-primary/50 w-full rounded-lg border border-border-default bg-surface-elevated px-3 py-2 text-sm text-text-secondary placeholder:text-text-muted focus:outline-none"
+                    className="bg-surface-elevated"
                     required
                   />
                 </div>
 
                 <div>
                   <label className="mb-1.5 block text-xs text-text-tertiary">所属分类</label>
-                  <select
+                  <Select
                     value={form.category || 'general'}
                     onChange={(e) =>
                       setForm((prev) => ({
@@ -265,24 +324,20 @@ export default function CapabilitySection() {
                         category: e.target.value as Capability['category'],
                       }))
                     }
-                    className="focus:border-primary/50 w-full rounded-lg border border-border-default bg-surface-elevated px-3 py-2 text-sm text-text-secondary focus:outline-none"
-                  >
-                    {categoryOptions.map((opt) => (
-                      <option key={opt.value} value={opt.value}>
-                        {opt.label}
-                      </option>
-                    ))}
-                  </select>
+                    className="bg-surface-elevated"
+                    options={categoryOptions}
+                  />
                 </div>
 
                 <div>
                   <label className="mb-1.5 block text-xs text-text-tertiary">描述</label>
-                  <textarea
+                  <Textarea
                     value={form.description || ''}
                     onChange={(e) => setForm((prev) => ({ ...prev, description: e.target.value }))}
                     placeholder="简要说明这个能力的含义和培养目标"
                     rows={3}
-                    className="focus:border-primary/50 w-full resize-none rounded-lg border border-border-default bg-surface-elevated px-3 py-2 text-sm text-text-secondary placeholder:text-text-muted focus:outline-none"
+                    className="min-h-0 bg-surface-elevated"
+                    resize="none"
                   />
                 </div>
 

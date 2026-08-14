@@ -23,10 +23,10 @@ const variantMap = {
 };
 
 const sizeMap = {
-  xs: 'h-7 min-h-[44px] px-2.5 text-xs',
-  sm: 'h-8 px-3 text-xs',
-  md: 'h-10 px-4 text-sm',
-  lg: 'h-12 px-6 text-base',
+  xs: 'h-7 min-w-7 px-2 text-xs',
+  sm: 'h-9 min-w-9 px-3 text-xs',
+  md: 'h-10 min-w-10 px-4 text-sm',
+  lg: 'h-12 min-w-12 px-6 text-base',
 };
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
@@ -50,7 +50,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       <button
         ref={ref}
         className={cn(
-          'inline-flex items-center justify-center gap-2 rounded-lg font-medium',
+          'inline-flex items-center justify-center gap-2 rounded-lg font-medium whitespace-nowrap',
           'transition-all duration-micro focus-visible:outline-none focus-visible:ring-2',
           'focus-visible:ring-offset-2 focus-visible:ring-offset-background',
           'disabled:pointer-events-none disabled:opacity-60',

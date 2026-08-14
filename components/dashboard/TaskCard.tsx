@@ -33,7 +33,7 @@ export default function TaskCard({
     <div
       onClick={onToggle}
       className={cn(
-        'group relative cursor-pointer rounded-2xl border transition-all duration-200',
+        'group relative cursor-pointer rounded-xl border transition-colors duration-200',
         'bg-surface hover:bg-surface-elevated',
         isDone
           ? 'border-l-primary/60 border-l-2 border-y-border-default border-r-border-default'
@@ -58,7 +58,7 @@ export default function TaskCard({
             e.stopPropagation();
             onToggle();
           }}
-          className="focus-ring mt-0.5 shrink-0 rounded-full"
+          className="focus-ring mt-0.5 size-8 shrink-0 rounded-full p-0"
           aria-label={isDone ? '标记为未完成' : '标记为完成'}
         >
           {isDone ? (
@@ -97,7 +97,7 @@ export default function TaskCard({
 
           <p
             className={cn(
-              'text-sm font-semibold leading-snug',
+              'text-sm font-semibold leading-5',
               isDone ? 'text-text-muted line-through' : 'text-text-primary'
             )}
           >

@@ -1,5 +1,6 @@
 'use client';
 import { Icon } from '@/components/ui/icon';
+import Alert from '@/components/ui/alert';
 
 import { useMemo } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
@@ -74,17 +75,11 @@ export default function ExamCalendarPage() {
         initial={shouldReduceMotion ? false : { opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4, delay: 0.05 }}
-        className="relative overflow-hidden rounded-2xl border border-border-default bg-surface-elevated p-5 sm:p-6"
       >
-        <div className="bg-warning/5 pointer-events-none absolute right-0 top-0 size-64 -translate-y-1/2 translate-x-1/3 rounded-full blur-3xl" />
-        <div className="relative flex items-start gap-3">
-          <Icon name="AlertCircle" size="md" className="mt-0.5 shrink-0 text-warning" />
-          <div>
-            <p className="text-sm text-text-secondary">
-              以下考试时间为参考日期，具体报名与考试安排请以官方通知为准。
-            </p>
-          </div>
-        </div>
+        <Alert
+          type="warning"
+          description="以下考试时间为参考日期，具体报名与考试安排请以官方通知为准。"
+        />
       </motion.div>
 
       {isLoading ? (
@@ -123,7 +118,7 @@ export default function ExamCalendarPage() {
                     initial={shouldReduceMotion ? false : { opacity: 0, x: -12 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ duration: 0.3, delay: Math.min(index * 0.05, 0.5) }}
-                    className="rounded-2xl border border-border-default bg-surface p-5 transition-colors hover:border-border-strong"
+                    className="rounded-xl border border-border-default bg-surface p-5 transition-colors hover:border-border-strong"
                   >
                     <div className="flex flex-col gap-4 sm:flex-row sm:items-start">
                       <div className="flex min-w-[80px] flex-col items-center justify-center rounded-xl border border-border-subtle bg-surface-elevated px-4 py-3">
@@ -189,7 +184,7 @@ export default function ExamCalendarPage() {
                 {past.map((event) => (
                   <div
                     key={event.id}
-                    className="flex flex-col gap-3 rounded-2xl border border-border-default bg-surface p-4 sm:flex-row sm:items-center"
+                    className="flex flex-col gap-3 rounded-xl border border-border-default bg-surface p-4 sm:flex-row sm:items-center"
                   >
                     <span className="min-w-[80px] text-sm text-text-tertiary">
                       {formatDate(event.date)}

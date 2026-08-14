@@ -8,6 +8,12 @@ import {
   middleSchoolPlans,
 } from './plans';
 import type { AiConfigData } from './aiConfig';
+import {
+  READING_ABILITIES,
+  READING_PHASES,
+  READING_TARGETS,
+  type ReadingLiteracyAssessment,
+} from './subjects/readingLiteracy';
 
 export interface DiagnosisInput {
   child: Child;
@@ -62,6 +68,7 @@ export interface DiagnosisResult {
   risks: RiskItem[];
   suggestions: SuggestionItem[];
   monthlyFocus: MonthlyFocusItem[];
+  readingLiteracy?: ReadingLiteracyAssessment;
 }
 
 export async function generateDiagnosis(
@@ -139,8 +146,25 @@ const SYSTEM_PROMPT = `你是「趣学伴」AI 升学规划专家，熟悉上海
   ],
   "monthlyFocus": [
     { "title": "...", "description": "..." }
-  ]
-}`;
+  ],
+  "readingLiteracy": {
+    "ladder": 3,
+    "dimensions": [
+      { "id": "recognition", "score": 75, "comment": "..." },
+      { "id": "comprehension", "score": 68, "comment": "..." },
+      { "id": "appreciation", "score": 60, "comment": "..." },
+      { "id": "evaluation", "score": 55, "comment": "..." },
+      { "id": "application", "score": 62, "comment": "..." },
+      { "id": "innovation", "score": 58, "comment": "..." }
+    ]
+  }
+}
+
+readingLiteracy 字段说明（仅当孩子处于小升初/中考阶段时输出，高考阶段可省略）：
+- ladder：阅读素养当前所处梯级（1-12，小学阶段通常 1-6）
+- dimensions：6 个阅读能力维度的评分（0-100），id 必须严格使用
+  recognition/comprehension/appreciation/evaluation/application/innovation 之一
+- 每个维度 comment 用一句话说明当前水平与下一梯级的差距`;
 
 function buildPrompt(input: DiagnosisInput): string {
   const { child, plans, currentDate } = input;
@@ -155,6 +179,7 @@ function buildPrompt(input: DiagnosisInput): string {
       : formatStageRoutesContext(stage);
 
   const subjectContext = stage === '小升初' ? formatPrimarySubjects() : formatMiddleSubjects();
+  const readingContext = formatReadingLiteracyContext(stage);
 
   return `当前日期：${currentDate}
 
@@ -173,10 +198,44 @@ ${routeContext}
 学科标准节奏：
 ${subjectContext}
 
+阅读素养评估框架（用于生成 readingLiteracy 字段）：
+${readingContext}
+
 请基于以上信息生成诊断报告。注意：
 1. 如果孩子还没有具体成绩/证书数据，请根据年级判断"按标准节奏应该完成什么"，并指出差距
 2. 给出的建议要具体到本周或本月可以启动的行动
-3. 不要编造孩子没有的证书或成绩`;
+3. 不要编造孩子没有的证书或成绩
+4. readingLiteracy 的评分要结合孩子的年级和路线节奏合理推断，并给出与下一梯级的差距说明`;
+}
+
+function formatReadingLiteracyContext(stage: '小升初' | '中考' | '高考'): string {
+  if (stage === '高考') {
+    return '该阶段不强制输出 readingLiteracy 字段。';
+  }
+
+  const phases = READING_PHASES.map(
+    (p) => `${p.phase}（${p.ladders[0]}-${p.ladders[1]} 梯，${p.stage}）`
+  ).join('；');
+
+  const dimensions = READING_ABILITIES.map(
+    (a) =>
+      `- ${a.name}（${a.groupName}）：${a.ladders
+        .filter((l) => l.ladder <= 6)
+        .map((l) => `${l.ladder}梯：${l.description}`)
+        .join('；')}`
+  ).join('\n');
+
+  const targets = READING_TARGETS.filter((t) => t.dailyMinutes > 0)
+    .map((t) => `${t.ladder}梯：日均约 ${t.dailyMinutes} 分钟${t.annualChars > 0 ? `，年均 ≥ ${t.annualChars} 万字` : ''}`)
+    .join('；');
+
+  return `四阶十二梯：${phases}
+
+6 个阅读能力维度（1-6 梯行为描述）：
+${dimensions}
+
+量化阅读目标（表 20）：
+${targets}`;
 }
 
 function formatPlanContext(plan: DiagnosisInput['plans'][0]): string {
@@ -282,5 +341,16 @@ export function getFallbackDiagnosis(input: DiagnosisInput): DiagnosisResult {
         description: '和孩子一起确定 1-2 个主攻路线和 1 个保底路线。',
       },
     ],
+    readingLiteracy: {
+      ladder: 3,
+      dimensions: [
+        { id: 'recognition', score: 60, comment: '待评估：请补充识字量与朗读表现。' },
+        { id: 'comprehension', score: 60, comment: '待评估：请补充阅读理解答题情况。' },
+        { id: 'appreciation', score: 60, comment: '待评估：请补充阅读感受与审美表现。' },
+        { id: 'evaluation', score: 60, comment: '待评估：请补充对文本的判断与评价。' },
+        { id: 'application', score: 60, comment: '待评估：请补充阅读所得的应用情况。' },
+        { id: 'innovation', score: 60, comment: '待评估：请补充创意表达与提问情况。' },
+      ],
+    },
   };
 }

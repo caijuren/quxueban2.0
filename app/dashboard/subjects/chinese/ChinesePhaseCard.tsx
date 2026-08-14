@@ -13,7 +13,7 @@ export default function ChinesePhaseCard({ grade }: { grade: number }) {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.2 }}
-      className="rounded-2xl border border-border-subtle bg-surface-elevated p-6"
+      className="rounded-xl border border-border-subtle bg-surface-elevated p-6"
     >
       <div className="mb-6 flex items-center gap-3">
         <div className="flex size-10 items-center justify-center rounded-xl border border-border-default bg-surface-elevated">

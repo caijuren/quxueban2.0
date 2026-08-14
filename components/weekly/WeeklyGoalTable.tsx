@@ -215,7 +215,7 @@ export default function WeeklyGoalTable({ goals, tasks, onChange }: WeeklyGoalTa
       <motion.div
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
-        className="rounded-2xl border border-border-subtle bg-surface-elevated p-8 text-center"
+        className="rounded-xl border border-border-subtle bg-surface-elevated p-8 text-center"
       >
         <div className="bg-primary/10 mx-auto mb-3 flex size-12 items-center justify-center rounded-xl">
           <Icon name="Target" size="lg" className="text-primary" />
@@ -232,7 +232,7 @@ export default function WeeklyGoalTable({ goals, tasks, onChange }: WeeklyGoalTa
     <motion.div
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
-      className="overflow-hidden rounded-2xl border border-border-subtle bg-surface-elevated"
+      className="overflow-hidden rounded-xl border border-border-subtle bg-surface-elevated"
     >
       <DataTable<TableRow>
         columns={tableColumns}

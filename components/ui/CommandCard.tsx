@@ -38,7 +38,7 @@ export default function CommandCard({
   return (
     <div
       className={cn(
-        'overflow-hidden border transition-all duration-200',
+        'overflow-hidden rounded-xl border transition-colors duration-200',
         active ? 'command-panel-active' : 'command-panel',
         hover && !active && 'hover:border-border-strong hover:bg-surface-hover',
         isInteractive &&

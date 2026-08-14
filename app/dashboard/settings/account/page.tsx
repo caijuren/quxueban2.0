@@ -5,6 +5,7 @@ import { UserWithSettings } from '@/lib/settings';
 import ConsolePageShell from '@/components/console/core/ConsolePageShell';
 import { useConsoleSettings } from '@/components/console/core/useConsoleSettings';
 import AccountSection from '@/components/settings/AccountSection';
+import Alert from '@/components/ui/alert';
 
 export default function AccountPage() {
   const { user, isLoading, error, handleUpdate } = useConsoleSettings();
@@ -19,9 +20,7 @@ export default function AccountPage() {
 
   if (error || !user) {
     return (
-      <div className="border-error/20 bg-error/10 rounded-2xl border p-6 text-error">
-        {error instanceof Error ? error.message : '加载失败'}
-      </div>
+      <Alert type="error" title="加载失败" description={error instanceof Error ? error.message : '无法加载账户信息'} />
     );
   }
 

@@ -5,6 +5,7 @@ import { UserWithSettings } from '@/lib/settings';
 import ConsolePageShell from '@/components/console/core/ConsolePageShell';
 import { useConsoleSettings } from '@/components/console/core/useConsoleSettings';
 import AppearanceSection from '@/components/settings/AppearanceSection';
+import Alert from '@/components/ui/alert';
 
 export default function AppearancePage() {
   const { user, isLoading, error, handleUpdate } = useConsoleSettings();
@@ -19,9 +20,7 @@ export default function AppearancePage() {
 
   if (error || !user?.settings) {
     return (
-      <div className="border-error/20 bg-error/10 rounded-2xl border p-6 text-error">
-        {error instanceof Error ? error.message : '加载失败'}
-      </div>
+      <Alert type="error" title="加载失败" description={error instanceof Error ? error.message : '无法加载外观设置'} />
     );
   }
 

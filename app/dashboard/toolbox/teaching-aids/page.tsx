@@ -1,6 +1,8 @@
 'use client';
 import { Icon } from '@/components/ui/icon';
 import Button from '@/components/ui/button';
+import SearchInput from '@/components/ui/search-input';
+import FilterPanel from '@/components/ui/filter-panel';
 
 import { useEffect, useMemo, useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
@@ -141,100 +143,83 @@ export default function TeachingAidsPage() {
         initial={shouldReduceMotion ? false : { opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4, delay: 0.05 }}
-        className="space-y-4 rounded-2xl border border-border-default bg-surface-elevated p-4 sm:p-5"
       >
-        <div className="flex flex-col gap-3 sm:flex-row">
-          {/* "Search" */}
-          <div className="relative flex-1">
-            <Icon
-              name="Search"
-              size="sm"
-              className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted"
-            />
-            <input
-              type="text"
+        <FilterPanel activeCount={activeFiltersCount + (keyword ? 1 : 0)} onClear={clearFilters}>
+          <div className="flex flex-col gap-3 sm:flex-row">
+            <SearchInput
               value={keyword}
               onChange={(e) => setKeyword(e.target.value)}
+              onClear={() => setKeyword('')}
               placeholder="搜索书名、ISBN、关键词..."
-              className="focus:border-primary/50 focus:ring-primary/20 h-10 w-full rounded-xl border border-border-default bg-surface px-9 text-sm text-text-secondary transition-all placeholder:text-text-muted focus:outline-none focus:ring-1"
+              className="flex-1"
             />
-            {keyword && (
+
+            {hasActiveFilters && (
               <Button
-                variant="ghost"
-                size="xs"
-                onClick={() => setKeyword('')}
-                className="absolute right-3 top-1/2 -translate-y-1/2"
-                aria-label="清空搜索"
+                type="button"
+                variant="secondary"
+                size="md"
+                onClick={clearFilters}
+                className="hidden sm:inline-flex"
               >
-                <Icon name="X" size="sm" />
+                <Icon name="RotateCcw" size="sm" />
+                清除筛选
+                {activeFiltersCount > 0 && (
+                  <span className="bg-primary/10 ml-1 rounded-full px-1.5 py-0.5 text-2xs text-primary">
+                    {activeFiltersCount}
+                  </span>
+                )}
               </Button>
             )}
           </div>
 
-          {hasActiveFilters && (
-            <Button
-              variant="secondary"
-              size="md"
-              onClick={clearFilters}
-              className=""
-            >
-              <Icon name="RotateCcw" size="sm" />
-              清除筛选
-              {activeFiltersCount > 0 && (
-                <span className="bg-primary/10 ml-1 rounded-full px-1.5 py-0.5 text-2xs text-primary">
-                  {activeFiltersCount}
-                </span>
-              )}
-            </Button>
+          {filterOptions && (
+            <div className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
+              <FilterSelect
+                label="年级"
+                value={grade}
+                options={filterOptions.grades}
+                onChange={setGrade}
+                placeholder="全部年级"
+              />
+              <FilterSelect
+                label="学科"
+                value={subject}
+                options={filterOptions.subjects}
+                onChange={setSubject}
+                placeholder="全部学科"
+              />
+              <FilterSelect
+                label="出版社"
+                value={publisher}
+                options={filterOptions.publishers}
+                onChange={setPublisher}
+                placeholder="全部出版社"
+              />
+              <FilterSelect
+                label="内容类型"
+                value={contentType}
+                options={filterOptions.contentTypes}
+                onChange={setContentType}
+                placeholder="全部类型"
+              />
+              <FilterSelect
+                label="难度"
+                value={difficulty}
+                options={filterOptions.difficulties}
+                onChange={setDifficulty}
+                placeholder="全部难度"
+              />
+              <FilterSelect
+                label="新教材适配"
+                value={isNewTextbook}
+                options={filterOptions.isNewTextbook}
+                onChange={setIsNewTextbook}
+                placeholder="全部"
+              />
+            </div>
           )}
-        </div>
-
-        {filterOptions && (
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
-            <FilterSelect
-              label="年级"
-              value={grade}
-              options={filterOptions.grades}
-              onChange={setGrade}
-              placeholder="全部年级"
-            />
-            <FilterSelect
-              label="学科"
-              value={subject}
-              options={filterOptions.subjects}
-              onChange={setSubject}
-              placeholder="全部学科"
-            />
-            <FilterSelect
-              label="出版社"
-              value={publisher}
-              options={filterOptions.publishers}
-              onChange={setPublisher}
-              placeholder="全部出版社"
-            />
-            <FilterSelect
-              label="内容类型"
-              value={contentType}
-              options={filterOptions.contentTypes}
-              onChange={setContentType}
-              placeholder="全部类型"
-            />
-            <FilterSelect
-              label="难度"
-              value={difficulty}
-              options={filterOptions.difficulties}
-              onChange={setDifficulty}
-              placeholder="全部难度"
-            />
-            <FilterSelect
-              label="新教材适配"
-              value={isNewTextbook}
-              options={filterOptions.isNewTextbook}
-              onChange={setIsNewTextbook}
-              placeholder="全部"
-            />
-          </div>
-        )}
+        </FilterPanel>
       </motion.div>
 
       {/* Results */}

@@ -6,16 +6,21 @@ import Link from 'next/link';
 import { useChildren } from '@/components/dashboard/ChildrenContext';
 import ChildEmptyState from '@/components/dashboard/ChildEmptyState';
 import { gradeLabel } from '@/lib/children';
+import { getReadingLadderByGrade } from '@/lib/subjects/readingLiteracy';
 import { useSubjectPlan } from '@/lib/hooks/useSubjectPlan';
+import { useAiDiagnosis } from '@/lib/hooks/useAiDiagnosis';
 import ChineseTrackMap from './ChineseTrackMap';
 import ChineseYearlyMatrix from './ChineseYearlyMatrix';
 import ChineseExamTimeline from './ChineseExamTimeline';
 import AIDiagnosisCard from '../AIDiagnosisCard';
+import ReadingAbilityRadar from '@/components/reading/ReadingAbilityRadar';
+import Alert from '@/components/ui/alert';
 
 export default function ChineseSubjectPage() {
   const { currentChild } = useChildren();
   const shouldReduceMotion = useReducedMotion();
   const { data: config, isLoading, error: queryError } = useSubjectPlan('chinese');
+  const { data: diagnosis } = useAiDiagnosis(currentChild?.id);
 
   if (!currentChild) {
     return (
@@ -87,6 +92,14 @@ export default function ChineseSubjectPage() {
               childName={currentChild.name}
             />
           </div>
+          <div className="lg:col-span-3">
+            <ReadingAbilityRadar
+              assessment={diagnosis?.readingLiteracy}
+              currentLadder={getReadingLadderByGrade(currentChild.grade)}
+              title={`${currentChild.name}的阅读素养评估`}
+              description="基于《中国青少年阅读素养框架》6 个阅读能力维度，AI 诊断会给出当前梯级定位"
+            />
+          </div>
         </div>
       )}
 
@@ -97,9 +110,11 @@ export default function ChineseSubjectPage() {
       )}
 
       {queryError && (
-        <div className="border-error/20 bg-error/10 rounded-2xl border p-6 text-error">
-          {queryError instanceof Error ? queryError.message : '加载失败'}
-        </div>
+        <Alert
+          type="error"
+          title="加载失败"
+          description={queryError instanceof Error ? queryError.message : '无法加载语文学科规划'}
+        />
       )}
 
       {config && (

@@ -50,7 +50,7 @@ const Card = React.forwardRef<HTMLDivElement, CardProps>(
       <div
         ref={ref}
         className={cn(
-          'bg-surface transition-all duration-fast',
+          'bg-surface transition-colors duration-fast',
           paddingMap[padding],
           radiusMap[radius],
           shadowMap[shadow],

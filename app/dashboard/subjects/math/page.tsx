@@ -14,6 +14,7 @@ import SubjectCheckIn from '../SubjectCheckIn';
 import AIDiagnosisCard from '../AIDiagnosisCard';
 import MathPhaseCard from './MathPhaseCard';
 import MathTodayTasks from './MathTodayTasks';
+import Alert from '@/components/ui/alert';
 
 export default function MathSubjectPage() {
   const { currentChild } = useChildren();
@@ -122,9 +123,11 @@ export default function MathSubjectPage() {
       )}
 
       {queryError && (
-        <div className="border-error/20 bg-error/10 rounded-2xl border p-6 text-error">
-          {queryError instanceof Error ? queryError.message : '加载失败'}
-        </div>
+        <Alert
+          type="error"
+          title="加载失败"
+          description={queryError instanceof Error ? queryError.message : '无法加载数学学科规划'}
+        />
       )}
 
       {config && (

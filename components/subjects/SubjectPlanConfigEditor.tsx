@@ -403,7 +403,7 @@ export default function SubjectPlanConfigEditor({
       )}
 
       {queryError && (
-        <div className="border-error/20 bg-error/10 rounded-2xl border p-6 text-error">
+        <div className="border-error/20 bg-error/10 rounded-xl border p-6 text-error">
           {queryError instanceof Error ? queryError.message : '加载失败'}
         </div>
       )}
@@ -718,7 +718,7 @@ export default function SubjectPlanConfigEditor({
                   return (
                     <div
                       key={track.id}
-                      className="rounded-2xl border border-border-subtle bg-surface-elevated p-5"
+                      className="rounded-xl border border-border-subtle bg-surface-elevated p-5"
                     >
                       <div className="mb-4 flex items-center gap-2">
                         <div
@@ -966,7 +966,7 @@ function ConfigSection({
   children: React.ReactNode;
 }) {
   return (
-    <div className="rounded-2xl border border-border-subtle bg-surface-elevated p-6">
+    <div className="rounded-xl border border-border-subtle bg-surface-elevated p-6">
       <div className="mb-5">
         <h2 className="text-lg font-bold text-text-secondary">{title}</h2>
         <p className="mt-0.5 text-xs text-text-tertiary">{subtitle}</p>

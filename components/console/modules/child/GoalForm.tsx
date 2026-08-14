@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { Icon } from '@/components/ui/icon';
 import Button from '@/components/ui/button';
 import Select from '@/components/ui/select';
+import Input from '@/components/ui/input';
 import { LearningGoal } from '@/lib/types';
 import { LearningGoalCreateInput } from '@/lib/validation';
 
@@ -87,12 +88,12 @@ export default function GoalForm({ initial, onSubmit, onCancel, isLoading }: Goa
         <form onSubmit={handleSubmit} className="space-y-4 p-5">
           <div>
             <label className="mb-1.5 block text-xs text-text-muted">目标标题</label>
-            <input
+            <Input
               type="text"
               value={form.title}
               onChange={(e) => update('title', e.target.value)}
               placeholder="例如：一年阅读 100 本书"
-              className="focus:border-primary/50 w-full rounded-xl border border-border-default bg-surface-hover px-3 py-2.5 text-sm text-text-secondary placeholder:text-text-muted focus:outline-none"
+              className="bg-surface-hover"
               required
             />
           </div>
@@ -151,12 +152,12 @@ export default function GoalForm({ initial, onSubmit, onCancel, isLoading }: Goa
 
           <div>
             <label className="mb-1.5 block text-xs text-text-muted">具体目标</label>
-            <input
+            <Input
               type="text"
               value={form.target ?? ''}
               onChange={(e) => update('target', e.target.value)}
               placeholder="例如：100本 / 90分 / 30分钟"
-              className="focus:border-primary/50 w-full rounded-xl border border-border-default bg-surface-hover px-3 py-2.5 text-sm text-text-secondary placeholder:text-text-muted focus:outline-none"
+              className="bg-surface-hover"
             />
           </div>
 
