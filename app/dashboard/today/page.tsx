@@ -11,6 +11,7 @@ import ChildEmptyState from '@/components/dashboard/ChildEmptyState';
 import CommandCard from '@/components/ui/CommandCard';
 import TaskCompletionModal from '@/components/today/TaskCompletionModal';
 import DailyVictoryModal from '@/components/today/DailyVictoryModal';
+import ReadingGoalCard from '@/components/today/ReadingGoalCard';
 import { categoryIcons, allCategories } from '@/lib/taskIcons';
 import { getTodayName, getCurrentWeekId } from '@/lib/weeklyTasks';
 import { TASK_CATEGORY_LABELS } from '@/lib/taskTemplates';
@@ -389,6 +390,14 @@ export default function TodayPage() {
                     />
                   </div>
                 </div>
+
+                {category === 'reading' && currentChild && (
+                  <ReadingGoalCard
+                    grade={currentChild.grade}
+                    tasks={tasks}
+                    date={todayDate}
+                  />
+                )}
 
                 <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-2">
                   {tasks.map((task) => {

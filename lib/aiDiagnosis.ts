@@ -30,6 +30,12 @@ export interface DiagnosisInput {
     probability?: number;
   }>;
   currentDate: string;
+  readingStats?: {
+    recentWeeksAvgDailyMinutes: number;
+    totalDays: number;
+    doneDays: number;
+    completionRate: number;
+  };
 }
 
 export interface SubjectHealth {
@@ -164,7 +170,10 @@ readingLiteracy 字段说明（仅当孩子处于小升初/中考阶段时输出
 - ladder：阅读素养当前所处梯级（1-12，小学阶段通常 1-6）
 - dimensions：6 个阅读能力维度的评分（0-100），id 必须严格使用
   recognition/comprehension/appreciation/evaluation/application/innovation 之一
-- 每个维度 comment 用一句话说明当前水平与下一梯级的差距`;
+- 每个维度 comment 用一句话说明当前水平与下一梯级的差距
+- 若提供了「真实阅读打卡数据」（readingStats），必须优先以该数据为评分依据：
+  打卡完成率、日均阅读时长与年级目标（表 20）的差距，会直接影响 ladder 与各维度评分；
+  打卡数据不足时再结合年级标准节奏推断，并在 comment 中说明推断依据`;
 
 function buildPrompt(input: DiagnosisInput): string {
   const { child, plans, currentDate } = input;
@@ -180,6 +189,9 @@ function buildPrompt(input: DiagnosisInput): string {
 
   const subjectContext = stage === '小升初' ? formatPrimarySubjects() : formatMiddleSubjects();
   const readingContext = formatReadingLiteracyContext(stage);
+  const readingStatsContext = input.readingStats
+    ? formatReadingStatsContext(input.readingStats)
+    : '（暂无真实阅读打卡数据，请按年级标准节奏推断）';
 
   return `当前日期：${currentDate}
 
@@ -201,11 +213,73 @@ ${subjectContext}
 阅读素养评估框架（用于生成 readingLiteracy 字段）：
 ${readingContext}
 
+真实阅读打卡数据（近 4 周，用于校准阅读素养评分）：
+${readingStatsContext}
+
 请基于以上信息生成诊断报告。注意：
 1. 如果孩子还没有具体成绩/证书数据，请根据年级判断"按标准节奏应该完成什么"，并指出差距
 2. 给出的建议要具体到本周或本月可以启动的行动
 3. 不要编造孩子没有的证书或成绩
-4. readingLiteracy 的评分要结合孩子的年级和路线节奏合理推断，并给出与下一梯级的差距说明`;
+4. readingLiteracy 的评分要优先结合真实阅读打卡数据（readingStats），其次结合孩子的年级和路线节奏合理推断，并给出与下一梯级的差距说明`;
+}
+
+function formatReadingStatsContext(stats: NonNullable<DiagnosisInput['readingStats']>): string {
+  return `- 近 4 周日均阅读时长：约 ${stats.recentWeeksAvgDailyMinutes} 分钟
+- 阅读打卡天数：${stats.doneDays} / ${stats.totalDays} 天
+- 阅读任务完成率：${stats.completionRate}%
+（对比：孩子年级对应的官方日均阅读目标见上方量化阅读目标，若日均时长明显低于目标，应下调梯级或相关维度评分）`;
+}
+
+interface RawWeeklyTask {
+  category?: string;
+  status?: string;
+  day?: string;
+  completionRecords?: Array<{
+    date?: string;
+    status?: string;
+    actualDurationMinutes?: number;
+  }>;
+}
+
+export function computeReadingStats(
+  plans: Array<{ tasks?: unknown }>
+): DiagnosisInput['readingStats'] | undefined {
+  const readingTasks: RawWeeklyTask[] = [];
+  plans.forEach((plan) => {
+    if (!Array.isArray(plan.tasks)) return;
+    (plan.tasks as RawWeeklyTask[]).forEach((task) => {
+      if ((task.category || '').toUpperCase() === 'READING') readingTasks.push(task);
+    });
+  });
+
+  if (readingTasks.length === 0) return undefined;
+
+  const days = new Set<string>();
+  const doneDays = new Set<string>();
+  let totalMinutes = 0;
+
+  readingTasks.forEach((task) => {
+    const records = task.completionRecords ?? [];
+    records.forEach((record) => {
+      const date = record.date;
+      if (!date) return;
+      days.add(date);
+      totalMinutes += record.actualDurationMinutes ?? 0;
+      if (record.status === 'done' || record.status === 'partially_done') {
+        doneDays.add(date);
+      }
+    });
+  });
+
+  const totalDays = days.size;
+  if (totalDays === 0) return undefined;
+
+  return {
+    recentWeeksAvgDailyMinutes: Math.round(totalMinutes / totalDays),
+    totalDays,
+    doneDays: doneDays.size,
+    completionRate: Math.round((doneDays.size / totalDays) * 100),
+  };
 }
 
 function formatReadingLiteracyContext(stage: '小升初' | '中考' | '高考'): string {

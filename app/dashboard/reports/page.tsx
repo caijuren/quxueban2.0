@@ -52,6 +52,7 @@ import {
 } from '@/lib/weeklyTasks';
 import Button from '@/components/ui/button';
 import { useGenerateAiSummary, useSaveWeeklyPlan } from '@/lib/hooks/useWeeklyPlans';
+import ReadingReportSection from '@/components/reading/ReadingReportSection';
 
 function shiftWeekId(weekId: string, delta: number): string {
   const { start } = getWeekRange(weekId);
@@ -948,6 +949,15 @@ export default function ReportsPage() {
                 </div>
               )}
             </GlassCard>
+          </StaggerItem>
+
+          {/* Reading literacy */}
+          <StaggerItem>
+            <ReadingReportSection
+              childName={currentChild.name}
+              grade={currentChild.grade}
+              plan={plan}
+            />
           </StaggerItem>
 
           {/* High-frequency task details */}

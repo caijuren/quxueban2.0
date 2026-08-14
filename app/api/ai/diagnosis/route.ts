@@ -3,7 +3,11 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 import { getEnabledAiConfig } from '@/lib/aiConfig';
-import { generateDiagnosis, getFallbackDiagnosis } from '@/lib/aiDiagnosis';
+import {
+  generateDiagnosis,
+  getFallbackDiagnosis,
+  computeReadingStats,
+} from '@/lib/aiDiagnosis';
 
 export async function POST(req: NextRequest) {
   try {
@@ -27,6 +31,16 @@ export async function POST(req: NextRequest) {
     if (!child) {
       return NextResponse.json({ error: '未找到孩子档案' }, { status: 404 });
     }
+
+    // 近 4 周周计划，用于统计真实阅读打卡数据
+    const recentPlans = await prisma.weeklyPlan.findMany({
+      where: { childId: child.id },
+      orderBy: { weekId: 'desc' },
+      take: 4,
+      select: { tasks: true },
+    });
+
+    const readingStats = computeReadingStats(recentPlans);
 
     const input = {
       child: {
@@ -58,6 +72,7 @@ export async function POST(req: NextRequest) {
         probability: p.probability,
       })),
       currentDate: new Date().toISOString().split('T')[0],
+      readingStats,
     };
 
     try {
