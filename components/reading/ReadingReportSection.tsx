@@ -10,13 +10,25 @@ import {
   getReadingTargetByGrade,
 } from '@/lib/subjects/readingLiteracy';
 import { WeeklyPlan, TaskCategory } from '@/lib/storage.types';
-import { parseDurationMinutes } from '@/lib/weeklyTasks';
+import { formatWeekLabel } from '@/lib/weeklyTasks';
+import { computeReadingLadderTrend } from '@/lib/readingProgress';
 import { cn } from '@/lib/utils';
+import {
+  ResponsiveContainer,
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ReferenceLine,
+} from 'recharts';
 
 interface ReadingReportSectionProps {
   childName: string;
   grade: number;
   plan: WeeklyPlan;
+  weeklyPlans: WeeklyPlan[];
 }
 
 function getWeeklyReadingMinutes(plan: WeeklyPlan): number {
@@ -28,19 +40,57 @@ function getWeeklyReadingMinutes(plan: WeeklyPlan): number {
     }, 0);
 }
 
+function LadderTrendTooltip({
+  active,
+  payload,
+  label,
+}: {
+  active?: boolean;
+  payload?: Array<{ value?: number; payload?: { score?: number; completionRate?: number; minutes?: number } }>;
+  label?: string;
+}) {
+  if (!active || !payload || payload.length === 0) return null;
+  const p = payload[0]?.payload;
+  return (
+    <div className="glass rounded-lg px-3 py-2 text-xs shadow-lg">
+      <p className="mb-1 font-medium text-text-primary">{label}</p>
+      <p className="text-text-secondary">梯级：{payload[0]?.value ?? '-'} 梯</p>
+      {p && (
+        <>
+          <p className="text-text-muted">达成指数：{p.score ?? '-'}</p>
+          <p className="text-text-muted">完成率：{p.completionRate ?? '-'}%</p>
+          <p className="text-text-muted">阅读时长：{p.minutes ?? '-'} 分钟</p>
+        </>
+      )}
+    </div>
+  );
+}
+
 export default function ReadingReportSection({
   childName,
   grade,
   plan,
+  weeklyPlans,
 }: ReadingReportSectionProps) {
   const target = getReadingTargetByGrade(grade);
-  const ladder = getReadingLadderByGrade(grade);
+  const baseLadder = getReadingLadderByGrade(grade);
 
   const weeklyMinutes = useMemo(() => getWeeklyReadingMinutes(plan), [plan]);
   const weeklyTarget = target ? target.dailyMinutes * 7 : 0;
   const rate =
     weeklyTarget > 0 ? Math.min(100, Math.round((weeklyMinutes / weeklyTarget) * 100)) : 0;
   const reached = weeklyTarget > 0 && weeklyMinutes >= weeklyTarget;
+
+  const trend = useMemo(() => {
+    const data = computeReadingLadderTrend(weeklyPlans, grade, plan.weekId, 8);
+    return data.map((d) => ({
+      ...d,
+      label: formatWeekLabel(d.weekId).split(' - ')[0],
+    }));
+  }, [weeklyPlans, grade, plan.weekId]);
+
+  const hasTrendData = trend.some((d) => d.hasData);
+  const latestLadder = [...trend].reverse().find((d) => d.hasData)?.ladder ?? baseLadder;
 
   return (
     <GlassCard className="p-5">
@@ -90,7 +140,7 @@ export default function ReadingReportSection({
                 <span className="text-xs text-text-muted"> 万字 / 年</span>
               </p>
               <p className="mt-1 text-2xs text-text-muted">
-                当前梯级 {ladder} 梯（{childName} 年级对应）
+                当前梯级 {latestLadder} 梯（年级基准 {baseLadder} 梯）
               </p>
             </div>
           )}
@@ -104,11 +154,76 @@ export default function ReadingReportSection({
         {/* Reading ability radar */}
         <div className="lg:col-span-2">
           <ReadingAbilityRadar
-            currentLadder={ladder}
+            currentLadder={latestLadder}
             title={`${childName}的阅读素养评估`}
             description="6 个阅读能力维度 · 四阶十二梯进阶体系"
           />
         </div>
+      </div>
+
+      {/* Ladder trend */}
+      <div className="mt-6 border-t border-border-subtle pt-5">
+        <div className="mb-3 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Icon name="TrendingUp" size="sm" className="text-primary" />
+            <span className="text-sm font-semibold text-text-secondary">近 8 周阅读梯级趋势</span>
+          </div>
+          <span className="text-2xs text-text-muted">
+            由每周阅读打卡时长与完成率推导 · 虚线为年级基准梯级
+          </span>
+        </div>
+
+        {hasTrendData ? (
+          <div className="h-48">
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart
+                data={trend}
+                margin={{ top: 8, right: 12, bottom: 0, left: -28 }}
+              >
+                <CartesianGrid stroke="var(--border-subtle)" strokeWidth={1} vertical={false} />
+                <XAxis
+                  dataKey="label"
+                  axisLine={false}
+                  tickLine={false}
+                  tick={{ fill: 'var(--text-tertiary)', fontSize: 11 }}
+                  dy={8}
+                />
+                <YAxis
+                  domain={[0, 12]}
+                  ticks={[0, 3, 6, 9, 12]}
+                  axisLine={false}
+                  tickLine={false}
+                  tick={{ fill: 'var(--text-tertiary)', fontSize: 11 }}
+                  tickFormatter={(v: number) => `${v}梯`}
+                />
+                <Tooltip content={<LadderTrendTooltip />} />
+                <ReferenceLine
+                  y={baseLadder}
+                  stroke="var(--color-secondary)"
+                  strokeDasharray="4 4"
+                  strokeOpacity={0.6}
+                />
+                <Line
+                  type="monotone"
+                  dataKey="ladder"
+                  name="阅读梯级"
+                  stroke="var(--color-primary)"
+                  strokeWidth={2}
+                  dot={{ r: 3, fill: 'var(--color-primary)' }}
+                  activeDot={{ r: 5 }}
+                  connectNulls
+                />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+        ) : (
+          <div className="rounded-xl border border-dashed border-border-default bg-surface-elevated p-6 text-center">
+            <Icon name="BookOpen" size="md" className="mx-auto mb-2 text-text-muted" />
+            <p className="text-sm text-text-muted">
+              暂无阅读打卡数据，完成阅读任务打卡后即可生成梯级趋势。
+            </p>
+          </div>
+        )}
       </div>
     </GlassCard>
   );

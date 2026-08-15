@@ -957,6 +957,7 @@ export default function ReportsPage() {
               childName={currentChild.name}
               grade={currentChild.grade}
               plan={plan}
+              weeklyPlans={weeklyPlans}
             />
           </StaggerItem>
 
