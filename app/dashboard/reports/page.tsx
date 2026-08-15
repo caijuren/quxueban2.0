@@ -954,6 +954,7 @@ export default function ReportsPage() {
           {/* Reading literacy */}
           <StaggerItem>
             <ReadingReportSection
+              childId={currentChild.id}
               childName={currentChild.name}
               grade={currentChild.grade}
               plan={plan}

@@ -181,6 +181,8 @@ model Child {
   pointLogs    PointLog[]
   parentLogs   ParentLog[]
   chatSessions ChatSession[]
+  readingBooks ReadingBook[]
+  readingRecords ReadingRecord[]
 
   @@index([userId])
   @@index([familyId])
@@ -656,4 +658,51 @@ model AiConfig {
   updatedAt DateTime @updatedAt
 
   @@index([provider])
+}
+
+// 个人书房：家庭藏书 / 已读书目（可关联内置书目库 Book）
+model ReadingBook {
+  id            String   @id @default(uuid())
+  childId       String
+  bookId        String? // 关联内置书目库 Book.bookId
+  title         String
+  author        String?
+  isbn          String?
+  coverImageUrl String?
+  status        String   @default("unread") // unread | reading | read
+  source        String   @default("manual") // manual | import | builtin
+  rating        Int?
+  notes         String?  @db.Text
+  readCount     Int      @default(0)
+  totalMinutes  Int      @default(0)
+  lastReadAt    DateTime?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  child   Child           @relation(fields: [childId], references: [id], onDelete: Cascade)
+  records ReadingRecord[]
+
+  @@index([childId])
+  @@index([status])
+  @@index([isbn])
+}
+
+// 阅读记录：某本书某次阅读（日期/时长/页码/笔记）
+model ReadingRecord {
+  id              String   @id @default(uuid())
+  childId         String
+  readingBookId   String
+  readDate        DateTime
+  durationMinutes Int      @default(0)
+  pages           Int?
+  note            String?  @db.Text
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  child       Child       @relation(fields: [childId], references: [id], onDelete: Cascade)
+  readingBook ReadingBook @relation(fields: [readingBookId], references: [id], onDelete: Cascade)
+
+  @@index([childId])
+  @@index([readingBookId])
+  @@index([readDate])
 }

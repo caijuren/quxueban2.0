@@ -1,6 +1,7 @@
 'use client';
 
 import { useMemo } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { Icon } from '@/components/ui/icon';
 import GlassCard from '@/components/ui/glass-card';
 import { ProgressBar } from '@/components/motion/progress-bar';
@@ -12,6 +13,7 @@ import {
 import { WeeklyPlan, TaskCategory } from '@/lib/storage.types';
 import { formatWeekLabel } from '@/lib/weeklyTasks';
 import { computeReadingLadderTrend } from '@/lib/readingProgress';
+import { apiGet } from '@/lib/apiClient';
 import { cn } from '@/lib/utils';
 import {
   ResponsiveContainer,
@@ -25,6 +27,7 @@ import {
 } from 'recharts';
 
 interface ReadingReportSectionProps {
+  childId: string;
   childName: string;
   grade: number;
   plan: WeeklyPlan;
@@ -67,6 +70,7 @@ function LadderTrendTooltip({
 }
 
 export default function ReadingReportSection({
+  childId,
   childName,
   grade,
   plan,
@@ -74,6 +78,23 @@ export default function ReadingReportSection({
 }: ReadingReportSectionProps) {
   const target = getReadingTargetByGrade(grade);
   const baseLadder = getReadingLadderByGrade(grade);
+
+  const { data: archiveData } = useQuery<{
+    books: Array<{ status: string; totalMinutes: number }>;
+  }>({
+    queryKey: ['reading-books', childId, 'all', ''],
+    queryFn: () => apiGet(`/api/reading/books?childId=${childId}`),
+    enabled: !!childId,
+  });
+
+  const archiveStats = useMemo(() => {
+    const books = archiveData?.books ?? [];
+    return {
+      total: books.length,
+      read: books.filter((b) => b.status === 'read').length,
+      minutes: books.reduce((s, b) => s + b.totalMinutes, 0),
+    };
+  }, [archiveData]);
 
   const weeklyMinutes = useMemo(() => getWeeklyReadingMinutes(plan), [plan]);
   const weeklyTarget = target ? target.dailyMinutes * 7 : 0;
@@ -144,6 +165,36 @@ export default function ReadingReportSection({
               </p>
             </div>
           )}
+
+          <div className="rounded-xl border border-border-subtle bg-surface-elevated p-4">
+            <div className="mb-2 flex items-center gap-2">
+              <Icon name="Library" size="sm" className="text-accent" />
+              <span className="text-xs font-medium text-text-secondary">阅读档案</span>
+            </div>
+            <div className="grid grid-cols-3 gap-2 text-center">
+              <div>
+                <p className="font-display text-base font-bold text-text-primary">
+                  {archiveStats.total}
+                </p>
+                <p className="text-2xs text-text-muted">藏书</p>
+              </div>
+              <div>
+                <p className="font-display text-base font-bold text-success">
+                  {archiveStats.read}
+                </p>
+                <p className="text-2xs text-text-muted">已读</p>
+              </div>
+              <div>
+                <p className="font-display text-base font-bold text-text-primary">
+                  {archiveStats.minutes}
+                </p>
+                <p className="text-2xs text-text-muted">累计分钟</p>
+              </div>
+            </div>
+            <p className="mt-2 text-2xs text-text-muted">
+              来自「阅读档案」的书房与阅读记录
+            </p>
+          </div>
 
           <p className="text-2xs leading-relaxed text-text-muted">
             阅读时长与年阅读量目标来自教育部行业标准《中国青少年阅读素养框架》（JY/T

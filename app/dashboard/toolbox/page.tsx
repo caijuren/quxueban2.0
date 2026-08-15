@@ -48,6 +48,16 @@ const toolGroups: ToolGroup[] = [
         status: 'active',
         color: 'secondary',
       },
+      {
+        id: 'reading-archive',
+        name: '阅读档案',
+        description: '个人书房、已读书目与阅读记录，支持小花生等数据批量导入',
+        href: '/dashboard/toolbox/reading-archive',
+        icon: 'Library',
+        tags: ['书房', '导入'],
+        status: 'active',
+        color: 'accent',
+      },
     ],
   },
   {
