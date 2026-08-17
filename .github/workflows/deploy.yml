@@ -13,8 +13,6 @@ jobs:
       - uses: actions/checkout@v4
 
       - uses: pnpm/action-setup@v4
-        with:
-          version: 9
 
       - uses: actions/setup-node@v4
         with:
@@ -59,8 +57,8 @@ jobs:
             docker compose --env-file .env.production down
             docker compose --env-file .env.production rm -f
 
-            # 重新构建并启动数据库
-            docker compose --env-file .env.production up -d --build db
+            # 重新构建并启动数据库与缓存
+            docker compose --env-file .env.production up -d --build db redis
 
             # 执行数据库迁移与种子数据
             docker compose --env-file .env.production run --rm --build seed
