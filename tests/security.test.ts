@@ -6,9 +6,12 @@ import { isUserOwnedUpload, isViewableTaskEvidence } from '../lib/uploadSecurity
 import { getInvalidProductionSecrets } from '../scripts/validate-production-env.js';
 import { isDingTalkConfigured, sendDingTalkMarkdown } from '../lib/dingtalk';
 
-test('bind rate limiter rejects requests after the configured limit', () => {
+test('bind rate limiter rejects requests after the configured limit', async () => {
   const key = `test-${Date.now()}-${Math.random()}`;
-  const results = Array.from({ length: 9 }, () => bindRateLimit(key));
+  const results = [];
+  for (let i = 0; i < 9; i += 1) {
+    results.push(await bindRateLimit(key));
+  }
 
   assert.equal(results.slice(0, 8).every((result) => result.allowed), true);
   assert.equal(results[8].allowed, false);
@@ -58,6 +61,7 @@ test('production environment validation rejects missing or placeholder secrets',
     POSTGRES_PASSWORD: undefined,
     ADMIN_PASSWORD: 'short',
     DEMO_PARENT_PASSWORD: 'short',
+    CONFIG_ENCRYPTION_KEY: 'change-me-min-32-chars-strong-random-key',
   });
 
   assert.deepEqual(invalid, [
@@ -67,6 +71,7 @@ test('production environment validation rejects missing or placeholder secrets',
     'POSTGRES_PASSWORD',
     'ADMIN_PASSWORD',
     'DEMO_PARENT_PASSWORD',
+    'CONFIG_ENCRYPTION_KEY',
   ]);
 });
 
@@ -80,6 +85,7 @@ test('production environment validation accepts strong non-placeholder secrets',
       POSTGRES_PASSWORD: `${strong}d`,
       ADMIN_PASSWORD: `${strong}e`,
       DEMO_PARENT_PASSWORD: `${strong}f`,
+      CONFIG_ENCRYPTION_KEY: `${strong}g`,
     }),
     []
   );
