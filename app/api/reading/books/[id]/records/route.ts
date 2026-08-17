@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
+import { Prisma } from '@/lib/generated/prisma';
 import { canManageChild, canViewChild } from '@/lib/family';
 
 async function authenticate() {
@@ -73,7 +74,12 @@ export async function POST(req: Request, { params }: Params) {
         readDate,
         durationMinutes,
         pages: typeof body.pages === 'number' ? body.pages : null,
+        startPage: typeof body.startPage === 'number' ? body.startPage : null,
+        endPage: typeof body.endPage === 'number' ? body.endPage : null,
+        effect: body.effect ? String(body.effect) : null,
+        performance: body.performance ? String(body.performance) : null,
         note: body.note ? String(body.note) : null,
+        tags: Array.isArray(body.tags) ? body.tags : Prisma.JsonNull,
       },
     });
 
@@ -81,13 +87,14 @@ export async function POST(req: Request, { params }: Params) {
     const agg = await prisma.readingRecord.aggregate({
       where: { readingBookId: params.id },
       _count: true,
-      _sum: { durationMinutes: true },
+      _sum: { durationMinutes: true, pages: true },
     });
     await prisma.readingBook.update({
       where: { id: params.id },
       data: {
         readCount: agg._count,
         totalMinutes: agg._sum.durationMinutes ?? 0,
+        totalPagesRead: agg._sum.pages ?? 0,
         lastReadAt: new Date(),
         status: 'read',
       },

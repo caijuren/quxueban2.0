@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
+import { Prisma } from '@/lib/generated/prisma';
 import { canManageChild, canViewChild } from '@/lib/family';
 
 async function authenticate() {
@@ -43,6 +44,32 @@ export async function PATCH(req: Request, { params }: Params) {
         coverImageUrl:
           body.coverImageUrl !== undefined
             ? (body.coverImageUrl ? String(body.coverImageUrl) : null)
+            : undefined,
+        publisher:
+          body.publisher !== undefined ? (body.publisher ? String(body.publisher) : null) : undefined,
+        description:
+          body.description !== undefined ? (body.description ? String(body.description) : null) : undefined,
+        totalPages:
+          body.totalPages !== undefined ? (body.totalPages ? Number(body.totalPages) : null) : undefined,
+        wordCount:
+          body.wordCount !== undefined ? (body.wordCount ? Number(body.wordCount) : null) : undefined,
+        textType:
+          body.textType !== undefined ? (body.textType ? String(body.textType) : null) : undefined,
+        readingDifficulty:
+          body.readingDifficulty !== undefined
+            ? (body.readingDifficulty ? String(body.readingDifficulty) : null)
+            : undefined,
+        readingLadderStart:
+          body.readingLadderStart !== undefined
+            ? (body.readingLadderStart ? Number(body.readingLadderStart) : null)
+            : undefined,
+        readingLadderEnd:
+          body.readingLadderEnd !== undefined
+            ? (body.readingLadderEnd ? Number(body.readingLadderEnd) : null)
+            : undefined,
+        literacyTags:
+          body.literacyTags !== undefined
+            ? (Array.isArray(body.literacyTags) ? body.literacyTags : Prisma.JsonNull)
             : undefined,
         status: body.status !== undefined ? String(body.status) : undefined,
         rating: body.rating !== undefined ? (body.rating ? Number(body.rating) : null) : undefined,

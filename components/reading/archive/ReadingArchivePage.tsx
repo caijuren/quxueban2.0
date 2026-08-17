@@ -5,21 +5,27 @@ import { motion, useReducedMotion } from 'framer-motion';
 import { Icon, type IconName } from '@/components/ui/icon';
 import { useChildren } from '@/components/dashboard/ChildrenContext';
 import EmptyState from '@/components/ui/EmptyState';
+import ReadingOverviewSection from '@/components/reading/archive/ReadingOverviewSection';
 import BookshelfSection from '@/components/reading/archive/BookshelfSection';
 import ReadingRecordsSection from '@/components/reading/archive/ReadingRecordsSection';
 import ImportSection from '@/components/reading/archive/ImportSection';
+import EvidenceSection from '@/components/reading/archive/EvidenceSection';
+import DiagnosisSection from '@/components/reading/archive/DiagnosisSection';
 import { cn } from '@/lib/utils';
 
 const TABS: Array<{ id: string; label: string; icon: IconName }> = [
+  { id: 'overview', label: '概览', icon: 'LayoutDashboard' },
   { id: 'bookshelf', label: '书房', icon: 'Library' },
   { id: 'records', label: '阅读记录', icon: 'BookOpen' },
+  { id: 'evidence', label: '能力证据', icon: 'ListChecks' },
+  { id: 'diagnosis', label: '阅读诊断', icon: 'Brain' },
   { id: 'import', label: '批量导入', icon: 'Upload' },
 ];
 
 export default function ReadingArchivePage() {
   const shouldReduceMotion = useReducedMotion();
   const { currentChild } = useChildren();
-  const [tab, setTab] = useState('bookshelf');
+  const [tab, setTab] = useState('overview');
 
   return (
     <div className="min-h-[calc(100vh-8rem)] space-y-6">
@@ -82,8 +88,11 @@ export default function ReadingArchivePage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3 }}
           >
+            {tab === 'overview' && <ReadingOverviewSection childId={currentChild.id} />}
             {tab === 'bookshelf' && <BookshelfSection childId={currentChild.id} />}
             {tab === 'records' && <ReadingRecordsSection childId={currentChild.id} />}
+            {tab === 'evidence' && <EvidenceSection childId={currentChild.id} />}
+            {tab === 'diagnosis' && <DiagnosisSection childId={currentChild.id} />}
             {tab === 'import' && <ImportSection childId={currentChild.id} />}
           </motion.div>
         </>

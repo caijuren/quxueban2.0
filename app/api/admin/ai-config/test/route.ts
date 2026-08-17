@@ -9,9 +9,6 @@ export async function POST() {
     if (!session?.user?.id) {
       return NextResponse.json({ error: '未登录' }, { status: 401 });
     }
-    if (session.user.role !== 'ADMIN') {
-      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
-    }
 
     const config = await getEnabledAiConfig();
     if (!config) {

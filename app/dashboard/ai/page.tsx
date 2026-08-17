@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { SlideUp, StaggerContainer, StaggerItem } from '@/components/motion';
 import Button from '@/components/ui/button';
 import { Icon } from '@/components/ui/icon';
@@ -72,6 +72,7 @@ export default function AIPage() {
   const [diagnosis, setDiagnosis] = useState<DiagnosisResult | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const hasAttempted = useRef(false);
 
   const generateDiagnosis = useCallback(
     async (options?: { force?: boolean }) => {
@@ -113,7 +114,7 @@ export default function AIPage() {
   );
 
   useEffect(() => {
-    if (!currentChild || loading) return;
+    if (!currentChild || hasAttempted.current) return;
 
     const cached = loadCachedDiagnosis(currentChild.id);
     if (cached) {
@@ -121,10 +122,9 @@ export default function AIPage() {
       return;
     }
 
-    if (!diagnosis) {
-      generateDiagnosis();
-    }
-  }, [currentChild, diagnosis, loading, generateDiagnosis]);
+    hasAttempted.current = true;
+    generateDiagnosis();
+  }, [currentChild, generateDiagnosis]);
 
   const getItemText = (key: keyof typeof sectionConfig, item: unknown): string => {
     if (typeof item === 'string') return item;

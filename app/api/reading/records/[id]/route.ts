@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
+import { Prisma } from '@/lib/generated/prisma';
 import { canManageChild, canViewChild } from '@/lib/family';
 
 async function authenticate() {
@@ -44,7 +45,17 @@ export async function PATCH(req: Request, { params }: Params) {
         durationMinutes:
           body.durationMinutes !== undefined ? Number(body.durationMinutes) : undefined,
         pages: body.pages !== undefined ? (body.pages ? Number(body.pages) : null) : undefined,
+        startPage:
+          body.startPage !== undefined ? (body.startPage ? Number(body.startPage) : null) : undefined,
+        endPage:
+          body.endPage !== undefined ? (body.endPage ? Number(body.endPage) : null) : undefined,
+        effect: body.effect !== undefined ? (body.effect ? String(body.effect) : null) : undefined,
+        performance:
+          body.performance !== undefined
+            ? (body.performance ? String(body.performance) : null)
+            : undefined,
         note: body.note !== undefined ? (body.note ? String(body.note) : null) : undefined,
+        tags: body.tags !== undefined ? (Array.isArray(body.tags) ? body.tags : Prisma.JsonNull) : undefined,
       },
     });
 
@@ -52,13 +63,14 @@ export async function PATCH(req: Request, { params }: Params) {
     const agg = await prisma.readingRecord.aggregate({
       where: { readingBookId: record.readingBookId },
       _count: true,
-      _sum: { durationMinutes: true },
+      _sum: { durationMinutes: true, pages: true },
     });
     await prisma.readingBook.update({
       where: { id: record.readingBookId },
       data: {
         readCount: agg._count,
         totalMinutes: agg._sum.durationMinutes ?? 0,
+        totalPagesRead: agg._sum.pages ?? 0,
       },
     });
 
@@ -86,13 +98,14 @@ export async function DELETE(_req: Request, { params }: Params) {
     const agg = await prisma.readingRecord.aggregate({
       where: { readingBookId: record.readingBookId },
       _count: true,
-      _sum: { durationMinutes: true },
+      _sum: { durationMinutes: true, pages: true },
     });
     await prisma.readingBook.update({
       where: { id: record.readingBookId },
       data: {
         readCount: agg._count,
         totalMinutes: agg._sum.durationMinutes ?? 0,
+        totalPagesRead: agg._sum.pages ?? 0,
       },
     });
 

@@ -3,7 +3,7 @@ import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 import { canManageChild, canViewChild } from '@/lib/family';
-import type { Prisma } from '@/lib/generated/prisma';
+import { Prisma } from '@/lib/generated/prisma';
 
 async function authenticate() {
   const session = await getServerSession(authOptions);
@@ -26,6 +26,10 @@ export async function GET(req: Request) {
   const childId = searchParams.get('childId');
   const status = searchParams.get('status');
   const keyword = searchParams.get('keyword')?.trim();
+  const textType = searchParams.get('textType')?.trim();
+  const readingDifficulty = searchParams.get('readingDifficulty')?.trim();
+  const literacyTag = searchParams.get('literacyTag')?.trim();
+  const sort = searchParams.get('sort') ?? 'recent';
 
   if (!childId) {
     return NextResponse.json({ error: 'childId is required' }, { status: 400 });
@@ -39,6 +43,13 @@ export async function GET(req: Request) {
   try {
     const where: Prisma.ReadingBookWhereInput = { childId };
     if (status && status !== 'all') where.status = status;
+    if (textType && textType !== 'all') where.textType = textType;
+    if (readingDifficulty && readingDifficulty !== 'all') {
+      where.readingDifficulty = readingDifficulty;
+    }
+    if (literacyTag && literacyTag !== 'all') {
+      where.literacyTags = { array_contains: [literacyTag] };
+    }
     if (keyword) {
       where.OR = [
         { title: { contains: keyword, mode: 'insensitive' } },
@@ -47,9 +58,20 @@ export async function GET(req: Request) {
       ];
     }
 
+    const orderBy: Prisma.ReadingBookOrderByWithRelationInput[] =
+      sort === 'title'
+        ? [{ title: 'asc' }]
+        : sort === 'rating'
+          ? [{ rating: 'desc' }, { updatedAt: 'desc' }]
+          : sort === 'minutes'
+            ? [{ totalMinutes: 'desc' }, { updatedAt: 'desc' }]
+            : sort === 'progress'
+              ? [{ totalPagesRead: 'desc' }, { updatedAt: 'desc' }]
+              : [{ updatedAt: 'desc' }];
+
     const books = await prisma.readingBook.findMany({
       where,
-      orderBy: [{ status: 'asc' }, { updatedAt: 'desc' }],
+      orderBy,
       include: { _count: { select: { records: true } } },
     });
 
@@ -93,6 +115,16 @@ export async function POST(req: Request) {
         author: body.author ? String(body.author) : null,
         isbn: body.isbn ? String(body.isbn) : null,
         coverImageUrl: body.coverImageUrl ? String(body.coverImageUrl) : null,
+        publisher: body.publisher ? String(body.publisher) : null,
+        description: body.description ? String(body.description) : null,
+        totalPages: typeof body.totalPages === 'number' ? body.totalPages : null,
+        wordCount: typeof body.wordCount === 'number' ? body.wordCount : null,
+        textType: body.textType ? String(body.textType) : null,
+        readingDifficulty: body.readingDifficulty ? String(body.readingDifficulty) : null,
+        readingLadderStart:
+          typeof body.readingLadderStart === 'number' ? body.readingLadderStart : null,
+        readingLadderEnd: typeof body.readingLadderEnd === 'number' ? body.readingLadderEnd : null,
+        literacyTags: Array.isArray(body.literacyTags) ? body.literacyTags : Prisma.JsonNull,
         status: body.status ? String(body.status) : 'unread',
         source: body.source ? String(body.source) : 'manual',
         rating: typeof body.rating === 'number' ? body.rating : null,

@@ -35,6 +35,7 @@ export function SlideUp({
 
   return (
     <Component
+      suppressHydrationWarning
       initial={{
         opacity: shouldReduceMotion ? 1 : 0,
         y: shouldReduceMotion ? 0 : distance,

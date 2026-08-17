@@ -183,6 +183,7 @@ model Child {
   chatSessions ChatSession[]
   readingBooks ReadingBook[]
   readingRecords ReadingRecord[]
+  readingEvidences ReadingEvidence[]
 
   @@index([userId])
   @@index([familyId])
@@ -662,22 +663,32 @@ model AiConfig {
 
 // 个人书房：家庭藏书 / 已读书目（可关联内置书目库 Book）
 model ReadingBook {
-  id            String   @id @default(uuid())
-  childId       String
-  bookId        String? // 关联内置书目库 Book.bookId
-  title         String
-  author        String?
-  isbn          String?
-  coverImageUrl String?
-  status        String   @default("unread") // unread | reading | read
-  source        String   @default("manual") // manual | import | builtin
-  rating        Int?
-  notes         String?  @db.Text
-  readCount     Int      @default(0)
-  totalMinutes  Int      @default(0)
-  lastReadAt    DateTime?
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  id                String   @id @default(uuid())
+  childId           String
+  bookId            String? // 关联内置书目库 Book.bookId
+  title             String
+  author            String?
+  isbn              String?
+  coverImageUrl     String?
+  publisher         String?
+  description       String?  @db.Text
+  totalPages        Int?
+  wordCount         Int?
+  textType          String? // picture_book | story | poetry | nonfiction | traditional_culture | other
+  readingDifficulty String? // easy | medium | challenge
+  readingLadderStart Int?
+  readingLadderEnd  Int?
+  literacyTags      Json? // 素养标签数组（对应阅读能力维度）
+  status            String   @default("unread") // unread | reading | read
+  source            String   @default("manual") // manual | import | builtin
+  rating            Int?
+  notes             String?  @db.Text
+  readCount         Int      @default(0)
+  totalMinutes      Int      @default(0)
+  totalPagesRead    Int      @default(0)
+  lastReadAt        DateTime?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
 
   child   Child           @relation(fields: [childId], references: [id], onDelete: Cascade)
   records ReadingRecord[]
@@ -695,7 +706,12 @@ model ReadingRecord {
   readDate        DateTime
   durationMinutes Int      @default(0)
   pages           Int?
+  startPage       Int?
+  endPage         Int?
+  effect          String? // 很好 | 较好 | 一般
+  performance     String?  @db.Text
   note            String?  @db.Text
+  tags            Json?
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 
@@ -705,4 +721,26 @@ model ReadingRecord {
   @@index([childId])
   @@index([readingBookId])
   @@index([readDate])
+}
+
+// 阅读能力证据：家长记录/AI 解析的阅读能力表现，可确认/拒绝后归档
+model ReadingEvidence {
+  id            String   @id @default(uuid())
+  childId       String
+  type          String // character_assessment | independent_reading | vocabulary_understanding | discourse_structure | reading_expression
+  status        String   @default("pending") // pending | confirmed | rejected
+  occurredAt    DateTime @default(now())
+  originalText  String   @db.Text
+  data          Json?
+  indicatorIds  Json? // 关联的阅读能力维度 id 数组
+  sourceType    String   @default("manual") // manual | ai | import
+  attachmentUrl String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  child Child @relation(fields: [childId], references: [id], onDelete: Cascade)
+
+  @@index([childId])
+  @@index([status])
+  @@index([type])
 }

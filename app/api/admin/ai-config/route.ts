@@ -9,9 +9,6 @@ export async function GET() {
     if (!session?.user?.id) {
       return NextResponse.json({ error: '未登录' }, { status: 401 });
     }
-    if (session.user.role !== 'ADMIN') {
-      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
-    }
 
     const config = await getAiConfig();
     const response: SafeAiConfigData | null = config ? toSafeConfig(config) : null;
@@ -41,9 +38,6 @@ export async function POST(req: NextRequest) {
     const session = (await getServerSession(authOptions)) as Session | null;
     if (!session?.user?.id) {
       return NextResponse.json({ error: '未登录' }, { status: 401 });
-    }
-    if (session.user.role !== 'ADMIN') {
-      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
 
     const body = (await req.json()) as {

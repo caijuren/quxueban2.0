@@ -55,6 +55,7 @@ export function StaggerContainer({
 
   return (
     <Component
+      suppressHydrationWarning
       initial="hidden"
       animate="visible"
       variants={{
@@ -83,6 +84,7 @@ export function StaggerItem({ children, className, as = 'div' }: StaggerItemProp
 
   return (
     <Component
+      suppressHydrationWarning
       variants={{
         hidden: { opacity: shouldReduceMotion ? 1 : 0, y: shouldReduceMotion ? 0 : 8 },
         visible: {
