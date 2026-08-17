@@ -1,5 +1,6 @@
 import type { Child } from '@/lib/children';
 import { getEnabledAiConfig } from '@/lib/aiConfig';
+import { aiFetch } from '@/lib/ai/fetchWithResilience';
 
 export interface DailyTaskSnapshot {
   focus: string;
@@ -152,7 +153,7 @@ async function callLLM(messages: LLMMessage[]): Promise<string | null> {
   }
 
   try {
-    const res = await fetch(config.apiUrl, {
+    const res = await aiFetch(config.apiUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

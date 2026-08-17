@@ -1,5 +1,6 @@
 // AI 阅读诊断：读取阅读记录 + 能力证据，生成基于《中国青少年阅读素养框架》的诊断报告
 import type { AiConfigData } from './aiConfig';
+import { aiFetch } from './ai/fetchWithResilience';
 import {
   READING_ABILITIES,
   getPhaseByLadder,
@@ -79,7 +80,7 @@ export async function generateReadingDiagnosis(
 
   const prompt = buildDiagnosisPrompt(input);
 
-  const response = await fetch(config.apiUrl, {
+  const response = await aiFetch(config.apiUrl, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

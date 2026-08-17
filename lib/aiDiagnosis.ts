@@ -8,6 +8,7 @@ import {
   middleSchoolPlans,
 } from './plans';
 import type { AiConfigData } from './aiConfig';
+import { aiFetch } from './ai/fetchWithResilience';
 import {
   READING_ABILITIES,
   READING_PHASES,
@@ -91,7 +92,7 @@ export async function generateDiagnosis(
 
   const prompt = buildPrompt(input);
 
-  const response = await fetch(config.apiUrl, {
+  const response = await aiFetch(config.apiUrl, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

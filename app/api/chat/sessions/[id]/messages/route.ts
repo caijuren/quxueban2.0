@@ -3,6 +3,7 @@ import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 import { getEnabledAiConfig } from '@/lib/aiConfig';
+import { aiFetch } from '@/lib/ai/fetchWithResilience';
 import { chatMessageCreateSchema, validateBody } from '@/lib/validation';
 
 type Params = { params: { id: string } };
@@ -28,7 +29,7 @@ async function callLLM(messages: LLMMessage[]): Promise<string | null> {
   }
 
   try {
-    const res = await fetch(config.apiUrl, {
+    const res = await aiFetch(config.apiUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

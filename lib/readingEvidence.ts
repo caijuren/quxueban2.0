@@ -1,4 +1,5 @@
 import type { AiConfigData } from './aiConfig';
+import { aiFetch } from './ai/fetchWithResilience';
 import type { ReadingAbilityId } from './subjects/readingLiteracy';
 
 export type EvidenceType =
@@ -99,7 +100,7 @@ export async function parseEvidenceWithAI(
     throw new Error('AI 解析功能已禁用');
   }
 
-  const response = await fetch(config.apiUrl, {
+  const response = await aiFetch(config.apiUrl, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
