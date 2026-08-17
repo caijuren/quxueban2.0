@@ -93,18 +93,22 @@ export async function POST(req: Request) {
 
   const createdTemplates: TaskTemplateWithLinks[] = [];
 
-  for (const templateId of templateIds) {
-    const systemTpl = SYSTEM_TASK_TEMPLATES.find((t) => t.id === templateId);
-    if (!systemTpl) continue;
+  const candidateTemplates = templateIds
+    .map((templateId) => SYSTEM_TASK_TEMPLATES.find((t) => t.id === templateId))
+    .filter((tpl): tpl is NonNullable<typeof tpl> => Boolean(tpl));
 
-    const existing = await prisma.taskTemplate.findFirst({
-      where: {
-        userId: session.user.id,
-        childId,
-        title: systemTpl.title,
-      },
-    });
-    if (existing) continue;
+  const existingTemplates = await prisma.taskTemplate.findMany({
+    where: {
+      userId: session.user.id,
+      childId,
+      title: { in: candidateTemplates.map((t) => t.title) },
+    },
+    select: { title: true },
+  });
+  const existingTitles = new Set(existingTemplates.map((t) => t.title));
+
+  for (const systemTpl of candidateTemplates) {
+    if (existingTitles.has(systemTpl.title)) continue;
 
     const created = await prisma.taskTemplate.create({
       data: {

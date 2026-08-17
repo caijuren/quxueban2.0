@@ -131,20 +131,30 @@ export async function POST(req: Request) {
         select: { readingBookId: true },
       })).map((r) => r.readingBookId)
     )];
-    for (const id of affectedIds) {
-      const agg = await prisma.readingRecord.aggregate({
-        where: { readingBookId: id },
-        _count: true,
+    if (affectedIds.length > 0) {
+      const grouped = await prisma.readingRecord.groupBy({
+        by: ['readingBookId'],
+        where: { readingBookId: { in: affectedIds } },
+        _count: { _all: true },
         _sum: { durationMinutes: true },
       });
-      await prisma.readingBook.update({
-        where: { id },
-        data: {
-          readCount: agg._count,
-          totalMinutes: agg._sum.durationMinutes ?? 0,
-          status: agg._count > 0 ? 'read' : 'unread',
-        },
-      });
+      const aggById = new Map(
+        grouped.map((g) => [
+          g.readingBookId,
+          { count: g._count._all, minutes: g._sum.durationMinutes ?? 0 },
+        ])
+      );
+      for (const id of affectedIds) {
+        const agg = aggById.get(id) ?? { count: 0, minutes: 0 };
+        await prisma.readingBook.update({
+          where: { id },
+          data: {
+            readCount: agg.count,
+            totalMinutes: agg.minutes,
+            status: agg.count > 0 ? 'read' : 'unread',
+          },
+        });
+      }
     }
 
     return NextResponse.json(result);

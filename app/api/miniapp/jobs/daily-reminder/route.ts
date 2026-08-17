@@ -31,26 +31,25 @@ export async function POST(req: Request) {
   let sent = 0;
   let skipped = 0;
 
-  for (const user of users) {
-    if (!user.wechatOpenId || user.children.length === 0) continue;
-
+  const subscribedUsers = users.filter((user) => {
+    if (!user.wechatOpenId || user.children.length === 0) return false;
     const prefs = (user.settings?.notificationPrefs as Record<string, unknown>) || {};
     const subscriptions = (prefs.miniappSubscriptions as Record<string, string>) || {};
-    if (subscriptions[templateId] !== 'subscribed') {
-      skipped++;
-      continue;
-    }
+    return subscriptions[templateId] === 'subscribed';
+  });
+  skipped = users.length - subscribedUsers.length;
 
+  const childIds = subscribedUsers.flatMap((user) => user.children.map((c) => c.id));
+  const plans = childIds.length
+    ? await prisma.weeklyPlan.findMany({
+        where: { childId: { in: childIds }, weekId },
+      })
+    : [];
+  const planByChildId = new Map(plans.map((plan) => [plan.childId, plan]));
+
+  for (const user of subscribedUsers) {
     for (const child of user.children) {
-      const plan = await prisma.weeklyPlan.findUnique({
-        where: {
-          childId_weekId: {
-            childId: child.id,
-            weekId,
-          },
-        },
-      });
-
+      const plan = planByChildId.get(child.id);
       if (!plan) continue;
 
       const rawTasks = (plan.tasks as unknown as Partial<WeeklyTaskItem>[]) || [];
@@ -63,7 +62,7 @@ export async function POST(req: Request) {
       const pendingCount = todayTasks.length - doneCount;
 
       try {
-        await sendDailyReminder(user.id, user.wechatOpenId, child.name, pendingCount, doneCount);
+        await sendDailyReminder(user.id, user.wechatOpenId!, child.name, pendingCount, doneCount);
         sent++;
       } catch (err) {
         console.error(`[daily-reminder] send failed for user ${user.id}:`, err);
