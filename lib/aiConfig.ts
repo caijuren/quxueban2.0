@@ -1,4 +1,5 @@
 import { prisma } from './prisma';
+import { encryptSecret, decryptSecret } from './crypto';
 
 export interface AiConfigData {
   id: string;
@@ -48,7 +49,8 @@ export async function getAiConfig(): Promise<AiConfigData | null> {
   const config = await prisma.aiConfig.findFirst({
     orderBy: { updatedAt: 'desc' },
   });
-  return config;
+  if (!config) return null;
+  return { ...config, apiKey: decryptSecret(config.apiKey) };
 }
 
 export async function getEnabledAiConfig(): Promise<AiConfigData | null> {
@@ -56,7 +58,8 @@ export async function getEnabledAiConfig(): Promise<AiConfigData | null> {
     where: { isEnabled: true },
     orderBy: { updatedAt: 'desc' },
   });
-  return config;
+  if (!config) return null;
+  return { ...config, apiKey: decryptSecret(config.apiKey) };
 }
 
 export async function upsertAiConfig(data: {
@@ -66,30 +69,34 @@ export async function upsertAiConfig(data: {
   model: string;
   isEnabled: boolean;
 }): Promise<AiConfigData> {
+  const encryptedKey = encryptSecret(data.apiKey);
+
   const existing = await prisma.aiConfig.findFirst({
     orderBy: { updatedAt: 'desc' },
   });
 
   if (existing) {
-    return prisma.aiConfig.update({
+    const updated = await prisma.aiConfig.update({
       where: { id: existing.id },
       data: {
         provider: data.provider,
-        apiKey: data.apiKey,
+        apiKey: encryptedKey,
         apiUrl: data.apiUrl,
         model: data.model,
         isEnabled: data.isEnabled,
       },
     });
+    return { ...updated, apiKey: data.apiKey };
   }
 
-  return prisma.aiConfig.create({
+  const created = await prisma.aiConfig.create({
     data: {
       provider: data.provider,
-      apiKey: data.apiKey,
+      apiKey: encryptedKey,
       apiUrl: data.apiUrl,
       model: data.model,
       isEnabled: data.isEnabled,
     },
   });
+  return { ...created, apiKey: data.apiKey };
 }

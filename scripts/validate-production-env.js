@@ -5,6 +5,7 @@ const requiredSecrets = [
   'POSTGRES_PASSWORD',
   'ADMIN_PASSWORD',
   'DEMO_PARENT_PASSWORD',
+  'CONFIG_ENCRYPTION_KEY',
 ];
 
 const insecureValues = new Set([
@@ -13,6 +14,7 @@ const insecureValues = new Set([
   'change-me-to-a-random-cron-secret',
   'change-me-for-demo-account',
   'build-time-placeholder',
+  'change-me-min-32-chars-strong-random-key',
 ]);
 
 export function getInvalidProductionSecrets(env) {
