@@ -434,6 +434,7 @@ model Notification {
 
   @@index([userId])
   @@index([createdAt])
+  @@index([userId, createdAt])
 }
 
 model SubjectPlanConfig {
@@ -518,6 +519,7 @@ model PointLog {
   @@index([userId])
   @@index([childId])
   @@index([createdAt])
+  @@index([childId, createdAt])
 }
 
 model ParentLog {
@@ -555,6 +557,7 @@ model ChatSession {
   @@index([userId])
   @@index([childId])
   @@index([updatedAt])
+  @@index([userId, childId, updatedAt])
 }
 
 model ChatMessage {
@@ -568,6 +571,7 @@ model ChatMessage {
 
   @@index([sessionId])
   @@index([createdAt])
+  @@index([sessionId, createdAt])
 }
 
 model Publisher {
@@ -721,6 +725,7 @@ model ReadingRecord {
   @@index([childId])
   @@index([readingBookId])
   @@index([readDate])
+  @@index([childId, readDate])
 }
 
 // 阅读能力证据：家长记录/AI 解析的阅读能力表现，可确认/拒绝后归档
