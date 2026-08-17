@@ -7,7 +7,7 @@ import { getValidInvite } from '@/lib/invite';
 
 export async function POST(req: NextRequest) {
   const ip = getClientIp(req);
-  const limit = authRateLimit(ip);
+  const limit = await authRateLimit(ip);
   if (!limit.allowed) {
     return NextResponse.json({ error: '请求过于频繁，请稍后再试' }, { status: 429 });
   }

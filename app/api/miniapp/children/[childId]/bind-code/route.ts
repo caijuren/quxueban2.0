@@ -17,7 +17,7 @@ export async function POST(req: NextRequest, { params }: { params: { childId: st
   const auth = await getMiniAppUser(req);
   if (!auth || auth.type !== 'parent') return unauthorizedResponse();
 
-  if (!bindRateLimit(`generate-miniapp:${getClientIp(req)}`).allowed) {
+  if (!(await bindRateLimit(`generate-miniapp:${getClientIp(req)}`)).allowed) {
     return NextResponse.json({ error: '请求过于频繁，请稍后再试' }, { status: 429 });
   }
 

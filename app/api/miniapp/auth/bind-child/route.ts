@@ -32,7 +32,7 @@ async function fetchWechatOpenId(code: string): Promise<string | null> {
 }
 
 export async function POST(req: Request) {
-  if (!bindRateLimit(`bind-child:${getClientIp(req)}`).allowed) {
+  if (!(await bindRateLimit(`bind-child:${getClientIp(req)}`)).allowed) {
     return NextResponse.json({ error: '请求过于频繁，请稍后再试' }, { status: 429 });
   }
   try {

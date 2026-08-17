@@ -19,7 +19,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
-  if (!bindRateLimit(`generate:${getClientIp(req)}`).allowed) {
+  if (!(await bindRateLimit(`generate:${getClientIp(req)}`)).allowed) {
     return NextResponse.json({ error: '请求过于频繁，请稍后再试' }, { status: 429 });
   }
 
