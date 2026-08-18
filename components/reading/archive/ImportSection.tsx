@@ -33,6 +33,28 @@ export default function ImportSection({ childId }: { childId: string }) {
     [rows]
   );
 
+  const tryDecode = (buffer: ArrayBuffer, encoding: string): string => {
+    try {
+      return new TextDecoder(encoding, { fatal: true }).decode(buffer);
+    } catch {
+      return '';
+    }
+  };
+
+  const parseBuffer = (buffer: ArrayBuffer): { text: string; encoding: string } => {
+    const utf8 = tryDecode(buffer, 'utf-8');
+    const { rows: utf8Rows } = parseReadingCsv(utf8);
+    if (utf8Rows.length > 0) {
+      return { text: utf8, encoding: 'utf-8' };
+    }
+    const gbk = tryDecode(buffer, 'gbk');
+    const { rows: gbkRows } = parseReadingCsv(gbk);
+    if (gbkRows.length > 0) {
+      return { text: gbk, encoding: 'gbk' };
+    }
+    return { text: utf8, encoding: 'utf-8' };
+  };
+
   const handleFile = (file: File) => {
     setParsing(true);
     setResult(null);
@@ -40,11 +62,14 @@ export default function ImportSection({ childId }: { childId: string }) {
     const reader = new FileReader();
     reader.onload = () => {
       try {
-        const { rows: parsed, errors } = parseReadingCsv(String(reader.result ?? ''));
+        const buffer = reader.result as ArrayBuffer;
+        const { text, encoding } = parseBuffer(buffer);
+        const { rows: parsed, errors, headers } = parseReadingCsv(text);
         setRows(parsed);
         setParsing(false);
         if (parsed.length === 0) {
-          toast.warning('未解析到有效数据', '请确认 CSV 包含"书名"列');
+          const headerHint = headers.length > 0 ? `检测到表头：${headers.slice(0, 6).join(' / ')}` : '未检测到有效表头';
+          toast.warning('未解析到有效数据', `请确认 CSV 包含"书名"列（${encoding}；${headerHint}）`);
         } else {
           toast.success(`解析成功，共 ${parsed.length} 条`);
         }
@@ -53,14 +78,14 @@ export default function ImportSection({ childId }: { childId: string }) {
         }
       } catch {
         setParsing(false);
-        toast.error('解析失败', '请确认文件为 UTF-8 编码的 CSV');
+        toast.error('解析失败', '请确认文件为 CSV/TXT 格式');
       }
     };
     reader.onerror = () => {
       setParsing(false);
       toast.error('读取文件失败');
     };
-    reader.readAsText(file, 'utf-8');
+    reader.readAsArrayBuffer(file);
   };
 
   const doImport = async () => {

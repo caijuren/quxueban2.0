@@ -12,23 +12,25 @@ export interface ParsedReadingRow {
 }
 
 const HEADER_ALIASES: Record<string, string[]> = {
-  title: ['书名', '标题', '名称', 'title', '书名/标题', 'bookname'],
-  author: ['作者', '作者/译者', 'author', '作家'],
-  isbn: ['isbn', 'ISBN', '书号', '条形码'],
+  title: ['书名', '书名/作品', '标题', '名称', 'title', 'bookname', 'book', 'name'],
+  author: ['作者', '作者/译者', '著者', '作家', 'author', 'writer'],
+  isbn: ['isbn', 'ISBN', '书号', '条形码', 'isbn/issn'],
   readDate: [
     '阅读日期',
     '日期',
     '打卡日期',
+    '完成日期',
     'readdate',
     'read_date',
     'date',
     '最近一次阅读时间',
     '最近阅读时间',
     '上次阅读时间',
+    '阅读时间',
   ],
-  durationMinutes: ['时长', '阅读时长', '分钟', 'duration', 'minutes', '时长(分钟)'],
-  pages: ['页数', '页码', 'pages'],
-  note: ['备注', '心得', '读后感', 'note', '评论', '星级评价'],
+  durationMinutes: ['时长', '阅读时长', '分钟', 'duration', 'minutes', '时长(分钟)', '阅读分钟'],
+  pages: ['页数', '页码', 'pages', '总页数'],
+  note: ['备注', '心得', '读后感', 'note', '评论', '星级评价', '评分'],
 };
 
 export function normalizeHeader(header: string): string | null {
@@ -96,7 +98,7 @@ function detectDelimiter(text: string): string {
   return winner.count > 0 ? winner.delimiter : ',';
 }
 
-function parseByArrays(text: string, delimiter: string): { rows: ParsedReadingRow[]; errors: string[] } {
+function parseByArrays(text: string, delimiter: string): { rows: ParsedReadingRow[]; errors: string[]; headers: string[] } {
   const errors: string[] = [];
   const result = Papa.parse<string[]>(text, {
     header: false,
@@ -111,7 +113,7 @@ function parseByArrays(text: string, delimiter: string): { rows: ParsedReadingRo
   const arrays = result.data ?? [];
   const headerIndex = arrays.findIndex((row) => row.some((cell) => cell.trim()));
   if (headerIndex === -1) {
-    return { rows: [], errors: ['未找到表头行'] };
+    return { rows: [], errors: ['未找到表头行'], headers: [] };
   }
 
   const headers = arrays[headerIndex].map((h) => h.trim());
@@ -127,8 +129,7 @@ function parseByArrays(text: string, delimiter: string): { rows: ParsedReadingRo
 
     const raw: Record<string, string> = {};
     padded.forEach((value, idx) => {
-      const key = normalizedKeys[idx];
-      // Keep original header for unmapped columns so mapCsvRow can still see them
+      // Keep original header so mapCsvRow can match aliases
       raw[headers[idx] ?? `col${idx}`] = value ?? '';
     });
 
@@ -136,16 +137,21 @@ function parseByArrays(text: string, delimiter: string): { rows: ParsedReadingRo
     if (mapped.title) rows.push(mapped);
   }
 
-  return { rows, errors };
+  return { rows, errors, headers };
+}
+
+function stripBom(text: string): string {
+  return text.charCodeAt(0) === 0xfeff ? text.slice(1) : text;
 }
 
 export function parseReadingCsv(
   text: string
-): { rows: ParsedReadingRow[]; errors: string[] } {
-  const delimiter = detectDelimiter(text);
+): { rows: ParsedReadingRow[]; errors: string[]; headers: string[] } {
+  const cleanText = stripBom(text);
+  const delimiter = detectDelimiter(cleanText);
 
   // Try header-based parsing first; fall back to array-based if structural errors occur
-  const headerResult = Papa.parse<Record<string, string>>(text, {
+  const headerResult = Papa.parse<Record<string, string>>(cleanText, {
     header: true,
     delimiter,
     skipEmptyLines: 'greedy',
@@ -161,8 +167,9 @@ export function parseReadingCsv(
       .map(mapCsvRow)
       .filter((r) => r.title);
     const errors = headerResult.errors.map((e) => e.message);
-    return { rows, errors };
+    const headers = headerResult.meta.fields ?? [];
+    return { rows, errors, headers };
   }
 
-  return parseByArrays(text, delimiter);
+  return parseByArrays(cleanText, delimiter);
 }
