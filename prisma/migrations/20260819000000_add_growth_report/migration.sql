@@ -6,8 +6,8 @@ CREATE TYPE "ReportStatus" AS ENUM ('GENERATING', 'READY', 'FAILED');
 
 -- CreateTable
 CREATE TABLE "GrowthReport" (
-    "id" UUID NOT NULL,
-    "childId" UUID NOT NULL,
+    "id" TEXT NOT NULL,
+    "childId" TEXT NOT NULL,
     "type" "ReportType" NOT NULL,
     "periodStart" DATE NOT NULL,
     "periodEnd" DATE NOT NULL,
