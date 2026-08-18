@@ -12,13 +12,23 @@ export interface ParsedReadingRow {
 }
 
 const HEADER_ALIASES: Record<string, string[]> = {
-  title: ['书名', '标题', '名称', 'title', '书名/标题'],
-  author: ['作者', '作者/译者', 'author'],
+  title: ['书名', '标题', '名称', 'title', '书名/标题', 'bookname'],
+  author: ['作者', '作者/译者', 'author', '作家'],
   isbn: ['isbn', 'ISBN', '书号', '条形码'],
-  readDate: ['阅读日期', '日期', '打卡日期', 'readdate', 'read_date', 'date'],
+  readDate: [
+    '阅读日期',
+    '日期',
+    '打卡日期',
+    'readdate',
+    'read_date',
+    'date',
+    '最近一次阅读时间',
+    '最近阅读时间',
+    '上次阅读时间',
+  ],
   durationMinutes: ['时长', '阅读时长', '分钟', 'duration', 'minutes', '时长(分钟)'],
   pages: ['页数', '页码', 'pages'],
-  note: ['备注', '心得', '读后感', 'note', '评论'],
+  note: ['备注', '心得', '读后感', 'note', '评论', '星级评价'],
 };
 
 export function normalizeHeader(header: string): string | null {
@@ -64,16 +74,45 @@ export function mapCsvRow(raw: Record<string, string>): ParsedReadingRow {
   return row;
 }
 
+function detectDelimiter(text: string): string {
+  const firstLine = text.split(/\r?\n/)[0] ?? '';
+  if (!firstLine) return ',';
+  // Count candidate delimiters outside of quotes
+  const counts: { delimiter: string; count: number }[] = [
+    { delimiter: '\t', count: 0 },
+    { delimiter: ',', count: 0 },
+    { delimiter: ';', count: 0 },
+  ];
+  let inQuotes = false;
+  for (const ch of firstLine) {
+    if (ch === '"') {
+      inQuotes = !inQuotes;
+    } else if (!inQuotes) {
+      const found = counts.find((c) => c.delimiter === ch);
+      if (found) found.count++;
+    }
+  }
+  const winner = counts.reduce((a, b) => (a.count >= b.count ? a : b));
+  return winner.count > 0 ? winner.delimiter : ',';
+}
+
 export function parseReadingCsv(
   text: string
 ): { rows: ParsedReadingRow[]; errors: string[] } {
   const errors: string[] = [];
+  const delimiter = detectDelimiter(text);
   const result = Papa.parse<Record<string, string>>(text, {
     header: true,
+    delimiter,
     skipEmptyLines: 'greedy',
+    transformHeader: (header) => header.trim(),
   }) as Papa.ParseResult<Record<string, string>>;
   if (result.errors.length > 0) {
-    errors.push(...result.errors.map((e) => e.message));
+    // Filter out non-actionable errors from trailing empty fields
+    const actionable = result.errors.filter(
+      (e) => e.type !== 'FieldMismatch' || e.code !== 'TooFewFields'
+    );
+    errors.push(...actionable.map((e) => e.message));
   }
   const rows = (result.data ?? [])
     .map(mapCsvRow)

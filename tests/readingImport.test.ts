@@ -56,3 +56,23 @@ test('parseReadingCsv parses full CSV and skips empty titles', () => {
   assert.equal(rows[0].title, '小王子');
   assert.equal(rows[1].title, '夏洛的网');
 });
+
+test('parseReadingCsv handles 小花生 tab-separated export', () => {
+  const tsv = `书名\tISBN\t作者\t出版社\t字数\t页数\t出版年份\t语言\t书架分类\t添加时间\t阅读人\t阅读人\t阅读次数\t最近一次阅读时间\t星级评价（1-5星）\t评价时间
+国际大奖小说·爱藏本: 波普先生的企鹅\t9787530737774\t[美]阿特沃特 等 著；安聿麒 译\t新蕾出版社\t45000\t117\t2006-08\t中文\t\t2026-08-17\tCandy\t\t1\t2026-08-17\t\t
+青鸟\t9787559736673\t莫里斯·梅特林克 著\t浙江少年儿童出版社\t185000\t285\t2024-03\t汉族\t\t2026-08-15\tCandy\t\t1\t2026-08-15\t\t
+城南旧事\t9787539555119\t林海音 著\t中国少年儿童出版社\t\t239\t2016-01\t中文\t\t2026-08-13\t\tSummer\t1\t2026-08-13\t\t
+`;
+  const { rows, errors } = parseReadingCsv(tsv);
+  assert.equal(rows.length, 3);
+  assert.equal(rows[0].title, '国际大奖小说·爱藏本: 波普先生的企鹅');
+  assert.equal(rows[0].isbn, '9787530737774');
+  assert.equal(rows[0].author, '[美]阿特沃特 等 著；安聿麒 译');
+  assert.equal(rows[0].pages, 117);
+  assert.equal(rows[0].readDate, '2026-08-17');
+  assert.equal(rows[1].title, '青鸟');
+  assert.equal(rows[1].readDate, '2026-08-15');
+  assert.equal(rows[2].title, '城南旧事');
+  assert.equal(rows[2].readDate, '2026-08-13');
+  assert.equal(errors.length, 0);
+});
