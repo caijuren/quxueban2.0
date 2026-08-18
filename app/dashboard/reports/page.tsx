@@ -489,7 +489,17 @@ export default function ReportsPage() {
           <h1 className="font-display text-2xl font-bold sm:text-3xl">成长报告</h1>
         </div>
 
-        {plan && stats && (
+        <div className="flex items-center gap-2">
+          <Button
+            variant="secondary"
+            onClick={() => (window.location.href = '/dashboard/reports/briefing')}
+            className="bg-ai/10 border-ai/20 hover:bg-ai/15 flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-sm font-medium text-ai transition-colors"
+          >
+            <Icon name="Sparkles" size="sm" />
+            AI 简报
+          </Button>
+
+          {plan && stats && (
           <div className="flex items-center justify-end gap-1 rounded-xl border border-border-default bg-surface-elevated p-1 shadow-sm">
             <Button
               variant="secondary"
@@ -520,6 +530,7 @@ export default function ReportsPage() {
             </Button>
           </div>
         )}
+        </div>
       </SlideUp>
 
       {plan && stats && (

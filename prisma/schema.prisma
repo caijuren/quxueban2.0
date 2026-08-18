@@ -184,6 +184,7 @@ model Child {
   readingBooks ReadingBook[]
   readingRecords ReadingRecord[]
   readingEvidences ReadingEvidence[]
+  growthReports GrowthReport[]
 
   @@index([userId])
   @@index([familyId])
@@ -748,4 +749,42 @@ model ReadingEvidence {
   @@index([childId])
   @@index([status])
   @@index([type])
+}
+
+enum ReportType {
+  WEEKLY
+  MONTHLY
+}
+
+enum ReportStatus {
+  GENERATING
+  READY
+  FAILED
+}
+
+model GrowthReport {
+  id              String       @id @default(uuid())
+  childId         String
+  child           Child        @relation(fields: [childId], references: [id], onDelete: Cascade)
+
+  type            ReportType
+  periodStart     DateTime     @db.Date
+  periodEnd       DateTime     @db.Date
+
+  title           String
+  summary         String
+  highlights      Json         @default("[]")
+  concerns        Json         @default("[]")
+  abilityInsights Json         @default("{}")
+  nextWeekPlan    Json         @default("[]")
+  chartsData      Json         @default("{}")
+
+  rawAiResponse   Json?
+  status          ReportStatus @default(GENERATING)
+
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+
+  @@unique([childId, type, periodStart])
+  @@index([childId, type, createdAt])
 }
