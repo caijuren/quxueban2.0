@@ -96,26 +96,73 @@ function detectDelimiter(text: string): string {
   return winner.count > 0 ? winner.delimiter : ',';
 }
 
+function parseByArrays(text: string, delimiter: string): { rows: ParsedReadingRow[]; errors: string[] } {
+  const errors: string[] = [];
+  const result = Papa.parse<string[]>(text, {
+    header: false,
+    delimiter,
+    skipEmptyLines: 'greedy',
+  }) as Papa.ParseResult<string[]>;
+
+  if (result.errors.length > 0) {
+    errors.push(...result.errors.map((e) => e.message));
+  }
+
+  const arrays = result.data ?? [];
+  const headerIndex = arrays.findIndex((row) => row.some((cell) => cell.trim()));
+  if (headerIndex === -1) {
+    return { rows: [], errors: ['未找到表头行'] };
+  }
+
+  const headers = arrays[headerIndex].map((h) => h.trim());
+  const normalizedKeys = headers.map((h) => normalizeHeader(h));
+
+  const rows: ParsedReadingRow[] = [];
+  for (let i = headerIndex + 1; i < arrays.length; i++) {
+    const cells = arrays[i];
+    // Tolerate rows with more or fewer fields than the header
+    const padded = cells.length < headers.length
+      ? [...cells, ...Array(headers.length - cells.length).fill('')]
+      : cells.slice(0, headers.length);
+
+    const raw: Record<string, string> = {};
+    padded.forEach((value, idx) => {
+      const key = normalizedKeys[idx];
+      // Keep original header for unmapped columns so mapCsvRow can still see them
+      raw[headers[idx] ?? `col${idx}`] = value ?? '';
+    });
+
+    const mapped = mapCsvRow(raw);
+    if (mapped.title) rows.push(mapped);
+  }
+
+  return { rows, errors };
+}
+
 export function parseReadingCsv(
   text: string
 ): { rows: ParsedReadingRow[]; errors: string[] } {
-  const errors: string[] = [];
   const delimiter = detectDelimiter(text);
-  const result = Papa.parse<Record<string, string>>(text, {
+
+  // Try header-based parsing first; fall back to array-based if structural errors occur
+  const headerResult = Papa.parse<Record<string, string>>(text, {
     header: true,
     delimiter,
     skipEmptyLines: 'greedy',
     transformHeader: (header) => header.trim(),
   }) as Papa.ParseResult<Record<string, string>>;
-  if (result.errors.length > 0) {
-    // Filter out non-actionable errors from trailing empty fields
-    const actionable = result.errors.filter(
-      (e) => e.type !== 'FieldMismatch' || e.code !== 'TooFewFields'
-    );
-    errors.push(...actionable.map((e) => e.message));
+
+  const hasStructuralErrors = headerResult.errors.some(
+    (e) => e.type === 'FieldMismatch'
+  );
+
+  if (!hasStructuralErrors) {
+    const rows = (headerResult.data ?? [])
+      .map(mapCsvRow)
+      .filter((r) => r.title);
+    const errors = headerResult.errors.map((e) => e.message);
+    return { rows, errors };
   }
-  const rows = (result.data ?? [])
-    .map(mapCsvRow)
-    .filter((r) => r.title);
-  return { rows, errors };
+
+  return parseByArrays(text, delimiter);
 }

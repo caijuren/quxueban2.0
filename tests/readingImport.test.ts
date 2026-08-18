@@ -57,6 +57,23 @@ test('parseReadingCsv parses full CSV and skips empty titles', () => {
   assert.equal(rows[1].title, '夏洛的网');
 });
 
+test('parseReadingCsv tolerates rows with extra or missing fields', () => {
+  const csv = `书名,作者,阅读日期
+小王子,圣埃克苏佩里,2026-08-15
+夏洛的网,怀特,2026-08-14,多余列,再多余
+鲁滨逊漂流记,笛福
+`;
+  const { rows, errors } = parseReadingCsv(csv);
+  assert.equal(rows.length, 3);
+  assert.equal(rows[0].title, '小王子');
+  assert.equal(rows[0].readDate, '2026-08-15');
+  assert.equal(rows[1].title, '夏洛的网');
+  assert.equal(rows[1].readDate, '2026-08-14');
+  assert.equal(rows[2].title, '鲁滨逊漂流记');
+  assert.equal(rows[2].author, '笛福');
+  assert.equal(errors.length, 0);
+});
+
 test('parseReadingCsv handles 小花生 tab-separated export', () => {
   const tsv = `书名\tISBN\t作者\t出版社\t字数\t页数\t出版年份\t语言\t书架分类\t添加时间\t阅读人\t阅读人\t阅读次数\t最近一次阅读时间\t星级评价（1-5星）\t评价时间
 国际大奖小说·爱藏本: 波普先生的企鹅\t9787530737774\t[美]阿特沃特 等 著；安聿麒 译\t新蕾出版社\t45000\t117\t2006-08\t中文\t\t2026-08-17\tCandy\t\t1\t2026-08-17\t\t
